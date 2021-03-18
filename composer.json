@@ -1,0 +1,47 @@
+{
+    "name": "php-tuf/composer-stager",
+    "type": "library",
+    "description": "Stages Composer command operations so they can be safely run on a production codebase.",
+    "homepage": "https://github.com/php-tuf/composer-stager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Travis Carden",
+            "email": "travis.carden@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "php-tuf/phpcodesniffer-standard": "dev-main"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.x-dev"
+        }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/php-tuf/phpcodesniffer-standard"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
+        "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests"
+    },
+    "scripts-descriptions": {
+        "phpcbf": "Automatically fixes standards violations where possible.",
+        "phpcs": "Checks code for standards compliance."
+    },
+    "support": {
+        "issues": "https://github.com/php-tuf/composer-stager/issues",
+        "source": "https://github.com/php-tuf/composer-stager"
+    }
+}
