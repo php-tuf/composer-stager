@@ -16,7 +16,8 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "php-tuf/phpcodesniffer-standard": "dev-main"
+        "php-tuf/phpcodesniffer-standard": "dev-main",
+        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "optimize-autoloader": true,
@@ -36,12 +37,19 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
-        "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests"
+        "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
+        "phpunit": "phpunit",
+        "test": [
+            "@phpcs",
+            "@phpunit"
+        ]
     },
     "scripts-descriptions": {
         "phpcbf": "Automatically fixes standards violations where possible.",
-        "phpcs": "Checks code for standards compliance."
+        "phpcs": "Checks code for standards compliance.",
+        "test": "Runs automated tests."
     },
     "support": {
         "issues": "https://github.com/php-tuf/composer-stager/issues",
