@@ -11,6 +11,9 @@
             "role": "Developer"
         }
     ],
+    "require": {
+        "symfony/console": "^4.4"
+    },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "php-tuf/phpcodesniffer-standard": "dev-main"
