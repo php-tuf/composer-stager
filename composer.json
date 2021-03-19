@@ -28,6 +28,16 @@
             "dev-develop": "0.x-dev"
         }
     },
+    "autoload": {
+        "psr-4": {
+            "PhpTuf\\ComposerStager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpTuf\\ComposerStager\\Tests\\": "tests/"
+        }
+    },
     "repositories": [
         {
             "type": "git",
@@ -36,6 +46,9 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "bin": [
+        "bin/composer-stage"
+    ],
     "scripts": {
         "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
