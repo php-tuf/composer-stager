@@ -13,10 +13,10 @@ class FrontScriptTest extends TestCase
 {
     public function testBasicExecution(): void
     {
+        $path = __DIR__ . '/../../bin/composer-stage';
+
         $output = [];
-        // This ugly "dirname" construct is for Windows compatibility.
-        $path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR;
-        exec($path . 'composer-stage --version', $output);
+        exec("php {$path} --version", $output);
 
         self::assertSame('Composer Stager', $output[0]);
     }

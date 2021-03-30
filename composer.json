@@ -1,8 +1,9 @@
 {
     "name": "php-tuf/composer-stager",
     "type": "library",
-    "description": "Stages Composer command operations so they can be safely run on a production codebase.",
+    "description": "Stages Composer commands so they can be safely run on a production codebase.",
     "homepage": "https://github.com/php-tuf/composer-stager",
+    "readme": "README.md",
     "license": "MIT",
     "authors": [
         {
