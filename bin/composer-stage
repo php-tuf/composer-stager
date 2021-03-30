@@ -17,10 +17,13 @@ require __DIR__ . '/../vendor/autoload.php';
 ini_set('memory_limit', -1);
 set_time_limit(0);
 
+use PhpTuf\ComposerStager\Console\Command\BeginCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
 $application->setName('Composer Stager');
+
+$application->add(new BeginCommand());
 
 $application->run();
