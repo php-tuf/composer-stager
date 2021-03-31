@@ -18,7 +18,8 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "php-tuf/phpcodesniffer-standard": "dev-main",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "ext-json": "*"
     },
     "config": {
         "optimize-autoloader": true,

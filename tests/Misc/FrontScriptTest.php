@@ -13,11 +13,41 @@ class FrontScriptTest extends TestCase
 {
     public function testBasicExecution(): void
     {
-        $path = __DIR__ . '/../../bin/composer-stage';
-
-        $output = [];
-        exec("php {$path} --version", $output);
+        $output = $this->runFrontScript('--version');
 
         self::assertSame('Composer Stager', $output[0]);
+    }
+
+    public function testCommandList(): void
+    {
+        $output = $this->runFrontScript('--format=json list');
+
+        $data = json_decode($output[0], true, 512, JSON_THROW_ON_ERROR);
+        $commands = array_map(static function ($value) {
+            return $value['name'];
+        }, $data['commands']);
+
+        self::assertSame([
+            'begin',
+            'commit',
+            'help',
+            'list',
+            'stage',
+        ], $commands);
+    }
+
+    private function runFrontScript(string $commandString): array
+    {
+        $output = [];
+
+        $command = implode(' ', [
+            'bin' => 'php',
+            'script_path' => __DIR__ . '/../../bin/composer-stage',
+            'command_string' => $commandString,
+        ]);
+
+        exec($command, $output);
+
+        return $output;
     }
 }
