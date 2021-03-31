@@ -52,10 +52,12 @@
     ],
     "scripts": {
         "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
+        "lint": "find src -name '*.php' -exec php -l {} \\;",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpunit": "phpunit",
         "test": [
+            "@lint",
             "@phpcs",
             "@phpunit"
         ]
