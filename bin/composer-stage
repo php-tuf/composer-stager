@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * @file
+ * Composer Command Stager front file.
+ */
+
+namespace PhpTuf\ComposerStager;
+
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    die("Could not find autoloader. Run 'composer install' first.\n");
+}
+
+require __DIR__ . '/../vendor/autoload.php';
+
+ini_set('memory_limit', -1);
+set_time_limit(0);
+
+use PhpTuf\ComposerStager\Console\Command\BeginCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$application->setName('Composer Stager');
+
+$application->add(new BeginCommand());
+
+$application->run();

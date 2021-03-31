@@ -1,0 +1,74 @@
+{
+    "name": "php-tuf/composer-stager",
+    "type": "library",
+    "description": "Stages Composer commands so they can be safely run on a production codebase.",
+    "homepage": "https://github.com/php-tuf/composer-stager",
+    "readme": "README.md",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Travis Carden",
+            "email": "travis.carden@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "symfony/console": "^4.4"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "php-tuf/phpcodesniffer-standard": "dev-main",
+        "phpunit/phpunit": "^9.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpTuf\\ComposerStager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpTuf\\ComposerStager\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/php-tuf/phpcodesniffer-standard"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": [
+        "bin/composer-stage"
+    ],
+    "scripts": {
+        "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
+        "lint": "find src -name '*.php' -exec php -l {} \\;",
+        "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
+        "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
+        "phpunit": "phpunit",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@phpunit"
+        ]
+    },
+    "scripts-descriptions": {
+        "phpcbf": "Automatically fixes standards violations where possible.",
+        "phpcs": "Checks code for standards compliance.",
+        "test": "Runs automated tests."
+    },
+    "support": {
+        "issues": "https://github.com/php-tuf/composer-stager/issues",
+        "source": "https://github.com/php-tuf/composer-stager"
+    }
+}
