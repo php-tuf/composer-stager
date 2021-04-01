@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Stages Composer commands so they can be safely run on a production codebase.",
     "homepage": "https://github.com/php-tuf/composer-stager",
-    "readme": "README.md",
+    "readme": "docs/README.md",
     "license": "MIT",
     "authors": [
         {

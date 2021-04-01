@@ -4,8 +4,12 @@ name: Tests
 on:
   push:
     branches: [ main, wip ]
+    paths-ignore:
+      - 'docs/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
   schedule:
     # Every Monday at 00:00:00 UTC.
     - cron:  '0 0 * * 1'
