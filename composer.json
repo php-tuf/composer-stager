@@ -56,7 +56,7 @@
         "lint": "find src -name '*.php' -exec php -l {} \\;",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
-        "phpunit": "phpunit",
+        "phpunit": "phpunit --coverage-clover /tmp/clover.xml # Enable coverage to test annotations",
         "test": [
             "@lint",
             "@phpcs",
