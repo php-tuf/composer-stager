@@ -29,6 +29,7 @@ class FrontScriptTest extends TestCase
 
         self::assertSame([
             'begin',
+            'clean',
             'commit',
             'help',
             'list',
