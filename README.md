@@ -1,5 +1,7 @@
 # Composer Stager
 
+![](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg)
+
 Composer Stager makes long-running Composer commands safe to run on a production codebase by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
 
 ## Contributing

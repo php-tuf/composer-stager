@@ -1,11 +1,14 @@
 ---
-name: Main
+name: Tests
 
 on:
   push:
     branches: [ main, wip ]
   pull_request:
     branches: [ main ]
+  schedule:
+    # Every Monday at 00:00:00 UTC.
+    - cron:  '0 0 * * 1'
 
 jobs:
   build:
