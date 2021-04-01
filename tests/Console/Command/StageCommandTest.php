@@ -29,11 +29,11 @@ class StageCommandTest extends CommandTestBase
         $arguments = $definition->getArguments();
         $options = $definition->getOptions();
 
-        self::assertEquals('stage', $command->getName(), 'Set correct name.');
-        self::assertEquals([], $command->getAliases(), 'Set correct aliases.');
+        self::assertSame('stage', $command->getName(), 'Set correct name.');
+        self::assertSame([], $command->getAliases(), 'Set correct aliases.');
         self::assertNotEmpty($command->getDescription(), 'Set a description.');
-        self::assertEquals([], array_keys($arguments), 'Set correct arguments.');
-        self::assertEquals([], array_keys($options), 'Set correct options.');
+        self::assertSame([], array_keys($arguments), 'Set correct arguments.');
+        self::assertSame([], array_keys($options), 'Set correct options.');
     }
 
     /**
@@ -43,7 +43,7 @@ class StageCommandTest extends CommandTestBase
     {
         $this->executeCommand();
 
-        self::assertEquals('', $this->getDisplay(), 'Displayed correct output.');
-        self::assertEquals(StatusCode::OK, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
+        self::assertSame(StatusCode::OK, $this->getStatusCode(), 'Returned correct status code.');
     }
 }
