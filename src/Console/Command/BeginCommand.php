@@ -14,7 +14,7 @@ class BeginCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Begins staging Composer')
+            ->setDescription('Begins the staging process by copying the active directory to the staging directory')
             ;
     }
 

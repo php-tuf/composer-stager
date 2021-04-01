@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Misc;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,11 +12,14 @@ use PHPUnit\Framework\TestCase;
  */
 class FrontScriptTest extends TestCase
 {
+    /**
+     * @covers \PhpTuf\ComposerStager\Console\Application::__construct
+     */
     public function testBasicExecution(): void
     {
         $output = $this->runFrontScript('--version');
 
-        self::assertSame('Composer Stager', $output[0]);
+        self::assertStringStartsWith('Composer Stager v', $output[0]);
     }
 
     public function testCommandList(): void

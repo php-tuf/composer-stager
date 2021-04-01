@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
