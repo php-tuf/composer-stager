@@ -18,16 +18,31 @@ ini_set('memory_limit', -1);
 set_time_limit(0);
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Command\BeginCommand;
-use PhpTuf\ComposerStager\Console\Command\CleanCommand;
-use PhpTuf\ComposerStager\Console\Command\CommitCommand;
-use PhpTuf\ComposerStager\Console\Command\StageCommand;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-$application = new Application();
+$containerBuilder = new ContainerBuilder();
 
-$application->add(new BeginCommand());
-$application->add(new CleanCommand());
-$application->add(new CommitCommand());
-$application->add(new StageCommand());
+$loader = new YamlFileLoader($containerBuilder, new FileLocator());
+$loader->load(__DIR__ . '/../config/services.yml');
+
+$containerBuilder->compile();
+
+/** @var Application $application */
+$application = $containerBuilder->get(Application::class);
+
+// Register commands.
+// @todo This shouldn't be necessary--it should be done automatically by the
+//   services configuration. Figure out what's wrong and remove this hack.
+// @see https://symfony.com/doc/current/console.html#registering-the-command
+foreach ($containerBuilder->getServiceIds() as $serviceId) {
+    $service = $containerBuilder->get($serviceId);
+    if (!is_a($service, Command::class)) {
+      continue;
+    }
+    $application->add($service);
+}
 
 $application->run();

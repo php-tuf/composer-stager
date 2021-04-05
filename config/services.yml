@@ -1,0 +1,11 @@
+---
+services:
+
+  _defaults:
+    autoconfigure: true
+    autowire: true
+    public: true
+
+  PhpTuf\ComposerStager\:
+    public: true
+    resource: '../src/*'
