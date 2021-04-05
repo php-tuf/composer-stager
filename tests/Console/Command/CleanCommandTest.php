@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\CleanCommand;
 use PhpTuf\ComposerStager\Console\Command\StatusCode;
+use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Tests\Console\CommandTestBase;
 use Symfony\Component\Console\Command\Command;
 
@@ -45,6 +46,6 @@ class CleanCommandTest extends CommandTestBase
         $this->executeCommand();
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(StatusCode::OK, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(ExitCode::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
     }
 }

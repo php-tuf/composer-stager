@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,6 +21,6 @@ class CleanCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        return StatusCode::OK;
+        return ExitCode::SUCCESS;
     }
 }
