@@ -30,27 +30,32 @@ class ApplicationTest extends TestCase
         ], array_keys($input->getOptions()), 'Set correct options');
     }
 
-    public function testDefaultActiveDirOption(): void
+    /**
+     * @dataProvider providerDefaultDirOptionDefinitions
+     */
+    public function testDefaultActiveDirOptionDefinitions($name, $shortcut): void
     {
         $application = new Application();
         $input = $application->getDefinition();
-        $workingDirOption = $input->getOption('active-dir');
+        $workingDirOption = $input->getOption($name);
 
-        self::assertSame('active-dir', $workingDirOption->getName(), 'Set correct name.');
-        self::assertSame('d', $workingDirOption->getShortcut(), 'Set correct shortcut.');
+        self::assertSame($name, $workingDirOption->getName(), 'Set correct name.');
+        self::assertSame($shortcut, $workingDirOption->getShortcut(), 'Set correct shortcut.');
         self::assertNull($workingDirOption->getDefault(), 'Set correct default.');
         self::assertNotEmpty($workingDirOption->getDescription(), 'Set a description.');
     }
 
-    public function testDefaultStagingDirOption(): void
+    public function providerDefaultDirOptionDefinitions(): array
     {
-        $application = new Application();
-        $input = $application->getDefinition();
-        $workingDirOption = $input->getOption('staging-dir');
-
-        self::assertSame('staging-dir', $workingDirOption->getName(), 'Set correct name.');
-        self::assertSame('s', $workingDirOption->getShortcut(), 'Set correct shortcut.');
-        self::assertNull($workingDirOption->getDefault(), 'Set correct default.');
-        self::assertNotEmpty($workingDirOption->getDescription(), 'Set a description.');
+        return [
+            [
+                'name' => 'active-dir',
+                'shortcut' => 'd',
+            ],
+            [
+                'name' => 'staging-dir',
+                'shortcut' => 's',
+            ],
+        ];
     }
 }
