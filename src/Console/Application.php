@@ -2,11 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Console;
 
-use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-class Application extends SymfonyApplication
+class Application extends \Symfony\Component\Console\Application
 {
     private const NAME = 'Composer Stager';
     private const VERSION = 'v1.0.x-dev';
@@ -22,7 +21,7 @@ class Application extends SymfonyApplication
 
         $inputDefinition->addOption(
             new InputOption(
-                'active-dir',
+                ApplicationOptions::ACTIVE_DIR,
                 'd',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as active directory'
@@ -31,7 +30,7 @@ class Application extends SymfonyApplication
 
         $inputDefinition->addOption(
             new InputOption(
-                'staging-dir',
+                ApplicationOptions::STAGING_DIR,
                 's',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as staging directory'

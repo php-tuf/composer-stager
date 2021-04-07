@@ -3,7 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Console;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PHPUnit\Framework\TestCase;
+use PhpTuf\ComposerStager\Console\ApplicationOptions;
+use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Application
@@ -25,8 +26,8 @@ class ApplicationTest extends TestCase
             'ansi',
             'no-ansi',
             'no-interaction',
-            'active-dir',
-            'staging-dir',
+            ApplicationOptions::ACTIVE_DIR,
+            ApplicationOptions::STAGING_DIR,
         ], array_keys($input->getOptions()), 'Set correct options');
     }
 
@@ -49,11 +50,11 @@ class ApplicationTest extends TestCase
     {
         return [
             [
-                'name' => 'active-dir',
+                'name' => ApplicationOptions::ACTIVE_DIR,
                 'shortcut' => 'd',
             ],
             [
-                'name' => 'staging-dir',
+                'name' => ApplicationOptions::STAGING_DIR,
                 'shortcut' => 's',
             ],
         ];

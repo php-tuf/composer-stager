@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\BeginCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Tests\Console\CommandTestBase;
+use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Command\Command;
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\BeginCommand
  */
-class BeginCommandTest extends CommandTestBase
+class BeginCommandTest extends CommandTestCase
 {
     protected function createCommand(): Command
     {

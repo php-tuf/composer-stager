@@ -3,11 +3,11 @@
 namespace PhpTuf\ComposerStager\Tests\Console;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PHPUnit\Framework\TestCase;
+use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-abstract class CommandTestBase extends TestCase
+abstract class CommandTestCase extends TestCase
 {
     /**
      * The command tester.
