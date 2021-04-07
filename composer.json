@@ -13,10 +13,10 @@
         }
     ],
     "require": {
-        "symfony/config": "^4.4",
-        "symfony/console": "^4.4",
-        "symfony/dependency-injection": "^4.4",
-        "symfony/yaml": "^4.4"
+        "symfony/config": "^4.4 || ^5.2",
+        "symfony/console": "^4.4 || ^5.2",
+        "symfony/dependency-injection": "^4.4 || ^5.2",
+        "symfony/yaml": "^4.4 || ^5.2"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
