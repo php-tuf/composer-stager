@@ -57,7 +57,7 @@
     ],
     "scripts": {
         "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
-        "lint": "find src -name '*.php' -exec php -l {} \\;",
+        "lint": "find src tests -name '*.php' -print0 | xargs -0 -n1 php -l",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpunit": "phpunit --coverage-clover /tmp/clover.xml # Enable coverage to test annotations",
