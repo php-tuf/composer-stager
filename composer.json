@@ -19,10 +19,11 @@
         "symfony/yaml": "^4.4 || ^5.2"
     },
     "require-dev": {
+        "ext-json": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "php-tuf/phpcodesniffer-standard": "dev-main",
-        "phpunit/phpunit": "^9.5",
-        "ext-json": "*"
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "optimize-autoloader": true,
