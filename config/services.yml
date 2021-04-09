@@ -9,3 +9,4 @@ services:
   PhpTuf\ComposerStager\:
     public: true
     resource: '../src/*'
+    exclude: '../src/Exception'
