@@ -2,8 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Console;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends \Symfony\Component\Console\Application
 {
@@ -38,5 +42,17 @@ class Application extends \Symfony\Component\Console\Application
         );
 
         return $inputDefinition;
+    }
+
+    protected function doRunCommand(
+        Command $command,
+        InputInterface $input,
+        OutputInterface $output
+    ): int {
+        $output->getFormatter()->setStyle(
+            'error',
+            new OutputFormatterStyle('red')
+        );
+        return parent::doRunCommand($command, $input, $output);
     }
 }

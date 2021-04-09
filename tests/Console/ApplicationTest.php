@@ -4,7 +4,13 @@ namespace PhpTuf\ComposerStager\Tests\Console;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\ApplicationOptions;
+use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Tester\ApplicationTester;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Application
@@ -13,6 +19,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 class ApplicationTest extends TestCase
 {
+    /**
+     * @uses \PhpTuf\ComposerStager\Console\Application::getDefaultInputDefinition
+     */
     public function testDefaultOptions(): void
     {
         $application = new Application();
@@ -32,21 +41,27 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @dataProvider providerDefaultDirOptionDefinitions
+     * @covers ::getDefaultInputDefinition
+     *
+     * @dataProvider providerGlobalOptionDefinitions
      */
-    public function testDefaultActiveDirOptionDefinitions($name, $shortcut): void
+    public function testGlobalOptionDefinitions($name, $shortcut): void
     {
         $application = new Application();
         $input = $application->getDefinition();
-        $workingDirOption = $input->getOption($name);
+        $option = $input->getOption($name);
 
-        self::assertSame($name, $workingDirOption->getName(), 'Set correct name.');
-        self::assertSame($shortcut, $workingDirOption->getShortcut(), 'Set correct shortcut.');
-        self::assertNull($workingDirOption->getDefault(), 'Set correct default.');
-        self::assertNotEmpty($workingDirOption->getDescription(), 'Set a description.');
+        self::assertSame($name, $option->getName(), 'Set correct name.');
+        self::assertSame(
+            $shortcut,
+            $option->getShortcut(),
+            'Set correct shortcut.'
+        );
+        self::assertNull($option->getDefault(), 'Set correct default.');
+        self::assertNotEmpty($option->getDescription(), 'Set a description.');
     }
 
-    public function providerDefaultDirOptionDefinitions(): array
+    public function providerGlobalOptionDefinitions(): array
     {
         return [
             [
@@ -58,5 +73,37 @@ class ApplicationTest extends TestCase
                 'shortcut' => 's',
             ],
         ];
+    }
+
+    /**
+     * @covers ::doRunCommand
+     */
+    public function testGlobalOutputStyleOverrides(): void
+    {
+        $createdCommand = new class() extends Command {
+            protected static $defaultName = 'test';
+
+            protected function execute(
+                InputInterface $input,
+                OutputInterface $output
+            ): int {
+                return ExitCode::SUCCESS;
+            }
+        };
+
+        $application = new Application();
+        $application->setAutoExit(false);
+        $application->add($createdCommand);
+        $foundCommand = $application->find($createdCommand->getName());
+        $applicationTester = new ApplicationTester($application);
+        $applicationTester->run([
+            'command' => $foundCommand->getName(),
+        ]);
+
+        $expectedStyle = new OutputFormatterStyle('red');
+        $actualStyle = $applicationTester->getOutput()
+            ->getFormatter()
+            ->getStyle('error');
+        self::assertEquals($expectedStyle, $actualStyle, 'Overrode error style.');
     }
 }

@@ -59,8 +59,7 @@ abstract class CommandTestCase extends TestCase
         $application = new Application();
         $createdCommand = $this->createCommand();
         $application->add($createdCommand);
-        $foundCommand = $application->find($createdCommand::getDefaultName());
-        self::assertInstanceOf(get_class($createdCommand), $foundCommand, 'Instantiated class.');
+        $foundCommand = $application->find($createdCommand->getName());
         $this->commandTester = new CommandTester($foundCommand);
         return $this->commandTester;
     }
