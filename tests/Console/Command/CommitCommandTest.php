@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\CommitCommand;
-use PhpTuf\ComposerStager\Console\Command\StatusCode;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Tests\Console\CommandTestBase;
 use Symfony\Component\Console\Command\Command;

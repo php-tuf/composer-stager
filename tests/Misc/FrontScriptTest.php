@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Misc;
 
-use PhpTuf\ComposerStager\Console\Application;
 use PHPUnit\Framework\TestCase;
 
 /**
