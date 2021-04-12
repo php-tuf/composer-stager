@@ -22,7 +22,7 @@ abstract class CommandTestCase extends TestCase
      * @return \Symfony\Component\Console\Command\Command
      *   A command object with mocked dependencies injected.
      */
-    abstract protected function createCommand(): Command;
+    abstract protected function createSut(): Command;
 
     /**
      * Executes a given command with the command tester.
@@ -39,7 +39,7 @@ abstract class CommandTestCase extends TestCase
     ): void {
         $tester = $this->getCommandTester();
         $tester->setInputs($inputs);
-        $commandName = $this->createCommand()::getDefaultName();
+        $commandName = $this->createSut()::getDefaultName();
         $args = array_merge(['command' => $commandName], $args);
         $tester->execute($args);
     }
@@ -57,7 +57,7 @@ abstract class CommandTestCase extends TestCase
         }
 
         $application = new Application();
-        $createdCommand = $this->createCommand();
+        $createdCommand = $this->createSut();
         $application->add($createdCommand);
         $foundCommand = $application->find($createdCommand->getName());
         $this->commandTester = new CommandTester($foundCommand);

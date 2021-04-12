@@ -14,7 +14,7 @@ use Symfony\Component\Console\Command\Command;
  */
 class StageCommandTest extends CommandTestCase
 {
-    protected function createCommand(): Command
+    protected function createSut(): Command
     {
         return new StageCommand();
     }
@@ -24,7 +24,7 @@ class StageCommandTest extends CommandTestCase
      */
     public function testBasicConfiguration(): void
     {
-        $command = $this->createCommand();
+        $command = $this->createSut();
 
         $definition = $command->getDefinition();
         $arguments = $definition->getArguments();

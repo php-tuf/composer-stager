@@ -51,7 +51,7 @@ class ApplicationOptionsTest extends TestCase
         $activeDirGivenInput,
         $activeDirExpectedOutput,
         $stagingDirGivenInput,
-        $stagingDirExpectdOutput
+        $stagingDirExpectedOutput
     ): void {
         $this->filesystem
             ->getcwd()
@@ -61,7 +61,7 @@ class ApplicationOptionsTest extends TestCase
         $sut->resolve($activeDirGivenInput, $stagingDirGivenInput);
 
         self::assertSame($activeDirExpectedOutput, $sut->getActiveDir(), 'Resolved active directory.');
-        self::assertSame($stagingDirExpectdOutput, $sut->getStagingDir(), 'Resolved staging directory.');
+        self::assertSame($stagingDirExpectedOutput, $sut->getStagingDir(), 'Resolved staging directory.');
     }
 
     public function provider(): array
@@ -77,7 +77,7 @@ class ApplicationOptionsTest extends TestCase
             ],
             // Values provided.
             [
-                'cwd' => '/var/www',
+                'cwd' => '/var/www2',
                 'activeDirGivenInput' => '/lorem',
                 'activeDirExpectedOutput' => '/lorem',
                 'stagingDirGivenInput' => '/ipsum',

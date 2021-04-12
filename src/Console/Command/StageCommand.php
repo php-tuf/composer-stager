@@ -13,9 +13,7 @@ class StageCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Stages a Composer command')
-            ;
+        $this->setDescription('Stages a Composer command');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

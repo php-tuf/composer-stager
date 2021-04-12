@@ -13,9 +13,7 @@ class CommitCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Makes the staged changes live by syncing the active directory with the staging directory')
-            ;
+        $this->setDescription('Makes the staged changes live by syncing the active directory with the staging directory');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

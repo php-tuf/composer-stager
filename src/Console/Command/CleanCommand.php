@@ -13,9 +13,7 @@ class CleanCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Removes the staging directory')
-            ;
+        $this->setDescription('Removes the staging directory');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

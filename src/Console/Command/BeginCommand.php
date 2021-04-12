@@ -13,9 +13,7 @@ class BeginCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Begins the staging process by copying the active directory to the staging directory')
-            ;
+        $this->setDescription('Begins the staging process by copying the active directory to the staging directory');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

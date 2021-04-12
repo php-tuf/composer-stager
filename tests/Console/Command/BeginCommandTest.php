@@ -14,7 +14,7 @@ use Symfony\Component\Console\Command\Command;
  */
 class BeginCommandTest extends CommandTestCase
 {
-    protected function createCommand(): Command
+    protected function createSut(): Command
     {
         return new BeginCommand();
     }
@@ -24,15 +24,15 @@ class BeginCommandTest extends CommandTestCase
      */
     public function testBasicConfiguration(): void
     {
-        $command = $this->createCommand();
+        $sut = $this->createSut();
 
-        $definition = $command->getDefinition();
+        $definition = $sut->getDefinition();
         $arguments = $definition->getArguments();
         $options = $definition->getOptions();
 
-        self::assertSame('begin', $command->getName(), 'Set correct name.');
-        self::assertSame([], $command->getAliases(), 'Set correct aliases.');
-        self::assertNotEmpty($command->getDescription(), 'Set a description.');
+        self::assertSame('begin', $sut->getName(), 'Set correct name.');
+        self::assertSame([], $sut->getAliases(), 'Set correct aliases.');
+        self::assertNotEmpty($sut->getDescription(), 'Set a description.');
         self::assertSame([], array_keys($arguments), 'Set correct arguments.');
         self::assertSame([], array_keys($options), 'Set correct options.');
     }
