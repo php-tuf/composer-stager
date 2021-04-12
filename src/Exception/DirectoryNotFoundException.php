@@ -8,13 +8,10 @@ class DirectoryNotFoundException extends PathException
 {
     public function __construct(
         string $path,
-        string $message = '',
+        string $message = 'No such directory: "%s"',
         int $code = 0,
         Throwable $previous = null
     ) {
-        if (!$message) {
-            $message = sprintf('No such directory: "%s"', $path);
-        }
         parent::__construct($path, $message, $code, $previous);
     }
 }

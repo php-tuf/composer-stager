@@ -18,6 +18,7 @@ class PathException extends \Exception
         Throwable $previous = null
     ) {
         $this->path = $path;
+        $message = sprintf($message, $path);
         parent::__construct($message, $code, $previous);
     }
 
