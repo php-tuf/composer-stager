@@ -22,6 +22,7 @@
     "require-dev": {
         "ext-json": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
         "php-tuf/phpcodesniffer-standard": "dev-main",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.1",
@@ -62,7 +63,7 @@
     ],
     "scripts": {
         "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
-        "lint": "find src tests -name '*.php' -print0 | xargs -0 -n1 php -l",
+        "lint": "parallel-lint --exclude vendor --no-progress .",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpstan": "phpstan analyse src tests",
