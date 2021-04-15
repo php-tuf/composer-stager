@@ -52,7 +52,7 @@ abstract class CommandTestCase extends TestCase
      */
     protected function getCommandTester(): CommandTester
     {
-        if ($this->commandTester) {
+        if ($this->commandTester !== null) {
             return $this->commandTester;
         }
 

@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Process\ProcessFactory;
 class Stager
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $command;
 
@@ -38,6 +38,8 @@ class Stager
     }
 
     /**
+     * @param string[] $command
+     *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
@@ -58,7 +60,7 @@ class Stager
      */
     private function validateCommand(): void
     {
-        if (!$this->command) {
+        if ($this->command === []) {
             throw new LogicException('The command cannot be empty.');
         }
         if (array_key_exists('--working-dir', $this->command)

@@ -14,7 +14,7 @@ if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-ini_set('memory_limit', -1);
+ini_set('memory_limit', '-1');
 set_time_limit(0);
 
 use PhpTuf\ComposerStager\Console\Application;
@@ -39,10 +39,9 @@ $application = $containerBuilder->get(Application::class);
 // @see https://symfony.com/doc/current/console.html#registering-the-command
 foreach ($containerBuilder->getServiceIds() as $serviceId) {
     $service = $containerBuilder->get($serviceId);
-    if (!is_a($service, Command::class)) {
-      continue;
+    if ($service !== null && is_a($service, Command::class)) {
+        $application->add($service);
     }
-    $application->add($service);
 }
 
-$application->run();
+return $application->run();

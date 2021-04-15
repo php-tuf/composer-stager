@@ -68,7 +68,7 @@
         "lint": "parallel-lint --exclude vendor --no-progress .",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
-        "phpstan": "phpstan analyse src tests",
+        "phpstan": "phpstan analyse",
         "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
         "test": [
             "composer validate",

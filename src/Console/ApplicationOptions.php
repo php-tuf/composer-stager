@@ -47,17 +47,17 @@ class ApplicationOptions
 
     private function resolveActiveDir(?string $activeDir): string
     {
-        if ($activeDir) {
-            return $activeDir;
+        if (is_null($activeDir)) {
+            return $this->filesystem->getcwd();
         }
-        return $this->filesystem->getcwd();
+        return $activeDir;
     }
 
     private function resolveStagingDir(?string $stagingDir): string
     {
-        if ($stagingDir) {
-            return $stagingDir;
+        if (is_null($stagingDir)) {
+            return $this->filesystem->getcwd() . '/.composer_staging';
         }
-        return $this->filesystem->getcwd() . '/.composer_staging';
+        return $stagingDir;
     }
 }

@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Exception;
 
 use Throwable;
 
-class PathException extends Exception
+class PathException extends IOException
 {
     /**
      * @var string
