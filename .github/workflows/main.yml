@@ -36,21 +36,22 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Lint PHP
-        # The lint implementation depends on BSD find.
-        if: matrix.operating-system != 'windows-latest'
-        run: composer lint
-
       - name: Validate composer.json
         run: composer validate
 
       - name: Install dependencies
         run: composer install --ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Lint PHP
+        run: composer lint
+
       - name: Run PHPCS
         # Windows line endings wreak havoc with coding standards.
         if: matrix.operating-system != 'windows-latest'
         run: composer phpcs
+
+      - name: Run PHPStan
+        run: composer phpstan
 
       - name: Run PHPUnit
         run: composer phpunit

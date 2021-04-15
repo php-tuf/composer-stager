@@ -69,6 +69,7 @@
         "phpstan": "phpstan analyse src tests",
         "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
         "test": [
+            "composer validate",
             "@lint",
             "@phpcs",
             "@phpstan",
