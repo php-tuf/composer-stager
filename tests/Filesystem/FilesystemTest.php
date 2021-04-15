@@ -15,7 +15,6 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem {
 
     /**
      * @coversDefaultClass \PhpTuf\ComposerStager\Filesystem\Filesystem
-     * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Filesystem\Filesystem symfonyFilesystem
      */
     class FilesystemTest extends TestCase
     {

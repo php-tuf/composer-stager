@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
- * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
 class StagerTest extends TestCase
 {

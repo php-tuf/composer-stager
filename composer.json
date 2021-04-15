@@ -24,6 +24,10 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "php-tuf/phpcodesniffer-standard": "dev-main",
         "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12.83",
+        "phpstan/phpstan-deprecation-rules": "^0.12.6",
+        "phpstan/phpstan-strict-rules": "^0.12.9",
         "phpunit/phpunit": "^9.5"
     },
     "config": {
@@ -61,17 +65,23 @@
         "lint": "find src tests -name '*.php' -print0 | xargs -0 -n1 php -l",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
+        "phpstan": "phpstan analyse src tests",
         "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
         "test": [
             "@lint",
             "@phpcs",
+            "@phpstan",
             "@phpunit"
         ]
     },
     "scripts-descriptions": {
+        "coverage": "Runs PHPUnit with test coverage and opens a report in the browser.",
+        "lint": "Lints PHP files.",
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
-        "test": "Runs automated tests."
+        "phpstan": "Analyzes code to find bugs.",
+        "phpunit": "Runs PHPUnit tests.",
+        "test": "Runs all automated tests and static analysis."
     },
     "support": {
         "issues": "https://github.com/php-tuf/composer-stager/issues",
