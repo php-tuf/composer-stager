@@ -57,9 +57,11 @@ abstract class CommandTestCase extends TestCase
         }
 
         $application = new Application();
+
         $createdCommand = $this->createSut();
         $application->add($createdCommand);
         $foundCommand = $application->find($createdCommand->getName());
+
         $this->commandTester = new CommandTester($foundCommand);
         return $this->commandTester;
     }

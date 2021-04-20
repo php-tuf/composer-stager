@@ -2,24 +2,21 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console;
 
-use PhpTuf\ComposerStager\Console\ApplicationOptions;
+use PhpTuf\ComposerStager\Console\GlobalOptions;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Console\ApplicationOptions
- * @uses \PhpTuf\ComposerStager\Console\ApplicationOptions::__construct
- * @uses \PhpTuf\ComposerStager\Console\ApplicationOptions::getActiveDir
- * @uses \PhpTuf\ComposerStager\Console\ApplicationOptions::getStagingDir
- * @uses \PhpTuf\ComposerStager\Console\ApplicationOptions::resolve
- * @uses \PhpTuf\ComposerStager\Console\ApplicationOptions::resolveActiveDir
- * @uses \PhpTuf\ComposerStager\Console\ApplicationOptions::resolveStagingDir
+ * @coversDefaultClass \PhpTuf\ComposerStager\Console\GlobalOptions
+ * @uses \PhpTuf\ComposerStager\Console\GlobalOptions::__construct
+ * @uses \PhpTuf\ComposerStager\Console\GlobalOptions::resolveActiveDir
+ * @uses \PhpTuf\ComposerStager\Console\GlobalOptions::resolveStagingDir
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
  * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
-class ApplicationOptionsTest extends TestCase
+class GlobalOptionsTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -30,17 +27,14 @@ class ApplicationOptionsTest extends TestCase
             ->willReturn(true);
     }
 
-    private function createSut(): ApplicationOptions
+    private function createSut(): GlobalOptions
     {
         $filesystem = $this->filesystem->reveal();
-        return new ApplicationOptions($filesystem);
+        return new GlobalOptions($filesystem);
     }
 
     /**
      * @covers ::__construct
-     * @covers ::getActiveDir
-     * @covers ::getStagingDir
-     * @covers ::resolve
      * @covers ::resolveActiveDir
      * @covers ::resolveStagingDir
      *
@@ -58,10 +52,11 @@ class ApplicationOptionsTest extends TestCase
             ->willReturn($cwd);
         $sut = $this->createSut();
 
-        $sut->resolve($activeDirGivenInput, $stagingDirGivenInput);
+        $activeDirActualOutput = $sut->resolveActiveDir($activeDirGivenInput);
+        $stagingDirActualOutput = $sut->resolveStagingDir($stagingDirGivenInput);
 
-        self::assertSame($activeDirExpectedOutput, $sut->getActiveDir(), 'Resolved active directory.');
-        self::assertSame($stagingDirExpectedOutput, $sut->getStagingDir(), 'Resolved staging directory.');
+        self::assertSame($activeDirExpectedOutput, $activeDirActualOutput, 'Resolved active directory.');
+        self::assertSame($stagingDirExpectedOutput, $stagingDirActualOutput, 'Resolved staging directory.');
     }
 
     public function provider(): array

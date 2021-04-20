@@ -11,6 +11,7 @@ use Symfony\Component\Console\Command\Command;
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Command\CommitCommand
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\CommitCommand
+ * @uses \PhpTuf\ComposerStager\Console\GlobalOptions
  */
 class CommitCommandTest extends CommandTestCase
 {

@@ -25,7 +25,7 @@ class Application extends \Symfony\Component\Console\Application
 
         $inputDefinition->addOption(
             new InputOption(
-                ApplicationOptions::ACTIVE_DIR,
+                GlobalOptions::ACTIVE_DIR,
                 'd',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as active directory'
@@ -34,7 +34,7 @@ class Application extends \Symfony\Component\Console\Application
 
         $inputDefinition->addOption(
             new InputOption(
-                ApplicationOptions::STAGING_DIR,
+                GlobalOptions::STAGING_DIR,
                 's',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as staging directory'
@@ -44,15 +44,24 @@ class Application extends \Symfony\Component\Console\Application
         return $inputDefinition;
     }
 
+    /**
+     * @throws \Throwable
+     */
     protected function doRunCommand(
         Command $command,
         InputInterface $input,
         OutputInterface $output
     ): int {
+        $this->setOutputFormatterErrorStyle($output);
+        return parent::doRunCommand($command, $input, $output);
+    }
+
+    protected function setOutputFormatterErrorStyle(OutputInterface $output): void
+    {
         $output->getFormatter()->setStyle(
             'error',
+            // Red foreground, no background.
             new OutputFormatterStyle('red')
         );
-        return parent::doRunCommand($command, $input, $output);
     }
 }
