@@ -1,12 +1,12 @@
 ---
 services:
 
-  _defaults:
-    autoconfigure: true
-    autowire: true
-    public: true
+    _defaults:
+        autoconfigure: true
+        autowire: true
+        public: true
 
-  PhpTuf\ComposerStager\:
-    public: true
-    resource: '../src/*'
-    exclude: '../src/Exception'
+    PhpTuf\ComposerStager\:
+        public: true
+        resource: '../src/*'
+        exclude: '../src/Exception'
