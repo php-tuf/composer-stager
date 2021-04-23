@@ -99,8 +99,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @covers ::doRunCommand
-     * @covers ::setOutputFormatterErrorStyle
+     * @covers ::configureIO
      */
     public function testGlobalOutputStyleOverrides(): void
     {
