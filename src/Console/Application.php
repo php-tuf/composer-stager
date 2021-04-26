@@ -13,11 +13,20 @@ class Application extends \Symfony\Component\Console\Application
     private const NAME = 'Composer Stager';
     private const VERSION = 'v1.0.x-dev';
 
-    public function __construct()
+    /**
+     * @var \PhpTuf\ComposerStager\Console\GlobalOptions
+     */
+    private $globalOptions;
+
+    public function __construct(GlobalOptions $globalOptions)
     {
         parent::__construct(static::NAME, static::VERSION);
+        $this->globalOptions = $globalOptions;
     }
 
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     */
     protected function getDefaultInputDefinition(): InputDefinition
     {
         $inputDefinition = parent::getDefaultInputDefinition();
@@ -27,7 +36,8 @@ class Application extends \Symfony\Component\Console\Application
                 GlobalOptions::ACTIVE_DIR,
                 'd',
                 InputOption::VALUE_REQUIRED,
-                'Use the given directory as active directory'
+                'Use the given directory as active directory',
+                $this->globalOptions->getDefaultActiveDir()
             )
         );
 
@@ -36,7 +46,8 @@ class Application extends \Symfony\Component\Console\Application
                 GlobalOptions::STAGING_DIR,
                 's',
                 InputOption::VALUE_REQUIRED,
-                'Use the given directory as staging directory'
+                'Use the given directory as staging directory',
+                $this->globalOptions->getDefaultStagingDir()
             )
         );
 

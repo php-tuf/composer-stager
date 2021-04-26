@@ -21,7 +21,14 @@ use Symfony\Component\Console\Tester\ApplicationTester;
  */
 class ApplicationTest extends TestCase
 {
+    use GlobalOptionsSetupTrait;
+
     private const TEST_COMMAND = ['command' => 'test'];
+
+    protected function setUp(): void
+    {
+        $this->setUpGlobalOptions();
+    }
 
     private function createSut(): Application
     {
@@ -36,7 +43,8 @@ class ApplicationTest extends TestCase
             }
         };
 
-        $application = new Application();
+        $globalOptions = $this->globalOptions->reveal();
+        $application = new Application($globalOptions);
         $application->setAutoExit(false);
         $application->add($createdCommand);
         return $application;
@@ -70,15 +78,25 @@ class ApplicationTest extends TestCase
      *
      * @dataProvider providerGlobalOptionDefinitions
      */
-    public function testGlobalOptionDefinitions($name, $descriptionContains, $shortcut): void
-    {
+    public function testGlobalOptionDefinitions(
+        $name,
+        $descriptionContains,
+        $shortcut,
+        $default
+    ): void {
+        $this->globalOptions
+            ->getDefaultActiveDir()
+            ->willReturn($default);
+        $this->globalOptions
+            ->getDefaultStagingDir()
+            ->willReturn($default);
         $application = $this->createSut();
         $input = $application->getDefinition();
         $option = $input->getOption($name);
 
         self::assertSame($name, $option->getName(), 'Set correct name.');
         self::assertSame($shortcut, $option->getShortcut(), 'Set correct shortcut.');
-        self::assertNull($option->getDefault(), 'Set correct default.');
+        self::assertSame($default, $option->getDefault(), 'Set correct default.');
         self::assertStringContainsString($descriptionContains, $option->getDescription(), 'Set correct description.');
     }
 
@@ -89,11 +107,13 @@ class ApplicationTest extends TestCase
                 'name' => GlobalOptions::ACTIVE_DIR,
                 'descriptionContains' => 'active',
                 'shortcut' => 'd',
+                'default' => '/lorem',
             ],
             [
                 'name' => GlobalOptions::STAGING_DIR,
                 'descriptionContains' => 'staging',
                 'shortcut' => 's',
+                'default' => '/ipsum',
             ],
         ];
     }

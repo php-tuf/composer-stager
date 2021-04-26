@@ -22,10 +22,26 @@ class GlobalOptions
     /**
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
+    public function getDefaultActiveDir(): string
+    {
+        return $this->filesystem->getcwd();
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     */
+    public function getDefaultStagingDir(): string
+    {
+        return $this->filesystem->getcwd() . '/.composer_staging';
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     */
     public function resolveActiveDir(?string $activeDir): string
     {
         if (is_null($activeDir)) {
-            return $this->filesystem->getcwd();
+            return $this->getDefaultActiveDir();
         }
         return $activeDir;
     }
@@ -36,7 +52,7 @@ class GlobalOptions
     public function resolveStagingDir(?string $stagingDir): string
     {
         if (is_null($stagingDir)) {
-            return $this->filesystem->getcwd() . '/.composer_staging';
+            return $this->getDefaultStagingDir();
         }
         return $stagingDir;
     }

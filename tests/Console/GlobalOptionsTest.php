@@ -35,6 +35,8 @@ class GlobalOptionsTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getDefaultActiveDir
+     * @covers ::getDefaultStagingDir
      * @covers ::resolveActiveDir
      * @covers ::resolveStagingDir
      *
@@ -42,6 +44,8 @@ class GlobalOptionsTest extends TestCase
      */
     public function test(
         $cwd,
+        $defaultActiveDirExpected,
+        $defaultStagingDirExpected,
         $activeDirGivenInput,
         $activeDirExpectedOutput,
         $stagingDirGivenInput,
@@ -52,10 +56,14 @@ class GlobalOptionsTest extends TestCase
             ->willReturn($cwd);
         $sut = $this->createSut();
 
+        $defaultActiveDirActual = $sut->getDefaultActiveDir();
         $activeDirActualOutput = $sut->resolveActiveDir($activeDirGivenInput);
+        $defaultStagingDirActual = $sut->getDefaultStagingDir();
         $stagingDirActualOutput = $sut->resolveStagingDir($stagingDirGivenInput);
 
+        self::assertSame($defaultActiveDirExpected, $defaultActiveDirActual, 'Got default active directory.');
         self::assertSame($activeDirExpectedOutput, $activeDirActualOutput, 'Resolved active directory.');
+        self::assertSame($defaultStagingDirExpected, $defaultStagingDirActual, 'Got default staging directory.');
         self::assertSame($stagingDirExpectedOutput, $stagingDirActualOutput, 'Resolved staging directory.');
     }
 
@@ -65,6 +73,8 @@ class GlobalOptionsTest extends TestCase
             // Defaults.
             [
                 'cwd' => '/var/www',
+                'defaultActiveDirExpected' => '/var/www',
+                'defaultStagingDirExpected' => '/var/www/.composer_staging',
                 'activeDirGivenInput' => null,
                 'activeDirExpectedOutput' => '/var/www',
                 'stagingDirGivenInput' => null,
@@ -73,6 +83,8 @@ class GlobalOptionsTest extends TestCase
             // Values provided.
             [
                 'cwd' => '/var/www2',
+                'defaultActiveDirExpected' => '/var/www2',
+                'defaultStagingDirExpected' => '/var/www2/.composer_staging',
                 'activeDirGivenInput' => '/lorem',
                 'activeDirExpectedOutput' => '/lorem',
                 'stagingDirGivenInput' => '/ipsum',
