@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
 
@@ -39,6 +40,16 @@ class Stager
 
     /**
      * @param string[] $command
+     *   The Composer command parts exactly as they would be typed in the
+     *   terminal. Example:
+     *
+     *   @code{.php}
+     *   $command = [
+     *     // "composer" is implied.
+     *     'update',
+     *     '--with-all-dependencies',
+     *   ];
+     *   @endcode
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
@@ -50,9 +61,20 @@ class Stager
     {
         $this->command = $command;
         $this->stagingDir = $stagingDir;
+        $this->validate();
+        $this->runCommand();
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
+     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     */
+    private function validate(): void
+    {
         $this->validateCommand();
         $this->validatePreconditions();
-        $this->runCommand();
     }
 
     /**
@@ -84,12 +106,20 @@ class Stager
         }
     }
 
+    /**
+     * @throws \Symfony\Component\Process\Exception\RuntimeException
+     */
     private function runCommand(): void
     {
-        $this->processFactory
+        $process = $this->processFactory
             ->create(array_merge([
                 'composer',
-                sprintf('--working-dir=%s', $this->stagingDir),
+                "--working-dir={$this->stagingDir}",
             ], $this->command));
+        try {
+            $process->mustRun();
+        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
+            throw new ProcessFailedException('', 0, $e);
+        }
     }
 }

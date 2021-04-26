@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -18,6 +19,7 @@ use Symfony\Component\Process\Process;
  * @covers ::__construct
  * @covers ::runCommand
  * @covers ::stage
+ * @covers ::validate
  * @covers ::validateCommand
  * @covers ::validatePreconditions
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
@@ -26,6 +28,7 @@ use Symfony\Component\Process\Process;
  *
  * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
 class StagerTest extends TestCase
 {
@@ -41,11 +44,11 @@ class StagerTest extends TestCase
         $this->filesystem
             ->isWritable(static::STAGING_DIR)
             ->willReturn(true);
-        $process = $this->prophesize(Process::class);
+        $this->process = $this->prophesize(Process::class);
         $this->processFactory = $this->prophesize(ProcessFactory::class);
         $this->processFactory
             ->create(Argument::any())
-            ->willReturn($process);
+            ->willReturn($this->process);
     }
 
     private function createSut(): Stager
@@ -55,23 +58,53 @@ class StagerTest extends TestCase
         return new Stager($filesystem, $processFactory);
     }
 
-    public function testSuccess(): void
+    /**
+     * @dataProvider providerSuccess
+     */
+    public function testSuccess($givenCommand, $expectedCommand): void
     {
-        $this->processFactory
-            ->create([
-                'composer',
-                sprintf('--working-dir=%s', self::STAGING_DIR),
-                static::INERT_COMMAND,
-            ])
+        $process = $this->process;
+        $this->process
+            ->mustRun()
             ->shouldBeCalledOnce();
+        $this->processFactory
+            ->create($expectedCommand)
+            ->shouldBeCalledOnce()
+            ->willReturn($process);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
-
-        self::assertTrue(true, 'Completed correctly.');
+        $sut->stage($givenCommand, static::STAGING_DIR);
     }
 
-    public function testMissingStagingDirectory(): void
+    public function providerSuccess(): array
+    {
+        return [
+            [
+                'givenCommand' => ['update'],
+                'expectedCommand' => [
+                    'composer',
+                    '--working-dir=' . self::STAGING_DIR,
+                    'update',
+                ],
+            ],
+            [
+                'givenCommand' => [
+                    'require',
+                    'lorem/ipsum',
+                    '--dry-run',
+                ],
+                'expectedCommand' => [
+                    'composer',
+                    '--working-dir=' . self::STAGING_DIR,
+                    'require',
+                    'lorem/ipsum',
+                    '--dry-run',
+                ],
+            ],
+        ];
+    }
+
+    public function testStagingDirectoryDoesNotExist(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
         $this->expectDeprecationMessageMatches('/staging directory/');
@@ -131,5 +164,41 @@ class StagerTest extends TestCase
             [['--working-dir' => 'lorem/ipsum']],
             [['-d' => 'lorem/ipsum']],
         ];
+    }
+
+    public function testProcessFailed(): void
+    {
+        $this->expectException(ProcessFailedException::class);
+
+        $this->process
+            ->isSuccessful()
+            ->willReturn(false);
+        $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
+        $exception = $exception->reveal();
+        $this->process
+            ->mustRun()
+            ->willThrow($exception);
+
+        $sut = $this->createSut();
+
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
+    }
+
+    public function testProcessFailedException(): void
+    {
+        $this->expectException(ProcessFailedException::class);
+
+        $this->process
+            ->isSuccessful()
+            ->willReturn(false);
+        $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
+        $exception = $exception->reveal();
+        $this->process
+            ->mustRun()
+            ->willThrow($exception);
+
+        $sut = $this->createSut();
+
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 }
