@@ -24,6 +24,7 @@
         "ext-json": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "jangregor/phpstan-prophecy": "^0.8.1",
+        "pepakriz/phpstan-exception-rules": "^0.11.6",
         "php-parallel-lint/php-parallel-lint": "^1.3",
         "php-tuf/phpcodesniffer-standard": "dev-main",
         "phpspec/prophecy-phpunit": "^2.0",

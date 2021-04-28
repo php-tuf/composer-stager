@@ -11,6 +11,8 @@ class ProcessFactory
      * @param mixed ...$args
      *
      * @return \Symfony\Component\Process\Process<\Generator>
+     *
+     * @throws \Symfony\Component\Process\Exception\LogicException
      */
     public function create(array $array, ...$args): Process
     {
