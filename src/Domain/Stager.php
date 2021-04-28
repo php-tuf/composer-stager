@@ -9,13 +9,14 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
+use Symfony\Component\Process\Process;
 
 class Stager
 {
     /**
      * @var string[]
      */
-    private $command;
+    private $composerCommand;
 
     /**
      * @var \PhpTuf\ComposerStager\Filesystem\Filesystem
@@ -39,14 +40,15 @@ class Stager
     }
 
     /**
-     * @param string[] $command
+     * @param string[] $composerCommand
      *   The Composer command parts exactly as they would be typed in the
      *   terminal. Example:
      *
      *   @code{.php}
      *   $command = [
      *     // "composer" is implied.
-     *     'update',
+     *     'require',
+     *     'lorem/ipsum:"^1 || ^2"',
      *     '--with-all-dependencies',
      *   ];
      *   @endcode
@@ -57,12 +59,12 @@ class Stager
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \Symfony\Component\Process\Exception\LogicException
      */
-    public function stage(array $command, string $stagingDir): void
+    public function stage(array $composerCommand, string $stagingDir): string
     {
-        $this->command = $command;
+        $this->composerCommand = $composerCommand;
         $this->stagingDir = $stagingDir;
         $this->validate();
-        $this->runCommand();
+        return $this->runCommand();
     }
 
     /**
@@ -83,11 +85,11 @@ class Stager
      */
     private function validateCommand(): void
     {
-        if ($this->command === []) {
+        if ($this->composerCommand === []) {
             throw new LogicException('The command cannot be empty.');
         }
-        if (array_key_exists('--working-dir', $this->command)
-            || array_key_exists('-d', $this->command)) {
+        if (array_key_exists('--working-dir', $this->composerCommand)
+            || array_key_exists('-d', $this->composerCommand)) {
             throw new InvalidArgumentException('Cannot use the "--working-dir" (or "-d") options');
         }
     }
@@ -109,17 +111,25 @@ class Stager
     /**
      * @throws \Symfony\Component\Process\Exception\RuntimeException
      */
-    private function runCommand(): void
+    private function runCommand(): string
     {
         $process = $this->processFactory
             ->create(array_merge([
                 'composer',
                 "--working-dir={$this->stagingDir}",
-            ], $this->command));
+            ], $this->composerCommand));
         try {
             $process->mustRun();
+            return $this->parseOutput($process);
         } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
-            throw new ProcessFailedException('', 0, $e);
+            throw new ProcessFailedException($e->getMessage());
         }
+    }
+
+    private function parseOutput(Process $process): string
+    {
+        $output = [$process->getOutput(), $process->getErrorOutput()];
+        $output = array_filter($output);
+        return implode(PHP_EOL, $output);
     }
 }

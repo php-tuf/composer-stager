@@ -16,15 +16,11 @@ use Symfony\Component\Process\Process;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Stager
- * @covers ::__construct
- * @covers ::runCommand
- * @covers ::stage
- * @covers ::validate
- * @covers ::validateCommand
- * @covers ::validatePreconditions
+ * @covers \PhpTuf\ComposerStager\Domain\Stager
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
@@ -59,24 +55,34 @@ class StagerTest extends TestCase
     }
 
     /**
-     * @dataProvider providerSuccess
+     * @dataProvider providerHappyPath
      */
-    public function testSuccess($givenCommand, $expectedCommand): void
+    public function testHappyPath($givenCommand, $expectedCommand, $output, $errorOutput, $expectedReturn): void
     {
         $process = $this->process;
         $this->process
             ->mustRun()
             ->shouldBeCalledOnce();
+        $this->process
+            ->getOutput()
+            ->shouldBeCalledOnce()
+            ->willReturn($output);
+        $this->process
+            ->getErrorOutput()
+            ->shouldBeCalledOnce()
+            ->willReturn($errorOutput);
         $this->processFactory
             ->create($expectedCommand)
             ->shouldBeCalledOnce()
             ->willReturn($process);
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, static::STAGING_DIR);
+        $actualReturn = $sut->stage($givenCommand, static::STAGING_DIR);
+
+        self::assertSame($expectedReturn, $actualReturn, 'Returned correct value');
     }
 
-    public function providerSuccess(): array
+    public function providerHappyPath(): array
     {
         return [
             [
@@ -86,6 +92,9 @@ class StagerTest extends TestCase
                     '--working-dir=' . self::STAGING_DIR,
                     'update',
                 ],
+                'output' => '',
+                'errorOutput' => '',
+                'expectedReturn' => '',
             ],
             [
                 'givenCommand' => [
@@ -100,6 +109,9 @@ class StagerTest extends TestCase
                     'lorem/ipsum',
                     '--dry-run',
                 ],
+                'output' => 'Lorem',
+                'errorOutput' => 'Ipsum',
+                'expectedReturn' => 'Lorem' . PHP_EOL . 'Ipsum',
             ],
         ];
     }

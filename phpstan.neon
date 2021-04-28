@@ -4,15 +4,10 @@ parameters:
         - bin/composer-stage
         - src
         - tests
+    checkMissingIterableValueType: false
     ignoreErrors:
         -
             message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no typehint specified.#'
-            path: tests
-        -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no value type specified in iterable type array.#'
-            path: tests
-        -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) return type has no value type specified in iterable type array.#'
             path: tests
         -
             message: '#Parameter \#[0-9]+.\$[a-zA-Z0-9_]+ of method [a-zA-Z0-9\\_]+::[a-zA-Z0-9_]+\(\) expects [a-zA-Z0-9\|_]+, [a-zA-Z0-9\|_]+ given\.#'
