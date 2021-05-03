@@ -42,7 +42,8 @@ class Stager
     /**
      * @param string[] $composerCommand
      *   The Composer command parts exactly as they would be typed in the
-     *   terminal. Example:
+     *   terminal. There's no need to escape them in any way, only to separate
+     *   them. Example:
      *
      *   @code{.php}
      *   $command = [
@@ -108,9 +109,6 @@ class Stager
         }
     }
 
-    /**
-     * @throws \Symfony\Component\Process\Exception\RuntimeException
-     */
     private function runCommand(): string
     {
         $process = $this->processFactory
@@ -122,7 +120,7 @@ class Stager
             $process->mustRun();
             return $this->parseOutput($process);
         } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
-            throw new ProcessFailedException($e->getMessage());
+            throw new ProcessFailedException($e->getMessage(), 0, $e);
         }
     }
 

@@ -30,7 +30,7 @@ class StageCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Stages a Composer command')
+            ->setDescription('Executes a Composer command in the staging directory')
             ->addArgument(
                 'composer-command',
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
@@ -40,7 +40,6 @@ class StageCommand extends Command
             ->addUsage('-- update --with-all-dependencies')
             ->addUsage('-- require lorem/ipsum:"^1 || ^2"')
             ->addUsage('-- --help')
-            ->addUsage('--ansi -- help --ansi')
             ->setHelp('If you are getting unexpected behavior from command options, be sure you are preceding the "composer-command" argument with a double-hyphen (" -- "). See "Usage"')
         ;
     }
@@ -66,7 +65,10 @@ class StageCommand extends Command
 
             $output->write($return);
             return ExitCode::SUCCESS;
-        } catch (\Exception $e) {
+
+        // Prevent ugly "explosions" from unhandled exceptions by catching and
+        // formatting absolutely anything.
+        } catch (\Throwable $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return ExitCode::FAILURE;
         }

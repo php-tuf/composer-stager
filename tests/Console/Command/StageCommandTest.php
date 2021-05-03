@@ -58,7 +58,7 @@ class StageCommandTest extends CommandTestCase
         self::assertNotEmpty($command->getHelp(), 'Set help.');
 
         self::assertTrue($composerCommandArgument->isRequired(), 'Required Composer command option.');
-        self::assertTrue($composerCommandArgument->isArray(), 'Required Composer command option.');
+        self::assertTrue($composerCommandArgument->isArray(), 'Set Composer command to array.');
         self::assertNotEmpty($composerCommandArgument->getDescription(), "Description provided.");
     }
 
@@ -110,7 +110,7 @@ class StageCommandTest extends CommandTestCase
     public function testCommandFailure($exception, $message): void
     {
         $this->stager
-            ->stage(Argument::any(), Argument::any())
+            ->stage(Argument::cetera())
             ->willThrow($exception);
 
         $this->executeCommand(['composer-command' => [static::INERT_COMMAND]]);
