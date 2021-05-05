@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
+use Symfony\Component\Process\ExecutableFinder;
 
 class Stager
 {
@@ -16,6 +17,11 @@ class Stager
      * @var string[]
      */
     private $composerCommand;
+
+    /**
+     * @var \Symfony\Component\Process\ExecutableFinder
+     */
+    private $executableFinder;
 
     /**
      * @var \PhpTuf\ComposerStager\Filesystem\Filesystem
@@ -32,8 +38,12 @@ class Stager
      */
     private $stagingDir;
 
-    public function __construct(Filesystem $filesystem, ProcessFactory $processFactory)
-    {
+    public function __construct(
+        ExecutableFinder $executableFinder,
+        Filesystem $filesystem,
+        ProcessFactory $processFactory
+    ) {
+        $this->executableFinder = $executableFinder;
         $this->filesystem = $filesystem;
         $this->processFactory = $processFactory;
     }
@@ -115,9 +125,11 @@ class Stager
 
     private function runCommand(?callable $callback): void
     {
+        /** @var string $composer */
+        $composer = $this->executableFinder->find('composer');
         $process = $this->processFactory
             ->create(array_merge([
-                'composer',
+                $composer,
                 "--working-dir={$this->stagingDir}",
             ], $this->composerCommand));
         try {

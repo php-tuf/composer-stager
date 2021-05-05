@@ -10,3 +10,6 @@ services:
         public: true
         resource: '../src/*'
         exclude: '../src/Exception'
+
+    Symfony\Component\Process\ExecutableFinder:
+        shared: false

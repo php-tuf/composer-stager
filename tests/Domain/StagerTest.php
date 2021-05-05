@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
 /**
@@ -24,6 +25,7 @@ use Symfony\Component\Process\Process;
  *
  * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $executableFinder
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
 class StagerTest extends TestCase
@@ -33,6 +35,10 @@ class StagerTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->executableFinder = $this->prophesize(ExecutableFinder::class);
+        $this->executableFinder
+            ->find(Argument::cetera())
+            ->willReturnArgument();
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
             ->exists(static::STAGING_DIR)
@@ -49,16 +55,21 @@ class StagerTest extends TestCase
 
     private function createSut(): Stager
     {
+        $executableFinder = $this->executableFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $processFactory = $this->processFactory->reveal();
-        return new Stager($filesystem, $processFactory);
+        return new Stager($executableFinder, $filesystem, $processFactory);
     }
 
     /**
      * @dataProvider providerHappyPathNoCallback
      */
-    public function testHappyPathNoCallback($givenCommand, $expectedCommand): void
+    public function testHappyPathNoCallback($givenCommand, $composerPath, $expectedCommand): void
     {
+        $this->executableFinder
+            ->find('composer', Argument::cetera())
+            ->shouldBeCalledOnce()
+            ->willReturn($composerPath);
         $process = $this->process;
         $this->process
             ->mustRun(null)
@@ -78,8 +89,9 @@ class StagerTest extends TestCase
         return [
             [
                 'givenCommand' => ['update'],
+                'composerPath' => '/lorem/composer',
                 'expectedCommand' => [
-                    'composer',
+                    '/lorem/composer',
                     '--working-dir=' . self::STAGING_DIR,
                     'update',
                 ],
@@ -90,8 +102,9 @@ class StagerTest extends TestCase
                     'lorem/ipsum',
                     '--dry-run',
                 ],
+                'composerPath' => '/ipsum/composer',
                 'expectedCommand' => [
-                    'composer',
+                    '/ipsum/composer',
                     '--working-dir=' . self::STAGING_DIR,
                     'require',
                     'lorem/ipsum',
