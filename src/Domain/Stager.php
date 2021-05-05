@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
-use Symfony\Component\Process\Process;
 
 class Stager
 {
@@ -54,18 +53,23 @@ class Stager
      *   ];
      *   @endcode
      *
+     *   @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
+     *
+     * @param callable|null $callback A PHP callback to run whenever there is
+     *   some output available on STDOUT or STDERR.
+     *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \Symfony\Component\Process\Exception\LogicException
      */
-    public function stage(array $composerCommand, string $stagingDir): string
+    public function stage(array $composerCommand, string $stagingDir, callable $callback = null): void
     {
         $this->composerCommand = $composerCommand;
         $this->stagingDir = $stagingDir;
         $this->validate();
-        return $this->runCommand();
+        $this->runCommand($callback);
     }
 
     /**
@@ -91,7 +95,7 @@ class Stager
         }
         if (array_key_exists('--working-dir', $this->composerCommand)
             || array_key_exists('-d', $this->composerCommand)) {
-            throw new InvalidArgumentException('Cannot use the "--working-dir" (or "-d") options');
+            throw new InvalidArgumentException('Cannot use the "--working-dir" (or "-d") option');
         }
     }
 
@@ -109,7 +113,7 @@ class Stager
         }
     }
 
-    private function runCommand(): string
+    private function runCommand(?callable $callback): void
     {
         $process = $this->processFactory
             ->create(array_merge([
@@ -117,17 +121,9 @@ class Stager
                 "--working-dir={$this->stagingDir}",
             ], $this->composerCommand));
         try {
-            $process->mustRun();
-            return $this->parseOutput($process);
+            $process->mustRun($callback);
         } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
             throw new ProcessFailedException($e->getMessage(), 0, $e);
         }
-    }
-
-    private function parseOutput(Process $process): string
-    {
-        $output = [$process->getOutput(), $process->getErrorOutput()];
-        $output = array_filter($output);
-        return implode(PHP_EOL, $output);
     }
 }

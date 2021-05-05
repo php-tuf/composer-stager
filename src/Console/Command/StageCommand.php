@@ -58,12 +58,20 @@ class StageCommand extends Command
             /** @var string $stagingDir */
             $stagingDir = $input->getOption('staging-dir');
 
-            $return = $this->stager->stage(
+            // Write process output as it comes.
+            /** @see \Symfony\Component\Process\Process::readPipes */
+            $callback = static function ($type, $buffer) use ($output): void {
+                // @codeCoverageIgnoreStart
+                $output->write($buffer);
+                // @codeCoverageIgnoreEnd
+            };
+
+            $this->stager->stage(
                 $composerCommand,
-                $stagingDir
+                $stagingDir,
+                $callback
             );
 
-            $output->write($return);
             return ExitCode::SUCCESS;
 
         // Prevent ugly "explosions" from unhandled exceptions by catching and

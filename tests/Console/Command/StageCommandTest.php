@@ -70,16 +70,15 @@ class StageCommandTest extends CommandTestCase
     public function testBasicExecution($composerCommand, $stagingDir, $output): void
     {
         $this->stager
-            ->stage($composerCommand, $stagingDir)
-            ->shouldBeCalledOnce()
-            ->willReturn($output);
+            ->stage($composerCommand, $stagingDir, Argument::any())
+            ->shouldBeCalledOnce();
 
         $this->executeCommand([
             'composer-command' => $composerCommand,
             '--staging-dir' => $stagingDir,
         ]);
 
-        self::assertSame($output, $this->getDisplay(), 'Displayed correct output.');
+        self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
         self::assertSame(ExitCode::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
     }
 

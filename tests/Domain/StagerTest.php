@@ -55,34 +55,25 @@ class StagerTest extends TestCase
     }
 
     /**
-     * @dataProvider providerHappyPath
+     * @dataProvider providerHappyPathNoCallback
      */
-    public function testHappyPath($givenCommand, $expectedCommand, $output, $errorOutput, $expectedReturn): void
+    public function testHappyPathNoCallback($givenCommand, $expectedCommand): void
     {
         $process = $this->process;
         $this->process
-            ->mustRun()
-            ->shouldBeCalledOnce();
-        $this->process
-            ->getOutput()
+            ->mustRun(null)
             ->shouldBeCalledOnce()
-            ->willReturn($output);
-        $this->process
-            ->getErrorOutput()
-            ->shouldBeCalledOnce()
-            ->willReturn($errorOutput);
+            ->willReturn($process->reveal());
         $this->processFactory
             ->create($expectedCommand)
             ->shouldBeCalledOnce()
-            ->willReturn($process);
+            ->willReturn($process->reveal());
         $sut = $this->createSut();
 
-        $actualReturn = $sut->stage($givenCommand, static::STAGING_DIR);
-
-        self::assertSame($expectedReturn, $actualReturn, 'Returned correct value');
+        $sut->stage($givenCommand, static::STAGING_DIR);
     }
 
-    public function providerHappyPath(): array
+    public function providerHappyPathNoCallback(): array
     {
         return [
             [
@@ -92,9 +83,6 @@ class StagerTest extends TestCase
                     '--working-dir=' . self::STAGING_DIR,
                     'update',
                 ],
-                'output' => '',
-                'errorOutput' => '',
-                'expectedReturn' => '',
             ],
             [
                 'givenCommand' => [
@@ -109,11 +97,27 @@ class StagerTest extends TestCase
                     'lorem/ipsum',
                     '--dry-run',
                 ],
-                'output' => 'Lorem',
-                'errorOutput' => 'Ipsum',
-                'expectedReturn' => 'Lorem' . PHP_EOL . 'Ipsum',
             ],
         ];
+    }
+
+    public function testHappyPathWithCallback(): void
+    {
+        $callback = static function (): void {
+        };
+
+        $process = $this->process;
+        $this->process
+            ->mustRun($callback)
+            ->shouldBeCalledOnce()
+            ->willReturn($process->reveal());
+        $this->processFactory
+            ->create(Argument::any())
+            ->shouldBeCalledOnce()
+            ->willReturn($process->reveal());
+        $sut = $this->createSut();
+
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR, $callback);
     }
 
     public function testStagingDirectoryDoesNotExist(): void
@@ -188,7 +192,7 @@ class StagerTest extends TestCase
         $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
         $exception = $exception->reveal();
         $this->process
-            ->mustRun()
+            ->mustRun(Argument::cetera())
             ->willThrow($exception);
 
         $sut = $this->createSut();
@@ -206,7 +210,7 @@ class StagerTest extends TestCase
         $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
         $exception = $exception->reveal();
         $this->process
-            ->mustRun()
+            ->mustRun(Argument::cetera())
             ->willThrow($exception);
 
         $sut = $this->createSut();
