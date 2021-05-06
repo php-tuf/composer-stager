@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Process\ComposerFinder;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
-use Symfony\Component\Process\ExecutableFinder;
 
 class Stager
 {
@@ -19,9 +19,9 @@ class Stager
     private $composerCommand;
 
     /**
-     * @var \Symfony\Component\Process\ExecutableFinder
+     * @var \PhpTuf\ComposerStager\Process\ComposerFinder
      */
-    private $executableFinder;
+    private $composerFinder;
 
     /**
      * @var \PhpTuf\ComposerStager\Filesystem\Filesystem
@@ -39,11 +39,11 @@ class Stager
     private $stagingDir;
 
     public function __construct(
-        ExecutableFinder $executableFinder,
+        ComposerFinder $composerFinder,
         Filesystem $filesystem,
         ProcessFactory $processFactory
     ) {
-        $this->executableFinder = $executableFinder;
+        $this->composerFinder = $composerFinder;
         $this->filesystem = $filesystem;
         $this->processFactory = $processFactory;
     }
@@ -65,14 +65,15 @@ class Stager
      *
      *   @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      *
+     * @param string $stagingDir
      * @param callable|null $callback A PHP callback to run whenever there is
      *   some output available on STDOUT or STDERR.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
+     * @throws \PhpTuf\ComposerStager\Exception\FileNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      */
     public function stage(array $composerCommand, string $stagingDir, callable $callback = null): void
     {
@@ -105,7 +106,7 @@ class Stager
         }
         if (array_key_exists('--working-dir', $this->composerCommand)
             || array_key_exists('-d', $this->composerCommand)) {
-            throw new InvalidArgumentException('Cannot use the "--working-dir" (or "-d") option');
+            throw new InvalidArgumentException('Cannot stage a command containing the "--working-dir" (or "-d") option');
         }
     }
 
@@ -123,13 +124,14 @@ class Stager
         }
     }
 
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\FileNotFoundException
+     */
     private function runCommand(?callable $callback): void
     {
-        /** @var string $composer */
-        $composer = $this->executableFinder->find('composer');
         $process = $this->processFactory
             ->create(array_merge([
-                $composer,
+                $this->composerFinder->find(),
                 "--working-dir={$this->stagingDir}",
             ], $this->composerCommand));
         try {

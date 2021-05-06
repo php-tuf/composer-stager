@@ -5,14 +5,15 @@ namespace PhpTuf\ComposerStager\Tests\Domain;
 use PhpTuf\ComposerStager\Domain\Stager;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Process\ComposerFinder;
 use PhpTuf\ComposerStager\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
-use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
 /**
@@ -24,8 +25,8 @@ use Symfony\Component\Process\Process;
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Process\ComposerFinder|\Prophecy\Prophecy\ObjectProphecy $composerFinder
  * @property \PhpTuf\ComposerStager\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $executableFinder
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
 class StagerTest extends TestCase
@@ -35,10 +36,10 @@ class StagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->executableFinder = $this->prophesize(ExecutableFinder::class);
-        $this->executableFinder
-            ->find(Argument::cetera())
-            ->willReturnArgument();
+        $this->composerFinder = $this->prophesize(ComposerFinder::class);
+        $this->composerFinder
+            ->find()
+            ->willReturn('composer');
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
             ->exists(static::STAGING_DIR)
@@ -55,10 +56,10 @@ class StagerTest extends TestCase
 
     private function createSut(): Stager
     {
-        $executableFinder = $this->executableFinder->reveal();
+        $composerFinder = $this->composerFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $processFactory = $this->processFactory->reveal();
-        return new Stager($executableFinder, $filesystem, $processFactory);
+        return new Stager($composerFinder, $filesystem, $processFactory);
     }
 
     /**
@@ -66,8 +67,8 @@ class StagerTest extends TestCase
      */
     public function testHappyPathNoCallback($givenCommand, $composerPath, $expectedCommand): void
     {
-        $this->executableFinder
-            ->find('composer', Argument::cetera())
+        $this->composerFinder
+            ->find()
             ->shouldBeCalledOnce()
             ->willReturn($composerPath);
         $process = $this->process;
@@ -136,8 +137,8 @@ class StagerTest extends TestCase
     public function testStagingDirectoryDoesNotExist(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
-        $this->expectDeprecationMessageMatches('/staging directory/');
-        $this->expectDeprecationMessageMatches('/exist/');
+        $this->expectExceptionMessageMatches('/staging directory/');
+        $this->expectExceptionMessageMatches('/exist/');
 
         $this->filesystem
             ->exists(static::STAGING_DIR)
@@ -151,8 +152,8 @@ class StagerTest extends TestCase
     public function testNonWritableStagingDirectory(): void
     {
         $this->expectException(DirectoryNotWritableException::class);
-        $this->expectDeprecationMessageMatches('/staging directory/');
-        $this->expectDeprecationMessageMatches('/writable/');
+        $this->expectExceptionMessageMatches('/staging directory/');
+        $this->expectExceptionMessageMatches('/writable/');
 
         $this->filesystem
             ->isWritable(static::STAGING_DIR)
@@ -162,6 +163,19 @@ class StagerTest extends TestCase
 
         $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
+
+    public function testComposerExecutableNotFound(): void
+    {
+        $this->expectException(FileNotFoundException::class);
+
+        $this->composerFinder
+            ->find()
+            ->willThrow(FileNotFoundException::class);
+        $sut = $this->createSut();
+
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
+    }
+
 
     public function testEmptyCommand(): void
     {
