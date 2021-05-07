@@ -14,6 +14,9 @@ abstract class CommandTestCase extends TestCase
 {
     use GlobalOptionsSetupTrait;
 
+    protected const INERT_COMMAND = '--version';
+    protected const STAGING_DIR = '/lorem/ipsum';
+
     /**
      * The command tester.
      *
@@ -91,8 +94,7 @@ abstract class CommandTestCase extends TestCase
     /**
      * Gets the status code returned by the last execution of the command.
      *
-     * @return int
-     *   The status code.
+     * @return int The exit code.
      */
     protected function getStatusCode(): int
     {
