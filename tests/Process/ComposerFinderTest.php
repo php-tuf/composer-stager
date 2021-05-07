@@ -79,8 +79,6 @@ class ComposerFinderTest extends TestCase
         $sut = $this->createSut();
 
         $sut->find();
-        // Call again to test result caching.
-        $sut->find();
     }
 
     /**
