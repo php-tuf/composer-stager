@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ComposerFinder;
@@ -102,7 +101,10 @@ class Stager
     private function validateCommand(): void
     {
         if ($this->composerCommand === []) {
-            throw new LogicException('The command cannot be empty.');
+            throw new InvalidArgumentException('The composer-command argument cannot be empty');
+        }
+        if (reset($this->composerCommand) === 'composer') {
+            throw new InvalidArgumentException('The composer-command argument cannot begin with "composer"');
         }
         if (array_key_exists('--working-dir', $this->composerCommand)
             || array_key_exists('-d', $this->composerCommand)) {

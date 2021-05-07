@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Process\ComposerFinder;
@@ -176,15 +175,27 @@ class StagerTest extends TestCase
         $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 
-
     public function testEmptyCommand(): void
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/empty/');
 
         $sut = $this->createSut();
 
         $sut->stage([], static::STAGING_DIR);
+    }
+
+    public function testCommandContainsComposer(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/cannot begin/');
+
+        $sut = $this->createSut();
+
+        $sut->stage([
+            'composer',
+            static::INERT_COMMAND,
+        ], static::STAGING_DIR);
     }
 
     /**
@@ -194,7 +205,6 @@ class StagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/--working-dir/');
-        $this->expectExceptionMessageMatches('/-d/');
 
         $sut = $this->createSut();
 
