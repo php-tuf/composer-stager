@@ -137,7 +137,7 @@ class Stager
         try {
             $process->mustRun($callback);
         } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
-            throw new ProcessFailedException($e->getMessage(), 0, $e);
+            throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

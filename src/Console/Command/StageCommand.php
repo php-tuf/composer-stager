@@ -33,8 +33,14 @@ class StageCommand extends Command
             ->setDescription('Executes a Composer command in the staging directory')
             ->addArgument(
                 'composer-command',
+                // The argument uses array mode so that it's automatically
+                // parsed and escaped by the Console component. This approach,
+                // though safer and easier, requires the command string to be
+                // preceded by a double-hyphen (" -- ") or ALL options will
+                // always be applied to the "stage" and never staged, regardless
+                // of placement.
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'The raw Composer command to stage. This MUST be preceded by a double-hyphen (" -- ") to prevent confusion of command options. See "Usage"'
+                'The Composer command to stage, without "composer". This MUST be preceded by a double-hyphen (" -- ") to prevent confusion of command options. See "Usage"'
             )
             ->addUsage('[options] -- <composer-command>...')
             ->addUsage('-- update --with-all-dependencies')
@@ -60,7 +66,7 @@ class StageCommand extends Command
 
             // Write process output as it comes.
             /** @see \Symfony\Component\Process\Process::readPipes */
-            $callback = static function ($type, $buffer) use ($output): void {
+            $callback = static function ($type, string $buffer) use ($output): void {
                 // @codeCoverageIgnoreStart
                 $output->write($buffer);
                 // @codeCoverageIgnoreEnd
