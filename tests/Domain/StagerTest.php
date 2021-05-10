@@ -136,8 +136,7 @@ class StagerTest extends TestCase
     public function testStagingDirectoryDoesNotExist(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
-        $this->expectExceptionMessageMatches('/staging directory/');
-        $this->expectExceptionMessageMatches('/exist/');
+        $this->expectExceptionMessageMatches('/staging directory.*not exist/');
 
         $this->filesystem
             ->exists(static::STAGING_DIR)
@@ -151,8 +150,7 @@ class StagerTest extends TestCase
     public function testNonWritableStagingDirectory(): void
     {
         $this->expectException(DirectoryNotWritableException::class);
-        $this->expectExceptionMessageMatches('/staging directory/');
-        $this->expectExceptionMessageMatches('/writable/');
+        $this->expectExceptionMessageMatches('/staging directory.*not writable/');
 
         $this->filesystem
             ->isWritable(static::STAGING_DIR)
