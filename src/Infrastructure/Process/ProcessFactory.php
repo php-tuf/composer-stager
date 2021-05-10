@@ -4,6 +4,9 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
 use Symfony\Component\Process\Process;
 
+/**
+ * @internal
+ */
 class ProcessFactory
 {
     /**

@@ -4,6 +4,9 @@ namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 
+/**
+ * @internal
+ */
 class Filesystem extends \Symfony\Component\Filesystem\Filesystem
 {
     /**
