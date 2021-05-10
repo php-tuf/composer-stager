@@ -2,6 +2,7 @@
 
 * [Active directory](#active-directory)
 * [Begin](#begin)
+* [Clean](#clean)
 * [Commit](#commit)
 * [Staging directory](#staging-directory)
 * [Stage](#stage)
@@ -12,11 +13,15 @@ The Composer root of the live application. cf. [staging directory](#staging-dire
 
 ## Begin
 
-To start the total staging process by copying the [active directory](#active-directory) to the [staging directory](#staging-directory). cf. [stage](#stage) and [commit](#commit).
+To start the total staging process by copying the [active directory](#active-directory) to the [staging directory](#staging-directory). cf. [stage](#stage), [commit](#commit), and [clean](#clean).
+
+## Clean
+
+To completely remove the [staging directory](#staging-directory). cf. [begin](#begin), [stage](#stage), and [commit](#commit).
 
 ## Commit
 
-To make staged changes live by syncing the [active directory](#active-directory) with the [staging directory](#staging-directory). cf. [begin](#begin) and [stage](#stage).
+To make staged changes live by syncing the [active directory](#active-directory) with the [staging directory](#staging-directory). cf. [begin](#begin), [stage](#stage), and [clean](#clean).
 
 ## Staging directory
 
@@ -24,7 +29,7 @@ A non-live copy of the [active directory](#active-directory) where changes can b
 
 ## Stage
 
-To perform one or more commands on the [staging directory](#staging-directory). cf. [begin](#begin) and [commit](#commit).
+To perform one or more commands on the [staging directory](#staging-directory). cf. [begin](#begin), [commit](#commit), and [clean](#clean).
 
 ---
 
