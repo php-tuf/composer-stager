@@ -67,9 +67,7 @@ class StageCommand extends Command
             // Write process output as it comes.
             /** @see \Symfony\Component\Process\Process::readPipes */
             $callback = static function ($type, string $buffer) use ($output): void {
-                // @codeCoverageIgnoreStart
-                $output->write($buffer);
-                // @codeCoverageIgnoreEnd
+                $output->write($buffer); // @codeCoverageIgnore
             };
 
             $this->stager->stage(
