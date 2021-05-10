@@ -8,9 +8,9 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Process\ComposerFinder;
-use PhpTuf\ComposerStager\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\Process;
@@ -23,9 +23,9 @@ use Symfony\Component\Process\Process;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
- * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Process\ComposerFinder|\Prophecy\Prophecy\ObjectProphecy $composerFinder
- * @property \PhpTuf\ComposerStager\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder|\Prophecy\Prophecy\ObjectProphecy $composerFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
 class StagerTest extends TestCase

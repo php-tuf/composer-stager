@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Process;
+namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Exception\FileNotFoundException;
 use Symfony\Component\Process\ExecutableFinder;

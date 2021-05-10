@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Process;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Exception\FileNotFoundException;
-use PhpTuf\ComposerStager\Process\ComposerFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Process\ComposerFinder
- * @covers \PhpTuf\ComposerStager\Process\ComposerFinder::__construct
- * @covers \PhpTuf\ComposerStager\Process\ComposerFinder::find
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder::__construct
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder::find
  * @uses \PhpTuf\ComposerStager\Exception\FileNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *

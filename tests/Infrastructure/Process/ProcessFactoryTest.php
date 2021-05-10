@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Process;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process;
 
-use PhpTuf\ComposerStager\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Process\ProcessFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
  */
 class ProcessFactoryTest extends TestCase
 {

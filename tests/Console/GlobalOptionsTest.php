@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Console;
 
 use PhpTuf\ComposerStager\Console\GlobalOptions;
-use PhpTuf\ComposerStager\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -14,7 +14,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Console\GlobalOptions::resolveStagingDir
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
- * @property \PhpTuf\ComposerStager\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
 class GlobalOptionsTest extends TestCase
 {

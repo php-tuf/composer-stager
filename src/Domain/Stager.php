@@ -6,9 +6,9 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Process\ComposerFinder;
-use PhpTuf\ComposerStager\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 
 class Stager
 {
@@ -18,17 +18,17 @@ class Stager
     private $composerCommand;
 
     /**
-     * @var \PhpTuf\ComposerStager\Process\ComposerFinder
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder
      */
     private $composerFinder;
 
     /**
-     * @var \PhpTuf\ComposerStager\Filesystem\Filesystem
+     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PhpTuf\ComposerStager\Process\ProcessFactory
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
      */
     private $processFactory;
 

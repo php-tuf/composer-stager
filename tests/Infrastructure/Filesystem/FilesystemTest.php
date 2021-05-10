@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Filesystem;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Filesystem;
 
-use PhpTuf\ComposerStager\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Filesystem\Filesystem
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  */
 class FilesystemTest extends TestCase
 {

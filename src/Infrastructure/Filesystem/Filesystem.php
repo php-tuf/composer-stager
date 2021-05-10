@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Filesystem;
+namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Misc;
+namespace PhpTuf\ComposerStager\Tests\Console;
 
 use PHPUnit\Framework\TestCase;
 

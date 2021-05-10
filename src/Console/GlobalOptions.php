@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Console;
 
-use PhpTuf\ComposerStager\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 
 class GlobalOptions
 {
@@ -10,7 +10,7 @@ class GlobalOptions
     public const STAGING_DIR = 'staging-dir';
 
     /**
-     * @var \PhpTuf\ComposerStager\Filesystem\Filesystem
+     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
      */
     private $filesystem;
 
