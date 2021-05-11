@@ -27,8 +27,8 @@ class StageCommandTest extends CommandTestCase
 {
     protected function setUp(): void
     {
-        $this->setUpGlobalOptions();
         $this->stager = $this->prophesize(Stager::class);
+        parent::setUp();
     }
 
     protected function createSut(): Command
