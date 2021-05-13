@@ -1,3 +1,7 @@
+/.idea/workspace.xml
+/.idea/dictionaries/*
+!/.idea/dictionaries/project.xml
+/.idea/php.xml
 /var/
 /vendor/
 !/var/.gitkeep
