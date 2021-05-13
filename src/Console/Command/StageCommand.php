@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 class StageCommand extends Command
 {
@@ -80,7 +81,7 @@ class StageCommand extends Command
 
         // Prevent ugly "explosions" from unhandled exceptions by catching and
         // formatting absolutely anything.
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return ExitCode::FAILURE;
         }

@@ -72,7 +72,6 @@ class Stager
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
      * @throws \PhpTuf\ComposerStager\Exception\FileNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      */
     public function stage(array $composerCommand, string $stagingDir, callable $callback = null): void
     {
@@ -83,7 +82,6 @@ class Stager
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
@@ -95,7 +93,6 @@ class Stager
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
      */
     private function validateCommand(): void
