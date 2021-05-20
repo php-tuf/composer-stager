@@ -98,14 +98,14 @@ class Stager
     private function validateCommand(): void
     {
         if ($this->composerCommand === []) {
-            throw new InvalidArgumentException('The composer-command argument cannot be empty');
+            throw new InvalidArgumentException('The Composer command cannot be empty');
         }
         if (reset($this->composerCommand) === 'composer') {
-            throw new InvalidArgumentException('The composer-command argument cannot begin with "composer"');
+            throw new InvalidArgumentException('The Composer command cannot begin with "composer"');
         }
         if (array_key_exists('--working-dir', $this->composerCommand)
             || array_key_exists('-d', $this->composerCommand)) {
-            throw new InvalidArgumentException('Cannot stage a command containing the "--working-dir" (or "-d") option');
+            throw new InvalidArgumentException('Cannot stage a Composer command containing the "--working-dir" (or "-d") option');
         }
     }
 
