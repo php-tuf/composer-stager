@@ -3,12 +3,9 @@ parameters:
     paths:
         - bin/composer-stage
         - src
-        - tests
-    checkMissingIterableValueType: false
+    exceptionRules:
+        reportCheckedThrowsInGlobalScope: false
     ignoreErrors:
         -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no typehint specified.#'
-            path: tests
-        -
-            message: '#Parameter \#[0-9]+.\$[a-zA-Z0-9_]+ of method [a-zA-Z0-9\\_]+::[a-zA-Z0-9_]+\(\) expects [a-zA-Z0-9\|_]+, [a-zA-Z0-9\|_]+ given\.#'
-            path: tests
+            message: '#PHPDoc tag @throws with type [a-zA-Z0-9\|\\_]+ is not compatible with parent#'
+            path: .

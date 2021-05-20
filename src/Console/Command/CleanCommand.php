@@ -30,6 +30,10 @@ class CleanCommand extends Command
         $this->setDescription('Removes the staging directory');
     }
 
+    /**
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $stagingDir */
@@ -56,6 +60,10 @@ class CleanCommand extends Command
         }
     }
 
+    /**
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     */
     public function confirm(InputInterface $input, OutputInterface $output): bool
     {
         /** @var bool $noInteraction */

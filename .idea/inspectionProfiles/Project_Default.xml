@@ -89,7 +89,7 @@
       <option name="CODING_STANDARD" value="PhpTuf" />
       <option name="EXTENSIONS" value="php,js,css,inc" />
     </inspection_tool>
-    <inspection_tool class="PhpStanGlobal" enabled="true" level="INFORMATION" enabled_by_default="true">
+    <inspection_tool class="PhpStanGlobal" enabled="false" level="INFORMATION" enabled_by_default="false">
       <scope name="Project Files" level="WEAK WARNING" enabled="false">
         <option name="level" value="5" />
         <option name="config" value="$PROJECT_DIR$/phpstan.neon" />

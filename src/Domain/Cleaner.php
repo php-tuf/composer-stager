@@ -19,6 +19,7 @@ class Cleaner
 
     /**
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
     public function clean(string $stagingDir): void
     {
