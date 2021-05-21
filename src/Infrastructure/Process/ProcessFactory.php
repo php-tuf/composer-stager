@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
+use PhpTuf\ComposerStager\Exception\LogicException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -15,10 +16,14 @@ class ProcessFactory
      *
      * @return \Symfony\Component\Process\Process<\Generator>
      *
-     * @throws \Symfony\Component\Process\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      */
     public function create(array $array, ...$args): Process
     {
-        return new Process($array, ...$args);
+        try {
+            return new Process($array, ...$args);
+        } catch (\Symfony\Component\Process\Exception\LogicException $e) { // @codeCoverageIgnore
+            throw new LogicException($e->getMessage(), $e->getCode(), $e->getPrevious()); // @codeCoverageIgnore
+        }
     }
 }

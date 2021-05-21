@@ -71,8 +71,8 @@ class Stager
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      */
     public function stage(array $composerCommand, string $stagingDir, callable $callback = null): void
     {
@@ -125,9 +125,9 @@ class Stager
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
     private function runCommand(?callable $callback): void
     {
