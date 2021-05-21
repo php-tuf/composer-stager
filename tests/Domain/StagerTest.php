@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
@@ -24,7 +24,7 @@ use Symfony\Component\Process\Process;
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder|\Prophecy\Prophecy\ObjectProphecy $composerFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
@@ -35,9 +35,9 @@ class StagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->composerFinder = $this->prophesize(ComposerFinder::class);
-        $this->composerFinder
-            ->find()
+        $this->executableFinder = $this->prophesize(ExecutableFinder::class);
+        $this->executableFinder
+            ->find('composer')
             ->willReturn('composer');
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
@@ -55,7 +55,7 @@ class StagerTest extends TestCase
 
     private function createSut(): Stager
     {
-        $composerFinder = $this->composerFinder->reveal();
+        $composerFinder = $this->executableFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $processFactory = $this->processFactory->reveal();
         return new Stager($composerFinder, $filesystem, $processFactory);
@@ -66,8 +66,8 @@ class StagerTest extends TestCase
      */
     public function testHappyPathNoCallback($givenCommand, $composerPath, $expectedCommand): void
     {
-        $this->composerFinder
-            ->find()
+        $this->executableFinder
+            ->find('composer')
             ->shouldBeCalledOnce()
             ->willReturn($composerPath);
         $process = $this->process;
@@ -165,8 +165,8 @@ class StagerTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->composerFinder
-            ->find()
+        $this->executableFinder
+            ->find('composer')
             ->willThrow(FileNotFoundException::class);
         $sut = $this->createSut();
 
