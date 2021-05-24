@@ -48,10 +48,9 @@ class Stager
     }
 
     /**
-     * @param string[] $composerCommand
-     *   The Composer command parts exactly as they would be typed in the
-     *   terminal. There's no need to escape them in any way, only to separate
-     *   them. Example:
+     * @param string[] $composerCommand The Composer command parts exactly as
+     *   they would be typed in the terminal. There's no need to escape them in
+     *   any way, only to separate them. Example:
      *
      *   @code{.php}
      *   $command = [

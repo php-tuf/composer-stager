@@ -32,19 +32,17 @@ abstract class CommandTestCase extends TestCase
     /**
      * Creates a command object to test.
      *
-     * @return \Symfony\Component\Console\Command\Command
-     *   A command object with mocked dependencies injected.
+     * @return \Symfony\Component\Console\Command\Command A command object with
+     *   mocked dependencies injected.
      */
     abstract protected function createSut(): Command;
 
     /**
      * Executes a given command with the command tester.
      *
-     * @param array $args
-     *   The command arguments.
-     * @param string[] $inputs
-     *   An array of strings representing each input passed to the command input
-     *   stream.
+     * @param array $args The command arguments.
+     * @param string[] $inputs An array of strings representing each input passed
+     *   to the command input stream.
      */
     protected function executeCommand(
         array $args = [],
@@ -60,8 +58,7 @@ abstract class CommandTestCase extends TestCase
     /**
      * Gets the command tester.
      *
-     * @return \Symfony\Component\Console\Tester\CommandTester
-     *   A command tester.
+     * @return \Symfony\Component\Console\Tester\CommandTester A command tester.
      */
     protected function getCommandTester(): CommandTester
     {
@@ -83,8 +80,7 @@ abstract class CommandTestCase extends TestCase
     /**
      * Gets the display returned by the last execution of the command.
      *
-     * @return string
-     *   The display.
+     * @return string The display.
      */
     protected function getDisplay(): string
     {
