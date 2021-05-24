@@ -221,27 +221,6 @@ class StagerTest extends TestCase
     {
         $this->expectException(ProcessFailedException::class);
 
-        $this->process
-            ->isSuccessful()
-            ->willReturn(false);
-        $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
-        $exception = $exception->reveal();
-        $this->process
-            ->mustRun(Argument::cetera())
-            ->willThrow($exception);
-
-        $sut = $this->createSut();
-
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
-    }
-
-    public function testProcessFailedException(): void
-    {
-        $this->expectException(ProcessFailedException::class);
-
-        $this->process
-            ->isSuccessful()
-            ->willReturn(false);
         $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
         $exception = $exception->reveal();
         $this->process
