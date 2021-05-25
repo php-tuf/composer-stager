@@ -64,8 +64,8 @@ class Stager
      *   @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      *
      * @param string $stagingDir
-     * @param callable|null $callback A PHP callback to run whenever there is
-     *   some output available on STDOUT or STDERR.
+     * @param callable|null $callback An optional PHP callback to run whenever
+     *   there is some output available on STDOUT or STDERR.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
