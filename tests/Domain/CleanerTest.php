@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Domain;
 
 use PhpTuf\ComposerStager\Domain\Cleaner;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -90,5 +91,18 @@ class CleanerTest extends TestCase
             [true],
             [false],
         ];
+    }
+
+    public function testCleanFailToRemove(): void
+    {
+        $this->expectException(IOException::class);
+
+        $this->filesystem
+            ->remove(static::STAGING_DIR)
+            ->shouldBeCalledOnce()
+            ->willThrow(new \Symfony\Component\Filesystem\Exception\IOException(''));
+        $sut = $this->createSut();
+
+        $sut->clean(static::STAGING_DIR);
     }
 }
