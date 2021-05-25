@@ -19,7 +19,6 @@ class Cleaner
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
     public function clean(string $stagingDir): void

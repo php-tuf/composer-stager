@@ -93,6 +93,9 @@ class CleanerTest extends TestCase
         ];
     }
 
+    /**
+     * @covers ::clean
+     */
     public function testCleanFailToRemove(): void
     {
         $this->expectException(IOException::class);
