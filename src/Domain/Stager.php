@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
+use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner;
 
 final class Stager implements StagerInterface
 {
@@ -18,7 +18,7 @@ final class Stager implements StagerInterface
     private $composerCommand;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner
      */
     private $composerRunner;
 

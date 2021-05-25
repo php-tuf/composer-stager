@@ -1,8 +1,9 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 
 /**
  * Provides a base for process runners for consistent process creation and

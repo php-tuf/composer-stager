@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\AbstractRunner;
+use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\AbstractRunner
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\AbstractRunner::__construct
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner::__construct
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy processFactory
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
