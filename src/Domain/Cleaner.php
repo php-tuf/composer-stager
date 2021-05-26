@@ -30,7 +30,7 @@ class Cleaner
         try {
             $this->filesystem->remove($stagingDir);
         } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
-            throw new IOException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            throw new IOException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
