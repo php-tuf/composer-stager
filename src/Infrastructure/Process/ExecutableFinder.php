@@ -49,7 +49,7 @@ class ExecutableFinder
         // Cache and throw exception if not found.
         if (is_null($path)) {
             $cache = new IOException(
-                sprintf('The "%s" executable cannot be found. Make sure it is installed and in the $PATH.', $name)
+                sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH.', $name)
             );
             $this->setCache($name, $cache);
             throw $cache;
@@ -64,7 +64,7 @@ class ExecutableFinder
     /**
      * @param string $commandName
      *
-     * @return mixed
+     * @return \PhpTuf\ComposerStager\Exception\IOException|string
      */
     private function getCache(string $commandName)
     {

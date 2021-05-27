@@ -23,7 +23,7 @@ class ProcessFactory
         try {
             return new Process($array, ...$args);
         } catch (\Symfony\Component\Process\Exception\LogicException $e) { // @codeCoverageIgnore
-            throw new LogicException($e->getMessage(), $e->getCode(), $e->getPrevious()); // @codeCoverageIgnore
+            throw new LogicException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
     }
 }

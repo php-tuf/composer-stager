@@ -5,6 +5,9 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 
 /**
+ * Provides a base for process runners for consistent process creation and
+ * exception-handling.
+ *
  * @internal
  */
 abstract class AbstractRunner
