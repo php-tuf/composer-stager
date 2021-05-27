@@ -6,9 +6,12 @@ use PhpTuf\ComposerStager\Domain\Stager;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\Exception\LogicException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Stager
@@ -150,6 +153,37 @@ class StagerTest extends TestCase
         return [
             [['--working-dir' => 'lorem/ipsum']],
             [['-d' => 'lorem/ipsum']],
+        ];
+    }
+
+    /**
+     * @dataProvider providerProcessExceptions
+     */
+    public function testProcessExceptions($exception, $message): void
+    {
+        $this->expectException(ProcessFailedException::class);
+        $this->expectExceptionMessage($message);
+
+        $this->composerRunner
+            ->run(Argument::cetera())
+            ->willThrow($exception);
+
+        $sut = $this->createSut();
+
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
+    }
+
+    public function providerProcessExceptions(): array
+    {
+        return [
+            [
+                'exception' => new LogicException('lorem'),
+                'message' => 'lorem',
+            ],
+            [
+                'exception' => new ProcessFailedException('ipsum'),
+                'message' => 'ipsum',
+            ],
         ];
     }
 }

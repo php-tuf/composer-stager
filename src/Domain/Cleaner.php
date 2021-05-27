@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 
-class Cleaner
+class Cleaner implements CleanerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
@@ -18,10 +18,6 @@ class Cleaner
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
-     */
     public function clean(string $stagingDir): void
     {
         if (!$this->directoryExists($stagingDir)) {

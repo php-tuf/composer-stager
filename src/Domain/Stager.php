@@ -5,10 +5,12 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\Exception\LogicException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
 
-class Stager
+class Stager implements StagerInterface
 {
     /**
      * @var string[]
@@ -38,32 +40,6 @@ class Stager
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @param string[] $composerCommand The Composer command parts exactly as
-     *   they would be typed in the terminal. There's no need to escape them in
-     *   any way, only to separate them. Example:
-     *
-     *   @code{.php}
-     *   $command = [
-     *     // "composer" is implied.
-     *     'require',
-     *     'lorem/ipsum:"^1 || ^2"',
-     *     '--with-all-dependencies',
-     *   ];
-     *   @endcode
-     *
-     *   @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
-     *
-     * @param string $stagingDir
-     * @param callable|null $callback An optional PHP callback to run whenever
-     *   there is some output available on STDOUT or STDERR.
-     *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     */
     public function stage(array $composerCommand, string $stagingDir, ?callable $callback = null): void
     {
         $this->composerCommand = $composerCommand;
@@ -115,12 +91,18 @@ class Stager
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
     private function runCommand(?callable $callback): void
     {
-        $command = array_merge(["--working-dir={$this->stagingDir}"], $this->composerCommand);
-        $this->composerRunner->run($command, $callback);
+        $command = array_merge(
+            ['--working-dir=' . $this->stagingDir],
+            $this->composerCommand
+        );
+        try {
+            $this->composerRunner->run($command, $callback);
+        } catch (LogicException|ProcessFailedException $e) {
+            throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
