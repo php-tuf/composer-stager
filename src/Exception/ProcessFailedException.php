@@ -2,6 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Exception;
 
-class ProcessFailedException extends RuntimeException
+class ProcessFailedException extends RuntimeException implements ExceptionInterface
 {
 }

@@ -2,6 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Exception;
 
-class LogicException extends Exception
+class LogicException extends \LogicException implements ExceptionInterface
 {
 }

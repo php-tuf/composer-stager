@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Exception;
 
 use Throwable;
 
-class DirectoryNotFoundException extends PathException
+class DirectoryNotFoundException extends PathException implements ExceptionInterface
 {
     public function __construct(
         string $path,

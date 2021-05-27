@@ -2,6 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Exception;
 
-class InvalidArgumentException extends Exception
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 }
