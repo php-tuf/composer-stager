@@ -5,10 +5,8 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder;
-use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
 
 class Stager
 {
@@ -18,9 +16,9 @@ class Stager
     private $composerCommand;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner
      */
-    private $composerFinder;
+    private $composerRunner;
 
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
@@ -28,23 +26,16 @@ class Stager
     private $filesystem;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
-     */
-    private $processFactory;
-
-    /**
      * @var string
      */
     private $stagingDir;
 
     public function __construct(
-        ComposerFinder $composerFinder,
-        Filesystem $filesystem,
-        ProcessFactory $processFactory
+        ComposerRunner $composerRunner,
+        Filesystem $filesystem
     ) {
-        $this->composerFinder = $composerFinder;
+        $this->composerRunner = $composerRunner;
         $this->filesystem = $filesystem;
-        $this->processFactory = $processFactory;
     }
 
     /**
@@ -69,12 +60,11 @@ class Stager
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
-     * @throws \PhpTuf\ComposerStager\Exception\FileNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      */
-    public function stage(array $composerCommand, string $stagingDir, callable $callback = null): void
+    public function stage(array $composerCommand, string $stagingDir, ?callable $callback = null): void
     {
         $this->composerCommand = $composerCommand;
         $this->stagingDir = $stagingDir;
@@ -125,21 +115,12 @@ class Stager
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\FileNotFoundException
+     * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      */
     private function runCommand(?callable $callback): void
     {
-        $process = $this->processFactory
-            ->create(array_merge([
-                $this->composerFinder->find(),
-                "--working-dir={$this->stagingDir}",
-            ], $this->composerCommand));
-        try {
-            $process->mustRun($callback);
-        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
-            throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
-        }
+        $command = array_merge(["--working-dir={$this->stagingDir}"], $this->composerCommand);
+        $this->composerRunner->run($command, $callback);
     }
 }

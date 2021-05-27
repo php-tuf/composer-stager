@@ -5,15 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\Domain;
 use PhpTuf\ComposerStager\Domain\Stager;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder;
-use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use Prophecy\Argument;
-use Symfony\Component\Process\Process;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Stager
@@ -24,9 +19,7 @@ use Symfony\Component\Process\Process;
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerFinder|\Prophecy\Prophecy\ObjectProphecy $composerFinder
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner|\Prophecy\Prophecy\ObjectProphecy $composerRunner
  */
 class StagerTest extends TestCase
 {
@@ -35,10 +28,7 @@ class StagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->composerFinder = $this->prophesize(ComposerFinder::class);
-        $this->composerFinder
-            ->find()
-            ->willReturn('composer');
+        $this->composerRunner = $this->prophesize(ComposerRunner::class);
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
             ->exists(static::STAGING_DIR)
@@ -46,91 +36,49 @@ class StagerTest extends TestCase
         $this->filesystem
             ->isWritable(static::STAGING_DIR)
             ->willReturn(true);
-        $this->process = $this->prophesize(Process::class);
-        $this->processFactory = $this->prophesize(ProcessFactory::class);
-        $this->processFactory
-            ->create(Argument::any())
-            ->willReturn($this->process);
     }
 
     private function createSut(): Stager
     {
-        $composerFinder = $this->composerFinder->reveal();
+        $composerRunner = $this->composerRunner->reveal();
         $filesystem = $this->filesystem->reveal();
-        $processFactory = $this->processFactory->reveal();
-        return new Stager($composerFinder, $filesystem, $processFactory);
+        return new Stager($composerRunner, $filesystem);
     }
 
     /**
-     * @dataProvider providerHappyPathNoCallback
+     * @dataProvider providerHappyPath
      */
-    public function testHappyPathNoCallback($givenCommand, $composerPath, $expectedCommand): void
+    public function testHappyPath($givenCommand, $expectedCommand, $callback): void
     {
-        $this->composerFinder
-            ->find()
-            ->shouldBeCalledOnce()
-            ->willReturn($composerPath);
-        $process = $this->process;
-        $this->process
-            ->mustRun(null)
-            ->shouldBeCalledOnce()
-            ->willReturn($process->reveal());
-        $this->processFactory
-            ->create($expectedCommand)
-            ->shouldBeCalledOnce()
-            ->willReturn($process->reveal());
+        $this->composerRunner
+            ->run($expectedCommand, $callback)
+            ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, static::STAGING_DIR);
+        $sut->stage($givenCommand, static::STAGING_DIR, $callback);
     }
 
-    public function providerHappyPathNoCallback(): array
+    public function providerHappyPath(): array
     {
         return [
             [
                 'givenCommand' => ['update'],
-                'composerPath' => '/lorem/composer',
                 'expectedCommand' => [
-                    '/lorem/composer',
                     '--working-dir=' . self::STAGING_DIR,
                     'update',
                 ],
+                'callback' => null,
             ],
             [
-                'givenCommand' => [
-                    'require',
-                    'lorem/ipsum',
-                    '--dry-run',
-                ],
-                'composerPath' => '/ipsum/composer',
+                'givenCommand' => [static::INERT_COMMAND],
                 'expectedCommand' => [
-                    '/ipsum/composer',
                     '--working-dir=' . self::STAGING_DIR,
-                    'require',
-                    'lorem/ipsum',
-                    '--dry-run',
+                    static::INERT_COMMAND,
                 ],
+                'callback' => static function () {
+                }
             ],
         ];
-    }
-
-    public function testHappyPathWithCallback(): void
-    {
-        $callback = static function (): void {
-        };
-
-        $process = $this->process;
-        $this->process
-            ->mustRun($callback)
-            ->shouldBeCalledOnce()
-            ->willReturn($process->reveal());
-        $this->processFactory
-            ->create(Argument::any())
-            ->shouldBeCalledOnce()
-            ->willReturn($process->reveal());
-        $sut = $this->createSut();
-
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR, $callback);
     }
 
     public function testStagingDirectoryDoesNotExist(): void
@@ -147,7 +95,7 @@ class StagerTest extends TestCase
         $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 
-    public function testNonWritableStagingDirectory(): void
+    public function testStagingDirectoryNotWritable(): void
     {
         $this->expectException(DirectoryNotWritableException::class);
         $this->expectExceptionMessageMatches('/staging directory.*not writable/');
@@ -156,18 +104,6 @@ class StagerTest extends TestCase
             ->isWritable(static::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn(false);
-        $sut = $this->createSut();
-
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
-    }
-
-    public function testComposerExecutableNotFound(): void
-    {
-        $this->expectException(FileNotFoundException::class);
-
-        $this->composerFinder
-            ->find()
-            ->willThrow(FileNotFoundException::class);
         $sut = $this->createSut();
 
         $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
@@ -215,20 +151,5 @@ class StagerTest extends TestCase
             [['--working-dir' => 'lorem/ipsum']],
             [['-d' => 'lorem/ipsum']],
         ];
-    }
-
-    public function testProcessFailed(): void
-    {
-        $this->expectException(ProcessFailedException::class);
-
-        $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
-        $exception = $exception->reveal();
-        $this->process
-            ->mustRun(Argument::cetera())
-            ->willThrow($exception);
-
-        $sut = $this->createSut();
-
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 }
