@@ -11,7 +11,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 class ExecutableFinder
 {
     /**
-     * @var \PhpTuf\ComposerStager\Exception\IOException[]|string[]
+     * @var \PhpTuf\ComposerStager\Exception\IOException[]|string[]|null[]
      */
     private $cache = [];
 
@@ -38,7 +38,7 @@ class ExecutableFinder
         }
 
         // Return cached path.
-        if ($cache !== '') {
+        if ($cache !== null) {
             return $cache;
         }
 
@@ -64,14 +64,11 @@ class ExecutableFinder
     /**
      * @param string $commandName
      *
-     * @return \PhpTuf\ComposerStager\Exception\IOException|string
+     * @return \PhpTuf\ComposerStager\Exception\IOException|string|null
      */
     private function getCache(string $commandName)
     {
-        if (!array_key_exists($commandName, $this->cache)) {
-            return '';
-        }
-        return $this->cache[$commandName];
+        return $this->cache[$commandName] ?? null;
     }
 
     /**
