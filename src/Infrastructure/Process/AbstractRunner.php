@@ -30,7 +30,7 @@ abstract class AbstractRunner
     /**
      * @param string[] $command The command to run and its arguments as separate
      *   string values, e.g., ['require', 'lorem/ipsum']. The return value of
-     *   ::executableName() will be automatically prefixed.
+     *   ::executableName() will be automatically prepended.
      * @param callable|null $callback An optional PHP callback to run whenever
      *   there is some output available on STDOUT or STDERR.
      *
