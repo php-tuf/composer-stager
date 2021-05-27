@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Exception;
 
-interface ExceptionInterface extends \Throwable
+use Throwable;
+
+interface ExceptionInterface extends Throwable
 {
 }

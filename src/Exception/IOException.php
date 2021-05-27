@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Exception;
 
-class IOException extends \Exception implements ExceptionInterface
+use Exception;
+
+class IOException extends Exception implements ExceptionInterface
 {
 }
