@@ -56,8 +56,7 @@ class ExecutableFinder
         }
 
         // Cache and return path if found.
-        $cache = $path;
-        $this->setCache($name, $cache);
+        $this->setCache($name, $path);
         return $path;
     }
 
