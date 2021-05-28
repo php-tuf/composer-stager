@@ -36,6 +36,9 @@
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-latest"
     },
+    "suggest": {
+        "roave/security-advisories": "Ensures that your application doesn't have installed dependencies with known security vulnerabilities."
+    },
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true
@@ -74,13 +77,15 @@
         "phpmd": "phpmd src text phpmd",
         "phpstan": "phpstan analyse",
         "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
+        "security": "@composer update --dry-run roave/security-advisories",
         "test": [
             "composer validate",
             "@lint",
             "@phpcs",
             "@phpstan",
             "@phpmd",
-            "@phpunit"
+            "@phpunit",
+            "@security"
         ]
     },
     "scripts-descriptions": {
@@ -91,6 +96,7 @@
         "phpmd": "Looks for potential problems within the source code.",
         "phpstan": "Analyzes code to find bugs.",
         "phpunit": "Runs PHPUnit tests.",
+        "security": "Checks installed dependencies for known security vulnerabilities.",
         "test": "Runs all automated tests and static analysis."
     },
     "support": {

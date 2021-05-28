@@ -58,3 +58,6 @@ jobs:
 
       - name: Run PHPUnit
         run: composer phpunit
+
+      - name: Check dependencies for known security vulnerabilities
+        run: composer security
