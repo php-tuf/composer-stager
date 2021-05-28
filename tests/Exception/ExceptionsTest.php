@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use ReflectionClass;
 
 class ExceptionsTest extends TestCase
 {
@@ -18,9 +17,8 @@ class ExceptionsTest extends TestCase
      */
     public function testExceptionsImplementInterface($class): void
     {
-        $reflection = new ReflectionClass($class);
         self::assertTrue(
-            $reflection->implementsInterface(ExceptionInterface::class),
+            is_a($class, ExceptionInterface::class, true),
             sprintf('%s implements %s', $class, ExceptionInterface::class)
         );
     }
@@ -35,13 +33,7 @@ class ExceptionsTest extends TestCase
             if (strpos($class, 'PhpTuf\ComposerStager\Exception') !== 0) {
                 continue;
             }
-            // Filter out interfaces.
-            $reflection = new ReflectionClass($class);
-            if ($reflection->isInterface()) {
-                continue;
-            }
-            // Return FQNs.
-            $exceptions[][] = $reflection->getName();
+            $exceptions[][] = $class;
         }
         return $exceptions;
     }
