@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!-- https://phpmd.org/documentation/creating-a-ruleset.html -->
+<ruleset name="Composer Stager PHPMD Ruleset"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
+                     https://pmd.sourceforge.io/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="https://pmd.sourceforge.io/ruleset_xml_schema.xsd"
+>
+    <description>PHP Mess Detector rule set for Composer Stager</description>
+
+    <rule ref="rulesets/cleancode.xml"/>
+    <rule ref="rulesets/codesize.xml"/>
+    <rule ref="rulesets/controversial.xml"/>
+    <rule ref="rulesets/design.xml"/>
+    <rule ref="rulesets/naming.xml">
+        <exclude name="LongVariable"/>
+    </rule>
+    <rule ref="rulesets/unusedcode.xml">
+        <exclude name="UnusedFormalParameter"/>
+    </rule>
+</ruleset>

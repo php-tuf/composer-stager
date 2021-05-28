@@ -3,4 +3,7 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="ProjectResources">
+    <resource url="https://pmd.sourceforge.io/ruleset/2.0.0" location="$PROJECT_DIR$" />
+  </component>
 </project>
