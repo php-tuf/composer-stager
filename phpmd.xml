@@ -16,6 +16,7 @@
     <rule ref="rulesets/design.xml"/>
     <rule ref="rulesets/naming.xml">
         <exclude name="LongVariable"/>
+        <exclude name="ShortVariable"/>
     </rule>
     <rule ref="rulesets/unusedcode.xml">
         <exclude name="UnusedFormalParameter"/>
