@@ -7,7 +7,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
- * @property \PhpTuf\ComposerStager\Console\GlobalOptions|\Prophecy\Prophecy\ObjectProphecy $globalOptions
+ * @property \PhpTuf\ComposerStager\Console\GlobalOptions|\Prophecy\Prophecy\ObjectProphecy globalOptions
  */
 trait GlobalOptionsSetupTrait
 {

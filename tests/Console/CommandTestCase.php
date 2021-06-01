@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * @property \PhpTuf\ComposerStager\Console\GlobalOptions|\Prophecy\Prophecy\ObjectProphecy $globalOptions
+ * @property \PhpTuf\ComposerStager\Console\GlobalOptions|\Prophecy\Prophecy\ObjectProphecy globalOptions
  */
 abstract class CommandTestCase extends TestCase
 {

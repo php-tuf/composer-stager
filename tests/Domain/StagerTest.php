@@ -21,8 +21,8 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner|\Prophecy\Prophecy\ObjectProphecy $composerRunner
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner|\Prophecy\Prophecy\ObjectProphecy composerRunner
  */
 class StagerTest extends TestCase
 {

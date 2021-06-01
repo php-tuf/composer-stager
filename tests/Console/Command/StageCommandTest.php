@@ -21,7 +21,7 @@ use Symfony\Component\Process\Exception\LogicException;
  * @uses \PhpTuf\ComposerStager\Console\Command\StageCommand
  * @uses \PhpTuf\ComposerStager\Console\GlobalOptions
  *
- * @property \PhpTuf\ComposerStager\Domain\Stager|\Prophecy\Prophecy\ObjectProphecy $stager
+ * @property \PhpTuf\ComposerStager\Domain\Stager|\Prophecy\Prophecy\ObjectProphecy stager
  */
 class StageCommandTest extends CommandTestCase
 {

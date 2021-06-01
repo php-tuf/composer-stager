@@ -19,7 +19,7 @@ use Symfony\Component\Console\Command\Command;
  * @uses \PhpTuf\ComposerStager\Console\Command\CleanCommand::confirm
  * @uses \PhpTuf\ComposerStager\Console\GlobalOptions
  *
- * @property \PhpTuf\ComposerStager\Domain\Cleaner|\Prophecy\Prophecy\ObjectProphecy $cleaner
+ * @property \PhpTuf\ComposerStager\Domain\Cleaner|\Prophecy\Prophecy\ObjectProphecy cleaner
  */
 class CleanCommandTest extends CommandTestCase
 {

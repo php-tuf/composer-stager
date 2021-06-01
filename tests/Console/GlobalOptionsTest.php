@@ -14,7 +14,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Console\GlobalOptions::resolveStagingDir
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
  */
 class GlobalOptionsTest extends TestCase
 {

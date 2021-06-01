@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\AbstractRunner
  * @covers \PhpTuf\ComposerStager\Infrastructure\Process\AbstractRunner::__construct
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy $processFactory
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy processFactory
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
 class AbstractRunnerTest extends TestCase
