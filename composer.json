@@ -70,16 +70,23 @@
         "bin/composer-stage"
     ],
     "scripts": {
-        "coverage": "phpunit --coverage-html var/phpunit.cache/coverage-report; open var/phpunit.cache/coverage-report/index.html",
+        "coverage": [
+            "@composer dumpautoload",
+            "phpunit --coverage-html var/phpunit.cache/coverage-report",
+            "open var/phpunit.cache/coverage-report/index.html"
+        ],
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpmd": "phpmd src text phpmd",
         "phpstan": "phpstan analyse",
-        "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
+        "phpunit": [
+            "@composer dumpautoload",
+            "phpunit --coverage-clover /tmp/clover.xml"
+        ],
         "security": "@composer update --dry-run roave/security-advisories",
         "test": [
-            "composer validate",
+            "@composer validate",
             "@lint",
             "@phpcs",
             "@phpstan",
@@ -89,7 +96,7 @@
         ]
     },
     "scripts-descriptions": {
-        "coverage": "Runs PHPUnit with test coverage and opens a report in the browser.",
+        "coverage": "Runs PHPUnit with test coverage and opens a report in the browser (on macOS).",
         "lint": "Lints PHP files.",
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
