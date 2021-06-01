@@ -85,7 +85,17 @@
       </option>
       <option name="myCustomValuesEnabled" value="true" />
     </inspection_tool>
-    <inspection_tool class="MessDetectorValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="MessDetectorValidationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="Source files" level="WEAK WARNING" enabled="true">
+        <option name="customRulesets">
+          <list>
+            <RulesetDescriptor>
+              <option name="name" value="Composer Stager PHPMD Ruleset" />
+              <option name="path" value="$PROJECT_DIR$/phpmd.xml" />
+            </RulesetDescriptor>
+          </list>
+        </option>
+      </scope>
       <option name="customRulesets">
         <list>
           <RulesetDescriptor>
