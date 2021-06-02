@@ -64,7 +64,6 @@ class ApplicationTest extends TestCase
             'verbose',
             'version',
             'ansi',
-            'no-ansi',
             'no-interaction',
 
             GlobalOptions::ACTIVE_DIR,
