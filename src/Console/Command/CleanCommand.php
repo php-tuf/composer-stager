@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Domain\Cleaner;
+use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,11 +15,11 @@ class CleanCommand extends Command
     protected static $defaultName = 'clean';
 
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Cleaner
+     * @var \PhpTuf\ComposerStager\Domain\CleanerInterface
      */
     private $cleaner;
 
-    public function __construct(Cleaner $cleaner)
+    public function __construct(CleanerInterface $cleaner)
     {
         parent::__construct(static::$defaultName);
         $this->cleaner = $cleaner;

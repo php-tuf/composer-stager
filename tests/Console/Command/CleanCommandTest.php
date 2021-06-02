@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\CleanCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Domain\Cleaner;
+use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
@@ -25,7 +25,7 @@ class CleanCommandTest extends CommandTestCase
 {
     protected function setUp(): void
     {
-        $this->cleaner = $this->prophesize(Cleaner::class);
+        $this->cleaner = $this->prophesize(CleanerInterface::class);
         $this->cleaner
             ->directoryExists(Argument::cetera())
             ->willReturn(true);

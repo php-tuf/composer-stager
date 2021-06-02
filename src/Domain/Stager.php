@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
 
-class Stager implements StagerInterface
+final class Stager implements StagerInterface
 {
     /**
      * @var string[]

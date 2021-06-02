@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Domain\Stager;
+use PhpTuf\ComposerStager\Domain\StagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,11 +15,11 @@ class StageCommand extends Command
     protected static $defaultName = 'stage';
 
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Stager
+     * @var \PhpTuf\ComposerStager\Domain\StagerInterface
      */
     private $stager;
 
-    public function __construct(Stager $stager)
+    public function __construct(StagerInterface $stager)
     {
         parent::__construct(static::$defaultName);
         $this->stager = $stager;

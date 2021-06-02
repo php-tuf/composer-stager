@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\StageCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Domain\Stager;
+use PhpTuf\ComposerStager\Domain\StagerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
@@ -27,7 +27,7 @@ class StageCommandTest extends CommandTestCase
 {
     protected function setUp(): void
     {
-        $this->stager = $this->prophesize(Stager::class);
+        $this->stager = $this->prophesize(StagerInterface::class);
         parent::setUp();
     }
 
