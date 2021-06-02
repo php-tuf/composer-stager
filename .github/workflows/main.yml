@@ -2,62 +2,65 @@
 name: Tests
 
 on:
-  push:
-    branches: [ main, wip ]
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - 'docs/**'
-  schedule:
-    # Every Monday at 00:00:00 UTC.
-    - cron:  '0 0 * * 1'
+    push:
+        branches: [ main, wip ]
+        paths-ignore:
+            - .idea/**
+            - docs/**
+    pull_request:
+        branches: [ main ]
+        paths-ignore:
+            - .idea/**
+            - docs/**
+    schedule:
+        # Every Monday at 00:00:00 UTC.
+        # @see https://crontab.cronhub.io/
+        -   cron: "0 0 * * 1"
 
 jobs:
-  build:
-    name: PHP ${{ matrix.php }} test on ${{ matrix.operating-system }}
-    runs-on: ${{ matrix.operating-system }}
-    strategy:
-      fail-fast: false
-      max-parallel: 10
-      matrix:
-        operating-system: [ubuntu-latest, macos-latest, windows-latest]
-        php: ['7.3', '7.4', '8.0']
-        experimental: [false]
-    continue-on-error: ${{ matrix.experimental }}
+    build:
+        name: "PHP ${{ matrix.php }} - ${{ matrix.dependencies }} - ${{ matrix.os }}"
+        runs-on: "${{ matrix.os }}"
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, macos-latest, windows-latest]
+                php: ["7.3", "7.4", "8.0"]
+                dependencies: [ lowest, highest]
+        steps:
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "${{ matrix.php }}"
 
-    steps:
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          tools: composer:v2
+            -   name: "Checkout code"
+                uses: actions/checkout@v2 # https://github.com/marketplace/actions/checkout
 
-      - uses: actions/checkout@v2
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v1 # https://github.com/marketplace/actions/install-composer-dependencies
+                with:
+                    # Note: Installing with "highest" dependencies implicitly checks them for known security
+                    # vulnerabilities by updating roave/security-advisories.
+                    dependency-versions: "${{ matrix.dependencies }}"
 
-      - name: Validate composer.json
-        run: composer validate
+            -   name: "Validate composer.json"
+                run: "composer validate"
 
-      - name: Install dependencies
-        run: composer install --ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+            -   name: "Lint PHP"
+                run: "composer lint"
 
-      - name: Lint PHP
-        run: composer lint
+            -   name: "Run PHPCS"
+                if: "matrix.os != 'windows-latest'" # Windows line endings wreak havoc with coding standards.
+                run: "composer phpcs"
 
-      - name: Run PHPCS
-        # Windows line endings wreak havoc with coding standards.
-        if: matrix.operating-system != 'windows-latest'
-        run: composer phpcs
+            -   name: "Run PHPStan"
+                run: "composer phpstan"
 
-      - name: Run PHPStan
-        run: composer phpstan
+            -   name: "Run PHPMD"
+                run: "composer phpmd"
 
-      - name: Run PHPMD
-        run: composer phpmd
+            -   name: "Run PHPUnit"
+                run: "composer phpunit"
 
-      - name: Run PHPUnit
-        run: composer phpunit
-
-      - name: Check dependencies for known security vulnerabilities
-        run: composer security
+            -   name: "Check dependencies for known security vulnerabilities"
+                run: "composer security"
