@@ -4,11 +4,11 @@ namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\StagerInterface;
+use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Throwable;
 
 class StageCommand extends Command
 {
@@ -56,21 +56,23 @@ class StageCommand extends Command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return int The exit code.
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string[] $composerCommand */
+        $composerCommand = $input->getArgument('composer-command');
+        /** @var string $stagingDir */
+        $stagingDir = $input->getOption('staging-dir');
+
+        // Write process output as it comes.
+        /** @see \Symfony\Component\Process\Process::readPipes */
+        $callback = static function ($type, string $buffer) use ($output): void {
+            $output->write($buffer); // @codeCoverageIgnore
+        };
+
         try {
-            /** @var string[] $composerCommand */
-            $composerCommand = $input->getArgument('composer-command');
-            /** @var string $stagingDir */
-            $stagingDir = $input->getOption('staging-dir');
-
-            // Write process output as it comes.
-            /** @see \Symfony\Component\Process\Process::readPipes */
-            $callback = static function ($type, string $buffer) use ($output): void {
-                $output->write($buffer); // @codeCoverageIgnore
-            };
-
             $this->stager->stage(
                 $composerCommand,
                 $stagingDir,
@@ -78,10 +80,7 @@ class StageCommand extends Command
             );
 
             return ExitCode::SUCCESS;
-
-        // Prevent ugly "explosions" from unhandled exceptions by catching and
-        // formatting absolutely anything.
-        } catch (Throwable $e) {
+        } catch (ExceptionInterface $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return ExitCode::FAILURE;
         }

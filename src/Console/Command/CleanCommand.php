@@ -4,11 +4,11 @@ namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
+use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Throwable;
 
 class CleanCommand extends Command
 {
@@ -50,11 +50,9 @@ class CleanCommand extends Command
 
         try {
             $this->cleaner->clean($stagingDir);
-            return ExitCode::SUCCESS;
 
-        // Prevent ugly "explosions" from unhandled exceptions by catching and
-        // formatting absolutely anything.
-        } catch (Throwable $e) {
+            return ExitCode::SUCCESS;
+        } catch (ExceptionInterface $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return ExitCode::FAILURE;
         }

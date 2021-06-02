@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Process\Exception\LogicException;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Command\StageCommand
@@ -124,10 +123,7 @@ class StageCommandTest extends CommandTestCase
             ['exception' => new DirectoryNotFoundException(static::STAGING_DIR, 'Lorem'), 'message' => 'Lorem'],
             ['exception' => new DirectoryNotWritableException(static::STAGING_DIR, 'Ipsum'), 'message' => 'Ipsum'],
             ['exception' => new InvalidArgumentException('Dolor'), 'message' => 'Dolor'],
-            ['exception' => new \PhpTuf\ComposerStager\Exception\LogicException('Sit'), 'message' => 'Sit'],
-            ['exception' => new ProcessFailedException('Amet'), 'message' => 'Amet'],
-            ['exception' => new \Symfony\Component\Console\Exception\InvalidArgumentException('Consectetur'), 'message' => 'Consectetur'],
-            ['exception' => new LogicException('Adipiscing'), 'message' => 'Adipiscing'],
+            ['exception' => new ProcessFailedException('Sit'), 'message' => 'Sit'],
         ];
     }
 }
