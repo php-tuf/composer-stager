@@ -22,7 +22,7 @@ class ProcessFactory
     {
         try {
             return new Process($array, ...$args);
-        } catch (\Symfony\Component\Process\Exception\LogicException $e) { // @codeCoverageIgnore
+        } catch (\Symfony\Component\Process\Exception\ExceptionInterface $e) { // @codeCoverageIgnore
             throw new LogicException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
     }

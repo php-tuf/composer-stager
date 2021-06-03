@@ -43,6 +43,7 @@ class ApplicationTest extends TestCase
             }
         };
 
+        /** @var GlobalOptions $globalOptions */
         $globalOptions = $this->globalOptions->reveal();
         $application = new Application($globalOptions);
         $application->setAutoExit(false);
@@ -55,21 +56,19 @@ class ApplicationTest extends TestCase
      */
     public function testDefaultOptions(): void
     {
-        $application = $this->createSut();
-        $input = $application->getDefinition();
+        $baseOptions = (new \Symfony\Component\Console\Application())
+            ->getDefinition()
+            ->getOptionDefaults();
+        $sutOptions = $this->createSut()
+            ->getDefinition()
+            ->getOptionDefaults();
+
+        $addedOptions = array_diff_key($sutOptions, $baseOptions);
 
         self::assertSame([
-            'help',
-            'quiet',
-            'verbose',
-            'version',
-            'ansi',
-            'no-interaction',
-
             GlobalOptions::ACTIVE_DIR,
             GlobalOptions::STAGING_DIR,
-
-        ], array_keys($input->getOptionDefaults()), 'Set correct options');
+        ], array_keys($addedOptions), 'Set correct options');
     }
 
     /**
