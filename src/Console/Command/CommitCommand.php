@@ -7,9 +7,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CommitCommand extends Command
+final class CommitCommand extends Command
 {
-    protected static $defaultName = 'commit';
+    private const NAME = 'commit';
+
+    public function __construct()
+    {
+        parent::__construct(self::NAME);
+    }
 
     protected function configure(): void
     {

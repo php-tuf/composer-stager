@@ -11,9 +11,8 @@ namespace PhpTuf\ComposerStager\Console\Misc;
  *
  * @see https://tldp.org/LDP/abs/html/exitcodes.html
  */
-class ExitCode
+final class ExitCode
 {
     public const SUCCESS = 0;
     public const FAILURE = 1;
-    public const INVALID = 2;
 }

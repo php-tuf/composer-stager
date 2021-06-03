@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Exception\LogicException;
+use Symfony\Component\Process\Exception\ExceptionInterface;
 use Symfony\Component\Process\Process;
 
 /**
@@ -22,7 +23,7 @@ class ProcessFactory
     {
         try {
             return new Process($array, ...$args);
-        } catch (\Symfony\Component\Process\Exception\ExceptionInterface $e) { // @codeCoverageIgnore
+        } catch (ExceptionInterface $e) { // @codeCoverageIgnore
             throw new LogicException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
     }

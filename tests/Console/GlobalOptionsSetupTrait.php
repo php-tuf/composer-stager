@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console;
 
-use PhpTuf\ComposerStager\Console\GlobalOptions;
+use PhpTuf\ComposerStager\Console\GlobalOptionsInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -15,7 +15,7 @@ trait GlobalOptionsSetupTrait
 
     protected function setUpGlobalOptions(): void
     {
-        $this->globalOptions = $this->prophesize(GlobalOptions::class);
+        $this->globalOptions = $this->prophesize(GlobalOptionsInterface::class);
         $this->globalOptions
             ->getDefaultActiveDir()
             ->willReturn('');

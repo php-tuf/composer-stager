@@ -10,9 +10,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class CleanCommand extends Command
+final class CleanCommand extends Command
 {
-    protected static $defaultName = 'clean';
+    private const NAME = 'clean';
 
     /**
      * @var \PhpTuf\ComposerStager\Domain\CleanerInterface
@@ -21,7 +21,7 @@ class CleanCommand extends Command
 
     public function __construct(CleanerInterface $cleaner)
     {
-        parent::__construct(static::$defaultName);
+        parent::__construct(self::NAME);
         $this->cleaner = $cleaner;
     }
 

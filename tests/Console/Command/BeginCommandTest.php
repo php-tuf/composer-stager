@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Command\BeginCommand
+ * @covers ::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\BeginCommand
  * @uses \PhpTuf\ComposerStager\Console\GlobalOptions

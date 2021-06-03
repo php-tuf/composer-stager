@@ -18,11 +18,11 @@ class ExecutableFinder
     /**
      * @var \Symfony\Component\Process\ExecutableFinder
      */
-    private $symfonyExecutableFinder;
+    private $finder;
 
-    public function __construct(SymfonyExecutableFinder $symfonyExecutableFinder)
+    public function __construct(SymfonyExecutableFinder $finder)
     {
-        $this->symfonyExecutableFinder = $symfonyExecutableFinder;
+        $this->finder = $finder;
     }
 
     /**
@@ -43,8 +43,8 @@ class ExecutableFinder
         }
 
         // Look for executable.
-        $this->symfonyExecutableFinder->addSuffix('.phar');
-        $path = $this->symfonyExecutableFinder->find($name);
+        $this->finder->addSuffix('.phar');
+        $path = $this->finder->find($name);
 
         // Cache and throw exception if not found.
         if (is_null($path)) {

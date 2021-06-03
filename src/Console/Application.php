@@ -8,19 +8,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Application extends \Symfony\Component\Console\Application
+final class Application extends \Symfony\Component\Console\Application
 {
     private const NAME = 'Composer Stager';
     private const VERSION = 'v1.0.x-dev';
 
     /**
-     * @var \PhpTuf\ComposerStager\Console\GlobalOptions
+     * @var \PhpTuf\ComposerStager\Console\GlobalOptionsInterface
      */
     private $globalOptions;
 
-    public function __construct(GlobalOptions $globalOptions)
+    public function __construct(GlobalOptionsInterface $globalOptions)
     {
-        parent::__construct(static::NAME, static::VERSION);
+        parent::__construct(self::NAME, self::VERSION);
         $this->globalOptions = $globalOptions;
     }
 

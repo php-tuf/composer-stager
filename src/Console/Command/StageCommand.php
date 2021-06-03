@@ -10,9 +10,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StageCommand extends Command
+final class StageCommand extends Command
 {
-    protected static $defaultName = 'stage';
+    private const NAME = 'stage';
 
     /**
      * @var \PhpTuf\ComposerStager\Domain\StagerInterface
@@ -21,7 +21,7 @@ class StageCommand extends Command
 
     public function __construct(StagerInterface $stager)
     {
-        parent::__construct(static::$defaultName);
+        parent::__construct(self::NAME);
         $this->stager = $stager;
     }
 

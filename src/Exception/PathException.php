@@ -2,9 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Exception;
 
+use RuntimeException;
 use Throwable;
 
-class PathException extends \RuntimeException implements ExceptionInterface
+class PathException extends RuntimeException implements ExceptionInterface
 {
     /**
      * @var string
