@@ -3,6 +3,8 @@
     <words>
       <w>adipiscing</w>
       <w>carden</w>
+      <w>cleancode</w>
+      <w>codesize</w>
       <w>consectetur</w>
       <w>dealerdirect</w>
       <w>elit</w>
@@ -12,8 +14,12 @@
       <w>phpcbf</w>
       <w>phpcodesniffer</w>
       <w>phpcs</w>
+      <w>phpstan</w>
+      <w>rulesets</w>
+      <w>shivammathur</w>
       <w>stager</w>
       <w>sysexits</w>
+      <w>unusedcode</w>
       <w>xargs</w>
     </words>
   </dictionary>
