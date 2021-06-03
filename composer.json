@@ -61,7 +61,7 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/php-tuf/phpcodesniffer-standard"
+            "url": "https://github.com/php-tuf/phpcodesniffer-standard.git"
         }
     ],
     "minimum-stability": "dev",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5aca59f8222b29e4f0acc06f9a787e37",
+    "content-hash": "ad331a7bd20d7c97d22fde12a4daf88b",
     "packages": [
         {
             "name": "psr/container",
@@ -1987,7 +1987,7 @@
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-tuf/phpcodesniffer-standard",
+                "url": "https://github.com/php-tuf/phpcodesniffer-standard.git",
                 "reference": "a5ef8f43a38b73170e5142932a9e4af26346fbeb"
             },
             "require": {
