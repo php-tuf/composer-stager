@@ -86,8 +86,8 @@
         "bin/composer-stage"
     ],
     "scripts": {
+        "c": "rm -rf var/phpcs-cache.json var/phpstan var/phpunit.cache",
         "coverage": [
-            "@composer dumpautoload",
             "phpunit --coverage-html var/phpunit.cache/coverage-report",
             "open var/phpunit.cache/coverage-report/index.html"
         ],
@@ -96,13 +96,9 @@
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpmd": "phpmd src text phpmd",
         "phpstan": "phpstan analyse",
-        "phpunit": [
-            "@composer dumpautoload",
-            "phpunit --coverage-clover /tmp/clover.xml"
-        ],
+        "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
         "security": "@composer update --dry-run roave/security-advisories",
         "test": [
-            "@composer validate",
             "@lint",
             "@phpcs",
             "@phpstan",
@@ -112,6 +108,7 @@
         ]
     },
     "scripts-descriptions": {
+        "c": "Clears tool caches, e.g., PHPCS, PHPStan, and PHPUnit.",
         "coverage": "Runs PHPUnit with test coverage and opens a report in the browser (on macOS).",
         "lint": "Lints PHP files.",
         "phpcbf": "Automatically fixes standards violations where possible.",

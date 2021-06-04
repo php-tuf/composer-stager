@@ -1,5 +1,6 @@
 parameters:
     level: max
+    tmpDir: var/phpstan
     paths:
         - bin/composer-stage
         - src
@@ -9,3 +10,9 @@ parameters:
         -
             message: '#PHPDoc tag @throws with type [a-zA-Z0-9\|\\_]+ is not compatible with parent#'
             path: .
+
+services:
+    -
+        class: \PhpTuf\ComposerStager\Tests\PHPStan\InternalAnnotationRule
+        tags:
+            - phpstan.rules.rule
