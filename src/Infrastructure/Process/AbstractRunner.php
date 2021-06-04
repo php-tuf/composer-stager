@@ -43,7 +43,7 @@ abstract class AbstractRunner
         $process = $this->processFactory->create($command);
         try {
             $process->mustRun($callback);
-        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $e) {
+        } catch (\Symfony\Component\Process\Exception\ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
         }
     }

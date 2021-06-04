@@ -26,7 +26,7 @@ final class Cleaner implements CleanerInterface
 
         try {
             $this->filesystem->remove($stagingDir);
-        } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
+        } catch (\Symfony\Component\Filesystem\Exception\ExceptionInterface $e) {
             throw new IOException($e->getMessage(), $e->getCode(), $e);
         }
     }
