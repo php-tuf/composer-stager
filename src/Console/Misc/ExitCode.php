@@ -10,6 +10,8 @@ namespace PhpTuf\ComposerStager\Console\Misc;
  * must supply them ourselves.
  *
  * @see https://tldp.org/LDP/abs/html/exitcodes.html
+ *
+ * @internal
  */
 final class ExitCode
 {

@@ -4,6 +4,9 @@ namespace PhpTuf\ComposerStager\Console;
 
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 
+/**
+ * @internal
+ */
 final class GlobalOptions implements GlobalOptionsInterface
 {
     /**

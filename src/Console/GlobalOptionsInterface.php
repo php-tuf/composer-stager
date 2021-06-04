@@ -2,6 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Console;
 
+/**
+ * @internal
+ */
 interface GlobalOptionsInterface
 {
     public const STAGING_DIR = 'staging-dir';
