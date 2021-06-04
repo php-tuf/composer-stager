@@ -15,6 +15,7 @@
       <w>phpcodesniffer</w>
       <w>phpcs</w>
       <w>phpstan</w>
+      <w>roave</w>
       <w>rulesets</w>
       <w>shivammathur</w>
       <w>stager</w>
