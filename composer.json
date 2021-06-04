@@ -60,8 +60,24 @@
     },
     "repositories": [
         {
-            "type": "git",
-            "url": "https://github.com/php-tuf/phpcodesniffer-standard.git"
+            "_comment": [
+                "This is specified as a package rather than an ordinary vcs due to failures on to clone the repo on CI.",
+                "@todo To be removed altogether once the package is published to Packagist."
+            ],
+            "type": "package",
+            "package": {
+                "name": "php-tuf/phpcodesniffer-standard",
+                "version": "dev-main",
+                "dist": {
+                    "url": "https://github.com/php-tuf/phpcodesniffer-standard/archive/refs/heads/main.zip",
+                    "type": "zip"
+                },
+                "type": "phpcodesniffer-standard",
+                "require": {
+                    "slevomat/coding-standard": "^7.0",
+                    "squizlabs/php_codesniffer": "^3.5"
+                }
+            }
         }
     ],
     "minimum-stability": "dev",

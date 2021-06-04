@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad331a7bd20d7c97d22fde12a4daf88b",
+    "content-hash": "7bd8b7b1b4ea5b29c05033b96e3f9927",
     "packages": [
         {
             "name": "psr/container",
@@ -1985,52 +1985,15 @@
         {
             "name": "php-tuf/phpcodesniffer-standard",
             "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-tuf/phpcodesniffer-standard.git",
-                "reference": "a5ef8f43a38b73170e5142932a9e4af26346fbeb"
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/php-tuf/phpcodesniffer-standard/archive/refs/heads/main.zip"
             },
             "require": {
                 "slevomat/coding-standard": "^7.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "suggest": {
-                "dealerdirect/phpcodesniffer-composer-installer": "Automatically install PHP_CodeSniffer coding standards (rulesets)."
-            },
-            "default-branch": true,
-            "type": "phpcodesniffer-standard",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PhpTuf\\CodingStandards\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Travis Carden",
-                    "email": "travis.carden@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP_CodeSniffer rules (sniffs) for the PHP-TUF coding standard",
-            "homepage": "https://github.com/php-tuf/phpcodesniffer-standard",
-            "keywords": [
-                "phpcodesniffer-standard",
-                "phpcs",
-                "standards"
-            ],
-            "support": {
-                "issues": "https://github.com/php-tuf/phpcodesniffer-standard/issues",
-                "source": "https://github.com/php-tuf/phpcodesniffer-standard"
-            },
-            "time": "2021-04-09T14:14:08+00:00"
+            "type": "phpcodesniffer-standard"
         },
         {
             "name": "phpdocumentor/reflection-common",
