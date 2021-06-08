@@ -34,6 +34,8 @@ abstract class AbstractRunner
      * @param callable|null $callback An optional PHP callback to run whenever
      *   there is some output available on STDOUT or STDERR.
      *
+     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
+     *
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
