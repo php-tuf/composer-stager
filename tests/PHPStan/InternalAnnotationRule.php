@@ -30,7 +30,7 @@ class InternalAnnotationRule implements Rule
         }
 
         // Get docComment text.
-        $docComment = $node->getDocComment() ?: '';
+        $docComment = $node->getDocComment();
         if ($docComment instanceof Doc) {
             $docComment = $docComment->getText();
         }
