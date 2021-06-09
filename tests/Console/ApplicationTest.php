@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Console;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\GlobalOptions;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -17,18 +16,10 @@ use Symfony\Component\Console\Tester\ApplicationTester;
  * @covers \PhpTuf\ComposerStager\Console\Application::__construct
  * @covers \PhpTuf\ComposerStager\Console\Application::getDefaultInputDefinition
  * @uses \PhpTuf\ComposerStager\Console\Application
- * @uses \PhpTuf\ComposerStager\Console\GlobalOptions
  */
 class ApplicationTest extends TestCase
 {
-    use GlobalOptionsSetupTrait;
-
     private const TEST_COMMAND = ['command' => 'test'];
-
-    protected function setUp(): void
-    {
-        $this->setUpGlobalOptions();
-    }
 
     private function createSut(): Application
     {
@@ -43,9 +34,7 @@ class ApplicationTest extends TestCase
             }
         };
 
-        /** @var GlobalOptions $globalOptions */
-        $globalOptions = $this->globalOptions->reveal();
-        $application = new Application($globalOptions);
+        $application = new Application();
         $application->setAutoExit(false);
         $application->add($createdCommand);
         return $application;
@@ -66,8 +55,8 @@ class ApplicationTest extends TestCase
         $addedOptions = array_diff_key($sutOptions, $baseOptions);
 
         self::assertSame([
-            GlobalOptions::ACTIVE_DIR,
-            GlobalOptions::STAGING_DIR,
+            Application::ACTIVE_DIR_OPTION,
+            Application::STAGING_DIR_OPTION,
         ], array_keys($addedOptions), 'Set correct options');
     }
 
@@ -82,12 +71,6 @@ class ApplicationTest extends TestCase
         $shortcut,
         $default
     ): void {
-        $this->globalOptions
-            ->getDefaultActiveDir()
-            ->willReturn($default);
-        $this->globalOptions
-            ->getDefaultStagingDir()
-            ->willReturn($default);
         $application = $this->createSut();
         $input = $application->getDefinition();
         $option = $input->getOption($name);
@@ -102,16 +85,16 @@ class ApplicationTest extends TestCase
     {
         return [
             [
-                'name' => GlobalOptions::ACTIVE_DIR,
+                'name' => Application::ACTIVE_DIR_OPTION,
                 'descriptionContains' => 'active',
                 'shortcut' => 'd',
-                'default' => '/lorem',
+                'default' => Application::DEFAULT_ACTIVE_DIR,
             ],
             [
-                'name' => GlobalOptions::STAGING_DIR,
+                'name' => Application::STAGING_DIR_OPTION,
                 'descriptionContains' => 'staging',
                 'shortcut' => 's',
-                'default' => '/ipsum',
+                'default' => Application::DEFAULT_STAGING_DIR,
             ],
         ];
     }

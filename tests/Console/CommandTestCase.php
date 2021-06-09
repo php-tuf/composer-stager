@@ -7,13 +7,8 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * @property \PhpTuf\ComposerStager\Console\GlobalOptions|\Prophecy\Prophecy\ObjectProphecy globalOptions
- */
 abstract class CommandTestCase extends TestCase
 {
-    use GlobalOptionsSetupTrait;
-
     protected const INERT_COMMAND = '--version';
     protected const STAGING_DIR = '/lorem/ipsum';
 
@@ -23,11 +18,6 @@ abstract class CommandTestCase extends TestCase
      * @var \Symfony\Component\Console\Tester\CommandTester
      */
     private $commandTester;
-
-    protected function setUp(): void
-    {
-        $this->setUpGlobalOptions();
-    }
 
     /**
      * Creates a command object to test.
@@ -66,8 +56,7 @@ abstract class CommandTestCase extends TestCase
             return $this->commandTester;
         }
 
-        $globalOptions = $this->globalOptions->reveal();
-        $application = new Application($globalOptions);
+        $application = new Application();
 
         $createdCommand = $this->createSut();
         $application->add($createdCommand);

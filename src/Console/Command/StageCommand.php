@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\StagerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
@@ -67,7 +68,7 @@ final class StageCommand extends Command
         /** @var string[] $composerCommand */
         $composerCommand = $input->getArgument('composer-command');
         /** @var string $stagingDir */
-        $stagingDir = $input->getOption('staging-dir');
+        $stagingDir = $input->getOption(Application::STAGING_DIR_OPTION);
 
         // Write process output as it comes.
         /** @see \Symfony\Component\Process\Process::readPipes */

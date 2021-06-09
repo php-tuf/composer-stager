@@ -13,18 +13,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Application extends \Symfony\Component\Console\Application
 {
+    public const ACTIVE_DIR_OPTION = 'active-dir';
+    public const STAGING_DIR_OPTION = 'staging-dir';
+
+    public const DEFAULT_ACTIVE_DIR = '.';
+    public const DEFAULT_STAGING_DIR = '.composer_staging';
+
     private const NAME = 'Composer Stager';
     private const VERSION = 'v1.0.x-dev';
 
-    /**
-     * @var \PhpTuf\ComposerStager\Console\GlobalOptionsInterface
-     */
-    private $globalOptions;
-
-    public function __construct(GlobalOptionsInterface $globalOptions)
+    public function __construct()
     {
         parent::__construct(self::NAME, self::VERSION);
-        $this->globalOptions = $globalOptions;
     }
 
     /**
@@ -38,21 +38,21 @@ final class Application extends \Symfony\Component\Console\Application
 
         $inputDefinition->addOption(
             new InputOption(
-                GlobalOptions::ACTIVE_DIR,
+                self::ACTIVE_DIR_OPTION,
                 'd',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as active directory',
-                $this->globalOptions->getDefaultActiveDir()
+                self::DEFAULT_ACTIVE_DIR
             )
         );
 
         $inputDefinition->addOption(
             new InputOption(
-                GlobalOptions::STAGING_DIR,
+                self::STAGING_DIR_OPTION,
                 's',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as staging directory',
-                $this->globalOptions->getDefaultStagingDir()
+                self::DEFAULT_STAGING_DIR
             )
         );
 

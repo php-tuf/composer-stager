@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\StageCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\StagerInterface;
@@ -18,7 +19,6 @@ use Symfony\Component\Console\Command\Command;
  * @covers \PhpTuf\ComposerStager\Console\Command\StageCommand::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\StageCommand
- * @uses \PhpTuf\ComposerStager\Console\GlobalOptions
  *
  * @property \PhpTuf\ComposerStager\Domain\Stager|\Prophecy\Prophecy\ObjectProphecy stager
  */
@@ -74,7 +74,7 @@ class StageCommandTest extends CommandTestCase
 
         $this->executeCommand([
             'composer-command' => $composerCommand,
-            '--staging-dir' => $stagingDir,
+            sprintf('--%s', Application::STAGING_DIR_OPTION) => $stagingDir,
         ]);
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');

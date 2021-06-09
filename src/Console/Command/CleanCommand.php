@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
@@ -40,7 +41,7 @@ final class CleanCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $stagingDir */
-        $stagingDir = $input->getOption('staging-dir');
+        $stagingDir = $input->getOption(Application::STAGING_DIR_OPTION);
 
         if (!$this->cleaner->directoryExists($stagingDir)) {
             $output->writeln(sprintf('<error>The staging directory does not exist at "%s"</error>', $stagingDir));

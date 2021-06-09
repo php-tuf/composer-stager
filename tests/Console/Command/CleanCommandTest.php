@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\CleanCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
@@ -17,7 +18,6 @@ use Symfony\Component\Console\Command\Command;
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\CleanCommand::configure
  * @uses \PhpTuf\ComposerStager\Console\Command\CleanCommand::confirm
- * @uses \PhpTuf\ComposerStager\Console\GlobalOptions
  *
  * @property \PhpTuf\ComposerStager\Domain\Cleaner|\Prophecy\Prophecy\ObjectProphecy cleaner
  */
@@ -68,7 +68,7 @@ class CleanCommandTest extends CommandTestCase
             ->shouldBeCalledOnce();
 
         $this->executeCommand([
-            '--staging-dir' => static::STAGING_DIR,
+            sprintf('--%s', Application::STAGING_DIR_OPTION) => static::STAGING_DIR,
             '--no-interaction' => true,
         ]);
 
