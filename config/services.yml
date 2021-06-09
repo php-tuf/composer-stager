@@ -9,7 +9,9 @@ services:
     PhpTuf\ComposerStager\:
         public: true
         resource: '../src/*'
-        exclude: '../src/Exception'
+        exclude:
+            - '../src/Console/Output'
+            - '../src/Exception'
 
     Symfony\Component\Process\ExecutableFinder:
         shared: false
