@@ -42,6 +42,9 @@ jobs:
                     # Note: Installing with "highest" dependencies implicitly checks them for known security
                     # vulnerabilities by updating roave/security-advisories.
                     dependency-versions: "${{ matrix.dependencies }}"
+                    # Disable Composer caching due to random failures it causes, particularly on Windows jobs.
+                    # @see https://github.com/ramsey/composer-install/issues/79
+                    composer-options: "--no-cache"
 
             -   name: "Validate composer.json"
                 run: "composer validate"
