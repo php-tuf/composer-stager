@@ -88,7 +88,7 @@ class BeginCommandTest extends CommandTestCase
 
         $expectedDisplay = sprintf(
             '/active directory.*not.*"%s"/',
-            preg_quote(Application::DEFAULT_ACTIVE_DIR, '\'')
+            preg_quote(Application::ACTIVE_DIR_DEFAULT, '\'')
         );
         self::assertMatchesRegularExpression($expectedDisplay, $this->getDisplay(), 'Displayed correct output.');
         self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
@@ -110,7 +110,7 @@ class BeginCommandTest extends CommandTestCase
 
         $expectedDisplay = sprintf(
             '/staging directory.*exists.*"%s"/',
-            preg_quote(Application::DEFAULT_STAGING_DIR, '\'')
+            preg_quote(Application::STAGING_DIR_DEFAULT, '\'')
         );
         self::assertMatchesRegularExpression($expectedDisplay, $this->getDisplay(), 'Displayed correct output.');
         self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');

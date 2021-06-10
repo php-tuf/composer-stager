@@ -27,10 +27,10 @@ class BeginnerTest extends TestCase
         $this->fileCopier = $this->prophesize(FileCopier::class);
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
-            ->exists(Application::DEFAULT_ACTIVE_DIR)
+            ->exists(Application::ACTIVE_DIR_DEFAULT)
             ->willReturn(true);
         $this->filesystem
-            ->exists(Application::DEFAULT_STAGING_DIR)
+            ->exists(Application::STAGING_DIR_DEFAULT)
             ->willReturn(false);
     }
 
@@ -95,12 +95,12 @@ class BeginnerTest extends TestCase
         $this->expectExceptionMessageMatches('/active directory.*not exist/');
 
         $this->filesystem
-            ->exists(Application::DEFAULT_ACTIVE_DIR)
+            ->exists(Application::ACTIVE_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->begin(Application::DEFAULT_ACTIVE_DIR, Application::DEFAULT_STAGING_DIR);
+        $sut->begin(Application::ACTIVE_DIR_DEFAULT, Application::STAGING_DIR_DEFAULT);
     }
 
     /**
@@ -114,12 +114,12 @@ class BeginnerTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory already exists/');
 
         $this->filesystem
-            ->exists(Application::DEFAULT_STAGING_DIR)
+            ->exists(Application::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->begin(Application::DEFAULT_ACTIVE_DIR, Application::DEFAULT_STAGING_DIR);
+        $sut->begin(Application::ACTIVE_DIR_DEFAULT, Application::STAGING_DIR_DEFAULT);
     }
 
     /**
@@ -131,17 +131,17 @@ class BeginnerTest extends TestCase
     public function testDirectoryExistsMethods($expected): void
     {
         $this->filesystem
-            ->exists(Application::DEFAULT_ACTIVE_DIR)
+            ->exists(Application::ACTIVE_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $this->filesystem
-            ->exists(Application::DEFAULT_STAGING_DIR)
+            ->exists(Application::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $activeDir = $sut->activeDirectoryExists(Application::DEFAULT_ACTIVE_DIR);
-        $stagingDir = $sut->stagingDirectoryExists(Application::DEFAULT_STAGING_DIR);
+        $activeDir = $sut->activeDirectoryExists(Application::ACTIVE_DIR_DEFAULT);
+        $stagingDir = $sut->stagingDirectoryExists(Application::STAGING_DIR_DEFAULT);
 
         self::assertSame($expected, $activeDir, 'Correctly detected presence of active directory.');
         self::assertSame($expected, $stagingDir, 'Correctly detected presence of staging directory.');
