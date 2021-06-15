@@ -32,7 +32,7 @@ class FileCopier
      *
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    public function copy(string $from, string $to, array $exclusions, ?callable $callback = null): void
+    public function copy(string $from, string $to, array $exclusions = [], ?callable $callback = null): void
     {
         $command = [
             '--recursive',
@@ -48,7 +48,7 @@ class FileCopier
 
         // A trailing slash is added to the "from" directory so the CONTENTS of
         // the active directory are copied, not the directory itself.
-        $command[] = rtrim($from, '/') . '/';
+        $command[] = rtrim($from, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $command[] = $to;
 
         try {

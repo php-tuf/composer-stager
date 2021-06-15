@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @internal
  */
-class ProcessCallback
+final class ProcessCallback
 {
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface

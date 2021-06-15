@@ -35,6 +35,7 @@ final class Beginner implements BeginnerInterface
             throw new DirectoryAlreadyExistsException($stagingDir, 'The staging directory already exists at "%s"');
         }
 
+        // @todo Figure out how to let clients provide their own exclusions.
         $exclusions = [
             $stagingDir,
             '.git',

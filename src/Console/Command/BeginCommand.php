@@ -44,16 +44,6 @@ final class BeginCommand extends Command
         /** @var string $stagingDir */
         $stagingDir = $input->getOption(Application::STAGING_DIR_OPTION);
 
-        if (!$this->beginner->activeDirectoryExists($activeDir)) {
-            $output->writeln(sprintf('<error>The active directory does not exist at "%s"</error>', $activeDir));
-            return ExitCode::FAILURE;
-        }
-
-        if ($this->beginner->stagingDirectoryExists($stagingDir)) {
-            $output->writeln(sprintf('<error>The staging directory already exists at "%s"</error>', $stagingDir));
-            return ExitCode::FAILURE;
-        }
-
         try {
             $this->beginner->begin(
                 $activeDir,

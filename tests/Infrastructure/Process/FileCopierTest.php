@@ -54,13 +54,13 @@ class FileCopierTest extends TestCase
                     '--recursive',
                     '--links',
                     '--verbose',
-                    'lorem/ipsum/',
+                    'lorem/ipsum' . DIRECTORY_SEPARATOR,
                     'dolor/sit',
                 ],
                 'callback' => null,
             ],
             [
-                'from' => 'ipsum/lorem/',
+                'from' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
                 'to' => 'sit/dolor',
                 'exclusions' => [
                     'amet',
@@ -72,7 +72,7 @@ class FileCopierTest extends TestCase
                     '--verbose',
                     '--exclude=amet',
                     '--exclude=consectetur',
-                    'ipsum/lorem/',
+                    'ipsum/lorem' . DIRECTORY_SEPARATOR,
                     'sit/dolor',
                 ],
                 'callback' => static function () {

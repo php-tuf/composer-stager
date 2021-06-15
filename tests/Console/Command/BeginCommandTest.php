@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console\Command;
 
-use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\BeginCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
-use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
+use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
 use Prophecy\Argument;
@@ -74,50 +74,6 @@ class BeginCommandTest extends CommandTestCase
 
     /**
      * @covers ::execute
-     */
-    public function testActiveDirectoryNotFound(): void
-    {
-        $this->beginner
-            ->activeDirectoryExists(Argument::any())
-            ->willReturn(false);
-        $this->beginner
-            ->begin(Argument::cetera())
-            ->shouldNotBeCalled();
-
-        $this->executeCommand([]);
-
-        $expectedDisplay = sprintf(
-            '/active directory.*not.*"%s"/',
-            preg_quote(Application::ACTIVE_DIR_DEFAULT, '\'')
-        );
-        self::assertMatchesRegularExpression($expectedDisplay, $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
-    }
-
-    /**
-     * @covers ::execute
-     */
-    public function testStagingDirectoryAlreadyExists(): void
-    {
-        $this->beginner
-            ->stagingDirectoryExists(Argument::any())
-            ->willReturn(true);
-        $this->beginner
-            ->begin(Argument::cetera())
-            ->shouldNotBeCalled();
-
-        $this->executeCommand([]);
-
-        $expectedDisplay = sprintf(
-            '/staging directory.*exists.*"%s"/',
-            preg_quote(Application::STAGING_DIR_DEFAULT, '\'')
-        );
-        self::assertMatchesRegularExpression($expectedDisplay, $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
-    }
-
-    /**
-     * @covers ::execute
      *
      * @dataProvider providerCommandFailure
      */
@@ -136,8 +92,9 @@ class BeginCommandTest extends CommandTestCase
     public function providerCommandFailure(): array
     {
         return [
-            ['exception' => new IOException('Lorem'), 'message' => 'Lorem'],
-            ['exception' => new ProcessFailedException('Ipsum'), 'message' => 'Ipsum'],
+            ['exception' => new DirectoryAlreadyExistsException('', 'Lorem'), 'message' => 'Lorem'],
+            ['exception' => new DirectoryNotFoundException('', 'Ipsum'), 'message' => 'Ipsum'],
+            ['exception' => new ProcessFailedException('Dolor'), 'message' => 'Dolor'],
         ];
     }
 }
