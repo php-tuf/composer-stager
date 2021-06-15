@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 
-class Beginner implements BeginnerInterface
+final class Beginner implements BeginnerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
