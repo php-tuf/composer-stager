@@ -2,23 +2,63 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+/**
+ * Begins the staging process by copying the active directory to the staging directory.
+ */
 interface BeginnerInterface
 {
     /**
+     * Begins the staging process.
+     *
      * @param string $activeDir
+     *   The path to the active directory, absolute or relative to the working
+     *   directory (CWD), e.g., "/var/www/public" or "public".
      * @param string $stagingDir
-     * @param callable|null $callback An optional PHP callback to run whenever
-     *   there is some output available on STDOUT or STDERR.
+     *   The path to the staging directory, absolute or relative to the working
+     *   directory (CWD), e.g., "/var/www/staging" or "staging".
+     * @param callable|null $callback
+     *   An optional PHP callback to run whenever there is some output available
+     *   on STDOUT or STDERR. Example:
+     *
+     *   ```php
+     *   $callback = function (string $type, string $buffer) {
+     *       if ($type === \PhpTuf\ComposerStager\Domain\OutputType::ERR) {
+     *           echo 'ERR > ' . $buffer;
+     *       }
+     *       if ($type === \PhpTuf\ComposerStager\Domain\OutputType::OUT) {
+     *           echo 'OUT > ' . $buffer;
+     *       }
+     *   }
+     *   ```
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
+     *   If the staging directory already exists.
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     *   If the staging directory is not found.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     *
-     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
+     *   If the command process doesn't terminate successfully.
      */
     public function begin(string $activeDir, string $stagingDir, ?callable $callback = null): void;
 
+    /**
+     * Determines whether or not the given active directory exists.
+     *
+     * @param string $activeDir
+     *   The path to the active directory, absolute or relative to the working
+     *   directory (CWD), e.g., "/var/www/public" or "public".
+     *
+     * @return bool
+     */
     public function activeDirectoryExists(string $activeDir): bool;
 
+    /**
+     * Determines whether or not the given staging directory exists.
+     *
+     * @param string $stagingDir
+     *   The path to the staging directory, absolute or relative to the working
+     *   directory (CWD), e.g., "/var/www/staging" or "staging".
+     *
+     * @return bool
+     */
     public function stagingDirectoryExists(string $stagingDir): bool;
 }

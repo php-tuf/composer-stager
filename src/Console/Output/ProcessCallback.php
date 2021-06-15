@@ -27,12 +27,12 @@ class ProcessCallback
     }
 
     /**
-     * @param string $type The output type. Possible values are
-     *   \Symfony\Component\Process\Process::ERR and
-     *   \Symfony\Component\Process\Process::OUT.
-     * @param string $buffer The message to output.
-     *
-     * @see \Symfony\Component\Process\Process::readPipes
+     * @param string $type
+     *   The output type. Possible values are
+     *   \PhpTuf\ComposerStager\Domain\OutputType::ERR and
+     *   \PhpTuf\ComposerStager\Domain\OutputType::OUT.
+     * @param string $buffer
+     *   The message to output.
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
