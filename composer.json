@@ -91,10 +91,15 @@
             "phpunit --coverage-html var/phpunit.cache/coverage-report",
             "open var/phpunit.cache/coverage-report/index.html"
         ],
+        "install-phpdoc": "php -r \"copy('https://phpdoc.org/phpDocumentor.phar', 'vendor/bin/phpdoc.phar');\"",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpmd": "phpmd src text phpmd",
+        "phpdoc": [
+            "php vendor/bin/phpdoc.phar run --target=var/phpdoc/build --cache-folder=var/phpdoc/cache --directory=src/Domain,src/Exception,src/Infrastructure --title='Composer Stager'",
+            "open var/phpdoc/build/index.html"
+        ],
         "phpstan": "phpstan analyse",
         "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
         "security": "@composer update --dry-run roave/security-advisories",
@@ -113,6 +118,7 @@
         "lint": "Lints PHP files.",
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
+        "phpdoc": "Generates and open code documentation and opens it in the browser (on macOS).",
         "phpmd": "Looks for potential problems within the source code.",
         "phpstan": "Analyzes code to find bugs.",
         "phpunit": "Runs PHPUnit tests.",
