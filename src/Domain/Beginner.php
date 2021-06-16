@@ -27,11 +27,11 @@ final class Beginner implements BeginnerInterface
 
     public function begin(string $activeDir, string $stagingDir, ?callable $callback = null): void
     {
-        if (!$this->activeDirectoryExists($activeDir)) {
+        if (!$this->filesystem->exists($activeDir)) {
             throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
         }
 
-        if ($this->stagingDirectoryExists($stagingDir)) {
+        if ($this->filesystem->exists($stagingDir)) {
             throw new DirectoryAlreadyExistsException($stagingDir, 'The staging directory already exists at "%s"');
         }
 
@@ -47,15 +47,5 @@ final class Beginner implements BeginnerInterface
             $exclusions,
             $callback
         );
-    }
-
-    public function activeDirectoryExists(string $activeDir): bool
-    {
-        return $this->filesystem->exists($activeDir);
-    }
-
-    public function stagingDirectoryExists(string $stagingDir): bool
-    {
-        return $this->filesystem->exists($stagingDir);
     }
 }

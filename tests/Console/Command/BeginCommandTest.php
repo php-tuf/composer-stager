@@ -27,12 +27,6 @@ class BeginCommandTest extends CommandTestCase
     {
         $this->beginner = $this->prophesize(BeginnerInterface::class);
         $this->beginner
-            ->activeDirectoryExists(Argument::any())
-            ->willReturn(true);
-        $this->beginner
-            ->stagingDirectoryExists(Argument::any())
-            ->willReturn(false);
-        $this->beginner
             ->begin(Argument::cetera());
         parent::setUp();
     }

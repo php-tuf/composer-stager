@@ -42,9 +42,7 @@ class BeginnerTest extends TestCase
     }
 
     /**
-     * @covers ::activeDirectoryExists
      * @covers ::begin
-     * @covers ::stagingDirectoryExists
      *
      * @dataProvider providerBeginHappyPath
      */
@@ -86,7 +84,6 @@ class BeginnerTest extends TestCase
     }
 
     /**
-     * @covers ::activeDirectoryExists
      * @covers ::begin
      */
     public function testBeginActiveDirectoryDoesNotExist(): void
@@ -104,9 +101,7 @@ class BeginnerTest extends TestCase
     }
 
     /**
-     * @covers ::activeDirectoryExists
      * @covers ::begin
-     * @covers ::stagingDirectoryExists
      */
     public function testBeginStagingDirectoryAlreadyExists(): void
     {
@@ -120,38 +115,5 @@ class BeginnerTest extends TestCase
         $sut = $this->createSut();
 
         $sut->begin(Application::ACTIVE_DIR_DEFAULT, Application::STAGING_DIR_DEFAULT);
-    }
-
-    /**
-     * @covers ::activeDirectoryExists
-     * @covers ::stagingDirectoryExists
-     *
-     * @dataProvider providerDirectoryExistsMethods
-     */
-    public function testDirectoryExistsMethods($expected): void
-    {
-        $this->filesystem
-            ->exists(Application::ACTIVE_DIR_DEFAULT)
-            ->shouldBeCalledOnce()
-            ->willReturn($expected);
-        $this->filesystem
-            ->exists(Application::STAGING_DIR_DEFAULT)
-            ->shouldBeCalledOnce()
-            ->willReturn($expected);
-        $sut = $this->createSut();
-
-        $activeDir = $sut->activeDirectoryExists(Application::ACTIVE_DIR_DEFAULT);
-        $stagingDir = $sut->stagingDirectoryExists(Application::STAGING_DIR_DEFAULT);
-
-        self::assertSame($expected, $activeDir, 'Correctly detected presence of active directory.');
-        self::assertSame($expected, $stagingDir, 'Correctly detected presence of staging directory.');
-    }
-
-    public function providerDirectoryExistsMethods(): array
-    {
-        return [
-            [true],
-            [false],
-        ];
     }
 }
