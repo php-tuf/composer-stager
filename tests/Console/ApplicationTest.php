@@ -88,13 +88,13 @@ class ApplicationTest extends TestCase
                 'name' => Application::ACTIVE_DIR_OPTION,
                 'descriptionContains' => 'active',
                 'shortcut' => 'd',
-                'default' => Application::DEFAULT_ACTIVE_DIR,
+                'default' => Application::ACTIVE_DIR_DEFAULT,
             ],
             [
                 'name' => Application::STAGING_DIR_OPTION,
                 'descriptionContains' => 'staging',
                 'shortcut' => 's',
-                'default' => Application::DEFAULT_STAGING_DIR,
+                'default' => Application::STAGING_DIR_DEFAULT,
             ],
         ];
     }

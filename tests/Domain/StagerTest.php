@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
+use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -22,7 +22,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner|\Prophecy\Prophecy\ObjectProphecy composerRunner
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner|\Prophecy\Prophecy\ObjectProphecy composerRunner
  */
 class StagerTest extends TestCase
 {
@@ -78,8 +78,7 @@ class StagerTest extends TestCase
                     '--working-dir=' . self::STAGING_DIR,
                     static::INERT_COMMAND,
                 ],
-                'callback' => static function () {
-                }
+                'callback' => new TestCallback(),
             ],
         ];
     }

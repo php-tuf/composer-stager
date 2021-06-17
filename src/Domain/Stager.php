@@ -2,13 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner;
+use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner;
 
 final class Stager implements StagerInterface
 {
@@ -18,7 +19,7 @@ final class Stager implements StagerInterface
     private $composerCommand;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ComposerRunner
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner
      */
     private $composerRunner;
 
@@ -40,7 +41,7 @@ final class Stager implements StagerInterface
         $this->filesystem = $filesystem;
     }
 
-    public function stage(array $composerCommand, string $stagingDir, ?callable $callback = null): void
+    public function stage(array $composerCommand, string $stagingDir, ?CallbackInterface $callback = null): void
     {
         $this->composerCommand = $composerCommand;
         $this->stagingDir = $stagingDir;
@@ -93,7 +94,7 @@ final class Stager implements StagerInterface
     /**
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function runCommand(?callable $callback): void
+    private function runCommand(?CallbackInterface $callback): void
     {
         $command = array_merge(
             ['--working-dir=' . $this->stagingDir],

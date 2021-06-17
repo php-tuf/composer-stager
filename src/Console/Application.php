@@ -16,8 +16,8 @@ final class Application extends \Symfony\Component\Console\Application
     public const ACTIVE_DIR_OPTION = 'active-dir';
     public const STAGING_DIR_OPTION = 'staging-dir';
 
-    public const DEFAULT_ACTIVE_DIR = '.';
-    public const DEFAULT_STAGING_DIR = '.composer_staging';
+    public const ACTIVE_DIR_DEFAULT = '.';
+    public const STAGING_DIR_DEFAULT = '.composer_staging';
 
     private const NAME = 'Composer Stager';
     private const VERSION = 'v1.0.x-dev';
@@ -42,7 +42,7 @@ final class Application extends \Symfony\Component\Console\Application
                 'd',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as active directory',
-                self::DEFAULT_ACTIVE_DIR
+                self::ACTIVE_DIR_DEFAULT
             )
         );
 
@@ -52,7 +52,7 @@ final class Application extends \Symfony\Component\Console\Application
                 's',
                 InputOption::VALUE_REQUIRED,
                 'Use the given directory as staging directory',
-                self::DEFAULT_STAGING_DIR
+                self::STAGING_DIR_DEFAULT
             )
         );
 

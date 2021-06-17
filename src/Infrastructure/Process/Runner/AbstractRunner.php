@@ -1,8 +1,10 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
+use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 
 /**
  * Provides a base for process runners for consistent process creation and
@@ -28,18 +30,19 @@ abstract class AbstractRunner
     }
 
     /**
-     * @param string[] $command The command to run and its arguments as separate
-     *   string values, e.g., ['require', 'lorem/ipsum']. The return value of
-     *   ::executableName() will be automatically prepended.
-     * @param callable|null $callback An optional PHP callback to run whenever
-     *   there is some output available on STDOUT or STDERR.
+     * @param string[] $command
+     *   The command to run and its arguments as separate string values, e.g.,
+     *   ['require', 'lorem/ipsum']. The return value of ::executableName() will
+     *   be automatically prepended.
+     * @param \PhpTuf\ComposerStager\Domain\Output\CallbackInterface|null $callback
+     *   An optional PHP callback to run whenever there is process output.
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      *
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    public function run(array $command, ?callable $callback = null): void
+    public function run(array $command, ?CallbackInterface $callback = null): void
     {
         array_unshift($command, $this->executableName());
         $process = $this->processFactory->create($command);
