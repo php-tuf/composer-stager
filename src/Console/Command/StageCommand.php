@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Console\Output\ProcessCallback;
+use PhpTuf\ComposerStager\Console\Output\Callback;
 use PhpTuf\ComposerStager\Domain\StagerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Command\Command;
@@ -75,7 +75,7 @@ final class StageCommand extends Command
             $this->stager->stage(
                 $composerCommand,
                 $stagingDir,
-                new ProcessCallback($input, $output)
+                new Callback($input, $output)
             );
 
             return ExitCode::SUCCESS;

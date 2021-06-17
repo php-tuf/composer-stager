@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
+
 /**
  * Executes a Composer command in the staging directory.
  */
@@ -23,21 +25,9 @@ interface StagerInterface
      *
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/staging" or ".composer_staging".
-     * @param callable|null $callback
-     *   An optional PHP callback to run whenever there is some output available
-     *   on STDOUT or STDERR. Example:
-     *
-     *   ```php
-     *   $callback = function (string $type, string $buffer) {
-     *       if ($type === \PhpTuf\ComposerStager\Domain\OutputType::ERR) {
-     *           echo 'ERR > ' . $buffer;
-     *       }
-     *       if ($type === \PhpTuf\ComposerStager\Domain\OutputType::OUT) {
-     *           echo 'OUT > ' . $buffer;
-     *       }
-     *   }
-     *   ```
+     *   directory (CWD), e.g., "/var/www/staging" or "staging".
+     * @param \PhpTuf\ComposerStager\Domain\Output\CallbackInterface|null $callback
+     *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the staging directory is not found.
@@ -48,5 +38,5 @@ interface StagerInterface
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
-    public function stage(array $composerCommand, string $stagingDir, ?callable $callback = null): void;
+    public function stage(array $composerCommand, string $stagingDir, ?CallbackInterface $callback = null): void;
 }

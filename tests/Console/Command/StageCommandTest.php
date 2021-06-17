@@ -19,7 +19,7 @@ use Symfony\Component\Console\Command\Command;
  * @covers \PhpTuf\ComposerStager\Console\Command\StageCommand::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\StageCommand
- * @uses \PhpTuf\ComposerStager\Console\Output\ProcessCallback
+ * @uses \PhpTuf\ComposerStager\Console\Output\Callback
  *
  * @property \PhpTuf\ComposerStager\Domain\Stager|\Prophecy\Prophecy\ObjectProphecy stager
  */

@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Console\Output\ProcessCallback;
+use PhpTuf\ComposerStager\Console\Output\Callback;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Command\Command;
@@ -48,7 +48,7 @@ final class BeginCommand extends Command
             $this->beginner->begin(
                 $activeDir,
                 $stagingDir,
-                new ProcessCallback($input, $output)
+                new Callback($input, $output)
             );
 
             return ExitCode::SUCCESS;

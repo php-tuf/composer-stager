@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
+use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
@@ -24,15 +25,14 @@ class FileCopier
     /**
      * @param string $from
      * @param string $to
-     * @param string[] $exclusions Paths to exclude, relative to the "from" path.
-     * @param callable|null $callback An optional PHP callback to run whenever
-     *   there is some output available on STDOUT or STDERR.
-     *
-     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
+     * @param string[] $exclusions
+     *   Paths to exclude, relative to the "from" path.
+     * @param \PhpTuf\ComposerStager\Domain\Output\CallbackInterface|null $callback
+     *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    public function copy(string $from, string $to, array $exclusions = [], ?callable $callback = null): void
+    public function copy(string $from, string $to, array $exclusions = [], ?CallbackInterface $callback = null): void
     {
         $command = [
             '--recursive',

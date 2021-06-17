@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Console\Output;
 
-use PhpTuf\ComposerStager\Console\Output\ProcessCallback;
+use PhpTuf\ComposerStager\Console\Output\Callback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Console\Output\ProcessCallback
+ * @coversDefaultClass \PhpTuf\ComposerStager\Console\Output\Callback
  * @covers ::__invoke
  * @covers ::__construct
  */
@@ -30,7 +30,7 @@ class ProcessCallbackTest extends TestCase
             ->write($message)
             ->shouldBeCalledTimes((bool) $write);
         $output = $output->reveal();
-        $sut = new ProcessCallback($input, $output);
+        $sut = new Callback($input, $output);
 
         $sut(Process::OUT, $message);
     }

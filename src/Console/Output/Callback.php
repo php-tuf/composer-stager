@@ -2,13 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Console\Output;
 
+use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @internal
  */
-final class ProcessCallback
+final class Callback implements CallbackInterface
 {
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface
@@ -27,13 +28,6 @@ final class ProcessCallback
     }
 
     /**
-     * @param string $type
-     *   The output type. Possible values are
-     *   \PhpTuf\ComposerStager\Domain\OutputType::ERR and
-     *   \PhpTuf\ComposerStager\Domain\OutputType::OUT.
-     * @param string $buffer
-     *   The message to output.
-     *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function __invoke(string $type, string $buffer): void

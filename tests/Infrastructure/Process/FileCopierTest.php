@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
+use PhpTuf\ComposerStager\Tests\Domain\TestCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -75,8 +76,7 @@ class FileCopierTest extends TestCase
                     'ipsum/lorem' . DIRECTORY_SEPARATOR,
                     'sit/dolor',
                 ],
-                'callback' => static function () {
-                }
+                'callback' => new TestCallback(),
             ],
         ];
     }

@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
  * @covers ::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\BeginCommand
- * @uses \PhpTuf\ComposerStager\Console\Output\ProcessCallback
+ * @uses \PhpTuf\ComposerStager\Console\Output\Callback
  *
  * @property \PhpTuf\ComposerStager\Domain\BeginnerInterface|\Prophecy\Prophecy\ObjectProphecy beginner
  */
