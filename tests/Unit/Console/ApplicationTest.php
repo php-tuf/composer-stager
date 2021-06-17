@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;

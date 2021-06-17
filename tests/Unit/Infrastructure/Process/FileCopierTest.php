@@ -6,8 +6,8 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
-use PhpTuf\ComposerStager\Tests\Domain\TestCallback;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\Domain\TestCallback;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
 /**

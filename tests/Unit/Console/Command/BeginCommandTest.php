@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console\Command;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\BeginCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Domain\BeginnerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
+use PhpTuf\ComposerStager\Tests\Unit\Console\CommandTestCase;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
 

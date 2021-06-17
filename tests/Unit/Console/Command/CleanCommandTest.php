@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console\Command;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\CleanCommand;
@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
-use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
+use PhpTuf\ComposerStager\Tests\Unit\Console\CommandTestCase;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
 

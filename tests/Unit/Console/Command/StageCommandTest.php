@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console\Command;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\StageCommand;
@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
+use PhpTuf\ComposerStager\Tests\Unit\Console\CommandTestCase;
 use Prophecy\Argument;
 use Symfony\Component\Console\Command\Command;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Exception;
+namespace PhpTuf\ComposerStager\Tests\Unit\Exception;
 
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 class ExceptionsTest extends TestCase
 {
@@ -26,7 +26,7 @@ class ExceptionsTest extends TestCase
     public function providerExceptionsImplementInterface(): array
     {
         // Get the Composer autoloader class map.
-        $classMap = require __DIR__ . '/../../vendor/composer/autoload_classmap.php';
+        $classMap = require __DIR__ . '/../../../vendor/composer/autoload_classmap.php';
         $exceptions = [];
         foreach (array_keys($classMap) as $class) {
             // Limit to classes in the project exceptions namespace.

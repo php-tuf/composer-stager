@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console;
 
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +46,7 @@ class FrontScriptTest extends TestCase
 
         $command = implode(' ', [
             'bin' => 'php',
-            'script_path' => __DIR__ . '/../../bin/composer-stage',
+            'script_path' => __DIR__ . '/../../../bin/composer-stage',
             'command_string' => $commandString,
         ]);
 

@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem

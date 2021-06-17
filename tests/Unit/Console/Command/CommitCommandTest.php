@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console\Command;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Command\CommitCommand;
 use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use PhpTuf\ComposerStager\Tests\Console\CommandTestCase;
+use PhpTuf\ComposerStager\Tests\Unit\Console\CommandTestCase;
 use Symfony\Component\Console\Command\Command;
 
 /**

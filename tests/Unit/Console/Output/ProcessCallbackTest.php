@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Console\Output;
+namespace PhpTuf\ComposerStager\Tests\Unit\Console\Output;
 
 use PhpTuf\ComposerStager\Console\Output\Callback;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;

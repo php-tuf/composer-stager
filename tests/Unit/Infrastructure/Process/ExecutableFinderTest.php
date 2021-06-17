@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 

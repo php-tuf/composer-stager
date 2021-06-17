@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Domain;
+namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Domain\Beginner;
@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Beginner

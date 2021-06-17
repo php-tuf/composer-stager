@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Domain;
+namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 
 use PhpTuf\ComposerStager\Domain\Cleaner;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Cleaner

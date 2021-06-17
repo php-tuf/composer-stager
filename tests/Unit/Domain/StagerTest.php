@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Domain;
+namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 
 use PhpTuf\ComposerStager\Domain\Stager;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
 /**

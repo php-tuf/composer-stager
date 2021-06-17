@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Symfony\Component\Process\Process;
 
 /**

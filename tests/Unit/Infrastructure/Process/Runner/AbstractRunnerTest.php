@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process\Runner;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
-use PhpTuf\ComposerStager\Tests\Domain\TestCallback;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
+use PhpTuf\ComposerStager\Tests\Unit\Domain\TestCallback;
 use Prophecy\Argument;
 use Symfony\Component\Process\Process;
 

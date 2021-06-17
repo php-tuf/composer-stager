@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Domain;
+namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 
 use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
 
