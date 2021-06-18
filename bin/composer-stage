@@ -36,6 +36,8 @@ $application = $containerBuilder->get(Application::class);
 // Register commands.
 // @todo This shouldn't be necessary--it should be done automatically by the
 //   services configuration. Figure out what's wrong and remove this hack.
+//   Then, make make Command namespace in services.yml private (i.e.,
+//   "public: false").
 // @see https://symfony.com/doc/current/console.html#registering-the-command
 foreach ($containerBuilder->getServiceIds() as $serviceId) {
     $service = $containerBuilder->get($serviceId);

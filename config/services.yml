@@ -4,14 +4,18 @@ services:
     _defaults:
         autoconfigure: true
         autowire: true
-        public: true
+        public: false
 
     PhpTuf\ComposerStager\:
-        public: true
         resource: '../src/*'
         exclude:
-            - '../src/Console/Output'
             - '../src/Exception'
+
+    PhpTuf\ComposerStager\Console\:
+        resource: '../src/Console/*'
+        public: true
+        exclude:
+            - '../src/Console/Output'
 
     Symfony\Component\Process\ExecutableFinder:
         shared: false
