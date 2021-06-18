@@ -78,7 +78,7 @@ class StagerTest extends TestCase
                     '--working-dir=' . self::STAGING_DIR,
                     static::INERT_COMMAND,
                 ],
-                'callback' => new TestCallback(),
+                'callback' => new TestProcessOutputCallback(),
             ],
         ];
     }

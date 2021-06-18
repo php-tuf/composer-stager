@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
  *
  * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
  */
-interface CallbackInterface
+interface ProcessOutputCallbackInterface
 {
     /**
      * Standard output (stdout).

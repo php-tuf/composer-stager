@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
@@ -26,7 +26,7 @@ final class Beginner implements BeginnerInterface
         $this->filesystem = $filesystem;
     }
 
-    public function begin(string $activeDir, string $stagingDir, ?CallbackInterface $callback = null): void
+    public function begin(string $activeDir, string $stagingDir, ?ProcessOutputCallbackInterface $callback = null): void
     {
         if (!$this->filesystem->exists($activeDir)) {
             throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');

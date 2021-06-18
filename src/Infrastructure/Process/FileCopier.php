@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
-use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
@@ -27,12 +27,12 @@ class FileCopier
      * @param string $to
      * @param string[] $exclusions
      *   Paths to exclude, relative to the "from" path.
-     * @param \PhpTuf\ComposerStager\Domain\Output\CallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    public function copy(string $from, string $to, array $exclusions = [], ?CallbackInterface $callback = null): void
+    public function copy(string $from, string $to, array $exclusions = [], ?ProcessOutputCallbackInterface $callback = null): void
     {
         $command = [
             '--recursive',

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 
 /**
  * Executes a Composer command in the staging directory.
@@ -26,7 +26,7 @@ interface StagerInterface
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param \PhpTuf\ComposerStager\Domain\Output\CallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
@@ -38,5 +38,5 @@ interface StagerInterface
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
-    public function stage(array $composerCommand, string $stagingDir, ?CallbackInterface $callback = null): void;
+    public function stage(array $composerCommand, string $stagingDir, ?ProcessOutputCallbackInterface $callback = null): void;
 }

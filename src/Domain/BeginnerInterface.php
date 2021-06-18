@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\CallbackInterface;
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.
@@ -18,7 +18,7 @@ interface BeginnerInterface
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param \PhpTuf\ComposerStager\Domain\Output\CallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
@@ -28,5 +28,5 @@ interface BeginnerInterface
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
-    public function begin(string $activeDir, string $stagingDir, ?CallbackInterface $callback = null): void;
+    public function begin(string $activeDir, string $stagingDir, ?ProcessOutputCallbackInterface $callback = null): void;
 }

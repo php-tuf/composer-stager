@@ -77,7 +77,7 @@ class BeginnerTest extends TestCase
             [
                 'activeDir' => 'dolor/sit',
                 'stagingDir' => 'lorem/ipsum',
-                'callback' => new TestCallback(),
+                'callback' => new TestProcessOutputCallback(),
             ],
         ];
     }

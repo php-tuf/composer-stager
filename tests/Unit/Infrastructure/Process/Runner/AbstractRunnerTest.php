@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
-use PhpTuf\ComposerStager\Tests\Unit\Domain\TestCallback;
+use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use Prophecy\Argument;
 use Symfony\Component\Process\Process;
 
@@ -83,7 +83,7 @@ class AbstractRunnerTest extends TestCase
             [
                 'givenCommand' => [],
                 'expectedCommand' => [static::COMMAND_NAME],
-                'callback' => new TestCallback(),
+                'callback' => new TestProcessOutputCallback(),
             ],
         ];
     }
