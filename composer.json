@@ -86,10 +86,10 @@
         "bin/composer-stage"
     ],
     "scripts": {
-        "c": "rm -rf var/phpcs-cache.json var/phpstan var/phpunit.cache",
+        "c": "rm -rf var/phpcs-cache.json var/phpstan var/phpunit",
         "coverage": [
-            "phpunit --coverage-html var/phpunit.cache/coverage-report",
-            "open var/phpunit.cache/coverage-report/index.html"
+            "phpunit --coverage-html var/phpunit/coverage-report",
+            "open var/phpunit/coverage-report/index.html"
         ],
         "install-phpdoc": "php -r \"copy('https://phpdoc.org/phpDocumentor.phar', 'vendor/bin/phpdoc.phar');\"",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
