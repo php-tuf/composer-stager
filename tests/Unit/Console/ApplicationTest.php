@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Unit\Console;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
+use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
@@ -30,7 +30,7 @@ class ApplicationTest extends TestCase
                 InputInterface $input,
                 OutputInterface $output
             ): int {
-                return ExitCode::SUCCESS;
+                return AbstractCommand::SUCCESS;
             }
         };
 

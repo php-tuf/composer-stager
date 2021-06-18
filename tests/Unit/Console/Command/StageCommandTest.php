@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
+use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\StageCommand;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\StagerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
@@ -79,7 +79,7 @@ class StageCommandTest extends CommandTestCase
         ]);
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     public function providerBasicExecution(): array
@@ -115,7 +115,7 @@ class StageCommandTest extends CommandTestCase
         $this->executeCommand(['composer-command' => [static::INERT_COMMAND]]);
 
         self::assertSame($message . PHP_EOL, $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     public function providerCommandFailure(): array

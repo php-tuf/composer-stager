@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\CommitCommand;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Tests\Unit\Console\CommandTestCase;
 use Symfony\Component\Console\Command\Command;
 
@@ -46,6 +46,6 @@ class CommitCommandTest extends CommandTestCase
         $this->executeCommand();
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
     }
 }

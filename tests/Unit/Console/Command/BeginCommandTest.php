@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\BeginCommand;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
@@ -63,7 +63,7 @@ class BeginCommandTest extends CommandTestCase
         $this->executeCommand();
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     /**
@@ -80,7 +80,7 @@ class BeginCommandTest extends CommandTestCase
         $this->executeCommand([]);
 
         self::assertSame($message . PHP_EOL, $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     public function providerCommandFailure(): array

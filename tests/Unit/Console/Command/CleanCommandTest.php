@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
+use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\CleanCommand;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -73,7 +73,7 @@ class CleanCommandTest extends CommandTestCase
         ]);
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     /**
@@ -91,7 +91,7 @@ class CleanCommandTest extends CommandTestCase
         $this->executeCommand(['--no-interaction' => true]);
 
         self::assertStringContainsString('staging directory does not exist', $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     /**
@@ -118,12 +118,12 @@ class CleanCommandTest extends CommandTestCase
             [
                 'input' => 'yes',
                 'calls' => 1,
-                'exit' => ExitCode::SUCCESS,
+                'exit' => AbstractCommand::SUCCESS,
             ],
             [
                 'input' => 'no',
                 'calls' => 0,
-                'exit' => ExitCode::FAILURE,
+                'exit' => AbstractCommand::FAILURE,
             ],
         ];
     }
@@ -142,7 +142,7 @@ class CleanCommandTest extends CommandTestCase
         $this->executeCommand(['--no-interaction' => true]);
 
         self::assertSame($message . PHP_EOL, $this->getDisplay(), 'Displayed correct output.');
-        self::assertSame(ExitCode::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
+        self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
     }
 
     public function providerCommandFailure(): array

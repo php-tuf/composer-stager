@@ -2,15 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Console\Command;
 
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @internal
  */
-final class CommitCommand extends Command
+final class CommitCommand extends AbstractCommand
 {
     private const NAME = 'commit';
 
@@ -26,6 +24,6 @@ final class CommitCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        return ExitCode::SUCCESS;
+        return self::SUCCESS;
     }
 }

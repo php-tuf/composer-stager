@@ -3,10 +3,8 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -14,7 +12,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 /**
  * @internal
  */
-final class CleanCommand extends Command
+final class CleanCommand extends AbstractCommand
 {
     private const NAME = 'clean';
 
@@ -45,20 +43,20 @@ final class CleanCommand extends Command
 
         if (!$this->cleaner->directoryExists($stagingDir)) {
             $output->writeln(sprintf('<error>The staging directory does not exist at "%s"</error>', $stagingDir));
-            return ExitCode::FAILURE;
+            return self::FAILURE;
         }
 
         if (!$this->confirm($input, $output)) {
-            return ExitCode::FAILURE;
+            return self::FAILURE;
         }
 
         try {
             $this->cleaner->clean($stagingDir);
 
-            return ExitCode::SUCCESS;
+            return self::SUCCESS;
         } catch (ExceptionInterface $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
-            return ExitCode::FAILURE;
+            return self::FAILURE;
         }
     }
 

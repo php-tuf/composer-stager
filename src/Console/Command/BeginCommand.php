@@ -3,19 +3,16 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Misc\ExitCode;
 use PhpTuf\ComposerStager\Console\Output\Callback;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @internal
  */
-final class BeginCommand extends Command
+final class BeginCommand extends AbstractCommand
 {
     private const NAME = 'begin';
 
@@ -52,10 +49,10 @@ final class BeginCommand extends Command
                 new Callback($input, $output)
             );
 
-            return ExitCode::SUCCESS;
+            return self::SUCCESS;
         } catch (ExceptionInterface $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
-            return ExitCode::FAILURE;
+            return self::FAILURE;
         }
     }
 }
