@@ -5,5 +5,5 @@
 namespace ${NAMESPACE};
 
 #end
-class ${NAME} {
+trait ${NAME} {
 }
