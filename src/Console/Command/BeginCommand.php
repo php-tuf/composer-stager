@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Console\Command;
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Output\Callback;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
+use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -50,6 +51,10 @@ final class BeginCommand extends AbstractCommand
             );
 
             return self::SUCCESS;
+        } catch (DirectoryAlreadyExistsException $e) {
+            $output->writeln("<error>{$e->getMessage()}</error>");
+            $output->writeln('Hint: Use the "clean" command to remove the staging directory');
+            return self::FAILURE;
         } catch (ExceptionInterface $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
             return self::FAILURE;

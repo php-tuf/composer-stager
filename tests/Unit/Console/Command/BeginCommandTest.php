@@ -68,6 +68,28 @@ class BeginCommandTest extends CommandTestCase
 
     /**
      * @covers ::execute
+     * @uses \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
+     * @uses \PhpTuf\ComposerStager\Exception\PathException
+     */
+    public function testStagingDirectoryAlreadyExists(): void
+    {
+        $message = 'Lorem ipsum';
+        $this->beginner
+            ->begin(Argument::cetera())
+            ->willThrow(new DirectoryAlreadyExistsException('lorem/ipsum', $message));
+
+        $this->executeCommand([]);
+
+        $display = implode(PHP_EOL, [
+            $message,
+            'Hint: Use the "clean" command to remove the staging directory',
+        ]) . PHP_EOL;
+        self::assertSame($display, $this->getDisplay(), 'Displayed correct output.');
+        self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
+    }
+
+    /**
+     * @covers ::execute
      *
      * @dataProvider providerCommandFailure
      */
@@ -86,7 +108,6 @@ class BeginCommandTest extends CommandTestCase
     public function providerCommandFailure(): array
     {
         return [
-            ['exception' => new DirectoryAlreadyExistsException('', 'Lorem'), 'message' => 'Lorem'],
             ['exception' => new DirectoryNotFoundException('', 'Ipsum'), 'message' => 'Ipsum'],
             ['exception' => new ProcessFailedException('Dolor'), 'message' => 'Dolor'],
         ];
