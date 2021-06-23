@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process\Runner;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Filesystem;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;

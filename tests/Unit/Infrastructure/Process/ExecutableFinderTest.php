@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
