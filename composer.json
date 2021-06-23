@@ -86,11 +86,16 @@
         "bin/composer-stage"
     ],
     "scripts": {
-        "c": "rm -rf var/phpcs-cache.json var/phpstan var/phpunit",
-        "coverage": [
-            "phpunit --coverage-html var/phpunit/coverage-report",
-            "open var/phpunit/coverage-report/index.html"
+        "all": [
+            "@lint",
+            "@phpcs",
+            "@phpstan",
+            "@phpmd",
+            "@coverage",
+            "@security"
         ],
+        "c": "rm -rf var/phpcs-cache.json var/phpstan var/phpunit",
+        "coverage": "phpunit --coverage-text | grep --invert-match --extended-regexp '(\\\\|Methods)'",
         "install-phpdoc": "php -r \"copy('https://phpdoc.org/phpDocumentor.phar', 'vendor/bin/phpdoc.phar');\"",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
@@ -101,29 +106,23 @@
             "open var/phpdoc/build/index.html"
         ],
         "phpstan": "phpstan analyse",
-        "phpunit": "phpunit --coverage-clover /tmp/clover.xml",
         "security": "@composer update --dry-run roave/security-advisories",
-        "test": [
-            "@lint",
-            "@phpcs",
-            "@phpstan",
-            "@phpmd",
-            "@phpunit",
-            "@security"
-        ]
+        "test": "phpunit --coverage-html var/phpunit/coverage-report"
     },
     "scripts-descriptions": {
+        "all": "Runs all automated tests and static analysis.",
         "c": "Clears tool caches, e.g., PHPCS, PHPStan, and PHPUnit.",
-        "coverage": "Runs PHPUnit with test coverage and opens a report in the browser (on macOS).",
+        "coverage": "Runs PHPUnit tests with code coverage.",
+        "install-phpdoc": "Installs phpDocumentor.",
         "lint": "Lints PHP files.",
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
-        "phpdoc": "Generates and open code documentation and opens it in the browser (on macOS).",
+        "phpdoc": "Generates PHP documentation and opens it in the browser (on macOS).",
         "phpmd": "Looks for potential problems within the source code.",
         "phpstan": "Analyzes code to find bugs.",
         "phpunit": "Runs PHPUnit tests.",
         "security": "Checks installed dependencies for known security vulnerabilities.",
-        "test": "Runs all automated tests and static analysis."
+        "test": "Runs PHPUnit."
     },
     "support": {
         "issues": "https://github.com/php-tuf/composer-stager/issues",
