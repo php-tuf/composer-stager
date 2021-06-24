@@ -19,13 +19,11 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  */
 class CleanerTest extends TestCase
 {
-    private const STAGING_DIR = '/lorem/ipsum';
-
     public function setUp(): void
     {
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists(static::STAGING_DIR_DEFAULT)
             ->willReturn(true);
     }
 
@@ -41,11 +39,11 @@ class CleanerTest extends TestCase
     public function testCleanHappyPath(): void
     {
         $this->filesystem
-            ->remove(static::STAGING_DIR)
+            ->remove(static::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR);
+        $sut->clean(static::STAGING_DIR_DEFAULT);
     }
 
     /**
@@ -57,14 +55,14 @@ class CleanerTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*exist/');
 
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists(static::STAGING_DIR_DEFAULT)
             ->willReturn(false);
         $this->filesystem
-            ->remove(static::STAGING_DIR)
+            ->remove(static::STAGING_DIR_DEFAULT)
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR);
+        $sut->clean(static::STAGING_DIR_DEFAULT);
     }
 
     /**
@@ -75,12 +73,12 @@ class CleanerTest extends TestCase
     public function testDirectoryExists($expected): void
     {
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists(static::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->directoryExists(static::STAGING_DIR);
+        $actual = $sut->directoryExists(static::STAGING_DIR_DEFAULT);
 
         self::assertSame($expected, $actual, 'Correctly detected existence of staging directory.');
     }
@@ -101,11 +99,11 @@ class CleanerTest extends TestCase
         $this->expectException(IOException::class);
 
         $this->filesystem
-            ->remove(static::STAGING_DIR)
+            ->remove(static::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willThrow(new \Symfony\Component\Filesystem\Exception\IOException(''));
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR);
+        $sut->clean(static::STAGING_DIR_DEFAULT);
     }
 }

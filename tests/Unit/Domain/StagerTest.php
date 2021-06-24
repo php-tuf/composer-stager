@@ -26,7 +26,6 @@ use Prophecy\Argument;
  */
 class StagerTest extends TestCase
 {
-    private const STAGING_DIR = '/lorem/ipsum';
     private const INERT_COMMAND = 'about';
 
     protected function setUp(): void
@@ -34,10 +33,10 @@ class StagerTest extends TestCase
         $this->composerRunner = $this->prophesize(ComposerRunner::class);
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists(static::STAGING_DIR_DEFAULT)
             ->willReturn(true);
         $this->filesystem
-            ->isWritable(static::STAGING_DIR)
+            ->isWritable(static::STAGING_DIR_DEFAULT)
             ->willReturn(true);
     }
 
@@ -58,7 +57,7 @@ class StagerTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, static::STAGING_DIR, $callback);
+        $sut->stage($givenCommand, static::STAGING_DIR_DEFAULT, $callback);
     }
 
     public function providerHappyPath(): array
@@ -67,7 +66,7 @@ class StagerTest extends TestCase
             [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
-                    '--working-dir=' . self::STAGING_DIR,
+                    '--working-dir=' . self::STAGING_DIR_DEFAULT,
                     'update',
                 ],
                 'callback' => null,
@@ -75,7 +74,7 @@ class StagerTest extends TestCase
             [
                 'givenCommand' => [static::INERT_COMMAND],
                 'expectedCommand' => [
-                    '--working-dir=' . self::STAGING_DIR,
+                    '--working-dir=' . self::STAGING_DIR_DEFAULT,
                     static::INERT_COMMAND,
                 ],
                 'callback' => new TestProcessOutputCallback(),
@@ -89,12 +88,12 @@ class StagerTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*not exist/');
 
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists(static::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR_DEFAULT);
     }
 
     public function testStagingDirectoryNotWritable(): void
@@ -103,12 +102,12 @@ class StagerTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*not writable/');
 
         $this->filesystem
-            ->isWritable(static::STAGING_DIR)
+            ->isWritable(static::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR_DEFAULT);
     }
 
     public function testEmptyCommand(): void
@@ -118,7 +117,7 @@ class StagerTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([], static::STAGING_DIR);
+        $sut->stage([], static::STAGING_DIR_DEFAULT);
     }
 
     public function testCommandContainsComposer(): void
@@ -131,7 +130,7 @@ class StagerTest extends TestCase
         $sut->stage([
             'composer',
             static::INERT_COMMAND,
-        ], static::STAGING_DIR);
+        ], static::STAGING_DIR_DEFAULT);
     }
 
     /**
@@ -144,7 +143,7 @@ class StagerTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage($command, static::STAGING_DIR);
+        $sut->stage($command, static::STAGING_DIR_DEFAULT);
     }
 
     public function providerCommandContainsWorkingDirOption(): array
@@ -169,7 +168,7 @@ class StagerTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR_DEFAULT);
     }
 
     public function providerProcessExceptions(): array

@@ -121,8 +121,8 @@ class StageCommandTest extends CommandTestCase
     public function providerCommandFailure(): array
     {
         return [
-            ['exception' => new DirectoryNotFoundException(static::STAGING_DIR, 'Lorem'), 'message' => 'Lorem'],
-            ['exception' => new DirectoryNotWritableException(static::STAGING_DIR, 'Ipsum'), 'message' => 'Ipsum'],
+            ['exception' => new DirectoryNotFoundException(static::STAGING_DIR_DEFAULT, 'Lorem'), 'message' => 'Lorem'],
+            ['exception' => new DirectoryNotWritableException(static::STAGING_DIR_DEFAULT, 'Ipsum'), 'message' => 'Ipsum'],
             ['exception' => new InvalidArgumentException('Dolor'), 'message' => 'Dolor'],
             ['exception' => new ProcessFailedException('Sit'), 'message' => 'Sit'],
         ];

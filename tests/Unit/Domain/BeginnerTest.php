@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 
-use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
@@ -27,10 +26,10 @@ class BeginnerTest extends TestCase
         $this->fileCopier = $this->prophesize(FileCopier::class);
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->filesystem
-            ->exists(Application::ACTIVE_DIR_DEFAULT)
+            ->exists(self::ACTIVE_DIR_DEFAULT)
             ->willReturn(true);
         $this->filesystem
-            ->exists(Application::STAGING_DIR_DEFAULT)
+            ->exists(self::STAGING_DIR_DEFAULT)
             ->willReturn(false);
     }
 
@@ -91,12 +90,12 @@ class BeginnerTest extends TestCase
         $this->expectExceptionMessageMatches('/active directory.*not exist/');
 
         $this->filesystem
-            ->exists(Application::ACTIVE_DIR_DEFAULT)
+            ->exists(self::ACTIVE_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->begin(Application::ACTIVE_DIR_DEFAULT, Application::STAGING_DIR_DEFAULT);
+        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
     }
 
     /**
@@ -108,11 +107,11 @@ class BeginnerTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory already exists/');
 
         $this->filesystem
-            ->exists(Application::STAGING_DIR_DEFAULT)
+            ->exists(self::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->begin(Application::ACTIVE_DIR_DEFAULT, Application::STAGING_DIR_DEFAULT);
+        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
     }
 }

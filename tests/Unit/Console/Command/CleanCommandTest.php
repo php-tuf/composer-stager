@@ -64,11 +64,11 @@ class CleanCommandTest extends CommandTestCase
     public function testBasicExecution(): void
     {
         $this->cleaner
-            ->clean(static::STAGING_DIR)
+            ->clean(static::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce();
 
         $this->executeCommand([
-            sprintf('--%s', Application::STAGING_DIR_OPTION) => static::STAGING_DIR,
+            sprintf('--%s', Application::STAGING_DIR_OPTION) => static::STAGING_DIR_DEFAULT,
             '--no-interaction' => true,
         ]);
 
@@ -149,7 +149,7 @@ class CleanCommandTest extends CommandTestCase
     {
         return [
             ['exception' => new IOException('Lorem'), 'message' => 'Lorem'],
-            ['exception' => new DirectoryNotWritableException(static::STAGING_DIR, 'Ipsum'), 'message' => 'Ipsum'],
+            ['exception' => new DirectoryNotWritableException(static::STAGING_DIR_DEFAULT, 'Ipsum'), 'message' => 'Ipsum'],
         ];
     }
 }

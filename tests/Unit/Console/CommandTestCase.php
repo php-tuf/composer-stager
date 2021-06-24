@@ -10,7 +10,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 abstract class CommandTestCase extends TestCase
 {
     protected const INERT_COMMAND = '--version';
-    protected const STAGING_DIR = '/lorem/ipsum';
+    protected const STAGING_DIR_DEFAULT = '/lorem/ipsum';
 
     /**
      * The command tester.
