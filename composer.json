@@ -95,9 +95,9 @@
             "@coverage",
             "@security"
         ],
-        "coverage": "phpunit --coverage-text --color=always | grep --invert-match --extended-regexp '(^PhpTuf\\.*\\\\|Methods)'",
+        "coverage": "phpunit --coverage-html var/phpunit/coverage-report --coverage-text --color=always | grep --invert-match --extended-regexp '(^PhpTuf\\.*\\\\|Methods)'",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
-        "open-coverage": "open var/phpunit/coverage-report/index.html",
+        "open-coverage": "open var/phpunit/coverage-report/index.html || 'The code coverage report cannot be found. Run the \"coverage\" command'",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpmd": "phpmd src text phpmd",
