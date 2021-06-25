@@ -13,6 +13,14 @@ parameters:
 
 services:
     -
-        class: \PhpTuf\ComposerStager\Tests\PHPStan\InternalAnnotationRule
+        class: \PhpTuf\ComposerStager\Tests\PHPStan\FinalRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: \PhpTuf\ComposerStager\Tests\PHPStan\InterfaceRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: \PhpTuf\ComposerStager\Tests\PHPStan\InternalRule
         tags:
             - phpstan.rules.rule
