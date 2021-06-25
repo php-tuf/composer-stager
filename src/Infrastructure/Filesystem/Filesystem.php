@@ -3,15 +3,29 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Exception\IOException;
+use Symfony\Component\Filesystem\Exception\ExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * @internal
  */
-class Filesystem extends \Symfony\Component\Filesystem\Filesystem
+final class Filesystem implements FilesystemInterface
 {
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
+    private $symfonyFilesystem;
+
+    public function __construct(SymfonyFilesystem $symfonyFilesystem)
+    {
+        $this->symfonyFilesystem = $symfonyFilesystem;
+    }
+
+    public function exists(string $path): bool
+    {
+        return $this->symfonyFilesystem->exists($path);
+    }
+
     public function getcwd(): string
     {
         $cwd = getcwd();
@@ -21,11 +35,17 @@ class Filesystem extends \Symfony\Component\Filesystem\Filesystem
         return $cwd;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function isWritable(string $filename): bool
     {
-        return is_writable($filename);
+        return is_writable($filename); // @codeCoverageIgnore
+    }
+
+    public function remove(string $path): void
+    {
+        try {
+            $this->symfonyFilesystem->remove($path);
+        } catch (ExceptionInterface $e) {
+            throw new IOException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }

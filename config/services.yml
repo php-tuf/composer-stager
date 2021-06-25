@@ -17,5 +17,5 @@ services:
         exclude:
             - '../src/Console/Output'
 
-    Symfony\Component\Process\ExecutableFinder:
+    Symfony\Component\Filesystem\Filesystem:
         shared: false

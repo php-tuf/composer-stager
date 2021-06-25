@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
@@ -21,7 +21,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner|\Prophecy\Prophecy\ObjectProphecy composerRunner
  */
 class StagerTest extends TestCase
@@ -31,7 +31,7 @@ class StagerTest extends TestCase
     protected function setUp(): void
     {
         $this->composerRunner = $this->prophesize(ComposerRunner::class);
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(static::STAGING_DIR_DEFAULT)
             ->willReturn(true);

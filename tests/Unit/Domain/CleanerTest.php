@@ -5,8 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 use PhpTuf\ComposerStager\Domain\Cleaner;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
+use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Cleaner
@@ -15,13 +16,13 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  */
 class CleanerTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(static::STAGING_DIR_DEFAULT)
             ->willReturn(true);
@@ -96,12 +97,12 @@ class CleanerTest extends TestCase
      */
     public function testCleanFailToRemove(): void
     {
-        $this->expectException(IOException::class);
-
+        $exception = new IOException();
+        $this->expectExceptionObject($exception);
         $this->filesystem
-            ->remove(static::STAGING_DIR_DEFAULT)
+            ->remove(Argument::any())
             ->shouldBeCalledOnce()
-            ->willThrow(new \Symfony\Component\Filesystem\Exception\IOException(''));
+            ->willThrow($exception);
         $sut = $this->createSut();
 
         $sut->clean(static::STAGING_DIR_DEFAULT);

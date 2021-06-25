@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 
 final class Committer implements CommitterInterface
@@ -16,11 +16,11 @@ final class Committer implements CommitterInterface
     private $fileCopier;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
+     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
-    public function __construct(FileCopier $fileCopier, Filesystem $filesystem)
+    public function __construct(FileCopier $fileCopier, FilesystemInterface $filesystem)
     {
         $this->fileCopier = $fileCopier;
         $this->filesystem = $filesystem;

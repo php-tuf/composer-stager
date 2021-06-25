@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier|\Prophecy\Prophecy\ObjectProphecy fileCopier
  */
 class BeginnerTest extends TestCase
@@ -24,7 +24,7 @@ class BeginnerTest extends TestCase
     protected function setUp(): void
     {
         $this->fileCopier = $this->prophesize(FileCopier::class);
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(self::ACTIVE_DIR_DEFAULT)
             ->willReturn(true);
