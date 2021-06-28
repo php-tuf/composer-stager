@@ -34,7 +34,7 @@ class CommitterTest extends TestCase
             ->willReturn(true);
     }
 
-    private function createSut(): Committer
+    protected function createSut(): Committer
     {
         $fileCopier = $this->fileCopier->reveal();
         $filesystem = $this->filesystem->reveal();

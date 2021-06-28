@@ -34,7 +34,7 @@ class AbstractRunnerTest extends TestCase
         $this->process = $this->prophesize(Process::class);
     }
 
-    private function createSut($executableName = null)
+    protected function createSut($executableName = null)
     {
         $executableName = $executableName ?? self::COMMAND_NAME;
         $executableFinder = $this->executableFinder->reveal();

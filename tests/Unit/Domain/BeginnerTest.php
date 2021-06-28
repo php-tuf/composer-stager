@@ -33,7 +33,7 @@ class BeginnerTest extends TestCase
             ->willReturn(false);
     }
 
-    private function createSut(): Beginner
+    protected function createSut(): Beginner
     {
         $fileCopier = $this->fileCopier->reveal();
         $filesystem = $this->filesystem->reveal();

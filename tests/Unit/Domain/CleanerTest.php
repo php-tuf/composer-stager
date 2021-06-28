@@ -28,7 +28,7 @@ class CleanerTest extends TestCase
             ->willReturn(true);
     }
 
-    public function createSut(): Cleaner
+    protected function createSut(): Cleaner
     {
         $filesystem = $this->filesystem->reveal();
         return new Cleaner($filesystem);

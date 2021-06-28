@@ -24,7 +24,7 @@ class FileCopierTest extends TestCase
         $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
-    private function createSut(): FileCopier
+    protected function createSut(): FileCopier
     {
         $rsync = $this->rsync->reveal();
         return new FileCopier($rsync);

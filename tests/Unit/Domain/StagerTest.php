@@ -41,7 +41,7 @@ class StagerTest extends TestCase
             ->willReturn(true);
     }
 
-    private function createSut(): Stager
+    protected function createSut(): Stager
     {
         $composerRunner = $this->composerRunner->reveal();
         $filesystem = $this->filesystem->reveal();

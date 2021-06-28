@@ -21,7 +21,7 @@ class ApplicationTest extends TestCase
 {
     private const TEST_COMMAND = ['command' => 'test'];
 
-    private function createSut(): Application
+    protected function createSut(): Application
     {
         $createdCommand = new class() extends Command {
             protected static $defaultName = 'test';

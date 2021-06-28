@@ -30,7 +30,7 @@ class ExecutableFinderTest extends TestCase
             ->willReturnArgument();
     }
 
-    private function createSut(): ExecutableFinderInterface
+    protected function createSut(): ExecutableFinderInterface
     {
         $executableFinder = $this->symfonyExecutableFinder->reveal();
         return new ExecutableFinder($executableFinder);
