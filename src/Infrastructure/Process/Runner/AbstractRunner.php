@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 
 /**
@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 abstract class AbstractRunner
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface
      */
     private $executableFinder;
 
@@ -30,7 +30,7 @@ abstract class AbstractRunner
      */
     private $processFactory;
 
-    public function __construct(ExecutableFinder $executableFinder, ProcessFactoryInterface $processFactory)
+    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
     {
         $this->executableFinder = $executableFinder;
         $this->processFactory = $processFactory;

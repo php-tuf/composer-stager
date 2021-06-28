@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
@@ -16,7 +16,7 @@ use Symfony\Component\Process\Process;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
  * @covers \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner::__construct
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy executableFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy executableFinder
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy processFactory
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process process
  */
@@ -26,7 +26,7 @@ class AbstractRunnerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->executableFinder = $this->prophesize(ExecutableFinder::class);
+        $this->executableFinder = $this->prophesize(ExecutableFinderInterface::class);
         $this->executableFinder
             ->find(Argument::any())
             ->willReturnArgument();
@@ -50,7 +50,7 @@ class AbstractRunnerTest extends TestCase
         {
             private $executableName;
 
-            public function __construct($executableName, ExecutableFinder $executableFinder, ProcessFactoryInterface $processFactory)
+            public function __construct($executableName, ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
             {
                 parent::__construct($executableFinder, $processFactory);
                 $this->executableName = $executableName;

@@ -4,12 +4,13 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
+use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface
  * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::__construct
  * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::find
  * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::getCache
@@ -29,7 +30,7 @@ class ExecutableFinderTest extends TestCase
             ->willReturnArgument();
     }
 
-    private function createSut(): ExecutableFinder
+    private function createSut(): ExecutableFinderInterface
     {
         $executableFinder = $this->symfonyExecutableFinder->reveal();
         return new ExecutableFinder($executableFinder);

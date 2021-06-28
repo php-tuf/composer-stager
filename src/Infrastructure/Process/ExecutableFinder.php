@@ -8,7 +8,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 /**
  * @internal
  */
-class ExecutableFinder
+final class ExecutableFinder implements ExecutableFinderInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Exception\IOException[]|string[]|null[]
@@ -25,9 +25,6 @@ class ExecutableFinder
         $this->finder = $finder;
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
-     */
     public function find(string $name): string
     {
         $cache = $this->getCache($name);
