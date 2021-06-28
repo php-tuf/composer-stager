@@ -14,7 +14,7 @@ use Symfony\Component\Console\Command\Command;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Command\CommitCommand
- * @covers ::__construct
+ * @covers \PhpTuf\ComposerStager\Console\Command\CommitCommand::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\CommitCommand
  * @uses \PhpTuf\ComposerStager\Console\Output\Callback

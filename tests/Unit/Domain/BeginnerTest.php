@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Beginner
- * @covers ::__construct
+ * @covers \PhpTuf\ComposerStager\Domain\Beginner::__construct
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
