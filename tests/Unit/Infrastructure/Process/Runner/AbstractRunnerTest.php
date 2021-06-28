@@ -3,10 +3,10 @@
 namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
-use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
-use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\Process;
 
@@ -14,7 +14,7 @@ use Symfony\Component\Process\Process;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
  * @covers \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner::__construct
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory|\Prophecy\Prophecy\ObjectProphecy processFactory
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy processFactory
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
 class AbstractRunnerTest extends TestCase
@@ -23,7 +23,7 @@ class AbstractRunnerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->processFactory = $this->prophesize(ProcessFactory::class);
+        $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
         $this->process = $this->prophesize(Process::class);
     }
 

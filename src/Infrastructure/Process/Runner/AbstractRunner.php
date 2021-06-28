@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 
 /**
  * Provides a base for process runners for consistent process creation and
@@ -20,11 +20,11 @@ abstract class AbstractRunner
     abstract protected function executableName(): string;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface
      */
     private $processFactory;
 
-    public function __construct(ProcessFactory $processFactory)
+    public function __construct(ProcessFactoryInterface $processFactory)
     {
         $this->processFactory = $processFactory;
     }

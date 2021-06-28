@@ -9,20 +9,12 @@ use Symfony\Component\Process\Process;
 /**
  * @internal
  */
-class ProcessFactory
+final class ProcessFactory implements ProcessFactoryInterface
 {
-    /**
-     * @param string[] $array
-     * @param mixed ...$args
-     *
-     * @return \Symfony\Component\Process\Process<\Generator>
-     *
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
-     */
-    public function create(array $array, ...$args): Process
+    public function create(array $command, ...$args): Process
     {
         try {
-            return new Process($array, ...$args);
+            return new Process($command, ...$args);
         } catch (ExceptionInterface $e) { // @codeCoverageIgnore
             throw new LogicException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
