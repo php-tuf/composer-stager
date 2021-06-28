@@ -6,12 +6,12 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface;
 
 final class Beginner implements BeginnerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface
      */
     private $fileCopier;
 
@@ -20,7 +20,7 @@ final class Beginner implements BeginnerInterface
      */
     private $filesystem;
 
-    public function __construct(FileCopier $fileCopier, FilesystemInterface $filesystem)
+    public function __construct(FileCopierInterface $fileCopier, FilesystemInterface $filesystem)
     {
         $this->fileCopier = $fileCopier;
         $this->filesystem = $filesystem;

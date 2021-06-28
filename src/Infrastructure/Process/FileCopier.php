@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
 /**
  * @internal
  */
-class FileCopier
+final class FileCopier implements FileCopierInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner
@@ -22,16 +22,6 @@ class FileCopier
         $this->rsync = $rsync;
     }
 
-    /**
-     * @param string $from
-     * @param string $to
-     * @param string[] $exclusions
-     *   Paths to exclude, relative to the "from" path.
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
-     *   An optional PHP callback to run whenever there is process output.
-     *
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     */
     public function copy(string $from, string $to, array $exclusions = [], ?ProcessOutputCallbackInterface $callback = null): void
     {
         $command = [
