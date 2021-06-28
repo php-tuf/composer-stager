@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
+use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 
 /**
  * @internal
@@ -13,11 +13,11 @@ use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
 final class FileCopier implements FileCopierInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface
      */
     private $rsync;
 
-    public function __construct(RsyncRunner $rsync)
+    public function __construct(RsyncRunnerInterface $rsync)
     {
         $this->rsync = $rsync;
     }

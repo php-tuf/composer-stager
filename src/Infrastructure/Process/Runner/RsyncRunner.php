@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
-
 /**
  * @internal
  *
@@ -12,7 +10,7 @@ use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
  *
  * @see \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
  */
-class RsyncRunner extends AbstractRunner
+final class RsyncRunner extends AbstractRunner implements RsyncRunnerInterface
 {
     protected function executableName(): string
     {

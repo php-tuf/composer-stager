@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
+use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
@@ -15,13 +15,13 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
  * @covers ::__construct()
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner|\Prophecy\Prophecy\ObjectProphecy rsync
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
 class FileCopierTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->rsync = $this->prophesize(RsyncRunner::class);
+        $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
     private function createSut(): FileCopier

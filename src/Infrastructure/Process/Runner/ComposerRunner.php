@@ -2,12 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner;
-
 /**
  * @internal
  */
-class ComposerRunner extends AbstractRunner
+final class ComposerRunner extends AbstractRunner implements ComposerRunnerInterface
 {
     protected function executableName(): string
     {
