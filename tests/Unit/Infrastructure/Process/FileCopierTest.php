@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process;
 
+use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
@@ -101,6 +102,7 @@ class FileCopierTest extends TestCase
     public function providerCopyFailure(): array
     {
         return [
+            [IOException::class],
             [LogicException::class],
             [ProcessFailedException::class],
         ];

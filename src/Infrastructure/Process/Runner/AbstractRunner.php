@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 
 /**
@@ -15,6 +16,11 @@ use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
 abstract class AbstractRunner
 {
     /**
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
+     */
+    private $executableFinder;
+
+    /**
      * Returns the executable name, e.g., "composer" or "rsync".
      */
     abstract protected function executableName(): string;
@@ -24,8 +30,9 @@ abstract class AbstractRunner
      */
     private $processFactory;
 
-    public function __construct(ProcessFactoryInterface $processFactory)
+    public function __construct(ExecutableFinder $executableFinder, ProcessFactoryInterface $processFactory)
     {
+        $this->executableFinder = $executableFinder;
         $this->processFactory = $processFactory;
     }
 
@@ -39,17 +46,30 @@ abstract class AbstractRunner
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      *
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     *   If the executable cannot be found.
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
+     *   If the command process cannot be created.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     *   If the command process doesn't terminate successfully.
      */
     public function run(array $command, ?ProcessOutputCallbackInterface $callback = null): void
     {
-        array_unshift($command, $this->executableName());
+        array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
         try {
             $process->mustRun($callback);
         } catch (\Symfony\Component\Process\Exception\ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     */
+    private function findExecutable(): string
+    {
+        $name = $this->executableName();
+        return $this->executableFinder->find($name);
     }
 }

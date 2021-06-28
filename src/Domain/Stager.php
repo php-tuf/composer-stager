@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunner;
@@ -102,7 +102,7 @@ final class Stager implements StagerInterface
         );
         try {
             $this->composerRunner->run($command, $callback);
-        } catch (LogicException|ProcessFailedException $e) {
+        } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
         }
     }

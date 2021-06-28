@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Stager;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
@@ -175,12 +176,16 @@ class StagerTest extends TestCase
     {
         return [
             [
-                'exception' => new LogicException('lorem'),
+                'exception' => new IOException('lorem'),
                 'message' => 'lorem',
             ],
             [
-                'exception' => new ProcessFailedException('ipsum'),
+                'exception' => new LogicException('ipsum'),
                 'message' => 'ipsum',
+            ],
+            [
+                'exception' => new ProcessFailedException('dolor'),
+                'message' => 'dolor',
             ],
         ];
     }

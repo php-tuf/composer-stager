@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Process;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Exception\LogicException;
+use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunner;
 
@@ -43,7 +43,7 @@ final class FileCopier implements FileCopierInterface
 
         try {
             $this->rsync->run($command, $callback);
-        } catch (LogicException $e) {
+        } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
         }
     }
