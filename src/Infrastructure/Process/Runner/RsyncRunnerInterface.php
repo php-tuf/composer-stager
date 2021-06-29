@@ -5,12 +5,12 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 
 /**
- * Runs Rsync command.
+ * Runs rsync commands.
  */
 interface RsyncRunnerInterface
 {
     /**
-     * Runs a given command.
+     * Runs a given rsync command.
      *
      * @param string[] $command
      *   The command to run and its arguments as separate string values. Example:

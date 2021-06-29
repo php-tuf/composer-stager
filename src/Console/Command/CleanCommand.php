@@ -73,7 +73,7 @@ final class CleanCommand extends AbstractCommand
         }
 
         $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion('You are about to permanently remove the staging directory. This action cannot be undone. Continue? ');
+        $question = new ConfirmationQuestion('You are about to permanently remove the staging directory. This action cannot be undone. Continue? [Y/n] ');
         return $helper->ask($input, $output, $question);
     }
 }

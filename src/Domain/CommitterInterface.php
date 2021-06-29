@@ -27,7 +27,6 @@ interface CommitterInterface
      *   If the active directory is not writable.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
-     *
      */
     public function commit(string $stagingDir, string $activeDir, ?ProcessOutputCallbackInterface $callback = null): void;
 }

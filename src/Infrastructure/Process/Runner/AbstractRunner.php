@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
+use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 
 /**
  * Provides a base for process runners for consistent process creation and
@@ -59,7 +60,7 @@ abstract class AbstractRunner
         $process = $this->processFactory->create($command);
         try {
             $process->mustRun($callback);
-        } catch (\Symfony\Component\Process\Exception\ExceptionInterface $e) {
+        } catch (SymfonyExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
         }
     }

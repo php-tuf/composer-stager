@@ -31,11 +31,11 @@ interface FilesystemInterface
     /**
      * Determines whether or not the given path is writable.
      *
-     * @param string $filename
+     * @param string $path
      *   A path as absolute or relative to the working directory (CWD), e.g.,
      *   "/var/www/public" or "public".
      */
-    public function isWritable(string $filename): bool;
+    public function isWritable(string $path): bool;
 
     /**
      * Removes the given path.

@@ -69,7 +69,7 @@ final class Stager implements StagerInterface
             throw new InvalidArgumentException('The Composer command cannot be empty');
         }
         if (reset($this->composerCommand) === 'composer') {
-            throw new InvalidArgumentException('The Composer command cannot begin with "composer"');
+            throw new InvalidArgumentException('The Composer command cannot begin with "composer"--it is implied');
         }
         if (array_key_exists('--working-dir', $this->composerCommand)
             || array_key_exists('-d', $this->composerCommand)) {

@@ -28,7 +28,6 @@ final class Application extends \Symfony\Component\Console\Application
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Console\Exception\LogicException
      */

@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 interface ComposerRunnerInterface
 {
     /**
-     * Runs a given command.
+     * Runs a given Composer command.
      *
      * @param string[] $command
      *   The command to run and its arguments as separate string values. Example:

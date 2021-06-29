@@ -35,9 +35,9 @@ final class Filesystem implements FilesystemInterface
         return $cwd;
     }
 
-    public function isWritable(string $filename): bool
+    public function isWritable(string $path): bool
     {
-        return is_writable($filename); // @codeCoverageIgnore
+        return is_writable($path); // @codeCoverageIgnore
     }
 
     public function remove(string $path): void
