@@ -11,12 +11,12 @@ use Symfony\Component\Process\Process;
  */
 final class ProcessFactory implements ProcessFactoryInterface
 {
-    public function create(array $command, ...$args): Process
+    public function create(array $command): Process
     {
         try {
-            return new Process($command, ...$args);
+            return new Process($command);
         } catch (ExceptionInterface $e) { // @codeCoverageIgnore
-            throw new LogicException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
+            throw new LogicException($e->getMessage(), (int) $e->getCode(), $e); // @codeCoverageIgnore
         }
     }
 }

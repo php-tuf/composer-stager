@@ -35,6 +35,7 @@ final class CleanCommand extends AbstractCommand
     /**
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -63,6 +64,7 @@ final class CleanCommand extends AbstractCommand
     /**
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
     public function confirm(InputInterface $input, OutputInterface $output): bool
     {
@@ -72,8 +74,9 @@ final class CleanCommand extends AbstractCommand
             return true;
         }
 
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $helper */
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('You are about to permanently remove the staging directory. This action cannot be undone. Continue? [Y/n] ');
-        return $helper->ask($input, $output, $question);
+        return (bool) $helper->ask($input, $output, $question);
     }
 }

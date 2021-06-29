@@ -44,7 +44,7 @@ final class FileCopier implements FileCopierInterface
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
+            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }

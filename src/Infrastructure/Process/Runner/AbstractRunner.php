@@ -61,7 +61,7 @@ abstract class AbstractRunner
         try {
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
+            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 

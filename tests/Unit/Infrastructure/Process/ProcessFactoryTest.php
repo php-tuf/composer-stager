@@ -16,23 +16,22 @@ class ProcessFactoryTest extends TestCase
      *
      * @dataProvider providerFactory
      */
-    public function testFactory($command, $args): void
+    public function testFactory($command): void
     {
         $sut = new ProcessFactory();
 
-        $actual = $sut->create($command, ...$args);
+        $actual = $sut->create($command);
 
-        $expected = new Process($command, ...$args);
+        $expected = new Process($command);
         self::assertEquals($expected, $actual);
     }
 
     public function providerFactory(): array
     {
         return [
-            [[], []],
-            [['lorem'], []],
-            [['lorem', 'ipsum'], []],
-            [[], ['/var/www']],
+            [[]],
+            [['lorem']],
+            [['lorem', 'ipsum']],
         ];
     }
 }

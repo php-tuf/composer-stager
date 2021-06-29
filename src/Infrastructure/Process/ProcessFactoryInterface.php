@@ -24,10 +24,6 @@ interface ProcessFactoryInterface
      *   ];
      *   ```
      *
-     * @param mixed ...$args
-     *   Any number of arguments to pass to
-     *   \Symfony\Component\Process\Process::__construct.
-     *
      * @see \Symfony\Component\Process\Process::__construct
      *
      * @return \Symfony\Component\Process\Process
@@ -36,5 +32,5 @@ interface ProcessFactoryInterface
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
      *   If the process cannot be created.
      */
-    public function create(array $command, ...$args): Process;
+    public function create(array $command): Process;
 }

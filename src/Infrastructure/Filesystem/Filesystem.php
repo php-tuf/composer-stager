@@ -45,7 +45,7 @@ final class Filesystem implements FilesystemInterface
         try {
             $this->symfonyFilesystem->remove($path);
         } catch (ExceptionInterface $e) {
-            throw new IOException($e->getMessage(), $e->getCode(), $e);
+            throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }

@@ -85,6 +85,9 @@ jobs:
             -   name: "Run PHPStan"
                 run: "composer phpstan"
 
+            -   name: "Run Psalm"
+                run: "composer psalm"
+
             -   name: "Run PHPMD"
                 run: "composer phpmd"
 

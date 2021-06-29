@@ -17,6 +17,7 @@
         "symfony/config": "^4.4 || ^5.2",
         "symfony/console": "^4.4 || ^5.2",
         "symfony/dependency-injection": "^4.4 || ^5.2",
+        "symfony/filesystem": "^4.4 || ^5.2",
         "symfony/process": "^4.4 || ^5.2",
         "symfony/yaml": "^4.4 || ^5.2"
     },
@@ -35,6 +36,7 @@
         "phpstan/phpstan-strict-rules": "^0.12.9",
         "phpstan/phpstan-symfony": "^0.12.37",
         "phpunit/phpunit": "^9.5",
+        "psalm/phar": "^4.8",
         "roave/security-advisories": "dev-latest"
     },
     "suggest": {
@@ -93,6 +95,7 @@
             "@phpcs",
             "@phpstan",
             "@phpmd",
+            "@psalm",
             "@coverage",
             "@security"
         ],
@@ -103,6 +106,7 @@
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",
         "phpmd": "phpmd src text phpmd",
         "phpstan": "phpstan analyse",
+        "psalm": "psalm.phar",
         "security": "@composer update --dry-run roave/security-advisories",
         "test": "phpunit --coverage-html var/phpunit/coverage-report"
     },
@@ -114,6 +118,7 @@
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
         "phpmd": "Looks for potential problems within the source code.",
+        "psalm": "Analyzes PHP application for errors.",
         "phpstan": "Analyzes code to find bugs.",
         "security": "Checks installed dependencies for known security vulnerabilities.",
         "test": "Runs PHPUnit tests."

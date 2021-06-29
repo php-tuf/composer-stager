@@ -16,7 +16,7 @@ final class Stager implements StagerInterface
     /**
      * @var string[]
      */
-    private $composerCommand;
+    private $composerCommand = [];
 
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface
@@ -31,7 +31,7 @@ final class Stager implements StagerInterface
     /**
      * @var string
      */
-    private $stagingDir;
+    private $stagingDir = '';
 
     public function __construct(
         ComposerRunnerInterface $composerRunner,
@@ -103,7 +103,7 @@ final class Stager implements StagerInterface
         try {
             $this->composerRunner->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), $e->getCode(), $e);
+            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }
