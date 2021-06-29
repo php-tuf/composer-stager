@@ -3,12 +3,12 @@ name: Tests
 
 on:
     push:
-        branches: [ main, wip ]
+        branches: [ main, develop, wip ]
         paths-ignore:
             - .idea/**
             - docs/**
     pull_request:
-        branches: [ main ]
+        branches: [ develop ]
         paths-ignore:
             - .idea/**
             - docs/**
