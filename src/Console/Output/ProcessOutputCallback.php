@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @internal
  */
-final class Callback implements ProcessOutputCallbackInterface
+final class ProcessOutputCallback implements ProcessOutputCallbackInterface
 {
     /**
      * @var \Symfony\Component\Console\Output\OutputInterface

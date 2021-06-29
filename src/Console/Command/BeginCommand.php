@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Output\Callback;
+use PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
@@ -47,7 +47,7 @@ final class BeginCommand extends AbstractCommand
             $this->beginner->begin(
                 $activeDir,
                 $stagingDir,
-                new Callback($input, $output)
+                new ProcessOutputCallback($input, $output)
             );
 
             return self::SUCCESS;

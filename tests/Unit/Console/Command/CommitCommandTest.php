@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
  * @covers \PhpTuf\ComposerStager\Console\Command\CommitCommand::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\CommitCommand
- * @uses \PhpTuf\ComposerStager\Console\Output\Callback
+ * @uses \PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback
  *
  * @property \PhpTuf\ComposerStager\Domain\CommitterInterface|\Prophecy\Prophecy\ObjectProphecy committer
  */

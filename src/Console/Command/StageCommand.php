@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Output\Callback;
+use PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback;
 use PhpTuf\ComposerStager\Domain\StagerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -74,7 +74,7 @@ final class StageCommand extends AbstractCommand
             $this->stager->stage(
                 $composerCommand,
                 $stagingDir,
-                new Callback($input, $output)
+                new ProcessOutputCallback($input, $output)
             );
 
             return self::SUCCESS;

@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
-use PhpTuf\ComposerStager\Console\Output\Callback;
+use PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback;
 use PhpTuf\ComposerStager\Domain\CommitterInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,7 +46,7 @@ final class CommitCommand extends AbstractCommand
             $this->committer->commit(
                 $stagingDir,
                 $activeDir,
-                new Callback($input, $output)
+                new ProcessOutputCallback($input, $output)
             );
 
             return self::SUCCESS;
