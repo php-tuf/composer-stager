@@ -19,15 +19,12 @@ interface FilesystemInterface
     public function exists(string $path): bool;
 
     /**
-     * Gets the current working directory on success, or false on failure.
-     *
-     * @return string
-     *   The current working directory (CWD).
+     * Gets the current working directory (CWD) on success.
      *
      * @throws \PhpTuf\ComposerStager\Exception\IOException
-     *   If there is a failure. On some Unix variants, this check will fail if
-     *   any one of the parent directories does not have the readable or search
-     *   mode set, even if the current directory does.
+     *   If there is a failure. For example, on some Unix variants, this check
+     *   will fail if any one of the parent directories does not have the
+     *   readable or search mode set, even if the current directory does.
      */
     public function getcwd(): string;
 
@@ -37,8 +34,6 @@ interface FilesystemInterface
      * @param string $filename
      *   A path as absolute or relative to the working directory (CWD), e.g.,
      *   "/var/www/public" or "public".
-     *
-     * @return bool
      */
     public function isWritable(string $filename): bool;
 
