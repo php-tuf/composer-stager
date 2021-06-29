@@ -30,7 +30,7 @@ interface ProcessFactoryInterface
      *
      * @see \Symfony\Component\Process\Process::__construct
      *
-     * @return \Symfony\Component\Process\Process<\Generator>
+     * @return \Symfony\Component\Process\Process
      *   A Symfony Process object.
      *
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
