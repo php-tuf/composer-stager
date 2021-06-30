@@ -8,7 +8,7 @@ Composer Stager makes long-running Composer commands safe to run on a codebase i
 
 ## Console application
 
-The Console application can be independently installed via Git and invoked via its executable:
+The Console application can be used stand-alone by installing it via Git and invoking its executable:
 
 ```shell
 $ git clone https://github.com/php-tuf/composer-stager.git
