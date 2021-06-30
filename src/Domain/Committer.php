@@ -26,11 +26,6 @@ final class Committer implements CommitterInterface
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     */
     public function commit(string $stagingDir, string $activeDir, ?ProcessOutputCallbackInterface $callback = null): void
     {
         if (!$this->filesystem->exists($stagingDir)) {
@@ -46,5 +41,10 @@ final class Committer implements CommitterInterface
         }
 
         $this->fileCopier->copy($stagingDir, $activeDir, [], $callback);
+    }
+
+    public function directoryExists(string $stagingDir): bool
+    {
+        return $this->filesystem->exists($stagingDir);
     }
 }

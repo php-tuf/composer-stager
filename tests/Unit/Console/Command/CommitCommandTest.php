@@ -28,6 +28,9 @@ class CommitCommandTest extends CommandTestCase
         $this->committer = $this->prophesize(CommitterInterface::class);
         $this->committer
             ->commit(Argument::cetera());
+        $this->committer
+            ->directoryExists(Argument::cetera())
+            ->willReturn(true);
         parent::setUp();
     }
 
@@ -56,6 +59,7 @@ class CommitCommandTest extends CommandTestCase
     }
 
     /**
+     * @covers ::confirm
      * @covers ::execute
      *
      * @dataProvider providerBasicExecution
@@ -69,6 +73,7 @@ class CommitCommandTest extends CommandTestCase
         $this->executeCommand([
             '--' . Application::ACTIVE_DIR_OPTION => $activeDir,
             '--' . Application::STAGING_DIR_OPTION => $stagingDir,
+            '--no-interaction' => true,
         ]);
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
@@ -84,7 +89,59 @@ class CommitCommandTest extends CommandTestCase
             ],
             [
                 'activeDir' => '/amet/consectetur',
-                'stagingDir' => '/adispiscin/elit',
+                'stagingDir' => '/adipiscing/elit',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::execute
+     */
+    public function testStagingDirectoryNotFound(): void
+    {
+        $this->committer
+            ->directoryExists(Argument::cetera())
+            ->willReturn(false);
+        $this->committer
+            ->commit(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        $this->executeCommand(['--no-interaction' => true]);
+
+        self::assertStringContainsString('staging directory does not exist', $this->getDisplay(), 'Displayed correct output.');
+        self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');
+    }
+
+    /**
+     * @covers ::confirm
+     * @covers ::execute
+     *
+     * @dataProvider providerConfirmationPrompt
+     */
+    public function testConfirmationPrompt($input, $calls, $exit): void
+    {
+        $this->committer
+            ->commit(Argument::cetera())
+            ->shouldBeCalledTimes($calls);
+
+        $this->executeCommand([], [$input]);
+
+        self::assertStringContainsString('Continue?', $this->getDisplay(), 'Displayed correct output.');
+        self::assertSame($exit, $this->getStatusCode(), 'Returned correct status code.');
+    }
+
+    public function providerConfirmationPrompt(): array
+    {
+        return [
+            [
+                'input' => 'yes',
+                'calls' => 1,
+                'exit' => AbstractCommand::SUCCESS,
+            ],
+            [
+                'input' => 'no',
+                'calls' => 0,
+                'exit' => AbstractCommand::FAILURE,
             ],
         ];
     }
@@ -100,7 +157,7 @@ class CommitCommandTest extends CommandTestCase
             ->commit(Argument::cetera())
             ->willThrow($exception);
 
-        $this->executeCommand();
+        $this->executeCommand(['--no-interaction' => true]);
 
         self::assertSame($message . PHP_EOL, $this->getDisplay(), 'Displayed correct output.');
         self::assertSame(AbstractCommand::FAILURE, $this->getStatusCode(), 'Returned correct status code.');

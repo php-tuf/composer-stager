@@ -150,4 +150,30 @@ class CommitterTest extends TestCase
             ['activeDir' => '/dolor/sit'],
         ];
     }
+
+    /**
+     * @covers ::directoryExists
+     *
+     * @dataProvider providerDirectoryExists
+     */
+    public function testDirectoryExists($expected): void
+    {
+        $this->filesystem
+            ->exists(static::STAGING_DIR_DEFAULT)
+            ->shouldBeCalledOnce()
+            ->willReturn($expected);
+        $sut = $this->createSut();
+
+        $actual = $sut->directoryExists(static::STAGING_DIR_DEFAULT);
+
+        self::assertSame($expected, $actual, 'Correctly detected existence of staging directory.');
+    }
+
+    public function providerDirectoryExists(): array
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
 }

@@ -27,6 +27,8 @@ class CleanCommandTest extends CommandTestCase
     {
         $this->cleaner = $this->prophesize(CleanerInterface::class);
         $this->cleaner
+            ->clean(Argument::cetera());
+        $this->cleaner
             ->directoryExists(Argument::cetera())
             ->willReturn(true);
         parent::setUp();
@@ -37,7 +39,6 @@ class CleanCommandTest extends CommandTestCase
         $cleaner = $this->cleaner->reveal();
         return new CleanCommand($cleaner);
     }
-
 
     /**
      * @covers ::configure

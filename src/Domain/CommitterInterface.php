@@ -29,4 +29,13 @@ interface CommitterInterface
      *   If the command process doesn't terminate successfully.
      */
     public function commit(string $stagingDir, string $activeDir, ?ProcessOutputCallbackInterface $callback = null): void;
+
+    /**
+     * Determines whether or not the staging directory exists.
+     *
+     * @param string $stagingDir
+     *   The staging directory as an absolute path or relative to the working
+     *   directory (CWD), e.g., "/var/www/staging" or "staging".
+     */
+    public function directoryExists(string $stagingDir): bool;
 }
