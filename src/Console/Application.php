@@ -20,7 +20,7 @@ final class Application extends \Symfony\Component\Console\Application
     public const STAGING_DIR_DEFAULT = '.composer_staging';
 
     private const NAME = 'Composer Stager';
-    private const VERSION = 'v0.1.0';
+    private const VERSION = 'v0.2.x-dev';
 
     public function __construct()
     {
