@@ -44,10 +44,8 @@ The Composer library is installed, of course, via Composer:
 
 <!-- @todo Remove the custom repository command once we are publishing the library to Packagist. -->
 ```shell
-# Add a custom repository. (This will no longer be necessary once the library
-# is published to Packagist.)
-composer config repositories.composer-stager vcs \
-    https://github.com/php-tuf/composer-stager
+# Add a custom repository. (This will be unnecessary once we publish to Packagist.)
+composer config repositories.composer-stager vcs https://github.com/php-tuf/composer-stager
 
 composer require php-tuf/composer-stager
 ```
