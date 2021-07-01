@@ -41,7 +41,7 @@ $application = $containerBuilder->get(Application::class);
 // @see https://symfony.com/doc/current/console.html#registering-the-command
 foreach ($containerBuilder->getServiceIds() as $serviceId) {
     $service = $containerBuilder->get($serviceId);
-    if ($service !== null && is_a($service, Command::class)) {
+    if ($service instanceof Command) {
         $application->add($service);
     }
 }
