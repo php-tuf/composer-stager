@@ -1,8 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Unit\Console;
-
-use PHPUnit\Framework\TestCase;
+namespace PhpTuf\ComposerStager\Tests\Functional;
 
 /**
  * @coversNothing This actually covers the front script, obviously, but PHPUnit
@@ -38,20 +36,5 @@ class FrontScriptTest extends TestCase
             'list',
             'stage',
         ], $commands);
-    }
-
-    private function runFrontScript(string $commandString): array
-    {
-        $output = [];
-
-        $command = implode(' ', [
-            'bin' => 'php',
-            'script_path' => __DIR__ . '/../../../bin/composer-stage',
-            'command_string' => $commandString,
-        ]);
-
-        exec($command, $output);
-
-        return $output;
     }
 }

@@ -4,20 +4,38 @@ namespace PhpTuf\ComposerStager\Tests\Functional;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
-    private $testEnv;
-
-    protected function setUp(): void
+    protected function runFrontScript(string $commandString): array
     {
-        // Create test environment,
-        $this->testEnv = realpath(__DIR__ . '/../../var/test_env/') . md5(mt_rand());
-        mkdir($this->testEnv);
+        $command = implode(' ', [
+            'bin' => 'php',
+            'scriptPath' => realpath(__DIR__ . '/../../bin/composer-stage'),
+            'commandString' => $commandString,
+        ]);
+
+        return self::exec($command);
     }
 
-    protected function tearDown(): void
+    protected static function exec(string $command): array
     {
-        // Remove test environment.
-        if (file_exists($this->testEnv)) {
-            rmdir($this->testEnv);
+        // These ridiculous proc_open() acrobatics are necessary to prevent tests
+        // from printing output, because it is impossible to suppress stderr
+        // from exec() and other simpler functions, even with output buffering.
+        // @see https://stackoverflow.com/questions/33171386/capture-supress-all-output-from-php-exec-including-stderr
+        // @see https://www.php.net/manual/function.proc-open.php
+        $process = proc_open($command, [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ], $pipes);
+
+        if (!is_resource($process)) {
+            throw new \RuntimeException('Could not create a valid process.');
         }
+
+        $stdout = stream_get_contents($pipes[1]);
+
+        proc_close($process);
+
+        return explode(PHP_EOL, $stdout);
     }
 }
