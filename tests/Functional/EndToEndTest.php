@@ -3,134 +3,135 @@
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * @coversNothing
  */
 class EndToEndTest extends TestCase
 {
+    private const TEST_ENV = __DIR__ . '/../../var/phpunit/test-env/EndToEndTest';
     private const ACTIVE_DIR = 'active-dir';
     private const STAGING_DIR = 'staging-dir';
 
-    private $testEnv;
+    public static function setUpBeforeClass(): void
+    {
+        self::createTestEnvironment();
+        self::prepareActiveDirectory();
+    }
 
-    protected function setUp(): void
+    public static function tearDownAfterClass(): void
+    {
+        // Remove the test environment.
+        $filesystem = new Filesystem();
+        if ($filesystem->exists(self::TEST_ENV)) {
+            $filesystem->remove(self::TEST_ENV);
+        }
+    }
+
+    protected static function runFrontScript(array $args, string $cwd = __DIR__): Process
+    {
+        // Override default directory paths to be adjacent rather than nested
+        // for easier comparison of contents. Set the CWD to the test environment.
+        return parent::runFrontScript(array_merge([
+            '--active-dir=' . self::ACTIVE_DIR,
+            '--staging-dir=' . self::STAGING_DIR,
+        ], $args), self::TEST_ENV);
+    }
+
+    private static function createTestEnvironment(): void
     {
         $filesystem = new Filesystem();
 
         // Create the test environment and cd into it,
-        $this->testEnv = __DIR__ . '/../../var/phpunit/test-env/' . md5(mt_rand());
-        $filesystem->mkdir($this->testEnv);
-        chdir($this->testEnv);
+        $filesystem->mkdir(self::TEST_ENV);
+        chdir(self::TEST_ENV);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
         $filesystem->mkdir(self::ACTIVE_DIR);
     }
 
-    protected function tearDown(): void
-    {
-        // Remove the test environment.
-        $filesystem = new Filesystem();
-        if ($filesystem->exists($this->testEnv)) {
-            $filesystem->remove($this->testEnv);
-        }
-    }
-
-    protected function runFrontScript(string $commandString): array
-    {
-        // Override default directory paths to be adjacent rather than nested
-        // for easier comparison of contents.
-        $commandString = sprintf(
-            '--active-dir=%s --staging-dir=%s %s',
-            self::ACTIVE_DIR,
-            self::STAGING_DIR,
-            $commandString
-        );
-        return parent::runFrontScript($commandString);
-    }
-
-    public function testEndToEnd(): void
-    {
-        $this->assertTestPreconditions();
-        $this->prepareActiveDirectory();
-
-        $this->testBegin();
-        $this->testStage();
-        $this->testCommit();
-        $this->testClean();
-    }
-
-    private function assertTestPreconditions(): void
-    {
-        self::assertActiveDirectoryExists();
-        self::assertActiveDirectoryIsEmpty();
-        self::assertStagingDirectoryDoesNotExist();
-    }
-
-    private function prepareActiveDirectory(): void
+    private static function prepareActiveDirectory(): void
     {
         // Initialize composer.json.
-        self::exec(sprintf(
-            'composer --working-dir=%s init --name="lorem/ipsum" --no-interaction',
-            self::ACTIVE_DIR
-        ));
+        $process = new Process([
+            'composer',
+            '--working-dir=' . self::ACTIVE_DIR,
+            'init',
+            '--name=lorem/ipsum',
+            '--no-interaction',
+        ]);
+        $process->mustRun();
 
         self::assertActiveComposerJsonExists();
     }
 
-    private function testBegin(): void
+    public function testBegin(): void
     {
-        $this->runFrontScript('begin');
+        $process = self::runFrontScript(['begin']);
 
+        self::assertSame(0, $process->getExitCode());
         self::assertActiveAndStagingDirectoriesSame();
     }
 
-    private function testStage(): void
+    /**
+     * @depends testBegin
+     */
+    public function testStage(): void
     {
         // A "composer config" command is a good one to stage to avoid "testing
         // the Internet" since it makes no HTTP requests.
         $newName = 'dolor/sit';
-        $this->runFrontScript("stage -- config name {$newName}");
-        $actualName = $this->runFrontScript('stage -- config name')[0];
+        self::runFrontScript([
+            'stage',
+            '--',
+            'config',
+            'name',
+            $newName,
+        ]);
+        $process = self::runFrontScript([
+            'stage',
+            '--',
+            'config',
+            'name',
+        ]);
+        $actualName = $process->getOutput();
 
-        self::assertEquals($newName, $actualName, 'Composer commands succeeded.');
+        self::assertStringStartsWith($newName, $actualName, 'Composer commands succeeded.');
+        self::assertSame('', $process->getErrorOutput());
+        self::assertSame(0, $process->getExitCode());
         self::assertActiveAndStagingDirectoriesNotSame();
     }
 
-    private function testCommit(): void
+    /**
+     * @depends testStage
+     */
+    public function testCommit(): void
     {
-        $this->runFrontScript('commit --no-interaction');
+        $process = self::runFrontScript(['commit', '--no-interaction']);
 
+        self::assertSame('', $process->getErrorOutput());
+        self::assertSame(0, $process->getExitCode());
         self::assertActiveAndStagingDirectoriesSame();
     }
 
-    private function testClean(): void
+    /**
+     * @depends testCommit
+     */
+    public function testClean(): void
     {
-        $this->runFrontScript('clean --no-interaction');
+        $process = self::runFrontScript(['clean', '--no-interaction']);
 
+        self::assertSame('', $process->getErrorOutput());
+        self::assertEquals(0, $process->getExitCode());
         self::assertStagingDirectoryDoesNotExist();
     }
 
     private static function assertActiveComposerJsonExists(): void
     {
         self::assertFileExists(self::ACTIVE_DIR . '/composer.json');
-    }
-
-    private static function assertActiveDirectoryExists(): void
-    {
-        self::assertFileExists(self::ACTIVE_DIR, 'Active directory exists.');
-    }
-
-    private static function assertActiveDirectoryIsEmpty(): void
-    {
-        $contents = scandir(self::ACTIVE_DIR);
-
-        // Remove items for the current and parent directories.
-        $contents = array_diff($contents, ['.', '..']);
-
-        // Reindex the return array for clearer diffs.
-        self::assertEmpty(array_values($contents), 'Active directory is empty.');
     }
 
     private static function assertStagingDirectoryDoesNotExist(): void
@@ -140,29 +141,32 @@ class EndToEndTest extends TestCase
 
     private static function assertActiveAndStagingDirectoriesSame(): void
     {
-        self::assertSame(
-            [],
-            self::getActiveAndStagingDirectoriesDiff(),
+        self::assertTrue(
+            self::activeAndStagingDirectoriesAreSame(),
             'Active and staging directories are the same.'
         );
     }
 
     private static function assertActiveAndStagingDirectoriesNotSame(): void
     {
-        self::assertNotSame(
-            [],
-            self::getActiveAndStagingDirectoriesDiff(),
+        self::assertFalse(
+            self::activeAndStagingDirectoriesAreSame(),
             'Active and staging directories are not the same.'
         );
     }
 
-    private static function getActiveAndStagingDirectoriesDiff(): array
+    private static function activeAndStagingDirectoriesAreSame(): bool
     {
-        $diff = self::exec(sprintf(
-            'diff %s %s',
-            self::ACTIVE_DIR,
-            self::STAGING_DIR
-        ));
-        return array_filter($diff);
+        try {
+            $process = new Process([
+                'diff',
+                self::ACTIVE_DIR,
+                self::STAGING_DIR,
+            ]);
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            return false;
+        }
+        return true;
     }
 }

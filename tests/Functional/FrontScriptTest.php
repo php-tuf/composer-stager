@@ -14,16 +14,18 @@ class FrontScriptTest extends TestCase
      */
     public function testBasicExecution(): void
     {
-        $output = $this->runFrontScript('--version');
+        $process = self::runFrontScript(['--version']);
+        $output = $process->getOutput();
 
-        self::assertStringStartsWith('Composer Stager v', $output[0]);
+        self::assertStringStartsWith('Composer Stager v', $output);
     }
 
     public function testCommandList(): void
     {
-        $output = $this->runFrontScript('--format=json list');
+        $process = self::runFrontScript(['--format=json', 'list']);
+        $output = $process->getOutput();
 
-        $data = json_decode($output[0], true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
         $commands = array_map(static function ($value) {
             return $value['name'];
         }, $data['commands']);
