@@ -6,12 +6,12 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
 
 final class Committer implements CommitterInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface
      */
     private $fileCopier;
 
