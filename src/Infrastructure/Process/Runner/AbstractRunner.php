@@ -60,6 +60,8 @@ abstract class AbstractRunner
      *   If the command process cannot be created.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
+     * @throws \InvalidArgumentException
+     *   If the timeout is negative.
      */
     public function run(array $command, ?ProcessOutputCallbackInterface $callback = null): void
     {
