@@ -23,6 +23,8 @@ abstract class AbstractRunner
 
     /**
      * The process timeout in seconds, or NULL to never time out.
+     *
+     * @var int
      */
     protected $timeout = 60;
 
