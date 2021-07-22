@@ -14,7 +14,7 @@ use Symfony\Component\Process\Process;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner::__construct
+ * @covers ::__construct
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy executableFinder
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy processFactory

@@ -13,7 +13,7 @@ use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier::__construct
+ * @covers ::__construct
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
