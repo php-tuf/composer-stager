@@ -66,8 +66,8 @@ abstract class AbstractRunner
     public function run(array $command, ?ProcessOutputCallbackInterface $callback = null): void
     {
         array_unshift($command, $this->findExecutable());
-        $process = $this->processFactory->create($command)
-            ->setTimeout($this->timeout);
+        $process = $this->processFactory->create($command);
+        $process->setTimeout($this->timeout);
         try {
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {

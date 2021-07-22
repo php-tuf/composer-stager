@@ -77,6 +77,9 @@ class AbstractRunnerTest extends TestCase
             ->willReturnArgument()
             ->shouldBeCalledOnce();
         $this->process
+            ->setTimeout(Argument::type('float'))
+            ->shouldBeCalledOnce();
+        $this->process
             ->mustRun($callback)
             ->shouldBeCalledOnce();
         $this->processFactory
@@ -123,6 +126,9 @@ class AbstractRunnerTest extends TestCase
 
         $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
         $exception = $exception->reveal();
+        $this->process
+            ->setTimeout(Argument::type('float'))
+            ->shouldBeCalledOnce();
         $this->process
             ->mustRun(Argument::cetera())
             ->willThrow($exception);
