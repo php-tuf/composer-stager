@@ -22,6 +22,11 @@ abstract class AbstractRunner
     private $executableFinder;
 
     /**
+     * The process timeout in seconds, or NULL to never time out.
+     */
+    protected $timeout = 60;
+
+    /**
      * Returns the executable name, e.g., "composer" or "rsync".
      */
     abstract protected function executableName(): string;
@@ -57,7 +62,8 @@ abstract class AbstractRunner
     public function run(array $command, ?ProcessOutputCallbackInterface $callback = null): void
     {
         array_unshift($command, $this->findExecutable());
-        $process = $this->processFactory->create($command);
+        $process = $this->processFactory->create($command)
+            ->setTimeout($this->timeout);
         try {
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
