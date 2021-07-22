@@ -22,11 +22,11 @@ abstract class AbstractRunner
     private $executableFinder;
 
     /**
-     * The process timeout in seconds, or NULL to never time out.
+     * The process timeout in seconds, or null to never time out.
      *
-     * @var int
+     * @var int|null
      */
-    protected $timeout = 60;
+    private $timeout;
 
     /**
      * Returns the executable name, e.g., "composer" or "rsync".
@@ -38,10 +38,11 @@ abstract class AbstractRunner
      */
     private $processFactory;
 
-    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
+    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory, ?int $timeout = 60)
     {
         $this->executableFinder = $executableFinder;
         $this->processFactory = $processFactory;
+        $this->timeout = $timeout;
     }
 
     /**

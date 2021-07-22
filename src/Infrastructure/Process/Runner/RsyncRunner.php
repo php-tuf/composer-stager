@@ -13,11 +13,6 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
  */
 final class RsyncRunner extends AbstractRunner implements RsyncRunnerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $timeout = 300;
-
     protected function executableName(): string
     {
         return 'rsync'; // @codeCoverageIgnore
