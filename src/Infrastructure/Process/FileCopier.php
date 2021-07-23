@@ -32,10 +32,6 @@ final class FileCopier implements FileCopierInterface
             '--verbose',
         ];
 
-        foreach ($exclusions as $exclusion) {
-            $command[] = '--exclude=' . $exclusion;
-        }
-
         // A trailing slash is added to the "from" directory so the CONTENTS of
         // the active directory are copied, not the directory itself.
         $command[] = rtrim($from, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;

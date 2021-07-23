@@ -35,14 +35,14 @@ class FileCopierTest extends TestCase
      *
      * @dataProvider providerCopy
      */
-    public function testCopy($from, $to, $exclusions, $command, $callback): void
+    public function testCopy($from, $to, $command, $callback): void
     {
         $this->rsync
             ->run($command, $callback)
             ->shouldBeCalledOnce();
         $copier = $this->createSut();
 
-        $copier->copy($from, $to, $exclusions, $callback);
+        $copier->copy($from, $to, [], $callback);
     }
 
     public function providerCopy(): array
@@ -51,7 +51,6 @@ class FileCopierTest extends TestCase
             [
                 'from' => 'lorem/ipsum',
                 'to' => 'dolor/sit',
-                'exclusions' => [],
                 'command' => [
                     '--recursive',
                     '--links',
@@ -64,16 +63,10 @@ class FileCopierTest extends TestCase
             [
                 'from' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
                 'to' => 'sit/dolor',
-                'exclusions' => [
-                    'amet',
-                    'consectetur',
-                ],
                 'command' => [
                     '--recursive',
                     '--links',
                     '--verbose',
-                    '--exclude=amet',
-                    '--exclude=consectetur',
                     'ipsum/lorem' . DIRECTORY_SEPARATOR,
                     'sit/dolor',
                 ],
