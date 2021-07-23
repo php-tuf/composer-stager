@@ -24,3 +24,7 @@ services:
         class: \PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInternalAnnotationRule
         tags:
             - phpstan.rules.rule
+    -
+        class: \PhpTuf\ComposerStager\Tests\PHPStan\Methods\ForbiddenThrowsRule
+        tags:
+            - phpstan.rules.rule
