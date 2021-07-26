@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 /**
  * @internal
  */
-final class FileCopier implements FileCopierInterface
+final class RsyncFileCopier implements RsyncFileCopierInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface

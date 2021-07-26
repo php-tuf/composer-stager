@@ -17,6 +17,11 @@ services:
         exclude:
             - '../src/Console/Output'
 
+    PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory: ~
+
+    PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface:
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory', 'create' ]
+
     Symfony\Component\Process\ExecutableFinder: ~
 
     Symfony\Component\Filesystem\Filesystem: ~

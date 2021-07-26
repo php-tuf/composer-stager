@@ -1,33 +1,33 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\FileCopier;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier
  * @covers ::__construct
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
-class FileCopierTest extends TestCase
+class RsyncFileCopierTest extends TestCase
 {
     public function setUp(): void
     {
         $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
-    protected function createSut(): FileCopier
+    protected function createSut(): RsyncFileCopier
     {
         $rsync = $this->rsync->reveal();
-        return new FileCopier($rsync);
+        return new RsyncFileCopier($rsync);
     }
 
     /**
@@ -40,9 +40,9 @@ class FileCopierTest extends TestCase
         $this->rsync
             ->run($command, $callback)
             ->shouldBeCalledOnce();
-        $copier = $this->createSut();
+        $sut = $this->createSut();
 
-        $copier->copy($from, $to, [], $callback);
+        $sut->copy($from, $to, [], $callback);
     }
 
     public function providerCopy(): array
@@ -87,9 +87,9 @@ class FileCopierTest extends TestCase
         $this->rsync
             ->run(Argument::cetera())
             ->willThrow($exception);
-        $copier = $this->createSut();
+        $sut = $this->createSut();
 
-        $copier->copy('lorem', 'ipsum', []);
+        $sut->copy('lorem', 'ipsum', []);
     }
 
     public function providerCopyFailure(): array

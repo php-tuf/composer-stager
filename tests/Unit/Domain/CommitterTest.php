@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Committer;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
@@ -18,7 +18,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
  */
 class CommitterTest extends TestCase
 {
