@@ -45,7 +45,7 @@ final class SymfonyFileCopier implements SymfonyFileCopierInterface
         try {
             $directoryIterator = new RecursiveDirectoryIterator($from);
         } catch (UnexpectedValueException $e) {
-            throw new DirectoryNotFoundException($from, 'The "copy from" directory does not exist at "%s"');
+            throw new DirectoryNotFoundException($from, 'The "copy from" directory does not exist at "%s"', (int) $e->getCode(), $e);
         }
 
         /** @var callable(mixed, mixed, \RecursiveIterator<mixed, mixed>):bool $callback */

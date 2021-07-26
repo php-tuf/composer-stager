@@ -75,7 +75,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         self::assertSame(
             '',
-            self::activeAndStagingDirectoriesDiff(),
+            self::getActiveAndStagingDirectoriesDiff(),
             'Active and staging directories are the same.'
         );
     }
@@ -84,12 +84,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         self::assertNotSame(
             '',
-            self::activeAndStagingDirectoriesDiff(),
+            self::getActiveAndStagingDirectoriesDiff(),
             'Active and staging directories are not the same.'
         );
     }
 
-    protected static function activeAndStagingDirectoriesDiff(): string
+    protected static function getActiveAndStagingDirectoriesDiff(): string
     {
         $process = new Process([
             'diff',
