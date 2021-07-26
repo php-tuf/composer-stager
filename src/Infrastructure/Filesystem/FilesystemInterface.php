@@ -43,9 +43,12 @@ interface FilesystemInterface
      * @param string $path
      *   A path as absolute or relative to the working directory (CWD), e.g.,
      *   "/var/www/public" or "public".
+     * @param int|null $timeout
+     *   An optional process timeout (maximum runtime) in seconds. Set to null
+     *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      *   If removal fails.
      */
-    public function remove(string $path): void;
+    public function remove(string $path, ?int $timeout = 120): void;
 }

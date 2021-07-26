@@ -20,6 +20,9 @@ interface CommitterInterface
      *   directory (CWD), e.g., "/var/www/public" or "public".
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
+     * @param int|null $timeout
+     *   An optional process timeout (maximum runtime) in seconds. Set to null
+     *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the active directory or the staging directory is not found.
@@ -28,7 +31,12 @@ interface CommitterInterface
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
-    public function commit(string $stagingDir, string $activeDir, ?ProcessOutputCallbackInterface $callback = null): void;
+    public function commit(
+        string $stagingDir,
+        string $activeDir,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void;
 
     /**
      * Determines whether or not the staging directory exists.

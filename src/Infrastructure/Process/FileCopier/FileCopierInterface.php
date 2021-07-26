@@ -22,6 +22,9 @@ interface FileCopierInterface
      *   Paths to exclude, relative to the "from" path.
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
+     * @param int|null $timeout
+     *   An optional process timeout (maximum runtime) in seconds. Set to null
+     *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the source ("from") directory is not found.
@@ -32,6 +35,7 @@ interface FileCopierInterface
         string $from,
         string $to,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
     ): void;
 }

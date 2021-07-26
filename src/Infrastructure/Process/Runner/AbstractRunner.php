@@ -22,13 +22,6 @@ abstract class AbstractRunner
     private $executableFinder;
 
     /**
-     * The process timeout in seconds, or null to never time out.
-     *
-     * @var int|null
-     */
-    private $timeout;
-
-    /**
      * Returns the executable name, e.g., "composer" or "rsync".
      */
     abstract protected function executableName(): string;
@@ -38,11 +31,10 @@ abstract class AbstractRunner
      */
     private $processFactory;
 
-    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory, ?int $timeout = 60)
+    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
     {
         $this->executableFinder = $executableFinder;
         $this->processFactory = $processFactory;
-        $this->timeout = $timeout;
     }
 
     /**
@@ -61,15 +53,16 @@ abstract class AbstractRunner
      *   If the command process cannot be created.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
-     * @throws \InvalidArgumentException
-     *   If the timeout is negative.
      */
-    public function run(array $command, ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function run(
+        array $command,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
-        $process->setTimeout($this->timeout);
         try {
+            $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);

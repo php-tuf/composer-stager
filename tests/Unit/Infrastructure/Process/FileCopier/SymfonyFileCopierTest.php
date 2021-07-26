@@ -36,14 +36,16 @@ class SymfonyFileCopierTest extends TestCase
      *
      * @dataProvider providerCopy
      */
-    public function testCopy($from, $to, $exclusions, $callback): void
+    public function testCopy($from, $to, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
         $this->filesystem
             ->mirror($from, $to, Argument::type(RecursiveCallbackFilterIterator::class))
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($from, $to, $exclusions, $callback);
+        $sut->copy($from, $to, $exclusions, $callback, $givenTimeout);
+
+        self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
 
     public function providerCopy(): array
@@ -54,6 +56,8 @@ class SymfonyFileCopierTest extends TestCase
                 'to' => 'ipsum/lorem',
                 'exclusions' => [],
                 'callback' => null,
+                'givenTimeout' => null,
+                'expectedTimeout' => 0,
             ],
             [
                 'from' => '..',
@@ -63,6 +67,8 @@ class SymfonyFileCopierTest extends TestCase
                     'consectetur',
                 ],
                 'callback' => new TestProcessOutputCallback(),
+                'givenTimeout' => 10,
+                'expecteTimeout' => 10,
             ],
         ];
     }

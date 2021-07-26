@@ -24,7 +24,7 @@ class CleanerTest extends TestCase
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(Argument::any())
             ->willReturn(true);
     }
 
@@ -36,15 +36,31 @@ class CleanerTest extends TestCase
 
     /**
      * @covers ::clean
+     *
+     * @dataProvider providerCleanHappyPath
      */
-    public function testCleanHappyPath(): void
+    public function testCleanHappyPath($path, $timeout): void
     {
         $this->filesystem
-            ->remove(static::STAGING_DIR_DEFAULT)
+            ->remove($path, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT);
+        $sut->clean($path, $timeout);
+    }
+
+    public function providerCleanHappyPath(): array
+    {
+        return [
+            [
+                'path' => '/lorem/ipsum',
+                'timeout' => null,
+            ],
+            [
+                'path' => '/dolor/sit',
+                'timeout' => 10,
+            ],
+        ];
     }
 
     /**
@@ -100,7 +116,7 @@ class CleanerTest extends TestCase
         $exception = new IOException();
         $this->expectExceptionObject($exception);
         $this->filesystem
-            ->remove(Argument::any())
+            ->remove(Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow($exception);
         $sut = $this->createSut();

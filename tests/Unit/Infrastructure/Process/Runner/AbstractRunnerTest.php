@@ -32,6 +32,9 @@ class AbstractRunnerTest extends TestCase
             ->willReturnArgument();
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
         $this->process = $this->prophesize(Process::class);
+        $this->process
+            ->setTimeout(Argument::any())
+            ->willReturn($this->process);
     }
 
     protected function createSut($executableName = null)
@@ -70,14 +73,14 @@ class AbstractRunnerTest extends TestCase
      *
      * @dataProvider providerRun
      */
-    public function testRun($executableName, $givenCommand, $expectedCommand, $callback): void
+    public function testRun($executableName, $givenCommand, $expectedCommand, $callback, $timeout): void
     {
         $this->executableFinder
             ->find($executableName)
             ->willReturnArgument()
             ->shouldBeCalledOnce();
         $this->process
-            ->setTimeout(60)
+            ->setTimeout($timeout)
             ->shouldBeCalledOnce();
         $this->process
             ->mustRun($callback)
@@ -89,7 +92,7 @@ class AbstractRunnerTest extends TestCase
 
         $sut = $this->createSut($executableName);
 
-        $sut->run($givenCommand, $callback);
+        $sut->run($givenCommand, $callback, $timeout);
     }
 
     public function providerRun(): array
@@ -100,18 +103,21 @@ class AbstractRunnerTest extends TestCase
                 'givenCommand' => [],
                 'expectedCommand' => ['lorem'],
                 'callback' => null,
+                'timeout' => null,
             ],
             [
                 'executableName' => 'ipsum',
                 'givenCommand' => ['dolor', 'sit'],
                 'expectedCommand' => ['ipsum', 'dolor', 'sit'],
                 'callback' => null,
+                'timeout' => 100,
             ],
             [
                 'executableName' => 'amet',
                 'givenCommand' => [],
                 'expectedCommand' => ['amet'],
                 'callback' => new TestProcessOutputCallback(),
+                'timeout' => 200,
             ],
         ];
     }
@@ -126,9 +132,6 @@ class AbstractRunnerTest extends TestCase
 
         $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
         $exception = $exception->reveal();
-        $this->process
-            ->setTimeout(60)
-            ->shouldBeCalledOnce();
         $this->process
             ->mustRun(Argument::cetera())
             ->willThrow($exception);

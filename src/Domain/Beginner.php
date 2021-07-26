@@ -26,8 +26,12 @@ final class Beginner implements BeginnerInterface
         $this->filesystem = $filesystem;
     }
 
-    public function begin(string $activeDir, string $stagingDir, ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function begin(
+        string $activeDir,
+        string $stagingDir,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         if (!$this->filesystem->exists($activeDir)) {
             throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
         }
@@ -46,7 +50,8 @@ final class Beginner implements BeginnerInterface
             $activeDir,
             $stagingDir,
             $exclusions,
-            $callback
+            $callback,
+            $timeout
         );
     }
 }
