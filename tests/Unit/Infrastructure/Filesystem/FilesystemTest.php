@@ -72,21 +72,31 @@ class FilesystemTest extends TestCase
      *
      * @dataProvider providerRemove
      */
-    public function testRemove($path): void
+    public function testRemove($path, $givenTimeout, $expectedTimeout): void
     {
         $this->symfonyFilesystem
             ->remove($path)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($path);
+        $sut->remove($path, $givenTimeout);
+
+        self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
 
     public function providerRemove(): array
     {
         return [
-            ['path' => '/lorem/ipsum'],
-            ['path' => '/dolor/sit'],
+            [
+                'path' => '/lorem/ipsum',
+                'givenTimeout' => null,
+                'expectedTimeout' => 0,
+            ],
+            [
+                'path' => '/dolor/sit',
+                'givenTimeout' => 10,
+                'expectedTimeout' => 10,
+            ],
         ];
     }
 

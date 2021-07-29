@@ -27,9 +27,18 @@ final class SymfonyFileCopier implements SymfonyFileCopierInterface
         $this->filesystem = $filesystem;
     }
 
-    public function copy(string $from, string $to, array $exclusions = [], ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function copy(
+        string $from,
+        string $to,
+        array $exclusions = [],
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         try {
+            // Symfony Filesystem doesn't have a builtin mechanism for setting a
+            // timeout, so we have to enforce it ourselves.
+            set_time_limit((int) $timeout);
+
             $iterator = $this->createIterator($from);
             $this->filesystem->mirror($from, $to, $iterator);
         } catch (IOException $e) {

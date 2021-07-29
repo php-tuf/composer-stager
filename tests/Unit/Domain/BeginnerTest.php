@@ -45,7 +45,7 @@ class BeginnerTest extends TestCase
      *
      * @dataProvider providerBeginHappyPath
      */
-    public function testBeginHappyPath($activeDir, $stagingDir, $callback): void
+    public function testBeginHappyPath($activeDir, $stagingDir, $callback, $timeout): void
     {
         $this->filesystem
             ->exists($activeDir)
@@ -58,11 +58,11 @@ class BeginnerTest extends TestCase
             '.git',
         ];
         $this->fileCopier
-            ->copy($activeDir, $stagingDir, $exclusions, $callback)
+            ->copy($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir, $callback);
+        $sut->begin($activeDir, $stagingDir, $callback, $timeout);
     }
 
     public function providerBeginHappyPath(): array
@@ -72,11 +72,13 @@ class BeginnerTest extends TestCase
                 'activeDir' => 'lorem/ipsum',
                 'stagingDir' => 'dolor/sit',
                 'callback' => null,
+                'timeout' => null,
             ],
             [
                 'activeDir' => 'dolor/sit',
                 'stagingDir' => 'lorem/ipsum',
                 'callback' => new TestProcessOutputCallback(),
+                'timeout' => 100,
             ],
         ];
     }

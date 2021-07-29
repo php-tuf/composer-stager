@@ -17,13 +17,13 @@ final class Cleaner implements CleanerInterface
         $this->filesystem = $filesystem;
     }
 
-    public function clean(string $stagingDir): void
+    public function clean(string $stagingDir, ?int $timeout = 120): void
     {
         if (!$this->directoryExists($stagingDir)) {
             throw new DirectoryNotFoundException($stagingDir, 'The staging directory does not exist at "%s"');
         }
 
-        $this->filesystem->remove($stagingDir);
+        $this->filesystem->remove($stagingDir, $timeout);
     }
 
     public function directoryExists(string $stagingDir): bool

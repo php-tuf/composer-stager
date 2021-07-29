@@ -22,8 +22,13 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         $this->rsync = $rsync;
     }
 
-    public function copy(string $from, string $to, array $exclusions = [], ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function copy(
+        string $from,
+        string $to,
+        array $exclusions = [],
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         $command = [
             '--recursive',
             // The "--links" option is added to "copy symlinks as symlinks",

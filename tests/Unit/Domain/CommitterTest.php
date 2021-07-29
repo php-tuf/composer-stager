@@ -47,7 +47,7 @@ class CommitterTest extends TestCase
     public function testCommitWithMinimumParams(): void
     {
         $this->fileCopier
-            ->copy(self::STAGING_DIR_DEFAULT, self::ACTIVE_DIR_DEFAULT, [], null)
+            ->copy(self::STAGING_DIR_DEFAULT, self::ACTIVE_DIR_DEFAULT, [], Argument::cetera())
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -59,14 +59,14 @@ class CommitterTest extends TestCase
      *
      * @dataProvider providerCommitWithOptionalParams
      */
-    public function testCommitWithOptionalParams($stagingDir, $activeDir, $callback): void
+    public function testCommitWithOptionalParams($stagingDir, $activeDir, $callback, $timeout): void
     {
         $this->fileCopier
-            ->copy($stagingDir, $activeDir, [], $callback)
+            ->copy($stagingDir, $activeDir, [], $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit($stagingDir, $activeDir, $callback);
+        $sut->commit($stagingDir, $activeDir, $callback, $timeout);
     }
 
     public function providerCommitWithOptionalParams(): array
@@ -76,11 +76,13 @@ class CommitterTest extends TestCase
                 'stagingDir' => '/lorem/ipsum',
                 'activeDir' => '/dolor/sit',
                 'callback' => null,
+                'timeout' => null,
             ],
             [
                 'stagingDir' => 'amet/consectetur',
                 'activeDir' => 'adipiscing/elit',
                 'callback' => new TestProcessOutputCallback(),
+                'timeout' => 10,
             ],
         ];
     }

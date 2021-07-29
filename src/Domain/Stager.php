@@ -41,12 +41,16 @@ final class Stager implements StagerInterface
         $this->filesystem = $filesystem;
     }
 
-    public function stage(array $composerCommand, string $stagingDir, ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function stage(
+        array $composerCommand,
+        string $stagingDir,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         $this->composerCommand = $composerCommand;
         $this->stagingDir = $stagingDir;
         $this->validate();
-        $this->runCommand($callback);
+        $this->runCommand($callback, $timeout);
     }
 
     /**
@@ -94,14 +98,14 @@ final class Stager implements StagerInterface
     /**
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function runCommand(?ProcessOutputCallbackInterface $callback): void
+    private function runCommand(?ProcessOutputCallbackInterface $callback, ?int $timeout): void
     {
         $command = array_merge(
             ['--working-dir=' . $this->stagingDir],
             $this->composerCommand
         );
         try {
-            $this->composerRunner->run($command, $callback);
+            $this->composerRunner->run($command, $callback, $timeout);
         } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }

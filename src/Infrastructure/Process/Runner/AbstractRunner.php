@@ -54,11 +54,15 @@ abstract class AbstractRunner
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
-    public function run(array $command, ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function run(
+        array $command,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
         try {
+            $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);

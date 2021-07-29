@@ -26,8 +26,12 @@ final class Committer implements CommitterInterface
         $this->filesystem = $filesystem;
     }
 
-    public function commit(string $stagingDir, string $activeDir, ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function commit(
+        string $stagingDir,
+        string $activeDir,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         if (!$this->filesystem->exists($stagingDir)) {
             throw new DirectoryNotFoundException($stagingDir, 'The staging directory does not exist at "%s"');
         }
@@ -40,7 +44,7 @@ final class Committer implements CommitterInterface
             throw new DirectoryNotWritableException($activeDir, 'The active directory is not writable at "%s"');
         }
 
-        $this->fileCopier->copy($stagingDir, $activeDir, [], $callback);
+        $this->fileCopier->copy($stagingDir, $activeDir, [], $callback, $timeout);
     }
 
     public function directoryExists(string $stagingDir): bool
