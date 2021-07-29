@@ -95,7 +95,7 @@ class FilesystemTest extends TestCase
             [
                 'path' => '/dolor/sit',
                 'givenTimeout' => 10,
-                'expecteTimeout' => 10,
+                'expectedTimeout' => 10,
             ],
         ];
     }

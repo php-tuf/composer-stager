@@ -68,7 +68,7 @@ class SymfonyFileCopierTest extends TestCase
                 ],
                 'callback' => new TestProcessOutputCallback(),
                 'givenTimeout' => 10,
-                'expecteTimeout' => 10,
+                'expectedTimeout' => 10,
             ],
         ];
     }
