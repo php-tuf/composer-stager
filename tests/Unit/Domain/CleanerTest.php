@@ -42,7 +42,7 @@ class CleanerTest extends TestCase
     public function testCleanHappyPath($path, $callback, $timeout): void
     {
         $this->filesystem
-            ->remove($path, $timeout)
+            ->remove($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

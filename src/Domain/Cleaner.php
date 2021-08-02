@@ -27,7 +27,7 @@ final class Cleaner implements CleanerInterface
             throw new DirectoryNotFoundException($stagingDir, 'The staging directory does not exist at "%s"');
         }
 
-        $this->filesystem->remove($stagingDir, $timeout);
+        $this->filesystem->remove($stagingDir, $callback, $timeout);
     }
 
     public function directoryExists(string $stagingDir): bool

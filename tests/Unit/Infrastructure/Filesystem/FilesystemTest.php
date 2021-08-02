@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -72,14 +73,14 @@ class FilesystemTest extends TestCase
      *
      * @dataProvider providerRemove
      */
-    public function testRemove($path, $givenTimeout, $expectedTimeout): void
+    public function testRemove($path, $callback, $givenTimeout, $expectedTimeout): void
     {
         $this->symfonyFilesystem
             ->remove($path)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($path, $givenTimeout);
+        $sut->remove($path, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -89,11 +90,13 @@ class FilesystemTest extends TestCase
         return [
             [
                 'path' => '/lorem/ipsum',
+                'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
                 'path' => '/dolor/sit',
+                'callback' => new TestProcessOutputCallback(),
                 'givenTimeout' => 10,
                 'expectedTimeout' => 10,
             ],
