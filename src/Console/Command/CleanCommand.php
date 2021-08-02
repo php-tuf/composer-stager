@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Console\Command;
 
 use PhpTuf\ComposerStager\Console\Application;
+use PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,7 +53,10 @@ final class CleanCommand extends AbstractCommand
         }
 
         try {
-            $this->cleaner->clean($stagingDir);
+            $this->cleaner->clean(
+                $stagingDir,
+                new ProcessOutputCallback($input, $output)
+            );
 
             return self::SUCCESS;
         } catch (ExceptionInterface $e) {

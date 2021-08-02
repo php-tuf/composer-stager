@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\CleanCommand;
+use PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback;
 use PhpTuf\ComposerStager\Domain\CleanerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Command\Command;
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\CleanCommand::configure
  * @uses \PhpTuf\ComposerStager\Console\Command\CleanCommand::confirm
+ * @uses \PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback::__construct
  *
  * @property \PhpTuf\ComposerStager\Domain\Cleaner|\Prophecy\Prophecy\ObjectProphecy cleaner
  */
@@ -64,8 +66,9 @@ class CleanCommandTest extends CommandTestCase
      */
     public function testBasicExecution(): void
     {
+
         $this->cleaner
-            ->clean(static::STAGING_DIR_DEFAULT)
+            ->clean(static::STAGING_DIR_DEFAULT, Argument::type(ProcessOutputCallback::class))
             ->shouldBeCalledOnce();
 
         $this->executeCommand([

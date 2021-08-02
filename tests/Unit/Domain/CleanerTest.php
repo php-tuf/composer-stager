@@ -39,14 +39,14 @@ class CleanerTest extends TestCase
      *
      * @dataProvider providerCleanHappyPath
      */
-    public function testCleanHappyPath($path, $timeout): void
+    public function testCleanHappyPath($path, $callback, $timeout): void
     {
         $this->filesystem
-            ->remove($path, $timeout)
+            ->remove($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean($path, $timeout);
+        $sut->clean($path, $callback, $timeout);
     }
 
     public function providerCleanHappyPath(): array
@@ -54,10 +54,12 @@ class CleanerTest extends TestCase
         return [
             [
                 'path' => '/lorem/ipsum',
+                'callback' => null,
                 'timeout' => null,
             ],
             [
                 'path' => '/dolor/sit',
+                'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],
         ];
@@ -79,7 +81,7 @@ class CleanerTest extends TestCase
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT);
+        $sut->clean(static::STAGING_DIR_DEFAULT, null);
     }
 
     /**
@@ -121,6 +123,6 @@ class CleanerTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT);
+        $sut->clean(static::STAGING_DIR_DEFAULT, null);
     }
 }
