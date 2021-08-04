@@ -2,6 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -41,6 +45,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 //   even though it doesn't seem to cause any problems now. Fix it.
             }
         }
+    }
+
+    protected static function getContainer(): Container
+    {
+        $container = new ContainerBuilder();
+
+        $loader = new YamlFileLoader($container, new FileLocator());
+        $loader->load(__DIR__ . '/../../config/services.yml');
+
+        $container->compile();
+
+        return $container;
     }
 
     protected static function initializeComposerJson(): void
@@ -93,6 +109,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $process = new Process([
             'diff',
+            '--recursive',
             self::ACTIVE_DIR,
             self::STAGING_DIR,
         ]);

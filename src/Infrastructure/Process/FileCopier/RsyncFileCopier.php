@@ -42,12 +42,17 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         }
 
         $command = [
+            // Archive mode; same as -rlptgoD (no -H).
+            '--archive',
+            // Recurse into directories.
             '--recursive',
-            // The "--links" option is added to "copy symlinks as symlinks",
-            // which is important particularly for files in vendor/bin.
-            '--links',
+            // Increase verbosity.
             '--verbose',
         ];
+
+        foreach ($exclusions as $exclusion) {
+            $command[] = '--exclude=' . $exclusion;
+        }
 
         // A trailing slash is added to the "from" directory so the CONTENTS of
         // the active directory are copied, not the directory itself.

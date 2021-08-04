@@ -62,8 +62,8 @@ class RsyncFileCopierTest extends TestCase
                 'from' => 'lorem/ipsum',
                 'to' => 'dolor/sit',
                 'command' => [
+                    '--archive',
                     '--recursive',
-                    '--links',
                     '--verbose',
                     'lorem/ipsum' . DIRECTORY_SEPARATOR,
                     'dolor/sit',
@@ -74,8 +74,8 @@ class RsyncFileCopierTest extends TestCase
                 'from' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
                 'to' => 'sit/dolor',
                 'command' => [
+                    '--archive',
                     '--recursive',
-                    '--links',
                     '--verbose',
                     'ipsum/lorem' . DIRECTORY_SEPARATOR,
                     'sit/dolor',
