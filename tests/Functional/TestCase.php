@@ -82,6 +82,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $process;
     }
 
+    protected static function createFiles(array $filenames): void
+    {
+        foreach ($filenames as $filename) {
+            $dirname = dirname($filename);
+            if (!file_exists($dirname)) {
+                self::assertTrue(mkdir($dirname, 0777, true), 'Created directory.');
+            }
+            self::assertTrue(touch($filename), 'Created file.');
+        }
+    }
+
     protected static function assertStagingDirectoryDoesNotExist(): void
     {
         self::assertFileDoesNotExist(self::STAGING_DIR, 'Staging directory does not exist.');

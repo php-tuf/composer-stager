@@ -43,7 +43,7 @@ class RsyncFileCopierTest extends TestCase
     protected static function isRsyncAvailable(): bool
     {
         $finder = new ExecutableFinder();
-        return !($finder->find('rsync') === null);
+        return $finder->find('rsync') !== null;
     }
 
     private function createSut(): RsyncFileCopier
@@ -55,23 +55,25 @@ class RsyncFileCopierTest extends TestCase
         return $sut;
     }
 
-    public function testCopy(): void
+    protected function testCopy(): void
     {
-        touch(self::ACTIVE_DIR . '/lorem.txt');
-        touch(self::ACTIVE_DIR . '/ipsum.txt');
-        touch(self::ACTIVE_DIR . '/dolor-exclude.txt');
-        mkdir(self::ACTIVE_DIR . '/sit-exclude');
+        self::createFiles([
+            self::ACTIVE_DIR . '/lorem/exclude.txt',
+            self::ACTIVE_DIR . '/ipsum.txt',
+            self::ACTIVE_DIR . '/dolor.txt',
+            self::ACTIVE_DIR . '/sit-exclude.txt',
+        ]);
         $sut = $this->createSut();
 
         $sut->copy(self::ACTIVE_DIR, self::STAGING_DIR, [
-            'dolor-exclude.txt',
-            'sit-exclude',
+            'lorem/exclude.txt',
+            'sit-exclude.txt',
         ]);
 
-        self::assertFileExists(self::ACTIVE_DIR . '/lorem.txt');
         self::assertFileExists(self::ACTIVE_DIR . '/ipsum.txt');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/dolor-exclude.txt');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/sit-exclude');
+        self::assertFileExists(self::ACTIVE_DIR . '/dolor.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/lorem/exclude.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/sit-exclude.txt');
     }
 
     /**
