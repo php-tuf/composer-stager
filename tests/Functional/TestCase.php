@@ -2,6 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -43,6 +47,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
+    protected static function getContainer(): Container
+    {
+        $container = new ContainerBuilder();
+
+        $loader = new YamlFileLoader($container, new FileLocator());
+        $loader->load(__DIR__ . '/../../config/services.yml');
+
+        $container->compile();
+
+        return $container;
+    }
+
     protected static function initializeComposerJson(): void
     {
         $process = new Process([
@@ -64,6 +80,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $process = new Process($command, $cwd);
         $process->mustRun();
         return $process;
+    }
+
+    protected static function createFiles(array $filenames): void
+    {
+        foreach ($filenames as $filename) {
+            $dirname = dirname($filename);
+            if (!file_exists($dirname)) {
+                self::assertTrue(mkdir($dirname, 0777, true), 'Created directory.');
+            }
+            self::assertTrue(touch($filename), 'Created file.');
+        }
     }
 
     protected static function assertStagingDirectoryDoesNotExist(): void
@@ -93,6 +120,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $process = new Process([
             'diff',
+            '--recursive',
             self::ACTIVE_DIR,
             self::STAGING_DIR,
         ]);

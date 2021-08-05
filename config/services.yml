@@ -8,14 +8,10 @@ services:
 
     PhpTuf\ComposerStager\:
         resource: '../src/*'
-        exclude:
-            - '../src/Exception'
-
-    PhpTuf\ComposerStager\Console\:
-        resource: '../src/Console/*'
         public: true
         exclude:
             - '../src/Console/Output'
+            - '../src/Exception'
 
     PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory: ~
 
