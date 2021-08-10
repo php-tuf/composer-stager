@@ -21,3 +21,6 @@ services:
     Symfony\Component\Process\ExecutableFinder: ~
 
     Symfony\Component\Filesystem\Filesystem: ~
+
+    Symfony\Component\Finder\Finder:
+        shared: false
