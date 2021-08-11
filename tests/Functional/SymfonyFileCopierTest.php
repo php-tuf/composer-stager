@@ -2,17 +2,19 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
- * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier::__construct
- * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier::copy
+ * @covers ::__construct
+ * @covers ::copy
  */
-class SymfonyFileCopierTest extends TestCase
+class SymfonyFileCopierTest extends AbstractFileCopierTest
 {
+    protected const ACTIVE_DIR = '.';
+    protected const STAGING_DIR = '.composer_staging';
+
     public static function setUpBeforeClass(): void
     {
         self::createTestEnvironment();
@@ -23,38 +25,25 @@ class SymfonyFileCopierTest extends TestCase
         self::removeTestEnvironment();
     }
 
-    private function createSut(): SymfonyFileCopier
+    protected function createSut(): FileCopierInterface
     {
-        $filesystem = new Filesystem();
-        return new SymfonyFileCopier($filesystem);
+        $container = self::getContainer();
+
+        /** @var SymfonyFileCopier $sut */
+        $sut = $container->get(SymfonyFileCopier::class);
+        return $sut;
     }
 
     /**
-     * @covers ::createIterator
-     */
-    public function testCopy(): void
-    {
-        touch(self::ACTIVE_DIR . '/lorem.txt');
-        touch(self::ACTIVE_DIR . '/ipsum.txt');
-        $sut = $this->createSut();
-
-        $sut->copy(self::ACTIVE_DIR, self::STAGING_DIR, []);
-
-        self::assertActiveAndStagingDirectoriesSame();
-    }
-
-    /**
-     * @covers ::createIterator
      * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @uses \PhpTuf\ComposerStager\Exception\PathException
      * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
+     *
+     * @noinspection SenselessProxyMethodInspection
+     *   This method is overridden just to add test annotations.
      */
     public function testCopyFromDirectoryNotFound(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
-
-        $sut = $this->createSut();
-
-        $sut->copy('non-existent/directory', 'lorem/ipsum');
+        parent::testCopyFromDirectoryNotFound();
     }
 }

@@ -2,44 +2,52 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\FileCopier;
 
+use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
-use RecursiveCallbackFilterIterator;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
  * @covers ::__construct
- * @covers ::createIterator
+ * @covers ::copy
  *
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Filesystem\Filesystem filesystem
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder finder
  */
 class SymfonyFileCopierTest extends TestCase
 {
     public function setUp(): void
     {
         $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->finder = $this->prophesize(Finder::class);
+        $this->finder
+            ->in(Argument::any())
+            ->willReturn($this->finder);
+        $this->finder
+            ->notPath(Argument::any())
+            ->willReturn($this->finder);
     }
 
     protected function createSut(): SymfonyFileCopier
     {
         $filesystem = $this->filesystem->reveal();
-        return new SymfonyFileCopier($filesystem);
+        $finder = $this->finder->reveal();
+        return new SymfonyFileCopier($filesystem, $finder);
     }
 
     /**
-     * @covers ::copy
-     *
      * @dataProvider providerCopy
      */
     public function testCopy($from, $to, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
         $this->filesystem
-            ->mirror($from, $to, Argument::type(RecursiveCallbackFilterIterator::class))
+            ->mirror($from, $to, Argument::type(Finder::class))
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -74,8 +82,21 @@ class SymfonyFileCopierTest extends TestCase
     }
 
     /**
-     * @covers ::copy
+     * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @uses \PhpTuf\ComposerStager\Exception\PathException
      */
+    public function testCopyDirectoryNotFound(): void
+    {
+        $this->expectException(DirectoryNotFoundException::class);
+
+        $this->finder
+            ->in(Argument::any())
+            ->willThrow(\Symfony\Component\Finder\Exception\DirectoryNotFoundException::class);
+        $sut = $this->createSut();
+
+        $sut->copy('.', 'lorem', []);
+    }
+
     public function testCopyFailure(): void
     {
         $this->expectException(ProcessFailedException::class);
