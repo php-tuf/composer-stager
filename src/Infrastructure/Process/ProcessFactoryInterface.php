@@ -14,7 +14,6 @@ interface ProcessFactoryInterface
      *
      * @param string[] $command
      *   The command to run and its arguments listed as separate entries. Example:
-     *
      *   ```php
      *   $command = [
      *       'composer',
@@ -23,7 +22,6 @@ interface ProcessFactoryInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
-     *
      * @see \Symfony\Component\Process\Process::__construct
      *
      * @throws \PhpTuf\ComposerStager\Exception\LogicException

@@ -13,7 +13,6 @@ interface StagerInterface
      * @param string[] $composerCommand
      *   The Composer command parts exactly as they would be typed in the terminal.
      *   There's no need to escape them in any way, only to separate them. Example:
-     *
      *   ```php
      *   $command = [
      *       // "composer" is implied.
@@ -22,7 +21,6 @@ interface StagerInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
-     *
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/staging" or "staging".

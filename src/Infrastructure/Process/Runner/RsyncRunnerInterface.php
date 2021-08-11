@@ -14,7 +14,6 @@ interface RsyncRunnerInterface
      *
      * @param string[] $command
      *   The command to run and its arguments as separate string values. Example:
-     *
      *   ```php
      *   $command = [
      *       // "rsync" is implied.
@@ -23,7 +22,6 @@ interface RsyncRunnerInterface
      *       'path/to/destination',
      *   ];
      *   ```
-     *
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
