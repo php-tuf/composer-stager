@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class Application extends \Symfony\Component\Console\Application
 {
     private const NAME = 'Composer Stager';
-    private const VERSION = 'v0.1.1';
+    private const VERSION = 'v0.2.x-dev';
 
     public const ACTIVE_DIR_OPTION = 'active-dir';
     public const STAGING_DIR_OPTION = 'staging-dir';
