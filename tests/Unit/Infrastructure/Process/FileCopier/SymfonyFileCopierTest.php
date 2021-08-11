@@ -16,7 +16,6 @@ use Symfony\Component\Finder\Finder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
  * @covers ::__construct
  * @covers ::copy
- * @covers ::createIterator
  *
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Filesystem\Filesystem filesystem
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder finder
@@ -31,7 +30,7 @@ class SymfonyFileCopierTest extends TestCase
             ->in(Argument::any())
             ->willReturn($this->finder);
         $this->finder
-            ->filter(Argument::any())
+            ->notPath(Argument::any())
             ->willReturn($this->finder);
     }
 

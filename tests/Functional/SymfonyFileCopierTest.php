@@ -7,9 +7,8 @@ use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
- * @covers ::createIterator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier::__construct
- * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier::copy
+ * @covers ::__construct
+ * @covers ::copy
  */
 class SymfonyFileCopierTest extends AbstractFileCopierTest
 {
