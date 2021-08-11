@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -40,9 +41,16 @@ final class Filesystem implements FilesystemInterface
         return is_writable($path); // @codeCoverageIgnore
     }
 
-    public function remove(string $path): void
-    {
+    public function remove(
+        string $path,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         try {
+            // Symfony Filesystem doesn't have a builtin mechanism for setting a
+            // timeout, so we have to enforce it ourselves.
+            set_time_limit((int) $timeout);
+
             $this->symfonyFilesystem->remove($path);
         } catch (ExceptionInterface $e) {
             throw new IOException($e->getMessage(), (int) $e->getCode(), $e);

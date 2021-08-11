@@ -4,11 +4,11 @@
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![Psalm](https://img.shields.io/badge/Psalm-1-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 
-Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime. It can be used via its [console application](#console-application) or as a [Composer library](#composer-library).:
+Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime. It can be used via its [console application](#console-application) or as a [Composer library](#composer-library):
 
 ## Console application
 
-The Console application can be independently installed via Git and invoked via its executable:
+The Console application can be used stand-alone by installing it via Git and invoking its executable:
 
 ```shell
 $ git clone https://github.com/php-tuf/composer-stager.git

@@ -1,15 +1,16 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
+use PhpTuf\ComposerStager\Tests\PHPStan\Classes\AbstractRule;
 
 /**
  * Requires non-application classes have a corresponding interface.
  */
-class InterfaceRule extends AbstractRule
+class MissingInterfaceRule extends AbstractRule
 {
     public function processNode(Node $node, Scope $scope): array
     {

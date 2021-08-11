@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
@@ -17,13 +17,13 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
  */
 class BeginnerTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->fileCopier = $this->prophesize(FileCopierInterface::class);
+        $this->fileCopier = $this->prophesize(RsyncFileCopierInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(self::ACTIVE_DIR_DEFAULT)
@@ -45,7 +45,7 @@ class BeginnerTest extends TestCase
      *
      * @dataProvider providerBeginHappyPath
      */
-    public function testBeginHappyPath($activeDir, $stagingDir, $callback): void
+    public function testBeginHappyPath($activeDir, $stagingDir, $callback, $timeout): void
     {
         $this->filesystem
             ->exists($activeDir)
@@ -58,11 +58,11 @@ class BeginnerTest extends TestCase
             '.git',
         ];
         $this->fileCopier
-            ->copy($activeDir, $stagingDir, $exclusions, $callback)
+            ->copy($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir, $callback);
+        $sut->begin($activeDir, $stagingDir, $callback, $timeout);
     }
 
     public function providerBeginHappyPath(): array
@@ -72,11 +72,13 @@ class BeginnerTest extends TestCase
                 'activeDir' => 'lorem/ipsum',
                 'stagingDir' => 'dolor/sit',
                 'callback' => null,
+                'timeout' => null,
             ],
             [
                 'activeDir' => 'dolor/sit',
                 'stagingDir' => 'lorem/ipsum',
                 'callback' => new TestProcessOutputCallback(),
+                'timeout' => 100,
             ],
         ];
     }

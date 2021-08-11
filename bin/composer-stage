@@ -23,15 +23,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-$containerBuilder = new ContainerBuilder();
+$container = new ContainerBuilder();
 
-$loader = new YamlFileLoader($containerBuilder, new FileLocator());
+$loader = new YamlFileLoader($container, new FileLocator());
 $loader->load(__DIR__ . '/../config/services.yml');
 
-$containerBuilder->compile();
+$container->compile();
 
 /** @var Application $application */
-$application = $containerBuilder->get(Application::class);
+$application = $container->get(Application::class);
 
 // Register commands.
 // @todo This shouldn't be necessary--it should be done automatically by the
@@ -39,9 +39,9 @@ $application = $containerBuilder->get(Application::class);
 //   Then, make make Command namespace in services.yml private (i.e.,
 //   "public: false").
 // @see https://symfony.com/doc/current/console.html#registering-the-command
-foreach ($containerBuilder->getServiceIds() as $serviceId) {
-    $service = $containerBuilder->get($serviceId);
-    if ($service !== null && is_a($service, Command::class)) {
+foreach ($container->getServiceIds() as $serviceId) {
+    $service = $container->get($serviceId);
+    if ($service instanceof Command) {
         $application->add($service);
     }
 }

@@ -1,48 +1,58 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\FileCopier;
 
+use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier::__construct
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier
+ * @covers ::__construct
+ * @covers ::copy
+ * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+ * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  *
+ * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
-class FileCopierTest extends TestCase
+class RsyncFileCopierTest extends TestCase
 {
     public function setUp(): void
     {
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->filesystem
+            ->exists(Argument::any())
+            ->willReturn(true);
         $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
-    protected function createSut(): FileCopier
+    protected function createSut(): RsyncFileCopier
     {
+        $filesystem = $this->filesystem->reveal();
         $rsync = $this->rsync->reveal();
-        return new FileCopier($rsync);
+        return new RsyncFileCopier($filesystem, $rsync);
     }
 
     /**
-     * @covers ::copy
-     *
      * @dataProvider providerCopy
      */
-    public function testCopy($from, $to, $exclusions, $command, $callback): void
+    public function testCopy($from, $to, $command, $exclusions, $callback): void
     {
         $this->rsync
             ->run($command, $callback)
             ->shouldBeCalledOnce();
-        $copier = $this->createSut();
+        $sut = $this->createSut();
 
-        $copier->copy($from, $to, $exclusions, $callback);
+        $sut->copy($from, $to, $exclusions, $callback);
     }
 
     public function providerCopy(): array
@@ -51,31 +61,31 @@ class FileCopierTest extends TestCase
             [
                 'from' => 'lorem/ipsum',
                 'to' => 'dolor/sit',
-                'exclusions' => [],
                 'command' => [
+                    '--archive',
                     '--recursive',
-                    '--links',
                     '--verbose',
                     'lorem/ipsum' . DIRECTORY_SEPARATOR,
                     'dolor/sit',
                 ],
+                'exclusions' => [],
                 'callback' => null,
             ],
             [
                 'from' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
                 'to' => 'sit/dolor',
-                'exclusions' => [
-                    'amet',
-                    'consectetur',
-                ],
                 'command' => [
+                    '--archive',
                     '--recursive',
-                    '--links',
                     '--verbose',
-                    '--exclude=amet',
-                    '--exclude=consectetur',
+                    '--exclude=amet.php',
+                    '--exclude=consectetur.txt',
                     'ipsum/lorem' . DIRECTORY_SEPARATOR,
                     'sit/dolor',
+                ],
+                'exclusions' => [
+                    'amet.php',
+                    'consectetur.txt',
                 ],
                 'callback' => new TestProcessOutputCallback(),
             ],
@@ -83,8 +93,6 @@ class FileCopierTest extends TestCase
     }
 
     /**
-     * @covers ::copy
-     *
      * @dataProvider providerCopyFailure
      */
     public function testCopyFailure($exception): void
@@ -94,9 +102,9 @@ class FileCopierTest extends TestCase
         $this->rsync
             ->run(Argument::cetera())
             ->willThrow($exception);
-        $copier = $this->createSut();
+        $sut = $this->createSut();
 
-        $copier->copy('lorem', 'ipsum', []);
+        $sut->copy('lorem', 'ipsum', []);
     }
 
     public function providerCopyFailure(): array
@@ -106,5 +114,18 @@ class FileCopierTest extends TestCase
             [LogicException::class],
             [ProcessFailedException::class],
         ];
+    }
+
+    public function testCopyFromDirectoryNotFound(): void
+    {
+        $this->expectException(DirectoryNotFoundException::class);
+
+        $this->filesystem
+            ->exists(Argument::any())
+            ->willReturn(false);
+
+        $sut = $this->createSut();
+
+        $sut->copy(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
     }
 }

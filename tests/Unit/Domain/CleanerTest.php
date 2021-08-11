@@ -24,7 +24,7 @@ class CleanerTest extends TestCase
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(Argument::any())
             ->willReturn(true);
     }
 
@@ -36,15 +36,33 @@ class CleanerTest extends TestCase
 
     /**
      * @covers ::clean
+     *
+     * @dataProvider providerCleanHappyPath
      */
-    public function testCleanHappyPath(): void
+    public function testCleanHappyPath($path, $callback, $timeout): void
     {
         $this->filesystem
-            ->remove(static::STAGING_DIR_DEFAULT)
+            ->remove($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT);
+        $sut->clean($path, $callback, $timeout);
+    }
+
+    public function providerCleanHappyPath(): array
+    {
+        return [
+            [
+                'path' => '/lorem/ipsum',
+                'callback' => null,
+                'timeout' => null,
+            ],
+            [
+                'path' => '/dolor/sit',
+                'callback' => new TestProcessOutputCallback(),
+                'timeout' => 10,
+            ],
+        ];
     }
 
     /**
@@ -63,7 +81,7 @@ class CleanerTest extends TestCase
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT);
+        $sut->clean(static::STAGING_DIR_DEFAULT, null);
     }
 
     /**
@@ -100,11 +118,11 @@ class CleanerTest extends TestCase
         $exception = new IOException();
         $this->expectExceptionObject($exception);
         $this->filesystem
-            ->remove(Argument::any())
+            ->remove(Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT);
+        $sut->clean(static::STAGING_DIR_DEFAULT, null);
     }
 }

@@ -1,15 +1,16 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
+use PhpTuf\ComposerStager\Tests\PHPStan\Classes\AbstractRule;
 
 /**
  * Requires non-domain classes to be marked internal.
  */
-class InternalRule extends AbstractRule
+class MissingInternalAnnotationRule extends AbstractRule
 {
     public function processNode(Node $node, Scope $scope): array
     {

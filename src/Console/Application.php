@@ -13,14 +13,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Application extends \Symfony\Component\Console\Application
 {
+    private const NAME = 'Composer Stager';
+    private const VERSION = 'v0.1.1';
+
     public const ACTIVE_DIR_OPTION = 'active-dir';
     public const STAGING_DIR_OPTION = 'staging-dir';
 
     public const ACTIVE_DIR_DEFAULT = '.';
     public const STAGING_DIR_DEFAULT = '.composer_staging';
-
-    private const NAME = 'Composer Stager';
-    private const VERSION = 'v0.1.0';
 
     public function __construct()
     {

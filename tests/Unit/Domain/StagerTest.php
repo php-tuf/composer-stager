@@ -51,14 +51,14 @@ class StagerTest extends TestCase
     /**
      * @dataProvider providerHappyPath
      */
-    public function testHappyPath($givenCommand, $expectedCommand, $callback): void
+    public function testHappyPath($givenCommand, $expectedCommand, $callback, $timeout): void
     {
         $this->composerRunner
-            ->run($expectedCommand, $callback)
+            ->run($expectedCommand, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, static::STAGING_DIR_DEFAULT, $callback);
+        $sut->stage($givenCommand, static::STAGING_DIR_DEFAULT, $callback, $timeout);
     }
 
     public function providerHappyPath(): array
@@ -71,6 +71,7 @@ class StagerTest extends TestCase
                     'update',
                 ],
                 'callback' => null,
+                'timeout' => null,
             ],
             [
                 'givenCommand' => [static::INERT_COMMAND],
@@ -79,6 +80,7 @@ class StagerTest extends TestCase
                     static::INERT_COMMAND,
                 ],
                 'callback' => new TestProcessOutputCallback(),
+                'timeout' => 10,
             ],
         ];
     }

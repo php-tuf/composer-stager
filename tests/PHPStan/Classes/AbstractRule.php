@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -9,6 +9,9 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * Provides a base class for PHPStan class rules.
+ */
 abstract class AbstractRule implements Rule
 {
     /**

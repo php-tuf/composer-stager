@@ -6,12 +6,12 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
 
 final class Beginner implements BeginnerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopierInterface
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface
      */
     private $fileCopier;
 
@@ -26,8 +26,12 @@ final class Beginner implements BeginnerInterface
         $this->filesystem = $filesystem;
     }
 
-    public function begin(string $activeDir, string $stagingDir, ?ProcessOutputCallbackInterface $callback = null): void
-    {
+    public function begin(
+        string $activeDir,
+        string $stagingDir,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = 120
+    ): void {
         if (!$this->filesystem->exists($activeDir)) {
             throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
         }
@@ -46,7 +50,8 @@ final class Beginner implements BeginnerInterface
             $activeDir,
             $stagingDir,
             $exclusions,
-            $callback
+            $callback,
+            $timeout
         );
     }
 }

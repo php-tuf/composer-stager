@@ -8,15 +8,19 @@ services:
 
     PhpTuf\ComposerStager\:
         resource: '../src/*'
-        exclude:
-            - '../src/Exception'
-
-    PhpTuf\ComposerStager\Console\:
-        resource: '../src/Console/*'
         public: true
         exclude:
             - '../src/Console/Output'
+            - '../src/Exception'
+
+    PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory: ~
+
+    PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface:
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory', 'create' ]
 
     Symfony\Component\Process\ExecutableFinder: ~
 
     Symfony\Component\Filesystem\Filesystem: ~
+
+    Symfony\Component\Finder\Finder:
+        shared: false

@@ -11,16 +11,9 @@ parameters:
             message: '#PHPDoc tag @throws with type [a-zA-Z0-9\|\\_]+ is not compatible with parent#'
             path: .
 
-services:
-    -
-        class: \PhpTuf\ComposerStager\Tests\PHPStan\FinalRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: \PhpTuf\ComposerStager\Tests\PHPStan\InterfaceRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: \PhpTuf\ComposerStager\Tests\PHPStan\InternalRule
-        tags:
-            - phpstan.rules.rule
+rules:
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInternalAnnotationRule
+    - PhpTuf\ComposerStager\Tests\PHPStan\Methods\ForbiddenThrowsRule

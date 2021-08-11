@@ -10,11 +10,11 @@ use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::__construct
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::find
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::getCache
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder::setCache
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
+ * @covers ::__construct
+ * @covers ::find
+ * @covers ::getCache
+ * @covers ::setCache
  * @uses \PhpTuf\ComposerStager\Exception\FileNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
