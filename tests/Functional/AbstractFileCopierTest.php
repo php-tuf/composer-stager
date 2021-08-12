@@ -2,52 +2,106 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
 
 abstract class AbstractFileCopierTest extends TestCase
 {
     abstract protected function createSut(): FileCopierInterface;
 
-    public function testCopy(): void
+    public function testCopyBegin(): void
     {
         self::createFiles([
-            self::ACTIVE_DIR . '/lorem/ipsum/dolor.txt',
-            self::ACTIVE_DIR . '/lorem/ipsum/exclude.txt',
-            self::ACTIVE_DIR . '/sit/exclude.txt',
-            self::ACTIVE_DIR . '/sit/amet.txt',
-            self::ACTIVE_DIR . '/adipiscing-exclude.txt',
-            self::ACTIVE_DIR . '/consectetur.txt',
+            self::ACTIVE_DIR . '/lorem/ipsum/EXCLUDE.txt',
+            self::ACTIVE_DIR . '/dolor/EXCLUDE.txt',
+            self::ACTIVE_DIR . '/dolor/KEEP.txt',
+            self::ACTIVE_DIR . '/EXCLUDE/sit.txt',
+            self::ACTIVE_DIR . '/EXCLUDE/change.txt',
+            self::ACTIVE_DIR . '/amet/CHANGE.txt',
+            self::ACTIVE_DIR . '/EXCLUDE.txt',
+            self::ACTIVE_DIR . '/KEEP.txt',
+            self::ACTIVE_DIR . '/CHANGE.txt',
+            self::ACTIVE_DIR . '/DELETE.txt',
         ]);
         $sut = $this->createSut();
 
         $sut->copy(self::ACTIVE_DIR, self::STAGING_DIR, [
-            'lorem/ipsum/exclude.txt',
-            'sit/exclude.txt',
-            'adipiscing-exclude.txt',
-            realpath(self::ACTIVE_DIR . '/consectetur.txt'),
+            realpath(self::ACTIVE_DIR . '/KEEP.txt'), // Unsupported absolute path exclusion.
+            'lorem/ipsum/EXCLUDE.txt',
+            'dolor/EXCLUDE.txt',
+            'EXCLUDE/',
+            'EXCLUDE.txt',
         ]);
 
-        self::assertFileExists(self::STAGING_DIR . '/lorem/ipsum/dolor.txt');
-        self::assertFileExists(self::STAGING_DIR . '/sit/amet.txt');
-        self::assertFileExists(self::STAGING_DIR . '/consectetur.txt', 'Ignored unsupported absolute path exclusion.');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/lorem/ipsum/exclude.txt');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/sit/exclude.txt');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/adipiscing-exclude.txt');
+        // Included files.
+        self::assertFileExists(self::STAGING_DIR . '/dolor/KEEP.txt');
+        self::assertFileExists(self::STAGING_DIR . '/KEEP.txt');
+        self::assertFileExists(self::STAGING_DIR . '/CHANGE.txt');
+        self::assertFileExists(self::STAGING_DIR . '/DELETE.txt');
+        self::assertFileExists(
+            self::STAGING_DIR . '/KEEP.txt',
+            'Ignored unsupported absolute path exclusion.'
+        );
+        // Excluded files.
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/lorem/ipsum/EXCLUDE.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/dolor/EXCLUDE.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/EXCLUDE/sit.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/EXCLUDE/change.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/EXCLUDE.txt');
     }
 
     /**
-     * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @uses \PhpTuf\ComposerStager\Exception\PathException
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
+     * @depends testCopyBegin
      */
-    public function testCopyFromDirectoryNotFound(): void
+    public function testCopyCommit(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
-
+        // Act on the active directory.
+        file_put_contents(
+            self::ACTIVE_DIR . '/EXCLUDE/change.txt',
+            'changed'
+        );
+        // Act on the staging directory.
+        self::createFiles([self::STAGING_DIR . '/consectetur/NEW.txt']);
+        file_put_contents(
+            self::STAGING_DIR . '/CHANGE.txt',
+            'changed'
+        );
+        unlink(self::STAGING_DIR . '/DELETE.txt');
         $sut = $this->createSut();
 
-        $sut->copy('non-existent/directory', 'lorem/ipsum');
+        $sut->copy(self::STAGING_DIR, self::ACTIVE_DIR, [
+            realpath(self::ACTIVE_DIR . '/KEEP.txt'), // Unsupported absolute path exclusion.
+            'lorem/ipsum/EXCLUDE.txt',
+            'dolor/EXCLUDE.txt',
+            'EXCLUDE/',
+            'EXCLUDE.txt',
+        ]);
+
+        self::assertFileExists(self::STAGING_DIR, 'Preserved staging directory.');
+        self::assertFileExists(
+            self::ACTIVE_DIR . '/KEEP.txt',
+            'Copied new file in staging directory back to active directory'
+        );
+        self::assertFileExists(
+            self::ACTIVE_DIR . '/consectetur/NEW.txt',
+            'Copied new file in staging directory back to active directory'
+        );
+        self::assertEquals(
+            'changed',
+            file_get_contents(self::ACTIVE_DIR . '/EXCLUDE/change.txt'),
+            'Preserved changes to excluded file in active directory.'
+        );
+        self::assertFileExists(
+            self::ACTIVE_DIR . '/lorem/ipsum/EXCLUDE.txt',
+            'Did not delete excluded file in active directory.'
+        );
+        self::assertEquals(
+            'changed',
+            file_get_contents(self::ACTIVE_DIR . '/CHANGE.txt'),
+            'Preserved changes to excluded file in active directory.'
+        );
+        self::assertFileDoesNotExist(
+            self::ACTIVE_DIR . '/DELETE.txt',
+            'Deleted file from active directory that was removed from staging directory.'
+        );
     }
 }

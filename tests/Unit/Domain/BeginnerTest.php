@@ -53,10 +53,7 @@ class BeginnerTest extends TestCase
         $this->filesystem
             ->exists($stagingDir)
             ->willReturn(false);
-        $exclusions = [
-            $stagingDir,
-            '.git',
-        ];
+        $exclusions = [$stagingDir];
         $this->fileCopier
             ->copy($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();

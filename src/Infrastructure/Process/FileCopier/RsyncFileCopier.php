@@ -34,7 +34,7 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
     public function copy(
         string $from,
         string $to,
-        array $exclusions = [],
+        ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
@@ -43,15 +43,16 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         }
 
         $command = [
-            // Archive mode; same as -rlptgoD (no -H).
+            // Archive mode--the same as -rlptgoD (no -H), or --recursive,
+            // --links, --perms, --times, --group, --owner, --devices, --specials.
             '--archive',
-            // Recurse into directories.
-            '--recursive',
+            // Delete extraneous files from destination directories.
+            '--delete',
             // Increase verbosity.
             '--verbose',
         ];
 
-        foreach ($exclusions as $exclusion) {
+        foreach ((array) $exclusions as $exclusion) {
             $command[] = '--exclude=' . $exclusion;
         }
 

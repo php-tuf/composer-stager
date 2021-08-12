@@ -15,23 +15,23 @@ final class FileCopierFactory implements FileCopierFactoryInterface
     private $executableFinder;
 
     /**
+     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopierInterface
+     */
+    private $phpFileCopier;
+
+    /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface
      */
     private $rsyncFileCopier;
 
-    /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopierInterface
-     */
-    private $symfonyFileCopier;
-
     public function __construct(
         ExecutableFinder $executableFinder,
-        RsyncFileCopierInterface $rsyncFileCopier,
-        SymfonyFileCopierInterface $symfonyFileCopier
+        PhpFileCopierInterface $phpFileCopier,
+        RsyncFileCopierInterface $rsyncFileCopier
     ) {
         $this->executableFinder = $executableFinder;
+        $this->phpFileCopier = $phpFileCopier;
         $this->rsyncFileCopier = $rsyncFileCopier;
-        $this->symfonyFileCopier = $symfonyFileCopier;
     }
 
     public function create(): FileCopierInterface
@@ -39,6 +39,6 @@ final class FileCopierFactory implements FileCopierFactoryInterface
         if ($this->executableFinder->find('rsync') !== null) {
             return $this->rsyncFileCopier;
         }
-        return $this->symfonyFileCopier;
+        return $this->phpFileCopier;
     }
 }

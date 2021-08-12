@@ -39,6 +39,50 @@ class FilesystemTest extends TestCase
     }
 
     /**
+     * @covers ::copy
+     *
+     * @dataProvider providerCopy
+     */
+    public function testCopy($fromFile, $toFile): void
+    {
+        $this->symfonyFilesystem
+            ->copy($fromFile, $toFile, true)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->copy($fromFile, $toFile);
+    }
+
+    public function providerCopy(): array
+    {
+        return [
+            [
+                'fromFile' => 'lorem',
+                'toFile' => 'ipsum',
+            ],
+            [
+                'fromFile' => 'dolor',
+                'toFile' => 'sit',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::copy
+     */
+    public function testCopyFailure(): void
+    {
+        $this->expectException(IOException::class);
+
+        $this->symfonyFilesystem
+            ->copy(Argument::cetera())
+            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+        $sut = $this->createSut();
+
+        $sut->copy('lorem/index.php', 'ipsum/index.php');
+    }
+
+    /**
      * @dataProvider providerExists
      *
      * @covers ::exists

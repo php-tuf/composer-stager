@@ -10,16 +10,23 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 interface FileCopierInterface
 {
     /**
-     * Copies files.
+     * Copies files from one location to another.
+     *
+     * Files in the "to" directory will be overwritten by those in the "from"
+     * directory, even if newer. Files in the "to" directory that do not exist
+     * in the "from" directory will be deleted. Excluded paths will be completely
+     * ignored and neither copied to nor deleted from the "to" directory.
      *
      * @param string $from
-     *   The source ("from") directory as an absolute path or relative to the
-     *   working directory (CWD), e.g., "/var/www/example" or "example".
+     *   The directory to copy files from, as an absolute path or relative to the
+     *   current working directory (CWD), e.g., "/var/www/from" or "example".
      * @param string $to
-     *   The destination ("to") directory as an absolute path or relative to the
-     *   working directory (CWD), e.g., "/var/www/example" or "example".
-     * @param string[] $exclusions
-     *   Paths to exclude, relative to the "from" path.
+     *   The directory to copy files to, as an absolute path or relative to the
+     *   current working directory (CWD), e.g., "/var/www/to" or "example". If
+     *   it does not exist it will be created.
+     * @param string[]|null $exclusions
+     *   An array of paths to exclude, relative to the "from" directory.
+     *   (Absolute paths are not supported.)
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
@@ -27,14 +34,14 @@ interface FileCopierInterface
      *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     *   If the source ("from") directory is not found.
+     *   If the "from" directory is not found.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
     public function copy(
         string $from,
         string $to,
-        array $exclusions = [],
+        ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
