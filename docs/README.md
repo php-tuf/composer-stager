@@ -1,10 +1,15 @@
 # Composer Stager
 
+[![Latest Unstable Version](https://poser.pugx.org/php-tuf/composer-stager/v/unstable)](https://packagist.org/packages/php-tuf/composer-stager)
 [![Tests status](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![Psalm](https://img.shields.io/badge/Psalm-1-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 
 Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime. It can be used via its [console application](#console-application) or as a [Composer library](#composer-library):
+
+## Warning!
+
+Composer Stager is in the very early stages of development and _highly_ unstable. Unless you are part of the PHP-TUF development team, do not use it.
 
 ## Console application
 
