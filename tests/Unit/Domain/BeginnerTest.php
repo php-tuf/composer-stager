@@ -42,10 +42,31 @@ class BeginnerTest extends TestCase
 
     /**
      * @covers ::begin
-     *
-     * @dataProvider providerBeginHappyPath
      */
-    public function testBeginHappyPath($activeDir, $stagingDir, $callback, $timeout): void
+    public function testBeginWithMinimumParams(): void
+    {
+        $activeDir = 'lorem/ipsum';
+        $stagingDir = 'dolor/sit';
+        $this->filesystem
+            ->exists($activeDir)
+            ->willReturn(true);
+        $this->filesystem
+            ->exists($stagingDir)
+            ->willReturn(false);
+        $this->fileCopier
+            ->copy($activeDir, $stagingDir, [$stagingDir], null, 120)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->begin($activeDir, $stagingDir);
+    }
+
+    /**
+     * @covers ::begin
+     *
+     * @dataProvider providerBeginWithOptionalParams
+     */
+    public function testBeginWithOptionalParams($activeDir, $stagingDir, $givenExclusions, $expectedExclusions, $callback, $timeout): void
     {
         $this->filesystem
             ->exists($activeDir)
@@ -53,29 +74,43 @@ class BeginnerTest extends TestCase
         $this->filesystem
             ->exists($stagingDir)
             ->willReturn(false);
-        $exclusions = [$stagingDir];
         $this->fileCopier
-            ->copy($activeDir, $stagingDir, $exclusions, $callback, $timeout)
+            ->copy($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir, $callback, $timeout);
+        $sut->begin($activeDir, $stagingDir, $givenExclusions, $callback, $timeout);
     }
 
-    public function providerBeginHappyPath(): array
+    public function providerBeginWithOptionalParams(): array
     {
         return [
             [
                 'activeDir' => 'lorem/ipsum',
                 'stagingDir' => 'dolor/sit',
+                'givenExclusions' => null,
+                'expectedExclusions' => ['dolor/sit'],
                 'callback' => null,
                 'timeout' => null,
             ],
             [
                 'activeDir' => 'dolor/sit',
                 'stagingDir' => 'lorem/ipsum',
+                'givenExclusions' => ['amet/consectetur'],
+                'expectedExclusions' => [
+                    'amet/consectetur',
+                    'lorem/ipsum',
+                ],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 100,
+            ],
+            [
+                'activeDir' => 'sit/amet',
+                'stagingDir' => 'amet/consectetur',
+                'givenExclusions' => ['amet/consectetur'],
+                'expectedExclusions' => ['amet/consectetur'],
+                'callback' => null,
+                'timeout' => null,
             ],
         ];
     }

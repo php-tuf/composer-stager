@@ -29,6 +29,7 @@ final class Beginner implements BeginnerInterface
     public function begin(
         string $activeDir,
         string $stagingDir,
+        ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
@@ -41,7 +42,9 @@ final class Beginner implements BeginnerInterface
         }
 
         // Prevent infinite recursion if the staging directory is inside the active directory.
-        $exclusions = [$stagingDir];
+        $exclusions[] = $stagingDir;
+
+        $exclusions = array_unique($exclusions);
 
         $this->fileCopier->copy(
             $activeDir,
