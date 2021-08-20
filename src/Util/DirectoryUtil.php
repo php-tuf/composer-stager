@@ -14,13 +14,29 @@ final class DirectoryUtil
     {
     }
 
-    public static function stripTrailingSeparator(string $path): string
+    /**
+     * Strips the trailing slash (directory separator) from a given path.
+     *
+     * @param string $path
+     *   Any path, absolute or relative, existing or not.
+     *
+     * @return string
+     */
+    public static function stripTrailingSlash(string $path): string
     {
         return rtrim($path, '/\\');
     }
 
-    public static function ensureTrailingSeparator(string $path): string
+    /**
+     * Ensures that the given path ends with a slash (directory separator).
+     *
+     * @param string $path
+     *   Any path, absolute or relative, existing or not.
+     *
+     * @return string
+     */
+    public static function ensureTrailingSlash(string $path): string
     {
-        return self::stripTrailingSeparator($path) . DIRECTORY_SEPARATOR;
+        return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
     }
 }

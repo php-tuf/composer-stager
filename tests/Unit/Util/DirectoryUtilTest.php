@@ -11,13 +11,13 @@ use PHPUnit\Framework\TestCase;
 class DirectoryUtilTest extends TestCase
 {
     /**
-     * @covers ::stripTrailingSeparator
+     * @covers ::stripTrailingSlash
      *
      * @dataProvider providerStripTrailingSeparator
      */
     public function testStripTrailingSeparator($givenPath, $expectedPath): void
     {
-        $actual = DirectoryUtil::stripTrailingSeparator($givenPath);
+        $actual = DirectoryUtil::stripTrailingSlash($givenPath);
 
         self::assertEquals($expectedPath, $actual);
     }
@@ -45,14 +45,14 @@ class DirectoryUtilTest extends TestCase
     }
 
     /**
-     * @covers ::ensureTrailingSeparator
-     * @covers ::stripTrailingSeparator
+     * @covers ::ensureTrailingSlash
+     * @covers ::stripTrailingSlash
      *
      * @dataProvider providerEnsureTrailingSeparator
      */
     public function testEnsureTrailingSeparator($givenPath, $expectedPath): void
     {
-        $actual = DirectoryUtil::ensureTrailingSeparator($givenPath);
+        $actual = DirectoryUtil::ensureTrailingSlash($givenPath);
 
         self::assertEquals($expectedPath, $actual);
     }

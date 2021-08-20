@@ -57,7 +57,7 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
 
         // A trailing slash is added to the "from" directory so the CONTENTS of
         // the active directory are copied, not the directory itself.
-        $command[] = DirectoryUtil::ensureTrailingSeparator($from);
+        $command[] = DirectoryUtil::ensureTrailingSlash($from);
         $command[] = $to;
 
         try {
