@@ -65,8 +65,8 @@
     "repositories": [
         {
             "_comment": [
-                "This is specified as a package rather than an ordinary vcs due to failures on to clone the repo on CI.",
-                "@todo To be removed altogether once the package is published to Packagist."
+                "This is specified as a package rather than an ordinary VCS due to failures to clone the repo on CI.",
+                "@todo Remove altogether once the package is published to Packagist."
             ],
             "type": "package",
             "package": {
