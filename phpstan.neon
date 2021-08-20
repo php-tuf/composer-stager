@@ -16,4 +16,5 @@ rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInternalAnnotationRule
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\UtilityClassInstantiableRule
     - PhpTuf\ComposerStager\Tests\PHPStan\Methods\ForbiddenThrowsRule

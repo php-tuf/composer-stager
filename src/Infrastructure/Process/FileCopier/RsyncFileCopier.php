@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Util\DirectoryUtil;
 
 /**
  * @internal
@@ -56,7 +57,7 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
 
         // A trailing slash is added to the "from" directory so the CONTENTS of
         // the active directory are copied, not the directory itself.
-        $command[] = rtrim($from, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $command[] = DirectoryUtil::ensureTrailingSeparator($from);
         $command[] = $to;
 
         try {
