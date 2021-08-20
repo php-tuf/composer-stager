@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 interface FilesystemInterface
 {
     /**
-     * Determines whether or not the given path exists.
+     * Determines whether the given path exists.
      *
      * @param string $path
      *   A path as absolute or relative to the working directory (CWD), e.g.,
@@ -31,13 +31,42 @@ interface FilesystemInterface
     public function getcwd(): string;
 
     /**
-     * Determines whether or not the given path is writable.
+     * Determines whether the given path is a directory.
+     *
+     * @param string $path
+     *   A path as absolute or relative to the working directory (CWD), e.g.,
+     *   "/var/www/public" or "public".
+     */
+    public function isDir(string $path): bool;
+
+    /**
+     * Determines whether the given path is a file.
+     *
+     * @param string $path
+     *   A path as absolute or relative to the working directory (CWD), e.g.,
+     *   "/var/www/public" or "public".
+     */
+    public function isFile(string $path): bool;
+
+    /**
+     * Determines whether the given path is writable.
      *
      * @param string $path
      *   A path as absolute or relative to the working directory (CWD), e.g.,
      *   "/var/www/public" or "public".
      */
     public function isWritable(string $path): bool;
+
+    /**
+     * Recursively creates a directory at the given path.
+     *
+     * @param string $path
+     *   The directory to create.
+     *
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     *   If creation fails.
+     */
+    public function mkdir(string $path): void;
 
     /**
      * Removes the given path.

@@ -69,6 +69,74 @@ class FilesystemTest extends TestCase
     }
 
     /**
+     * @covers ::isDir
+     * @covers ::isFile
+     *
+     * @dataProvider providerIsDirIsFile
+     */
+    public function testIsDirIsFile($path, $isDir, $isFile): void
+    {
+        $sut = $this->createSut();
+
+        self::assertEquals($isDir, $sut->isDir($path));
+        self::assertEquals($isFile, $sut->isFile($path));
+    }
+
+    public function providerIsDirIsFile(): array
+    {
+        return [
+            [
+                'path' => __DIR__,
+                'isDir' => true,
+                'isFile' => false,
+            ],
+            [
+                'path' => __FILE__,
+                'isDir' => false,
+                'isFile' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::mkdir
+     *
+     * @dataProvider providerMkdir
+     */
+    public function testMkdir($dir): void
+    {
+        $this->symfonyFilesystem
+            ->mkdir($dir)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->mkdir($dir);
+    }
+
+    public function providerMkdir(): array
+    {
+        return [
+            ['dir' => 'lorem'],
+            ['dir' => 'ipsum'],
+        ];
+    }
+
+    /**
+     * @covers ::mkdir
+     */
+    public function testMkdirFailure(): void
+    {
+        $this->expectException(IOException::class);
+
+        $this->symfonyFilesystem
+            ->mkdir(Argument::any())
+            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+        $sut = $this->createSut();
+
+        $sut->mkdir('lorem');
+    }
+
+    /**
      * @covers ::remove
      *
      * @dataProvider providerRemove
