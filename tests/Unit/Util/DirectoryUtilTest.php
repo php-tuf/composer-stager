@@ -137,6 +137,16 @@ class DirectoryUtilTest extends TestCase
                 'descendant' => 'sed/do.txt/',
                 'expected' => 'do.txt',
             ],
+            [
+                'ancestor' => '',
+                'descendant' => 'eiusmod.txt',
+                'expected' => 'eiusmod.txt',
+            ],
+            [
+                'ancestor' => '.tempor',
+                'descendant' => '.tempor/incididunt',
+                'expected' => 'incididunt',
+            ],
         ];
     }
 
@@ -152,7 +162,6 @@ class DirectoryUtilTest extends TestCase
         $this->expectException(LogicException::class);
 
         DirectoryUtil::getDescendantRelativeToAncestor($ancestor, $descendant);
-        // Descendant is outside ancestor.
     }
 
     public function providerGetDescendantRelativeToAncestorError(): array

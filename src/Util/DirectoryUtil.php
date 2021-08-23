@@ -46,9 +46,9 @@ final class DirectoryUtil
      * Gets the path of a given path relative to a given base.
      *
      * @param string $ancestor
-     *   The path, absolute or relative, existing or not.
+     *   A path, absolute or relative, existing or not.
      * @param string $descendant
-     *   The base path, absolute or relative to the given ancestor, existing or not.
+     *   A path, relative to the given ancestor, existing or not.
      *
      * @throws \PhpTuf\ComposerStager\Exception\LogicException
      */
@@ -59,6 +59,10 @@ final class DirectoryUtil
         }
 
         $ancestorDirLen = strlen(self::ensureTrailingSlash($ancestor));
+        if ($ancestor === '') {
+            $ancestorDirLen = 0;
+        }
+
         $relativePath = substr($descendant, $ancestorDirLen);
 
         if ((bool) $relativePath === false) {
