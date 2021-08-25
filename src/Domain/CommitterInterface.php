@@ -18,11 +18,16 @@ interface CommitterInterface
      * @param string $activeDir
      *   The active directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/public" or "public".
+     * @param string[]|null $exclusions
+     *   Paths to exclude, relative to the active directory. With rare exception,
+     *   you should use the same exclusions when committing as when beginning.
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
+     *
+     * @see \PhpTuf\ComposerStager\Domain\BeginnerInterface::begin
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the active directory or the staging directory is not found.
@@ -34,6 +39,7 @@ interface CommitterInterface
     public function commit(
         string $stagingDir,
         string $activeDir,
+        ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
