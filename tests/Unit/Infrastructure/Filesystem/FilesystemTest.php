@@ -129,13 +129,18 @@ class FilesystemTest extends TestCase
     public function providerIsDirIsFile(): array
     {
         return [
-            [
+            [ // Directory.
                 'path' => __DIR__,
                 'isDir' => true,
                 'isFile' => false,
             ],
-            [
+            [ // File.
                 'path' => __FILE__,
+                'isDir' => false,
+                'isFile' => true,
+            ],
+            [ // Symlink.
+                'path' => __DIR__ . '/../../../../vendor/bin/phpunit',
                 'isDir' => false,
                 'isFile' => true,
             ],

@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 use LogicException;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
@@ -56,9 +55,7 @@ final class PhpFileCopier implements PhpFileCopierInterface
 
         try {
             $this->mirror($from, $to, (array) $exclusions);
-        } catch (DirectoryNotFoundException $e) {
-            throw $e;
-        } catch (ExceptionInterface | LogicException $e) {
+        } catch (IOException | LogicException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
@@ -100,12 +97,18 @@ final class PhpFileCopier implements PhpFileCopierInterface
                 ->in($from)
                 ->notPath($exclusions);
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
-            throw new DirectoryNotFoundException($from, 'The "copy from" directory does not exist at "%s"');
+            throw new DirectoryNotFoundException(
+                $from,
+                'The "copy from" directory does not exist at "%s"',
+                (int) $e->getCode(),
+                $e
+            );
         }
 
         // Index the "to" directory.
         try {
-            // Create the "to" directory if it doesn't exist.
+            // Ensure the "to" directory's presence. (This has no effect if it
+            // already exists.)
             $this->filesystem->mkdir($to);
             // Index it.
             $this->toFinder
@@ -123,11 +126,10 @@ final class PhpFileCopier implements PhpFileCopierInterface
      */
     private function deleteExtraneousFilesFromToDirectory(string $from, string $to): void
     {
-        if ($from !== '') {
-            $from = DirectoryUtil::ensureTrailingSlash($from);
-        }
+        $from = DirectoryUtil::ensureTrailingSlash($from);
 
-        foreach ($this->toFinder->getIterator() as $toPath) {
+        /** @var \Symfony\Component\Finder\SplFileInfo $toPath */
+        foreach ($this->toFinder as $toPath) {
             $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($to, $toPath->getPathname());
 
             $fromPathname = $from . $relativePathname;
@@ -146,12 +148,16 @@ final class PhpFileCopier implements PhpFileCopierInterface
      */
     private function copyNewFilesToToDirectory(string $from, string $to): void
     {
-        foreach ($this->fromFinder->getIterator() as $fromPath) {
+        $to = DirectoryUtil::ensureTrailingSlash($to);
+
+        /** @var \Symfony\Component\Finder\SplFileInfo $fromPath */
+        foreach ($this->fromFinder as $fromPath) {
             $fromPathname = $fromPath->getPathname();
 
-            $relativePath = DirectoryUtil::getDescendantRelativeToAncestor($from, $fromPathname);
-            $toPath = $to . DIRECTORY_SEPARATOR . $relativePath;
+            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($from, $fromPathname);
+            $toPath = $to . $relativePathname;
 
+            // Note: Symlinks will be treated as the paths they point to.
             if ($this->filesystem->isDir($fromPathname)) {
                 $this->filesystem->mkdir($toPath);
             } elseif ($this->filesystem->isFile($fromPathname)) {

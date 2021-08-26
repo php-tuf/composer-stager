@@ -5,12 +5,12 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 
 /**
- * Copies files from one location to another.
+ * Recursively copies files from one location to another.
  */
 interface FileCopierInterface
 {
     /**
-     * Copies files from one location to another.
+     * Recursively copies files, including symlinks, from one location to another.
      *
      * Files in the "to" directory will be overwritten by those in the "from"
      * directory, even if newer. Files in the "to" directory that do not exist
@@ -19,14 +19,14 @@ interface FileCopierInterface
      *
      * @param string $from
      *   The directory to copy files from, as an absolute path or relative to the
-     *   current working directory (CWD), e.g., "/var/www/from" or "example".
+     *   current working directory (CWD), e.g., "/var/www/from" or "from".
      * @param string $to
      *   The directory to copy files to, as an absolute path or relative to the
-     *   current working directory (CWD), e.g., "/var/www/to" or "example". If
+     *   current working directory (CWD), e.g., "/var/www/to" or "to". If
      *   it does not exist it will be created.
      * @param string[]|null $exclusions
      *   An array of paths to exclude, relative to the "from" directory.
-     *   (Absolute paths are not supported.)
+     *   (Absolute paths are ignored.)
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout

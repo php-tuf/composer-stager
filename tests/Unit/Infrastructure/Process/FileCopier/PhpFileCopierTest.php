@@ -63,36 +63,42 @@ class PhpFileCopierTest extends TestCase
     }
 
     /**
-     * @dataProvider providerCopy
+     * @dataProvider providerCopyWithOptionalParams
      */
-    public function testCopy($givenFrom, $givenTo, $expectedTo, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
+    public function testCopy($givenTo, $expectedTo, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
         $this->filesystem
             ->mkdir($expectedTo)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($givenFrom, $givenTo, $exclusions, $callback, $givenTimeout);
+        $sut->copy('from', $givenTo, $exclusions, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
 
-    public function providerCopy(): array
+    public function providerCopyWithOptionalParams(): array
     {
         return [
             [
-                'givenFrom' => 'lorem',
-                'givenTo' => 'ipsum',
-                'expectedTo' => 'ipsum',
+                'givenTo' => '',
+                'expectedTo' => '',
                 'exclusions' => [],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
-                'givenFrom' => 'lorem/ipsum/',
-                'givenTo' => 'dolor/sit/',
-                'expectedTo' => 'dolor/sit',
+                'givenTo' => 'lorem',
+                'expectedTo' => 'lorem',
+                'exclusions' => [],
+                'callback' => null,
+                'givenTimeout' => null,
+                'expectedTimeout' => 0,
+            ],
+            [
+                'givenTo' => 'ipsum/dolor/',
+                'expectedTo' => 'ipsum/dolor',
                 'exclusions' => [
                     'amet',
                     'consectetur',
@@ -183,15 +189,6 @@ class PhpFileCopierTest extends TestCase
                 'fromFilePathname' => 'from-ipsum/absent.txt',
                 'toDir' => 'to-dolor',
                 'toFilePathname' => 'to-dolor/absent.txt',
-                'toFileExistsInFrom' => false,
-                'remove' => true,
-            ],
-            [
-                'fromDir' => '',
-                'fromRelativePathname' => 'delete.txt',
-                'fromFilePathname' => 'delete.txt',
-                'toDir' => 'sit',
-                'toFilePathname' => 'sit/delete.txt',
                 'toFileExistsInFrom' => false,
                 'remove' => true,
             ],
