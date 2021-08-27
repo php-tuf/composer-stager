@@ -90,6 +90,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 self::assertTrue(mkdir($dirname, 0777, true), 'Created directory.');
             }
             self::assertTrue(touch($filename), 'Created file.');
+            self::assertNotFalse(realpath($filename), 'Got absolute path.');
         }
     }
 

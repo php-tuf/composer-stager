@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Console\Command;
 
+use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\BeginCommand;
 use PhpTuf\ComposerStager\Domain\BeginnerInterface;
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
@@ -14,7 +16,7 @@ use Symfony\Component\Console\Command\Command;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Console\Command\BeginCommand
- * @covers \PhpTuf\ComposerStager\Console\Command\BeginCommand::__construct
+ * @covers ::__construct
  * @uses \PhpTuf\ComposerStager\Console\Application
  * @uses \PhpTuf\ComposerStager\Console\Command\BeginCommand
  * @uses \PhpTuf\ComposerStager\Console\Output\ProcessOutputCallback
@@ -60,7 +62,16 @@ class BeginCommandTest extends CommandTestCase
      */
     public function testBasicExecution(): void
     {
-        $this->executeCommand();
+        $activeDir = 'lorem/ipsum';
+        $stagingDir = 'dolor/sit';
+        $this->beginner
+            ->begin($activeDir, $stagingDir, null, Argument::type(ProcessOutputCallbackInterface::class))
+            ->shouldBeCalledOnce();
+
+        $this->executeCommand([
+            '--' . Application::ACTIVE_DIR_OPTION => $activeDir,
+            '--' . Application::STAGING_DIR_OPTION => $stagingDir,
+        ]);
 
         self::assertSame('', $this->getDisplay(), 'Displayed correct output.');
         self::assertSame(AbstractCommand::SUCCESS, $this->getStatusCode(), 'Returned correct status code.');

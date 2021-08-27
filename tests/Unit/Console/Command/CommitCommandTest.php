@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Console\Application;
 use PhpTuf\ComposerStager\Console\Command\AbstractCommand;
 use PhpTuf\ComposerStager\Console\Command\CommitCommand;
 use PhpTuf\ComposerStager\Domain\CommitterInterface;
+use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Tests\Unit\Console\CommandTestCase;
@@ -67,7 +68,7 @@ class CommitCommandTest extends CommandTestCase
     public function testBasicExecution($activeDir, $stagingDir): void
     {
         $this->committer
-            ->commit($stagingDir, $activeDir, Argument::any())
+            ->commit($stagingDir, $activeDir, null, Argument::type(ProcessOutputCallbackInterface::class))
             ->shouldBeCalledOnce();
 
         $this->executeCommand([

@@ -2,52 +2,111 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
 
 abstract class AbstractFileCopierTest extends TestCase
 {
+    protected const ORIGINAL_CONTENT = '';
+    protected const CHANGED_CONTENT = 'changed';
+
     abstract protected function createSut(): FileCopierInterface;
 
-    public function testCopy(): void
+    public function testCopyBegin(): void
     {
         self::createFiles([
-            self::ACTIVE_DIR . '/lorem/ipsum/dolor.txt',
-            self::ACTIVE_DIR . '/lorem/ipsum/exclude.txt',
-            self::ACTIVE_DIR . '/sit/exclude.txt',
-            self::ACTIVE_DIR . '/sit/amet.txt',
-            self::ACTIVE_DIR . '/adipiscing-exclude.txt',
-            self::ACTIVE_DIR . '/consectetur.txt',
+            self::ACTIVE_DIR . '/lorem/ipsum/EXCLUDE_FILE.txt',
+            self::ACTIVE_DIR . '/dolor/EXCLUDE_FILE.txt',
+            self::ACTIVE_DIR . '/dolor/PRESERVE_UNCHANGED.txt',
+            self::ACTIVE_DIR . '/EXCLUDE_DIR/sit.txt',
+            self::ACTIVE_DIR . '/EXCLUDE_DIR/CHANGE_IN_ACTIVE_DIR.txt',
+            self::ACTIVE_DIR . '/EXCLUDE_FILE.txt',
+            self::ACTIVE_DIR . '/PRESERVE_UNCHANGED.txt',
+            self::ACTIVE_DIR . '/CHANGE_IN_STAGING_DIR.txt',
+            self::ACTIVE_DIR . '/DELETE_FROM_STAGING_DIR.txt',
         ]);
         $sut = $this->createSut();
 
         $sut->copy(self::ACTIVE_DIR, self::STAGING_DIR, [
-            'lorem/ipsum/exclude.txt',
-            'sit/exclude.txt',
-            'adipiscing-exclude.txt',
-            realpath(self::ACTIVE_DIR . '/consectetur.txt'),
+            realpath(self::ACTIVE_DIR . '/PRESERVE_UNCHANGED.txt'), // Unsupported absolute path exclusion.
+            'lorem/ipsum/EXCLUDE_FILE.txt',
+            'dolor/EXCLUDE_FILE.txt',
+            'EXCLUDE_DIR/',
+            'EXCLUDE_FILE.txt',
         ]);
 
-        self::assertFileExists(self::STAGING_DIR . '/lorem/ipsum/dolor.txt');
-        self::assertFileExists(self::STAGING_DIR . '/sit/amet.txt');
-        self::assertFileExists(self::STAGING_DIR . '/consectetur.txt', 'Ignored unsupported absolute path exclusion.');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/lorem/ipsum/exclude.txt');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/sit/exclude.txt');
-        self::assertFileDoesNotExist(self::STAGING_DIR . '/adipiscing-exclude.txt');
+        // Included files.
+        self::assertFileExists(
+            self::STAGING_DIR . '/PRESERVE_UNCHANGED.txt',
+            'Ignored unsupported absolute path exclusion.'
+        );
+        self::assertFileExists(self::STAGING_DIR . '/PRESERVE_UNCHANGED.txt');
+        self::assertFileExists(self::STAGING_DIR . '/CHANGE_IN_STAGING_DIR.txt');
+        self::assertFileExists(self::STAGING_DIR . '/DELETE_FROM_STAGING_DIR.txt');
+        // Excluded files.
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/lorem/ipsum/EXCLUDE_FILE.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/dolor/EXCLUDE_FILE.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/EXCLUDE_DIR/sit.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/EXCLUDE_DIR/CHANGE_IN_ACTIVE_DIR.txt');
+        self::assertFileDoesNotExist(self::STAGING_DIR . '/EXCLUDE_FILE.txt');
     }
 
     /**
-     * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @uses \PhpTuf\ComposerStager\Exception\PathException
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopier
+     * @depends testCopyBegin
      */
-    public function testCopyFromDirectoryNotFound(): void
+    public function testCopyCommit(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
-
+        // Act on the active directory.
+        file_put_contents(
+            self::ACTIVE_DIR . '/EXCLUDE_DIR/CHANGE_IN_ACTIVE_DIR.txt',
+            self::CHANGED_CONTENT
+        );
+        // Act on the staging directory.
+        self::createFiles([self::STAGING_DIR . '/consectetur/CREATE_IN_STAGING_DIR.txt']);
+        file_put_contents(
+            self::STAGING_DIR . '/CHANGE_IN_STAGING_DIR.txt',
+            self::CHANGED_CONTENT
+        );
+        unlink(self::STAGING_DIR . '/DELETE_FROM_STAGING_DIR.txt');
         $sut = $this->createSut();
 
-        $sut->copy('non-existent/directory', 'lorem/ipsum');
+        $sut->copy(self::STAGING_DIR, self::ACTIVE_DIR, [
+            realpath(self::ACTIVE_DIR . '/PRESERVE_UNCHANGED.txt'), // Unsupported absolute path exclusion.
+            'lorem/ipsum/EXCLUDE_FILE.txt',
+            'dolor/EXCLUDE_FILE.txt',
+            'EXCLUDE_DIR/',
+            'EXCLUDE_FILE.txt',
+        ]);
+
+        self::assertFileExists(
+            self::STAGING_DIR,
+            'Did not delete the staging directory.'
+        );
+        self::assertStringEqualsFile(
+            self::ACTIVE_DIR . '/PRESERVE_UNCHANGED.txt',
+            self::ORIGINAL_CONTENT,
+            'Preserved a preexisting file in the active directory that was never changed anywhere.'
+        );
+        self::assertFileExists(
+            self::ACTIVE_DIR . '/consectetur/CREATE_IN_STAGING_DIR.txt',
+            'Copied back to the active directory a new file that was created new in the staging directory.'
+        );
+        self::assertStringEqualsFile(
+            self::ACTIVE_DIR . '/EXCLUDE_DIR/CHANGE_IN_ACTIVE_DIR.txt',
+            self::CHANGED_CONTENT,
+            'Preserved changes made to a file in the active directory whose parent directory was excluded.'
+        );
+        self::assertFileExists(
+            self::ACTIVE_DIR . '/lorem/ipsum/EXCLUDE_FILE.txt',
+            'Did not delete from the active directory an excluded file.'
+        );
+        self::assertStringEqualsFile(
+            self::ACTIVE_DIR . '/CHANGE_IN_STAGING_DIR.txt',
+            self::CHANGED_CONTENT,
+            'Preserved in the active directory changes made to a file in the staging directory.'
+        );
+        self::assertFileDoesNotExist(
+            self::ACTIVE_DIR . '/DELETE_FROM_STAGING_DIR.txt',
+            'Deleted from the active directory a file was removed from the staging directory.'
+        );
     }
 }

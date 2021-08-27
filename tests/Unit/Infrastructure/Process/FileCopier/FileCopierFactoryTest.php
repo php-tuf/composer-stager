@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\FileCopier;
 
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory;
 use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopierInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder;
@@ -13,8 +13,8 @@ use Symfony\Component\Process\ExecutableFinder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory
  * @covers ::__construct
  *
+ * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopierInterface|\Prophecy\Prophecy\ObjectProphecy phpFileCopier
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier|\Prophecy\Prophecy\ObjectProphecy rsyncFileCopier
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\SymfonyFileCopierInterface|\Prophecy\Prophecy\ObjectProphecy symfonyFileCopier
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder executableFinder
  */
 class FileCopierFactoryTest extends TestCase
@@ -25,16 +25,16 @@ class FileCopierFactoryTest extends TestCase
         $this->executableFinder
             ->find(Argument::any())
             ->willReturn(null);
+        $this->phpFileCopier = $this->prophesize(PhpFileCopierInterface::class);
         $this->rsyncFileCopier = $this->prophesize(RsyncFileCopierInterface::class);
-        $this->symfonyFileCopier = $this->prophesize(SymfonyFileCopierInterface::class);
     }
 
     private function createSut(): FileCopierFactory
     {
         $executableFinder = $this->executableFinder->reveal();
+        $phpFileCopier = $this->phpFileCopier->reveal();
         $rsyncFileCopier = $this->rsyncFileCopier->reveal();
-        $symfonyFileCopier = $this->symfonyFileCopier->reveal();
-        return new FileCopierFactory($executableFinder, $rsyncFileCopier, $symfonyFileCopier);
+        return new FileCopierFactory($executableFinder, $phpFileCopier, $rsyncFileCopier);
     }
 
     /**
@@ -68,7 +68,7 @@ class FileCopierFactoryTest extends TestCase
                 'executable' => 'n/a',
                 'calledTimes' => 0,
                 'path' => null,
-                'instanceOf' => SymfonyFileCopierInterface::class,
+                'instanceOf' => PhpFileCopierInterface::class,
             ],
         ];
     }

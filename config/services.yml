@@ -22,5 +22,4 @@ services:
 
     Symfony\Component\Filesystem\Filesystem: ~
 
-    Symfony\Component\Finder\Finder:
-        shared: false
+    Symfony\Component\Finder\Finder: ~
