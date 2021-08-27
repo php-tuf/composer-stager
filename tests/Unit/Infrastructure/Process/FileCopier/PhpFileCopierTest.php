@@ -67,6 +67,8 @@ class PhpFileCopierTest extends TestCase
      */
     public function testCopy($givenTo, $expectedTo, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
+        $this->fixSeparators($givenTo, $expectedTo);
+
         $this->filesystem
             ->mkdir($expectedTo)
             ->shouldBeCalledOnce();
@@ -154,6 +156,8 @@ class PhpFileCopierTest extends TestCase
         $toFileExistsInFrom,
         $remove
     ): void {
+        $this->fixSeparators($fromDir, $fromRelativePathname, $fromFilePathname, $toDir, $toFilePathname);
+
         $toFileInfo = new SplFileInfo($toFilePathname, $toDir, $fromRelativePathname);
         $this->toFinder
             ->getIterator()
@@ -218,6 +222,8 @@ class PhpFileCopierTest extends TestCase
         $isDir,
         $isFile
     ): void {
+        $this->fixSeparators($fromDir, $fromFilePathname, $toDir, $toRelativePathname, $toFilePathname);
+
         $fromFileInfo = new SplFileInfo($fromFilePathname, $fromDir, $toRelativePathname);
         $this->fromFinder
             ->getIterator()
