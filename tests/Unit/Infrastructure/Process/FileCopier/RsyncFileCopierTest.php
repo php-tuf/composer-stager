@@ -20,6 +20,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
+ * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
@@ -63,7 +64,7 @@ class RsyncFileCopierTest extends TestCase
                 'to' => 'dolor/sit',
                 'command' => [
                     '--archive',
-                    '--recursive',
+                    '--delete',
                     '--verbose',
                     'lorem/ipsum' . DIRECTORY_SEPARATOR,
                     'dolor/sit',
@@ -76,7 +77,7 @@ class RsyncFileCopierTest extends TestCase
                 'to' => 'sit/dolor',
                 'command' => [
                     '--archive',
-                    '--recursive',
+                    '--delete',
                     '--verbose',
                     '--exclude=amet.php',
                     '--exclude=consectetur.txt',

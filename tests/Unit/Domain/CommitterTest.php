@@ -47,7 +47,13 @@ class CommitterTest extends TestCase
     public function testCommitWithMinimumParams(): void
     {
         $this->fileCopier
-            ->copy(self::STAGING_DIR_DEFAULT, self::ACTIVE_DIR_DEFAULT, [], Argument::cetera())
+            ->copy(
+                self::STAGING_DIR_DEFAULT,
+                self::ACTIVE_DIR_DEFAULT,
+                [self::STAGING_DIR_DEFAULT],
+                null,
+                120
+            )
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -59,14 +65,14 @@ class CommitterTest extends TestCase
      *
      * @dataProvider providerCommitWithOptionalParams
      */
-    public function testCommitWithOptionalParams($stagingDir, $activeDir, $callback, $timeout): void
+    public function testCommitWithOptionalParams($stagingDir, $activeDir, $givenExclusions, $expectedExclusions, $callback, $timeout): void
     {
         $this->fileCopier
-            ->copy($stagingDir, $activeDir, [], $callback, $timeout)
+            ->copy($stagingDir, $activeDir, $expectedExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit($stagingDir, $activeDir, $callback, $timeout);
+        $sut->commit($stagingDir, $activeDir, $givenExclusions, $callback, $timeout);
     }
 
     public function providerCommitWithOptionalParams(): array
@@ -75,14 +81,29 @@ class CommitterTest extends TestCase
             [
                 'stagingDir' => '/lorem/ipsum',
                 'activeDir' => '/dolor/sit',
+                'givenExclusions' => null,
+                'expectedExclusions' => ['/lorem/ipsum'],
                 'callback' => null,
                 'timeout' => null,
             ],
             [
                 'stagingDir' => 'amet/consectetur',
                 'activeDir' => 'adipiscing/elit',
+                'givenExclusions' => ['/sed/do'],
+                'expectedExclusions' => [
+                    '/sed/do',
+                    'amet/consectetur',
+                ],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
+            ],
+            [
+                'stagingDir' => '/do/eiusmod',
+                'activeDir' => '/tempor/incididunt',
+                'givenExclusions' => ['/do/eiusmod'],
+                'expectedExclusions' => ['/do/eiusmod'],
+                'callback' => null,
+                'timeout' => null,
             ],
         ];
     }

@@ -29,6 +29,7 @@ final class Committer implements CommitterInterface
     public function commit(
         string $stagingDir,
         string $activeDir,
+        ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
@@ -44,7 +45,14 @@ final class Committer implements CommitterInterface
             throw new DirectoryNotWritableException($activeDir, 'The active directory is not writable at "%s"');
         }
 
-        $this->fileCopier->copy($stagingDir, $activeDir, [], $callback, $timeout);
+        // Prevent the staging directory itself from being deleted if it is
+        // inside the active directory.
+        // @todo Add a functional test case for this.
+        $exclusions[] = $stagingDir;
+
+        $exclusions = array_unique($exclusions);
+
+        $this->fileCopier->copy($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 
     public function directoryExists(string $stagingDir): bool

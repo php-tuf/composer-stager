@@ -48,6 +48,11 @@ abstract class AbstractRule implements Rule
         return strpos($class->getName(), 'PhpTuf\ComposerStager\Domain') === 0;
     }
 
+    protected function isUtilClass(ClassReflection $class): bool
+    {
+        return strpos($class->getName(), 'PhpTuf\ComposerStager\Util') === 0;
+    }
+
     protected function isThrowable(ClassReflection $class): bool
     {
         return array_key_exists('Throwable', $class->getInterfaces());

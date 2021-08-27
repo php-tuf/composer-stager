@@ -39,6 +39,50 @@ class FilesystemTest extends TestCase
     }
 
     /**
+     * @covers ::copy
+     *
+     * @dataProvider providerCopy
+     */
+    public function testCopy($fromFile, $toFile): void
+    {
+        $this->symfonyFilesystem
+            ->copy($fromFile, $toFile, true)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->copy($fromFile, $toFile);
+    }
+
+    public function providerCopy(): array
+    {
+        return [
+            [
+                'fromFile' => 'lorem',
+                'toFile' => 'ipsum',
+            ],
+            [
+                'fromFile' => 'dolor',
+                'toFile' => 'sit',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::copy
+     */
+    public function testCopyFailure(): void
+    {
+        $this->expectException(IOException::class);
+
+        $this->symfonyFilesystem
+            ->copy(Argument::cetera())
+            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+        $sut = $this->createSut();
+
+        $sut->copy('lorem/index.php', 'ipsum/index.php');
+    }
+
+    /**
      * @dataProvider providerExists
      *
      * @covers ::exists
@@ -66,6 +110,79 @@ class FilesystemTest extends TestCase
                 'expected' => false,
             ],
         ];
+    }
+
+    /**
+     * @covers ::isDir
+     * @covers ::isFile
+     *
+     * @dataProvider providerIsDirIsFile
+     */
+    public function testIsDirIsFile($path, $isDir, $isFile): void
+    {
+        $sut = $this->createSut();
+
+        self::assertEquals($isDir, $sut->isDir($path));
+        self::assertEquals($isFile, $sut->isFile($path));
+    }
+
+    public function providerIsDirIsFile(): array
+    {
+        return [
+            [ // Directory.
+                'path' => __DIR__,
+                'isDir' => true,
+                'isFile' => false,
+            ],
+            [ // File.
+                'path' => __FILE__,
+                'isDir' => false,
+                'isFile' => true,
+            ],
+            [ // Symlink.
+                'path' => __DIR__ . '/../../../../vendor/bin/phpunit',
+                'isDir' => false,
+                'isFile' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::mkdir
+     *
+     * @dataProvider providerMkdir
+     */
+    public function testMkdir($dir): void
+    {
+        $this->symfonyFilesystem
+            ->mkdir($dir)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->mkdir($dir);
+    }
+
+    public function providerMkdir(): array
+    {
+        return [
+            ['dir' => 'lorem'],
+            ['dir' => 'ipsum'],
+        ];
+    }
+
+    /**
+     * @covers ::mkdir
+     */
+    public function testMkdirFailure(): void
+    {
+        $this->expectException(IOException::class);
+
+        $this->symfonyFilesystem
+            ->mkdir(Argument::any())
+            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+        $sut = $this->createSut();
+
+        $sut->mkdir('lorem');
     }
 
     /**

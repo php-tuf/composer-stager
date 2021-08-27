@@ -22,6 +22,19 @@ final class Filesystem implements FilesystemInterface
         $this->symfonyFilesystem = $symfonyFilesystem;
     }
 
+    public function copy(string $fromPath, string $toPath): void
+    {
+        try {
+            $this->symfonyFilesystem->copy($fromPath, $toPath, true);
+        } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
+            throw new IOException(sprintf(
+                'Failed to copy "%s" to "%s".',
+                $fromPath,
+                $toPath
+            ), (int) $e->getCode(), $e);
+        }
+    }
+
     public function exists(string $path): bool
     {
         return $this->symfonyFilesystem->exists($path);
@@ -36,9 +49,31 @@ final class Filesystem implements FilesystemInterface
         return $cwd;
     }
 
+    public function isDir(string $path): bool
+    {
+        return is_dir($path);
+    }
+
+    public function isFile(string $path): bool
+    {
+        return is_file($path);
+    }
+
     public function isWritable(string $path): bool
     {
         return is_writable($path); // @codeCoverageIgnore
+    }
+
+    public function mkdir(string $path): void
+    {
+        try {
+            $this->symfonyFilesystem->mkdir($path);
+        } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
+            throw new IOException(sprintf(
+                'Failed to create directory at "%s".',
+                $path
+            ), (int) $e->getCode(), $e);
+        }
     }
 
     public function remove(

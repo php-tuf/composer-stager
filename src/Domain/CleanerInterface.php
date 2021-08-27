@@ -33,7 +33,7 @@ interface CleanerInterface
     ): void;
 
     /**
-     * Determines whether or not the staging directory exists.
+     * Determines whether the staging directory exists.
      *
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working

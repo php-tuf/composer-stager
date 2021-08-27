@@ -14,7 +14,6 @@ interface ComposerRunnerInterface
      *
      * @param string[] $command
      *   The command to run and its arguments as separate string values. Example:
-     *
      *   ```php
      *   $command = [
      *       // "composer" is implied.
@@ -23,7 +22,6 @@ interface ComposerRunnerInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
-     *
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout

@@ -14,6 +14,7 @@ use Symfony\Component\Process\ExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  */
 class RsyncFileCopierTest extends AbstractFileCopierTest
 {

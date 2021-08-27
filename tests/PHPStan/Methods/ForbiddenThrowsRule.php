@@ -11,7 +11,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Forbids throwing non-PhpTuf exceptions from the non-application code.
+ * Forbids throwing non-PhpTuf exceptions from non-application code public methods.
  */
 class ForbiddenThrowsRule implements Rule
 {
@@ -22,9 +22,13 @@ class ForbiddenThrowsRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $methodReflection = $this->getMethodReflection($scope);
+        $method = $this->getMethodReflection($scope);
 
-        $throwType = $methodReflection->getThrowType();
+        if (!$method->isPublic()) {
+            return [];
+        }
+
+        $throwType = $method->getThrowType();
 
         if ($throwType === null) {
             return[];
@@ -41,7 +45,7 @@ class ForbiddenThrowsRule implements Rule
             }
 
             $message = sprintf(
-                'Built-in or third party exception "\%s" cannot be thrown outside the application layer. Catch it and throw the appropriate ComposerStager exception instead.',
+                'Built-in or third party exception "\%s" cannot be thrown from public methods outside the application layer. Catch it and throw the appropriate ComposerStager exception instead.',
                 $exception
             );
             $errors[] = RuleErrorBuilder::message($message)->build();
