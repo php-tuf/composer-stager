@@ -37,8 +37,11 @@ final class PhpFileCopier implements PhpFileCopierInterface
         Finder $toIterator
     ) {
         $this->filesystem = $filesystem;
-        $this->fromFinder = $fromIterator;
-        $this->toFinder = $toIterator;
+
+        // Injected Finders must always be cloned to avoid reusing and polluting
+        // the same instance from being reused and thus getting polluted.
+        $this->fromFinder = clone $fromIterator;
+        $this->toFinder = clone $toIterator;
     }
 
     public function copy(
