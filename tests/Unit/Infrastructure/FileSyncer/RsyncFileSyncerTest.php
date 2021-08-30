@@ -46,22 +46,22 @@ class RsyncFileSyncerTest extends TestCase
     /**
      * @dataProvider providerCopy
      */
-    public function testCopy($from, $to, $command, $exclusions, $callback): void
+    public function testCopy($source, $destination, $command, $exclusions, $callback): void
     {
         $this->rsync
             ->run($command, $callback)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->sync($from, $to, $exclusions, $callback);
+        $sut->sync($source, $destination, $exclusions, $callback);
     }
 
     public function providerCopy(): array
     {
         return [
             [
-                'from' => 'lorem/ipsum',
-                'to' => 'dolor/sit',
+                'source' => 'lorem/ipsum',
+                'destination' => 'dolor/sit',
                 'command' => [
                     '--archive',
                     '--delete',
@@ -73,8 +73,8 @@ class RsyncFileSyncerTest extends TestCase
                 'callback' => null,
             ],
             [
-                'from' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
-                'to' => 'sit/dolor',
+                'source' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
+                'destination' => 'sit/dolor',
                 'command' => [
                     '--archive',
                     '--delete',

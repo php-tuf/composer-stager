@@ -12,20 +12,20 @@ interface FileSyncerInterface
     /**
      * Recursively syncs files, including symlinks, from one directory to another.
      *
-     * Files in the "to" directory will be overwritten by those in the "from"
-     * directory, even if newer. Files in the "to" directory that do not exist
-     * in the "from" directory will be deleted. Excluded paths will be completely
-     * ignored and neither copied to nor deleted from the "to" directory.
+     * Files in the destination will be overwritten by those in the source, even if
+     * newer. Files in the destination that do not exist in the source will be deleted.
+     * Excluded paths will be completely ignored and neither copied to nor deleted
+     * from the destination. If the destination does not exist, it will be created.
      *
-     * @param string $from
+     * @param string $source
      *   The directory to sync files from, as an absolute path or relative to the
-     *   current working directory (CWD), e.g., "/var/www/from" or "from".
-     * @param string $to
+     *   current working directory (CWD), e.g., "/var/www/source" or "source".
+     * @param string $destination
      *   The directory to sync files to, as an absolute path or relative to the
-     *   current working directory (CWD), e.g., "/var/www/to" or "to". If
-     *   it does not exist it will be created.
+     *   current working directory (CWD), e.g., "/var/www/destination" or
+     *   "destination". If it does not exist it will be created.
      * @param string[]|null $exclusions
-     *   An array of paths to exclude, relative to the "from" directory.
+     *   An array of paths to exclude, relative to the source directory.
      *   (Absolute paths are ignored.)
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
@@ -39,8 +39,8 @@ interface FileSyncerInterface
      *   If the command process doesn't terminate successfully.
      */
     public function sync(
-        string $from,
-        string $to,
+        string $source,
+        string $destination,
         ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120

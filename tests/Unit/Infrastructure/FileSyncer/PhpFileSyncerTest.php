@@ -19,8 +19,8 @@ use Symfony\Component\Finder\SplFileInfo;
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder fromFinder
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder toFinder
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder $sourceFinder
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder $destinationFinder
  */
 class PhpFileSyncerTest extends TestCase
 {
@@ -32,24 +32,24 @@ class PhpFileSyncerTest extends TestCase
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(true);
-        $this->fromFinder = $this->prophesize(Finder::class);
-        $this->fromFinder
+        $this->sourceFinder = $this->prophesize(Finder::class);
+        $this->sourceFinder
             ->in(Argument::any())
-            ->willReturn($this->fromFinder);
-        $this->fromFinder
+            ->willReturn($this->sourceFinder);
+        $this->sourceFinder
             ->notPath(Argument::any())
-            ->willReturn($this->fromFinder);
-        $this->fromFinder
+            ->willReturn($this->sourceFinder);
+        $this->sourceFinder
             ->getIterator()
             ->willReturn(new ArrayIterator([]));
-        $this->toFinder = $this->prophesize(Finder::class);
-        $this->toFinder
+        $this->destinationFinder = $this->prophesize(Finder::class);
+        $this->destinationFinder
             ->in(Argument::any())
-            ->willReturn($this->toFinder);
-        $this->toFinder
+            ->willReturn($this->destinationFinder);
+        $this->destinationFinder
             ->notPath(Argument::any())
-            ->willReturn($this->toFinder);
-        $this->toFinder
+            ->willReturn($this->destinationFinder);
+        $this->destinationFinder
             ->getIterator()
             ->willReturn(new ArrayIterator([]));
     }
@@ -57,24 +57,24 @@ class PhpFileSyncerTest extends TestCase
     protected function createSut(): PhpFileSyncer
     {
         $filesystem = $this->filesystem->reveal();
-        $fromIterator = $this->fromFinder->reveal();
-        $toIterator = $this->toFinder->reveal();
-        return new PhpFileSyncer($filesystem, $fromIterator, $toIterator);
+        $sourceFinder = $this->sourceFinder->reveal();
+        $destinationFinder = $this->destinationFinder->reveal();
+        return new PhpFileSyncer($filesystem, $sourceFinder, $destinationFinder);
     }
 
     /**
      * @dataProvider providerCopyWithOptionalParams
      */
-    public function testCopy($givenTo, $expectedTo, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
+    public function testCopy($givenDestination, $expectedDestination, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
-        $this->fixSeparators($givenTo, $expectedTo);
+        $this->fixSeparators($givenDestination, $expectedDestination);
 
         $this->filesystem
-            ->mkdir($expectedTo)
+            ->mkdir($expectedDestination)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->sync('from', $givenTo, $exclusions, $callback, $givenTimeout);
+        $sut->sync('source', $givenDestination, $exclusions, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -83,24 +83,24 @@ class PhpFileSyncerTest extends TestCase
     {
         return [
             [
-                'givenTo' => '',
-                'expectedTo' => '',
+                'givenDestination' => '',
+                'expectedDestination' => '',
                 'exclusions' => [],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
-                'givenTo' => 'lorem',
-                'expectedTo' => 'lorem',
+                'givenDestination' => 'lorem',
+                'expectedDestination' => 'lorem',
                 'exclusions' => [],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
-                'givenTo' => 'ipsum/dolor/',
-                'expectedTo' => 'ipsum/dolor',
+                'givenDestination' => 'ipsum/dolor/',
+                'expectedDestination' => 'ipsum/dolor',
                 'exclusions' => [
                     'amet',
                     'consectetur',
@@ -116,154 +116,154 @@ class PhpFileSyncerTest extends TestCase
      * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @uses \PhpTuf\ComposerStager\Exception\PathException
      */
-    public function testCopyFromDirectoryNotFound(): void
+    public function testCopySourceNotFound(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
 
-        $from = 'from';
-        $this->fromFinder
-            ->in($from)
+        $source = 'source';
+        $this->sourceFinder
+            ->in($source)
             ->willThrow(\Symfony\Component\Finder\Exception\DirectoryNotFoundException::class);
 
         $sut = $this->createSut();
 
-        $sut->sync($from, 'to', []);
+        $sut->sync($source, 'destination', []);
     }
 
-    public function testCopyToDirectoryCouldNotBeCreated(): void
+    public function testCopyDestinationCouldNotBeCreated(): void
     {
         $this->expectException(ProcessFailedException::class);
 
-        $to = 'to';
-        $this->toFinder
-            ->in($to)
+        $destination = 'source';
+        $this->destinationFinder
+            ->in($destination)
             ->willThrow(\Symfony\Component\Finder\Exception\DirectoryNotFoundException::class);
 
         $sut = $this->createSut();
 
-        $sut->sync('from', $to, []);
+        $sut->sync('source', $destination, []);
     }
 
     /**
      * @dataProvider providerCopyDeleteFromDestination
      */
     public function testCopyDeleteFromDestination(
-        $fromDir,
-        $fromRelativePathname,
-        $fromFilePathname,
-        $toDir,
-        $toFilePathname,
-        $toFileExistsInFrom,
+        $source,
+        $sourceRelativePathname,
+        $sourceFilePathname,
+        $destination,
+        $destinationFilePathname,
+        $destinationFileExistsInSource,
         $remove
     ): void {
-        $this->fixSeparators($fromDir, $fromRelativePathname, $fromFilePathname, $toDir, $toFilePathname);
+        $this->fixSeparators($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
 
-        $toFileInfo = new SplFileInfo($toFilePathname, $toDir, $fromRelativePathname);
-        $this->toFinder
+        $destinationFileInfo = new SplFileInfo($destinationFilePathname, $destination, $sourceRelativePathname);
+        $this->destinationFinder
             ->getIterator()
-            ->willReturn(new ArrayIterator([$toFileInfo]));
+            ->willReturn(new ArrayIterator([$destinationFileInfo]));
         $this->filesystem
-            ->exists($fromFilePathname)
+            ->exists($sourceFilePathname)
             ->shouldBeCalledOnce()
-            ->willReturn($toFileExistsInFrom);
+            ->willReturn($destinationFileExistsInSource);
         $this->filesystem
-            ->remove($toFilePathname)
+            ->remove($destinationFilePathname)
             ->shouldBeCalledTimes((int) $remove);
 
         $sut = $this->createSut();
 
-        $sut->sync($fromDir, $toDir);
+        $sut->sync($source, $destination);
     }
 
     public function providerCopyDeleteFromDestination(): array
     {
         return [
             [
-                'fromDir' => 'from-lorem',
-                'fromRelativePathname' => 'present.txt',
-                'fromFilePathname' => 'from-lorem/present.txt',
-                'toDir' => 'to-ipsum',
-                'toFilePathname' => 'to-ipsum/present.txt',
-                'toFileExistsInFrom' => true,
+                'source' => 'source-lorem',
+                'sourceRelativePathname' => 'present.txt',
+                'sourceFilePathname' => 'source-lorem/present.txt',
+                'destination' => 'destination-ipsum',
+                'destinationFilePathname' => 'destination-ipsum/present.txt',
+                'destinationFileExistsInSource' => true,
                 'remove' => false,
             ],
             [
-                'fromDir' => 'from-ipsum',
-                'fromRelativePathname' => 'absent.txt',
-                'fromFilePathname' => 'from-ipsum/absent.txt',
-                'toDir' => 'to-dolor',
-                'toFilePathname' => 'to-dolor/absent.txt',
-                'toFileExistsInFrom' => false,
+                'source' => 'source-ipsum',
+                'sourceRelativePathname' => 'absent.txt',
+                'sourceFilePathname' => 'source-ipsum/absent.txt',
+                'destination' => 'destination-dolor',
+                'destinationFilePathname' => 'destination-dolor/absent.txt',
+                'destinationFileExistsInSource' => false,
                 'remove' => true,
             ],
             [
-                'fromDir' => '.',
-                'fromRelativePathname' => 'present.txt',
-                'fromFilePathname' => './present.txt',
-                'toDir' => '.composer_staging',
-                'toFilePathname' => '.composer_staging/present.txt',
-                'toFileExistsInFrom' => true,
+                'source' => '.',
+                'sourceRelativePathname' => 'present.txt',
+                'sourceFilePathname' => './present.txt',
+                'destination' => '.composer_staging',
+                'destinationFilePathname' => '.composer_staging/present.txt',
+                'destinationFileExistsInSource' => true,
                 'remove' => false,
             ],
         ];
     }
 
     /**
-     * @covers ::copyNewFilesToToDirectory
+     * @covers ::copyNewFilesToDestination
      *
-     * @dataProvider providerCopyNewFilesToToDirectory
+     * @dataProvider providerCopyNewFilesToDestination
      */
-    public function testCopyNewFilesToToDirectory(
-        $fromDir,
-        $fromFilePathname,
-        $toDir,
-        $toRelativePathname,
-        $toFilePathname,
+    public function testCopyNewFilesToDestination(
+        $source,
+        $sourceFilePathname,
+        $destination,
+        $destinationRelativePathname,
+        $destinationFilePathname,
         $isDir,
         $isFile
     ): void {
-        $this->fixSeparators($fromDir, $fromFilePathname, $toDir, $toRelativePathname, $toFilePathname);
+        $this->fixSeparators($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
 
-        $fromFileInfo = new SplFileInfo($fromFilePathname, $fromDir, $toRelativePathname);
-        $this->fromFinder
+        $sourceFileInfo = new SplFileInfo($sourceFilePathname, $source, $destinationRelativePathname);
+        $this->sourceFinder
             ->getIterator()
-            ->willReturn(new ArrayIterator([$fromFileInfo]));
+            ->willReturn(new ArrayIterator([$sourceFileInfo]));
         $this->filesystem
-            ->isDir($fromFilePathname)
+            ->isDir($sourceFilePathname)
             ->willReturn($isDir);
         $this->filesystem
-            ->mkdir($toFilePathname)
+            ->mkdir($destinationFilePathname)
             ->shouldBeCalledTimes((int) $isDir);
         $this->filesystem
-            ->isFile($fromFilePathname)
+            ->isFile($sourceFilePathname)
             ->willReturn($isFile);
         $this->filesystem
-            ->copy($fromFilePathname, $toFilePathname)
+            ->copy($sourceFilePathname, $destinationFilePathname)
             ->shouldBeCalledTimes((int) $isFile);
 
         $sut = $this->createSut();
 
-        $sut->sync($fromDir, $toDir);
+        $sut->sync($source, $destination);
     }
 
-    public function providerCopyNewFilesToToDirectory(): array
+    public function providerCopyNewFilesToDestination(): array
     {
         return [
             [
-                'fromDir' => 'from-lorem',
-                'fromFilePathname' => 'from-lorem/dolor.txt',
-                'toDir' => 'to-ipsum',
-                'toRelativePathname' => 'dolor.txt',
-                'toFilePathname' => 'to-ipsum/dolor.txt',
+                'source' => 'source-lorem',
+                'sourceFilePathname' => 'source-lorem/dolor.txt',
+                'destination' => 'destination-ipsum',
+                'destinationRelativePathname' => 'dolor.txt',
+                'destinationFilePathname' => 'destination-ipsum/dolor.txt',
                 'isDir' => false,
                 'isFile' => true,
             ],
             [
-                'fromDir' => 'from-ipsum',
-                'fromFilePathname' => 'from-ipsum/sit.txt',
-                'toDir' => 'to-dolor',
-                'toRelativePathname' => 'dolor.txt',
-                'toFilePathname' => 'to-dolor/sit.txt',
+                'source' => 'source-ipsum',
+                'sourceFilePathname' => 'source-ipsum/sit.txt',
+                'destination' => 'destination-dolor',
+                'destinationRelativePathname' => 'dolor.txt',
+                'destinationFilePathname' => 'destination-dolor/sit.txt',
                 'isDir' => true,
                 'isFile' => false,
             ],
@@ -271,38 +271,37 @@ class PhpFileSyncerTest extends TestCase
     }
 
     /**
-     * @covers ::copyNewFilesToToDirectory
+     * @covers ::copyNewFilesToDestination
      */
-    public function testCopyNewFilesToToDirectoryUnknownFileType(): void
+    public function testCopyNewFilesToDestinationUnknownFileType(): void
     {
         $this->expectException(ProcessFailedException::class);
 
-        $fromDir = 'from';
-        $fromFilePathname = 'from/unknown_type';
-        $toDir = 'to';
-        $toRelativePathname = 'unknown_type';
-        $toFilePathname = 'to/unknown_type';
+        $source = 'source';
+        $sourceFilePathname = 'source/unknown_type';
+        $destinationRelativePathname = 'unknown_type';
+        $destinationFilePathname = 'destination/unknown_type';
 
-        $fromFileInfo = new SplFileInfo($fromFilePathname, $fromDir, $toRelativePathname);
-        $this->fromFinder
+        $sourceFileInfo = new SplFileInfo($sourceFilePathname, $source, $destinationRelativePathname);
+        $this->sourceFinder
             ->getIterator()
-            ->willReturn(new ArrayIterator([$fromFileInfo]));
+            ->willReturn(new ArrayIterator([$sourceFileInfo]));
 
         $this->filesystem
-            ->isDir($fromFilePathname)
+            ->isDir($sourceFilePathname)
             ->willReturn(false);
         $this->filesystem
-            ->mkdir($toFilePathname)
+            ->mkdir($destinationFilePathname)
             ->shouldNotBeCalled();
         $this->filesystem
-            ->isFile($fromFilePathname)
+            ->isFile($sourceFilePathname)
             ->willReturn(false);
         $this->filesystem
-            ->copy($fromFilePathname, $toFilePathname)
+            ->copy($sourceFilePathname, $destinationFilePathname)
             ->shouldNotBeCalled();
 
         $sut = $this->createSut();
 
-        $sut->sync($fromDir, $toDir);
+        $sut->sync($source, 'destination');
     }
 }

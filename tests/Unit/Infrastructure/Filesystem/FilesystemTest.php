@@ -43,26 +43,26 @@ class FilesystemTest extends TestCase
      *
      * @dataProvider providerCopy
      */
-    public function testCopy($fromFile, $toFile): void
+    public function testCopy($source, $destination): void
     {
         $this->symfonyFilesystem
-            ->copy($fromFile, $toFile, true)
+            ->copy($source, $destination, true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($fromFile, $toFile);
+        $sut->copy($source, $destination);
     }
 
     public function providerCopy(): array
     {
         return [
             [
-                'fromFile' => 'lorem',
-                'toFile' => 'ipsum',
+                'source' => 'lorem',
+                'destination' => 'ipsum',
             ],
             [
-                'fromFile' => 'dolor',
-                'toFile' => 'sit',
+                'source' => 'dolor',
+                'destination' => 'sit',
             ],
         ];
     }

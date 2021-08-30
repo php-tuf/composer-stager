@@ -24,40 +24,40 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /**
      * @var \Symfony\Component\Finder\Finder
      */
-    private $fromFinder;
+    private $sourceFinder;
 
     /**
      * @var \Symfony\Component\Finder\Finder
      */
-    private $toFinder;
+    private $destinationFinder;
 
     public function __construct(
         FilesystemInterface $filesystem,
-        Finder $fromIterator,
-        Finder $toIterator
+        Finder $sourceFinder,
+        Finder $destinationFinder
     ) {
         $this->filesystem = $filesystem;
 
         // Injected Finders must always be cloned to avoid reusing and polluting
-        // the same instance.
-        $this->fromFinder = clone $fromIterator;
-        $this->toFinder = clone $toIterator;
+        // the same instances.
+        $this->sourceFinder = clone $sourceFinder;
+        $this->destinationFinder = clone $destinationFinder;
     }
 
     public function sync(
-        string $from,
-        string $to,
+        string $source,
+        string $destination,
         ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $from = DirectoryUtil::stripTrailingSlash($from);
-        $to = DirectoryUtil::stripTrailingSlash($to);
+        $source = DirectoryUtil::stripTrailingSlash($source);
+        $destination = DirectoryUtil::stripTrailingSlash($destination);
 
         set_time_limit((int) $timeout);
 
         try {
-            $this->mirror($from, $to, (array) $exclusions);
+            $this->mirror($source, $destination, (array) $exclusions);
         } catch (IOException | LogicException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
@@ -79,11 +79,11 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function mirror(string $from, string $to, array $exclusions = []): void
+    private function mirror(string $source, string $destination, array $exclusions = []): void
     {
-        $this->indexDirectories($from, $to, $exclusions);
-        $this->deleteExtraneousFilesFromToDirectory($from, $to);
-        $this->copyNewFilesToToDirectory($from, $to);
+        $this->indexDirectories($source, $destination, $exclusions);
+        $this->deleteExtraneousFilesFromDestination($source, $destination);
+        $this->copyNewFilesToDestination($source, $destination);
     }
 
     /**
@@ -92,33 +92,33 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function indexDirectories(string $from, string $to, array $exclusions): void
+    private function indexDirectories(string $source, string $destination, array $exclusions): void
     {
-        // Index the "from" directory.
+        // Index the source directory.
         try {
-            $this->fromFinder
-                ->in($from)
+            $this->sourceFinder
+                ->in($source)
                 ->notPath($exclusions);
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
             throw new DirectoryNotFoundException(
-                $from,
-                'The "sync from" directory does not exist at "%s"',
+                $source,
+                'The source directory does not exist at "%s"',
                 (int) $e->getCode(),
                 $e
             );
         }
 
-        // Index the "to" directory.
+        // Index the destination.
         try {
-            // Ensure the "to" directory's presence. (This has no effect if it
-            // already exists.)
-            $this->filesystem->mkdir($to);
+            // Ensure the destination directory's existence. (This has no effect
+            // if it already exists.)
+            $this->filesystem->mkdir($destination);
             // Index it.
-            $this->toFinder
-                ->in($to)
+            $this->destinationFinder
+                ->in($destination)
                 ->notPath($exclusions);
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException | IOException $e) {
-            $message = sprintf('The "sync to" directory could not be created at "%s".', $to);
+            $message = sprintf('The destination directory could not be created at "%s".', $destination);
             throw new ProcessFailedException($message, (int) $e->getCode(), $e);
         }
     }
@@ -127,18 +127,18 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
      * @throws \LogicException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
-    private function deleteExtraneousFilesFromToDirectory(string $from, string $to): void
+    private function deleteExtraneousFilesFromDestination(string $source, string $destination): void
     {
-        $from = DirectoryUtil::ensureTrailingSlash($from);
+        $source = DirectoryUtil::ensureTrailingSlash($source);
 
-        /** @var \Symfony\Component\Finder\SplFileInfo $toPath */
-        foreach ($this->toFinder as $toPath) {
-            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($to, $toPath->getPathname());
+        /** @var \Symfony\Component\Finder\SplFileInfo $destinationFileInfo */
+        foreach ($this->destinationFinder as $destinationFileInfo) {
+            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($destination, $destinationFileInfo->getPathname());
 
-            $fromPathname = $from . $relativePathname;
+            $sourcePathname = $source . $relativePathname;
 
-            if (!$this->filesystem->exists($fromPathname)) {
-                $this->filesystem->remove($toPath->getPathname());
+            if (!$this->filesystem->exists($sourcePathname)) {
+                $this->filesystem->remove($destinationFileInfo->getPathname());
             }
         }
     }
@@ -149,25 +149,25 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function copyNewFilesToToDirectory(string $from, string $to): void
+    private function copyNewFilesToDestination(string $source, string $destination): void
     {
-        $to = DirectoryUtil::ensureTrailingSlash($to);
+        $destination = DirectoryUtil::ensureTrailingSlash($destination);
 
-        /** @var \Symfony\Component\Finder\SplFileInfo $fromPath */
-        foreach ($this->fromFinder as $fromPath) {
-            $fromPathname = $fromPath->getPathname();
+        /** @var \Symfony\Component\Finder\SplFileInfo $sourceFileInfo */
+        foreach ($this->sourceFinder as $sourceFileInfo) {
+            $sourcePathname = $sourceFileInfo->getPathname();
 
-            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($from, $fromPathname);
-            $toPath = $to . $relativePathname;
+            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($source, $sourcePathname);
+            $destinationPath = $destination . $relativePathname;
 
             // Note: Symlinks will be treated as the paths they point to.
-            if ($this->filesystem->isDir($fromPathname)) {
-                $this->filesystem->mkdir($toPath);
-            } elseif ($this->filesystem->isFile($fromPathname)) {
-                $this->filesystem->copy($fromPathname, $toPath);
+            if ($this->filesystem->isDir($sourcePathname)) {
+                $this->filesystem->mkdir($destinationPath);
+            } elseif ($this->filesystem->isFile($sourcePathname)) {
+                $this->filesystem->copy($sourcePathname, $destinationPath);
             } else {
                 throw new IOException(
-                    sprintf('Unable to determine file type of "%s".', $fromPathname)
+                    sprintf('Unable to determine file type of "%s".', $sourcePathname)
                 );
             }
         }

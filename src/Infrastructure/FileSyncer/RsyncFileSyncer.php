@@ -32,14 +32,14 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     }
 
     public function sync(
-        string $from,
-        string $to,
+        string $source,
+        string $destination,
         ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists($from)) {
-            throw new DirectoryNotFoundException($from, 'The "sync from" directory does not exist at "%s"');
+        if (!$this->filesystem->exists($source)) {
+            throw new DirectoryNotFoundException($source, 'The "sync from" directory does not exist at "%s"');
         }
 
         $command = [
@@ -58,8 +58,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         // A trailing slash is added to the "from" directory so the CONTENTS of
         // the active directory are synced, not the directory itself.
-        $command[] = DirectoryUtil::ensureTrailingSlash($from);
-        $command[] = $to;
+        $command[] = DirectoryUtil::ensureTrailingSlash($source);
+        $command[] = $destination;
 
         try {
             $this->rsync->run($command, $callback);
