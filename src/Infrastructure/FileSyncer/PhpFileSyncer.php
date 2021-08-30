@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use LogicException;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @internal
  */
-final class PhpFileCopier implements PhpFileCopierInterface
+final class PhpFileSyncer implements PhpFileSyncerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
@@ -44,7 +44,7 @@ final class PhpFileCopier implements PhpFileCopierInterface
         $this->toFinder = clone $toIterator;
     }
 
-    public function copy(
+    public function sync(
         string $from,
         string $to,
         ?array $exclusions = [],
@@ -102,7 +102,7 @@ final class PhpFileCopier implements PhpFileCopierInterface
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
             throw new DirectoryNotFoundException(
                 $from,
-                'The "copy from" directory does not exist at "%s"',
+                'The "sync from" directory does not exist at "%s"',
                 (int) $e->getCode(),
                 $e
             );
@@ -118,7 +118,7 @@ final class PhpFileCopier implements PhpFileCopierInterface
                 ->in($to)
                 ->notPath($exclusions);
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException | IOException $e) {
-            $message = sprintf('The "copy to" directory could not be created at "%s".', $to);
+            $message = sprintf('The "sync to" directory could not be created at "%s".', $to);
             throw new ProcessFailedException($message, (int) $e->getCode(), $e);
         }
     }

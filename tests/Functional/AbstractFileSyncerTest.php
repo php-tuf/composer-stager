@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 
-abstract class AbstractFileCopierTest extends TestCase
+abstract class AbstractFileSyncerTest extends TestCase
 {
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
 
-    abstract protected function createSut(): FileCopierInterface;
+    abstract protected function createSut(): FileSyncerInterface;
 
     public function testCopyBegin(): void
     {
@@ -26,7 +26,7 @@ abstract class AbstractFileCopierTest extends TestCase
         ]);
         $sut = $this->createSut();
 
-        $sut->copy(self::ACTIVE_DIR, self::STAGING_DIR, [
+        $sut->sync(self::ACTIVE_DIR, self::STAGING_DIR, [
             realpath(self::ACTIVE_DIR . '/PRESERVE_UNCHANGED.txt'), // Unsupported absolute path exclusion.
             'lorem/ipsum/EXCLUDE_FILE.txt',
             'dolor/EXCLUDE_FILE.txt',
@@ -69,7 +69,7 @@ abstract class AbstractFileCopierTest extends TestCase
         unlink(self::STAGING_DIR . '/DELETE_FROM_STAGING_DIR.txt');
         $sut = $this->createSut();
 
-        $sut->copy(self::STAGING_DIR, self::ACTIVE_DIR, [
+        $sut->sync(self::STAGING_DIR, self::ACTIVE_DIR, [
             realpath(self::ACTIVE_DIR . '/PRESERVE_UNCHANGED.txt'), // Unsupported absolute path exclusion.
             'lorem/ipsum/EXCLUDE_FILE.txt',
             'dolor/EXCLUDE_FILE.txt',

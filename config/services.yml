@@ -13,10 +13,10 @@ services:
             - '../src/Console/Output'
             - '../src/Exception'
 
-    PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory: ~
+    PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory: ~
 
-    PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface:
-        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierFactory', 'create' ]
+    PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface:
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory', 'create' ]
 
     Symfony\Component\Process\ExecutableFinder: ~
 

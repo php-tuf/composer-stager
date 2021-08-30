@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Committer;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
@@ -18,13 +18,13 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
+ * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
  */
 class CommitterTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->fileCopier = $this->prophesize(FileCopierInterface::class);
+        $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())
@@ -36,9 +36,9 @@ class CommitterTest extends TestCase
 
     protected function createSut(): Committer
     {
-        $fileCopier = $this->fileCopier->reveal();
+        $fileSyncer = $this->fileSyncer->reveal();
         $filesystem = $this->filesystem->reveal();
-        return new Committer($fileCopier, $filesystem);
+        return new Committer($fileSyncer, $filesystem);
     }
 
     /**
@@ -46,8 +46,8 @@ class CommitterTest extends TestCase
      */
     public function testCommitWithMinimumParams(): void
     {
-        $this->fileCopier
-            ->copy(
+        $this->fileSyncer
+            ->sync(
                 self::STAGING_DIR_DEFAULT,
                 self::ACTIVE_DIR_DEFAULT,
                 [self::STAGING_DIR_DEFAULT],
@@ -67,8 +67,8 @@ class CommitterTest extends TestCase
      */
     public function testCommitWithOptionalParams($stagingDir, $activeDir, $givenExclusions, $expectedExclusions, $callback, $timeout): void
     {
-        $this->fileCopier
-            ->copy($stagingDir, $activeDir, $expectedExclusions, $callback, $timeout)
+        $this->fileSyncer
+            ->sync($stagingDir, $activeDir, $expectedExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -120,8 +120,8 @@ class CommitterTest extends TestCase
         $this->filesystem
             ->exists($missingDir)
             ->willReturn(false);
-        $this->fileCopier
-            ->copy(Argument::cetera())
+        $this->fileSyncer
+            ->sync(Argument::cetera())
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
@@ -158,8 +158,8 @@ class CommitterTest extends TestCase
         $this->filesystem
             ->isWritable($activeDir)
             ->willReturn(false);
-        $this->fileCopier
-            ->copy(Argument::cetera())
+        $this->fileSyncer
+            ->sync(Argument::cetera())
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 

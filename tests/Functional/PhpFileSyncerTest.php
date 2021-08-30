@@ -2,18 +2,18 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopier;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopier
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @covers ::__construct
- * @covers ::copy
+ * @covers ::sync
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
- * @uses \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopier
+ * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  */
-class PhpFileCopierTest extends AbstractFileCopierTest
+class PhpFileSyncerTest extends AbstractFileSyncerTest
 {
     protected const ACTIVE_DIR = '.';
     protected const STAGING_DIR = '.composer_staging';
@@ -28,12 +28,12 @@ class PhpFileCopierTest extends AbstractFileCopierTest
         self::removeTestEnvironment();
     }
 
-    protected function createSut(): FileCopierInterface
+    protected function createSut(): FileSyncerInterface
     {
         $container = self::getContainer();
 
-        /** @var PhpFileCopier $sut */
-        $sut = $container->get(PhpFileCopier::class);
+        /** @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer $sut */
+        $sut = $container->get(PhpFileSyncer::class);
         return $sut;
     }
 }

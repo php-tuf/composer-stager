@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
@@ -17,13 +17,13 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
+ * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
  */
 class BeginnerTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->fileCopier = $this->prophesize(RsyncFileCopierInterface::class);
+        $this->fileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(self::ACTIVE_DIR_DEFAULT)
@@ -35,9 +35,9 @@ class BeginnerTest extends TestCase
 
     protected function createSut(): Beginner
     {
-        $fileCopier = $this->fileCopier->reveal();
+        $fileSyncer = $this->fileSyncer->reveal();
         $filesystem = $this->filesystem->reveal();
-        return new Beginner($fileCopier, $filesystem);
+        return new Beginner($fileSyncer, $filesystem);
     }
 
     /**
@@ -53,8 +53,8 @@ class BeginnerTest extends TestCase
         $this->filesystem
             ->exists($stagingDir)
             ->willReturn(false);
-        $this->fileCopier
-            ->copy($activeDir, $stagingDir, [$stagingDir], null, 120)
+        $this->fileSyncer
+            ->sync($activeDir, $stagingDir, [$stagingDir], null, 120)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -74,8 +74,8 @@ class BeginnerTest extends TestCase
         $this->filesystem
             ->exists($stagingDir)
             ->willReturn(false);
-        $this->fileCopier
-            ->copy($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
+        $this->fileSyncer
+            ->sync($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

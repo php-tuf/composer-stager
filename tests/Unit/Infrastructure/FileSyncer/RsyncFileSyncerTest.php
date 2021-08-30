@@ -1,22 +1,22 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\FileCopier;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer
  * @covers ::__construct
- * @covers ::copy
+ * @covers ::sync
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
@@ -25,7 +25,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
-class RsyncFileCopierTest extends TestCase
+class RsyncFileSyncerTest extends TestCase
 {
     public function setUp(): void
     {
@@ -36,11 +36,11 @@ class RsyncFileCopierTest extends TestCase
         $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
-    protected function createSut(): RsyncFileCopier
+    protected function createSut(): RsyncFileSyncer
     {
         $filesystem = $this->filesystem->reveal();
         $rsync = $this->rsync->reveal();
-        return new RsyncFileCopier($filesystem, $rsync);
+        return new RsyncFileSyncer($filesystem, $rsync);
     }
 
     /**
@@ -53,7 +53,7 @@ class RsyncFileCopierTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($from, $to, $exclusions, $callback);
+        $sut->sync($from, $to, $exclusions, $callback);
     }
 
     public function providerCopy(): array
@@ -105,7 +105,7 @@ class RsyncFileCopierTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->copy('lorem', 'ipsum', []);
+        $sut->sync('lorem', 'ipsum', []);
     }
 
     public function providerCopyFailure(): array
@@ -127,6 +127,6 @@ class RsyncFileCopierTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->copy(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+        $sut->sync(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
     }
 }

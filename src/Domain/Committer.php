@@ -6,23 +6,23 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 
 final class Committer implements CommitterInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface
+     * @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface
      */
-    private $fileCopier;
+    private $fileSyncer;
 
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
-    public function __construct(FileCopierInterface $fileCopier, FilesystemInterface $filesystem)
+    public function __construct(FileSyncerInterface $fileSyncer, FilesystemInterface $filesystem)
     {
-        $this->fileCopier = $fileCopier;
+        $this->fileSyncer = $fileSyncer;
         $this->filesystem = $filesystem;
     }
 
@@ -52,7 +52,7 @@ final class Committer implements CommitterInterface
 
         $exclusions = array_unique($exclusions);
 
-        $this->fileCopier->copy($stagingDir, $activeDir, $exclusions, $callback, $timeout);
+        $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 
     public function directoryExists(string $stagingDir): bool

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Util\DirectoryUtil;
 /**
  * @internal
  */
-final class RsyncFileCopier implements RsyncFileCopierInterface
+final class RsyncFileSyncer implements RsyncFileSyncerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
@@ -31,7 +31,7 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         $this->rsync = $rsync;
     }
 
-    public function copy(
+    public function sync(
         string $from,
         string $to,
         ?array $exclusions = [],
@@ -39,7 +39,7 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($from)) {
-            throw new DirectoryNotFoundException($from, 'The "copy from" directory does not exist at "%s"');
+            throw new DirectoryNotFoundException($from, 'The "sync from" directory does not exist at "%s"');
         }
 
         $command = [
@@ -57,7 +57,7 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         }
 
         // A trailing slash is added to the "from" directory so the CONTENTS of
-        // the active directory are copied, not the directory itself.
+        // the active directory are synced, not the directory itself.
         $command[] = DirectoryUtil::ensureTrailingSlash($from);
         $command[] = $to;
 

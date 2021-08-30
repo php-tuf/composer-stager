@@ -2,21 +2,21 @@
 
 namespace PhpTuf\ComposerStager\Tests\Functional;
 
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\FileCopierInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopier
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer
  * @covers ::__construct
- * @covers ::copy
+ * @covers ::sync
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  */
-class RsyncFileCopierTest extends AbstractFileCopierTest
+class RsyncFileSyncerTest extends AbstractFileSyncerTest
 {
     public static function setUpBeforeClass(): void
     {
@@ -47,12 +47,12 @@ class RsyncFileCopierTest extends AbstractFileCopierTest
         return $finder->find('rsync') !== null;
     }
 
-    protected function createSut(): FileCopierInterface
+    protected function createSut(): FileSyncerInterface
     {
         $container = self::getContainer();
 
-        /** @var RsyncFileCopier $sut */
-        $sut = $container->get(RsyncFileCopier::class);
+        /** @var RsyncFileSyncer $sut */
+        $sut = $container->get(RsyncFileSyncer::class);
         return $sut;
     }
 }

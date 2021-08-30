@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 
 /**
- * Recursively copies files from one location to another.
+ * Recursively syncs files from one directory to another.
  */
-interface FileCopierInterface
+interface FileSyncerInterface
 {
     /**
-     * Recursively copies files, including symlinks, from one location to another.
+     * Recursively syncs files, including symlinks, from one directory to another.
      *
      * Files in the "to" directory will be overwritten by those in the "from"
      * directory, even if newer. Files in the "to" directory that do not exist
@@ -18,10 +18,10 @@ interface FileCopierInterface
      * ignored and neither copied to nor deleted from the "to" directory.
      *
      * @param string $from
-     *   The directory to copy files from, as an absolute path or relative to the
+     *   The directory to sync files from, as an absolute path or relative to the
      *   current working directory (CWD), e.g., "/var/www/from" or "from".
      * @param string $to
-     *   The directory to copy files to, as an absolute path or relative to the
+     *   The directory to sync files to, as an absolute path or relative to the
      *   current working directory (CWD), e.g., "/var/www/to" or "to". If
      *   it does not exist it will be created.
      * @param string[]|null $exclusions
@@ -38,7 +38,7 @@ interface FileCopierInterface
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
-    public function copy(
+    public function sync(
         string $from,
         string $to,
         ?array $exclusions = [],

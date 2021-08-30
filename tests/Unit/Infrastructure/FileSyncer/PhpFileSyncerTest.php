@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\Process\FileCopier;
+namespace PhpTuf\ComposerStager\Tests\Unit\Infrastructure\FileSyncer;
 
 use ArrayIterator;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopier;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\Unit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 use Prophecy\Argument;
@@ -14,15 +14,15 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopier
- * @covers \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\PhpFileCopier
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
+ * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder fromFinder
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder toFinder
  */
-class PhpFileCopierTest extends TestCase
+class PhpFileSyncerTest extends TestCase
 {
     public function setUp(): void
     {
@@ -54,12 +54,12 @@ class PhpFileCopierTest extends TestCase
             ->willReturn(new ArrayIterator([]));
     }
 
-    protected function createSut(): PhpFileCopier
+    protected function createSut(): PhpFileSyncer
     {
         $filesystem = $this->filesystem->reveal();
         $fromIterator = $this->fromFinder->reveal();
         $toIterator = $this->toFinder->reveal();
-        return new PhpFileCopier($filesystem, $fromIterator, $toIterator);
+        return new PhpFileSyncer($filesystem, $fromIterator, $toIterator);
     }
 
     /**
@@ -74,7 +74,7 @@ class PhpFileCopierTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy('from', $givenTo, $exclusions, $callback, $givenTimeout);
+        $sut->sync('from', $givenTo, $exclusions, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -127,7 +127,7 @@ class PhpFileCopierTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->copy($from, 'to', []);
+        $sut->sync($from, 'to', []);
     }
 
     public function testCopyToDirectoryCouldNotBeCreated(): void
@@ -141,7 +141,7 @@ class PhpFileCopierTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->copy('from', $to, []);
+        $sut->sync('from', $to, []);
     }
 
     /**
@@ -172,7 +172,7 @@ class PhpFileCopierTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->copy($fromDir, $toDir);
+        $sut->sync($fromDir, $toDir);
     }
 
     public function providerCopyDeleteFromDestination(): array
@@ -243,7 +243,7 @@ class PhpFileCopierTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->copy($fromDir, $toDir);
+        $sut->sync($fromDir, $toDir);
     }
 
     public function providerCopyNewFilesToToDirectory(): array
@@ -303,6 +303,6 @@ class PhpFileCopierTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->copy($fromDir, $toDir);
+        $sut->sync($fromDir, $toDir);
     }
 }
