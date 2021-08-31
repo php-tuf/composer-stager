@@ -22,14 +22,29 @@ final class PhpFileSyncer implements FileSyncerInterface
     private $filesystem;
 
     /**
+     * @var string
+     */
+    private $source = '';
+
+    /**
      * @var \Symfony\Component\Finder\Finder
      */
     private $sourceFinder;
 
     /**
+     * @var string
+     */
+    private $destination = '';
+
+    /**
      * @var \Symfony\Component\Finder\Finder
      */
     private $destinationFinder;
+
+    /**
+     * @var string[]
+     */
+    private $exclusions = [];
 
     public function __construct(
         FilesystemInterface $filesystem,
@@ -51,80 +66,49 @@ final class PhpFileSyncer implements FileSyncerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $source = DirectoryUtil::stripTrailingSlash($source);
-        $destination = DirectoryUtil::stripTrailingSlash($destination);
+        $this->source = $source;
+        $this->destination = $destination;
+        $this->exclusions = array_unique((array) $exclusions);
 
         set_time_limit((int) $timeout);
 
-        // Prevent infinite recursion if the destination is inside the source.
-        $exclusions[] = $destination;
-
-        $exclusions = array_unique($exclusions);
-
         try {
-            $this->mirror($source, $destination, $exclusions);
+            $this->indexDestination();
+            $this->deleteExtraneousFilesFromDestination();
+            $this->indexSource();
+            $this->copyNewFilesToDestination();
         } catch (IOException | LogicException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
+
+        // @todo Reset Symfony Finders so they aren't polluted if this class is
+        //   used again within the same PHP process.
     }
 
     /**
-     * @param string[] $exclusions
-     *
-     * @todo This whole method (and the rest of the class) could possibly be replaced with
-     *   a simple call to \Symfony\Component\Filesystem\Filesystem::mirror, but that
-     *   method has a bug affecting our use case. Consider using it instead once it's
-     *   fixed. Just be sure it has feature-parity with our path-handling--particularly,
-     *   support for an empty string as a relative path. See the unit tests.
-     * @see \Symfony\Component\Filesystem\Filesystem::mirror
-     * @see https://github.com/symfony/symfony/issues/14068
-     *
-     * @throws \LogicException
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function mirror(string $source, string $destination, array $exclusions = []): void
+    private function indexDestination(): void
     {
-        $this->indexDirectories($source, $destination, $exclusions);
-        $this->deleteExtraneousFilesFromDestination($source);
-        $this->copyNewFilesToDestination($destination);
-    }
-
-    /**
-     * @param string[] $exclusions
-     *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     */
-    private function indexDirectories(string $source, string $destination, array $exclusions): void
-    {
-        // Index the source directory.
-        try {
-            $this->sourceFinder
-                ->in($source)
-                ->notPath($exclusions);
-        } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
-            throw new DirectoryNotFoundException(
-                $source,
-                'The source directory does not exist at "%s"',
-                (int) $e->getCode(),
-                $e
-            );
-        }
-
-        // Index the destination.
         try {
             // Ensure the destination directory's existence. (This has no effect
             // if it already exists.)
-            $this->filesystem->mkdir($destination);
+            $this->filesystem->mkdir($this->destination);
+
             // Index it.
+            $source = DirectoryUtil::stripAncestor($this->source, $this->destination);
             $this->destinationFinder
-                ->in($destination)
-                ->notPath($exclusions);
+                ->in($this->destination)
+                ->notPath($this->exclusions)
+                // @todo Excluding the source makes it work when the
+                //   destination is inside the source, but causes it to fail
+                //   when the destination is an absolute path.
+                ->notPath($source);
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException | IOException $e) {
-            $message = sprintf('The destination directory could not be created at "%s".', $destination);
-            throw new ProcessFailedException($message, (int) $e->getCode(), $e);
+            throw new ProcessFailedException(sprintf(
+                'The destination directory could not be created at "%s".',
+                $this->destination
+            ), (int) $e->getCode(), $e);
         }
     }
 
@@ -132,9 +116,9 @@ final class PhpFileSyncer implements FileSyncerInterface
      * @throws \LogicException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
-    private function deleteExtraneousFilesFromDestination(string $source): void
+    private function deleteExtraneousFilesFromDestination(): void
     {
-        $source = DirectoryUtil::ensureTrailingSlash($source);
+        $source = DirectoryUtil::ensureTrailingSlash($this->source);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $destinationFileInfo */
         foreach ($this->destinationFinder as $destinationFileInfo) {
@@ -148,21 +132,46 @@ final class PhpFileSyncer implements FileSyncerInterface
     }
 
     /**
+     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     */
+    private function indexSource(): void
+    {
+        try {
+            $destination = DirectoryUtil::stripAncestor($this->destination, $this->source);
+            $destination = DirectoryUtil::ensureTrailingSlash($destination);
+            $this->sourceFinder
+                ->in($this->source)
+                ->notPath($this->exclusions)
+                // @todo Excluding the destination makes it work when the
+                //   destination is inside the source, but causes it to fail
+                //   when the destination is an absolute path.
+                ->notPath($destination);
+        } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
+            throw new DirectoryNotFoundException(
+                $this->source,
+                'The source directory does not exist at "%s"',
+                (int) $e->getCode(),
+                $e
+            );
+        }
+    }
+
+    /**
      * @throws \LogicException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function copyNewFilesToDestination(string $destination): void
+    private function copyNewFilesToDestination(): void
     {
-        $destination = DirectoryUtil::ensureTrailingSlash($destination);
+        $destination = DirectoryUtil::ensureTrailingSlash($this->destination);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $sourceFileInfo */
         foreach ($this->sourceFinder as $sourceFileInfo) {
             $sourcePathname = $sourceFileInfo->getPathname();
             $destinationPathname = $destination . $sourceFileInfo->getRelativePathname();
 
-            // Note: Symlinks will be treated as the paths they point to.
+            // Note: Symlinks will be interpreted as the paths they point to.
             if ($this->filesystem->isDir($sourcePathname)) {
                 $this->filesystem->mkdir($destinationPathname);
             } elseif ($this->filesystem->isFile($sourcePathname)) {

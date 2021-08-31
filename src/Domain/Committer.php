@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 
@@ -45,7 +47,11 @@ final class Committer implements CommitterInterface
             throw new DirectoryNotWritableException($activeDir, 'The active directory is not writable at "%s"');
         }
 
-        $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
+        try {
+            $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
+        } catch (IOException $e) {
+            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+        }
     }
 
     public function directoryExists(string $stagingDir): bool

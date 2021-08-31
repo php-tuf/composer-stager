@@ -33,6 +33,8 @@ class RsyncFileSyncerTest extends TestCase
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(true);
+        $this->filesystem
+            ->mkdir(Argument::any());
         $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
@@ -48,6 +50,9 @@ class RsyncFileSyncerTest extends TestCase
      */
     public function testSync($source, $destination, $exclusions, $command, $callback): void
     {
+        $this->filesystem
+            ->mkdir($destination)
+            ->shouldBeCalledOnce();
         $this->rsync
             ->run($command, $callback)
             ->shouldBeCalledOnce();
@@ -65,11 +70,11 @@ class RsyncFileSyncerTest extends TestCase
                 'exclusions' => [],
                 'command' => [
                     '--archive',
-                    '--delete',
+                    '--delete-during',
                     '--verbose',
-                    '--exclude=dolor/sit',
+                    '--exclude=lorem/ipsum',
                     'lorem/ipsum' . DIRECTORY_SEPARATOR,
-                    'dolor/sit',
+                    'dolor/sit' . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => null,
             ],
@@ -82,13 +87,13 @@ class RsyncFileSyncerTest extends TestCase
                 ],
                 'command' => [
                     '--archive',
-                    '--delete',
+                    '--delete-during',
                     '--verbose',
                     '--exclude=consectetur.txt',
                     '--exclude=adipiscing.php',
-                    '--exclude=sit/amet',
+                    '--exclude=ipsum/dolor' . DIRECTORY_SEPARATOR,
                     'ipsum/dolor' . DIRECTORY_SEPARATOR,
-                    'sit/amet',
+                    'sit/amet' . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => new TestProcessOutputCallback(),
             ],
@@ -102,11 +107,12 @@ class RsyncFileSyncerTest extends TestCase
                 ],
                 'command' => [
                     '--archive',
-                    '--delete',
+                    '--delete-during',
                     '--verbose',
                     '--exclude=elit/sed',
+                    '--exclude=consectetur/adipiscing',
                     'consectetur/adipiscing' . DIRECTORY_SEPARATOR,
-                    'elit/sed',
+                    'elit/sed' . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => null,
             ],
@@ -148,5 +154,18 @@ class RsyncFileSyncerTest extends TestCase
         $sut = $this->createSut();
 
         $sut->sync(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+    }
+
+    public function testSyncCreateDestinationDirectoryFailed(): void
+    {
+        $this->expectException(IOException::class);
+
+        $this->filesystem
+            ->mkdir('destination')
+            ->willThrow(IOException::class);
+
+        $sut = $this->createSut();
+
+        $sut->sync('source', 'destination');
     }
 }

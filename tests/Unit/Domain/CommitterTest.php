@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 use PhpTuf\ComposerStager\Domain\Committer;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
@@ -187,5 +189,21 @@ class CommitterTest extends TestCase
             [true],
             [false],
         ];
+    }
+
+    /**
+     * @covers ::commit
+     */
+    public function testIOError(): void
+    {
+        $this->expectException(ProcessFailedException::class);
+
+        $this->fileSyncer
+            ->sync(Argument::cetera())
+            ->shouldBeCalledOnce()
+            ->willThrow(IOException::class);
+        $sut = $this->createSut();
+
+        $sut->commit(self::STAGING_DIR_DEFAULT, self::ACTIVE_DIR_DEFAULT);
     }
 }
