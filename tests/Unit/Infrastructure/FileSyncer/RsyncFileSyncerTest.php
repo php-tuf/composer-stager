@@ -44,9 +44,9 @@ class RsyncFileSyncerTest extends TestCase
     }
 
     /**
-     * @dataProvider providerCopy
+     * @dataProvider providerSync
      */
-    public function testCopy($source, $destination, $command, $exclusions, $callback): void
+    public function testSync($source, $destination, $command, $exclusions, $callback): void
     {
         $this->rsync
             ->run($command, $callback)
@@ -56,7 +56,7 @@ class RsyncFileSyncerTest extends TestCase
         $sut->sync($source, $destination, $exclusions, $callback);
     }
 
-    public function providerCopy(): array
+    public function providerSync(): array
     {
         return [
             [
@@ -94,9 +94,9 @@ class RsyncFileSyncerTest extends TestCase
     }
 
     /**
-     * @dataProvider providerCopyFailure
+     * @dataProvider providerSyncFailure
      */
-    public function testCopyFailure($exception): void
+    public function testSyncFailure($exception): void
     {
         $this->expectException(ProcessFailedException::class);
 
@@ -108,7 +108,7 @@ class RsyncFileSyncerTest extends TestCase
         $sut->sync('lorem', 'ipsum', []);
     }
 
-    public function providerCopyFailure(): array
+    public function providerSyncFailure(): array
     {
         return [
             [IOException::class],
@@ -117,7 +117,7 @@ class RsyncFileSyncerTest extends TestCase
         ];
     }
 
-    public function testCopyFromDirectoryNotFound(): void
+    public function testSyncSourceDirectoryNotFound(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
 

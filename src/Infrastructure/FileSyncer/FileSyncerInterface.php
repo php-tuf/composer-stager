@@ -34,7 +34,7 @@ interface FileSyncerInterface
      *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     *   If the "from" directory is not found.
+     *   If the source directory is not found.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */

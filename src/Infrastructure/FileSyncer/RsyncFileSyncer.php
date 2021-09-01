@@ -56,8 +56,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
             $command[] = '--exclude=' . $exclusion;
         }
 
-        // A trailing slash is added to the "from" directory so the CONTENTS of
-        // the active directory are synced, not the directory itself.
+        // A trailing slash is added to the source directory so the CONTENTS
+        // of the active directory are synced, not the directory itself.
         $command[] = DirectoryUtil::ensureTrailingSlash($source);
         $command[] = $destination;
 
