@@ -41,11 +41,6 @@ final class Beginner implements BeginnerInterface
             throw new DirectoryAlreadyExistsException($stagingDir, 'The staging directory already exists at "%s"');
         }
 
-        // Prevent infinite recursion if the staging directory is inside the active directory.
-        $exclusions[] = $stagingDir;
-
-        $exclusions = array_unique($exclusions);
-
         $this->fileSyncer->sync(
             $activeDir,
             $stagingDir,

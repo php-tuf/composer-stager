@@ -54,7 +54,7 @@ class BeginnerTest extends TestCase
             ->exists($stagingDir)
             ->willReturn(false);
         $this->fileSyncer
-            ->sync($activeDir, $stagingDir, [$stagingDir], null, 120)
+            ->sync($activeDir, $stagingDir, [], null, 120)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -89,7 +89,7 @@ class BeginnerTest extends TestCase
                 'activeDir' => 'lorem/ipsum',
                 'stagingDir' => 'dolor/sit',
                 'givenExclusions' => null,
-                'expectedExclusions' => ['dolor/sit'],
+                'expectedExclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
@@ -97,18 +97,21 @@ class BeginnerTest extends TestCase
                 'activeDir' => 'dolor/sit',
                 'stagingDir' => 'lorem/ipsum',
                 'givenExclusions' => ['amet/consectetur'],
-                'expectedExclusions' => [
-                    'amet/consectetur',
-                    'lorem/ipsum',
-                ],
+                'expectedExclusions' => ['amet/consectetur'],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 100,
             ],
             [
                 'activeDir' => 'sit/amet',
                 'stagingDir' => 'amet/consectetur',
-                'givenExclusions' => ['amet/consectetur'],
-                'expectedExclusions' => ['amet/consectetur'],
+                'givenExclusions' => [
+                    'amet/consectetur',
+                    'adipiscing/elit',
+                ],
+                'expectedExclusions' => [
+                    'amet/consectetur',
+                    'adipiscing/elit',
+                ],
                 'callback' => null,
                 'timeout' => null,
             ],

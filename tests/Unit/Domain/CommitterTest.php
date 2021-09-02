@@ -50,7 +50,7 @@ class CommitterTest extends TestCase
             ->sync(
                 self::STAGING_DIR_DEFAULT,
                 self::ACTIVE_DIR_DEFAULT,
-                [self::STAGING_DIR_DEFAULT],
+                [],
                 null,
                 120
             )
@@ -82,7 +82,7 @@ class CommitterTest extends TestCase
                 'stagingDir' => '/lorem/ipsum',
                 'activeDir' => '/dolor/sit',
                 'givenExclusions' => null,
-                'expectedExclusions' => ['/lorem/ipsum'],
+                'expectedExclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
@@ -90,20 +90,9 @@ class CommitterTest extends TestCase
                 'stagingDir' => 'amet/consectetur',
                 'activeDir' => 'adipiscing/elit',
                 'givenExclusions' => ['/sed/do'],
-                'expectedExclusions' => [
-                    '/sed/do',
-                    'amet/consectetur',
-                ],
+                'expectedExclusions' => ['/sed/do'],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
-            ],
-            [
-                'stagingDir' => '/do/eiusmod',
-                'activeDir' => '/tempor/incididunt',
-                'givenExclusions' => ['/do/eiusmod'],
-                'expectedExclusions' => ['/do/eiusmod'],
-                'callback' => null,
-                'timeout' => null,
             ],
         ];
     }

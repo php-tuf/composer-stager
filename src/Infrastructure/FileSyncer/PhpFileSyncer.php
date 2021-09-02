@@ -56,8 +56,13 @@ final class PhpFileSyncer implements FileSyncerInterface
 
         set_time_limit((int) $timeout);
 
+        // Prevent infinite recursion if the destination is inside the source.
+        $exclusions[] = $destination;
+
+        $exclusions = array_unique($exclusions);
+
         try {
-            $this->mirror($source, $destination, (array) $exclusions);
+            $this->mirror($source, $destination, $exclusions);
         } catch (IOException | LogicException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }

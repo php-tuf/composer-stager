@@ -45,13 +45,6 @@ final class Committer implements CommitterInterface
             throw new DirectoryNotWritableException($activeDir, 'The active directory is not writable at "%s"');
         }
 
-        // Prevent the staging directory itself from being deleted if it is
-        // inside the active directory.
-        // @todo Add a functional test case for this.
-        $exclusions[] = $stagingDir;
-
-        $exclusions = array_unique($exclusions);
-
         $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 

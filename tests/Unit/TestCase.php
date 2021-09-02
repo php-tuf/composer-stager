@@ -17,10 +17,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param ...$paths
      *   An arbitrary number of paths as strings.
      */
-    protected function fixSeparators(&...$paths): void
+    protected function fixSeparatorsByReference(&...$paths): void
     {
         foreach ($paths as &$path) {
-            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+            $path = $this->fixSeparators($path);
         }
+    }
+
+    protected function fixSeparators($path)
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 }

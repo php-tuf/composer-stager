@@ -65,16 +65,22 @@ class PhpFileSyncerTest extends TestCase
     /**
      * @dataProvider providerCopyWithOptionalParams
      */
-    public function testCopy($givenDestination, $expectedDestination, $exclusions, $callback, $givenTimeout, $expectedTimeout): void
+    public function testCopy($source, $givenDestination, $expectedDestination, $givenExclusions, $expectedExclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
-        $this->fixSeparators($givenDestination, $expectedDestination);
+        $this->fixSeparatorsByReference($givenDestination, $expectedDestination);
 
         $this->filesystem
             ->mkdir($expectedDestination)
             ->shouldBeCalledOnce();
+        $this->sourceFinder
+            ->notPath($expectedExclusions)
+            ->shouldBeCalled();
+        $this->destinationFinder
+            ->notPath($expectedExclusions)
+            ->shouldBeCalled();
         $sut = $this->createSut();
 
-        $sut->sync('source', $givenDestination, $exclusions, $callback, $givenTimeout);
+        $sut->sync($source, $givenDestination, $givenExclusions, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -83,27 +89,40 @@ class PhpFileSyncerTest extends TestCase
     {
         return [
             [
+                'source' => 'lorem',
                 'givenDestination' => '',
                 'expectedDestination' => '',
-                'exclusions' => [],
+                'givenExclusions' => null,
+                'expectedExclusions' => [''],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
+                'source' => '',
                 'givenDestination' => 'lorem',
                 'expectedDestination' => 'lorem',
-                'exclusions' => [],
+                'givenExclusions' => [],
+                'expectedExclusions' => ['lorem'],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
-                'givenDestination' => 'ipsum/dolor/',
-                'expectedDestination' => 'ipsum/dolor',
-                'exclusions' => [
+                'source' => '',
+                'givenDestination' => $this->fixSeparators('lorem/ipsum/'),
+                'expectedDestination' => $this->fixSeparators('lorem/ipsum'),
+                'givenExclusions' => [
                     'amet',
                     'consectetur',
+                    $this->fixSeparators('lorem/ipsum'),
+                    $this->fixSeparators('lorem/ipsum'),
+                    $this->fixSeparators('lorem/ipsum'),
+                ],
+                'expectedExclusions' => [
+                    'amet',
+                    'consectetur',
+                    $this->fixSeparators('lorem/ipsum'),
                 ],
                 'callback' => new TestProcessOutputCallback(),
                 'givenTimeout' => 10,
@@ -156,7 +175,7 @@ class PhpFileSyncerTest extends TestCase
         $destinationFileExistsInSource,
         $remove
     ): void {
-        $this->fixSeparators($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
+        $this->fixSeparatorsByReference($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
 
         $destinationFileInfo = new SplFileInfo($destinationFilePathname, $destination, $sourceRelativePathname);
         $this->destinationFinder
@@ -222,7 +241,7 @@ class PhpFileSyncerTest extends TestCase
         $isDir,
         $isFile
     ): void {
-        $this->fixSeparators($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
+        $this->fixSeparatorsByReference($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
 
         $sourceFileInfo = new SplFileInfo($sourceFilePathname, $source, $destinationRelativePathname);
         $this->sourceFinder

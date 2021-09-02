@@ -46,7 +46,7 @@ class RsyncFileSyncerTest extends TestCase
     /**
      * @dataProvider providerSync
      */
-    public function testSync($source, $destination, $command, $exclusions, $callback): void
+    public function testSync($source, $destination, $exclusions, $command, $callback): void
     {
         $this->rsync
             ->run($command, $callback)
@@ -62,33 +62,53 @@ class RsyncFileSyncerTest extends TestCase
             [
                 'source' => 'lorem/ipsum',
                 'destination' => 'dolor/sit',
+                'exclusions' => [],
                 'command' => [
                     '--archive',
                     '--delete',
                     '--verbose',
+                    '--exclude=dolor/sit',
                     'lorem/ipsum' . DIRECTORY_SEPARATOR,
                     'dolor/sit',
                 ],
-                'exclusions' => [],
                 'callback' => null,
             ],
             [
-                'source' => 'ipsum/lorem' . DIRECTORY_SEPARATOR,
-                'destination' => 'sit/dolor',
+                'source' => 'ipsum/dolor' . DIRECTORY_SEPARATOR,
+                'destination' => 'sit/amet',
+                'exclusions' => [
+                    'consectetur.txt',
+                    'adipiscing.php',
+                ],
                 'command' => [
                     '--archive',
                     '--delete',
                     '--verbose',
-                    '--exclude=amet.php',
                     '--exclude=consectetur.txt',
-                    'ipsum/lorem' . DIRECTORY_SEPARATOR,
-                    'sit/dolor',
-                ],
-                'exclusions' => [
-                    'amet.php',
-                    'consectetur.txt',
+                    '--exclude=adipiscing.php',
+                    '--exclude=sit/amet',
+                    'ipsum/dolor' . DIRECTORY_SEPARATOR,
+                    'sit/amet',
                 ],
                 'callback' => new TestProcessOutputCallback(),
+            ],
+            [
+                'source' => 'consectetur/adipiscing',
+                'destination' => 'elit/sed',
+                'exclusions' => [
+                    'elit/sed',
+                    'elit/sed',
+                    'elit/sed',
+                ],
+                'command' => [
+                    '--archive',
+                    '--delete',
+                    '--verbose',
+                    '--exclude=elit/sed',
+                    'consectetur/adipiscing' . DIRECTORY_SEPARATOR,
+                    'elit/sed',
+                ],
+                'callback' => null,
             ],
         ];
     }

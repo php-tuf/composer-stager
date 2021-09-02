@@ -39,7 +39,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($source)) {
-            throw new DirectoryNotFoundException($source, 'The "sync from" directory does not exist at "%s"');
+            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
 
         $command = [
@@ -52,7 +52,12 @@ final class RsyncFileSyncer implements FileSyncerInterface
             '--verbose',
         ];
 
-        foreach ((array) $exclusions as $exclusion) {
+        // Prevent infinite recursion if the destination is inside the source.
+        $exclusions[] = $destination;
+
+        $exclusions = array_unique($exclusions);
+
+        foreach ($exclusions as $exclusion) {
             $command[] = '--exclude=' . $exclusion;
         }
 

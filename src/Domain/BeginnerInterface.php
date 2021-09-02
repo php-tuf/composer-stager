@@ -30,9 +30,8 @@ interface BeginnerInterface
      *     This might include your version control directory, e.g., ".git", or
      *     certain kinds of caches, e.g., of HTTP responses.
      *
-     *   The staging directory is ALWAYS excluded to prevent infinite recursion
-     *   in case it is inside the active directory. With rare exception, you
-     *   should use the same exclusions when beginning as when committing.
+     *   With rare exception, you should use the same exclusions when beginning
+     *   as when committing.
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
