@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Util\DirectoryUtil;
 /**
  * @internal
  */
-final class RsyncFileSyncer implements RsyncFileSyncerInterface
+final class RsyncFileSyncer implements FileSyncerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface

@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @internal
  */
-final class PhpFileSyncer implements PhpFileSyncerInterface
+final class PhpFileSyncer implements FileSyncerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface

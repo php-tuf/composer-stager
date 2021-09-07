@@ -15,19 +15,19 @@ final class FileSyncerFactory implements FileSyncerFactoryInterface
     private $executableFinder;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncerInterface
+     * @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface
      */
     private $phpFileSyncer;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncerInterface
+     * @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface
      */
     private $rsyncFileSyncer;
 
     public function __construct(
         ExecutableFinder $executableFinder,
-        PhpFileSyncerInterface $phpFileSyncer,
-        RsyncFileSyncerInterface $rsyncFileSyncer
+        FileSyncerInterface $phpFileSyncer,
+        FileSyncerInterface $rsyncFileSyncer
     ) {
         $this->executableFinder = $executableFinder;
         $this->phpFileSyncer = $phpFileSyncer;

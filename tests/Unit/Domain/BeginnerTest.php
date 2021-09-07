@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
 
 /**
@@ -16,14 +16,14 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
+ * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
  */
 class BeginnerTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->fileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
+        $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(self::ACTIVE_DIR_DEFAULT)
