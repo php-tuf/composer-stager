@@ -13,19 +13,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     /**
      * Makes paths portable by ensuring directory separators match the OS.
-     *
-     * @param ...$paths
-     *   An arbitrary number of paths as strings.
      */
-    protected function fixSeparatorsByReference(&...$paths): void
+    protected function fixSeparators(string $path)
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+    }
+
+    protected function fixSeparatorsMultiple(&...$paths): void
     {
         foreach ($paths as &$path) {
             $path = $this->fixSeparators($path);
         }
-    }
-
-    protected function fixSeparators($path)
-    {
-        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 }

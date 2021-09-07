@@ -8,6 +8,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
+/**
+ * Forbids empty interfaces, i.e., without methods.
+ */
 class UselessInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string

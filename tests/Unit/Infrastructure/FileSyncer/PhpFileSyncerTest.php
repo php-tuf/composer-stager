@@ -67,7 +67,7 @@ class PhpFileSyncerTest extends TestCase
      */
     public function testCopy($source, $givenDestination, $expectedDestination, $givenExclusions, $expectedExclusions, $callback, $givenTimeout, $expectedTimeout): void
     {
-        $this->fixSeparatorsByReference($givenDestination, $expectedDestination);
+        $this->fixSeparatorsMultiple($givenDestination, $expectedDestination);
 
         $this->filesystem
             ->mkdir($expectedDestination)
@@ -175,7 +175,7 @@ class PhpFileSyncerTest extends TestCase
         $destinationFileExistsInSource,
         $remove
     ): void {
-        $this->fixSeparatorsByReference($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
+        $this->fixSeparatorsMultiple($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
 
         $destinationFileInfo = new SplFileInfo($destinationFilePathname, $destination, $sourceRelativePathname);
         $this->destinationFinder
@@ -241,7 +241,7 @@ class PhpFileSyncerTest extends TestCase
         $isDir,
         $isFile
     ): void {
-        $this->fixSeparatorsByReference($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
+        $this->fixSeparatorsMultiple($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
 
         $sourceFileInfo = new SplFileInfo($sourceFilePathname, $source, $destinationRelativePathname);
         $this->sourceFinder
