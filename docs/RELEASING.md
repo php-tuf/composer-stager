@@ -15,3 +15,4 @@ For project maintainers.
     1. Push the release tag to GitHub along with the updated `develop` and `main` branches.
 1. [Create a GitHub release.](https://help.github.com/articles/creating-releases/)
     1. Set the tag version and release title both to the new version number.
+1. Update the package at https://packagist.org/packages/php-tuf/composer-stager to publish the new release. (Delete any extraneous versions it creates, e.g., `dev-wip`.)
