@@ -82,8 +82,8 @@ final class PhpFileCopier implements PhpFileCopierInterface
     private function mirror(string $from, string $to, array $exclusions = []): void
     {
         $this->indexDirectories($from, $to, $exclusions);
-        $this->deleteExtraneousFilesFromToDirectory($from, $to);
-        $this->copyNewFilesToToDirectory($from, $to);
+        $this->deleteExtraneousFilesFromToDirectory($from);
+        $this->copyNewFilesToToDirectory($to);
     }
 
     /**
@@ -127,18 +127,17 @@ final class PhpFileCopier implements PhpFileCopierInterface
      * @throws \LogicException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
-    private function deleteExtraneousFilesFromToDirectory(string $from, string $to): void
+    private function deleteExtraneousFilesFromToDirectory(string $from): void
     {
         $from = DirectoryUtil::ensureTrailingSlash($from);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $toPath */
         foreach ($this->toFinder as $toPath) {
-            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($to, $toPath->getPathname());
-
-            $fromPathname = $from . $relativePathname;
+            $toPathname = $toPath->getPathname();
+            $fromPathname = $from . $toPath->getRelativePathname();
 
             if (!$this->filesystem->exists($fromPathname)) {
-                $this->filesystem->remove($toPath->getPathname());
+                $this->filesystem->remove($toPathname);
             }
         }
     }
@@ -149,22 +148,20 @@ final class PhpFileCopier implements PhpFileCopierInterface
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function copyNewFilesToToDirectory(string $from, string $to): void
+    private function copyNewFilesToToDirectory(string $to): void
     {
         $to = DirectoryUtil::ensureTrailingSlash($to);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $fromPath */
         foreach ($this->fromFinder as $fromPath) {
             $fromPathname = $fromPath->getPathname();
-
-            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($from, $fromPathname);
-            $toPath = $to . $relativePathname;
+            $toPathname = $to . $fromPath->getRelativePathname();
 
             // Note: Symlinks will be treated as the paths they point to.
             if ($this->filesystem->isDir($fromPathname)) {
-                $this->filesystem->mkdir($toPath);
+                $this->filesystem->mkdir($toPathname);
             } elseif ($this->filesystem->isFile($fromPathname)) {
-                $this->filesystem->copy($fromPathname, $toPath);
+                $this->filesystem->copy($fromPathname, $toPathname);
             } else {
                 throw new IOException(
                     sprintf('Unable to determine file type of "%s".', $fromPathname)

@@ -260,10 +260,10 @@ class PhpFileCopierTest extends TestCase
             ],
             [
                 'fromDir' => 'from-ipsum',
-                'fromFilePathname' => 'from-ipsum/sit.txt',
+                'fromFilePathname' => 'from-ipsum/sit',
                 'toDir' => 'to-dolor',
-                'toRelativePathname' => 'dolor.txt',
-                'toFilePathname' => 'to-dolor/sit.txt',
+                'toRelativePathname' => 'sit',
+                'toFilePathname' => 'to-dolor/sit',
                 'isDir' => true,
                 'isFile' => false,
             ],
