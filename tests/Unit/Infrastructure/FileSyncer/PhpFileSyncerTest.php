@@ -279,10 +279,10 @@ class PhpFileSyncerTest extends TestCase
             ],
             [
                 'source' => 'source-ipsum',
-                'sourceFilePathname' => 'source-ipsum/sit.txt',
+                'sourceFilePathname' => 'source-ipsum/sit',
                 'destination' => 'destination-dolor',
-                'destinationRelativePathname' => 'dolor.txt',
-                'destinationFilePathname' => 'destination-dolor/sit.txt',
+                'destinationRelativePathname' => 'sit',
+                'destinationFilePathname' => 'destination-dolor/sit',
                 'isDir' => true,
                 'isFile' => false,
             ],

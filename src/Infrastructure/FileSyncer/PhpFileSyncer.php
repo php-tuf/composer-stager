@@ -87,8 +87,8 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function mirror(string $source, string $destination, array $exclusions = []): void
     {
         $this->indexDirectories($source, $destination, $exclusions);
-        $this->deleteExtraneousFilesFromDestination($source, $destination);
-        $this->copyNewFilesToDestination($source, $destination);
+        $this->deleteExtraneousFilesFromDestination($source);
+        $this->copyNewFilesToDestination($destination);
     }
 
     /**
@@ -132,18 +132,17 @@ final class PhpFileSyncer implements FileSyncerInterface
      * @throws \LogicException
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
-    private function deleteExtraneousFilesFromDestination(string $source, string $destination): void
+    private function deleteExtraneousFilesFromDestination(string $source): void
     {
         $source = DirectoryUtil::ensureTrailingSlash($source);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $destinationFileInfo */
         foreach ($this->destinationFinder as $destinationFileInfo) {
-            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($destination, $destinationFileInfo->getPathname());
-
-            $sourcePathname = $source . $relativePathname;
+            $destinationPathname = $destinationFileInfo->getPathname();
+            $sourcePathname = $source . $destinationFileInfo->getRelativePathname();
 
             if (!$this->filesystem->exists($sourcePathname)) {
-                $this->filesystem->remove($destinationFileInfo->getPathname());
+                $this->filesystem->remove($destinationPathname);
             }
         }
     }
@@ -154,22 +153,20 @@ final class PhpFileSyncer implements FileSyncerInterface
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function copyNewFilesToDestination(string $source, string $destination): void
+    private function copyNewFilesToDestination(string $destination): void
     {
         $destination = DirectoryUtil::ensureTrailingSlash($destination);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $sourceFileInfo */
         foreach ($this->sourceFinder as $sourceFileInfo) {
             $sourcePathname = $sourceFileInfo->getPathname();
-
-            $relativePathname = DirectoryUtil::getDescendantRelativeToAncestor($source, $sourcePathname);
-            $destinationPath = $destination . $relativePathname;
+            $destinationPathname = $destination . $sourceFileInfo->getRelativePathname();
 
             // Note: Symlinks will be treated as the paths they point to.
             if ($this->filesystem->isDir($sourcePathname)) {
-                $this->filesystem->mkdir($destinationPath);
+                $this->filesystem->mkdir($destinationPathname);
             } elseif ($this->filesystem->isFile($sourcePathname)) {
-                $this->filesystem->copy($sourcePathname, $destinationPath);
+                $this->filesystem->copy($sourcePathname, $destinationPathname);
             } else {
                 throw new IOException(
                     sprintf('Unable to determine file type of "%s".', $sourcePathname)
