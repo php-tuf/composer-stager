@@ -5,15 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\PHPStan\Methods;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
+use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
  * Forbids throwing non-PhpTuf exceptions from non-application code public methods.
  */
-class ForbiddenThrowsRule implements Rule
+class ForbiddenThrowsRule extends AbstractRule
 {
     public function getNodeType(): string
     {
@@ -34,13 +32,15 @@ class ForbiddenThrowsRule implements Rule
             return[];
         }
 
+        $class = $scope->getClassReflection();
+        if ($this->isApplicationClass($class)) {
+            return [];
+        }
+
         $errors = [];
         foreach ($throwType->getReferencedClasses() as $exception) {
-            if ($this->isApplicationCode($scope)) {
-                continue;
-            }
-
-            if ($this->isComposerStagerException($exception)) {
+            $class = $this->reflectionProvider->getClass($exception);
+            if ($this->isProjectClass($class)) {
                 continue;
             }
 
@@ -52,27 +52,5 @@ class ForbiddenThrowsRule implements Rule
         }
 
         return $errors;
-    }
-
-    private function getMethodReflection(Scope $scope): MethodReflection
-    {
-        $methodReflection = $scope->getFunction();
-
-        if (!$methodReflection instanceof MethodReflection) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $methodReflection;
-    }
-
-    private function isApplicationCode(Scope $scope): bool
-    {
-        $classReflection = $scope->getClassReflection();
-        return strpos($classReflection->getName(), 'PhpTuf\ComposerStager\Console\\') === 0;
-    }
-
-    private function isComposerStagerException(string $exception): bool
-    {
-        return strpos($exception, 'PhpTuf\ComposerStager\Exception') === 0;
     }
 }
