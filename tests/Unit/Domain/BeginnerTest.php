@@ -6,8 +6,11 @@ use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
+use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Beginner
@@ -147,6 +150,22 @@ class BeginnerTest extends TestCase
             ->exists(self::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(true);
+        $sut = $this->createSut();
+
+        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+    }
+
+    /**
+     * @covers ::begin
+     */
+    public function testIOError(): void
+    {
+        $this->expectException(ProcessFailedException::class);
+
+        $this->fileSyncer
+            ->sync(Argument::cetera())
+            ->shouldBeCalledOnce()
+            ->willThrow(IOException::class);
         $sut = $this->createSut();
 
         $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);

@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Domain;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 
@@ -41,12 +43,16 @@ final class Beginner implements BeginnerInterface
             throw new DirectoryAlreadyExistsException($stagingDir, 'The staging directory already exists at "%s"');
         }
 
-        $this->fileSyncer->sync(
-            $activeDir,
-            $stagingDir,
-            $exclusions,
-            $callback,
-            $timeout
-        );
+        try {
+            $this->fileSyncer->sync(
+                $activeDir,
+                $stagingDir,
+                $exclusions,
+                $callback,
+                $timeout
+            );
+        } catch (IOException $e) {
+            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+        }
     }
 }

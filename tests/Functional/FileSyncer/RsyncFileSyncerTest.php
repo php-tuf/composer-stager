@@ -1,9 +1,10 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Functional;
+namespace PhpTuf\ComposerStager\Tests\Functional\FileSyncer;
 
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Tests\Functional\FileSyncer\FileSyncerTestCase;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
@@ -16,14 +17,14 @@ use Symfony\Component\Process\ExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  */
-class RsyncFileSyncerTest extends AbstractFileSyncerTest
+class RsyncFileSyncerTest extends FileSyncerTestCase
 {
     public static function setUpBeforeClass(): void
     {
         if (!self::isRsyncAvailable()) {
             return;
         }
-        self::createTestEnvironment();
+        self::createTestEnvironment(self::ACTIVE_DIR);
     }
 
     public static function tearDownAfterClass(): void
@@ -31,13 +32,13 @@ class RsyncFileSyncerTest extends AbstractFileSyncerTest
         if (!self::isRsyncAvailable()) {
             return;
         }
-        self::removeTestEnvironment();
+        parent::tearDownAfterClass();
     }
 
     protected function setUp(): void
     {
         if (!self::isRsyncAvailable()) {
-            $this->markTestSkipped('Rsync is not available for testing.');
+            self::markTestSkipped('Rsync is not available for testing.');
         }
     }
 

@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Unit\Util;
 
+use PhpTuf\ComposerStager\Tests\Functional\TestCase;
 use PhpTuf\ComposerStager\Util\DirectoryUtil;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Util\DirectoryUtil
@@ -28,6 +28,15 @@ class DirectoryUtilTest extends TestCase
     {
         return [
             [
+                'givenPath' => '',
+                'expectedPath' => '',
+            ],
+            // UNIX-like paths:
+            [
+                'givenPath' => '/',
+                'expectedPath' => '/',
+            ],
+            [
                 'givenPath' => '/lorem/ipsum',
                 'expectedPath' => '/lorem/ipsum',
             ],
@@ -35,13 +44,31 @@ class DirectoryUtilTest extends TestCase
                 'givenPath' => '/lorem/ipsum/',
                 'expectedPath' => '/lorem/ipsum',
             ],
+            // Traditional DOS paths:
             [
                 'givenPath' => 'C:\Lorem\Ipsum',
                 'expectedPath' => 'C:\Lorem\Ipsum',
             ],
             [
-                'givenPath' => 'C:\Lorem\Ipsum\\',
-                'expectedPath' => 'C:\Lorem\Ipsum',
+                'givenPath' => 'h:\Lorem\Ipsum\\',
+                'expectedPath' => 'h:\Lorem\Ipsum',
+            ],
+            [
+                'givenPath' => 'C:\\',
+                'expectedPath' => 'C:\\',
+            ],
+            [
+                'givenPath' => 'h:',
+                'expectedPath' => 'h:',
+            ],
+            // UNC paths:
+            [
+                'givenPath' => '\\\\drive\\share',
+                'expectedPath' => '\\\\drive\\share',
+            ],
+            [
+                'givenPath' => '\\\\Drive1\\Another_Share\\',
+                'expectedPath' => '\\\\Drive1\\Another_Share\\',
             ],
         ];
     }
@@ -54,6 +81,8 @@ class DirectoryUtilTest extends TestCase
      */
     public function testEnsureTrailingSlash($givenPath, $expectedPath): void
     {
+        self::fixSeparatorsMultiple($givenPath, $expectedPath);
+
         $actual = DirectoryUtil::ensureTrailingSlash($givenPath);
 
         self::assertEquals($expectedPath, $actual);
@@ -63,20 +92,24 @@ class DirectoryUtilTest extends TestCase
     {
         return [
             [
+                'givenPath' => '',
+                'expectedPath' => './',
+            ],
+            [
                 'givenPath' => '/lorem/ipsum',
-                'expectedPath' => '/lorem/ipsum' . DIRECTORY_SEPARATOR,
+                'expectedPath' => '/lorem/ipsum/',
             ],
             [
                 'givenPath' => '/lorem/ipsum/',
-                'expectedPath' => '/lorem/ipsum' . DIRECTORY_SEPARATOR,
+                'expectedPath' => '/lorem/ipsum/',
             ],
             [
                 'givenPath' => 'C:\Lorem\Ipsum\\',
-                'expectedPath' => 'C:\Lorem\Ipsum' . DIRECTORY_SEPARATOR,
+                'expectedPath' => 'C:\Lorem\Ipsum\\',
             ],
             [
                 'givenPath' => 'C:\Lorem\Ipsum\\',
-                'expectedPath' => 'C:\Lorem\Ipsum' . DIRECTORY_SEPARATOR,
+                'expectedPath' => 'C:\Lorem\Ipsum\\',
             ],
         ];
     }

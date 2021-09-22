@@ -19,8 +19,8 @@ use Symfony\Component\Finder\SplFileInfo;
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder $sourceFinder
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder $destinationFinder
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder sourceFinder
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder destinationFinder
  */
 class PhpFileSyncerTest extends TestCase
 {
@@ -63,20 +63,36 @@ class PhpFileSyncerTest extends TestCase
     }
 
     /**
-     * @dataProvider providerCopyWithOptionalParams
+     * @dataProvider providerSyncWithOptionalParams
      */
-    public function testCopy($source, $givenDestination, $expectedDestination, $givenExclusions, $expectedExclusions, $callback, $givenTimeout, $expectedTimeout): void
-    {
-        $this->fixSeparatorsMultiple($givenDestination, $expectedDestination);
+    public function testSyncWithOptionalParams(
+        $source,
+        $givenDestination,
+        $expectedDestination,
+        $givenExclusions,
+        $expectedExclusions,
+        $callback,
+        $givenTimeout,
+        $expectedTimeout
+    ): void {
+        self::fixSeparatorsMultiple($givenDestination, $expectedDestination);
 
         $this->filesystem
-            ->mkdir($expectedDestination)
+            ->mkdir($givenDestination)
             ->shouldBeCalledOnce();
+        $this->sourceFinder
+            ->notPath($expectedExclusions)
+            ->shouldBeCalled()
+            ->willReturn($this->sourceFinder);
         $this->sourceFinder
             ->notPath($expectedExclusions)
             ->shouldBeCalled();
         $this->destinationFinder
             ->notPath($expectedExclusions)
+            ->shouldBeCalled()
+            ->willReturn($this->destinationFinder);
+        $this->destinationFinder
+            ->notPath($source)
             ->shouldBeCalled();
         $sut = $this->createSut();
 
@@ -85,7 +101,7 @@ class PhpFileSyncerTest extends TestCase
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
 
-    public function providerCopyWithOptionalParams(): array
+    public function providerSyncWithOptionalParams(): array
     {
         return [
             [
@@ -93,7 +109,7 @@ class PhpFileSyncerTest extends TestCase
                 'givenDestination' => '',
                 'expectedDestination' => '',
                 'givenExclusions' => null,
-                'expectedExclusions' => [''],
+                'expectedExclusions' => [],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
@@ -101,28 +117,28 @@ class PhpFileSyncerTest extends TestCase
             [
                 'source' => '',
                 'givenDestination' => 'lorem',
-                'expectedDestination' => 'lorem',
+                'expectedDestination' => 'lorem/',
                 'givenExclusions' => [],
-                'expectedExclusions' => ['lorem'],
+                'expectedExclusions' => [],
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
                 'source' => '',
-                'givenDestination' => $this->fixSeparators('lorem/ipsum/'),
-                'expectedDestination' => $this->fixSeparators('lorem/ipsum'),
+                'givenDestination' => 'lorem/ipsum',
+                'expectedDestination' => 'lorem/ipsum/',
                 'givenExclusions' => [
                     'amet',
                     'consectetur',
-                    $this->fixSeparators('lorem/ipsum'),
-                    $this->fixSeparators('lorem/ipsum'),
-                    $this->fixSeparators('lorem/ipsum'),
+                    // Ensure that exclusions get de-duped.
+                    'amet',
+                    'consectetur',
+                    'consectetur',
                 ],
                 'expectedExclusions' => [
                     'amet',
                     'consectetur',
-                    $this->fixSeparators('lorem/ipsum'),
                 ],
                 'callback' => new TestProcessOutputCallback(),
                 'givenTimeout' => 10,
@@ -135,7 +151,7 @@ class PhpFileSyncerTest extends TestCase
      * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      * @uses \PhpTuf\ComposerStager\Exception\PathException
      */
-    public function testCopySourceNotFound(): void
+    public function testSyncSourceNotFound(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
 
@@ -149,7 +165,7 @@ class PhpFileSyncerTest extends TestCase
         $sut->sync($source, 'destination', []);
     }
 
-    public function testCopyDestinationCouldNotBeCreated(): void
+    public function testSyncDestinationCouldNotBeCreated(): void
     {
         $this->expectException(ProcessFailedException::class);
 
@@ -164,9 +180,9 @@ class PhpFileSyncerTest extends TestCase
     }
 
     /**
-     * @dataProvider providerCopyDeleteFromDestination
+     * @dataProvider providerDeleteFromDestination
      */
-    public function testCopyDeleteFromDestination(
+    public function testSyncDeleteFromDestination(
         $source,
         $sourceRelativePathname,
         $sourceFilePathname,
@@ -175,7 +191,7 @@ class PhpFileSyncerTest extends TestCase
         $destinationFileExistsInSource,
         $remove
     ): void {
-        $this->fixSeparatorsMultiple($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
+        self::fixSeparatorsMultiple($source, $sourceRelativePathname, $sourceFilePathname, $destination, $destinationFilePathname);
 
         $destinationFileInfo = new SplFileInfo($destinationFilePathname, $destination, $sourceRelativePathname);
         $this->destinationFinder
@@ -194,7 +210,7 @@ class PhpFileSyncerTest extends TestCase
         $sut->sync($source, $destination);
     }
 
-    public function providerCopyDeleteFromDestination(): array
+    public function providerDeleteFromDestination(): array
     {
         return [
             [
@@ -230,9 +246,9 @@ class PhpFileSyncerTest extends TestCase
     /**
      * @covers ::copyNewFilesToDestination
      *
-     * @dataProvider providerCopyNewFilesToDestination
+     * @dataProvider providerNewFilesToDestination
      */
-    public function testCopyNewFilesToDestination(
+    public function testSyncNewFilesToDestination(
         $source,
         $sourceFilePathname,
         $destination,
@@ -241,7 +257,7 @@ class PhpFileSyncerTest extends TestCase
         $isDir,
         $isFile
     ): void {
-        $this->fixSeparatorsMultiple($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
+        self::fixSeparatorsMultiple($source, $sourceFilePathname, $destination, $destinationRelativePathname, $destinationFilePathname);
 
         $sourceFileInfo = new SplFileInfo($sourceFilePathname, $source, $destinationRelativePathname);
         $this->sourceFinder
@@ -265,7 +281,7 @@ class PhpFileSyncerTest extends TestCase
         $sut->sync($source, $destination);
     }
 
-    public function providerCopyNewFilesToDestination(): array
+    public function providerNewFilesToDestination(): array
     {
         return [
             [
@@ -292,7 +308,7 @@ class PhpFileSyncerTest extends TestCase
     /**
      * @covers ::copyNewFilesToDestination
      */
-    public function testCopyNewFilesToDestinationUnknownFileType(): void
+    public function testSyncNewFilesToDestinationUnknownFileType(): void
     {
         $this->expectException(ProcessFailedException::class);
 
