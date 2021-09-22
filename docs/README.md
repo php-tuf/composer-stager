@@ -48,7 +48,6 @@ $ composer-stager clean --no-interaction
 
 The Composer library is installed, of course, via Composer:
 
-<!-- @todo Remove the custom repository command once we are publishing the library to Packagist. -->
 ```shell
 composer require php-tuf/composer-stager
 ```
