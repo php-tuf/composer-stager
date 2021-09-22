@@ -127,8 +127,8 @@
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
         "phpmd": "Looks for potential problems within the source code.",
-        "psalm": "Analyzes PHP application for errors.",
         "phpstan": "Analyzes code to find bugs.",
+        "psalm": "Analyzes PHP application for errors.",
         "security": "Checks installed dependencies for known security vulnerabilities.",
         "static": "Runs all static analysis tools.",
         "test": "Runs automated tests."

@@ -22,15 +22,15 @@ final class Filesystem implements FilesystemInterface
         $this->symfonyFilesystem = $symfonyFilesystem;
     }
 
-    public function copy(string $fromPath, string $toPath): void
+    public function copy(string $source, string $destination): void
     {
         try {
-            $this->symfonyFilesystem->copy($fromPath, $toPath, true);
+            $this->symfonyFilesystem->copy($source, $destination, true);
         } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
             throw new IOException(sprintf(
                 'Failed to copy "%s" to "%s".',
-                $fromPath,
-                $toPath
+                $source,
+                $destination
             ), (int) $e->getCode(), $e);
         }
     }

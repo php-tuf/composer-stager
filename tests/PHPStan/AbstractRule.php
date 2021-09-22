@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
+namespace PhpTuf\ComposerStager\Tests\PHPStan;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -56,5 +56,12 @@ abstract class AbstractRule implements Rule
     protected function isThrowable(ClassReflection $class): bool
     {
         return array_key_exists('Throwable', $class->getInterfaces());
+    }
+
+    protected function getNamespace(string $name): string
+    {
+        $nameParts = explode('\\', $name);
+        array_pop($nameParts);
+        return implode('\\', $nameParts);
     }
 }

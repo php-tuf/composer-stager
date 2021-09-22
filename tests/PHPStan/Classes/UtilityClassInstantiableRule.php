@@ -5,10 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\Classes\AbstractRule;
+use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires utility classes to be un-instantiable.
+ * Requires utility classes to be non-instantiable.
  */
 class UtilityClassInstantiableRule extends AbstractRule
 {

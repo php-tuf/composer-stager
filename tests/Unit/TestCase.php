@@ -12,15 +12,20 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected const STAGING_DIR_DEFAULT = '/var/www/staging';
 
     /**
-     * Makes paths portable by ensuring directory separators match the OS.
-     *
-     * @param ...$paths
-     *   An arbitrary number of paths as strings.
+     * Makes a path portable by ensuring directory separators match the OS.
      */
-    protected function fixSeparators(&...$paths): void
+    protected static function fixSeparators(string $path)
+    {
+        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+    }
+
+    /**
+     * Makes paths portable by ensuring directory separators match the OS.
+     */
+    protected static function fixSeparatorsMultiple(&...$paths): void
     {
         foreach ($paths as &$path) {
-            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+            $path = self::fixSeparators($path);
         }
     }
 }

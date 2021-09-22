@@ -5,9 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Unit\Domain;
 use PhpTuf\ComposerStager\Domain\Beginner;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface;
 use PhpTuf\ComposerStager\Tests\Unit\TestCase;
+use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Beginner
@@ -16,14 +19,14 @@ use PhpTuf\ComposerStager\Tests\Unit\TestCase;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
+ * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\FileCopier\RsyncFileCopierInterface|\Prophecy\Prophecy\ObjectProphecy fileCopier
  */
 class BeginnerTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->fileCopier = $this->prophesize(RsyncFileCopierInterface::class);
+        $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(self::ACTIVE_DIR_DEFAULT)
@@ -35,9 +38,9 @@ class BeginnerTest extends TestCase
 
     protected function createSut(): Beginner
     {
-        $fileCopier = $this->fileCopier->reveal();
+        $fileSyncer = $this->fileSyncer->reveal();
         $filesystem = $this->filesystem->reveal();
-        return new Beginner($fileCopier, $filesystem);
+        return new Beginner($fileSyncer, $filesystem);
     }
 
     /**
@@ -53,8 +56,8 @@ class BeginnerTest extends TestCase
         $this->filesystem
             ->exists($stagingDir)
             ->willReturn(false);
-        $this->fileCopier
-            ->copy($activeDir, $stagingDir, [$stagingDir], null, 120)
+        $this->fileSyncer
+            ->sync($activeDir, $stagingDir, [], null, 120)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -74,8 +77,8 @@ class BeginnerTest extends TestCase
         $this->filesystem
             ->exists($stagingDir)
             ->willReturn(false);
-        $this->fileCopier
-            ->copy($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
+        $this->fileSyncer
+            ->sync($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -89,7 +92,7 @@ class BeginnerTest extends TestCase
                 'activeDir' => 'lorem/ipsum',
                 'stagingDir' => 'dolor/sit',
                 'givenExclusions' => null,
-                'expectedExclusions' => ['dolor/sit'],
+                'expectedExclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
@@ -97,18 +100,21 @@ class BeginnerTest extends TestCase
                 'activeDir' => 'dolor/sit',
                 'stagingDir' => 'lorem/ipsum',
                 'givenExclusions' => ['amet/consectetur'],
-                'expectedExclusions' => [
-                    'amet/consectetur',
-                    'lorem/ipsum',
-                ],
+                'expectedExclusions' => ['amet/consectetur'],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 100,
             ],
             [
                 'activeDir' => 'sit/amet',
                 'stagingDir' => 'amet/consectetur',
-                'givenExclusions' => ['amet/consectetur'],
-                'expectedExclusions' => ['amet/consectetur'],
+                'givenExclusions' => [
+                    'amet/consectetur',
+                    'adipiscing/elit',
+                ],
+                'expectedExclusions' => [
+                    'amet/consectetur',
+                    'adipiscing/elit',
+                ],
                 'callback' => null,
                 'timeout' => null,
             ],
@@ -144,6 +150,22 @@ class BeginnerTest extends TestCase
             ->exists(self::STAGING_DIR_DEFAULT)
             ->shouldBeCalledOnce()
             ->willReturn(true);
+        $sut = $this->createSut();
+
+        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+    }
+
+    /**
+     * @covers ::begin
+     */
+    public function testIOError(): void
+    {
+        $this->expectException(ProcessFailedException::class);
+
+        $this->fileSyncer
+            ->sync(Argument::cetera())
+            ->shouldBeCalledOnce()
+            ->willThrow(IOException::class);
         $sut = $this->createSut();
 
         $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);

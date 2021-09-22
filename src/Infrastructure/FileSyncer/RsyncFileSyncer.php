@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process\FileCopier;
+namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Util\DirectoryUtil;
 /**
  * @internal
  */
-final class RsyncFileCopier implements RsyncFileCopierInterface
+final class RsyncFileSyncer implements FileSyncerInterface
 {
     /**
      * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
@@ -31,36 +31,47 @@ final class RsyncFileCopier implements RsyncFileCopierInterface
         $this->rsync = $rsync;
     }
 
-    public function copy(
-        string $from,
-        string $to,
+    public function sync(
+        string $source,
+        string $destination,
         ?array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists($from)) {
-            throw new DirectoryNotFoundException($from, 'The "copy from" directory does not exist at "%s"');
+        if (!$this->filesystem->exists($source)) {
+            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
 
         $command = [
             // Archive mode--the same as -rlptgoD (no -H), or --recursive,
             // --links, --perms, --times, --group, --owner, --devices, --specials.
             '--archive',
-            // Delete extraneous files from destination directories.
-            '--delete',
+            // Delete extraneous files from destination directories. Note: Use of
+            // --delete-during rather than merely --delete prevents "file has
+            // vanished" errors when syncing a directory with its own ancestor.
+            '--delete-during',
             // Increase verbosity.
             '--verbose',
         ];
 
-        foreach ((array) $exclusions as $exclusion) {
+        // Prevent infinite recursion if the source is inside the destination.
+        $exclusions[] = $source;
+
+        $exclusions = array_unique($exclusions);
+
+        foreach ($exclusions as $exclusion) {
             $command[] = '--exclude=' . $exclusion;
         }
 
-        // A trailing slash is added to the "from" directory so the CONTENTS of
-        // the active directory are copied, not the directory itself.
-        $command[] = DirectoryUtil::ensureTrailingSlash($from);
-        $command[] = $to;
+        // A trailing slash is added to the source directory so the CONTENTS
+        // of the directory are synced, not the directory itself.
+        $command[] = DirectoryUtil::ensureTrailingSlash($source);
 
+        $command[] = DirectoryUtil::ensureTrailingSlash($destination);
+
+        // Ensure the destination directory's existence. (This has no effect
+        // if it already exists.)
+        $this->filesystem->mkdir($destination);
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {

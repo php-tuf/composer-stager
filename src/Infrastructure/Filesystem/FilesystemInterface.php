@@ -10,22 +10,22 @@ use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 interface FilesystemInterface
 {
     /**
-     * Copies a file.
+     * Copies a file from one place to another.
      *
-     * If the file already exists at the "to" path it will be overwritten.
+     * If the file already exists at the destination it will be overwritten.
      *
-     * @param string $fromPath
+     * @param string $source
      *   The file to copy, as an absolute path or relative to the current
-     *   working directory (CWD), e.g., "/var/www/from" or "from".
-     * @param string $toPath
+     *   working directory (CWD), e.g., "/var/www/source" or "source".
+     * @param string $destination
      *   The file to copy to, as an absolute path or relative to the current
-     *   working directory (CWD), e.g., "/var/www/to" or "to". If it does
-     *   not exist it will be created.
+     *   working directory (CWD), e.g., "/var/www/destination" or "destination".
+     *   If it does not exist it will be created.
      *
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      *   If the operation is unsuccessful.
      */
-    public function copy(string $fromPath, string $toPath): void;
+    public function copy(string $source, string $destination): void;
 
     /**
      * Determines whether the given path exists.
