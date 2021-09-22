@@ -43,9 +43,9 @@ final class DirectoryUtil
      *
      * @param string $path
      *   Any path, absolute or relative, existing or not. Empty paths and device
-     *   roots will be returned unchanged--but note that Windows UNC root path
-     *   detection is not robust. No validation is done to ensure that given
-     *   paths are valid.
+     *   roots will be returned unchanged--but note that Windows UNC (Universal
+     *   Naming Convention) root path detection is not robust. No validation is
+     *   done to ensure that given paths are valid.
      *
      * @see https://www.linux.com/training-tutorials/absolute-path-vs-relative-path-linuxunix/
      * @see https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats
@@ -58,6 +58,7 @@ final class DirectoryUtil
         }
 
         // Don't change a Windows drive-letter-or-UNC root path.
+        // @see \PhpTuf\ComposerStager\Tests\Unit\Util\DirectoryUtilTest::testStripTrailingSlash
         // @see https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s18.html
         if (preg_match('/^([a-z]:\\\\?$)|(\\\\\\\\[a-z0-9_-]+\\\\[a-z0-9_-]+\\\\?$)/i', $path) === 1) {
             return $path;

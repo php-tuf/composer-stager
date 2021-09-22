@@ -131,6 +131,7 @@ class PhpFileSyncerTest extends TestCase
                 'givenExclusions' => [
                     'amet',
                     'consectetur',
+                    // Ensure that exclusions get de-duped.
                     'amet',
                     'consectetur',
                     'consectetur',

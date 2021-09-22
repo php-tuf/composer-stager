@@ -86,70 +86,56 @@ abstract class FileSyncerTestCase extends TestCase
     public function providerDirectories(): array
     {
         return [
-            // Siblings without trailing slashes.
-            [
+            'Siblings without trailing slashes' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'staging-dir',
             ],
-            // Trailing slash on active directory only.
-            [
+            'Trailing slash on active directory only' => [
                 'activeDir' => 'active-dir/',
                 'stagingDir' => 'staging-dir',
             ],
-            // Trailing slash on staging directory only.
-            [
+            'Trailing slash on staging directory only' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'staging-dir/',
             ],
-            // Trailing slash on both.
-            [
+            'Trailing slash on both' => [
                 'activeDir' => 'active-dir/',
                 'stagingDir' => 'staging-dir/',
             ],
-            // Siblings with some directory depth.
-            [
+            'Siblings with some directory depth' => [
                 'activeDir' => 'active-dir/lorem/ipsum/dolor/sit/amet',
                 'stagingDir' => 'staging-dir/lorem/ipsum/dolor/sit/amet',
             ],
-            // Complex relative paths.
-            [
+            'Complex relative paths' => [
                 'activeDir' => 'active-dir/../active-dir/../active-dir',
                 'stagingDir' => 'staging-dir/../staging-dir/../staging-dir',
             ],
 
             // @todo RsyncFileSyncer fails these scenarios.
-            //// Staging directory under active directory.
-            //[
+            //'Staging directory under active directory' => [
             //    'activeDir' => 'active-dir',
             //    'stagingDir' => 'active-dir/staging-dir',
             //],
-            //// Staging directory under active directory with some directory depth.
-            //[
+            //'Staging directory under active directory with some directory depth' => [
             //    'activeDir' => 'active-dir',
             //    'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
             //],
-            //// Current working directory without a slash as staging directory
-            //// slash with staging directory inside it.
-            //[
+            //'Current working directory without a slash as staging directory slash with staging directory inside it' => [
             //    'activeDir' => './',
             //    'stagingDir' => './.composer_staging',
             //],
 
-            // Current working directory without a slash as active directory
-            // with staging directory inside it.
-            [
+            'Current working directory without a slash as active directory with staging directory inside it' => [
                 'activeDir' => '.',
                 'stagingDir' => '.composer_staging',
             ],
 
             // @todo PhpFileSyncer fails these scenarios.
-            //// Absolute path.
-            //[
+            //'Absolute path' => [
             //    'activeDir' => __DIR__ . '/../../../var/phpunit/test-env/active-dir',
             //    'stagingDir' => __DIR__ . '/../../../var/phpunit/test-env/staging-dir',
             //],
-            //// Temp directory.
-            //[
+            //'Temp directory' => [
             //    'activeDir' => sprintf('%s/composer-stager/%s/active-dir', sys_get_temp_dir(), md5(time())),
             //    'stagingDir' => sprintf('%s/composer-stager/%s/staging-dir', sys_get_temp_dir(), md5(time())),
             //],

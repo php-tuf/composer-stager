@@ -31,6 +31,11 @@ class DirectoryUtilTest extends TestCase
                 'givenPath' => '',
                 'expectedPath' => '',
             ],
+            // UNIX-like paths:
+            [
+                'givenPath' => '/',
+                'expectedPath' => '/',
+            ],
             [
                 'givenPath' => '/lorem/ipsum',
                 'expectedPath' => '/lorem/ipsum',
@@ -39,6 +44,7 @@ class DirectoryUtilTest extends TestCase
                 'givenPath' => '/lorem/ipsum/',
                 'expectedPath' => '/lorem/ipsum',
             ],
+            // Traditional DOS paths:
             [
                 'givenPath' => 'C:\Lorem\Ipsum',
                 'expectedPath' => 'C:\Lorem\Ipsum',
@@ -48,10 +54,6 @@ class DirectoryUtilTest extends TestCase
                 'expectedPath' => 'h:\Lorem\Ipsum',
             ],
             [
-                'givenPath' => '/',
-                'expectedPath' => '/',
-            ],
-            [
                 'givenPath' => 'C:\\',
                 'expectedPath' => 'C:\\',
             ],
@@ -59,6 +61,7 @@ class DirectoryUtilTest extends TestCase
                 'givenPath' => 'h:',
                 'expectedPath' => 'h:',
             ],
+            // UNC paths:
             [
                 'givenPath' => '\\\\drive\\share',
                 'expectedPath' => '\\\\drive\\share',
@@ -98,7 +101,7 @@ class DirectoryUtilTest extends TestCase
             ],
             [
                 'givenPath' => '/lorem/ipsum/',
-                'expectedPath' => '/lorem/ipsum\\',
+                'expectedPath' => '/lorem/ipsum/',
             ],
             [
                 'givenPath' => 'C:\Lorem\Ipsum\\',

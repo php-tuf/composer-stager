@@ -98,26 +98,30 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $filename = "{$baseDir}/{$filename}";
         $dirname = dirname($filename);
         if (!file_exists($dirname)) {
-            self::assertTrue(mkdir($dirname, 0777, true), 'Created directory.');
+            self::assertTrue(mkdir($dirname, 0777, true), "Created directory {$dirname}.");
         }
-        self::assertTrue(touch($filename), 'Created file.');
-        self::assertNotFalse(realpath($filename), 'Got absolute path.');
+        self::assertTrue(touch($filename), "Created file {$filename}.");
+        self::assertNotFalse(realpath($filename), "Got absolute path of {$filename}.");
     }
 
     protected static function changeFile($dir, $filename): void
     {
-        file_put_contents(
-            DirectoryUtil::ensureTrailingSlash($dir) . $filename,
+        $pathname = DirectoryUtil::ensureTrailingSlash($dir) . $filename;
+        $result = file_put_contents(
+            $pathname,
             self::CHANGED_CONTENT
         );
+        self::assertNotFalse($result, "Changed file {$pathname}.");
     }
 
     protected static function deleteFile($dir, $filename): void
     {
-        unlink(DirectoryUtil::ensureTrailingSlash($dir) . $filename);
+        $pathname = DirectoryUtil::ensureTrailingSlash($dir) . $filename;
+        $result = unlink($pathname);
+        self::assertTrue($result, "Deleted file {$pathname}.");
     }
 
-    protected static function fixSeparators(string $path)
+    protected static function fixSeparators(string $path): string
     {
         return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     }
@@ -133,9 +137,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $ignoreDir = DirectoryUtil::stripAncestor($ignoreDir, $dir);
 
-        $expected = array_map(static function ($path) {
-            return self::fixSeparators($path);
-        }, $expected);
+        $expected = array_map([self::class, 'fixSeparators'], $expected);
 
         $expected = array_filter($expected);
         asort($expected);
@@ -157,6 +159,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         self::assertEquals($expected, $actual, "Directory {$dir} contains the expected files.");
     }
 
+    /**
+     * Returns a flattened directory listing similar to what GNU find would,
+     * alphabetized for easier comparison. Example:
+     * ```php
+     * [
+     *     'adipiscing.txt',
+     *     'lorem/ipsum/dolor.txt',
+     *     'sit/amet.txt',
+     *     'sit/consectetur.txt',
+     * ];
+     * ```
+     */
     protected static function getFlatDirectoryListing(string $dir): array
     {
         $dir = DirectoryUtil::stripTrailingSlash($dir);
@@ -174,7 +188,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $pathname = $splFileInfo->getPathname();
             $listing[] = substr($pathname, strlen($dir) + 1);
         }
-        asort($listing);
+        sort($listing);
         return array_values($listing);
     }
 
