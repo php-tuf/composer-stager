@@ -13,6 +13,7 @@ parameters:
 
 rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule # Requires concrete non-application classes to be final.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule # Requires non-application/non-utility classes to have a corresponding interface.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInternalAnnotationRule # Requires non-domain classes to be marked internal.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\UtilityClassInstantiableRule # Requires utility classes to be non-instantiable.
