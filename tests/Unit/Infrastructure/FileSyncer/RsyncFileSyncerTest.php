@@ -70,7 +70,7 @@ class RsyncFileSyncerTest extends TestCase
                 'exclusions' => [],
                 'command' => [
                     '--archive',
-                    '--delete-during',
+                    '--delete-after',
                     '--verbose',
                     '--exclude=lorem/ipsum',
                     'lorem/ipsum' . DIRECTORY_SEPARATOR,
@@ -87,7 +87,7 @@ class RsyncFileSyncerTest extends TestCase
                 ],
                 'command' => [
                     '--archive',
-                    '--delete-during',
+                    '--delete-after',
                     '--verbose',
                     '--exclude=consectetur.txt',
                     '--exclude=adipiscing.php',
@@ -107,7 +107,7 @@ class RsyncFileSyncerTest extends TestCase
                 ],
                 'command' => [
                     '--archive',
-                    '--delete-during',
+                    '--delete-after',
                     '--verbose',
                     '--exclude=elit/sed',
                     '--exclude=consectetur/adipiscing',

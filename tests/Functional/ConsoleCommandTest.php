@@ -32,7 +32,7 @@ class ConsoleCommandTest extends TestCase
         return parent::runFrontScript(array_merge([
             '--active-dir=' . self::ACTIVE_DIR,
             '--staging-dir=' . self::STAGING_DIR,
-        ], $args), self::TEST_ENV);
+        ], $args), self::TEST_ENV_WORKING_DIR);
     }
 
     public function testBegin(): void
