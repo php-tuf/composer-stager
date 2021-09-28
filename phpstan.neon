@@ -4,6 +4,7 @@ parameters:
     paths:
         - bin/composer-stage
         - src
+        - .gitattributes
     exceptionRules:
         reportCheckedThrowsInGlobalScope: false
     ignoreErrors:
@@ -17,6 +18,7 @@ rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule # Requires non-application/non-utility classes to have a corresponding interface.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInternalAnnotationRule # Requires non-domain classes to be marked internal.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\UtilityClassInstantiableRule # Requires utility classes to be non-instantiable.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
     - PhpTuf\ComposerStager\Tests\PHPStan\Interfaces\InternalInterfaceRule # Forbids interfaces to be marked internal.
     - PhpTuf\ComposerStager\Tests\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods.
     - PhpTuf\ComposerStager\Tests\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing non-PhpTuf exceptions from non-application code public methods.
