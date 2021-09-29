@@ -63,18 +63,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $container;
     }
 
-    protected static function initializeComposerJson(): void
-    {
-        $process = new Process([
-            'composer',
-            '--working-dir=' . self::ACTIVE_DIR,
-            'init',
-            '--name=lorem/ipsum',
-            '--no-interaction',
-        ]);
-        $process->mustRun();
-    }
-
     protected static function runFrontScript(array $args, string $cwd = __DIR__): Process
     {
         $command = array_merge([

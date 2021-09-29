@@ -12,7 +12,6 @@ class ConsoleCommandTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::createTestEnvironment(self::ACTIVE_DIR);
-        self::initializeComposerJson();
     }
 
     public static function tearDownAfterClass(): void
@@ -38,11 +37,25 @@ class ConsoleCommandTest extends TestCase
 
     public function testBegin(): void
     {
+        self::initializeComposerJson();
+
         $process = self::runFrontScript(['begin']);
 
         self::assertSame('', $process->getErrorOutput());
         self::assertSame(0, $process->getExitCode());
         self::assertActiveAndStagingDirectoriesSame();
+    }
+
+    private static function initializeComposerJson(): void
+    {
+        $process = new Process([
+            'composer',
+            '--working-dir=' . TestCase::ACTIVE_DIR,
+            'init',
+            '--name=lorem/ipsum',
+            '--no-interaction',
+        ]);
+        $process->mustRun();
     }
 
     /**
