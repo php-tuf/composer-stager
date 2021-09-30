@@ -29,7 +29,7 @@ final class DirectoryUtil
      * @return string
      *   The resulting path, relative to the ancestor, e.g., "descendant".
      */
-    public static function stripAncestor(string $path, string $ancestor): string
+    public static function getPathRelativeToAncestor(string $path, string $ancestor): string
     {
         $ancestor = self::ensureTrailingSlash($ancestor);
         if (strpos($path, $ancestor) === 0) {

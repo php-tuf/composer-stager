@@ -106,18 +106,18 @@ class DirectoryUtilTest extends TestCase
     }
 
     /**
-     * @covers ::stripAncestor
+     * @covers ::getPathRelativeToAncestor
      *
-     * @dataProvider providerStripAncestor
+     * @dataProvider providerGetPathRelativeToAncestor
      */
-    public function testStripAncestor($path, $ancestor, $expected): void
+    public function testGetPathRelativeToAncestor($path, $ancestor, $expected): void
     {
-        $actual = DirectoryUtil::stripAncestor($path, $ancestor);
+        $actual = DirectoryUtil::getPathRelativeToAncestor($path, $ancestor);
 
         self::assertEquals($expected, $actual);
     }
 
-    public function providerStripAncestor(): array
+    public function providerGetPathRelativeToAncestor(): array
     {
         // UNIX-like OS paths.
         if (DIRECTORY_SEPARATOR === '/') {

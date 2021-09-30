@@ -123,7 +123,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = ''): void
     {
-        $ignoreDir = DirectoryUtil::stripAncestor($ignoreDir, $dir);
+        $ignoreDir = DirectoryUtil::getPathRelativeToAncestor($ignoreDir, $dir);
 
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 

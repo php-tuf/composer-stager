@@ -96,7 +96,7 @@ final class PhpFileSyncer implements FileSyncerInterface
             $this->filesystem->mkdir($this->destination);
 
             // Index it.
-            $source = DirectoryUtil::stripAncestor($this->source, $this->destination);
+            $source = DirectoryUtil::getPathRelativeToAncestor($this->source, $this->destination);
             $this->destinationFinder
                 ->in($this->destination)
                 ->notPath($this->exclusions)
@@ -137,7 +137,7 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function indexSource(): void
     {
         try {
-            $destination = DirectoryUtil::stripAncestor($this->destination, $this->source);
+            $destination = DirectoryUtil::getPathRelativeToAncestor($this->destination, $this->source);
             $destination = DirectoryUtil::ensureTrailingSlash($destination);
             $this->sourceFinder
                 ->in($this->source)
