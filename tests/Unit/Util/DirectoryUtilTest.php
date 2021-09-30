@@ -61,15 +61,6 @@ class DirectoryUtilTest extends TestCase
                 'givenPath' => 'h:',
                 'expectedPath' => 'h:',
             ],
-            // UNC paths:
-            [
-                'givenPath' => '\\\\drive\\share',
-                'expectedPath' => '\\\\drive\\share',
-            ],
-            [
-                'givenPath' => '\\\\Drive1\\Another_Share\\',
-                'expectedPath' => '\\\\Drive1\\Another_Share\\',
-            ],
         ];
     }
 
