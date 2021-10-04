@@ -49,12 +49,7 @@ final class DirectoryUtil
      */
     public static function stripTrailingSlash(string $path): string
     {
-        // Don't change an empty path.
-        if ($path === '') {
-            return '';
-        }
-
-        // Don't change a Windows drive letter root path.
+        // Don't change a Windows drive letter root path, e.g., "C:\".
         if (preg_match('/^[a-z]:\\\\?$/i', $path) === 1) {
             return $path;
         }
