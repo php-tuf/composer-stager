@@ -33,6 +33,10 @@ class DirectoryUtilTest extends TestCase
             ],
             // UNIX-like paths:
             [
+                'givenPath' => './',
+                'expectedPath' => '.',
+            ],
+            [
                 'givenPath' => '/',
                 'expectedPath' => '/',
             ],
@@ -46,16 +50,20 @@ class DirectoryUtilTest extends TestCase
             ],
             // Traditional DOS paths:
             [
+                'givenPath' => '.\\',
+                'expectedPath' => '.',
+            ],
+            [
+                'givenPath' => 'C:\\',
+                'expectedPath' => 'C:\\',
+            ],
+            [
                 'givenPath' => 'C:\Lorem\Ipsum',
                 'expectedPath' => 'C:\Lorem\Ipsum',
             ],
             [
                 'givenPath' => 'h:\Lorem\Ipsum\\',
                 'expectedPath' => 'h:\Lorem\Ipsum',
-            ],
-            [
-                'givenPath' => 'C:\\',
-                'expectedPath' => 'C:\\',
             ],
             [
                 'givenPath' => 'h:',
@@ -84,6 +92,10 @@ class DirectoryUtilTest extends TestCase
         return [
             [
                 'givenPath' => '',
+                'expectedPath' => './',
+            ],
+            [
+                'givenPath' => '.',
                 'expectedPath' => './',
             ],
             [
@@ -161,6 +173,21 @@ class DirectoryUtilTest extends TestCase
         }
         // Windows paths.
         return [
+            [
+                'path' => '',
+                'ancestor' => '',
+                'expected' => '',
+            ],
+            [
+                'path' => 'Lorem',
+                'ancestor' => 'Ipsum',
+                'expected' => 'Lorem',
+            ],
+            [
+                'path' => 'Lorem\\Ipsum',
+                'ancestor' => 'Lorem',
+                'expected' => 'Ipsum',
+            ],
             [
                 'path' => 'Lorem\Ipsum\Dolor\Sit\Amet',
                 'ancestor' => 'Lorem\Ipsum',
