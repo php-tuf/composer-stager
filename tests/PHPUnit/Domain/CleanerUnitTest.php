@@ -74,14 +74,14 @@ class CleanerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*exist/');
 
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(static::STAGING_DIR)
             ->willReturn(false);
         $this->filesystem
-            ->remove(static::STAGING_DIR_DEFAULT)
+            ->remove(static::STAGING_DIR)
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT, null);
+        $sut->clean(static::STAGING_DIR, null);
     }
 
     /**
@@ -92,12 +92,12 @@ class CleanerUnitTest extends TestCase
     public function testDirectoryExists($expected): void
     {
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(static::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->directoryExists(static::STAGING_DIR_DEFAULT);
+        $actual = $sut->directoryExists(static::STAGING_DIR);
 
         self::assertSame($expected, $actual, 'Correctly detected existence of staging directory.');
     }
@@ -123,6 +123,6 @@ class CleanerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR_DEFAULT, null);
+        $sut->clean(static::STAGING_DIR, null);
     }
 }

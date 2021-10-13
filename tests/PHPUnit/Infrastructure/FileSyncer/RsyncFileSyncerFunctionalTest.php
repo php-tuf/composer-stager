@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Functional\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
-use PhpTuf\ComposerStager\Tests\Functional\FileSyncer\FileSyncerTestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
@@ -17,7 +17,7 @@ use Symfony\Component\Process\ExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  */
-class RsyncFileSyncerTest extends FileSyncerTestCase
+class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {
     public static function setUpBeforeClass(): void
     {

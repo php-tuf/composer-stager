@@ -1,13 +1,14 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Functional;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Console\Command;
 
+use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Process\Process;
 
 /**
  * @coversNothing
  */
-class ConsoleCommandTest extends TestCase
+class EndToEndFunctionalTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {

@@ -153,7 +153,7 @@ class RsyncFileSyncerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->sync(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+        $sut->sync(self::ACTIVE_DIR, self::STAGING_DIR);
     }
 
     public function testSyncCreateDestinationDirectoryFailed(): void

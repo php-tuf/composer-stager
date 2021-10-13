@@ -20,7 +20,7 @@
             <directory suffix="UnitTest.php">tests/PHPUnit</directory>
         </testsuite>
         <testsuite name="Functional">
-            <directory suffix="Test.php">tests/Functional</directory>
+            <directory suffix="FunctionalTest.php">tests/PHPUnit</directory>
         </testsuite>
     </testsuites>
 

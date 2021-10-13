@@ -50,8 +50,8 @@ class CommitterUnitTest extends TestCase
     {
         $this->fileSyncer
             ->sync(
-                self::STAGING_DIR_DEFAULT,
-                self::ACTIVE_DIR_DEFAULT,
+                self::STAGING_DIR,
+                self::ACTIVE_DIR,
                 [],
                 null,
                 120
@@ -59,7 +59,7 @@ class CommitterUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit(self::STAGING_DIR_DEFAULT, self::ACTIVE_DIR_DEFAULT);
+        $sut->commit(self::STAGING_DIR, self::ACTIVE_DIR);
     }
 
     /**
@@ -173,12 +173,12 @@ class CommitterUnitTest extends TestCase
     public function testDirectoryExists($expected): void
     {
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(static::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->directoryExists(static::STAGING_DIR_DEFAULT);
+        $actual = $sut->directoryExists(static::STAGING_DIR);
 
         self::assertSame($expected, $actual, 'Correctly detected existence of staging directory.');
     }
@@ -204,6 +204,6 @@ class CommitterUnitTest extends TestCase
             ->willThrow(IOException::class);
         $sut = $this->createSut();
 
-        $sut->commit(self::STAGING_DIR_DEFAULT, self::ACTIVE_DIR_DEFAULT);
+        $sut->commit(self::STAGING_DIR, self::ACTIVE_DIR);
     }
 }

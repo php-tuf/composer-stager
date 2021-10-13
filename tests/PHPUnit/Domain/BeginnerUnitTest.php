@@ -29,10 +29,10 @@ class BeginnerUnitTest extends TestCase
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(self::ACTIVE_DIR_DEFAULT)
+            ->exists(self::ACTIVE_DIR)
             ->willReturn(true);
         $this->filesystem
-            ->exists(self::STAGING_DIR_DEFAULT)
+            ->exists(self::STAGING_DIR)
             ->willReturn(false);
     }
 
@@ -130,12 +130,12 @@ class BeginnerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/active directory.*not exist/');
 
         $this->filesystem
-            ->exists(self::ACTIVE_DIR_DEFAULT)
+            ->exists(self::ACTIVE_DIR)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+        $sut->begin(self::ACTIVE_DIR, self::STAGING_DIR);
     }
 
     /**
@@ -147,12 +147,12 @@ class BeginnerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory already exists/');
 
         $this->filesystem
-            ->exists(self::STAGING_DIR_DEFAULT)
+            ->exists(self::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+        $sut->begin(self::ACTIVE_DIR, self::STAGING_DIR);
     }
 
     /**
@@ -168,6 +168,6 @@ class BeginnerUnitTest extends TestCase
             ->willThrow(IOException::class);
         $sut = $this->createSut();
 
-        $sut->begin(self::ACTIVE_DIR_DEFAULT, self::STAGING_DIR_DEFAULT);
+        $sut->begin(self::ACTIVE_DIR, self::STAGING_DIR);
     }
 }

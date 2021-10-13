@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Functional\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
-use PhpTuf\ComposerStager\Tests\Functional\TestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
-abstract class FileSyncerTestCase extends TestCase
+abstract class FileSyncerFunctionalTestCase extends TestCase
 {
     private const PHP_FILE_SYNCER_ON_WINDOWS = 'windows';
 

@@ -34,10 +34,10 @@ class StagerUnitTest extends TestCase
         $this->composerRunner = $this->prophesize(ComposerRunnerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(static::STAGING_DIR)
             ->willReturn(true);
         $this->filesystem
-            ->isWritable(static::STAGING_DIR_DEFAULT)
+            ->isWritable(static::STAGING_DIR)
             ->willReturn(true);
     }
 
@@ -58,7 +58,7 @@ class StagerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, static::STAGING_DIR_DEFAULT, $callback, $timeout);
+        $sut->stage($givenCommand, static::STAGING_DIR, $callback, $timeout);
     }
 
     public function providerHappyPath(): array
@@ -67,7 +67,7 @@ class StagerUnitTest extends TestCase
             [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
-                    '--working-dir=' . self::STAGING_DIR_DEFAULT,
+                    '--working-dir=' . self::STAGING_DIR,
                     'update',
                 ],
                 'callback' => null,
@@ -76,7 +76,7 @@ class StagerUnitTest extends TestCase
             [
                 'givenCommand' => [static::INERT_COMMAND],
                 'expectedCommand' => [
-                    '--working-dir=' . self::STAGING_DIR_DEFAULT,
+                    '--working-dir=' . self::STAGING_DIR,
                     static::INERT_COMMAND,
                 ],
                 'callback' => new TestProcessOutputCallback(),
@@ -91,12 +91,12 @@ class StagerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*not exist/');
 
         $this->filesystem
-            ->exists(static::STAGING_DIR_DEFAULT)
+            ->exists(static::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR_DEFAULT);
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 
     public function testStagingDirectoryNotWritable(): void
@@ -105,12 +105,12 @@ class StagerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*not writable/');
 
         $this->filesystem
-            ->isWritable(static::STAGING_DIR_DEFAULT)
+            ->isWritable(static::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR_DEFAULT);
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 
     public function testEmptyCommand(): void
@@ -120,7 +120,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([], static::STAGING_DIR_DEFAULT);
+        $sut->stage([], static::STAGING_DIR);
     }
 
     public function testCommandContainsComposer(): void
@@ -133,7 +133,7 @@ class StagerUnitTest extends TestCase
         $sut->stage([
             'composer',
             static::INERT_COMMAND,
-        ], static::STAGING_DIR_DEFAULT);
+        ], static::STAGING_DIR);
     }
 
     /**
@@ -146,7 +146,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage($command, static::STAGING_DIR_DEFAULT);
+        $sut->stage($command, static::STAGING_DIR);
     }
 
     public function providerCommandContainsWorkingDirOption(): array
@@ -171,7 +171,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR_DEFAULT);
+        $sut->stage([static::INERT_COMMAND], static::STAGING_DIR);
     }
 
     public function providerProcessExceptions(): array

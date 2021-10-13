@@ -1,13 +1,15 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Functional;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Console;
+
+use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversNothing This actually covers the front script, obviously, but PHPUnit
  *   currently has no way to indicate coverage of a file as opposed to a class.
  * @see https://github.com/sebastianbergmann/phpunit/issues/3794
  */
-class FrontScriptTest extends TestCase
+class FrontScriptFunctionalTest extends TestCase
 {
     /**
      * @covers \PhpTuf\ComposerStager\Console\Application::__construct

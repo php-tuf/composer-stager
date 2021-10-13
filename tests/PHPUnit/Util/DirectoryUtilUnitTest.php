@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Util;
 
-use PhpTuf\ComposerStager\Tests\Functional\TestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use PhpTuf\ComposerStager\Util\DirectoryUtil;
 
 /**

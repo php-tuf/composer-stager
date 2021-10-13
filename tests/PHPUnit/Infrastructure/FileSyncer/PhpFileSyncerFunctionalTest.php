@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\Functional\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
-use PhpTuf\ComposerStager\Tests\Functional\FileSyncer\FileSyncerTestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\Tests\Functional\FileSyncer\FileSyncerTestCase;
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
  */
-class PhpFileSyncerTest extends FileSyncerTestCase
+class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {
     protected function createSut(): FileSyncerInterface
     {
