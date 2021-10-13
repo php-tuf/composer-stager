@@ -81,18 +81,18 @@ class CommitterTest extends TestCase
     {
         return [
             [
-                'stagingDir' => '/lorem/ipsum',
-                'activeDir' => '/dolor/sit',
+                'stagingDir' => '/one/two',
+                'activeDir' => '/three/four',
                 'givenExclusions' => null,
                 'expectedExclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
             [
-                'stagingDir' => 'amet/consectetur',
-                'activeDir' => 'adipiscing/elit',
-                'givenExclusions' => ['/sed/do'],
-                'expectedExclusions' => ['/sed/do'],
+                'stagingDir' => 'five/six',
+                'activeDir' => 'seven/eight',
+                'givenExclusions' => ['/nine/ten'],
+                'expectedExclusions' => ['/nine/ten'],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],
@@ -123,15 +123,15 @@ class CommitterTest extends TestCase
     {
         return [
             [
-                'stagingDir' => '/lorem/ipsum/staging',
-                'activeDir' => '/dolor/sit/active',
-                'missingDir' => '/dolor/sit/active',
+                'stagingDir' => '/one/two/staging',
+                'activeDir' => '/three/four/active',
+                'missingDir' => '/three/four/active',
                 'exceptionMessage' => '@active directory.*not exist.*/active@',
             ],
             [
-                'stagingDir' => 'amet/consectetur/staging',
-                'activeDir' => 'adipiscing/elit/active',
-                'missingDir' => 'amet/consectetur/staging',
+                'stagingDir' => 'five/six/staging',
+                'activeDir' => 'seven/eight/active',
+                'missingDir' => 'five/six/staging',
                 'exceptionMessage' => '@staging directory.*not exist.*staging@',
             ],
         ];
@@ -160,8 +160,8 @@ class CommitterTest extends TestCase
     public function providerActiveDirectoryNotWritable(): array
     {
         return [
-            ['activeDir' => '/lorem/ipsum'],
-            ['activeDir' => '/dolor/sit'],
+            ['activeDir' => '/one/two'],
+            ['activeDir' => '/three/four'],
         ];
     }
 

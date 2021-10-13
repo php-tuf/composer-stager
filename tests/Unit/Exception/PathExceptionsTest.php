@@ -48,18 +48,18 @@ class PathExceptionsTest extends TestCase
         return [
             // Defaults.
             [
-                'args' => ['/lorem'],
-                'path' => '/lorem',
+                'args' => ['/one'],
+                'path' => '/one',
                 'expectedPathMessage' => '',
-                'expectedDirectoryAlreadyExistsMessage' => 'Directory already exists: "/lorem"',
-                'expectedDirectoryNotFoundMessage' => 'No such directory: "/lorem"',
-                'expectedDirectoryNotWritableMessage' => 'Directory not writable: "/lorem"',
-                'expectedFileNotFoundMessage' => 'No such file: "/lorem"',
+                'expectedDirectoryAlreadyExistsMessage' => 'Directory already exists: "/one"',
+                'expectedDirectoryNotFoundMessage' => 'No such directory: "/one"',
+                'expectedDirectoryNotWritableMessage' => 'Directory not writable: "/one"',
+                'expectedFileNotFoundMessage' => 'No such file: "/one"',
             ],
             // Completely override message.
             [
-                'args' => ['/ipsum', 'Lorem ipsum'],
-                'path' => '/ipsum',
+                'args' => ['/two', 'Lorem ipsum'],
+                'path' => '/two',
                 'expectedPathMessage' => 'Lorem ipsum',
                 'expectedDirectoryAlreadyExistsMessage' => 'Lorem ipsum',
                 'expectedDirectoryNotFound' => 'Lorem ipsum',
@@ -68,13 +68,13 @@ class PathExceptionsTest extends TestCase
             ],
             // Override message with path substitution.
             [
-                'args' => ['/dolor/sit', 'Lorem ipsum: "%s"'],
-                'path' => '/dolor/sit',
-                'expectedDirectoryAlreadyExistsMessage' => 'Lorem ipsum: "/dolor/sit"',
-                'expectedPathMessage' => 'Lorem ipsum: "/dolor/sit"',
-                'expectedDirectoryNotFound' => 'Lorem ipsum: "/dolor/sit"',
-                'expectedDirectoryNotWritableMessage' => 'Lorem ipsum: "/dolor/sit"',
-                'expectedFileNotFound' => 'Lorem ipsum: "/dolor/sit"',
+                'args' => ['/three/four', 'Lorem ipsum: "%s"'],
+                'path' => '/three/four',
+                'expectedDirectoryAlreadyExistsMessage' => 'Lorem ipsum: "/three/four"',
+                'expectedPathMessage' => 'Lorem ipsum: "/three/four"',
+                'expectedDirectoryNotFound' => 'Lorem ipsum: "/three/four"',
+                'expectedDirectoryNotWritableMessage' => 'Lorem ipsum: "/three/four"',
+                'expectedFileNotFound' => 'Lorem ipsum: "/three/four"',
             ],
         ];
     }

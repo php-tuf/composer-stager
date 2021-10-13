@@ -102,11 +102,11 @@ class FilesystemTest extends TestCase
     {
         return [
             [
-                'path' => '/lorem/ipsum',
+                'path' => '/one/two',
                 'expected' => true,
             ],
             [
-                'path' => '/dolor/sit',
+                'path' => 'three/four',
                 'expected' => false,
             ],
         ];
@@ -206,13 +206,13 @@ class FilesystemTest extends TestCase
     {
         return [
             [
-                'path' => '/lorem/ipsum',
+                'path' => '/one/two',
                 'callback' => null,
                 'givenTimeout' => null,
                 'expectedTimeout' => 0,
             ],
             [
-                'path' => '/dolor/sit',
+                'path' => 'three/four',
                 'callback' => new TestProcessOutputCallback(),
                 'givenTimeout' => 10,
                 'expectedTimeout' => 10,

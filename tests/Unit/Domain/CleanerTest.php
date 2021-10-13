@@ -53,12 +53,12 @@ class CleanerTest extends TestCase
     {
         return [
             [
-                'path' => '/lorem/ipsum',
+                'path' => '/one/two',
                 'callback' => null,
                 'timeout' => null,
             ],
             [
-                'path' => '/dolor/sit',
+                'path' => 'three/four',
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],

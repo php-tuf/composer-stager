@@ -48,8 +48,8 @@ class BeginnerTest extends TestCase
      */
     public function testBeginWithMinimumParams(): void
     {
-        $activeDir = 'lorem/ipsum';
-        $stagingDir = 'dolor/sit';
+        $activeDir = 'one/two';
+        $stagingDir = 'three/four';
         $this->filesystem
             ->exists($activeDir)
             ->willReturn(true);
@@ -89,31 +89,31 @@ class BeginnerTest extends TestCase
     {
         return [
             [
-                'activeDir' => 'lorem/ipsum',
-                'stagingDir' => 'dolor/sit',
+                'activeDir' => 'one/two',
+                'stagingDir' => 'three/four',
                 'givenExclusions' => null,
                 'expectedExclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
             [
-                'activeDir' => 'dolor/sit',
-                'stagingDir' => 'lorem/ipsum',
-                'givenExclusions' => ['amet/consectetur'],
-                'expectedExclusions' => ['amet/consectetur'],
+                'activeDir' => 'five/six',
+                'stagingDir' => 'seven/eight',
+                'givenExclusions' => ['nine/ten'],
+                'expectedExclusions' => ['nine/ten'],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 100,
             ],
             [
-                'activeDir' => 'sit/amet',
-                'stagingDir' => 'amet/consectetur',
+                'activeDir' => 'eleven/twelve',
+                'stagingDir' => 'thirteen/fourteen',
                 'givenExclusions' => [
-                    'amet/consectetur',
-                    'adipiscing/elit',
+                    'thirteen/fourteen',
+                    'fifteen/sixteen',
                 ],
                 'expectedExclusions' => [
-                    'amet/consectetur',
-                    'adipiscing/elit',
+                    'thirteen/fourteen',
+                    'fifteen/sixteen',
                 ],
                 'callback' => null,
                 'timeout' => null,

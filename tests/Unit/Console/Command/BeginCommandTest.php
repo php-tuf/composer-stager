@@ -62,8 +62,8 @@ class BeginCommandTest extends CommandTestCase
      */
     public function testBasicExecution(): void
     {
-        $activeDir = 'lorem/ipsum';
-        $stagingDir = 'dolor/sit';
+        $activeDir = 'one/two';
+        $stagingDir = 'three/four';
         $this->beginner
             ->begin($activeDir, $stagingDir, null, Argument::type(ProcessOutputCallbackInterface::class))
             ->shouldBeCalledOnce();

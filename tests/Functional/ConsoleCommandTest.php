@@ -65,7 +65,7 @@ class ConsoleCommandTest extends TestCase
     {
         // A "composer config" command is a good one to stage to avoid "testing
         // the Internet" since it makes no HTTP requests.
-        $newName = 'dolor/sit';
+        $newName = 'three/four';
         self::runFrontScript([
             'stage',
             '--',

@@ -122,7 +122,7 @@ class DirectoryUtilTest extends TestCase
      *
      * @dataProvider providerGetPathRelativeToAncestor
      */
-    public function testGetPathRelativeToAncestor($path, $ancestor, $expected): void
+    public function testGetPathRelativeToAncestor($ancestor, $path, $expected): void
     {
         $actual = DirectoryUtil::getPathRelativeToAncestor($path, $ancestor);
 
@@ -134,74 +134,89 @@ class DirectoryUtilTest extends TestCase
         // UNIX-like OS paths.
         if (!self::isWindows()) {
             return [
-                [
-                    'path' => '',
+                'Match: single directory depth' => [
+                    'ancestor' => 'one',
+                    'path'     => 'one/two',
+                    'expected' =>     'two',
+                ],
+                'Match: multiple directories depth' => [
+                    'ancestor' => 'one/two',
+                    'path'     => 'one/two/three/four/five',
+                    'expected' =>         'three/four/five',
+                ],
+                'No match: no shared ancestor' => [
+                    'ancestor' => 'one/two',
+                    'path'     => 'three/four/five/six/seven',
+                    'expected' => 'three/four/five/six/seven',
+                ],
+                'No match: identical paths' => [
+                    'ancestor' => 'one',
+                    'path'     => 'one',
+                    'expected' => 'one',
+                ],
+                'No match: ancestor only as absolute path' => [
+                    'ancestor' => '/one/two',
+                    'path'     => 'one/two/three/four/five',
+                    'expected' => 'one/two/three/four/five',
+                ],
+                'No match: path only as absolute path' => [
+                    'ancestor' => 'one/two',
+                    'path'     => '/one/two/three/four/five',
+                    'expected' => '/one/two/three/four/five',
+                ],
+                'No match: sneaky "near match"' => [
+                    'ancestor' => 'one',
+                    'path'     => 'one_two',
+                    'expected' => 'one_two',
+                ],
+                'Special case: empty strings' => [
                     'ancestor' => '',
+                    'path'     => '',
                     'expected' => '',
-                ],
-                [
-                    'path' => 'lorem',
-                    'ancestor' => 'ipsum',
-                    'expected' => 'lorem',
-                ],
-                [
-                    'path' => 'lorem/ipsum',
-                    'ancestor' => 'lorem',
-                    'expected' => 'ipsum',
-                ],
-                [
-                    'path' => 'lorem/ipsum/dolor/sit/amet',
-                    'ancestor' => 'lorem/ipsum',
-                    'expected' => 'dolor/sit/amet',
-                ],
-                [
-                    'path' => 'lorem/ipsum/dolor/sit/amet',
-                    'ancestor' => 'ipsum/dolor',
-                    'expected' => 'lorem/ipsum/dolor/sit/amet',
-                ],
-                [
-                    'path' => 'lorem/ipsum/dolor/sit/amet',
-                    'ancestor' => '/lorem/ipsum',
-                    'expected' => 'lorem/ipsum/dolor/sit/amet',
-                ],
-                [
-                    'path' => '/lorem/ipsum/dolor/sit/amet',
-                    'ancestor' => 'lorem/ipsum',
-                    'expected' => '/lorem/ipsum/dolor/sit/amet',
                 ],
             ];
         }
         // Windows paths.
         return [
-            [
-                'path' => '',
+            'Match: single directory depth' => [
+                'ancestor' => 'One',
+                'path'     => 'One\\Two',
+                'expected' =>      'Two',
+            ],
+            'Match: multiple directories depth' => [
+                'ancestor' => 'One\\Two',
+                'path'     => 'One\\Two\\Three\\Four\\Five',
+                'expected' =>           'Three\\Four\\Five',
+            ],
+            'No match: no shared ancestor' => [
+                'ancestor' => 'One\\Two',
+                'path'     => 'Three\\Four\\Five\\Six\\Seven',
+                'expected' => 'Three\\Four\\Five\\Six\\Seven',
+            ],
+            'No match: identical paths' => [
+                'ancestor' => 'One',
+                'path'     => 'One',
+                'expected' => 'One',
+            ],
+            'No match: ancestor only as absolute path' => [
+                'ancestor' => '\\One\\Two',
+                'path'     => 'One\\Two\\Three\\Four\\Five',
+                'expected' => 'One\\Two\\Three\\Four\\Five',
+            ],
+            'No match: path only as absolute path' => [
+                'ancestor' => 'One\\Two',
+                'path'     => 'C:\\One\\Two\\Three\\Four',
+                'expected' => 'C:\\One\\Two\\Three\\Four',
+            ],
+            'No match: sneaky "near match"' => [
+                'ancestor' => 'One',
+                'path'     => 'One_Two',
+                'expected' => 'One_Two',
+            ],
+            'Special case: empty strings' => [
                 'ancestor' => '',
+                'path'     => '',
                 'expected' => '',
-            ],
-            [
-                'path' => 'Lorem',
-                'ancestor' => 'Ipsum',
-                'expected' => 'Lorem',
-            ],
-            [
-                'path' => 'Lorem\\Ipsum',
-                'ancestor' => 'Lorem',
-                'expected' => 'Ipsum',
-            ],
-            [
-                'path' => 'Lorem\Ipsum\Dolor\Sit\Amet',
-                'ancestor' => 'Lorem\Ipsum',
-                'expected' => 'Dolor\Sit\Amet',
-            ],
-            [
-                'path' => 'C:\Lorem\Ipsum\Dolor\Sit',
-                'ancestor' => 'Lorem\Ipsum',
-                'expected' => 'C:\Lorem\Ipsum\Dolor\Sit',
-            ],
-            [
-                'path' => 'C:\Lorem\Ipsum\Dolor\Sit',
-                'ancestor' => 'C:\Lorem\Ipsum',
-                'expected' => 'Dolor\Sit',
             ],
         ];
     }

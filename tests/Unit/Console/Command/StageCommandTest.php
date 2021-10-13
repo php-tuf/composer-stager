@@ -67,7 +67,7 @@ class StageCommandTest extends CommandTestCase
      *
      * @dataProvider providerBasicExecution
      */
-    public function testBasicExecution($composerCommand, $stagingDir, $output): void
+    public function testBasicExecution($composerCommand, $stagingDir): void
     {
         $this->stager
             ->stage($composerCommand, $stagingDir, Argument::any())
@@ -87,16 +87,14 @@ class StageCommandTest extends CommandTestCase
         return [
             [
                 'composerCommand' => [self::INERT_COMMAND],
-                'stagingDir' => 'lorem/ipsum',
-                'output' => 'lorem'
+                'stagingDir' => 'one/two',
             ],
             [
                 'composerCommand' => [
                     'update',
                     '--with-all-dependencies',
                 ],
-                'stagingDir' => 'dolor/sit',
-                'output' => 'ipsum'
+                'stagingDir' => 'three/four',
             ],
         ];
     }

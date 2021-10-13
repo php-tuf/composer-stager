@@ -85,12 +85,12 @@ class CommitCommandTest extends CommandTestCase
     {
         return [
             [
-                'activeDir' => '/lorem/ipsum',
-                'stagingDir' => '/dolor/sit',
+                'activeDir' => '/one/two',
+                'stagingDir' => '/three/four',
             ],
             [
-                'activeDir' => '/amet/consectetur',
-                'stagingDir' => '/adipiscing/elit',
+                'activeDir' => '/five/six',
+                'stagingDir' => '/seven/eight',
             ],
         ];
     }
