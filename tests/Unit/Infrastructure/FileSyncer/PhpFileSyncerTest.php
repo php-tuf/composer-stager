@@ -66,37 +66,42 @@ class PhpFileSyncerTest extends TestCase
      * @dataProvider providerSyncWithOptionalParams
      */
     public function testSyncWithOptionalParams(
-        $source,
+        $givenSource,
+        $expectedSource,
+        $shouldExcludeSource,
         $givenDestination,
         $expectedDestination,
+        $shouldExcludeDestination,
         $givenExclusions,
         $expectedExclusions,
         $callback,
         $givenTimeout,
         $expectedTimeout
     ): void {
-        self::fixSeparatorsMultiple($givenDestination, $expectedDestination);
+        self::fixSeparatorsMultiple($expectedSource, $givenDestination, $expectedDestination);
 
         $this->filesystem
             ->mkdir($givenDestination)
             ->shouldBeCalledOnce();
         $this->sourceFinder
             ->notPath($expectedExclusions)
-            ->shouldBeCalled()
+            ->shouldBeCalledOnce()
             ->willReturn($this->sourceFinder);
         $this->sourceFinder
-            ->notPath($expectedExclusions)
-            ->shouldBeCalled();
+            ->notPath($expectedDestination)
+            ->shouldBeCalledTimes((int) $shouldExcludeDestination)
+            ->willReturn($this->sourceFinder);
         $this->destinationFinder
             ->notPath($expectedExclusions)
-            ->shouldBeCalled()
+            ->shouldBeCalledOnce()
             ->willReturn($this->destinationFinder);
         $this->destinationFinder
-            ->notPath($source)
-            ->shouldBeCalled();
+            ->notPath($expectedSource)
+            ->shouldBeCalledTimes((int) $shouldExcludeSource)
+            ->willReturn($this->destinationFinder);
         $sut = $this->createSut();
 
-        $sut->sync($source, $givenDestination, $givenExclusions, $callback, $givenTimeout);
+        $sut->sync($givenSource, $givenDestination, $givenExclusions, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -105,9 +110,12 @@ class PhpFileSyncerTest extends TestCase
     {
         return [
             [
-                'source' => 'lorem',
+                'givenSource' => 'lorem',
+                'expectedSource' => 'lorem/',
+                'shouldExcludeSource' => true,
                 'givenDestination' => '',
-                'expectedDestination' => '',
+                'expectedDestination' => './',
+                'shouldExcludeDestination' => true,
                 'givenExclusions' => null,
                 'expectedExclusions' => [],
                 'callback' => null,
@@ -115,9 +123,38 @@ class PhpFileSyncerTest extends TestCase
                 'expectedTimeout' => 0,
             ],
             [
-                'source' => '',
+                'givenSource' => 'lorem',
+                'expectedSource' => 'lorem/',
+                'shouldExcludeSource' => true,
+                'givenDestination' => '.',
+                'expectedDestination' => './',
+                'shouldExcludeDestination' => true,
+                'givenExclusions' => null,
+                'expectedExclusions' => [],
+                'callback' => null,
+                'givenTimeout' => null,
+                'expectedTimeout' => 0,
+            ],
+            [
+                'givenSource' => '/lorem',
+                'expectedSource' => 'n/a',
+                'shouldExcludeSource' => false,
+                'givenDestination' => '/ipsum',
+                'expectedDestination' => 'n/a',
+                'shouldExcludeDestination' => false,
+                'givenExclusions' => null,
+                'expectedExclusions' => [],
+                'callback' => null,
+                'givenTimeout' => null,
+                'expectedTimeout' => 0,
+            ],
+            [
+                'givenSource' => '',
+                'expectedSource' => './',
+                'shouldExcludeSource' => true,
                 'givenDestination' => 'lorem',
                 'expectedDestination' => 'lorem/',
+                'shouldExcludeDestination' => true,
                 'givenExclusions' => [],
                 'expectedExclusions' => [],
                 'callback' => null,
@@ -125,9 +162,12 @@ class PhpFileSyncerTest extends TestCase
                 'expectedTimeout' => 0,
             ],
             [
-                'source' => '',
+                'givenSource' => '',
+                'expectedSource' => './',
+                'shouldExcludeSource' => true,
                 'givenDestination' => 'lorem/ipsum',
                 'expectedDestination' => 'lorem/ipsum/',
+                'shouldExcludeDestination' => true,
                 'givenExclusions' => [
                     'amet',
                     'consectetur',

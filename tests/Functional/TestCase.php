@@ -15,6 +15,7 @@ use Symfony\Component\Process\Process;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected const TEST_ENV = __DIR__ . '/../../var/phpunit/test-env';
+    protected const TEST_ENV_WORKING_DIR = self::TEST_ENV . '/working-dir';
     protected const ACTIVE_DIR = 'active-dir';
     protected const STAGING_DIR = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
@@ -25,8 +26,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $filesystem = new Filesystem();
 
         // Create the test environment,
-        $filesystem->mkdir(self::TEST_ENV);
-        chdir(self::TEST_ENV);
+        $filesystem->mkdir(self::TEST_ENV_WORKING_DIR);
+        chdir(self::TEST_ENV_WORKING_DIR);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
@@ -121,15 +122,23 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = ''): void
+    /**
+     * Asserts a flattened directory listing similar to what GNU find would
+     * return, alphabetized for easier comparison. Example:
+     * ```php
+     * [
+     *     'adipiscing.txt',
+     *     'lorem/ipsum/dolor.txt',
+     *     'sit/amet.txt',
+     *     'sit/consectetur.txt',
+     * ];
+     * ```
+     */
+    protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = '', string $message = ''): void
     {
         $ignoreDir = DirectoryUtil::getPathRelativeToAncestor($ignoreDir, $dir);
 
         $expected = array_map([self::class, 'fixSeparators'], $expected);
-
-        $expected = array_filter($expected);
-        asort($expected);
-        $expected = array_values($expected);
 
         $actual = self::getFlatDirectoryListing($dir);
         $actual = array_map(static function ($path) use ($ignoreDir) {
@@ -140,11 +149,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             return self::fixSeparators($path);
         }, $actual);
 
+        if ($message === '') {
+            $message = "Directory {$dir} contains the expected files.";
+        }
+
+        // Normalize arrays for comparison.
+        $expected = array_filter($expected);
+        asort($expected);
         $actual = array_filter($actual);
         asort($actual);
-        $actual = array_values($actual);
 
-        self::assertEquals($expected, $actual, "Directory {$dir} contains the expected files.");
+        // Make diffs easier to read by eliminating noise from numeric keys.
+        $expected = array_fill_keys($expected, 0);
+        $actual = array_fill_keys($actual, 0);
+
+        self::assertEquals($expected, $actual, $message);
     }
 
     /**
@@ -231,5 +250,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ]);
         $process->run();
         return $process->getOutput();
+    }
+
+    protected static function isWindows(): bool
+    {
+        return DIRECTORY_SEPARATOR !== '/';
     }
 }

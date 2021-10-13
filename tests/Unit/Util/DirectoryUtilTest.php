@@ -132,7 +132,7 @@ class DirectoryUtilTest extends TestCase
     public function providerGetPathRelativeToAncestor(): array
     {
         // UNIX-like OS paths.
-        if (DIRECTORY_SEPARATOR === '/') {
+        if (!self::isWindows()) {
             return [
                 [
                     'path' => '',
