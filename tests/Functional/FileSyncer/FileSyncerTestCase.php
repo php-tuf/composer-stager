@@ -121,7 +121,7 @@ abstract class FileSyncerTestCase extends TestCase
 
     public function providerDirectories(): array
     {
-        $random = md5(time());
+        $random = uniqid('', true);
         $tempDir = sprintf('%s/composer-stager/%s', sys_get_temp_dir(), $random);
         return [
             'Siblings: no trailing slashes' => [
