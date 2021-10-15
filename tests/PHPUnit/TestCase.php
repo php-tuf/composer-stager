@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
 use PhpTuf\ComposerStager\Util\PathUtil;
 use Prophecy\PhpUnit\ProphecyTrait;
+use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Container;
@@ -17,8 +18,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
 
-    protected const TEST_ENV = __DIR__ . '/../../var/phpunit/test-env';
-    protected const TEST_ENV_WORKING_DIR = self::TEST_ENV . '/working-dir';
+    protected const TEST_ENV_CONTAINER = __DIR__ . '/../../var/phpunit/test-env-container';
+    protected const TEST_ENV = self::TEST_ENV_CONTAINER . '/test-env';
     protected const ACTIVE_DIR = 'active-dir';
     protected const STAGING_DIR = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
@@ -29,8 +30,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $filesystem = new Filesystem();
 
         // Create the test environment,
-        $filesystem->mkdir(self::TEST_ENV_WORKING_DIR);
-        chdir(self::TEST_ENV_WORKING_DIR);
+        $filesystem->mkdir(self::TEST_ENV);
+        chdir(self::TEST_ENV);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
@@ -40,14 +41,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function removeTestEnvironment(): void
     {
         $filesystem = new Filesystem();
-        if ($filesystem->exists(self::TEST_ENV)) {
+        if ($filesystem->exists(self::TEST_ENV_CONTAINER)) {
             try {
-                $filesystem->remove(self::TEST_ENV);
+                $filesystem->remove(self::TEST_ENV_CONTAINER);
             } catch (IOException $e) {
                 // @todo Windows chokes on this every time, e.g.,
                 //    | Failed to remove directory
-                //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env":
-                //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env):
+                //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
+                //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container):
                 //    | Resource temporarily unavailable.
                 //   Obviously, this error suppression is likely to bite us in the future
                 //   even though it doesn't seem to cause any problems now. Fix it.
@@ -130,31 +131,28 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * return, alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'adipiscing.txt',
+     *     'elit.txt',
      *     'lorem/ipsum/dolor.txt',
      *     'sit/amet.txt',
-     *     'sit/consectetur.txt',
+     *     'consectetur/adipiscing.txt',
      * ];
      * ```
      */
     protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = '', string $message = ''): void
     {
-        $ignoreDir = PathUtil::getPathRelativeToAncestor($ignoreDir, $dir);
-
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
-        $actual = array_map(static function ($path) use ($ignoreDir) {
+        $actual = array_map(static function ($path) use ($dir, $ignoreDir) {
+            // Paths must be prefixed with the given directory for "ignored paths"
+            // matching but returned un-prefixed for later expectation comparison.
+            $matchPath = PathUtil::ensureTrailingSlash($dir) . $path;
             $ignoreDir = PathUtil::ensureTrailingSlash($ignoreDir);
-            if (strpos($path, $ignoreDir) === 0) {
+            if (strpos($matchPath, $ignoreDir) === 0) {
                 return false;
             }
             return self::fixSeparators($path);
         }, $actual);
-
-        if ($message === '') {
-            $message = "Directory {$dir} contains the expected files.";
-        }
 
         // Normalize arrays for comparison.
         $expected = array_filter($expected);
@@ -166,7 +164,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $expected = array_fill_keys($expected, 0);
         $actual = array_fill_keys($actual, 0);
 
+        if ($message === '') {
+            $message = "Directory {$dir} contains the expected files.";
+        }
         self::assertEquals($expected, $actual, $message);
+    }
+
+    protected static function getDirectoryContents(string $dir): array
+    {
+        $dir = PathUtil::ensureTrailingSlash($dir);
+        $dirListing = self::getFlatDirectoryListing($dir);
+
+        $contents = [];
+        foreach ($dirListing as $pathname) {
+            $contents[$pathname] = file_get_contents($dir . $pathname);
+        }
+        return $contents;
     }
 
     /**
@@ -174,10 +187,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'adipiscing.txt',
+     *     'elit.txt',
      *     'lorem/ipsum/dolor.txt',
      *     'sit/amet.txt',
-     *     'sit/consectetur.txt',
+     *     'consectetur/adipiscing.txt',
      * ];
      * ```
      */
@@ -186,7 +199,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $dir = PathUtil::stripTrailingSlash($dir);
 
         $iterator = new RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir)
+            new RecursiveDirectoryIterator($dir)
         );
 
         $listing = [];
