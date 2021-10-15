@@ -80,9 +80,6 @@ final class PhpFileSyncer implements FileSyncerInterface
         } catch (IOException | LogicException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
-
-        // @todo Reset Symfony Finders so they aren't polluted if this class is
-        //   used again within the same PHP process.
     }
 
     /**
@@ -96,14 +93,19 @@ final class PhpFileSyncer implements FileSyncerInterface
             $this->filesystem->mkdir($this->destination);
 
             // Index it.
-            $source = DirectoryUtil::stripAncestor($this->source, $this->destination);
+            $source = DirectoryUtil::getPathRelativeToAncestor($this->source, $this->destination);
+            $source = DirectoryUtil::ensureTrailingSlash($source);
             $this->destinationFinder
                 ->in($this->destination)
-                ->notPath($this->exclusions)
-                // @todo Excluding the source makes it work when the
-                //   destination is inside the source, but causes it to fail
-                //   when the destination is an absolute path.
-                ->notPath($source);
+                ->notPath($this->exclusions);
+            // Exclude the source directory in order to prevent a Finder
+            // AccessDeniedException if it is an ancestor of the destination
+            // directory (i.e., if it is "underneath" or "inside" it)--unless it
+            // is a UNIX-like absolute path, which triggers a bug in Finder.
+            // @see https://github.com/symfony/symfony/issues/43282
+            if ($source[0] !== '/') {
+                $this->destinationFinder->notPath($source);
+            }
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException | IOException $e) {
             throw new ProcessFailedException(sprintf(
                 'The destination directory could not be created at "%s".',
@@ -137,15 +139,19 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function indexSource(): void
     {
         try {
-            $destination = DirectoryUtil::stripAncestor($this->destination, $this->source);
+            $destination = DirectoryUtil::getPathRelativeToAncestor($this->destination, $this->source);
             $destination = DirectoryUtil::ensureTrailingSlash($destination);
             $this->sourceFinder
                 ->in($this->source)
-                ->notPath($this->exclusions)
-                // @todo Excluding the destination makes it work when the
-                //   destination is inside the source, but causes it to fail
-                //   when the destination is an absolute path.
-                ->notPath($destination);
+                ->notPath($this->exclusions);
+            // Exclude the destination directory in order to prevent infinite
+            // recursion if it is a descendant of the source directory (i.e., if
+            // it is "underneath" or "inside" it)--unless it is a UNIX-like
+            // absolute path, which triggers a bug in Finder.
+            // @see https://github.com/symfony/symfony/issues/43282
+            if ($destination[0] !== '/') {
+                $this->sourceFinder->notPath($destination);
+            }
         } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
             throw new DirectoryNotFoundException(
                 $this->source,

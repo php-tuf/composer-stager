@@ -15,21 +15,24 @@ final class DirectoryUtil
     }
 
     /**
-     * Makes a path relative to a given ancestor by stripping said ancestor from
-     * the front of it.
+     * Makes a path relative to a given ancestor by stripping said ancestor
+     * (as-given) from the front of it.
      *
-     * If the path is not a descendant of the ancestor (i.e., it does not begin
-     * with the ancestor), it will be returned unchanged, with no error.
+     * Note: this method is not robust. It uses string comparison only. It does
+     * no validation and only very limited normalization. It is only fit for
+     * simple cases where the range of possible input is well-known and limited.
      *
      * @param string $path
-     *   The path to strip the ancestor from, e.g., "/var/www/ancestor/descendant".
+     *   The path to strip the ancestor from, e.g., "ancestor/descendant".
      * @param string $ancestor
-     *   The ancestor to strip from the path, e.g., "/var/www/ancestor".
+     *   The ancestor to strip from the path, e.g., "ancestor".
      *
      * @return string
-     *   The resulting path, relative to the ancestor, e.g., "descendant".
+     *   The resulting path, relative to the ancestor, e.g., "descendant". If
+     *   the path is not a descendant of the ancestor (i.e., it does not begin
+     *   with the ancestor), it will be returned unchanged, with no error.
      */
-    public static function stripAncestor(string $path, string $ancestor): string
+    public static function getPathRelativeToAncestor(string $path, string $ancestor): string
     {
         $ancestor = self::ensureTrailingSlash($ancestor);
         if (strpos($path, $ancestor) === 0) {
@@ -43,24 +46,14 @@ final class DirectoryUtil
      *
      * @param string $path
      *   Any path, absolute or relative, existing or not. Empty paths and device
-     *   roots will be returned unchanged--but note that Windows UNC (Universal
-     *   Naming Convention) root path detection is not robust. No validation is
-     *   done to ensure that given paths are valid.
-     *
-     * @see https://www.linux.com/training-tutorials/absolute-path-vs-relative-path-linuxunix/
-     * @see https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+     *   roots will be returned unchanged. Remote paths and UNC (Universal
+     *   Naming Convention) paths are not supported. No validation is done to
+     *   ensure that given paths are valid.
      */
     public static function stripTrailingSlash(string $path): string
     {
-        // Don't change an empty path.
-        if ($path === '') {
-            return '';
-        }
-
-        // Don't change a Windows drive-letter-or-UNC root path.
-        // @see \PhpTuf\ComposerStager\Tests\Unit\Util\DirectoryUtilTest::testStripTrailingSlash
-        // @see https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch08s18.html
-        if (preg_match('/^([a-z]:\\\\?$)|(\\\\\\\\[a-z0-9_-]+\\\\[a-z0-9_-]+\\\\?$)/i', $path) === 1) {
+        // Don't change a Windows drive letter root path, e.g., "C:\".
+        if (preg_match('/^[a-z]:\\\\?$/i', $path) === 1) {
             return $path;
         }
 

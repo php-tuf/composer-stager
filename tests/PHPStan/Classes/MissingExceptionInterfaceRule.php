@@ -6,14 +6,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
+use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires concrete non-application classes to be final.
- *
- * @see https://ocramius.github.io/blog/when-to-declare-classes-final/
+ * Requires throwable classes to implement ExceptionInterface.
  */
-class ConcreteClassNotFinalRule extends AbstractRule
+class MissingExceptionInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {
@@ -24,15 +23,13 @@ class ConcreteClassNotFinalRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
-        if ($class->isInterface() ||
-            $class->isAbstract() ||
-            $this->isThrowable($class)
-        ) {
-            return [];
+        if (!$this->isThrowable($class)) {
+            return[];
         }
 
-        if (!$class->isFinalByKeyword()) {
-            return [RuleErrorBuilder::message('Concrete non-application class must be final')->build()];
+        if (!array_key_exists(ExceptionInterface::class, $class->getInterfaces())) {
+            $message = sprintf('Throwable class must implement %s', ExceptionInterface::class);
+            return [RuleErrorBuilder::message($message)->build()];
         }
 
         return [];

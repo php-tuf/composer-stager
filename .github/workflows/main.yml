@@ -18,6 +18,51 @@ on:
         -   cron: "0 0 * * 1"
 
 jobs:
+    static_analysis:
+        name: "Static Analysis"
+        runs-on: macos-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php: [ "7.4" ]
+        steps:
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "${{ matrix.php }}"
+                    coverage: xdebug2
+
+            -   name: "Checkout code"
+                uses: actions/checkout@v2 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v1 # https://github.com/marketplace/actions/install-composer-dependencies
+                with:
+                    # Disable Composer caching due to random failures it causes.
+                    # @see https://github.com/ramsey/composer-install/issues/79
+                    composer-options: "--no-cache"
+
+            -   name: "Validate composer.json"
+                run: "composer validate"
+
+            -   name: "Lint PHP"
+                run: "composer lint"
+
+            -   name: "Run PHPCS"
+                run: "composer phpcs"
+
+            -   name: "Run PHPStan"
+                run: "composer phpstan"
+
+            -   name: "Run Psalm"
+                run: "composer psalm"
+
+            -   name: "Run PHPMD"
+                run: "composer phpmd"
+
+            -   name: "Check dependencies for known security vulnerabilities"
+                run: "composer security"
+
     coverage:
         name: "Code Coverage"
         runs-on: ubuntu-latest
@@ -46,7 +91,7 @@ jobs:
                 run: "composer coverage"
 
     tests:
-        name: "Test: ${{ matrix.os }}, ${{ matrix.dependencies }}, PHP ${{ matrix.php }}"
+        name: "Test: ${{ matrix.os }}, ${{ matrix.dependencies }} (${{ matrix.php }})"
         runs-on: "${{ matrix.os }}"
         strategy:
             fail-fast: false
@@ -72,27 +117,5 @@ jobs:
                     # @see https://github.com/ramsey/composer-install/issues/79
                     composer-options: "--no-cache"
 
-            -   name: "Validate composer.json"
-                run: "composer validate"
-
-            -   name: "Lint PHP"
-                run: "composer lint"
-
-            -   name: "Run PHPCS"
-                if: "matrix.os != 'windows-latest'" # Windows line endings wreak havoc with coding standards.
-                run: "composer phpcs"
-
-            -   name: "Run PHPStan"
-                run: "composer phpstan"
-
-            -   name: "Run Psalm"
-                run: "composer psalm"
-
-            -   name: "Run PHPMD"
-                run: "composer phpmd"
-
-            -   name: "Run PHPUnit"
+            -   name: "Run Tests"
                 run: "composer test"
-
-            -   name: "Check dependencies for known security vulnerabilities"
-                run: "composer security"
