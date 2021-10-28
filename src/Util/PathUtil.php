@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Util;
 /**
  * @internal
  */
-final class DirectoryUtil
+final class PathUtil
 {
     /**
      * @codeCoverageIgnore

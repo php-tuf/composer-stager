@@ -16,7 +16,7 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
+ * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Finder\Finder sourceFinder

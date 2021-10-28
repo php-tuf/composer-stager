@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
-use PhpTuf\ComposerStager\Util\DirectoryUtil;
+use PhpTuf\ComposerStager\Util\PathUtil;
 
 /**
  * @internal
@@ -65,9 +65,9 @@ final class RsyncFileSyncer implements FileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = DirectoryUtil::ensureTrailingSlash($source);
+        $command[] = PathUtil::ensureTrailingSlash($source);
 
-        $command[] = DirectoryUtil::ensureTrailingSlash($destination);
+        $command[] = PathUtil::ensureTrailingSlash($destination);
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)

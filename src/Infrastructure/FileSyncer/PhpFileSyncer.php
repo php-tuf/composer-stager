@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Util\DirectoryUtil;
+use PhpTuf\ComposerStager\Util\PathUtil;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -93,8 +93,8 @@ final class PhpFileSyncer implements FileSyncerInterface
             $this->filesystem->mkdir($this->destination);
 
             // Index it.
-            $source = DirectoryUtil::getPathRelativeToAncestor($this->source, $this->destination);
-            $source = DirectoryUtil::ensureTrailingSlash($source);
+            $source = PathUtil::getPathRelativeToAncestor($this->source, $this->destination);
+            $source = PathUtil::ensureTrailingSlash($source);
             $this->destinationFinder
                 ->in($this->destination)
                 ->notPath($this->exclusions);
@@ -120,7 +120,7 @@ final class PhpFileSyncer implements FileSyncerInterface
      */
     private function deleteExtraneousFilesFromDestination(): void
     {
-        $source = DirectoryUtil::ensureTrailingSlash($this->source);
+        $source = PathUtil::ensureTrailingSlash($this->source);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $destinationFileInfo */
         foreach ($this->destinationFinder as $destinationFileInfo) {
@@ -139,8 +139,8 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function indexSource(): void
     {
         try {
-            $destination = DirectoryUtil::getPathRelativeToAncestor($this->destination, $this->source);
-            $destination = DirectoryUtil::ensureTrailingSlash($destination);
+            $destination = PathUtil::getPathRelativeToAncestor($this->destination, $this->source);
+            $destination = PathUtil::ensureTrailingSlash($destination);
             $this->sourceFinder
                 ->in($this->source)
                 ->notPath($this->exclusions);
@@ -170,7 +170,7 @@ final class PhpFileSyncer implements FileSyncerInterface
      */
     private function copyNewFilesToDestination(): void
     {
-        $destination = DirectoryUtil::ensureTrailingSlash($this->destination);
+        $destination = PathUtil::ensureTrailingSlash($this->destination);
 
         /** @var \Symfony\Component\Finder\SplFileInfo $sourceFileInfo */
         foreach ($this->sourceFinder as $sourceFileInfo) {

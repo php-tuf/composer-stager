@@ -15,7 +15,7 @@
     </rule>
     <rule ref="rulesets/cleancode.xml/StaticAccess">
         <properties>
-            <property name="exceptions" value="\PhpTuf\ComposerStager\Util\DirectoryUtil"/>
+            <property name="exceptions" value="\PhpTuf\ComposerStager\Util\PathUtil"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml"/>

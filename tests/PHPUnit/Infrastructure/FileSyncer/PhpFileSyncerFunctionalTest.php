@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunc
  * @covers ::sync
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
+ * @uses \PhpTuf\ComposerStager\Util\PathUtil
  */
 class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {

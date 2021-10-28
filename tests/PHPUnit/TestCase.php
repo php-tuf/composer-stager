@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
-use PhpTuf\ComposerStager\Util\DirectoryUtil;
+use PhpTuf\ComposerStager\Util\PathUtil;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveIteratorIterator;
 use Symfony\Component\Config\FileLocator;
@@ -98,7 +98,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected static function changeFile($dir, $filename): void
     {
-        $pathname = DirectoryUtil::ensureTrailingSlash($dir) . $filename;
+        $pathname = PathUtil::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents(
             $pathname,
             self::CHANGED_CONTENT
@@ -108,7 +108,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected static function deleteFile($dir, $filename): void
     {
-        $pathname = DirectoryUtil::ensureTrailingSlash($dir) . $filename;
+        $pathname = PathUtil::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
         self::assertTrue($result, "Deleted file {$pathname}.");
     }
@@ -139,13 +139,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = '', string $message = ''): void
     {
-        $ignoreDir = DirectoryUtil::getPathRelativeToAncestor($ignoreDir, $dir);
+        $ignoreDir = PathUtil::getPathRelativeToAncestor($ignoreDir, $dir);
 
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
         $actual = array_map(static function ($path) use ($ignoreDir) {
-            $ignoreDir = DirectoryUtil::ensureTrailingSlash($ignoreDir);
+            $ignoreDir = PathUtil::ensureTrailingSlash($ignoreDir);
             if (strpos($path, $ignoreDir) === 0) {
                 return false;
             }
@@ -183,7 +183,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected static function getFlatDirectoryListing(string $dir): array
     {
-        $dir = DirectoryUtil::stripTrailingSlash($dir);
+        $dir = PathUtil::stripTrailingSlash($dir);
 
         $iterator = new RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dir)
@@ -205,7 +205,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function assertFileChanged($dir, $path, $message = ''): void
     {
         self::assertStringEqualsFile(
-            DirectoryUtil::ensureTrailingSlash($dir) . $path,
+            PathUtil::ensureTrailingSlash($dir) . $path,
             self::CHANGED_CONTENT,
             $message
         );
@@ -214,7 +214,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function assertFileNotChanged($dir, $path, $message = ''): void
     {
         self::assertStringEqualsFile(
-            DirectoryUtil::ensureTrailingSlash($dir) . $path,
+            PathUtil::ensureTrailingSlash($dir) . $path,
             self::ORIGINAL_CONTENT,
             $message
         );

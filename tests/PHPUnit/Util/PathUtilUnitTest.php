@@ -3,14 +3,14 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Util;
 
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
-use PhpTuf\ComposerStager\Util\DirectoryUtil;
+use PhpTuf\ComposerStager\Util\PathUtil;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Util\DirectoryUtil
- * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil::ensureTrailingSlash
- * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil::stripTrailingSlash
+ * @coversDefaultClass \PhpTuf\ComposerStager\Util\PathUtil
+ * @uses \PhpTuf\ComposerStager\Util\PathUtil::ensureTrailingSlash
+ * @uses \PhpTuf\ComposerStager\Util\PathUtil::stripTrailingSlash
  */
-class DirectoryUtilUnitTest extends TestCase
+class PathUtilUnitTest extends TestCase
 {
     /**
      * @covers ::stripTrailingSlash
@@ -19,7 +19,7 @@ class DirectoryUtilUnitTest extends TestCase
      */
     public function testStripTrailingSlash($givenPath, $expectedPath): void
     {
-        $actual = DirectoryUtil::stripTrailingSlash($givenPath);
+        $actual = PathUtil::stripTrailingSlash($givenPath);
 
         self::assertEquals($expectedPath, $actual);
     }
@@ -82,7 +82,7 @@ class DirectoryUtilUnitTest extends TestCase
     {
         self::fixSeparatorsMultiple($givenPath, $expectedPath);
 
-        $actual = DirectoryUtil::ensureTrailingSlash($givenPath);
+        $actual = PathUtil::ensureTrailingSlash($givenPath);
 
         self::assertEquals($expectedPath, $actual);
     }
@@ -124,7 +124,7 @@ class DirectoryUtilUnitTest extends TestCase
      */
     public function testGetPathRelativeToAncestor($ancestor, $path, $expected): void
     {
-        $actual = DirectoryUtil::getPathRelativeToAncestor($path, $ancestor);
+        $actual = PathUtil::getPathRelativeToAncestor($path, $ancestor);
 
         self::assertEquals($expected, $actual);
     }
