@@ -83,8 +83,8 @@ class CommitterUnitTest extends TestCase
             [
                 'stagingDir' => '/one/two',
                 'activeDir' => '/three/four',
-                'givenExclusions' => null,
-                'expectedExclusions' => null,
+                'givenExclusions' => [],
+                'expectedExclusions' => [],
                 'callback' => null,
                 'timeout' => null,
             ],

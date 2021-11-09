@@ -18,7 +18,7 @@ interface CommitterInterface
      * @param string $activeDir
      *   The active directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/public" or "public".
-     * @param string[]|null $exclusions
+     * @param string[] $exclusions
      *   Paths to exclude, relative to the active directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
      * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
@@ -39,7 +39,7 @@ interface CommitterInterface
     public function commit(
         string $stagingDir,
         string $activeDir,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;

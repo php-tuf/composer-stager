@@ -58,7 +58,7 @@ final class CommitCommand extends AbstractCommand
             $this->committer->commit(
                 $stagingDir,
                 $activeDir,
-                null,
+                [],
                 new ProcessOutputCallback($input, $output)
             );
 

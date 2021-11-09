@@ -68,7 +68,7 @@ class CommitCommandUnitTest extends CommandTestCase
     public function testBasicExecution($activeDir, $stagingDir): void
     {
         $this->committer
-            ->commit($stagingDir, $activeDir, null, Argument::type(ProcessOutputCallbackInterface::class))
+            ->commit($stagingDir, $activeDir, [], Argument::type(ProcessOutputCallbackInterface::class))
             ->shouldBeCalledOnce();
 
         $this->executeCommand([
