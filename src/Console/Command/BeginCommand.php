@@ -47,7 +47,7 @@ final class BeginCommand extends AbstractCommand
             $this->beginner->begin(
                 $activeDir,
                 $stagingDir,
-                null,
+                [],
                 new ProcessOutputCallback($input, $output)
             );
 
