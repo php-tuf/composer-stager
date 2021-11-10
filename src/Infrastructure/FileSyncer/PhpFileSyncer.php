@@ -62,13 +62,13 @@ final class PhpFileSyncer implements FileSyncerInterface
     public function sync(
         string $source,
         string $destination,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $this->source = $source;
         $this->destination = $destination;
-        $this->exclusions = array_unique((array) $exclusions);
+        $this->exclusions = array_unique($exclusions);
 
         set_time_limit((int) $timeout);
 

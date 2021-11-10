@@ -31,7 +31,7 @@ final class Beginner implements BeginnerInterface
     public function begin(
         string $activeDir,
         string $stagingDir,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {

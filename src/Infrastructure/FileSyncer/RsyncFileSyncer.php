@@ -34,7 +34,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
     public function sync(
         string $source,
         string $destination,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {

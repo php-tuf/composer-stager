@@ -31,7 +31,7 @@ final class Committer implements CommitterInterface
     public function commit(
         string $stagingDir,
         string $activeDir,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {

@@ -91,8 +91,8 @@ class BeginnerUnitTest extends TestCase
             [
                 'activeDir' => 'one/two',
                 'stagingDir' => 'three/four',
-                'givenExclusions' => null,
-                'expectedExclusions' => null,
+                'givenExclusions' => [],
+                'expectedExclusions' => [],
                 'callback' => null,
                 'timeout' => null,
             ],

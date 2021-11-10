@@ -65,7 +65,7 @@ class BeginCommandUnitTest extends CommandTestCase
         $activeDir = 'one/two';
         $stagingDir = 'three/four';
         $this->beginner
-            ->begin($activeDir, $stagingDir, null, Argument::type(ProcessOutputCallbackInterface::class))
+            ->begin($activeDir, $stagingDir, [], Argument::type(ProcessOutputCallbackInterface::class))
             ->shouldBeCalledOnce();
 
         $this->executeCommand([

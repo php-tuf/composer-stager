@@ -18,7 +18,7 @@ interface BeginnerInterface
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param string[]|null $exclusions
+     * @param string[] $exclusions
      *   Paths to exclude, relative to the active directory. Careful use of
      *   exclusions can reduce execution time and disk usage. Two kinds of files
      *   and directories are good candidates for exclusion:
@@ -50,7 +50,7 @@ interface BeginnerInterface
     public function begin(
         string $activeDir,
         string $stagingDir,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;

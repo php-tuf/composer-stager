@@ -25,7 +25,7 @@ interface FileSyncerInterface
      *   The directory to sync files to, as an absolute path or relative to the
      *   current working directory (CWD), e.g., "/var/www/destination" or
      *   "destination". If it does not exist it will be created.
-     * @param string[]|null $exclusions
+     * @param string[] $exclusions
      *   An array of paths to exclude, relative to the source directory. Absolute
      *   paths are silently ignored. The destination directory is automatically
      *   excluded in order to prevent infinite recursion if it is a descendant of
@@ -46,7 +46,7 @@ interface FileSyncerInterface
     public function sync(
         string $source,
         string $destination,
-        ?array $exclusions = [],
+        array $exclusions = [],
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
