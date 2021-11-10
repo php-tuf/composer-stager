@@ -100,6 +100,7 @@
             "@coverage",
             "@security"
         ],
+        "ccc": "rm -r var/* &> /dev/null || true",
         "coverage": "phpunit --coverage-html $(pwd)/var/phpunit/coverage-report --coverage-text --color=always | grep --invert-match --extended-regexp '(^PhpTuf\\.*\\\\|Methods)'",
         "functional": "phpunit --no-coverage --testsuite=Functional",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
@@ -123,6 +124,7 @@
     },
     "scripts-descriptions": {
         "all": "Runs all automated tests and static analysis tools.",
+        "ccc": "Clears the script caches in the \"var\" directory.",
         "coverage": "Runs PHPUnit tests with code coverage.",
         "functional": "Runs functional tests.",
         "lint": "Lints PHP files.",
