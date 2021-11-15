@@ -10,7 +10,6 @@ services:
         resource: '../src/*'
         public: true
         exclude:
-            - '../src/Console/Output'
             - '../src/Exception'
 
     PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory:

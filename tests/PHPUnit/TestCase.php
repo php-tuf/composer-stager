@@ -68,17 +68,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $container;
     }
 
-    protected static function runFrontScript(array $args, string $cwd = __DIR__): Process
-    {
-        $command = array_merge([
-            'bin' => 'php',
-            'scriptPath' => realpath(__DIR__ . '/../../bin/composer-stage'),
-        ], $args);
-        $process = new Process($command, $cwd);
-        $process->mustRun();
-        return $process;
-    }
-
     protected static function createFiles(string $baseDir, array $filenames): void
     {
         foreach ($filenames as $filename) {

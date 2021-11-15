@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires concrete non-application classes to be final.
+ * Requires concrete classes to be final.
  *
  * @see https://ocramius.github.io/blog/when-to-declare-classes-final/
  */
@@ -32,7 +32,7 @@ class ConcreteClassNotFinalRule extends AbstractRule
         }
 
         if (!$class->isFinalByKeyword()) {
-            return [RuleErrorBuilder::message('Concrete non-application class must be final')->build()];
+            return [RuleErrorBuilder::message('Concrete class must be final')->build()];
         }
 
         return [];
