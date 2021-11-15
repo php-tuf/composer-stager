@@ -147,14 +147,6 @@ final class PhpFileSyncer implements FileSyncerInterface
             $relativePathname = self::getRelativePath($this->source, $sourceFilePathname);
             $destinationFilePathname = $this->destination . $relativePathname;
 
-            // If the source file is a directory, create it in the destination.
-            // This will have no effect if it already exists. Note: Symlinks
-            // will be interpreted as the paths they point to.
-            if ($this->filesystem->isDir($sourceFilePathname)) {
-                $this->filesystem->mkdir($destinationFilePathname);
-                continue;
-            }
-
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but
             // for lots of small files (the primary use case), the cost of
