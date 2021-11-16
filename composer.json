@@ -14,11 +14,8 @@
     ],
     "require": {
         "php": "^7.3 || ^8.0",
-        "symfony/config": "^4.4 || ^5.2",
-        "symfony/dependency-injection": "^4.4 || ^5.2",
         "symfony/filesystem": "^4.4 || ^5.2",
-        "symfony/process": "^4.4 || ^5.2",
-        "symfony/yaml": "^4.4 || ^5.2"
+        "symfony/process": "^4.4 || ^5.2"
     },
     "require-dev": {
         "ext-json": "*",
@@ -36,7 +33,10 @@
         "phpstan/phpstan-symfony": "^0.12.37",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^4.8",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "symfony/config": "^5.3",
+        "symfony/dependency-injection": "^5.3",
+        "symfony/yaml": "^5.3"
     },
     "suggest": {
         "roave/security-advisories": "Ensures that your application doesn't have installed dependencies with known security vulnerabilities."
