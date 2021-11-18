@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase;
 

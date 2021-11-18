@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;

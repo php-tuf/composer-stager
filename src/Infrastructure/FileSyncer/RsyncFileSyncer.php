@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;

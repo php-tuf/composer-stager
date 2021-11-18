@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder;
@@ -12,8 +12,8 @@ use Symfony\Component\Process\ExecutableFinder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory
  * @covers ::__construct
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy phpFileSyncer
- * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy rsyncFileSyncer
+ * @property \PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy phpFileSyncer
+ * @property \PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy rsyncFileSyncer
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder executableFinder
  */
 class FileSyncerFactoryUnitTest extends TestCase
