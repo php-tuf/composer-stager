@@ -8,7 +8,7 @@ parameters:
 rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule # Requires concrete classes to be final.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule # Requires non-utility classes to have a corresponding interface.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule # Requires non-utility classes to implement an interface.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInternalAnnotationRule # Requires non-domain classes to be marked internal.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\UtilityClassInstantiableRule # Requires utility classes to be non-instantiable.
     - PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
