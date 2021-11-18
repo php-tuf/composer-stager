@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
+namespace PhpTuf\ComposerStager\Domain\Process\Runner;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 

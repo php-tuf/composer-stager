@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -23,7 +23,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy composerRunner
+ * @property \PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy composerRunner
  */
 class StagerUnitTest extends TestCase
 {

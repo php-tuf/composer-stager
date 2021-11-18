@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 
 final class Stager implements StagerInterface
 {
@@ -19,7 +19,7 @@ final class Stager implements StagerInterface
     private $composerCommand = [];
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface
      */
     private $composerRunner;
 
