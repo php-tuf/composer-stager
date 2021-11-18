@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
+use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
+
 /**
  * @internal
  *

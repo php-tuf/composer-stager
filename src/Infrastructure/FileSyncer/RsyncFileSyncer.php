@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Util\PathUtil;
 
 /**
@@ -21,7 +21,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
     private $filesystem;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface
      */
     private $rsync;
 

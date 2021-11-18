@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -23,7 +23,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
+ * @property \PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
 class RsyncFileSyncerUnitTest extends TestCase
 {
