@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 use Closure;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -15,7 +15,7 @@ use Prophecy\Argument;
  * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  */
 class PhpFileSyncerUnitTest extends TestCase
 {

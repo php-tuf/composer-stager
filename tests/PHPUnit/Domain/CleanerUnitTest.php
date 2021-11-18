@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain;
 use PhpTuf\ComposerStager\Domain\Cleaner;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -16,7 +16,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  */
 class CleanerUnitTest extends TestCase
 {

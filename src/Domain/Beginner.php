@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 
 final class Beginner implements BeginnerInterface
@@ -18,7 +18,7 @@ final class Beginner implements BeginnerInterface
     private $fileSyncer;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 

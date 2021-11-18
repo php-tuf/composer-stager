@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
 
 final class Committer implements CommitterInterface
@@ -18,7 +18,7 @@ final class Committer implements CommitterInterface
     private $fileSyncer;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 

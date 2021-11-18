@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
+namespace PhpTuf\ComposerStager\Domain\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 

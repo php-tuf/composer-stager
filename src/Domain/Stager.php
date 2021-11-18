@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface;
 
 final class Stager implements StagerInterface
@@ -24,7 +24,7 @@ final class Stager implements StagerInterface
     private $composerRunner;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 

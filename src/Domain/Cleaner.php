@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Domain;
 
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 
 final class Cleaner implements CleanerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 

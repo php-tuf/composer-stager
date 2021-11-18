@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;

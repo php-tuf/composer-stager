@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestProcessOutputCallback;
@@ -22,7 +22,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy rsync
  */
 class RsyncFileSyncerUnitTest extends TestCase
