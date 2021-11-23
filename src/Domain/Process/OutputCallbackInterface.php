@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Domain\Output;
+namespace PhpTuf\ComposerStager\Domain\Process;
 
 use Symfony\Component\Process\Process;
 
@@ -8,12 +8,11 @@ use Symfony\Component\Process\Process;
  * Receives streamed process output.
  *
  * This provides an interface for output callbacks accepted by domain classes.
- * It ensures compatibility with the Symfony Process component used in the
- * infrastructure layer.
+ * It is designed for compatibility with the Symfony Process component.
  *
  * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
  */
-interface ProcessOutputCallbackInterface
+interface OutputCallbackInterface
 {
     /**
      * Standard output (stdout).

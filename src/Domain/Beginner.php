@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -32,7 +32,7 @@ final class Beginner implements BeginnerInterface
         string $activeDir,
         string $stagingDir,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($activeDir)) {

@@ -101,7 +101,7 @@ class BeginnerUnitTest extends TestCase
                 'stagingDir' => 'seven/eight',
                 'givenExclusions' => ['nine/ten'],
                 'expectedExclusions' => ['nine/ten'],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 100,
             ],
             [

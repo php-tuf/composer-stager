@@ -59,7 +59,7 @@ class CleanerUnitTest extends TestCase
             ],
             [
                 'path' => 'three/four',
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];

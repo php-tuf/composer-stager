@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 
@@ -20,7 +20,7 @@ final class Cleaner implements CleanerInterface
 
     public function clean(
         string $stagingDir,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         if (!$this->directoryExists($stagingDir)) {

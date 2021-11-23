@@ -93,7 +93,7 @@ class CommitterUnitTest extends TestCase
                 'activeDir' => 'seven/eight',
                 'givenExclusions' => ['/nine/ten'],
                 'expectedExclusions' => ['/nine/ten'],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];

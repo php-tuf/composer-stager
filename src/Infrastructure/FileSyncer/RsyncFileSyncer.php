@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
@@ -36,7 +36,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
         string $source,
         string $destination,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($source)) {

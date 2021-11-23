@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -69,7 +69,7 @@ final class Filesystem implements FilesystemInterface
 
     public function remove(
         string $path,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         try {

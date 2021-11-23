@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
-use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -95,7 +95,7 @@ class RsyncFileSyncerUnitTest extends TestCase
                     'source/two' . DIRECTORY_SEPARATOR,
                     'destination/two' . DIRECTORY_SEPARATOR,
                 ],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
             ],
             [
                 'source' => 'source/three',

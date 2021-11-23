@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
@@ -44,7 +44,7 @@ final class Stager implements StagerInterface
     public function stage(
         array $composerCommand,
         string $stagingDir,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $this->composerCommand = $composerCommand;
@@ -98,7 +98,7 @@ final class Stager implements StagerInterface
     /**
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function runCommand(?ProcessOutputCallbackInterface $callback, ?int $timeout): void
+    private function runCommand(?OutputCallbackInterface $callback, ?int $timeout): void
     {
         $command = array_merge(
             ['--working-dir=' . $this->stagingDir],

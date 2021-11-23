@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactoryInterface;
@@ -42,7 +42,7 @@ abstract class AbstractRunner
      *   The command to run and its arguments as separate string values, e.g.,
      *   ['require', 'lorem/ipsum']. The return value of ::executableName() will
      *   be automatically prepended.
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
@@ -56,7 +56,7 @@ abstract class AbstractRunner
      */
     public function run(
         array $command,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         array_unshift($command, $this->findExecutable());

@@ -79,7 +79,7 @@ class StagerUnitTest extends TestCase
                     '--working-dir=' . self::STAGING_DIR,
                     static::INERT_COMMAND,
                 ],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];

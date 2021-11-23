@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
  * Makes the staged changes live by syncing the active directory with the staging directory.
@@ -21,7 +21,7 @@ interface CommitterInterface
      * @param string[] $exclusions
      *   Paths to exclude, relative to the active directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -40,7 +40,7 @@ interface CommitterInterface
         string $stagingDir,
         string $activeDir,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 

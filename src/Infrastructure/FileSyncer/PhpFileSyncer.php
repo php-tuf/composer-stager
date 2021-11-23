@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use FilesystemIterator;
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
@@ -47,7 +47,7 @@ final class PhpFileSyncer implements FileSyncerInterface
         string $source,
         string $destination,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $this->source = $this->processSource($source);

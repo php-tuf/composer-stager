@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Filesystem;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
  * Provides basic utilities for interacting with the file system.
@@ -74,7 +74,7 @@ interface FilesystemInterface
      * @param string $path
      *   A path as absolute or relative to the working directory (CWD), e.g.,
      *   "/var/www/public" or "public".
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -85,7 +85,7 @@ interface FilesystemInterface
      */
     public function remove(
         string $path,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }
