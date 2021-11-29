@@ -55,7 +55,7 @@ final class PhpFileSyncer implements FileSyncerInterface
         set_time_limit((int) $timeout);
 
         $this->deleteExtraneousFilesFromDestination();
-        $this->copyNewFilesToDestination();
+        $this->copySourceFilesToDestination();
     }
 
     /**
@@ -90,12 +90,9 @@ final class PhpFileSyncer implements FileSyncerInterface
      */
     private function processExclusions(array $exclusions): array
     {
-        $exclusions = array_map(static function ($path): string {
-            // Normalize paths 1) for duplicate removal below and 2) to support
-            // exclusion later on of paths ending with directory separators.
-            return PathUtil::stripTrailingSlash($path);
-        }, $exclusions);
-
+        // Normalize paths 1) for duplicate removal below and 2) to support
+        // exclusion later on of paths ending with directory separators.
+        $exclusions = array_map([PathUtil::class, 'stripTrailingSlash'], $exclusions);
         return array_unique($exclusions);
     }
 
@@ -139,7 +136,7 @@ final class PhpFileSyncer implements FileSyncerInterface
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function copyNewFilesToDestination(): void
+    private function copySourceFilesToDestination(): void
     {
         $sourceFiles = $this->find($this->source);
 
@@ -180,29 +177,17 @@ final class PhpFileSyncer implements FileSyncerInterface
             $exclusions
         ): bool {
             $relativePathname = self::getRelativePath($directory, $foundPathname);
-            $relativePathname = PathUtil::stripTrailingSlash($relativePathname);
-
-            foreach ($exclusions as $exclusion) {
-                if ($exclusion === $relativePathname) {
-                    return false;
-                }
-            }
-            return true;
+            return !in_array($relativePathname, $exclusions, true);
         });
 
-        /** @var iterable<string> $iterator */
+        /** @var \Traversable<string> $iterator */
         $iterator = new RecursiveIteratorIterator($filterIterator);
 
         // The iterator must be converted to a flat list of pathnames rather
         // than returned whole because its element order is uncertain, so the
         // extraneous file deletion that happens later would fail when it sometimes
         // tried to delete files after their ancestors had already been deleted.
-        $files = [];
-        foreach ($iterator as $sourceFilePathname) {
-            $files[] = $sourceFilePathname;
-        }
-
-        return $files;
+        return iterator_to_array($iterator);
     }
 
     private static function getRelativePath(string $ancestor, string $path): string
