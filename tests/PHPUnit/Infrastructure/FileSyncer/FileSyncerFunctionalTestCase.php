@@ -34,89 +34,138 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             $this->markTestIncomplete();
         }
 
+        // Set up environment.
         self::removeTestEnvironment();
         self::createTestEnvironment($activeDir);
 
+        // Create fixture (active directory).
         self::createFiles($activeDir, [
-            'no_changes_ever.txt',
-            'arbitrary_dir/no_changes_ever.txt',
-            'arbitrary_dir/exclude_file.txt',
-            'exclude_dir1/and/arbitrary_file.txt',
-            'exclude_dir1/and_change_file_in_active_dir_after_syncing_to_staging_dir.txt',
-            'exclude_dir2/arbitrary_file.txt',
-            'exclude_file.txt',
-            'change_in_staging_dir_before_syncing_back_to_active_dir.txt',
-            'delete_from_staging_dir_before_syncing_back_to_active_dir.txt',
-            'very/deeply/nested/file/that/is/never/changed/in/either/the/active/directory/or/the/staging/directory.txt',
-            'very/deeply/nested/file/that/is/changed/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
-            'long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
-            'exclude_long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+            // Unchanging files.
+            'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
+            'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
+            'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
+            'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
+            'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+            // Files excluded by exact pathname.
+            'EXCLUDED_file_in_active_dir_root.txt',
+            'arbitrary_subdir/EXCLUDED_file.txt',
+            // Files excluded by directory.
+            'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt',
+            'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
+            'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
+            'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt',
+            // Files to be changed in the staging directory.
+            'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
+            // Files to be deleted from the staging directory.
+            'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
+            // Excluded file to be deleted from the ACTIVE directory after syncing to the staging directory.
+            'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt',
         ]);
-        $exclusions = [
-            'arbitrary_dir/exclude_file.txt',
-            'exclude_dir1/', // Trailing slash.
-            'exclude_dir2', // No trailing slash.
-            'exclude_file.txt',
-            'exclude_long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
-            'non_existent_file.txt',
-            implode('/', [self::TEST_ENV, $activeDir, 'no_changes_ever.txt']), // Absolute path to existing file. Unsupported--should have no effect.
-        ];
 
+        $exclusions = [
+            // Exact pathnames.
+            'EXCLUDED_file_in_active_dir_root.txt',
+            'arbitrary_subdir/EXCLUDED_file.txt',
+            // Directories.
+            'EXCLUDED_dir',
+            'another_EXCLUDED_dir/', // With a trailing slash.
+            'arbitrary_subdir/with/nested/EXCLUDED_dir',
+            // Duplicative.
+            'EXCLUDED_file_in_active_dir_root.txt',
+            // Overlapping.
+            'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
+            // Non-existent.
+            'file_that_NEVER_EXISTS_anywhere.txt',
+        ];
+        $exclusions = array_map([self::class, 'fixSeparators'], $exclusions);
+
+        // Sync files from the active directory to the new staging directory.
         $sut->sync($activeDir, $stagingDir, $exclusions);
 
         self::assertDirectoryListing($stagingDir, [
-            'no_changes_ever.txt',
-            'arbitrary_dir/no_changes_ever.txt',
-            'change_in_staging_dir_before_syncing_back_to_active_dir.txt',
-            'delete_from_staging_dir_before_syncing_back_to_active_dir.txt',
-            'very/deeply/nested/file/that/is/never/changed/in/either/the/active/directory/or/the/staging/directory.txt',
-            'very/deeply/nested/file/that/is/changed/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
-            'long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
-        ], '', sprintf('Synced correct files from active directory to new staging directory at %s.', $stagingDir));
+            'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
+            'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
+            'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
+            'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
+            'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
+            'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
+            'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+        ], '', sprintf('Synced correct files from active directory to new staging directory at "%s".', $stagingDir));
 
-        self::changeFile($activeDir, 'exclude_dir1/and_change_file_in_active_dir_after_syncing_to_staging_dir.txt');
-        self::createFile($stagingDir, 'exclude_dir1/but_create_file_in_it_in_the_staging_dir.txt');
-        self::changeFile($stagingDir, 'very/deeply/nested/file/that/is/changed/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt');
-        self::changeFile($stagingDir, 'change_in_staging_dir_before_syncing_back_to_active_dir.txt');
-        self::deleteFile($stagingDir, 'delete_from_staging_dir_before_syncing_back_to_active_dir.txt');
-        self::createFile($stagingDir, 'create_in_staging_dir.txt');
+        // Change files.
+        self::changeFile($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt');
+        self::changeFile($stagingDir, 'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt');
+        self::changeFile($stagingDir, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt');
 
+        // Delete files.
+        self::deleteFile($stagingDir, 'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt');
+        self::deleteFile($activeDir, 'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt');
+
+        // Create files.
+        self::createFile($stagingDir, 'EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt');
+        self::createFile($stagingDir, 'CREATE_in_staging_dir.txt');
+        self::createFile($stagingDir, 'another_subdir/CREATE_in_staging_dir.txt');
+
+        $previousStagingDirContents = self::getDirectoryContents($stagingDir);
+
+        // Sync files from staging directory back to active directory. Use the
+        // same SUT object to make sure it doesn't get polluted between calls.
         $sut->sync($stagingDir, $activeDir, $exclusions);
 
         self::assertDirectoryListing($activeDir, [
-            'no_changes_ever.txt', // Preserved unchanged file and ignored unsupported absolute path exclusion.
-            'arbitrary_dir/no_changes_ever.txt',
-            'arbitrary_dir/exclude_file.txt',
-            'exclude_dir1/and/arbitrary_file.txt', // Did not delete from the active directory an excluded directory absent from the staging directory.
-            'exclude_dir1/and_change_file_in_active_dir_after_syncing_to_staging_dir.txt',
-            'exclude_dir2/arbitrary_file.txt',
-            'exclude_file.txt', // Did not delete from the active directory an excluded file absent from the staging directory.
-            'change_in_staging_dir_before_syncing_back_to_active_dir.txt',
-            // This file should be absent from the active directory because it was deleted from the staging directory:
-            // delete_from_staging_dir_before_syncing_back_to_active_dir.txt
-            'very/deeply/nested/file/that/is/never/changed/in/either/the/active/directory/or/the/staging/directory.txt', // Correctly handled deeply nested, unchanged file.
-            'very/deeply/nested/file/that/is/changed/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt', // Correctly handled deeply nested, changed file.
-            'long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt', // Correctly handled long filename with weird characters.
-            'exclude_long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt', // Correctly excluded long filename with weird characters.
-            'create_in_staging_dir.txt', // Copied back to the active directory a new file that was created new in the staging directory.
-        ], $stagingDir, sprintf('Synced correct files from staging directory back to active directory at %s.', $activeDir));
+            // Unchanged files are left alone.
+            'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
+            'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
+            'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
+            'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
+            'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+            // Files excluded by exact pathname are still in the active directory.
+            'EXCLUDED_file_in_active_dir_root.txt',
+            'arbitrary_subdir/EXCLUDED_file.txt',
+            // Files excluded by directory are still in the active directory.
+            'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt',
+            'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
+            'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
+            'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt',
+            // Files created in the staging directory are copied back to the active directory.
+            'CREATE_in_staging_dir.txt',
+            'another_subdir/CREATE_in_staging_dir.txt',
+            // Files changed in the staging directory are synced back. (File contents asserted below.)
+            'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
+            // Files deleted from either side are absent from the active directory.
+            // - another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt
+            // - DELETE_from_staging_dir_before_syncing_back_to_active_dir
+        ], $stagingDir, sprintf('Synced correct files from staging directory back to active directory at "%s".', $activeDir));
 
-        self::assertFileNotChanged($activeDir, 'no_changes_ever.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
-        self::assertFileChanged($activeDir, 'very/deeply/nested/file/that/is/changed/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
-        self::assertFileChanged($activeDir, 'exclude_dir1/and_change_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
-        self::assertFileChanged($activeDir, 'change_in_staging_dir_before_syncing_back_to_active_dir.txt', 'Preserved in the active directory changes made to a file in the staging directory.');
-        self::assertFileExists($stagingDir);
+        // Unchanged file contents.
+        self::assertFileNotChanged($activeDir, 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt');
+        self::assertFileNotChanged($activeDir, 'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt');
+        self::assertFileNotChanged($activeDir, 'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt');
+        self::assertFileNotChanged($activeDir, 'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt');
+        self::assertFileNotChanged($activeDir, 'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt');
+        self::assertFileNotChanged($activeDir, 'EXCLUDED_file_in_active_dir_root.txt');
+        self::assertFileNotChanged($activeDir, 'arbitrary_subdir/EXCLUDED_file.txt');
+        self::assertFileNotChanged($activeDir, 'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt');
+        self::assertFileNotChanged($activeDir, 'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt');
+        self::assertFileNotChanged($activeDir, 'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt');
+        self::assertFileNotChanged($activeDir, 'CREATE_in_staging_dir.txt');
+        self::assertFileNotChanged($activeDir, 'another_subdir/CREATE_in_staging_dir.txt');
 
-        self::assertDirectoryListing($stagingDir, [
-            'no_changes_ever.txt',
-            'arbitrary_dir/no_changes_ever.txt',
-            'change_in_staging_dir_before_syncing_back_to_active_dir.txt',
-            'very/deeply/nested/file/that/is/never/changed/in/either/the/active/directory/or/the/staging/directory.txt',
-            'very/deeply/nested/file/that/is/changed/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
-            'long_filename_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
-            'exclude_dir1/but_create_file_in_it_in_the_staging_dir.txt',
-            'create_in_staging_dir.txt',
-        ], '', sprintf('Preserved staging directory at %s after syncing it back to active directory.', $stagingDir));
+        // Changed file contents.
+        self::assertFileChanged($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved in the active directory changes made to an excluded file in the active directory.');
+        self::assertFileChanged($activeDir, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt', 'Preserved in the active directory changes made to a file in the staging directory.');
+        self::assertFileChanged($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
+        self::assertFileChanged($activeDir, 'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
+
+        $currentStagingDirContents = self::getDirectoryContents($stagingDir);
+        self::assertEquals(
+            $previousStagingDirContents,
+            $currentStagingDirContents,
+            'Staging directory was not changed when syncing back to active directory.'
+        );
     }
 
     public function providerDirectories(): array
@@ -124,7 +173,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $random = uniqid('', true);
         $tempDir = sprintf('%s/composer-stager/%s', sys_get_temp_dir(), $random);
         return [
-            'Siblings: no trailing slashes' => [
+            // Siblings cases.
+            'Siblings: simple' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'staging-dir',
             ],
@@ -145,8 +195,16 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                 'stagingDir' => 'staging-dir/../staging-dir/../staging-dir',
             ],
             'Siblings: absolute paths' => [
-                'activeDir' => self::TEST_ENV_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_ENV_WORKING_DIR . '/staging-dir',
+                'activeDir' => self::TEST_ENV . '/active-dir',
+                'stagingDir' => self::TEST_ENV . '/staging-dir',
+            ],
+            'Siblings: one absolute path, one relative' => [
+                'activeDir' => self::TEST_ENV . '/active-dir',
+                'stagingDir' => 'staging-dir',
+            ],
+            'Siblings: one relative path, one absolute' => [
+                'activeDir' => 'active-dir',
+                'stagingDir' => self::TEST_ENV . '/staging-dir',
             ],
             'Siblings: temp directory' => [
                 'activeDir' => $tempDir . '/active-dir',
@@ -158,28 +216,38 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                 'activeDir' => './',
                 'stagingDir' => '../staging-dir',
             ],
-            'Siblings: active as "dot"' => [
+            'Siblings: active as "dot" (.)' => [
                 'activeDir' => '.',
                 'stagingDir' => '../staging-dir',
+                // @todo
                 'incomplete' => [self::PHP_FILE_SYNCER_ON_WINDOWS],
             ],
             'Siblings: staging as CWD with trailing slash' => [
                 'activeDir' => '../active-dir',
                 'stagingDir' => './',
+                // @todo
+                'incomplete' => [
+                    PhpFileSyncer::class,
+                    RsyncFileSyncer::class,
+                ],
             ],
-            'Siblings: staging as "dot"' => [
+            'Siblings: staging as "dot" (.)' => [
                 'activeDir' => '../active-dir',
                 'stagingDir' => '.',
-                'incomplete' => [self::PHP_FILE_SYNCER_ON_WINDOWS],
+                // @todo
+                'incomplete' => [
+                    PhpFileSyncer::class,
+                    RsyncFileSyncer::class,
+                ],
             ],
-
+            // Nested cases.
             'Nested: simple' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/staging-dir',
                 // @todo
                 'incomplete' => [
-                    RsyncFileSyncer::class,
                     self::PHP_FILE_SYNCER_ON_WINDOWS,
+                    RsyncFileSyncer::class,
                 ],
             ],
             'Nested: with directory depth' => [
@@ -187,26 +255,42 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                 'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
                 // @todo
                 'incomplete' => [
-                    RsyncFileSyncer::class,
                     self::PHP_FILE_SYNCER_ON_WINDOWS,
+                    RsyncFileSyncer::class,
                 ],
             ],
             'Nested: absolute paths' => [
-                'activeDir' => self::TEST_ENV_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_ENV_WORKING_DIR . '/active-dir/staging-dir',
+                'activeDir' => self::TEST_ENV . '/active-dir',
+                'stagingDir' => self::TEST_ENV . '/active-dir/staging-dir',
                 // @todo
                 'incomplete' => [
-                    RsyncFileSyncer::class,
                     self::PHP_FILE_SYNCER_ON_WINDOWS,
+                    RsyncFileSyncer::class,
                 ],
             ],
-            // This scenario is the most important for shared hosting situations,
+
+            // These scenarios are the most important for shared hosting situations,
             // which may not provide access to paths outside the application root,
             // e.g., the web root.
-            'Nested: active as "dot", staging as "hidden" dir' => [
-                'activeDir' => '.',
-                'stagingDir' => '.composer_staging',
+            'Nested: both dirs relative, staging as "hidden" dir' => [
+                'activeDir' => 'active-dir',
+                'stagingDir' => 'active-dir/.composer_staging',
+                // @todo
+                'incomplete' => [
+                    self::PHP_FILE_SYNCER_ON_WINDOWS,
+                    RsyncFileSyncer::class,
+                ],
             ],
+            'Nested: Both dirs absolute, staging as "hidden" dir' => [
+                'activeDir' => self::TEST_ENV . '/active-dir',
+                'stagingDir' => self::TEST_ENV . '/active-dir/.composer_staging',
+                // @todo
+                'incomplete' => [
+                    self::PHP_FILE_SYNCER_ON_WINDOWS,
+                    RsyncFileSyncer::class,
+                ],
+            ],
+
             'Nested: temp directory' => [
                 'activeDir' => $tempDir . '/active-dir',
                 'stagingDir' => $tempDir . '/active-dir/staging-dir',

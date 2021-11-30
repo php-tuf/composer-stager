@@ -49,16 +49,6 @@ final class Filesystem implements FilesystemInterface
         return $cwd;
     }
 
-    public function isDir(string $path): bool
-    {
-        return is_dir($path);
-    }
-
-    public function isFile(string $path): bool
-    {
-        return is_file($path);
-    }
-
     public function isWritable(string $path): bool
     {
         return is_writable($path); // @codeCoverageIgnore

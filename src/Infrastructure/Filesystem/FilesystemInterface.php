@@ -49,36 +49,6 @@ interface FilesystemInterface
     public function getcwd(): string;
 
     /**
-     * Determines whether the given path is a directory.
-     *
-     * Consistent with PHP's own behavior on this point, a symlink will be
-     * followed and treated like the path it points to. In other words, a
-     * symlink that points to a directory will return true.
-     *
-     * @see https://www.php.net/manual/en/function.is-dir.php
-     *
-     * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
-     */
-    public function isDir(string $path): bool;
-
-    /**
-     * Determines whether the given path is a file.
-     *
-     * Consistent with PHP's own behavior on this point, a symlink will be
-     * followed and treated like the path it points to. In other words, a
-     * symlink that points to a file will return true.
-     *
-     * @see https://www.php.net/manual/en/function.is-file.php
-     *
-     * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
-     */
-    public function isFile(string $path): bool;
-
-    /**
      * Determines whether the given path is writable.
      *
      * @param string $path

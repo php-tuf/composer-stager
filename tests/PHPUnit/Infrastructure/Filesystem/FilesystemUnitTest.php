@@ -113,41 +113,6 @@ class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::isDir
-     * @covers ::isFile
-     *
-     * @dataProvider providerIsDirIsFile
-     */
-    public function testIsDirIsFile($path, $isDir, $isFile): void
-    {
-        $sut = $this->createSut();
-
-        self::assertEquals($isDir, $sut->isDir($path));
-        self::assertEquals($isFile, $sut->isFile($path));
-    }
-
-    public function providerIsDirIsFile(): array
-    {
-        return [
-            [ // Directory.
-                'path' => __DIR__,
-                'isDir' => true,
-                'isFile' => false,
-            ],
-            [ // File.
-                'path' => __FILE__,
-                'isDir' => false,
-                'isFile' => true,
-            ],
-            [ // Symlink.
-                'path' => __DIR__ . '/../../../../vendor/bin/phpunit',
-                'isDir' => false,
-                'isFile' => true,
-            ],
-        ];
-    }
-
-    /**
      * @covers ::mkdir
      *
      * @dataProvider providerMkdir
