@@ -9,9 +9,9 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires utility classes to be non-instantiable.
+ * Requires utility classes to be abstract.
  */
-class UtilityClassInstantiableRule extends AbstractRule
+class NonAbstractUtilityClassRule extends AbstractRule
 {
     public function getNodeType(): string
     {
@@ -26,13 +26,10 @@ class UtilityClassInstantiableRule extends AbstractRule
             return [];
         }
 
-        $constructor = $class->getConstructor();
-
-        if ($class->isFinalByKeyword() && $constructor->isPrivate()
-        ) {
+        if ($class->isAbstract()) {
             return [];
         }
 
-        return [RuleErrorBuilder::message('Utility class must be non-instantiable, i.e., final with a private constructor')->build()];
+        return [RuleErrorBuilder::message('Utility class must be abstract')->build()];
     }
 }

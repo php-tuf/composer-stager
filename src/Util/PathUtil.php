@@ -5,15 +5,8 @@ namespace PhpTuf\ComposerStager\Util;
 /**
  * @internal
  */
-final class PathUtil
+abstract class PathUtil
 {
-    /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
-    }
-
     /**
      * Strips the trailing slash (directory separator) from a given path.
      *
