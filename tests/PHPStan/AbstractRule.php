@@ -55,11 +55,6 @@ abstract class AbstractRule implements Rule
         return !$method->isPublic() && !$method->isPrivate();
     }
 
-    protected function isApplicationClass(ClassReflection $class): bool
-    {
-        return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Console\\');
-    }
-
     protected function isDomainClass(ClassReflection $class): bool
     {
         return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Domain\\');

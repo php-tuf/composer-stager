@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Forbids throwing non-PhpTuf exceptions from non-application code public methods.
+ * Forbids throwing non-PhpTuf exceptions from public methods.
  */
 class ForbiddenThrowsRule extends AbstractRule
 {
@@ -32,11 +32,6 @@ class ForbiddenThrowsRule extends AbstractRule
             return[];
         }
 
-        $class = $scope->getClassReflection();
-        if ($this->isApplicationClass($class)) {
-            return [];
-        }
-
         $errors = [];
         foreach ($throwType->getReferencedClasses() as $exception) {
             $class = $this->reflectionProvider->getClass($exception);
@@ -45,7 +40,7 @@ class ForbiddenThrowsRule extends AbstractRule
             }
 
             $message = sprintf(
-                'Built-in or third party exception "\%s" cannot be thrown from public methods outside the application layer. Catch it and throw the appropriate ComposerStager exception instead.',
+                'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead.',
                 $exception
             );
             $errors[] = RuleErrorBuilder::message($message)->build();

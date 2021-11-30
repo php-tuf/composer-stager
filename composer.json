@@ -14,12 +14,8 @@
     ],
     "require": {
         "php": "^7.3 || ^8.0",
-        "symfony/config": "^4.4 || ^5.2",
-        "symfony/console": "^4.4 || ^5.2",
-        "symfony/dependency-injection": "^4.4 || ^5.2",
         "symfony/filesystem": "^4.4 || ^5.2",
-        "symfony/process": "^4.4 || ^5.2",
-        "symfony/yaml": "^4.4 || ^5.2"
+        "symfony/process": "^4.4 || ^5.2"
     },
     "require-dev": {
         "ext-json": "*",
@@ -37,7 +33,10 @@
         "phpstan/phpstan-symfony": "^0.12.37",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^4.8",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "symfony/config": "^5.3",
+        "symfony/dependency-injection": "^5.3",
+        "symfony/yaml": "^5.3"
     },
     "suggest": {
         "roave/security-advisories": "Ensures that your application doesn't have installed dependencies with known security vulnerabilities."
@@ -102,7 +101,7 @@
         "ccc": "rm -r var/* &> /dev/null || true",
         "coverage": "phpunit --coverage-html $(pwd)/var/phpunit/coverage-report --coverage-text --color=always | grep --invert-match --extended-regexp '(^PhpTuf\\.*\\\\|Methods)'",
         "functional": "phpunit --no-coverage --testsuite=Functional",
-        "lint": "parallel-lint --no-progress bin/composer-stage src tests",
+        "lint": "parallel-lint --no-progress src tests",
         "open-coverage": "open $(pwd)/var/phpunit/coverage-report/index.html || echo 'Run the \"coverage\" command to generate the coverage report.'",
         "phpcbf": "phpcbf --standard=PhpTuf ./src ./tests",
         "phpcs": "phpcs -s --standard=PhpTuf ./src ./tests",

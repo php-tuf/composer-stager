@@ -6,44 +6,12 @@
 [![Psalm](https://img.shields.io/badge/Psalm-1-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![PHPMD](https://img.shields.io/static/v1?label=PHPMD&message=all&color=brightgreen)](https://phpmd.org/)
 
-Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime. It can be used via its [console application](#console-application) or as a [Composer library](#composer-library):
+Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
 
 <!-- @todo Remove warning once there's a stable release. -->
 ## Warning!
 
 Composer Stager is in the very early stages of development and _highly_ unstable. Unless you are part of the PHP-TUF development team, do not use it.
-
-## Console application
-
-The Console application can be used stand-alone by installing it via Git and invoking its executable:
-
-```shell
-$ git clone https://github.com/php-tuf/composer-stager.git
-$ php composer-stager/bin/composer-stager
-```
-
-### Available commands
-
-* `begin` - Begins the staging process by copying the active directory to the staging directory.
-* `stage` - Executes a Composer command in the staging directory.
-* `commit` - Makes the staged changes live by syncing the active directory with the staging directory.
-* `clean` - Removes the staging directory.
-
-### Example workflow:
-
-```shell
-# Copy the codebase to the staging directory.
-$ composer-stager begin
-
-# Run a Composer command on it.
-$ composer-stager stage -- require lorem/ipsum --update-with-all-dependencies
-
-# Sync the changes back to the active directory.
-$ composer-stager commit --no-interaction
-
-# Remove the staging directory.
-$ composer-stager clean --no-interaction
-```
 
 ## Composer library
 

@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires non-application/non-utility classes to have a corresponding interface.
+ * Requires non-utility classes to have a corresponding interface.
  */
 class MissingInterfaceRule extends AbstractRule
 {
@@ -22,8 +22,7 @@ class MissingInterfaceRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
-        if ($this->isApplicationClass($class) ||
-            $this->isUtilClass($class) ||
+        if ($this->isUtilClass($class) ||
             $class->isInterface() ||
             $class->isAbstract() ||
             $this->isThrowable($class)
@@ -38,7 +37,7 @@ class MissingInterfaceRule extends AbstractRule
             }
         }
 
-        $message = sprintf('Non-application/non-utility class must implement an interface in the same namespace, i.e., %s', $namespace);
+        $message = sprintf('Non-utility class must implement an interface in the same namespace, i.e., %s', $namespace);
         return [RuleErrorBuilder::message($message)->build()];
     }
 }
