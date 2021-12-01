@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires non-utility classes to have a corresponding interface.
+ * Requires non-utility classes to implement an interface.
  */
 class MissingInterfaceRule extends AbstractRule
 {
@@ -30,14 +30,11 @@ class MissingInterfaceRule extends AbstractRule
             return [];
         }
 
-        $namespace = $this->getNamespace($class->getName());
-        foreach ($class->getInterfaces() as $interface) {
-            if ($this->getNamespace($interface->getName()) === $namespace) {
-                return [];
-            }
+        if ($class->getInterfaces() !== []) {
+            return [];
         }
 
-        $message = sprintf('Non-utility class must implement an interface in the same namespace, i.e., %s', $namespace);
+        $message = sprintf('Non-utility classes to implement an interface.');
         return [RuleErrorBuilder::message($message)->build()];
     }
 }

@@ -2,23 +2,23 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 
 final class Committer implements CommitterInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface
+     * @var \PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface
      */
     private $fileSyncer;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
@@ -32,7 +32,7 @@ final class Committer implements CommitterInterface
         string $stagingDir,
         string $activeDir,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($stagingDir)) {

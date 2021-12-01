@@ -2,12 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Util\PathUtil;
 
 /**
@@ -16,12 +17,12 @@ use PhpTuf\ComposerStager\Util\PathUtil;
 final class RsyncFileSyncer implements FileSyncerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface
      */
     private $rsync;
 
@@ -35,7 +36,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
         string $source,
         string $destination,
         array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($source)) {

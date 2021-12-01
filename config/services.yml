@@ -17,7 +17,7 @@ services:
             $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer'
             $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer'
 
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface:
+    PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface:
         factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory', 'create' ]
 
     PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer:

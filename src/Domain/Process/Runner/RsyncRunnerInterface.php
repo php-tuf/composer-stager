@@ -1,28 +1,28 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Process\Runner;
+namespace PhpTuf\ComposerStager\Domain\Process\Runner;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
- * Runs Composer commands.
+ * Runs rsync commands.
  */
-interface ComposerRunnerInterface
+interface RsyncRunnerInterface
 {
     /**
-     * Runs a given Composer command.
+     * Runs a given rsync command.
      *
      * @param string[] $command
      *   The command to run and its arguments as separate string values. Example:
      *   ```php
      *   $command = [
-     *       // "composer" is implied.
-     *       'require',
-     *       'lorem/ipsum:"^1 || ^2"',
-     *       '--with-all-dependencies',
+     *       // "rsync" is implied.
+     *       '--recursive',
+     *       'path/to/source',
+     *       'path/to/destination',
      *   ];
      *   ```
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -39,7 +39,7 @@ interface ComposerRunnerInterface
      */
     public function run(
         array $command,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }
