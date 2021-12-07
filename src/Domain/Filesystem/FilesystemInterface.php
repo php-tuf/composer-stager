@@ -40,11 +40,6 @@ interface FilesystemInterface
 
     /**
      * Gets the current working directory (CWD) on success.
-     *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
-     *   If there is a failure. For example, on some Unix variants, this check
-     *   will fail if any one of the parent directories does not have the
-     *   readable or search mode set, even if the current directory does.
      */
     public function getcwd(): string;
 
