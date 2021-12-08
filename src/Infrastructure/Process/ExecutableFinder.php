@@ -5,9 +5,6 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process;
 use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
-/**
- * @internal
- */
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     /**

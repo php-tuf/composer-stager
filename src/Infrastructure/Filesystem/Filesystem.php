@@ -8,9 +8,6 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-/**
- * @internal
- */
 final class Filesystem implements FilesystemInterface
 {
     /**

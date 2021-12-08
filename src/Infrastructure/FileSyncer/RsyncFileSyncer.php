@@ -11,9 +11,6 @@ use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Util\PathUtil;
 
-/**
- * @internal
- */
 final class RsyncFileSyncer implements FileSyncerInterface
 {
     /**

@@ -2,9 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Util;
 
-/**
- * @internal
- */
 abstract class PathUtil
 {
     /**

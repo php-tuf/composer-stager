@@ -6,9 +6,6 @@ use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use Symfony\Component\Process\ExecutableFinder;
 
-/**
- * @internal
- */
 final class FileSyncerFactory implements FileSyncerFactoryInterface
 {
     /**

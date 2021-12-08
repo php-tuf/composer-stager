@@ -13,9 +13,6 @@ use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-/**
- * @internal
- */
 final class PhpFileSyncer implements FileSyncerInterface
 {
     /**
