@@ -29,6 +29,7 @@ class UnixLikePathUnitTest extends TestCase
      * @covers ::__toString
      * @covers ::getAbsolute
      * @covers ::isAbsolute
+     * @covers ::makeAbsolute
      * @covers ::normalize
      *
      * @dataProvider providerBasicFunctionality
