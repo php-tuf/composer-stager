@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
  * Executes a Composer command in the staging directory.
@@ -24,7 +24,7 @@ interface StagerInterface
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -42,7 +42,7 @@ interface StagerInterface
     public function stage(
         array $composerCommand,
         string $stagingDir,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }

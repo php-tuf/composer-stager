@@ -1,6 +1,8 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
+namespace PhpTuf\ComposerStager\Domain\FileSyncer;
+
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 
 /**
  * Creates file syncers.

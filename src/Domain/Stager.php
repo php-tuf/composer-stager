@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 
 final class Stager implements StagerInterface
 {
@@ -19,12 +19,12 @@ final class Stager implements StagerInterface
     private $composerCommand = [];
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\ComposerRunnerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface
      */
     private $composerRunner;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
@@ -44,7 +44,7 @@ final class Stager implements StagerInterface
     public function stage(
         array $composerCommand,
         string $stagingDir,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $this->composerCommand = $composerCommand;
@@ -98,7 +98,7 @@ final class Stager implements StagerInterface
     /**
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function runCommand(?ProcessOutputCallbackInterface $callback, ?int $timeout): void
+    private function runCommand(?OutputCallbackInterface $callback, ?int $timeout): void
     {
         $command = array_merge(
             ['--working-dir=' . $this->stagingDir],

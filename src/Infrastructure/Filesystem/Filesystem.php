@@ -2,14 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-/**
- * @internal
- */
 final class Filesystem implements FilesystemInterface
 {
     /**
@@ -42,21 +40,14 @@ final class Filesystem implements FilesystemInterface
 
     public function getcwd(): string
     {
-        $cwd = getcwd();
-        if ($cwd === false) {
-            throw new IOException('Cannot access the current working directory.'); // @codeCoverageIgnore
-        }
-        return $cwd;
-    }
-
-    public function isDir(string $path): bool
-    {
-        return is_dir($path);
-    }
-
-    public function isFile(string $path): bool
-    {
-        return is_file($path);
+        // It is technically possible for getcwd() to fail and return false. (For
+        // example, on some Unix variants, this check will fail if any one of the
+        // parent directories does not have the readable or search mode set, even
+        // if the current directory does.) But the likelihood is probably so slight
+        // that it hardly seems worth cluttering up client code handling theoretical
+        // IO exceptions. Cast the return value to a string for the purpose of
+        // static analysis and move on.
+        return (string) getcwd();
     }
 
     public function isWritable(string $path): bool
@@ -78,7 +69,7 @@ final class Filesystem implements FilesystemInterface
 
     public function remove(
         string $path,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         try {

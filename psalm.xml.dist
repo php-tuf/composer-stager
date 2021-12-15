@@ -2,6 +2,7 @@
 
 <!-- https://psalm.dev/docs/running_psalm/configuration/ -->
 <psalm
+        cacheDirectory="var/psalm"
         errorLevel="1"
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

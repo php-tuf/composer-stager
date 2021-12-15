@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase;
-use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer
@@ -15,7 +15,7 @@ use Symfony\Component\Process\ExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
- * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
+ * @uses \PhpTuf\ComposerStager\Util\PathUtil
  */
 class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {
@@ -44,7 +44,7 @@ class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 
     protected static function isRsyncAvailable(): bool
     {
-        $finder = new ExecutableFinder();
+        $finder = new SymfonyExecutableFinder();
         return $finder->find('rsync') !== null;
     }
 

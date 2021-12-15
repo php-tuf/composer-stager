@@ -2,17 +2,16 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
- * @covers ::__construct
- * @covers ::sync
+ * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Util\DirectoryUtil
+ * @uses \PhpTuf\ComposerStager\Util\PathUtil
  */
 class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {

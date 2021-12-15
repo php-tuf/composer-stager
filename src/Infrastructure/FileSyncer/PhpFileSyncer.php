@@ -2,22 +2,21 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
-use LogicException;
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use FilesystemIterator;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Util\DirectoryUtil;
-use Symfony\Component\Finder\Finder;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Util\PathUtil;
+use RecursiveCallbackFilterIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
-/**
- * @internal
- */
 final class PhpFileSyncer implements FileSyncerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
@@ -27,166 +26,194 @@ final class PhpFileSyncer implements FileSyncerInterface
     private $source = '';
 
     /**
-     * @var \Symfony\Component\Finder\Finder
-     */
-    private $sourceFinder;
-
-    /**
      * @var string
      */
     private $destination = '';
-
-    /**
-     * @var \Symfony\Component\Finder\Finder
-     */
-    private $destinationFinder;
 
     /**
      * @var string[]
      */
     private $exclusions = [];
 
-    public function __construct(
-        FilesystemInterface $filesystem,
-        Finder $sourceFinder,
-        Finder $destinationFinder
-    ) {
+    public function __construct(FilesystemInterface $filesystem)
+    {
         $this->filesystem = $filesystem;
-
-        // Injected Finders must always be cloned to avoid reusing and polluting
-        // the same instances.
-        $this->sourceFinder = clone $sourceFinder;
-        $this->destinationFinder = clone $destinationFinder;
     }
 
     public function sync(
         string $source,
         string $destination,
-        ?array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        array $exclusions = [],
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $this->source = $source;
-        $this->destination = $destination;
-        $this->exclusions = array_unique((array) $exclusions);
-
+        $this->source = $this->processSource($source);
+        $this->destination = $this->processDestination($destination);
+        $this->exclusions = $this->processExclusions($exclusions);
         set_time_limit((int) $timeout);
 
-        try {
-            $this->indexDestination();
-            $this->deleteExtraneousFilesFromDestination();
-            $this->indexSource();
-            $this->copyNewFilesToDestination();
-        } catch (IOException | LogicException $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
-     */
-    private function indexDestination(): void
-    {
-        try {
-            // Ensure the destination directory's existence. (This has no effect
-            // if it already exists.)
-            $this->filesystem->mkdir($this->destination);
-
-            // Index it.
-            $source = DirectoryUtil::getPathRelativeToAncestor($this->source, $this->destination);
-            $source = DirectoryUtil::ensureTrailingSlash($source);
-            $this->destinationFinder
-                ->in($this->destination)
-                ->notPath($this->exclusions);
-            // Exclude the source directory in order to prevent a Finder
-            // AccessDeniedException if it is an ancestor of the destination
-            // directory (i.e., if it is "underneath" or "inside" it)--unless it
-            // is a UNIX-like absolute path, which triggers a bug in Finder.
-            // @see https://github.com/symfony/symfony/issues/43282
-            if ($source[0] !== '/') {
-                $this->destinationFinder->notPath($source);
-            }
-        } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException | IOException $e) {
-            throw new ProcessFailedException(sprintf(
-                'The destination directory could not be created at "%s".',
-                $this->destination
-            ), (int) $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * @throws \LogicException
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
-     */
-    private function deleteExtraneousFilesFromDestination(): void
-    {
-        $source = DirectoryUtil::ensureTrailingSlash($this->source);
-
-        /** @var \Symfony\Component\Finder\SplFileInfo $destinationFileInfo */
-        foreach ($this->destinationFinder as $destinationFileInfo) {
-            $destinationPathname = $destinationFileInfo->getPathname();
-            $sourcePathname = $source . $destinationFileInfo->getRelativePathname();
-
-            if (!$this->filesystem->exists($sourcePathname)) {
-                $this->filesystem->remove($destinationPathname);
-            }
-        }
+        $this->deleteExtraneousFilesFromDestination();
+        $this->copySourceFilesToDestination();
     }
 
     /**
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      */
-    private function indexSource(): void
+    private function processSource(string $source): string
     {
-        try {
-            $destination = DirectoryUtil::getPathRelativeToAncestor($this->destination, $this->source);
-            $destination = DirectoryUtil::ensureTrailingSlash($destination);
-            $this->sourceFinder
-                ->in($this->source)
-                ->notPath($this->exclusions);
-            // Exclude the destination directory in order to prevent infinite
-            // recursion if it is a descendant of the source directory (i.e., if
-            // it is "underneath" or "inside" it)--unless it is a UNIX-like
-            // absolute path, which triggers a bug in Finder.
-            // @see https://github.com/symfony/symfony/issues/43282
-            if ($destination[0] !== '/') {
-                $this->sourceFinder->notPath($destination);
+        if (!$this->filesystem->exists($source)) {
+            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
+        }
+
+        // Ensure a trailing slash once, now at the beginning, so all future operations can depend on it.
+        return PathUtil::ensureTrailingSlash($source);
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     */
+    private function processDestination(string $destination): string
+    {
+        // Create the destination directory if it doesn't already exist.
+        $this->filesystem->mkdir($destination);
+
+        // Ensure a trailing slash once, now at the beginning, so all future operations can depend on it.
+        return PathUtil::ensureTrailingSlash($destination);
+    }
+
+    /**
+     * @param string[] $exclusions
+     *
+     * @return string[]
+     */
+    private function processExclusions(array $exclusions): array
+    {
+        // Normalize paths 1) for duplicate removal below and 2) to support
+        // exclusion later on of paths ending with directory separators.
+        $exclusions = array_map([PathUtil::class, 'stripTrailingSlash'], $exclusions);
+        return array_unique($exclusions);
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     */
+    private function deleteExtraneousFilesFromDestination(): void
+    {
+        // There's no reason to look for deletions if the destination is already empty.
+        if ($this->destinationIsEmpty()) {
+            return;
+        }
+
+        $destinationFiles = $this->find($this->destination);
+
+        foreach ($destinationFiles as $destinationFilePathname) {
+            $relativePathname = self::getRelativePath($this->destination, $destinationFilePathname);
+            $sourceFilePathname = $this->source . $relativePathname;
+
+            // Don't iterate over the destination directory if it is a descendant
+            // of the source directory (i.e., if it is "underneath" or "inside"
+            // it) or it will itself be deleted in the process.
+            if (strpos($destinationFilePathname, $this->source) === 0) {
+                continue;
             }
-        } catch (\Symfony\Component\Finder\Exception\DirectoryNotFoundException $e) {
-            throw new DirectoryNotFoundException(
-                $this->source,
-                'The source directory does not exist at "%s"',
-                (int) $e->getCode(),
-                $e
-            );
+
+            // If it doesn't exist in the source, delete it from the destination.
+            if (!$this->filesystem->exists($sourceFilePathname)) {
+                $this->filesystem->remove($destinationFilePathname);
+            }
+        }
+    }
+
+    private function destinationIsEmpty(): bool
+    {
+        return scandir($this->destination) === ['.', '..'];
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     */
+    private function copySourceFilesToDestination(): void
+    {
+        $sourceFiles = $this->find($this->source);
+
+        foreach ($sourceFiles as $sourceFilePathname) {
+            $relativePathname = self::getRelativePath($this->source, $sourceFilePathname);
+            $destinationFilePathname = $this->destination . $relativePathname;
+
+            // Copy the file--even if it already exists and is identical in the
+            // destination. Obviously, this has performance implications, but
+            // for lots of small files (the primary use case), the cost of
+            // checking differences first would surely outweigh any savings.
+            $this->filesystem->copy($sourceFilePathname, $destinationFilePathname);
         }
     }
 
     /**
-     * @throws \LogicException
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @return string[]
+     *   A list of file pathnames, each beginning with the given directory. The
+     *   iterator cannot simply be returned because its element order is uncertain,
+     *   so the extraneous file deletion function would fail later when it sometimes
+     *   tried to delete files after it had already deleted their ancestors.
      *
-     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     *
+     * @todo This class is (unsurprisingly) the largest and most complex in the
+     *   codebase, and this method with its helpers accounts for over a third of
+     *   that by all measures. Extract it to its own class and improve its tests.
      */
-    private function copyNewFilesToDestination(): void
+    private function find(string $directory): array
     {
-        $destination = DirectoryUtil::ensureTrailingSlash($this->destination);
+        $directoryIterator = $this->getRecursiveDirectoryIterator($directory);
 
-        /** @var \Symfony\Component\Finder\SplFileInfo $sourceFileInfo */
-        foreach ($this->sourceFinder as $sourceFileInfo) {
-            $sourcePathname = $sourceFileInfo->getPathname();
-            $destinationPathname = $destination . $sourceFileInfo->getRelativePathname();
+        $exclusions = $this->exclusions;
+        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static function (
+            string $foundPathname
+        ) use (
+            $directory,
+            $exclusions
+        ): bool {
+            $relativePathname = self::getRelativePath($directory, $foundPathname);
+            return !in_array($relativePathname, $exclusions, true);
+        });
 
-            // Note: Symlinks will be interpreted as the paths they point to.
-            if ($this->filesystem->isDir($sourcePathname)) {
-                $this->filesystem->mkdir($destinationPathname);
-            } elseif ($this->filesystem->isFile($sourcePathname)) {
-                $this->filesystem->copy($sourcePathname, $destinationPathname);
-            } else {
-                throw new IOException(
-                    sprintf('Unable to determine file type of "%s".', $sourcePathname)
-                );
-            }
+        /** @var \Traversable<string> $iterator */
+        $iterator = new RecursiveIteratorIterator($filterIterator);
+
+        // The iterator must be converted to a flat list of pathnames rather
+        // than returned whole because its element order is uncertain, so the
+        // extraneous file deletion that happens later would fail when it sometimes
+        // tried to delete files after their ancestors had already been deleted.
+        return iterator_to_array($iterator);
+    }
+
+    private static function getRelativePath(string $ancestor, string $path): string
+    {
+        $ancestor = PathUtil::ensureTrailingSlash($ancestor);
+        if (strpos($path, $ancestor) === 0) {
+            $path = substr($path, strlen($ancestor));
+        }
+        return $path;
+    }
+
+    /**
+     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     *
+     * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator
+     *   to throw an exception here (because the given directory has disappeared)
+     *   but extremely unlikely, and it's infeasible to simulate in automated
+     *   tests--at least without way more trouble than it's worth.
+     */
+    private function getRecursiveDirectoryIterator(string $directory): RecursiveDirectoryIterator
+    {
+        try {
+            return new RecursiveDirectoryIterator(
+                $directory,
+                FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
+            );
+        } catch (\UnexpectedValueException $e) {
+            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }

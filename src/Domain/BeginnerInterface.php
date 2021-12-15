@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.
@@ -18,7 +18,7 @@ interface BeginnerInterface
      * @param string $stagingDir
      *   The staging directory as an absolute path or relative to the working
      *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param string[]|null $exclusions
+     * @param string[] $exclusions
      *   Paths to exclude, relative to the active directory. Careful use of
      *   exclusions can reduce execution time and disk usage. Two kinds of files
      *   and directories are good candidates for exclusion:
@@ -32,7 +32,7 @@ interface BeginnerInterface
      *
      *   With rare exception, you should use the same exclusions when beginning
      *   as when committing.
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -50,8 +50,8 @@ interface BeginnerInterface
     public function begin(
         string $activeDir,
         string $stagingDir,
-        ?array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        array $exclusions = [],
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }

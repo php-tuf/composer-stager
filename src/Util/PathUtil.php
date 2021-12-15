@@ -2,45 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Util;
 
-/**
- * @internal
- */
-final class DirectoryUtil
+abstract class PathUtil
 {
-    /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * Makes a path relative to a given ancestor by stripping said ancestor
-     * (as-given) from the front of it.
-     *
-     * Note: this method is not robust. It uses string comparison only. It does
-     * no validation and only very limited normalization. It is only fit for
-     * simple cases where the range of possible input is well-known and limited.
-     *
-     * @param string $path
-     *   The path to strip the ancestor from, e.g., "ancestor/descendant".
-     * @param string $ancestor
-     *   The ancestor to strip from the path, e.g., "ancestor".
-     *
-     * @return string
-     *   The resulting path, relative to the ancestor, e.g., "descendant". If
-     *   the path is not a descendant of the ancestor (i.e., it does not begin
-     *   with the ancestor), it will be returned unchanged, with no error.
-     */
-    public static function getPathRelativeToAncestor(string $path, string $ancestor): string
-    {
-        $ancestor = self::ensureTrailingSlash($ancestor);
-        if (strpos($path, $ancestor) === 0) {
-            $path = substr($path, strlen($ancestor));
-        }
-        return $path;
-    }
-
     /**
      * Strips the trailing slash (directory separator) from a given path.
      *

@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Filesystem;
 
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem;
-use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -113,41 +113,6 @@ class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::isDir
-     * @covers ::isFile
-     *
-     * @dataProvider providerIsDirIsFile
-     */
-    public function testIsDirIsFile($path, $isDir, $isFile): void
-    {
-        $sut = $this->createSut();
-
-        self::assertEquals($isDir, $sut->isDir($path));
-        self::assertEquals($isFile, $sut->isFile($path));
-    }
-
-    public function providerIsDirIsFile(): array
-    {
-        return [
-            [ // Directory.
-                'path' => __DIR__,
-                'isDir' => true,
-                'isFile' => false,
-            ],
-            [ // File.
-                'path' => __FILE__,
-                'isDir' => false,
-                'isFile' => true,
-            ],
-            [ // Symlink.
-                'path' => __DIR__ . '/../../../../vendor/bin/phpunit',
-                'isDir' => false,
-                'isFile' => true,
-            ],
-        ];
-    }
-
-    /**
      * @covers ::mkdir
      *
      * @dataProvider providerMkdir
@@ -213,7 +178,7 @@ class FilesystemUnitTest extends TestCase
             ],
             [
                 'path' => 'three/four',
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'givenTimeout' => 10,
                 'expectedTimeout' => 10,
             ],

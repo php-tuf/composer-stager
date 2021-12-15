@@ -9,9 +9,7 @@ For project maintainers.
 1. Create a release tag with [Gitflow](https://github.com/nvie/gitflow):
     1. Choose a [semantic version](https://semver.org/) number (`x.y.z`).
     1. Start the release with `git flow release start x.y.z`.
-    1. Set `\PhpTuf\ComposerStager\Console\Application::VERSION` the version to `x.y.z` and commit.
     1. Finish the release with `git flow release finish x.y.z`.
-    1. Return `\PhpTuf\ComposerStager\Console\Application::VERSION` to dev, i.e., `X.Y.Z-dev` and commit.
     1. Push the release tag to GitHub along with the updated `develop` and `main` branches.
 1. [Create a GitHub release.](https://help.github.com/articles/creating-releases/)
     1. Set the tag version and release title both to the new version number.

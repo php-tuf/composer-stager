@@ -5,9 +5,6 @@ namespace PhpTuf\ComposerStager\Infrastructure\Process;
 use PhpTuf\ComposerStager\Exception\IOException;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
-/**
- * @internal
- */
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     /**
@@ -18,11 +15,11 @@ final class ExecutableFinder implements ExecutableFinderInterface
     /**
      * @var \Symfony\Component\Process\ExecutableFinder
      */
-    private $finder;
+    private $symfonyExecutableFinder;
 
-    public function __construct(SymfonyExecutableFinder $finder)
+    public function __construct(SymfonyExecutableFinder $symfonyExecutableFinder)
     {
-        $this->finder = $finder;
+        $this->symfonyExecutableFinder = $symfonyExecutableFinder;
     }
 
     public function find(string $name): string
@@ -40,8 +37,8 @@ final class ExecutableFinder implements ExecutableFinderInterface
         }
 
         // Look for executable.
-        $this->finder->addSuffix('.phar');
-        $path = $this->finder->find($name);
+        $this->symfonyExecutableFinder->addSuffix('.phar');
+        $path = $this->symfonyExecutableFinder->find($name);
 
         // Cache and throw exception if not found.
         if (is_null($path)) {

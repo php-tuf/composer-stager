@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
+namespace PhpTuf\ComposerStager\Domain\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
  * Recursively syncs files from one directory to another.
@@ -25,12 +25,12 @@ interface FileSyncerInterface
      *   The directory to sync files to, as an absolute path or relative to the
      *   current working directory (CWD), e.g., "/var/www/destination" or
      *   "destination". If it does not exist it will be created.
-     * @param string[]|null $exclusions
+     * @param string[] $exclusions
      *   An array of paths to exclude, relative to the source directory. Absolute
      *   paths are silently ignored. The destination directory is automatically
      *   excluded in order to prevent infinite recursion if it is a descendant of
      *   the source directory (i.e., if it is "underneath" or "inside" it).
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -46,8 +46,8 @@ interface FileSyncerInterface
     public function sync(
         string $source,
         string $destination,
-        ?array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        array $exclusions = [],
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }

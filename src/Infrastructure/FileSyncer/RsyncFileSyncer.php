@@ -2,26 +2,24 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface;
-use PhpTuf\ComposerStager\Util\DirectoryUtil;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Util\PathUtil;
 
-/**
- * @internal
- */
 final class RsyncFileSyncer implements FileSyncerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
     /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Process\Runner\RsyncRunnerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface
      */
     private $rsync;
 
@@ -34,8 +32,8 @@ final class RsyncFileSyncer implements FileSyncerInterface
     public function sync(
         string $source,
         string $destination,
-        ?array $exclusions = [],
-        ?ProcessOutputCallbackInterface $callback = null,
+        array $exclusions = [],
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         if (!$this->filesystem->exists($source)) {
@@ -65,9 +63,9 @@ final class RsyncFileSyncer implements FileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = DirectoryUtil::ensureTrailingSlash($source);
+        $command[] = PathUtil::ensureTrailingSlash($source);
 
-        $command[] = DirectoryUtil::ensureTrailingSlash($destination);
+        $command[] = PathUtil::ensureTrailingSlash($destination);
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)

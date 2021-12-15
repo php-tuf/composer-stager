@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Infrastructure\Filesystem;
+namespace PhpTuf\ComposerStager\Domain\Filesystem;
 
-use PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 
 /**
  * Provides basic utilities for interacting with the file system.
@@ -40,43 +40,8 @@ interface FilesystemInterface
 
     /**
      * Gets the current working directory (CWD) on success.
-     *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
-     *   If there is a failure. For example, on some Unix variants, this check
-     *   will fail if any one of the parent directories does not have the
-     *   readable or search mode set, even if the current directory does.
      */
     public function getcwd(): string;
-
-    /**
-     * Determines whether the given path is a directory.
-     *
-     * Consistent with PHP's own behavior on this point, a symlink will be
-     * followed and treated like the path it points to. In other words, a
-     * symlink that points to a directory will return true.
-     *
-     * @see https://www.php.net/manual/en/function.is-dir.php
-     *
-     * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
-     */
-    public function isDir(string $path): bool;
-
-    /**
-     * Determines whether the given path is a file.
-     *
-     * Consistent with PHP's own behavior on this point, a symlink will be
-     * followed and treated like the path it points to. In other words, a
-     * symlink that points to a file will return true.
-     *
-     * @see https://www.php.net/manual/en/function.is-file.php
-     *
-     * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
-     */
-    public function isFile(string $path): bool;
 
     /**
      * Determines whether the given path is writable.
@@ -104,7 +69,7 @@ interface FilesystemInterface
      * @param string $path
      *   A path as absolute or relative to the working directory (CWD), e.g.,
      *   "/var/www/public" or "public".
-     * @param \PhpTuf\ComposerStager\Domain\Output\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -115,7 +80,7 @@ interface FilesystemInterface
      */
     public function remove(
         string $path,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }
