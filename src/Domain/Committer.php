@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain;
 
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -29,22 +30,22 @@ final class Committer implements CommitterInterface
     }
 
     public function commit(
-        string $stagingDir,
-        string $activeDir,
+        PathInterface $stagingDir,
+        PathInterface $activeDir,
         array $exclusions = [],
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists($stagingDir)) {
-            throw new DirectoryNotFoundException($stagingDir, 'The staging directory does not exist at "%s"');
+        if (!$this->filesystem->exists((string) $stagingDir)) {
+            throw new DirectoryNotFoundException((string) $stagingDir, 'The staging directory does not exist at "%s"');
         }
 
-        if (!$this->filesystem->exists($activeDir)) {
-            throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
+        if (!$this->filesystem->exists((string) $activeDir)) {
+            throw new DirectoryNotFoundException((string) $activeDir, 'The active directory does not exist at "%s"');
         }
 
-        if (!$this->filesystem->isWritable($activeDir)) {
-            throw new DirectoryNotWritableException($activeDir, 'The active directory is not writable at "%s"');
+        if (!$this->filesystem->isWritable((string) $activeDir)) {
+            throw new DirectoryNotWritableException((string) $activeDir, 'The active directory is not writable at "%s"');
         }
 
         try {

@@ -6,6 +6,7 @@ use Closure;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -13,6 +14,9 @@ use Prophecy\Argument;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
@@ -43,28 +47,30 @@ class PhpFileSyncerUnitTest extends TestCase
     {
         $this->expectException(DirectoryNotFoundException::class);
 
-        $source = 'source';
+        $source = PathFactory::create('source');
         $this->filesystem
             ->exists($source)
             ->willReturn(false);
 
         $sut = $this->createSut();
 
-        $sut->sync($source, 'destination');
+        $destination = PathFactory::create('destination');
+        $sut->sync($source, $destination);
     }
 
     public function testSyncDestinationCouldNotBeCreated(): void
     {
         $this->expectException(IOException::class);
 
-        $destination = 'destination';
+        $destination = PathFactory::create('destination');
         $this->filesystem
             ->mkdir($destination)
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();
 
-        $sut->sync('source', $destination, []);
+        $source = PathFactory::create('source');
+        $sut->sync($source, $destination, []);
     }
 
     /**

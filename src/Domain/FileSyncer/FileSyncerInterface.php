@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
  * Recursively syncs files from one directory to another.
@@ -16,15 +17,11 @@ interface FileSyncerInterface
      * newer. Files in the destination that do not exist in the source will be deleted.
      * Excluded paths will be completely ignored and neither copied to nor deleted
      * from the destination. If the destination does not exist, it will be created.
-     * Remote filesystems are not supported.
      *
-     * @param string $source
-     *   The directory to sync files from, as an absolute path or relative to the
-     *   current working directory (CWD), e.g., "/var/www/source" or "source".
-     * @param string $destination
-     *   The directory to sync files to, as an absolute path or relative to the
-     *   current working directory (CWD), e.g., "/var/www/destination" or
-     *   "destination". If it does not exist it will be created.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
+     *   The directory to sync files from.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
+     *   The directory to sync files to.
      * @param string[] $exclusions
      *   An array of paths to exclude, relative to the source directory. Absolute
      *   paths are silently ignored. The destination directory is automatically
@@ -44,8 +41,8 @@ interface FileSyncerInterface
      *   If the command process doesn't terminate successfully.
      */
     public function sync(
-        string $source,
-        string $destination,
+        PathInterface $source,
+        PathInterface $destination,
         array $exclusions = [],
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120

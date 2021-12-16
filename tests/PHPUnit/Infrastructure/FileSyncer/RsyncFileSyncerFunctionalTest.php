@@ -11,10 +11,14 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer
  * @covers ::__construct
  * @covers ::sync
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Runner\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  */
 class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase

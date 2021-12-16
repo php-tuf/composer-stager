@@ -42,8 +42,8 @@ class Updater
 
     public function update(): void
     {
-        $activeDir = '/var/www/public';
-        $stagingDir = '/var/www/staging';
+        $activeDir = PathFactory::create('/var/www/public');
+        $stagingDir = PathFactory::create('/var/www/staging');
 
         // Copy the codebase to the staging directory.
         $this->beginner->begin($activeDir, $stagingDir);

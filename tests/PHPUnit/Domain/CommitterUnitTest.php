@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -18,14 +19,22 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  * @property \PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface stagingDir
  */
 class CommitterUnitTest extends TestCase
 {
     protected function setUp(): void
     {
+        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
+        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
@@ -50,8 +59,8 @@ class CommitterUnitTest extends TestCase
     {
         $this->fileSyncer
             ->sync(
-                self::STAGING_DIR,
-                self::ACTIVE_DIR,
+                $this->stagingDir,
+                $this->activeDir,
                 [],
                 null,
                 120
@@ -59,7 +68,7 @@ class CommitterUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit(self::STAGING_DIR, self::ACTIVE_DIR);
+        $sut->commit($this->stagingDir, $this->activeDir);
     }
 
     /**
@@ -69,6 +78,9 @@ class CommitterUnitTest extends TestCase
      */
     public function testCommitWithOptionalParams($stagingDir, $activeDir, $givenExclusions, $expectedExclusions, $callback, $timeout): void
     {
+        $stagingDir = PathFactory::create(self::STAGING_DIR);
+        $activeDir = PathFactory::create(self::ACTIVE_DIR);
+
         $this->fileSyncer
             ->sync($stagingDir, $activeDir, $expectedExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
@@ -106,6 +118,10 @@ class CommitterUnitTest extends TestCase
      */
     public function testDirectoryNotFound($stagingDir, $activeDir, $missingDir, $exceptionMessage): void
     {
+        $stagingDir = PathFactory::create($stagingDir);
+        $activeDir = PathFactory::create($activeDir);
+        $missingDir = PathFactory::create($missingDir);
+
         $this->expectException(DirectoryNotFoundException::class);
         $this->expectExceptionMessageMatches($exceptionMessage);
         $this->filesystem
@@ -144,6 +160,8 @@ class CommitterUnitTest extends TestCase
      */
     public function testActiveDirectoryNotWritable($activeDir): void
     {
+        $activeDir = PathFactory::create($activeDir);
+
         $this->expectException(DirectoryNotWritableException::class);
         $this->expectExceptionMessageMatches(sprintf('@active directory.*not writable.*%s@', addslashes($activeDir)));
         $this->filesystem
@@ -204,6 +222,6 @@ class CommitterUnitTest extends TestCase
             ->willThrow(IOException::class);
         $sut = $this->createSut();
 
-        $sut->commit(self::STAGING_DIR, self::ACTIVE_DIR);
+        $sut->commit($this->stagingDir, $this->activeDir);
     }
 }

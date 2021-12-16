@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain;
 
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
  * Makes the staged changes live by syncing the active directory with the staging directory.
@@ -12,12 +13,10 @@ interface CommitterInterface
     /**
      * Commits staged changes to the active directory.
      *
-     * @param string $stagingDir
-     *   The staging directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param string $activeDir
-     *   The active directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/public" or "public".
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+     *   The staging directory.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
+     *   The active directory.
      * @param string[] $exclusions
      *   Paths to exclude, relative to the active directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
@@ -37,8 +36,8 @@ interface CommitterInterface
      *   If the command process doesn't terminate successfully.
      */
     public function commit(
-        string $stagingDir,
-        string $activeDir,
+        PathInterface $stagingDir,
+        PathInterface $activeDir,
         array $exclusions = [],
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120

@@ -9,9 +9,13 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunc
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
  * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  */
 class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {

@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
@@ -19,7 +20,11 @@ use Prophecy\Argument;
  * @covers ::sync
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
@@ -50,6 +55,9 @@ class RsyncFileSyncerUnitTest extends TestCase
      */
     public function testSync($source, $destination, $exclusions, $command, $callback): void
     {
+        $source = PathFactory::create($source);
+        $destination = PathFactory::create($destination);
+
         $this->filesystem
             ->mkdir($destination)
             ->shouldBeCalledOnce();
@@ -72,9 +80,9 @@ class RsyncFileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '--exclude=source/one',
-                    'source/one' . DIRECTORY_SEPARATOR,
-                    'destination/two' . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/one') . DIRECTORY_SEPARATOR,
+                    PathFactory::create('source/one') . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/two') . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => null,
             ],
@@ -91,9 +99,9 @@ class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=three',
                     '--exclude=four.txt',
-                    '--exclude=source/two' . DIRECTORY_SEPARATOR,
-                    'source/two' . DIRECTORY_SEPARATOR,
-                    'destination/two' . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/two') . DIRECTORY_SEPARATOR,
+                    PathFactory::create('source/two') . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/two') . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => new TestOutputCallback(),
             ],
@@ -110,9 +118,9 @@ class RsyncFileSyncerUnitTest extends TestCase
                     '--delete-after',
                     '--verbose',
                     '--exclude=destination/three',
-                    '--exclude=source/three',
-                    'source/three' . DIRECTORY_SEPARATOR,
-                    'destination/three' . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/three') . DIRECTORY_SEPARATOR,
+                    PathFactory::create('source/three') . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/three') . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => null,
             ],
@@ -131,7 +139,9 @@ class RsyncFileSyncerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->sync('lorem', 'ipsum', []);
+        $source = PathFactory::create('lorem');
+        $destination = PathFactory::create('ipsum');
+        $sut->sync($source, $destination, []);
     }
 
     public function providerSyncFailure(): array
@@ -153,7 +163,9 @@ class RsyncFileSyncerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->sync(self::ACTIVE_DIR, self::STAGING_DIR);
+        $source = PathFactory::create(self::ACTIVE_DIR);
+        $destination = PathFactory::create(self::STAGING_DIR);
+        $sut->sync($source, $destination);
     }
 
     public function testSyncCreateDestinationDirectoryFailed(): void
@@ -161,11 +173,13 @@ class RsyncFileSyncerUnitTest extends TestCase
         $this->expectException(IOException::class);
 
         $this->filesystem
-            ->mkdir('destination')
+            ->mkdir(PathFactory::create('destination'))
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();
 
-        $sut->sync('source', 'destination');
+        $source = PathFactory::create('source');
+        $destination = PathFactory::create('destination');
+        $sut->sync($source, $destination);
     }
 }

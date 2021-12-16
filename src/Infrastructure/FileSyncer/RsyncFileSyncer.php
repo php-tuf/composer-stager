@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
@@ -29,13 +30,17 @@ final class RsyncFileSyncer implements FileSyncerInterface
         $this->rsync = $rsync;
     }
 
+    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
     public function sync(
-        string $source,
-        string $destination,
+        PathInterface $source,
+        PathInterface $destination,
         array $exclusions = [],
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
+        $source = (string) $source;
+        $destination = (string) $destination;
+
         if (!$this->filesystem->exists($source)) {
             throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
@@ -53,7 +58,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
         ];
 
         // Prevent infinite recursion if the source is inside the destination.
-        $exclusions[] = $source;
+        $exclusions[] = PathUtil::ensureTrailingSlash($source);
 
         $exclusions = array_unique($exclusions);
 

@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain;
 
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -29,18 +30,18 @@ final class Beginner implements BeginnerInterface
     }
 
     public function begin(
-        string $activeDir,
-        string $stagingDir,
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
         array $exclusions = [],
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists($activeDir)) {
-            throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
+        if (!$this->filesystem->exists((string) $activeDir)) {
+            throw new DirectoryNotFoundException((string) $activeDir, 'The active directory does not exist at "%s"');
         }
 
-        if ($this->filesystem->exists($stagingDir)) {
-            throw new DirectoryAlreadyExistsException($stagingDir, 'The staging directory already exists at "%s"');
+        if ($this->filesystem->exists((string) $stagingDir)) {
+            throw new DirectoryAlreadyExistsException((string) $stagingDir, 'The staging directory already exists at "%s"');
         }
 
         try {
