@@ -21,7 +21,7 @@ To completely remove the [staging directory](#staging-directory). cf. [begin](#b
 
 ## Commit
 
-To make staged changes live by syncing the [active directory](#active-directory) with the [staging directory](#staging-directory). cf. [begin](#begin), [stage](#stage), and [clean](#clean).
+To make staged changes live by syncing the [active directory](#active-directory) with the [staging directory](#staging-directory) (or syncing the staging directory _to_ the active directory, if you prefer). cf. [begin](#begin), [stage](#stage), and [clean](#clean).
 
 ## Staging directory
 
