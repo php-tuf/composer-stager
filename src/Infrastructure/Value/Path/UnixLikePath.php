@@ -18,8 +18,7 @@ final class UnixLikePath extends AbstractPath
         }
 
         // Otherwise, prefix the CWD.
-        $cwd = $this->filesystem->getcwd();
-        return $cwd . DIRECTORY_SEPARATOR . $path;
+        return $this->cwd . DIRECTORY_SEPARATOR . $path;
     }
 
     private function isAbsolute(string $path): bool

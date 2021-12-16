@@ -2,50 +2,43 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path;
 
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @covers ::__construct()
- *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  */
 class UnixLikePathUnitTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
-    }
-
-    private function createSut($path): UnixLikePath
-    {
-        $filesystem = $this->filesystem->reveal();
-        return new UnixLikePath($filesystem, $path);
-    }
-
     /**
+     * @covers ::__construct()
      * @covers ::__toString
      * @covers ::getAbsolute
+     * @covers ::getcwd
      * @covers ::isAbsolute
      * @covers ::makeAbsolute
      * @covers ::normalize
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality($given, $cwd, $resolved): void
+    public function testBasicFunctionality($given, $cwd, $absolute): void
     {
-        self::fixSeparatorsMultiple($given, $cwd, $resolved);
+        self::fixSeparatorsMultiple($given, $cwd, $absolute);
 
-        $this->filesystem
-            ->getcwd()
-            ->willReturn($cwd);
+        $sut = new UnixLikePath($given);
 
-        $sut = $this->createSut($given);
+        // Dynamically override CWD.
+        $setCwd = function ($cwd) {
+            $this->cwd = $cwd;
+        };
+        $setCwd->call($sut, $cwd);
 
-        self::assertEquals($resolved, $sut->getAbsolute());
-        self::assertEquals($resolved, $sut);
+        self::assertEquals($absolute, $sut->getAbsolute(), 'Got correct value via explicit method call.');
+        self::assertEquals($absolute, $sut, 'Got correct value by implicit casting to string.');
+
+        chdir(__DIR__);
+
+        self::assertEquals($absolute, $sut->getAbsolute(), 'Retained correct value after changing working directory.');
     }
 
     public function providerBasicFunctionality(): array

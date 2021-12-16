@@ -53,8 +53,7 @@ final class WindowsPath extends AbstractPath
     private function normalizeAbsoluteFromCurrentDrive(string $path): string
     {
         // Get the current drive from the CWD.
-        $cwd = $this->filesystem->getcwd();
-        $driveName = substr($cwd, 0, 2);
+        $driveName = substr($this->cwd, 0, 2);
 
         // Prefix the normalized path with it and return.
         return $driveName . $this->normalize($path);
@@ -63,8 +62,7 @@ final class WindowsPath extends AbstractPath
     private function getAbsoluteFromRelative(string $path): string
     {
         // Make the path absolute by prefixing the CWD.
-        $cwd = $this->filesystem->getcwd();
-        $path = $cwd . DIRECTORY_SEPARATOR . $path;
+        $path = $this->cwd . DIRECTORY_SEPARATOR . $path;
 
         // Normalize and return.
         $driveRoot = substr($path, 0, 3);

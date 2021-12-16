@@ -2,25 +2,38 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 abstract class AbstractPath implements PathInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
+     * @var string
      */
-    protected $filesystem;
+    protected $cwd;
 
     /**
      * @var string
      */
     protected $path;
 
-    public function __construct(FilesystemInterface $filesystem, string $path)
+    public function __construct(string $path)
     {
-        $this->filesystem = $filesystem;
         $this->path = $path;
+
+        // Especially since it accepts relative paths, an immutable path value
+        // object should be immune to environmental details like the current
+        // working directory. Cache the CWD at time of creation.
+        $this->cwd = $this->getcwd();
+    }
+
+    /**
+     * In order to avoid class dependencies, PHP's internal getcwd() function is
+     * called directly here. For comparison...
+     * @see \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem::getcwd
+     */
+    private function getcwd(): string
+    {
+        return (string) getcwd();
     }
 
     final public function __toString(): string

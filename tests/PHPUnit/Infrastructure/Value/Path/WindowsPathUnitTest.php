@@ -2,36 +2,23 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path;
 
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @covers ::__construct()
- * @covers ::__toString
- * @covers ::normalize
- *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
  */
 class WindowsPathUnitTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
-    }
-
-    private function createSut($path): WindowsPath
-    {
-        $filesystem = $this->filesystem->reveal();
-        return new WindowsPath($filesystem, $path);
-    }
-
     /**
+     * @covers ::__construct()
+     * @covers ::__toString
      * @covers ::getAbsolute
      * @covers ::getAbsoluteFromRelative
+     * @covers ::getcwd
      * @covers ::isAbsoluteFromCurrentDrive
      * @covers ::isAbsoluteFromSpecificDrive
+     * @covers ::normalize
      * @covers ::normalizeAbsoluteFromCurrentDrive
      * @covers ::normalizeAbsoluteFromSpecificDrive
      *
@@ -45,14 +32,20 @@ class WindowsPathUnitTest extends TestCase
             self::fixSeparatorsMultiple($given, $cwd, $absolute);
         }
 
-        $this->filesystem
-            ->getcwd()
-            ->willReturn($cwd);
+        $sut = new WindowsPath($given);
 
-        $sut = $this->createSut($given);
+        // Dynamically override CWD.
+        $setCwd = function ($cwd) {
+            $this->cwd = $cwd;
+        };
+        $setCwd->call($sut, $cwd);
 
-        self::assertEquals($absolute, $sut->getAbsolute());
-        self::assertEquals($absolute, $sut);
+        self::assertEquals($absolute, $sut->getAbsolute(), 'Got correct value via explicit method call.');
+        self::assertEquals($absolute, $sut, 'Got correct value by implicit casting to string.');
+
+        chdir(__DIR__);
+
+        self::assertEquals($absolute, $sut->getAbsolute(), 'Retained correct value after changing working directory.');
     }
 
     public function providerBasicFunctionality(): array
