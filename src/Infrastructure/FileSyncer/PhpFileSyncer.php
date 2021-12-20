@@ -175,6 +175,11 @@ final class PhpFileSyncer implements FileSyncerInterface
             $exclusions
         ): bool {
             $relativePathname = self::getRelativePath($directory, $foundPathname);
+            // On the surface, it may look like individual descendants of an excluded
+            // directory (i.e., files "underneath" or "inside" it) won't be excluded
+            // because they aren't individually in the array in order to be matched.
+            // But because the directory iterator is recursive, their excluded
+            // ancestor WILL BE found, and they will be excluded by extension.
             return !in_array($relativePathname, $exclusions, true);
         });
 
