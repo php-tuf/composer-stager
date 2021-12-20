@@ -54,6 +54,10 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt',
+            // Files excluded by "hidden" directory, i.e., beginning with a "dot" (.), e.g., ".git".
+            '.hidden_EXCLUDED_dir/one.txt',
+            '.hidden_EXCLUDED_dir/two.txt',
+            '.hidden_EXCLUDED_dir/three.txt',
             // Files to be changed in the staging directory.
             'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
@@ -71,6 +75,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'EXCLUDED_dir',
             'another_EXCLUDED_dir/', // With a trailing slash.
             'arbitrary_subdir/with/nested/EXCLUDED_dir',
+            // "Hidden" directoriy.
+            '.hidden_EXCLUDED_dir',
             // Duplicative.
             'EXCLUDED_file_in_active_dir_root.txt',
             // Overlapping.
@@ -129,6 +135,10 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt',
+            // Files excluded by "hidden" directory are still in the active directory".
+            '.hidden_EXCLUDED_dir/one.txt',
+            '.hidden_EXCLUDED_dir/two.txt',
+            '.hidden_EXCLUDED_dir/three.txt',
             // Files created in the staging directory are copied back to the active directory.
             'CREATE_in_staging_dir.txt',
             'another_subdir/CREATE_in_staging_dir.txt',
