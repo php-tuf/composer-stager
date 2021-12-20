@@ -75,7 +75,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'EXCLUDED_dir',
             'another_EXCLUDED_dir/', // With a trailing slash.
             'arbitrary_subdir/with/nested/EXCLUDED_dir',
-            // "Hidden" directoriy.
+            // "Hidden" directory.
             '.hidden_EXCLUDED_dir',
             // Duplicative.
             'EXCLUDED_file_in_active_dir_root.txt',
