@@ -4,6 +4,7 @@ parameters:
     paths:
         - src
         - .gitattributes
+    treatPhpDocTypesAsCertain: false
 
 rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule # Requires concrete classes to be final.
@@ -12,4 +13,4 @@ rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\NonAbstractUtilityClassRule # Requires utility classes to be abstract.
     - PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
     - PhpTuf\ComposerStager\Tests\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing non-PhpTuf exceptions from code public methods.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing non-PhpTuf exceptions from public methods.
