@@ -22,9 +22,12 @@
     </yaml>
     <codeStyleSettings language="PHP">
       <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
+      <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="0" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
       <option name="BLANK_LINES_BEFORE_PACKAGE" value="0" />
       <option name="BLANK_LINES_AFTER_PACKAGE" value="1" />
+      <option name="BLANK_LINES_AROUND_FIELD" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
       <option name="SPACE_AFTER_TYPE_CAST" value="true" />
       <option name="CALL_PARAMETERS_WRAP" value="1" />
