@@ -8,7 +8,7 @@ final class WindowsPath extends AbstractPath
      * Windows path rules are complex. They are only partially implemented here.
      * @see https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats
      */
-    public function getAbsolute(): string
+    protected function resolve(string $basePath): string
     {
         $path = $this->path;
 
@@ -19,12 +19,12 @@ final class WindowsPath extends AbstractPath
 
         // If the path is absolute from the current drive, e.g., `\Program Files\Example`.
         if ($this->isAbsoluteFromCurrentDrive($path)) {
-            return $this->normalizeAbsoluteFromCurrentDrive($path);
+            return $this->normalizeAbsoluteFromCurrentDrive($path, $basePath);
         }
 
         // Otherwise, the path is assumed to be relative--there are technically
         // other possibilities--e.g., `Example' or `..\Example`.
-        return $this->getAbsoluteFromRelative($path);
+        return $this->getAbsoluteFromRelative($path, $basePath);
     }
 
     private function isAbsoluteFromSpecificDrive(string $path): bool
@@ -50,19 +50,19 @@ final class WindowsPath extends AbstractPath
         return preg_match('/^[\\\\\/]/', $path) === 1;
     }
 
-    private function normalizeAbsoluteFromCurrentDrive(string $path): string
+    private function normalizeAbsoluteFromCurrentDrive(string $path, string $basePath): string
     {
-        // Get the current drive from the CWD.
-        $driveName = substr($this->cwd, 0, 2);
+        // Get the current drive from the base path.
+        $driveName = substr($basePath, 0, 2);
 
         // Prefix the normalized path with it and return.
         return $driveName . $this->normalize($path);
     }
 
-    private function getAbsoluteFromRelative(string $path): string
+    private function getAbsoluteFromRelative(string $path, string $basePath): string
     {
-        // Make the path absolute by prefixing the CWD.
-        $path = $this->cwd . DIRECTORY_SEPARATOR . $path;
+        // Make the path absolute by prefixing the base path.
+        $path = $basePath . DIRECTORY_SEPARATOR . $path;
 
         // Normalize and return.
         $driveRoot = substr($path, 0, 3);

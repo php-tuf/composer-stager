@@ -49,8 +49,8 @@ final class PhpFileSyncer implements FileSyncerInterface
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $source = (string) $source;
-        $destination = (string) $destination;
+        $source = $source->getResolved();
+        $destination = $destination->getResolved();
 
         $this->source = $this->processSource($source);
         $this->destination = $this->processDestination($destination);

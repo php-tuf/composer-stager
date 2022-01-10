@@ -38,10 +38,10 @@ class BeginnerUnitTest extends TestCase
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists($this->activeDir)
+            ->exists($this->activeDir->getResolved())
             ->willReturn(true);
         $this->filesystem
-            ->exists($this->stagingDir)
+            ->exists($this->stagingDir->getResolved())
             ->willReturn(false);
     }
 
@@ -58,10 +58,10 @@ class BeginnerUnitTest extends TestCase
     public function testBeginWithMinimumParams(): void
     {
         $this->filesystem
-            ->exists($this->activeDir)
+            ->exists($this->activeDir->getResolved())
             ->willReturn(true);
         $this->filesystem
-            ->exists($this->stagingDir)
+            ->exists($this->stagingDir->getResolved())
             ->willReturn(false);
         $this->fileSyncer
             ->sync($this->activeDir, $this->stagingDir, [], null, 120)
@@ -81,10 +81,10 @@ class BeginnerUnitTest extends TestCase
         $activeDir = PathFactory::create($activeDir);
         $stagingDir = PathFactory::create($stagingDir);
         $this->filesystem
-            ->exists($activeDir)
+            ->exists($activeDir->getResolved())
             ->willReturn(true);
         $this->filesystem
-            ->exists($stagingDir)
+            ->exists($stagingDir->getResolved())
             ->willReturn(false);
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
@@ -139,7 +139,7 @@ class BeginnerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/active directory.*not exist/');
 
         $this->filesystem
-            ->exists($this->activeDir)
+            ->exists($this->activeDir->getResolved())
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
@@ -156,7 +156,7 @@ class BeginnerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory already exists/');
 
         $this->filesystem
-            ->exists($this->stagingDir)
+            ->exists($this->stagingDir->getResolved())
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();

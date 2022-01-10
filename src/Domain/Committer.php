@@ -36,16 +36,18 @@ final class Committer implements CommitterInterface
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists((string) $stagingDir)) {
-            throw new DirectoryNotFoundException((string) $stagingDir, 'The staging directory does not exist at "%s"');
+        $stagingDirResolved = $stagingDir->getResolved();
+        if (!$this->filesystem->exists($stagingDirResolved)) {
+            throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
 
-        if (!$this->filesystem->exists((string) $activeDir)) {
-            throw new DirectoryNotFoundException((string) $activeDir, 'The active directory does not exist at "%s"');
+        $activeDirResolved = $activeDir->getResolved();
+        if (!$this->filesystem->exists($activeDirResolved)) {
+            throw new DirectoryNotFoundException($activeDirResolved, 'The active directory does not exist at "%s"');
         }
 
-        if (!$this->filesystem->isWritable((string) $activeDir)) {
-            throw new DirectoryNotWritableException((string) $activeDir, 'The active directory is not writable at "%s"');
+        if (!$this->filesystem->isWritable($activeDirResolved)) {
+            throw new DirectoryNotWritableException($activeDirResolved, 'The active directory is not writable at "%s"');
         }
 
         try {

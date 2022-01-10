@@ -36,12 +36,14 @@ final class Beginner implements BeginnerInterface
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists((string) $activeDir)) {
-            throw new DirectoryNotFoundException((string) $activeDir, 'The active directory does not exist at "%s"');
+        $activeDirResolved = $activeDir->getResolved();
+        if (!$this->filesystem->exists($activeDirResolved)) {
+            throw new DirectoryNotFoundException($activeDirResolved, 'The active directory does not exist at "%s"');
         }
 
-        if ($this->filesystem->exists((string) $stagingDir)) {
-            throw new DirectoryAlreadyExistsException((string) $stagingDir, 'The staging directory already exists at "%s"');
+        $stagingDirResolved = $stagingDir->getResolved();
+        if ($this->filesystem->exists($stagingDirResolved)) {
+            throw new DirectoryAlreadyExistsException($stagingDirResolved, 'The staging directory already exists at "%s"');
         }
 
         try {

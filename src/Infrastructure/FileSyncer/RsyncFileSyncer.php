@@ -38,8 +38,8 @@ final class RsyncFileSyncer implements FileSyncerInterface
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $source = (string) $source;
-        $destination = (string) $destination;
+        $source = $source->getResolved();
+        $destination = $destination->getResolved();
 
         if (!$this->filesystem->exists($source)) {
             throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');

@@ -59,7 +59,7 @@ class RsyncFileSyncerUnitTest extends TestCase
         $destination = PathFactory::create($destination);
 
         $this->filesystem
-            ->mkdir($destination)
+            ->mkdir($destination->getResolved())
             ->shouldBeCalledOnce();
         $this->rsync
             ->run($command, $callback)
@@ -80,9 +80,9 @@ class RsyncFileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '--exclude=' . PathFactory::create('source/one') . DIRECTORY_SEPARATOR,
-                    PathFactory::create('source/one') . DIRECTORY_SEPARATOR,
-                    PathFactory::create('destination/two') . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/one')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('source/one')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/two')->getResolved() . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => null,
             ],
@@ -99,9 +99,9 @@ class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=three',
                     '--exclude=four.txt',
-                    '--exclude=' . PathFactory::create('source/two') . DIRECTORY_SEPARATOR,
-                    PathFactory::create('source/two') . DIRECTORY_SEPARATOR,
-                    PathFactory::create('destination/two') . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/two')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('source/two')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/two')->getResolved() . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => new TestOutputCallback(),
             ],
@@ -118,9 +118,9 @@ class RsyncFileSyncerUnitTest extends TestCase
                     '--delete-after',
                     '--verbose',
                     '--exclude=destination/three',
-                    '--exclude=' . PathFactory::create('source/three') . DIRECTORY_SEPARATOR,
-                    PathFactory::create('source/three') . DIRECTORY_SEPARATOR,
-                    PathFactory::create('destination/three') . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/three')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('source/three')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/three')->getResolved() . DIRECTORY_SEPARATOR,
                 ],
                 'callback' => null,
             ],
@@ -173,7 +173,7 @@ class RsyncFileSyncerUnitTest extends TestCase
         $this->expectException(IOException::class);
 
         $this->filesystem
-            ->mkdir(PathFactory::create('destination'))
+            ->mkdir(PathFactory::create('destination')->getResolved())
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();
