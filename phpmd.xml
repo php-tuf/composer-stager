@@ -33,4 +33,6 @@
     <rule ref="rulesets/unusedcode.xml">
         <exclude name="UnusedFormalParameter"/>
     </rule>
+
+    <exclude-pattern>tests</exclude-pattern>
 </ruleset>
