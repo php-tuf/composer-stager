@@ -44,9 +44,13 @@ class Updater
     {
         $activeDir = PathFactory::create('/var/www/public');
         $stagingDir = PathFactory::create('/var/www/staging');
+        $exclusions = new PathAggregateFactory::create([
+            'cache',
+            'uploads',
+        ]);
 
         // Copy the codebase to the staging directory.
-        $this->beginner->begin($activeDir, $stagingDir);
+        $this->beginner->begin($activeDir, $stagingDir, $exclusions);
 
         // Run a Composer command on it.
         $this->stager->stage([
@@ -56,7 +60,7 @@ class Updater
         ], $stagingDir);
 
         // Sync the changes back to the active directory.
-        $this->committer->commit($stagingDir, $activeDir);
+        $this->committer->commit($stagingDir, $activeDir, $exclusions->getAll());
 
         // Remove the staging directory.
         $this->cleaner->clean($stagingDir);

@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
@@ -32,8 +33,8 @@ final class Beginner implements BeginnerInterface
     public function begin(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $activeDirResolved = $activeDir->getResolved();
@@ -46,11 +47,15 @@ final class Beginner implements BeginnerInterface
             throw new DirectoryAlreadyExistsException($stagingDirResolved, 'The staging directory already exists at "%s"');
         }
 
+        $exclusionList = $exclusions === null ? [] : $exclusions->getAll();
+        $exclusionList = array_map(static function ($path): string {
+            return $path->getResolved();
+        }, $exclusionList);
         try {
             $this->fileSyncer->sync(
                 $activeDir,
                 $stagingDir,
-                $exclusions,
+                $exclusionList,
                 $callback,
                 $timeout
             );

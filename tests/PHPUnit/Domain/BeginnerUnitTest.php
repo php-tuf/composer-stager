@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -19,7 +20,9 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
@@ -80,6 +83,7 @@ class BeginnerUnitTest extends TestCase
     {
         $activeDir = PathFactory::create($activeDir);
         $stagingDir = PathFactory::create($stagingDir);
+
         $this->filesystem
             ->exists($activeDir->getResolved())
             ->willReturn(true);
@@ -100,7 +104,7 @@ class BeginnerUnitTest extends TestCase
             [
                 'activeDir' => 'one/two',
                 'stagingDir' => 'three/four',
-                'givenExclusions' => [],
+                'givenExclusions' => null,
                 'expectedExclusions' => [],
                 'callback' => null,
                 'timeout' => null,
@@ -108,21 +112,21 @@ class BeginnerUnitTest extends TestCase
             [
                 'activeDir' => 'five/six',
                 'stagingDir' => 'seven/eight',
-                'givenExclusions' => ['nine/ten'],
-                'expectedExclusions' => ['nine/ten'],
+                'givenExclusions' => PathAggregateFactory::create(['nine/ten']),
+                'expectedExclusions' => [PathFactory::create('nine/ten')->getResolved()],
                 'callback' => new TestOutputCallback(),
                 'timeout' => 100,
             ],
             [
                 'activeDir' => 'eleven/twelve',
                 'stagingDir' => 'thirteen/fourteen',
-                'givenExclusions' => [
+                'givenExclusions' => PathAggregateFactory::create([
                     'thirteen/fourteen',
                     'fifteen/sixteen',
-                ],
+                ]),
                 'expectedExclusions' => [
-                    'thirteen/fourteen',
-                    'fifteen/sixteen',
+                    PathFactory::create('thirteen/fourteen')->getResolved(),
+                    PathFactory::create('fifteen/sixteen')->getResolved(),
                 ],
                 'callback' => null,
                 'timeout' => null,
