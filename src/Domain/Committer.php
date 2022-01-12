@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
@@ -32,8 +33,8 @@ final class Committer implements CommitterInterface
     public function commit(
         PathInterface $stagingDir,
         PathInterface $activeDir,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $stagingDirResolved = $stagingDir->getResolved();
@@ -50,8 +51,12 @@ final class Committer implements CommitterInterface
             throw new DirectoryNotWritableException($activeDirResolved, 'The active directory is not writable at "%s"');
         }
 
+        $exclusionList = $exclusions === null ? [] : $exclusions->getAll();
+        $exclusionList = array_map(static function ($path): string {
+            return $path->getResolved();
+        }, $exclusionList);
         try {
-            $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
+            $this->fileSyncer->sync($stagingDir, $activeDir, $exclusionList, $callback, $timeout);
         } catch (IOException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }

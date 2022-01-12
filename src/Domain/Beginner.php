@@ -52,13 +52,7 @@ final class Beginner implements BeginnerInterface
             return $path->getResolved();
         }, $exclusionList);
         try {
-            $this->fileSyncer->sync(
-                $activeDir,
-                $stagingDir,
-                $exclusionList,
-                $callback,
-                $timeout
-            );
+            $this->fileSyncer->sync($activeDir, $stagingDir, $exclusionList, $callback, $timeout);
         } catch (IOException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }

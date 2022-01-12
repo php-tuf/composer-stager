@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
@@ -17,8 +18,8 @@ interface CommitterInterface
      *   The staging directory.
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
      *   The active directory.
-     * @param string[] $exclusions
-     *   Paths to exclude, relative to the active directory. With rare exception,
+     * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
+     *   Paths to exclude, relative to the staging directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
      * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
@@ -38,8 +39,8 @@ interface CommitterInterface
     public function commit(
         PathInterface $stagingDir,
         PathInterface $activeDir,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 

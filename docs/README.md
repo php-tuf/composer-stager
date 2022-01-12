@@ -60,7 +60,7 @@ class Updater
         ], $stagingDir);
 
         // Sync the changes back to the active directory.
-        $this->committer->commit($stagingDir, $activeDir, $exclusions->getAll());
+        $this->committer->commit($stagingDir, $activeDir, $exclusions);
 
         // Remove the staging directory.
         $this->cleaner->clean($stagingDir);
