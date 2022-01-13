@@ -7,12 +7,12 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
  */
 class UnixLikePathUnitTest extends TestCase
 {
     /**
      * @covers ::__construct()
-     * @covers ::getcwd
      * @covers ::getResolved
      * @covers ::getResolvedRelativeTo
      * @covers ::isAbsolute

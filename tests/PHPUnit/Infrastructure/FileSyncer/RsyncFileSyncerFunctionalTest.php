@@ -10,8 +10,11 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer
  * @covers ::__construct
+ * @covers ::getRelativePath
  * @covers ::sync
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ProcessFactory

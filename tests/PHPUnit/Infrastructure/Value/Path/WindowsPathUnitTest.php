@@ -13,7 +13,6 @@ class WindowsPathUnitTest extends TestCase
     /**
      * @covers ::__construct()
      * @covers ::getAbsoluteFromRelative
-     * @covers ::getcwd
      * @covers ::getResolved
      * @covers ::getResolvedRelativeTo
      * @covers ::isAbsoluteFromCurrentDrive
@@ -22,6 +21,7 @@ class WindowsPathUnitTest extends TestCase
      * @covers ::normalizeAbsoluteFromCurrentDrive
      * @covers ::normalizeAbsoluteFromSpecificDrive
      * @covers ::resolve
+     * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
      *
      * @dataProvider providerBasicFunctionality
      */

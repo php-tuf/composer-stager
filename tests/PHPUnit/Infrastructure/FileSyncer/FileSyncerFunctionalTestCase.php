@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -88,7 +89,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             // Non-existent.
             'file_that_NEVER_EXISTS_anywhere.txt',
         ];
-        $exclusions = array_map([self::class, 'fixSeparators'], $exclusions);
+        $exclusions = PathAggregateFactory::create($exclusions);
 
         // Sync files from the active directory to the new staging directory.
         $sut->sync($activeDirPath, $stagingDirPath, $exclusions);
@@ -295,7 +296,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                     RsyncFileSyncer::class,
                 ],
             ],
-            'Nested: Both dirs absolute, staging as "hidden" dir' => [
+            'Nested: both dirs absolute, staging as "hidden" dir' => [
                 'activeDir' => self::TEST_ENV . '/active-dir',
                 'stagingDir' => self::TEST_ENV . '/active-dir/.composer_staging',
                 // @todo

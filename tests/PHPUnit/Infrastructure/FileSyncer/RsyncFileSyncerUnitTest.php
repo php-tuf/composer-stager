@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
@@ -17,9 +18,13 @@ use Prophecy\Argument;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer
  * @covers ::__construct
+ * @covers ::getRelativePath
  * @covers ::sync
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\NullPathAggregate
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
@@ -75,52 +80,54 @@ class RsyncFileSyncerUnitTest extends TestCase
             [
                 'source' => 'source/one',
                 'destination' => 'destination/two',
-                'exclusions' => [],
+                'exclusions' => null,
                 'command' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '--exclude=' . PathFactory::create('source/one')->getResolved() . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/one')->getResolved(),
                     PathFactory::create('source/one')->getResolved() . DIRECTORY_SEPARATOR,
-                    PathFactory::create('destination/two')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/two')->getResolved(),
                 ],
                 'callback' => null,
             ],
             [
                 'source' => 'source/two' . DIRECTORY_SEPARATOR,
                 'destination' => 'destination/two',
-                'exclusions' => [
+                'exclusions' => PathAggregateFactory::create([
                     'three',
                     'four.txt',
-                ],
+                ]),
                 'command' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
                     '--exclude=three',
                     '--exclude=four.txt',
-                    '--exclude=' . PathFactory::create('source/two')->getResolved() . DIRECTORY_SEPARATOR,
+                    '--exclude=' . PathFactory::create('source/two')->getResolved(),
                     PathFactory::create('source/two')->getResolved() . DIRECTORY_SEPARATOR,
-                    PathFactory::create('destination/two')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/two')->getResolved(),
                 ],
                 'callback' => new TestOutputCallback(),
             ],
             [
                 'source' => 'source/three',
                 'destination' => 'destination/three',
-                'exclusions' => [
-                    'destination/three',
-                    'destination/three',
-                    'destination/three',
-                ],
+                'exclusions' => PathAggregateFactory::create([
+                    'four/five',
+                    'six/seven',
+                    'six/seven',
+                    'six/seven',
+                ]),
                 'command' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '--exclude=destination/three',
-                    '--exclude=' . PathFactory::create('source/three')->getResolved() . DIRECTORY_SEPARATOR,
+                    '--exclude=four' . DIRECTORY_SEPARATOR . 'five',
+                    '--exclude=six' . DIRECTORY_SEPARATOR . 'seven',
+                    '--exclude=' . PathFactory::create('source/three')->getResolved(),
                     PathFactory::create('source/three')->getResolved() . DIRECTORY_SEPARATOR,
-                    PathFactory::create('destination/three')->getResolved() . DIRECTORY_SEPARATOR,
+                    PathFactory::create('destination/three')->getResolved(),
                 ],
                 'callback' => null,
             ],
@@ -141,7 +148,7 @@ class RsyncFileSyncerUnitTest extends TestCase
 
         $source = PathFactory::create('lorem');
         $destination = PathFactory::create('ipsum');
-        $sut->sync($source, $destination, []);
+        $sut->sync($source, $destination);
     }
 
     public function providerSyncFailure(): array

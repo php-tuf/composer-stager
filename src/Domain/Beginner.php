@@ -47,12 +47,8 @@ final class Beginner implements BeginnerInterface
             throw new DirectoryAlreadyExistsException($stagingDirResolved, 'The staging directory already exists at "%s"');
         }
 
-        $exclusionList = $exclusions === null ? [] : $exclusions->getAll();
-        $exclusionList = array_map(static function ($path): string {
-            return $path->getResolved();
-        }, $exclusionList);
         try {
-            $this->fileSyncer->sync($activeDir, $stagingDir, $exclusionList, $callback, $timeout);
+            $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
         } catch (IOException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }

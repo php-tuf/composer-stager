@@ -17,6 +17,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
@@ -70,7 +71,7 @@ class PhpFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $source = PathFactory::create('source');
-        $sut->sync($source, $destination, []);
+        $sut->sync($source, $destination);
     }
 
     /**

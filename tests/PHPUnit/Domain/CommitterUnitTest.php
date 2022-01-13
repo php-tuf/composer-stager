@@ -63,7 +63,7 @@ class CommitterUnitTest extends TestCase
             ->sync(
                 $this->stagingDir,
                 $this->activeDir,
-                [],
+                null,
                 null,
                 120
             )
@@ -78,17 +78,17 @@ class CommitterUnitTest extends TestCase
      *
      * @dataProvider providerCommitWithOptionalParams
      */
-    public function testCommitWithOptionalParams($stagingDir, $activeDir, $givenExclusions, $expectedExclusions, $callback, $timeout): void
+    public function testCommitWithOptionalParams($stagingDir, $activeDir, $exclusions, $callback, $timeout): void
     {
         $stagingDir = PathFactory::create(self::STAGING_DIR);
         $activeDir = PathFactory::create(self::ACTIVE_DIR);
 
         $this->fileSyncer
-            ->sync($stagingDir, $activeDir, $expectedExclusions, $callback, $timeout)
+            ->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit($stagingDir, $activeDir, $givenExclusions, $callback, $timeout);
+        $sut->commit($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 
     public function providerCommitWithOptionalParams(): array
@@ -97,16 +97,14 @@ class CommitterUnitTest extends TestCase
             [
                 'stagingDir' => '/one/two',
                 'activeDir' => '/three/four',
-                'givenExclusions' => null,
-                'expectedExclusions' => [],
+                'exclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
             [
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
-                'givenExclusions' => PathAggregateFactory::create(['/nine/ten']),
-                'expectedExclusions' => ['/nine/ten'],
+                'exclusions' => PathAggregateFactory::create(['/nine/ten']),
                 'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
@@ -144,7 +142,7 @@ class CommitterUnitTest extends TestCase
                 'stagingDir' => '/one/two/staging',
                 'activeDir' => '/three/four/active',
                 'missingDir' => '/three/four/active',
-                'exceptionMessage' => '@active directory.*not exist.*/active@',
+                'exceptionMessage' => '@active directory.*not exist.*active@',
             ],
             [
                 'stagingDir' => 'five/six/staging',

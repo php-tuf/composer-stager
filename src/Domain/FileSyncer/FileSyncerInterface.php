@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\FileSyncer;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
@@ -22,11 +23,11 @@ interface FileSyncerInterface
      *   The directory to sync files from.
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
      *   The directory to sync files to.
-     * @param string[] $exclusions
-     *   An array of paths to exclude, relative to the source directory. Absolute
-     *   paths are silently ignored. The destination directory is automatically
-     *   excluded in order to prevent infinite recursion if it is a descendant of
-     *   the source directory (i.e., if it is "underneath" or "inside" it).
+     * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
+     *   Paths to exclude, relative to the source directory. The destination
+     *   directory is automatically excluded in order to prevent infinite
+     *   recursion if it is a descendant of the source directory (i.e., if it is
+     *   "underneath" or "inside" it).
      * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
@@ -43,8 +44,8 @@ interface FileSyncerInterface
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }

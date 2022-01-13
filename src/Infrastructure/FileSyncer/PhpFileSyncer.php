@@ -3,6 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use FilesystemIterator;
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\NullPathAggregate;
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -21,21 +23,6 @@ final class PhpFileSyncer implements FileSyncerInterface
      */
     private $filesystem;
 
-    /**
-     * @var string
-     */
-    private $source = '';
-
-    /**
-     * @var string
-     */
-    private $destination = '';
-
-    /**
-     * @var string[]
-     */
-    private $exclusions = [];
-
     public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
@@ -45,81 +32,66 @@ final class PhpFileSyncer implements FileSyncerInterface
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $source = $source->getResolved();
-        $destination = $destination->getResolved();
-
-        $this->source = $this->processSource($source);
-        $this->destination = $this->processDestination($destination);
-        $this->exclusions = $this->processExclusions($exclusions);
         set_time_limit((int) $timeout);
 
-        $this->deleteExtraneousFilesFromDestination();
-        $this->copySourceFilesToDestination();
+        $exclusions = $exclusions ?? new NullPathAggregate();
+
+        $this->assertSourceExists($source);
+        $this->ensureDestinationExists($destination);
+        $this->deleteExtraneousFilesFromDestination($destination, $source, $exclusions);
+        $this->copySourceFilesToDestination($source, $destination, $exclusions);
     }
 
     /**
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      */
-    private function processSource(string $source): string
+    private function assertSourceExists(PathInterface $source): void
     {
+        $source = $source->getResolved();
         if (!$this->filesystem->exists($source)) {
             throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
-
-        // Ensure a trailing slash once, now at the beginning, so all future operations can depend on it.
-        return PathUtil::ensureTrailingSlash($source);
     }
 
     /**
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      */
-    private function processDestination(string $destination): string
+    private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
-        $this->filesystem->mkdir($destination);
-
-        // Ensure a trailing slash once, now at the beginning, so all future operations can depend on it.
-        return PathUtil::ensureTrailingSlash($destination);
-    }
-
-    /**
-     * @param string[] $exclusions
-     *
-     * @return string[]
-     */
-    private function processExclusions(array $exclusions): array
-    {
-        // Normalize paths 1) for duplicate removal below and 2) to support
-        // exclusion later on of paths ending with directory separators.
-        $exclusions = array_map([PathUtil::class, 'stripTrailingSlash'], $exclusions);
-        return array_unique($exclusions);
+        $this->filesystem->mkdir($destination->getResolved());
     }
 
     /**
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function deleteExtraneousFilesFromDestination(): void
-    {
+    private function deleteExtraneousFilesFromDestination(
+        PathInterface $destination,
+        PathInterface $source,
+        PathAggregateInterface $exclusions
+    ): void {
         // There's no reason to look for deletions if the destination is already empty.
-        if ($this->destinationIsEmpty()) {
+        if ($this->destinationIsEmpty($destination)) {
             return;
         }
 
-        $destinationFiles = $this->find($this->destination);
+        $destinationFiles = $this->find($destination, $exclusions);
 
+        $sourceResolved = $source->getResolved();
+        $destinationResolved = $destination->getResolved();
         foreach ($destinationFiles as $destinationFilePathname) {
-            $relativePathname = self::getRelativePath($this->destination, $destinationFilePathname);
-            $sourceFilePathname = $this->source . $relativePathname;
+            $relativePathname = self::getRelativePath($destinationResolved, $destinationFilePathname);
+            $sourceFilePathname = $sourceResolved . DIRECTORY_SEPARATOR . $relativePathname;
 
             // Don't iterate over the destination directory if it is a descendant
             // of the source directory (i.e., if it is "underneath" or "inside"
             // it) or it will itself be deleted in the process.
-            if (strpos($destinationFilePathname, $this->source) === 0) {
+            if (strpos($destinationFilePathname, $sourceResolved) === 0) {
                 continue;
             }
 
@@ -130,22 +102,27 @@ final class PhpFileSyncer implements FileSyncerInterface
         }
     }
 
-    private function destinationIsEmpty(): bool
+    private function destinationIsEmpty(PathInterface $destination): bool
     {
-        return scandir($this->destination) === ['.', '..'];
+        return scandir($destination->getResolved()) === ['.', '..'];
     }
 
     /**
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function copySourceFilesToDestination(): void
-    {
-        $sourceFiles = $this->find($this->source);
+    private function copySourceFilesToDestination(
+        PathInterface $source,
+        PathInterface $destination,
+        PathAggregateInterface $exclusions
+    ): void {
+        $sourceFiles = $this->find($source, $exclusions);
 
+        $sourceResolved = $source->getResolved();
+        $destinationResolved = $destination->getResolved();
         foreach ($sourceFiles as $sourceFilePathname) {
-            $relativePathname = self::getRelativePath($this->source, $sourceFilePathname);
-            $destinationFilePathname = $this->destination . $relativePathname;
+            $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
+            $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
 
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but
@@ -168,24 +145,25 @@ final class PhpFileSyncer implements FileSyncerInterface
      *   codebase, and this method with its helpers accounts for over a third of
      *   that by all measures. Extract it to its own class and improve its tests.
      */
-    private function find(string $directory): array
+    private function find(PathInterface $directory, PathAggregateInterface $exclusions): array
     {
-        $directoryIterator = $this->getRecursiveDirectoryIterator($directory);
+        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->getResolved());
 
-        $exclusions = $this->exclusions;
+        $exclusions = array_map(static function ($path) use ($directory): string {
+            return $path->getResolvedRelativeTo($directory);
+        }, $exclusions->getAll());
+
         $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static function (
             string $foundPathname
         ) use (
-            $directory,
             $exclusions
         ): bool {
-            $relativePathname = self::getRelativePath($directory, $foundPathname);
             // On the surface, it may look like individual descendants of an excluded
             // directory (i.e., files "underneath" or "inside" it) won't be excluded
             // because they aren't individually in the array in order to be matched.
             // But because the directory iterator is recursive, their excluded
             // ancestor WILL BE found, and they will be excluded by extension.
-            return !in_array($relativePathname, $exclusions, true);
+            return !in_array($foundPathname, $exclusions, true);
         });
 
         /** @var \Traversable<string> $iterator */

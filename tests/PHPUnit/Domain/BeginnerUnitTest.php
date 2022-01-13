@@ -67,7 +67,7 @@ class BeginnerUnitTest extends TestCase
             ->exists($this->stagingDir->getResolved())
             ->willReturn(false);
         $this->fileSyncer
-            ->sync($this->activeDir, $this->stagingDir, [], null, 120)
+            ->sync($this->activeDir, $this->stagingDir, null, null, 120)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -79,7 +79,7 @@ class BeginnerUnitTest extends TestCase
      *
      * @dataProvider providerBeginWithOptionalParams
      */
-    public function testBeginWithOptionalParams($activeDir, $stagingDir, $givenExclusions, $expectedExclusions, $callback, $timeout): void
+    public function testBeginWithOptionalParams($activeDir, $stagingDir, $exclusions, $callback, $timeout): void
     {
         $activeDir = PathFactory::create($activeDir);
         $stagingDir = PathFactory::create($stagingDir);
@@ -91,11 +91,11 @@ class BeginnerUnitTest extends TestCase
             ->exists($stagingDir->getResolved())
             ->willReturn(false);
         $this->fileSyncer
-            ->sync($activeDir, $stagingDir, $expectedExclusions, $callback, $timeout)
+            ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir, $givenExclusions, $callback, $timeout);
+        $sut->begin($activeDir, $stagingDir, $exclusions, $callback, $timeout);
     }
 
     public function providerBeginWithOptionalParams(): array
@@ -105,7 +105,6 @@ class BeginnerUnitTest extends TestCase
                 'activeDir' => 'one/two',
                 'stagingDir' => 'three/four',
                 'givenExclusions' => null,
-                'expectedExclusions' => [],
                 'callback' => null,
                 'timeout' => null,
             ],
@@ -113,7 +112,6 @@ class BeginnerUnitTest extends TestCase
                 'activeDir' => 'five/six',
                 'stagingDir' => 'seven/eight',
                 'givenExclusions' => PathAggregateFactory::create(['nine/ten']),
-                'expectedExclusions' => [PathFactory::create('nine/ten')->getResolved()],
                 'callback' => new TestOutputCallback(),
                 'timeout' => 100,
             ],
@@ -124,10 +122,6 @@ class BeginnerUnitTest extends TestCase
                     'thirteen/fourteen',
                     'fifteen/sixteen',
                 ]),
-                'expectedExclusions' => [
-                    PathFactory::create('thirteen/fourteen')->getResolved(),
-                    PathFactory::create('fifteen/sixteen')->getResolved(),
-                ],
                 'callback' => null,
                 'timeout' => null,
             ],

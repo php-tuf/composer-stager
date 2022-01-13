@@ -51,12 +51,8 @@ final class Committer implements CommitterInterface
             throw new DirectoryNotWritableException($activeDirResolved, 'The active directory is not writable at "%s"');
         }
 
-        $exclusionList = $exclusions === null ? [] : $exclusions->getAll();
-        $exclusionList = array_map(static function ($path): string {
-            return $path->getResolved();
-        }, $exclusionList);
         try {
-            $this->fileSyncer->sync($stagingDir, $activeDir, $exclusionList, $callback, $timeout);
+            $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
         } catch (IOException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
