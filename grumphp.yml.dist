@@ -1,0 +1,55 @@
+---
+grumphp:
+    ascii:
+        failed: ~
+        succeeded: ~
+    fixer:
+        enabled: false
+    hide_circumvention_tip: true
+
+    tasks:
+        clover_coverage:
+            clover_file: var/phpunit/clover.xml
+            level: 100
+        composer: ~
+        composer_normalize: ~
+        phpcs:
+            standard: vendor/php-tuf/phpcodesniffer-standard/src/Standards/PhpTuf
+            whitelist_patterns:
+                - src
+        phplint:
+            ignore_patterns:
+                - .idea
+                - vendor
+        phpmd:
+            whitelist_patterns:
+                - src
+            ruleset:
+                - phpmd
+        phpstan:
+            use_grumphp_paths: false
+        phpunit: ~
+        psalm: ~
+        securitychecker_roave: ~
+
+    testsuites:
+        static:
+            tasks:
+                - composer
+                - composer_normalize
+                - phpcs
+                - phplint
+                - phpmd
+                - psalm
+                - phpstan
+        test:
+            tasks:
+                - clover_coverage
+                - composer
+                - composer_normalize
+                - phpcs
+                - phplint
+                - phpmd
+                - phpstan
+                - phpunit
+                - psalm

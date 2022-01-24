@@ -2,6 +2,7 @@
 
 [![Latest Unstable Version](https://poser.pugx.org/php-tuf/composer-stager/v/unstable)](https://packagist.org/packages/php-tuf/composer-stager)
 [![Tests status](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
+[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![Psalm](https://img.shields.io/badge/Psalm-1-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![PHPMD](https://img.shields.io/static/v1?label=PHPMD&message=all&color=brightgreen)](https://phpmd.org/)

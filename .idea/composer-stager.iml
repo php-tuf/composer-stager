@@ -69,6 +69,12 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psalm/phar" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpro/grumphp-shim" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/composer-normalize" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/json-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/json-printer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/justinrainbow/json-schema" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/localheinz/diff" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
