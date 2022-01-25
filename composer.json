@@ -88,9 +88,6 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": [
-        "bin/composer-stage"
-    ],
     "scripts": {
         "all": [
             "@lint",
