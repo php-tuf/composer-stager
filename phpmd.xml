@@ -11,7 +11,7 @@
     <description>PHP Mess Detector rule set for Composer Stager</description>
 
     <rule ref="rulesets/cleancode.xml">
-        <exclude name="StaticAccess" />
+        <exclude name="StaticAccess"/>
     </rule>
     <rule ref="rulesets/cleancode.xml/StaticAccess">
         <properties>
@@ -24,8 +24,16 @@
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml"/>
-    <rule ref="rulesets/controversial.xml"/>
-    <rule ref="rulesets/design.xml"/>
+    <rule ref="rulesets/controversial.xml">
+        <exclude name="CouplingBetweenObjects"/>
+    </rule>
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
+        <properties>
+            <property name="maximum">
+                <value>15</value>
+            </property>
+        </properties>
+    </rule>
     <rule ref="rulesets/naming.xml">
         <exclude name="LongVariable"/>
         <exclude name="ShortVariable"/>
