@@ -58,7 +58,7 @@ class GitattributesMissingExportIgnoreRule extends AbstractRule
                 continue;
             }
 
-            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS.";
+            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS";
             $errors[] = RuleErrorBuilder::message($message)->build();
         }
 

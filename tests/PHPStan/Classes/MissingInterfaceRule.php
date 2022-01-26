@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires non-utility classes to implement an interface.
+ * Requires non-factory, non-utility classes to implement an interface.
  */
 class MissingInterfaceRule extends AbstractRule
 {
@@ -22,7 +22,8 @@ class MissingInterfaceRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
-        if ($this->isUtilClass($class) ||
+        if ($this->isFactoryClass($class) ||
+            $this->isUtilClass($class) ||
             $class->isInterface() ||
             $class->isAbstract() ||
             $this->isThrowable($class)
@@ -34,7 +35,7 @@ class MissingInterfaceRule extends AbstractRule
             return [];
         }
 
-        $message = sprintf('Non-utility classes to implement an interface.');
+        $message = 'Non-factory, non-utility class must implement an interface';
         return [RuleErrorBuilder::message($message)->build()];
     }
 }

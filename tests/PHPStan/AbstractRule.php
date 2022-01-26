@@ -60,6 +60,12 @@ abstract class AbstractRule implements Rule
         return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Domain\\');
     }
 
+    protected function isFactoryClass(ClassReflection $class): bool
+    {
+        $factory = 'Factory';
+        return substr($class->getName(), -strlen($factory)) === $factory;
+    }
+
     protected function isUtilClass(ClassReflection $class): bool
     {
         return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Util\\');
