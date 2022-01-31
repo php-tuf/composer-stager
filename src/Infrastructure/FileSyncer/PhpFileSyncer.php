@@ -51,7 +51,7 @@ final class PhpFileSyncer implements FileSyncerInterface
      */
     private function assertSourceExists(PathInterface $source): void
     {
-        $source = $source->getResolved();
+        $source = $source->resolve();
         if (!$this->filesystem->exists($source)) {
             throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
@@ -63,7 +63,7 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
-        $this->filesystem->mkdir($destination->getResolved());
+        $this->filesystem->mkdir($destination->resolve());
     }
 
     /**
@@ -82,8 +82,8 @@ final class PhpFileSyncer implements FileSyncerInterface
 
         $destinationFiles = $this->find($destination, $exclusions);
 
-        $sourceResolved = $source->getResolved();
-        $destinationResolved = $destination->getResolved();
+        $sourceResolved = $source->resolve();
+        $destinationResolved = $destination->resolve();
         foreach ($destinationFiles as $destinationFilePathname) {
             $relativePathname = self::getRelativePath($destinationResolved, $destinationFilePathname);
             $sourceFilePathname = $sourceResolved . DIRECTORY_SEPARATOR . $relativePathname;
@@ -104,7 +104,7 @@ final class PhpFileSyncer implements FileSyncerInterface
 
     private function destinationIsEmpty(PathInterface $destination): bool
     {
-        return scandir($destination->getResolved()) === ['.', '..'];
+        return scandir($destination->resolve()) === ['.', '..'];
     }
 
     /**
@@ -118,8 +118,8 @@ final class PhpFileSyncer implements FileSyncerInterface
     ): void {
         $sourceFiles = $this->find($source, $exclusions);
 
-        $sourceResolved = $source->getResolved();
-        $destinationResolved = $destination->getResolved();
+        $sourceResolved = $source->resolve();
+        $destinationResolved = $destination->resolve();
         foreach ($sourceFiles as $sourceFilePathname) {
             $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
             $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
@@ -147,10 +147,10 @@ final class PhpFileSyncer implements FileSyncerInterface
      */
     private function find(PathInterface $directory, PathAggregateInterface $exclusions): array
     {
-        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->getResolved());
+        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
 
         $exclusions = array_map(static function ($path) use ($directory): string {
-            return $path->getResolvedRelativeTo($directory);
+            return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
 
         $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static function (

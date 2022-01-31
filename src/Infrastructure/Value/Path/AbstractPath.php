@@ -26,18 +26,18 @@ abstract class AbstractPath implements PathInterface
         $this->cwd = $this->getcwd();
     }
 
-    public function getResolved(): string
+    public function resolve(): string
     {
-        return $this->resolve($this->cwd);
+        return $this->doResolve($this->cwd);
     }
 
-    public function getResolvedRelativeTo(PathInterface $path): string
+    public function resolveRelativeTo(PathInterface $path): string
     {
-        $basePath = $path->getResolved();
-        return $this->resolve($basePath);
+        $basePath = $path->resolve();
+        return $this->doResolve($basePath);
     }
 
-    abstract protected function resolve(string $basePath): string;
+    abstract protected function doResolve(string $basePath): string;
 
     /**
      * In order to avoid class dependencies, PHP's internal getcwd() function is

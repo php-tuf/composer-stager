@@ -80,7 +80,7 @@ final class Stager implements StagerInterface
      */
     private function validatePreconditions(PathInterface $stagingDir): void
     {
-        $stagingDirResolved = $stagingDir->getResolved();
+        $stagingDirResolved = $stagingDir->resolve();
         if (!$this->filesystem->exists($stagingDirResolved)) {
             throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
@@ -97,7 +97,7 @@ final class Stager implements StagerInterface
     private function runCommand(PathInterface $stagingDir, array $composerCommand, ?OutputCallbackInterface $callback, ?int $timeout): void
     {
         $command = array_merge(
-            ['--working-dir=' . $stagingDir->getResolved()],
+            ['--working-dir=' . $stagingDir->resolve()],
             $composerCommand
         );
         try {

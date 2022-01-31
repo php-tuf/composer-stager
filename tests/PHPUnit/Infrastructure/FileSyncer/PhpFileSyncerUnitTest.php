@@ -50,7 +50,7 @@ class PhpFileSyncerUnitTest extends TestCase
 
         $source = PathFactory::create('source');
         $this->filesystem
-            ->exists($source->getResolved())
+            ->exists($source->resolve())
             ->willReturn(false);
 
         $sut = $this->createSut();
@@ -65,7 +65,7 @@ class PhpFileSyncerUnitTest extends TestCase
 
         $destination = PathFactory::create('destination');
         $this->filesystem
-            ->mkdir($destination->getResolved())
+            ->mkdir($destination->resolve())
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();

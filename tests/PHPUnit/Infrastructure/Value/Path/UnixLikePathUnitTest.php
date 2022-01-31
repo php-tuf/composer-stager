@@ -13,12 +13,12 @@ class UnixLikePathUnitTest extends TestCase
 {
     /**
      * @covers ::__construct()
-     * @covers ::getResolved
-     * @covers ::getResolvedRelativeTo
+     * @covers ::doResolve
      * @covers ::isAbsolute
      * @covers ::makeAbsolute
      * @covers ::normalize
      * @covers ::resolve
+     * @covers ::resolveRelativeTo
      *
      * @dataProvider providerBasicFunctionality
      */
@@ -43,20 +43,20 @@ class UnixLikePathUnitTest extends TestCase
         $setCwd->call($sut, $cwd);
         $setCwd->call($equalInstance, $cwd);
 
-        self::assertEquals($resolved, $sut->getResolved(), 'Got correct value via explicit method call.');
+        self::assertEquals($resolved, $sut->resolve(), 'Got correct value via explicit method call.');
 
         chdir(__DIR__);
 
-        self::assertEquals($resolved, $sut->getResolved(), 'Retained correct value after changing working directory.');
+        self::assertEquals($resolved, $sut->resolve(), 'Retained correct value after changing working directory.');
 
-        self::assertEquals($resolved, $sut->getResolved(), 'Correctly resolved path.');
-        self::assertEquals($resolvedRelativeTo, $sut->getResolvedRelativeTo($relativeBase), 'Correctly resolved path relative to another given path.');
+        self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
+        self::assertEquals($resolvedRelativeTo, $sut->resolveRelativeTo($relativeBase), 'Correctly resolved path relative to another given path.');
         self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
 
         // Make sure object is truly immutable.
         chdir(__DIR__);
-        self::assertEquals($resolved, $sut->getResolved(), 'Retained correct value after changing working directory.');
+        self::assertEquals($resolved, $sut->resolve(), 'Retained correct value after changing working directory.');
         self::assertEquals($sut, $equalInstance, 'Path value still considered equal to another instance with the same input after changing working directory.');
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
     }

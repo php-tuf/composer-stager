@@ -41,10 +41,10 @@ class StagerUnitTest extends TestCase
         $this->composerRunner = $this->prophesize(ComposerRunnerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists($this->stagingDir->getResolved())
+            ->exists($this->stagingDir->resolve())
             ->willReturn(true);
         $this->filesystem
-            ->isWritable($this->stagingDir->getResolved())
+            ->isWritable($this->stagingDir->resolve())
             ->willReturn(true);
     }
 
@@ -74,7 +74,7 @@ class StagerUnitTest extends TestCase
             [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
-                    '--working-dir=' . PathFactory::create(self::STAGING_DIR)->getResolved(),
+                    '--working-dir=' . PathFactory::create(self::STAGING_DIR)->resolve(),
                     'update',
                 ],
                 'callback' => null,
@@ -83,7 +83,7 @@ class StagerUnitTest extends TestCase
             [
                 'givenCommand' => [static::INERT_COMMAND],
                 'expectedCommand' => [
-                    '--working-dir=' . PathFactory::create(self::STAGING_DIR)->getResolved(),
+                    '--working-dir=' . PathFactory::create(self::STAGING_DIR)->resolve(),
                     static::INERT_COMMAND,
                 ],
                 'callback' => new TestOutputCallback(),
@@ -98,7 +98,7 @@ class StagerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*not exist/');
 
         $this->filesystem
-            ->exists($this->stagingDir->getResolved())
+            ->exists($this->stagingDir->resolve())
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
@@ -112,7 +112,7 @@ class StagerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*not writable/');
 
         $this->filesystem
-            ->isWritable($this->stagingDir->getResolved())
+            ->isWritable($this->stagingDir->resolve())
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();

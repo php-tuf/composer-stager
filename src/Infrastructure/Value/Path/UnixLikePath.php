@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
 final class UnixLikePath extends AbstractPath
 {
-    protected function resolve(string $basePath): string
+    protected function doResolve(string $basePath): string
     {
         $absolute = $this->makeAbsolute($basePath);
         return $this->normalize($absolute);

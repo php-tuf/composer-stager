@@ -125,7 +125,7 @@ class CommitterUnitTest extends TestCase
         $this->expectException(DirectoryNotFoundException::class);
         $this->expectExceptionMessageMatches($exceptionMessage);
         $this->filesystem
-            ->exists($missingDir->getResolved())
+            ->exists($missingDir->resolve())
             ->willReturn(false);
         $this->fileSyncer
             ->sync(Argument::cetera())
@@ -166,11 +166,11 @@ class CommitterUnitTest extends TestCase
         $this->expectExceptionMessageMatches(
             sprintf(
                 '@active directory.*not writable.*%s@',
-                addslashes($activeDir->getResolved())
+                addslashes($activeDir->resolve())
             )
         );
         $this->filesystem
-            ->isWritable($activeDir->getResolved())
+            ->isWritable($activeDir->resolve())
             ->willReturn(false);
         $this->fileSyncer
             ->sync(Argument::cetera())

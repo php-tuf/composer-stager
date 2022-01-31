@@ -41,8 +41,8 @@ final class RsyncFileSyncer implements FileSyncerInterface
     ): void {
         $exclusions = $exclusions ?? new NullPathAggregate();
 
-        if (!$this->filesystem->exists($source->getResolved())) {
-            throw new DirectoryNotFoundException($source->getResolved(), 'The source directory does not exist at "%s"');
+        if (!$this->filesystem->exists($source->resolve())) {
+            throw new DirectoryNotFoundException($source->resolve(), 'The source directory does not exist at "%s"');
         }
 
         $command = [
@@ -59,13 +59,13 @@ final class RsyncFileSyncer implements FileSyncerInterface
 
         $exclusions = array_map(function ($path) use ($destination): string {
             return $this::getRelativePath(
-                $destination->getResolved(),
-                $path->getResolvedRelativeTo($destination)
+                $destination->resolve(),
+                $path->resolveRelativeTo($destination)
             );
         }, $exclusions->getAll());
 
         // Prevent infinite recursion if the source is inside the destination.
-        $exclusions[] = $source->getResolved();
+        $exclusions[] = $source->resolve();
 
         // There's no reason to process duplicates.
         $exclusions = array_unique($exclusions);
@@ -76,13 +76,13 @@ final class RsyncFileSyncer implements FileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = $source->getResolved() . DIRECTORY_SEPARATOR;
+        $command[] = $source->resolve() . DIRECTORY_SEPARATOR;
 
-        $command[] = $destination->getResolved();
+        $command[] = $destination->resolve();
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)
-        $this->filesystem->mkdir($destination->getResolved());
+        $this->filesystem->mkdir($destination->resolve());
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {

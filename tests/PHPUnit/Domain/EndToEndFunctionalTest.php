@@ -117,7 +117,7 @@ class EndToEndFunctionalTest extends TestCase
         // Clean.
         $this->cleaner->clean($stagingDir);
 
-        self::assertFileDoesNotExist($stagingDir->getResolved(), 'Staging directory was completely removed.');
+        self::assertFileDoesNotExist($stagingDir->resolve(), 'Staging directory was completely removed.');
     }
 
     private function composer(array $command, PathInterface $cwd): string
@@ -126,7 +126,7 @@ class EndToEndFunctionalTest extends TestCase
         array_unshift($command, $composer);
         $command[] = '--no-interaction';
 
-        $process = new Process($command, $cwd->getResolved());
+        $process = new Process($command, $cwd->resolve());
         $process->mustRun();
         return rtrim($process->getOutput());
     }

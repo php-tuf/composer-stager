@@ -17,7 +17,7 @@ interface PathInterface
      * of creation, e.g., "/var/www/example" given a path of "example" and a
      * working directory of "/var/www".
      */
-    public function getResolved(): string;
+    public function resolve(): string;
 
     /**
      * Gets the fully resolved, absolute path string without trailing slash relative to another given path.
@@ -26,5 +26,5 @@ interface PathInterface
      * object, e.g., "/usr/local/example" given a path of "example" and a Path
      * argument that resolves to "/usr/local".
      */
-    public function getResolvedRelativeTo(PathInterface $path): string;
+    public function resolveRelativeTo(PathInterface $path): string;
 }

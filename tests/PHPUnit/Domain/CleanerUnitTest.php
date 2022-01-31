@@ -50,7 +50,7 @@ class CleanerUnitTest extends TestCase
     {
         $path = PathFactory::create($path);
         $this->filesystem
-            ->remove($path->getResolved(), $callback, $timeout)
+            ->remove($path->resolve(), $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -82,10 +82,10 @@ class CleanerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*exist/');
 
         $this->filesystem
-            ->exists($this->stagingDir->getResolved())
+            ->exists($this->stagingDir->resolve())
             ->willReturn(false);
         $this->filesystem
-            ->remove($this->stagingDir->getResolved())
+            ->remove($this->stagingDir->resolve())
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
@@ -100,7 +100,7 @@ class CleanerUnitTest extends TestCase
     public function testDirectoryExists($expected): void
     {
         $this->filesystem
-            ->exists($this->stagingDir->getResolved())
+            ->exists($this->stagingDir->resolve())
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
@@ -126,7 +126,7 @@ class CleanerUnitTest extends TestCase
         $exception = new IOException();
         $this->expectExceptionObject($exception);
         $this->filesystem
-            ->remove($this->stagingDir->getResolved(), Argument::cetera())
+            ->remove($this->stagingDir->resolve(), Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow($exception);
         $sut = $this->createSut();

@@ -24,7 +24,7 @@ final class Cleaner implements CleanerInterface
         OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $stagingDirResolved = $stagingDir->getResolved();
+        $stagingDirResolved = $stagingDir->resolve();
         if (!$this->directoryExists($stagingDir)) {
             throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
@@ -34,6 +34,6 @@ final class Cleaner implements CleanerInterface
 
     public function directoryExists(PathInterface $stagingDir): bool
     {
-        return $this->filesystem->exists($stagingDir->getResolved());
+        return $this->filesystem->exists($stagingDir->resolve());
     }
 }
