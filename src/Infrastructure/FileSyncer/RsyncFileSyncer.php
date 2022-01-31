@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\NullPathAggregate;
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
@@ -12,6 +11,7 @@ use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Process\Runner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
 
 final class RsyncFileSyncer implements FileSyncerInterface
 {
@@ -39,7 +39,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
         OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        $exclusions = $exclusions ?? new NullPathAggregate();
+        $exclusions = $exclusions ?? new PathAggregate([]);
 
         if (!$this->filesystem->exists($source->resolve())) {
             throw new DirectoryNotFoundException($source->resolve(), 'The source directory does not exist at "%s"');

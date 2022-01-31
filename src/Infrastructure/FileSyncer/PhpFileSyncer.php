@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\NullPathAggregate;
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
@@ -11,6 +10,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
 use PhpTuf\ComposerStager\Util\PathUtil;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -38,7 +38,7 @@ final class PhpFileSyncer implements FileSyncerInterface
     ): void {
         set_time_limit((int) $timeout);
 
-        $exclusions = $exclusions ?? new NullPathAggregate();
+        $exclusions = $exclusions ?? new PathAggregate([]);
 
         $this->assertSourceExists($source);
         $this->ensureDestinationExists($destination);

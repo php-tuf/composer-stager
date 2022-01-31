@@ -44,6 +44,8 @@ interface BeginnerInterface
      *   If the staging directory already exists.
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the active directory is not found.
+     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */

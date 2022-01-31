@@ -21,7 +21,6 @@ use Prophecy\Argument;
  * @covers ::getRelativePath
  * @covers ::sync
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\NullPathAggregate
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate

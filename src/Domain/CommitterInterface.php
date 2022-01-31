@@ -33,6 +33,8 @@ interface CommitterInterface
      *   If the active directory or the staging directory is not found.
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
      *   If the active directory is not writable.
+     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */

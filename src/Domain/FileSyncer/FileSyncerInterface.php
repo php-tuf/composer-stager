@@ -36,6 +36,8 @@ interface FileSyncerInterface
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the source directory is not found.
+     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      *   If the destination directory cannot be created.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
