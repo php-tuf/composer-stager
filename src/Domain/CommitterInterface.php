@@ -48,8 +48,7 @@ interface CommitterInterface
      * Determines whether the staging directory exists.
      *
      * @param string $stagingDir
-     *   The staging directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/staging" or "staging".
+     *   The staging directory.
      */
     public function directoryExists(string $stagingDir): bool;
 }

@@ -16,6 +16,12 @@ abstract class AbstractPath implements PathInterface
      */
     protected $path;
 
+    /**
+     * @param string $path
+     *   The path string may be absolute or relative to the current working
+     *   directory as returned by `getcwd()` at runtime, e.g., "/var/www/example"
+     *   or "example". Nothing needs to actually exist at the path.
+     */
     public function __construct(string $path)
     {
         $this->path = $path;

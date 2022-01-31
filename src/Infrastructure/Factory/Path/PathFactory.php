@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
 /**
- * Creates a path value object.
+ * Creates path value objects.
  */
 final class PathFactory
 {
@@ -15,8 +15,9 @@ final class PathFactory
      * Creates a path value object from a string.
      *
      * @param string $path
-     *   The path string, as absolute or relative to the current working directory (CWD),
-     *   e.g., "/var/www/example" or "example". Nothing needs to actually exist at the path.
+     *   The path string, as absolute or relative to the current working directory
+     *   as returned by `getcwd()` at runtime, e.g., "/var/www/example" or
+     *   "example". Nothing needs to actually exist at the path.
      */
     public static function create(string $path): PathInterface
     {

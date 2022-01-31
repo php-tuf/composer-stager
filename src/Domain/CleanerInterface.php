@@ -14,8 +14,7 @@ interface CleanerInterface
      * Removes the staging directory.
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
-     *   The staging directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/staging" or "staging".
+     *   The staging directory.
      * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout

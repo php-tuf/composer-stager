@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use TypeError;
 
 /**
- * Creates a path aggregate.
+ * Creates path aggregates.
 */
 final class PathAggregateFactory
 {
@@ -18,9 +18,9 @@ final class PathAggregateFactory
      * Creates a path aggregate from an array of strings.
      *
      * @param string[] $paths
-     *   An array of path strings, as absolute or relative to the current
-     *   working directory (CWD), e.g., "/var/www/example" or "example". Nothing
-     *   needs to actually exist at the paths.
+     *   An array of path strings, as absolute or relative to the current working
+     *   directory as returned by `getcwd()` at runtime, e.g., "/var/www/example"
+     *   or "example". Nothing needs to actually exist at the paths.
      *
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
      */
