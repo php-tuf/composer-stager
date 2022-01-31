@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use stdClass;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
@@ -47,10 +48,10 @@ class PathAggregateUnitTest extends TestCase
      *
      * @dataProvider providerInvalidInput
      */
-    public function testInvalidInput($paths): void
+    public function testInvalidInput($paths, $givenType): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/Paths must implement/');
+        $this->expectExceptionMessageMatches("/Paths must implement.* {$givenType}/");
 
         new PathAggregate($paths);
     }
@@ -60,12 +61,19 @@ class PathAggregateUnitTest extends TestCase
         return [
             'String value' => [
                 'paths' => ['one'],
+                'givenType' => 'string',
             ],
             'Null value' => [
                 'paths' => [null],
+                'givenType' => 'NULL',
             ],
             'Array value' => [
                 'paths' => [[]],
+                'givenType' => 'array',
+            ],
+            'Object value' => [
+                'paths' => [new stdClass()],
+                'givenType' => 'stdClass',
             ],
             'Invalid value among valid ones' => [
                 'paths' => [
@@ -73,6 +81,7 @@ class PathAggregateUnitTest extends TestCase
                     'two',
                     PathFactory::create('three'),
                 ],
+                'givenType' => 'string',
             ],
         ];
     }

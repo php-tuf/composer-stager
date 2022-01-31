@@ -30,7 +30,7 @@ final class PathAggregate implements PathAggregateInterface
     }
 
     /**
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[] $paths
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[]|array $paths
      *
      * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
      */
@@ -38,10 +38,11 @@ final class PathAggregate implements PathAggregateInterface
     {
         foreach ($paths as $path) {
             if (!$path instanceof PathInterface) {
+                $given = is_object($path) ? get_class($path) : gettype($path);
                 throw new InvalidArgumentException(sprintf(
                     'Paths must implement %s. Given %s.',
                     PathInterface::class,
-                    var_export($path, true)
+                    $given
                 ));
             }
         }
