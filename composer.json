@@ -94,6 +94,9 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "0.x-dev"
+        },
+        "grumphp": {
+            "disable-plugin": true
         }
     },
     "scripts": {
