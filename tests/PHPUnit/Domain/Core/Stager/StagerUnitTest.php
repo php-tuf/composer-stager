@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Stager;
 
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -28,8 +28,8 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy composerRunner
+ * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy composerRunner
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface stagingDir
  */
 class StagerUnitTest extends TestCase
@@ -87,7 +87,7 @@ class StagerUnitTest extends TestCase
                     '--working-dir=' . PathFactory::create(self::STAGING_DIR)->resolve(),
                     static::INERT_COMMAND,
                 ],
-                'callback' => new TestOutputCallback(),
+                'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],
         ];

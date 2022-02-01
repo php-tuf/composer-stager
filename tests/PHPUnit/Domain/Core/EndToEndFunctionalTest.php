@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
-use PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Process\Process;
 
@@ -20,7 +20,7 @@ use Symfony\Component\Process\Process;
  * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner cleaner
  * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer committer
  * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager stager
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder executableFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder executableFinder
  */
 class EndToEndFunctionalTest extends TestCase
 {
@@ -47,7 +47,8 @@ class EndToEndFunctionalTest extends TestCase
      * contents), because nothing more complicated is needed to exercise the domain
      * classes at their level of abstraction. The underlying file syncers are
      * tested with many more complicated scenarios, as appropriate to their level.
-     * @see \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer\FileSyncerFunctionalTestCase
+     *
+     * @see \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer\FileSyncerFunctionalTestCase
      */
     public function test(): void
     {

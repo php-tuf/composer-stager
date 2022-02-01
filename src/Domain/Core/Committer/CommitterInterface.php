@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
-use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
@@ -21,7 +21,7 @@ interface CommitterInterface
      * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
      *   Paths to exclude, relative to the staging directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
-     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -42,7 +42,7 @@ interface CommitterInterface
         PathInterface $stagingDir,
         PathInterface $activeDir,
         PathAggregateInterface $exclusions = null,
-        OutputCallbackInterface $callback = null,
+        ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 

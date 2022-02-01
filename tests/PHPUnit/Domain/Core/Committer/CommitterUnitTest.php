@@ -3,15 +3,15 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
-use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
-use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -27,8 +27,8 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
- * @property \PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
+ * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy fileSyncer
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface stagingDir
  */
@@ -106,7 +106,7 @@ class CommitterUnitTest extends TestCase
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
                 'exclusions' => PathAggregateFactory::create(['/nine/ten']),
-                'callback' => new TestOutputCallback(),
+                'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],
         ];

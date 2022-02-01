@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Stager;
 
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
@@ -15,12 +15,12 @@ use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 final class Stager implements StagerInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface
      */
     private $composerRunner;
 
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
@@ -35,7 +35,7 @@ final class Stager implements StagerInterface
     public function stage(
         array $composerCommand,
         PathInterface $stagingDir,
-        OutputCallbackInterface $callback = null,
+        ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $this->validate($stagingDir, $composerCommand);
@@ -94,7 +94,7 @@ final class Stager implements StagerInterface
      *
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      */
-    private function runCommand(PathInterface $stagingDir, array $composerCommand, ?OutputCallbackInterface $callback, ?int $timeout): void
+    private function runCommand(PathInterface $stagingDir, array $composerCommand, ?ProcessOutputCallbackInterface $callback, ?int $timeout): void
     {
         $command = array_merge(
             ['--working-dir=' . $stagingDir->resolve()],

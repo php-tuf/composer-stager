@@ -14,18 +14,18 @@ services:
             - '../src/Infrastructure/Aggregate'
             - '../src/Infrastructure/Value'
 
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory:
+    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory:
         arguments:
-            $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer'
-            $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer'
+            $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer'
+            $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer'
 
-    PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory', 'create' ]
+    PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory', 'create' ]
 
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer:
+    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer:
         public: true
 
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer:
+    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer:
         public: true
 
     Symfony\Component\Process\ExecutableFinder: ~

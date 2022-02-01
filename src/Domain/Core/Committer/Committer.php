@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
-use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
@@ -15,12 +15,12 @@ use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 final class Committer implements CommitterInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface
+     * @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
      */
     private $fileSyncer;
 
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface
+     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
      */
     private $filesystem;
 
@@ -34,7 +34,7 @@ final class Committer implements CommitterInterface
         PathInterface $stagingDir,
         PathInterface $activeDir,
         PathAggregateInterface $exclusions = null,
-        OutputCallbackInterface $callback = null,
+        ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
         $stagingDirResolved = $stagingDir->resolve();

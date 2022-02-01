@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
-use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
@@ -32,7 +32,7 @@ interface BeginnerInterface
      *
      *   With rare exception, you should use the same exclusions when beginning
      *   as when committing.
-     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -53,7 +53,7 @@ interface BeginnerInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         PathAggregateInterface $exclusions = null,
-        OutputCallbackInterface $callback = null,
+        ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }

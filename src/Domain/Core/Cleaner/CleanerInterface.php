@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Cleaner;
 
-use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
@@ -15,7 +15,7 @@ interface CleanerInterface
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
      *   The staging directory.
-     * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -28,7 +28,7 @@ interface CleanerInterface
      */
     public function clean(
         PathInterface $stagingDir,
-        OutputCallbackInterface $callback = null,
+        ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 
