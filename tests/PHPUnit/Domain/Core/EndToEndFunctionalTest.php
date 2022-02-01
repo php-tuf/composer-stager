@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Beginner;
-use PhpTuf\ComposerStager\Domain\Cleaner;
-use PhpTuf\ComposerStager\Domain\Committer;
-use PhpTuf\ComposerStager\Domain\Stager;
+use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
+use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
+use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
+use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
@@ -16,10 +16,10 @@ use Symfony\Component\Process\Process;
 /**
  * @coversNothing
  *
- * @property \PhpTuf\ComposerStager\Domain\Beginner beginner
- * @property \PhpTuf\ComposerStager\Domain\Cleaner cleaner
- * @property \PhpTuf\ComposerStager\Domain\Committer committer
- * @property \PhpTuf\ComposerStager\Domain\Stager stager
+ * @property \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner beginner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner cleaner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer committer
+ * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager stager
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\ExecutableFinder executableFinder
  */
 class EndToEndFunctionalTest extends TestCase

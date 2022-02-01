@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Domain;
+namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
@@ -27,7 +27,7 @@ interface CommitterInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @see \PhpTuf\ComposerStager\Domain\BeginnerInterface::begin
+     * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the active directory or the staging directory is not found.

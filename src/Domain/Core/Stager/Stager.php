@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Domain;
+namespace PhpTuf\ComposerStager\Domain\Core\Stager;
 
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 
 final class Stager implements StagerInterface
 {

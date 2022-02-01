@@ -1,23 +1,24 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Stager;
 
-use PhpTuf\ComposerStager\Domain\Stager;
+use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\LogicException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Process\Runner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Stager
- * @covers \PhpTuf\ComposerStager\Domain\Stager
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Exception\PathException

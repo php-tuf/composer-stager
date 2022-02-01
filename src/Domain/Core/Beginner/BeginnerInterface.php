@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Domain;
+namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
@@ -38,7 +38,7 @@ interface BeginnerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @see \PhpTuf\ComposerStager\Domain\CommitterInterface::commit
+     * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
      *
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
      *   If the staging directory already exists.

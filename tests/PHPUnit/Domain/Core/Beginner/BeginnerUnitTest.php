@@ -1,22 +1,23 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Beginner;
 
-use PhpTuf\ComposerStager\Domain\Beginner;
+use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
+use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Beginner
- * @covers \PhpTuf\ComposerStager\Domain\Beginner::__construct
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner::__construct
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
