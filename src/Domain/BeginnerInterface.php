@@ -2,7 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.
@@ -12,13 +14,11 @@ interface BeginnerInterface
     /**
      * Begins the staging process.
      *
-     * @param string $activeDir
-     *   The active directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/public" or "public".
-     * @param string $stagingDir
-     *   The staging directory as an absolute path or relative to the working
-     *   directory (CWD), e.g., "/var/www/staging" or "staging".
-     * @param string[] $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
+     *   The active directory.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+     *   The staging directory.
+     * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
      *   Paths to exclude, relative to the active directory. Careful use of
      *   exclusions can reduce execution time and disk usage. Two kinds of files
      *   and directories are good candidates for exclusion:
@@ -44,14 +44,16 @@ interface BeginnerInterface
      *   If the staging directory already exists.
      * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
      *   If the active directory is not found.
+     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
     public function begin(
-        string $activeDir,
-        string $stagingDir,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void;
 }

@@ -2,7 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -29,22 +31,24 @@ final class Committer implements CommitterInterface
     }
 
     public function commit(
-        string $stagingDir,
-        string $activeDir,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathInterface $stagingDir,
+        PathInterface $activeDir,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists($stagingDir)) {
-            throw new DirectoryNotFoundException($stagingDir, 'The staging directory does not exist at "%s"');
+        $stagingDirResolved = $stagingDir->resolve();
+        if (!$this->filesystem->exists($stagingDirResolved)) {
+            throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
 
-        if (!$this->filesystem->exists($activeDir)) {
-            throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
+        $activeDirResolved = $activeDir->resolve();
+        if (!$this->filesystem->exists($activeDirResolved)) {
+            throw new DirectoryNotFoundException($activeDirResolved, 'The active directory does not exist at "%s"');
         }
 
-        if (!$this->filesystem->isWritable($activeDir)) {
-            throw new DirectoryNotWritableException($activeDir, 'The active directory is not writable at "%s"');
+        if (!$this->filesystem->isWritable($activeDirResolved)) {
+            throw new DirectoryNotWritableException($activeDirResolved, 'The active directory is not writable at "%s"');
         }
 
         try {

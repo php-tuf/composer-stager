@@ -3,6 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -37,6 +39,9 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         // Set up environment.
         self::removeTestEnvironment();
         self::createTestEnvironment($activeDir);
+
+        $activeDirPath = PathFactory::create($activeDir);
+        $stagingDirPath = PathFactory::create($stagingDir);
 
         // Create fixture (active directory).
         self::createFiles($activeDir, [
@@ -84,10 +89,10 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             // Non-existent.
             'file_that_NEVER_EXISTS_anywhere.txt',
         ];
-        $exclusions = array_map([self::class, 'fixSeparators'], $exclusions);
+        $exclusions = PathAggregateFactory::create($exclusions);
 
         // Sync files from the active directory to the new staging directory.
-        $sut->sync($activeDir, $stagingDir, $exclusions);
+        $sut->sync($activeDirPath, $stagingDirPath, $exclusions);
 
         self::assertDirectoryListing($stagingDir, [
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
@@ -118,7 +123,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
         // Sync files from staging directory back to active directory. Use the
         // same SUT object to make sure it doesn't get polluted between calls.
-        $sut->sync($stagingDir, $activeDir, $exclusions);
+        $sut->sync($stagingDirPath, $activeDirPath, $exclusions);
 
         self::assertDirectoryListing($activeDir, [
             // Unchanged files are left alone.
@@ -291,7 +296,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                     RsyncFileSyncer::class,
                 ],
             ],
-            'Nested: Both dirs absolute, staging as "hidden" dir' => [
+            'Nested: both dirs absolute, staging as "hidden" dir' => [
                 'activeDir' => self::TEST_ENV . '/active-dir',
                 'stagingDir' => self::TEST_ENV . '/active-dir/.composer_staging',
                 // @todo

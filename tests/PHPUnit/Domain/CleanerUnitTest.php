@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Cleaner;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -15,13 +16,19 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Domain\Cleaner::directoryExists
  * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface stagingDir
  */
 class CleanerUnitTest extends TestCase
 {
     public function setUp(): void
     {
+        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())
@@ -41,8 +48,9 @@ class CleanerUnitTest extends TestCase
      */
     public function testCleanHappyPath($path, $callback, $timeout): void
     {
+        $path = PathFactory::create($path);
         $this->filesystem
-            ->remove($path, $callback, $timeout)
+            ->remove($path->resolve(), $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -74,14 +82,14 @@ class CleanerUnitTest extends TestCase
         $this->expectExceptionMessageMatches('/staging directory.*exist/');
 
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists($this->stagingDir->resolve())
             ->willReturn(false);
         $this->filesystem
-            ->remove(static::STAGING_DIR)
+            ->remove($this->stagingDir->resolve())
             ->shouldNotBeCalled();
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR, null);
+        $sut->clean($this->stagingDir);
     }
 
     /**
@@ -92,12 +100,12 @@ class CleanerUnitTest extends TestCase
     public function testDirectoryExists($expected): void
     {
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists($this->stagingDir->resolve())
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->directoryExists(static::STAGING_DIR);
+        $actual = $sut->directoryExists($this->stagingDir);
 
         self::assertSame($expected, $actual, 'Correctly detected existence of staging directory.');
     }
@@ -118,11 +126,11 @@ class CleanerUnitTest extends TestCase
         $exception = new IOException();
         $this->expectExceptionObject($exception);
         $this->filesystem
-            ->remove(Argument::cetera())
+            ->remove($this->stagingDir->resolve(), Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->clean(static::STAGING_DIR, null);
+        $sut->clean($this->stagingDir);
     }
 }

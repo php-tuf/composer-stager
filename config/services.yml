@@ -11,6 +11,8 @@ services:
         public: true
         exclude:
             - '../src/Exception'
+            - '../src/Infrastructure/Aggregate'
+            - '../src/Infrastructure/Value'
 
     PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory:
         arguments:

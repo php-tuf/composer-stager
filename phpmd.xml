@@ -18,6 +18,7 @@
             <property name="exceptions">
                 <value>
                     \Closure,
+                    \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory,
                     \PhpTuf\ComposerStager\Util\PathUtil
                 </value>
             </property>

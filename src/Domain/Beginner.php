@@ -2,7 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Domain;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Exception\IOException;
@@ -29,28 +31,24 @@ final class Beginner implements BeginnerInterface
     }
 
     public function begin(
-        string $activeDir,
-        string $stagingDir,
-        array $exclusions = [],
-        ?OutputCallbackInterface $callback = null,
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        PathAggregateInterface $exclusions = null,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
-        if (!$this->filesystem->exists($activeDir)) {
-            throw new DirectoryNotFoundException($activeDir, 'The active directory does not exist at "%s"');
+        $activeDirResolved = $activeDir->resolve();
+        if (!$this->filesystem->exists($activeDirResolved)) {
+            throw new DirectoryNotFoundException($activeDirResolved, 'The active directory does not exist at "%s"');
         }
 
-        if ($this->filesystem->exists($stagingDir)) {
-            throw new DirectoryAlreadyExistsException($stagingDir, 'The staging directory already exists at "%s"');
+        $stagingDirResolved = $stagingDir->resolve();
+        if ($this->filesystem->exists($stagingDirResolved)) {
+            throw new DirectoryAlreadyExistsException($stagingDirResolved, 'The staging directory already exists at "%s"');
         }
 
         try {
-            $this->fileSyncer->sync(
-                $activeDir,
-                $stagingDir,
-                $exclusions,
-                $callback,
-                $timeout
-            );
+            $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
         } catch (IOException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }

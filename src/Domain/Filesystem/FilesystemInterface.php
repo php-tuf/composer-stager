@@ -16,11 +16,13 @@ interface FilesystemInterface
      *
      * @param string $source
      *   The file to copy, as an absolute path or relative to the current
-     *   working directory (CWD), e.g., "/var/www/source" or "source".
+     *   working directory as returned by `getcwd()` at runtime, e.g.,
+     *   "/var/www/source" or "source".
      * @param string $destination
      *   The file to copy to, as an absolute path or relative to the current
-     *   working directory (CWD), e.g., "/var/www/destination" or "destination".
-     *   If it does not exist it will be created.
+     *   working directory as returned by `getcwd()` at runtime, e.g.,
+     *   "/var/www/destination" or "destination". If it does not exist it will
+     *   be created.
      *
      * @throws \PhpTuf\ComposerStager\Exception\IOException
      *   If the operation is unsuccessful.
@@ -31,15 +33,15 @@ interface FilesystemInterface
      * Determines whether the given path exists.
      *
      * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
+     *   A path as absolute or relative to the working directory as returned by
+     *   `getcwd()` at runtime, e.g., "/var/www/public" or "public".
      *
      * @return bool
      */
     public function exists(string $path): bool;
 
     /**
-     * Gets the current working directory (CWD) on success.
+     * Gets the current working directory as returned by `getcwd()` at runtime.
      */
     public function getcwd(): string;
 
@@ -47,8 +49,8 @@ interface FilesystemInterface
      * Determines whether the given path is writable.
      *
      * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
+     *   A path as absolute or relative to the working directory as returned
+     *   by `getcwd()` at runtime, e.g., "/var/www/public" or "public".
      */
     public function isWritable(string $path): bool;
 
@@ -67,8 +69,8 @@ interface FilesystemInterface
      * Removes the given path.
      *
      * @param string $path
-     *   A path as absolute or relative to the working directory (CWD), e.g.,
-     *   "/var/www/public" or "public".
+     *   A path as absolute or relative to the working directory as returned by
+     *   `getcwd()` at runtime, e.g., "/var/www/public" or "public".
      * @param \PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout

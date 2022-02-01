@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain;
 
 use PhpTuf\ComposerStager\Domain\Process\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Filesystem\FilesystemInterface;
 
@@ -19,19 +20,20 @@ final class Cleaner implements CleanerInterface
     }
 
     public function clean(
-        string $stagingDir,
-        ?OutputCallbackInterface $callback = null,
+        PathInterface $stagingDir,
+        OutputCallbackInterface $callback = null,
         ?int $timeout = 120
     ): void {
+        $stagingDirResolved = $stagingDir->resolve();
         if (!$this->directoryExists($stagingDir)) {
-            throw new DirectoryNotFoundException($stagingDir, 'The staging directory does not exist at "%s"');
+            throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
 
-        $this->filesystem->remove($stagingDir, $callback, $timeout);
+        $this->filesystem->remove($stagingDirResolved, $callback, $timeout);
     }
 
-    public function directoryExists(string $stagingDir): bool
+    public function directoryExists(PathInterface $stagingDir): bool
     {
-        return $this->filesystem->exists($stagingDir);
+        return $this->filesystem->exists($stagingDir->resolve());
     }
 }
