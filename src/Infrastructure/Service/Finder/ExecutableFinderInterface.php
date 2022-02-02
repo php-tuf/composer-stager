@@ -16,7 +16,7 @@ interface ExecutableFinderInterface
      * @return string
      *   The path to the given executable.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the executable cannot be found.
      */
     public function find(string $name): string;

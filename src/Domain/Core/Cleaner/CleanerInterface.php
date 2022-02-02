@@ -21,9 +21,9 @@ interface CleanerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
      *   If the staging directory is not found.
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If removal fails.
      */
     public function clean(

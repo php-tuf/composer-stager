@@ -24,7 +24,7 @@ interface FilesystemInterface
      *   "/var/www/destination" or "destination". If it does not exist it will
      *   be created.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the operation is unsuccessful.
      */
     public function copy(string $source, string $destination): void;
@@ -60,7 +60,7 @@ interface FilesystemInterface
      * @param string $path
      *   The directory to create.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If creation fails.
      */
     public function mkdir(string $path): void;
@@ -77,7 +77,7 @@ interface FilesystemInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If removal fails.
      */
     public function remove(

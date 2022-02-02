@@ -22,9 +22,10 @@ interface ProcessFactoryInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
+     *
      * @see \Symfony\Component\Process\Process::__construct
      *
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the process cannot be created.
      */
     public function create(array $command): Process;

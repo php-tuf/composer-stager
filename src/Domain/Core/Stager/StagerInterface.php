@@ -30,13 +30,13 @@ interface StagerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
      *   If the staging directory is not found.
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
      *   If the staging directory is not writable.
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If the given Composer command is invalid.
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
     public function stage(

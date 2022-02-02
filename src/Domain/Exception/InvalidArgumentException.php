@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Exception;
+namespace PhpTuf\ComposerStager\Domain\Exception;
 
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {

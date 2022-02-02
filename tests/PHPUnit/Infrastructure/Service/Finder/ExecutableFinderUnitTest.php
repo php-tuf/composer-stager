@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Finder;
 
-use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -15,8 +15,8 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::find
  * @covers ::getCache
  * @covers ::setCache
- * @uses \PhpTuf\ComposerStager\Exception\FileNotFoundException
- * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  *
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $symfonyExecutableFinder
  */

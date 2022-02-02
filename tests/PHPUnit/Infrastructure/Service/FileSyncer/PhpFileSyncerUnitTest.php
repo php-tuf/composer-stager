@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use Closure;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -42,8 +42,8 @@ class PhpFileSyncerUnitTest extends TestCase
     }
 
     /**
-     * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @uses \PhpTuf\ComposerStager\Exception\PathException
+     * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+     * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
      */
     public function testSyncSourceNotFound(): void
     {

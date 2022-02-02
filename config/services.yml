@@ -10,7 +10,7 @@ services:
         resource: '../src/*'
         public: true
         exclude:
-            - '../src/Exception'
+            - '../src/Domain/Exception'
             - '../src/Infrastructure/Aggregate'
             - '../src/Infrastructure/Value'
 

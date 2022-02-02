@@ -3,12 +3,12 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Exception\IOException;
-use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -18,9 +18,9 @@ use Prophecy\Argument;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
  * @covers \PhpTuf\ComposerStager\Domain\Core\Committer\Committer::__construct
- * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
- * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
- * @uses \PhpTuf\ComposerStager\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath

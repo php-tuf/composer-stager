@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Exception;
+namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use Throwable;
 
-class DirectoryNotWritableException extends PathException
+class FileNotFoundException extends PathException
 {
     public function __construct(
         string $path,
-        string $message = 'Directory not writable: "%s"',
+        string $message = 'No such file: "%s"',
         int $code = 0,
         Throwable $previous = null
     ) {

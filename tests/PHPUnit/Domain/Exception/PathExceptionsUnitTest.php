@@ -1,22 +1,22 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Exception;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Exception;
 
-use PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException;
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Exception\FileNotFoundException;
-use PhpTuf\ComposerStager\Exception\PathException;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PHPUnit\Framework\TestCase;
 
 class PathExceptionsUnitTest extends TestCase
 {
     /**
-     * @covers \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
-     * @covers \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @covers \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
-     * @covers \PhpTuf\ComposerStager\Exception\FileNotFoundException
-     * @covers \PhpTuf\ComposerStager\Exception\PathException
+     * @covers \PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException
+     * @covers \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+     * @covers \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
+     * @covers \PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException
+     * @covers \PhpTuf\ComposerStager\Domain\Exception\PathException
      *
      * @dataProvider provider
      */

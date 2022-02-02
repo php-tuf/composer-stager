@@ -2,15 +2,15 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Stager;
 
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 
 final class Stager implements StagerInterface
 {
@@ -45,9 +45,9 @@ final class Stager implements StagerInterface
     /**
      * @param string[] $composerCommand
      *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     private function validate(PathInterface $stagingDir, array $composerCommand): void
     {
@@ -58,7 +58,7 @@ final class Stager implements StagerInterface
     /**
      * @param string[] $composerCommand
      *
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     private function validateCommand(array $composerCommand): void
     {
@@ -75,8 +75,8 @@ final class Stager implements StagerInterface
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
      */
     private function validatePreconditions(PathInterface $stagingDir): void
     {
@@ -92,7 +92,7 @@ final class Stager implements StagerInterface
     /**
      * @param string[] $composerCommand
      *
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      */
     private function runCommand(PathInterface $stagingDir, array $composerCommand, ?ProcessOutputCallbackInterface $callback, ?int $timeout): void
     {

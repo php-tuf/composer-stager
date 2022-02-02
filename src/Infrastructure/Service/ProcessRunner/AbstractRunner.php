@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
 
+use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
@@ -45,11 +45,11 @@ abstract class AbstractRunner
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      *
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the executable cannot be found.
-     * @throws \PhpTuf\ComposerStager\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the command process cannot be created.
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
     public function run(
@@ -68,7 +68,7 @@ abstract class AbstractRunner
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
     private function findExecutable(): string
     {

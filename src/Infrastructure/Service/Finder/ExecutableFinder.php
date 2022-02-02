@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 
-use PhpTuf\ComposerStager\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Exception\IOException[]|string[]|null[]
+     * @var \PhpTuf\ComposerStager\Domain\Exception\IOException[]|string[]|null[]
      */
     private $cache = [];
 
@@ -57,7 +57,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
     /**
      * @param string $commandName
      *
-     * @return \PhpTuf\ComposerStager\Exception\IOException|string|null
+     * @return \PhpTuf\ComposerStager\Domain\Exception\IOException|string|null
      */
     private function getCache(string $commandName)
     {
@@ -66,7 +66,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
 
     /**
      * @param string $commandName
-     * @param string|\PhpTuf\ComposerStager\Exception\IOException $value
+     * @param string|\PhpTuf\ComposerStager\Domain\Exception\IOException $value
      */
     private function setCache(string $commandName, $value): void
     {

@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Exception;
+namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use Throwable;
 
-class FileNotFoundException extends PathException
+class DirectoryAlreadyExistsException extends PathException
 {
     public function __construct(
         string $path,
-        string $message = 'No such file: "%s"',
+        string $message = 'Directory already exists: "%s"',
         int $code = 0,
         Throwable $previous = null
     ) {

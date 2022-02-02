@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 
 final class PathAggregate implements PathAggregateInterface
 {
@@ -16,7 +16,7 @@ final class PathAggregate implements PathAggregateInterface
     /**
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[] $paths
      *
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     public function __construct(array $paths)
     {
@@ -32,7 +32,7 @@ final class PathAggregate implements PathAggregateInterface
     /**
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[]|array $paths
      *
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     private function assertValidInput(array $paths): void
     {

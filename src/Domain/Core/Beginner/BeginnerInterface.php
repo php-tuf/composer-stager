@@ -40,13 +40,13 @@ interface BeginnerInterface
      *
      * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
      *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryAlreadyExistsException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException
      *   If the staging directory already exists.
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
      *   If the active directory is not found.
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
     public function begin(

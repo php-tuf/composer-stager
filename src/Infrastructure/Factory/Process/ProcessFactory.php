@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Factory\Process;
 
-use PhpTuf\ComposerStager\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use Symfony\Component\Process\Exception\ExceptionInterface;
 use Symfony\Component\Process\Process;
 

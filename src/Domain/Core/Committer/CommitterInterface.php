@@ -29,13 +29,13 @@ interface CommitterInterface
      *
      * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
      *
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
      *   If the active directory or the staging directory is not found.
-     * @throws \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
      *   If the active directory is not writable.
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
-     * @throws \PhpTuf\ComposerStager\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      */
     public function commit(

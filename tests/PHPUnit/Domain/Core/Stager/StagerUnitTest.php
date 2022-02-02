@@ -3,14 +3,14 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Stager;
 
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
-use PhpTuf\ComposerStager\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Exception\IOException;
-use PhpTuf\ComposerStager\Exception\LogicException;
-use PhpTuf\ComposerStager\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -19,10 +19,10 @@ use Prophecy\Argument;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
- * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotFoundException
- * @uses \PhpTuf\ComposerStager\Exception\DirectoryNotWritableException
- * @uses \PhpTuf\ComposerStager\Exception\PathException
- * @uses \PhpTuf\ComposerStager\Exception\ProcessFailedException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
