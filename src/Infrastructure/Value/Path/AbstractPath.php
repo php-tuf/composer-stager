@@ -48,7 +48,8 @@ abstract class AbstractPath implements PathInterface
     /**
      * In order to avoid class dependencies, PHP's internal getcwd() function is
      * called directly here. For comparison...
-     * @see \PhpTuf\ComposerStager\Infrastructure\Filesystem\Filesystem::getcwd
+     *
+     * @see \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::getcwd
      */
     private function getcwd(): string
     {

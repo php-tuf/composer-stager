@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 
@@ -21,7 +21,7 @@ final class PathAggregateFactory
      *   directory as returned by `getcwd()` at runtime, e.g., "/var/www/example"
      *   or "example". Nothing needs to actually exist at the paths.
      *
-     * @throws \PhpTuf\ComposerStager\Exception\InvalidArgumentException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     public static function create(array $paths): PathAggregateInterface
     {
