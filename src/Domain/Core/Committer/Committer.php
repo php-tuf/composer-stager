@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class Committer implements CommitterInterface
@@ -35,7 +36,7 @@ final class Committer implements CommitterInterface
         PathInterface $activeDir,
         PathAggregateInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $stagingDirResolved = $stagingDir->resolve();
         if (!$this->filesystem->exists($stagingDirResolved)) {

@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
@@ -48,6 +49,6 @@ interface FileSyncerInterface
         PathInterface $destination,
         PathAggregateInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
 }

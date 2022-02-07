@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 /**
  * Runs Composer commands.
  */
-interface ComposerRunnerInterface
+interface ComposerRunnerInterface extends ProcessRunnerInterface
 {
     /**
      * Runs a given Composer command.
@@ -40,6 +40,6 @@ interface ComposerRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = self::DEFAULT_TIMEOUT
     ): void;
 }

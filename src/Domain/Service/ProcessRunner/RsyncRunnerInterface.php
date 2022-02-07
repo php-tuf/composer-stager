@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 /**
  * Runs rsync commands.
  */
-interface RsyncRunnerInterface
+interface RsyncRunnerInterface extends ProcessRunnerInterface
 {
     /**
      * Runs a given rsync command.
@@ -40,6 +40,6 @@ interface RsyncRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = self::DEFAULT_TIMEOUT
     ): void;
 }

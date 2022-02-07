@@ -21,13 +21,15 @@ class UselessInterfaceRule extends AbstractRule
     public function processNode(Node $node, Scope $scope): array
     {
         $interface = $this->getClassReflection($node);
-        $methods = $interface->getNativeReflection()->getMethods();
+        $reflection = $interface->getNativeReflection();
+        $methods = $reflection->getMethods();
+        $members = $reflection->getConstants();
 
-        if (count($methods) > 0) {
+        if (count($methods) > 0 || count($members) > 0) {
             return [];
         }
 
-        $message = 'Interface is useless: it has no methods';
+        $message = 'Interface is useless: it has no methods or constants';
         return [RuleErrorBuilder::message($message)->build()];
     }
 }

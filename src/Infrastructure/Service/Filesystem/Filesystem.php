@@ -3,11 +3,13 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-final class Filesystem implements \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
+final class Filesystem implements FilesystemInterface
 {
     /**
      * @var \Symfony\Component\Filesystem\Filesystem
@@ -69,7 +71,7 @@ final class Filesystem implements \PhpTuf\ComposerStager\Domain\Service\Filesyst
     public function remove(
         string $path,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         try {
             // Symfony Filesystem doesn't have a builtin mechanism for setting a

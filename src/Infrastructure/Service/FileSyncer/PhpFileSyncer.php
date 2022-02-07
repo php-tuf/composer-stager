@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
 use PhpTuf\ComposerStager\Util\PathUtil;
@@ -34,7 +35,7 @@ final class PhpFileSyncer implements FileSyncerInterface
         PathInterface $destination,
         PathAggregateInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         set_time_limit((int) $timeout);
 

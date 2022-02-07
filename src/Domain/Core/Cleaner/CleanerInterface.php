@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Core\Cleaner;
 
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
@@ -29,7 +30,7 @@ interface CleanerInterface
     public function clean(
         PathInterface $stagingDir,
         ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
 
     /**
