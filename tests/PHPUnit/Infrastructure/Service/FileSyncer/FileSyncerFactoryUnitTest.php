@@ -12,9 +12,9 @@ use Symfony\Component\Process\ExecutableFinder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory
  * @covers ::__construct
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy phpFileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy rsyncFileSyncer
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder executableFinder
+ * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer
+ * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
+ * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $executableFinder
  */
 class FileSyncerFactoryUnitTest extends TestCase
 {

@@ -21,7 +21,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  * @uses \PhpTuf\ComposerStager\Util\PathUtil
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
 class PhpFileSyncerUnitTest extends TestCase
 {

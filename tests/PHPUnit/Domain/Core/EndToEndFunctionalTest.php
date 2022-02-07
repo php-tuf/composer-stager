@@ -16,11 +16,11 @@ use Symfony\Component\Process\Process;
 /**
  * @coversNothing
  *
- * @property \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner beginner
- * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner cleaner
- * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer committer
- * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager stager
- * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder executableFinder
+ * @property \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner $beginner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner $cleaner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer $committer
+ * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager $stager
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder $executableFinder
  */
 class EndToEndFunctionalTest extends TestCase
 {
