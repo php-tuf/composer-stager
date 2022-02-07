@@ -101,7 +101,7 @@
     },
     "scripts": {
         "all": "grumphp run",
-        "c": "rm -r var/* &> /dev/null || true",
+        "c": "rm -r var/*/* &> /dev/null || true",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"coverage\" command to generate the coverage report.'",
         "functional": "phpunit --testsuite=Functional",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",

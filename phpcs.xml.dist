@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset -->
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="ComposerStager"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+
+    <description>Composer Stager</description>
+
+    <arg name="colors"/>
+    <arg name="cache" value="var/phpcs/cache.json"/>
+    <arg name="parallel" value="10"/>
+
+    <file>.src</file>
+
+    <rule ref="PhpTuf"/>
+    <rule ref="Generic.Arrays.ArrayIndent"/>
+    <rule ref="vendor/squizlabs/php_codesniffer/src/Standards/Generic/Sniffs/PHP/RequireStrictTypesSniff.php"/>
+
+</ruleset>

@@ -5,8 +5,9 @@
 /var                 export-ignore
 /.gitattributes      export-ignore
 /composer.lock       export-ignore
+/grumphp.yml.dist    export-ignore
 /phpmd.xml           export-ignore
 /phpstan.neon        export-ignore
 /phpunit.xml.dist    export-ignore
-/grumphp.yml.dist    export-ignore
 /psalm.xml.dist      export-ignore
+/phpcs.xml.dist      export-ignore

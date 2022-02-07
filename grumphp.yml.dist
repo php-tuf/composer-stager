@@ -14,7 +14,7 @@ grumphp:
         composer: ~
         composer_normalize: ~
         phpcs:
-            standard: vendor/php-tuf/phpcodesniffer-standard/src/Standards/PhpTuf
+            standard: []
             whitelist_patterns:
                 - src
         phplint:

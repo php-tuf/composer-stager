@@ -2,9 +2,10 @@
 /.idea/dictionaries/*
 !/.idea/dictionaries/project.xml
 /.idea/php.xml
-/var/
+/var/*/*
+!/var/*/.gitkeep
 /vendor/
-!/var/.gitkeep
 /grumphp.yml
+/phpcs.xml
 /phpunit.xml
 /psalm.xml
