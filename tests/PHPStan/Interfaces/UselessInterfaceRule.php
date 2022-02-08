@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Forbids empty interfaces, i.e., without methods.
+ * Forbids empty interfaces, i.e., without methods or constants.
  */
 class UselessInterfaceRule extends AbstractRule
 {
