@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
-use PhpTuf\ComposerStager\Util\PathUtil;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -179,7 +178,7 @@ final class PhpFileSyncer implements FileSyncerInterface
 
     private static function getRelativePath(string $ancestor, string $path): string
     {
-        $ancestor = PathUtil::ensureTrailingSlash($ancestor);
+        $ancestor .= DIRECTORY_SEPARATOR;
         if (strpos($path, $ancestor) === 0) {
             $path = substr($path, strlen($ancestor));
         }

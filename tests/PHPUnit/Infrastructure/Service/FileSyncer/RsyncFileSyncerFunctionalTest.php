@@ -21,7 +21,6 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Util\PathUtil
  */
 class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {

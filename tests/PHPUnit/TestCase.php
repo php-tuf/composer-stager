@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
-use PhpTuf\ComposerStager\Util\PathUtil;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -88,7 +87,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected static function changeFile($dir, $filename): void
     {
-        $pathname = PathUtil::ensureTrailingSlash($dir) . $filename;
+        $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents(
             $pathname,
             self::CHANGED_CONTENT
@@ -98,7 +97,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected static function deleteFile($dir, $filename): void
     {
-        $pathname = PathUtil::ensureTrailingSlash($dir) . $filename;
+        $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
         self::assertTrue($result, "Deleted file {$pathname}.");
     }
@@ -135,8 +134,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $actual = array_map(static function ($path) use ($dir, $ignoreDir) {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
-            $matchPath = PathUtil::ensureTrailingSlash($dir) . $path;
-            $ignoreDir = PathUtil::ensureTrailingSlash($ignoreDir);
+            $matchPath = self::ensureTrailingSlash($dir) . $path;
+            $ignoreDir = self::ensureTrailingSlash($ignoreDir);
             if (strpos($matchPath, $ignoreDir) === 0) {
                 return false;
             }
@@ -161,7 +160,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected static function getDirectoryContents(string $dir): array
     {
-        $dir = PathUtil::ensureTrailingSlash($dir);
+        $dir = self::ensureTrailingSlash($dir);
         $dirListing = self::getFlatDirectoryListing($dir);
 
         $contents = [];
@@ -185,7 +184,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected static function getFlatDirectoryListing(string $dir): array
     {
-        $dir = PathUtil::stripTrailingSlash($dir);
+        $dir = self::stripTrailingSlash($dir);
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir)
@@ -204,10 +203,53 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return array_values($listing);
     }
 
+    /**
+     * Strips the trailing slash (directory separator) from a given path.
+     *
+     * @param string $path
+     *   Any path, absolute or relative, existing or not. Empty paths and device
+     *   roots will be returned unchanged. Remote paths and UNC (Universal
+     *   Naming Convention) paths are not supported. No validation is done to
+     *   ensure that given paths are valid.
+     */
+    protected static function stripTrailingSlash(string $path): string
+    {
+        // Don't change a Windows drive letter root path, e.g., "C:\".
+        if (preg_match('/^[a-z]:\\\\?$/i', $path) === 1) {
+            return $path;
+        }
+
+        $trimmedPath = rtrim($path, '/\\');
+
+        // Don't change a UNIX-like root path.
+        if ($trimmedPath === '') {
+            return $path;
+        }
+
+        return $trimmedPath;
+    }
+
+    /**
+     * Ensures that the given path ends with a slash (directory separator).
+     *
+     * @param string $path
+     *   Any path, absolute or relative, existing or not.
+     *
+     * @return string
+     */
+    protected static function ensureTrailingSlash(string $path): string
+    {
+        if ($path === '') {
+            $path = '.';
+        }
+
+        return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
+    }
+
     protected static function assertFileChanged($dir, $path, $message = ''): void
     {
         self::assertStringEqualsFile(
-            PathUtil::ensureTrailingSlash($dir) . $path,
+            self::ensureTrailingSlash($dir) . $path,
             self::CHANGED_CONTENT,
             $message
         );
@@ -216,7 +258,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function assertFileNotChanged($dir, $path, $message = ''): void
     {
         self::assertStringEqualsFile(
-            PathUtil::ensureTrailingSlash($dir) . $path,
+            self::ensureTrailingSlash($dir) . $path,
             self::ORIGINAL_CONTENT,
             $message
         );
