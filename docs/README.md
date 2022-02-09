@@ -68,9 +68,9 @@ class Updater
 }
 ```
 
-## Known issues
+## Limitations and known issues
 
-See the current list of [known issues](known_issues.md).
+[Current limitations and known issues.](known_issues.md)
 
 ## Contributing
 

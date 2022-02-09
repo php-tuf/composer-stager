@@ -40,11 +40,14 @@ final class RsyncFileSyncer implements FileSyncerInterface
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
+        $source = $source->resolve();
+        $destination = $destination->resolve();
+
         $exclusions = $exclusions ?? new PathList([]);
         $exclusions = $exclusions->getAll();
 
-        if (!$this->filesystem->exists($source->resolve())) {
-            throw new DirectoryNotFoundException($source->resolve(), 'The source directory does not exist at "%s"');
+        if (!$this->filesystem->exists($source)) {
+            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
 
         $command = [
@@ -60,7 +63,9 @@ final class RsyncFileSyncer implements FileSyncerInterface
         ];
 
         // Prevent infinite recursion if the source is inside the destination.
-        $exclusions[] = $source->resolve();
+        if ($this->isDescendant($source, $destination)) {
+            $exclusions[] = self::getRelativePath($destination, $source);
+        }
 
         // There's no reason to process duplicates.
         $exclusions = array_unique($exclusions);
@@ -71,17 +76,28 @@ final class RsyncFileSyncer implements FileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = $source->resolve() . DIRECTORY_SEPARATOR;
+        $command[] = $source . DIRECTORY_SEPARATOR;
 
-        $command[] = $destination->resolve();
+        $command[] = $destination;
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)
-        $this->filesystem->mkdir($destination->resolve());
+        $this->filesystem->mkdir($destination);
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
+    }
+
+    private function isDescendant(string $descendant, string $ancestor): bool
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+        return strpos($descendant, $ancestor) === 0;
+    }
+
+    private static function getRelativePath(string $ancestor, string $path): string
+    {
+        return substr($path, strlen($ancestor) + 1);
     }
 }

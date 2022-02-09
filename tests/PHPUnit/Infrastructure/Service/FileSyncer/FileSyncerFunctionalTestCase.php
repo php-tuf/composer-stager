@@ -5,14 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
-    private const PHP_FILE_SYNCER_ON_WINDOWS = 'windows';
-
     public static function tearDownAfterClass(): void
     {
         self::removeTestEnvironment();
@@ -23,18 +19,9 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /**
      * @dataProvider providerDirectories
      */
-    public function testSync($activeDir, $stagingDir, $incomplete = []): void
+    public function testSync($activeDir, $stagingDir): void
     {
         $sut = $this->createSut();
-
-        // @todo Some tests are known incomplete. Complete them, obviously.
-        $sutClass = get_class($sut);
-        if (in_array($sutClass, $incomplete, true)) {
-            $this->markTestIncomplete();
-        }
-        if (in_array(self::PHP_FILE_SYNCER_ON_WINDOWS, $incomplete, true) && self::isWindows()) {
-            $this->markTestIncomplete();
-        }
 
         // Set up environment.
         self::removeTestEnvironment();
@@ -94,7 +81,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         // Sync files from the active directory to the new staging directory.
         $sut->sync($activeDirPath, $stagingDirPath, $exclusions);
 
-        self::assertDirectoryListing($stagingDir, [
+        self::assertDirectoryListing($stagingDirPath->resolve(), [
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
             'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
@@ -103,7 +90,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
             'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
-        ], '', sprintf('Synced correct files from active directory to new staging directory at "%s".', $stagingDir));
+        ], '', sprintf('Synced correct files from active directory to new staging directory:%s%s ->%s%s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
 
         // Change files.
         self::changeFile($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt');
@@ -125,7 +112,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         // same SUT object to make sure it doesn't get polluted between calls.
         $sut->sync($stagingDirPath, $activeDirPath, $exclusions);
 
-        self::assertDirectoryListing($activeDir, [
+        self::assertDirectoryListing($activeDirPath->resolve(), [
             // Unchanged files are left alone.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -153,7 +140,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             // Files deleted from either side are absent from the active directory.
             // - another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt
             // - DELETE_from_staging_dir_before_syncing_back_to_active_dir
-        ], $stagingDir, sprintf('Synced correct files from staging directory back to active directory at "%s".', $activeDir));
+        ], $stagingDirPath->resolve(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
 
         // Unchanged file contents.
         self::assertFileNotChanged($activeDir, 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt');
@@ -179,14 +166,12 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         self::assertEquals(
             $previousStagingDirContents,
             $currentStagingDirContents,
-            'Staging directory was not changed when syncing back to active directory.'
+            sprintf('Staging directory was not changed when syncing back to active directory:%s%s ->%s%s', PHP_EOL, $stagingDir, PHP_EOL, $activeDir)
         );
     }
 
     public function providerDirectories(): array
     {
-        $random = uniqid('', true);
-        $tempDir = sprintf('%s/composer-stager/%s', sys_get_temp_dir(), $random);
         return [
             // Siblings cases.
             'Siblings: simple' => [
@@ -221,12 +206,6 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                 'activeDir' => 'active-dir',
                 'stagingDir' => self::TEST_ENV . '/staging-dir',
             ],
-            'Siblings: temp directory' => [
-                'activeDir' => $tempDir . '/active-dir',
-                'stagingDir' => $tempDir . '/staging-dir',
-                // @todo
-                'incomplete' => [RsyncFileSyncer::class],
-            ],
             'Siblings: active as CWD with trailing slash' => [
                 'activeDir' => './',
                 'stagingDir' => '../staging-dir',
@@ -234,86 +213,42 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'Siblings: active as "dot" (.)' => [
                 'activeDir' => '.',
                 'stagingDir' => '../staging-dir',
-                // @todo
-                'incomplete' => [self::PHP_FILE_SYNCER_ON_WINDOWS],
             ],
-            'Siblings: staging as CWD with trailing slash' => [
-                'activeDir' => '../active-dir',
-                'stagingDir' => './',
-                // @todo
-                'incomplete' => [
-                    PhpFileSyncer::class,
-                    RsyncFileSyncer::class,
-                ],
-            ],
-            'Siblings: staging as "dot" (.)' => [
-                'activeDir' => '../active-dir',
-                'stagingDir' => '.',
-                // @todo
-                'incomplete' => [
-                    PhpFileSyncer::class,
-                    RsyncFileSyncer::class,
-                ],
-            ],
+
             // Nested cases.
             'Nested: simple' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/staging-dir',
-                // @todo
-                'incomplete' => [
-                    self::PHP_FILE_SYNCER_ON_WINDOWS,
-                    RsyncFileSyncer::class,
-                ],
             ],
             'Nested: with directory depth' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
-                // @todo
-                'incomplete' => [
-                    self::PHP_FILE_SYNCER_ON_WINDOWS,
-                    RsyncFileSyncer::class,
-                ],
             ],
             'Nested: absolute paths' => [
                 'activeDir' => self::TEST_ENV . '/active-dir',
                 'stagingDir' => self::TEST_ENV . '/active-dir/staging-dir',
-                // @todo
-                'incomplete' => [
-                    self::PHP_FILE_SYNCER_ON_WINDOWS,
-                    RsyncFileSyncer::class,
-                ],
             ],
 
-            // These scenarios are the most important for shared hosting situations,
-            // which may not provide access to paths outside the application root,
-            // e.g., the web root.
+            // These scenarios are the most important for shared hosting
+            // situations, which may not provide access to paths outside the
+            // application root, e.g., the web root.
             'Nested: both dirs relative, staging as "hidden" dir' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/.composer_staging',
-                // @todo
-                'incomplete' => [
-                    self::PHP_FILE_SYNCER_ON_WINDOWS,
-                    RsyncFileSyncer::class,
-                ],
             ],
             'Nested: both dirs absolute, staging as "hidden" dir' => [
                 'activeDir' => self::TEST_ENV . '/active-dir',
                 'stagingDir' => self::TEST_ENV . '/active-dir/.composer_staging',
-                // @todo
-                'incomplete' => [
-                    self::PHP_FILE_SYNCER_ON_WINDOWS,
-                    RsyncFileSyncer::class,
-                ],
             ],
 
-            'Nested: temp directory' => [
-                'activeDir' => $tempDir . '/active-dir',
-                'stagingDir' => $tempDir . '/active-dir/staging-dir',
-                // @todo
-                'incomplete' => [
-                    PhpFileSyncer::class,
-                    RsyncFileSyncer::class,
-                ],
+            // Other cases.
+            'Other: Staging dir in temp directory' => [
+                'activeDir' => 'active-dir',
+                'stagingDir' => sprintf(
+                    '%s/composer-stager/%s',
+                    sys_get_temp_dir(),
+                    uniqid('', true)
+                ),
             ],
         ];
     }
