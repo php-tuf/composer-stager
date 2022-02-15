@@ -58,23 +58,23 @@ class PathExceptionsUnitTest extends TestCase
             ],
             // Completely override message.
             [
-                'args' => ['/two', 'Lorem ipsum'],
+                'args' => ['/two', 'Example message'],
                 'path' => '/two',
-                'expectedPathMessage' => 'Lorem ipsum',
-                'expectedDirectoryAlreadyExistsMessage' => 'Lorem ipsum',
-                'expectedDirectoryNotFound' => 'Lorem ipsum',
-                'expectedDirectoryNotWritableMessage' => 'Lorem ipsum',
-                'expectedFileNotFound' => 'Lorem ipsum',
+                'expectedPathMessage' => 'Example message',
+                'expectedDirectoryAlreadyExistsMessage' => 'Example message',
+                'expectedDirectoryNotFound' => 'Example message',
+                'expectedDirectoryNotWritableMessage' => 'Example message',
+                'expectedFileNotFound' => 'Example message',
             ],
             // Override message with path substitution.
             [
-                'args' => ['/three/four', 'Lorem ipsum: "%s"'],
+                'args' => ['/three/four', 'Example message: "%s"'],
                 'path' => '/three/four',
-                'expectedDirectoryAlreadyExistsMessage' => 'Lorem ipsum: "/three/four"',
-                'expectedPathMessage' => 'Lorem ipsum: "/three/four"',
-                'expectedDirectoryNotFound' => 'Lorem ipsum: "/three/four"',
-                'expectedDirectoryNotWritableMessage' => 'Lorem ipsum: "/three/four"',
-                'expectedFileNotFound' => 'Lorem ipsum: "/three/four"',
+                'expectedDirectoryAlreadyExistsMessage' => 'Example message: "/three/four"',
+                'expectedPathMessage' => 'Example message: "/three/four"',
+                'expectedDirectoryNotFound' => 'Example message: "/three/four"',
+                'expectedDirectoryNotWritableMessage' => 'Example message: "/three/four"',
+                'expectedFileNotFound' => 'Example message: "/three/four"',
             ],
         ];
     }

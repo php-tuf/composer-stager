@@ -57,12 +57,12 @@ class FilesystemUnitTest extends TestCase
     {
         return [
             [
-                'source' => 'lorem',
-                'destination' => 'ipsum',
+                'source' => 'one',
+                'destination' => 'two',
             ],
             [
-                'source' => 'dolor',
-                'destination' => 'sit',
+                'source' => 'three',
+                'destination' => 'four',
             ],
         ];
     }
@@ -79,7 +79,7 @@ class FilesystemUnitTest extends TestCase
             ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
         $sut = $this->createSut();
 
-        $sut->copy('lorem/index.php', 'ipsum/index.php');
+        $sut->copy('source/index.php', 'destination/index.php');
     }
 
     /**
@@ -130,8 +130,8 @@ class FilesystemUnitTest extends TestCase
     public function providerMkdir(): array
     {
         return [
-            ['dir' => 'lorem'],
-            ['dir' => 'ipsum'],
+            ['dir' => 'one'],
+            ['dir' => 'two'],
         ];
     }
 
@@ -147,7 +147,7 @@ class FilesystemUnitTest extends TestCase
             ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
         $sut = $this->createSut();
 
-        $sut->mkdir('lorem');
+        $sut->mkdir('example');
     }
 
     /**
@@ -197,6 +197,6 @@ class FilesystemUnitTest extends TestCase
             ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
         $sut = $this->createSut();
 
-        $sut->remove('/lorem/ipsum');
+        $sut->remove('/example/path');
     }
 }

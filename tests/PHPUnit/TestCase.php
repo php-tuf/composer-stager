@@ -119,10 +119,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * return, alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'elit.txt',
-     *     'lorem/ipsum/dolor.txt',
-     *     'sit/amet.txt',
-     *     'consectetur/adipiscing.txt',
+     *     'one/two/three.txt',
+     *     'eight.txt',
+     *     'four/five.txt',
+     *     'six/seven.txt',
      * ];
      * ```
      */
@@ -175,10 +175,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'elit.txt',
-     *     'lorem/ipsum/dolor.txt',
-     *     'sit/amet.txt',
-     *     'consectetur/adipiscing.txt',
+     *     'one/two/three.txt',
+     *     'eight.txt',
+     *     'four/five.txt',
+     *     'six/seven.txt',
      * ];
      * ```
      */

@@ -160,8 +160,8 @@ class StagerUnitTest extends TestCase
     public function providerCommandContainsWorkingDirOption(): array
     {
         return [
-            [['--working-dir' => 'lorem/ipsum']],
-            [['-d' => 'lorem/ipsum']],
+            [['--working-dir' => 'example/package']],
+            [['-d' => 'example/package']],
         ];
     }
 
@@ -186,16 +186,16 @@ class StagerUnitTest extends TestCase
     {
         return [
             [
-                'exception' => new IOException('lorem'),
-                'message' => 'lorem',
+                'exception' => new IOException('one'),
+                'message' => 'one',
             ],
             [
-                'exception' => new LogicException('ipsum'),
-                'message' => 'ipsum',
+                'exception' => new LogicException('two'),
+                'message' => 'two',
             ],
             [
-                'exception' => new ProcessFailedException('dolor'),
-                'message' => 'dolor',
+                'exception' => new ProcessFailedException('three'),
+                'message' => 'three',
             ],
         ];
     }

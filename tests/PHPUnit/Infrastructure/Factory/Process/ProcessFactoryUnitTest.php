@@ -30,8 +30,8 @@ class ProcessFactoryUnitTest extends TestCase
     {
         return [
             [[]],
-            [['lorem']],
-            [['lorem', 'ipsum']],
+            [['one']],
+            [['one', 'two']],
         ];
     }
 }

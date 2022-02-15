@@ -99,23 +99,23 @@ class AbstractRunnerUnitTest extends TestCase
     {
         return [
             [
-                'executableName' => 'lorem',
+                'executableName' => 'one',
                 'givenCommand' => [],
-                'expectedCommand' => ['lorem'],
+                'expectedCommand' => ['one'],
                 'callback' => null,
                 'timeout' => null,
             ],
             [
-                'executableName' => 'ipsum',
-                'givenCommand' => ['dolor', 'sit'],
-                'expectedCommand' => ['ipsum', 'dolor', 'sit'],
+                'executableName' => 'two',
+                'givenCommand' => ['three', 'four'],
+                'expectedCommand' => ['two', 'three', 'four'],
                 'callback' => null,
                 'timeout' => 100,
             ],
             [
-                'executableName' => 'amet',
+                'executableName' => 'five',
                 'givenCommand' => [],
-                'expectedCommand' => ['amet'],
+                'expectedCommand' => ['five'],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 200,
             ],

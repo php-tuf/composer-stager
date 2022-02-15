@@ -144,8 +144,8 @@ class RsyncFileSyncerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $source = PathFactory::create('lorem');
-        $destination = PathFactory::create('ipsum');
+        $source = PathFactory::create('source');
+        $destination = PathFactory::create('destination');
         $sut->sync($source, $destination);
     }
 

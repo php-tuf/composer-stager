@@ -50,7 +50,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
             'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
-            'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+            'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
             // Files excluded by exact pathname.
             'EXCLUDED_file_in_active_dir_root.txt',
             'arbitrary_subdir/EXCLUDED_file.txt',
@@ -102,7 +102,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
-            'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+            'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
         ], '', sprintf('Synced correct files from active directory to new staging directory at "%s".', $stagingDir));
 
         // Change files.
@@ -131,7 +131,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
             'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
-            'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt',
+            'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
             // Files excluded by exact pathname are still in the active directory.
             'EXCLUDED_file_in_active_dir_root.txt',
             'arbitrary_subdir/EXCLUDED_file.txt',
@@ -160,7 +160,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         self::assertFileNotChanged($activeDir, 'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt');
         self::assertFileNotChanged($activeDir, 'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt');
         self::assertFileNotChanged($activeDir, 'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt');
-        self::assertFileNotChanged($activeDir, 'long_filename_NEVER_CHANGED_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et.txt');
+        self::assertFileNotChanged($activeDir, 'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt');
         self::assertFileNotChanged($activeDir, 'EXCLUDED_file_in_active_dir_root.txt');
         self::assertFileNotChanged($activeDir, 'arbitrary_subdir/EXCLUDED_file.txt');
         self::assertFileNotChanged($activeDir, 'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt');

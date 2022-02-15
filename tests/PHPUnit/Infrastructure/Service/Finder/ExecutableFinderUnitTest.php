@@ -66,14 +66,14 @@ class ExecutableFinderUnitTest extends TestCase
     {
         return [
             [
-                'firstCommandName' => 'dolor',
-                'firstPath' => '/lorem/ipsum/dolor',
-                'secondCommandName' => 'sit',
+                'firstCommandName' => 'two',
+                'firstPath' => '/one/two/two',
+                'secondCommandName' => 'three',
             ],
             [
-                'firstCommandName' => 'adipiscing',
-                'firstPath' => '/amet/consectetur/adipiscing',
-                'secondCommandName' => 'elit',
+                'firstCommandName' => 'seven',
+                'firstPath' => '/four/five/seven',
+                'secondCommandName' => 'eight',
             ],
         ];
     }
@@ -102,8 +102,8 @@ class ExecutableFinderUnitTest extends TestCase
     public function providerFindNotFound(): array
     {
         return [
-            ['name' => 'lorem'],
-            ['name' => 'ipsum'],
+            ['name' => 'one'],
+            ['name' => 'two'],
         ];
     }
 

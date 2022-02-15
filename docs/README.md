@@ -55,7 +55,7 @@ class Updater
         // Run a Composer command on it.
         $this->stager->stage([
             'require',
-            'lorem/ipsum',
+            'example/package',
             '--update-with-all-dependencies',
         ], $stagingDir);
 

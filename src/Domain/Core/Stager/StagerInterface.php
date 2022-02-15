@@ -19,7 +19,7 @@ interface StagerInterface
      *   $command = [
      *       // "composer" is implied.
      *       'require',
-     *       'lorem/ipsum:"^1 || ^2"',
+     *       'example/package:"^1 || ^2"',
      *       '--with-all-dependencies',
      *   ];
      *   ```
