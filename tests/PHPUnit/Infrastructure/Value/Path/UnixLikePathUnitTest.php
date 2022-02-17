@@ -94,7 +94,7 @@ class UnixLikePathUnitTest extends TestCase
                 'relativeBase' => '/tmp/three',
                 'resolvedRelativeTo' => '/tmp/three/ ',
             ],
-            'Relative path with nesting' => [
+            'Relative path with depth' => [
                 'given' => 'one/two/three/four/five',
                 'cwd' => '/var',
                 'resolved' => '/var/one/two/three/four/five',
@@ -158,7 +158,7 @@ class UnixLikePathUnitTest extends TestCase
                 'relativeBase' => '/tmp',
                 'resolvedRelativeTo' => '/one',
             ],
-            'Absolute path with nesting' => [
+            'Absolute path with depth' => [
                 'given' => '/one/two/three/four/five',
                 'cwd' => '/var/six/seven/eight/nine',
                 'resolved' => '/one/two/three/four/five',
