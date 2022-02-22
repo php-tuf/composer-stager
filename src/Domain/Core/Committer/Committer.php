@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -34,7 +34,7 @@ final class Committer implements CommitterInterface
     public function commit(
         PathInterface $stagingDir,
         PathInterface $activeDir,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {

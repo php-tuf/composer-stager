@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
@@ -11,7 +11,8 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -32,13 +33,13 @@ final class PhpFileSyncer implements FileSyncerInterface
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         set_time_limit((int) $timeout);
 
-        $exclusions = $exclusions ?? new PathAggregate([]);
+        $exclusions = $exclusions ?? new PathList([]);
 
         $this->assertSourceExists($source);
         $this->ensureDestinationExists($destination);
@@ -73,7 +74,7 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function deleteExtraneousFilesFromDestination(
         PathInterface $destination,
         PathInterface $source,
-        PathAggregateInterface $exclusions
+        PathListInterface $exclusions
     ): void {
         // There's no reason to look for deletions if the destination is already empty.
         if ($this->destinationIsEmpty($destination)) {
@@ -114,7 +115,7 @@ final class PhpFileSyncer implements FileSyncerInterface
     private function copySourceFilesToDestination(
         PathInterface $source,
         PathInterface $destination,
-        PathAggregateInterface $exclusions
+        PathListInterface $exclusions
     ): void {
         $sourceFiles = $this->find($source, $exclusions);
 
@@ -145,11 +146,12 @@ final class PhpFileSyncer implements FileSyncerInterface
      *   codebase, and this method with its helpers accounts for over a third of
      *   that by all measures. Extract it to its own class and improve its tests.
      */
-    private function find(PathInterface $directory, PathAggregateInterface $exclusions): array
+    private function find(PathInterface $directory, PathListInterface $exclusions): array
     {
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
 
         $exclusions = array_map(static function ($path) use ($directory): string {
+            $path = PathFactory::create($path);
             return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
 

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -34,7 +34,7 @@ final class Beginner implements BeginnerInterface
     public function begin(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -24,7 +24,7 @@ interface FileSyncerInterface
      *   The directory to sync files from.
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
      *   The directory to sync files to.
-     * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the source directory. The destination
      *   directory is automatically excluded in order to prevent infinite
      *   recursion if it is a descendant of the source directory (i.e., if it is
@@ -47,7 +47,7 @@ interface FileSyncerInterface
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;

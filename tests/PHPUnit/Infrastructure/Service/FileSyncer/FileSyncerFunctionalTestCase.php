@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -89,7 +89,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             // Non-existent.
             'file_that_NEVER_EXISTS_anywhere.txt',
         ];
-        $exclusions = PathAggregateFactory::create($exclusions);
+        $exclusions = new PathList($exclusions);
 
         // Sync files from the active directory to the new staging directory.
         $sut->sync($activeDirPath, $stagingDirPath, $exclusions);

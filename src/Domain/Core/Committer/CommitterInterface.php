@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -19,7 +19,7 @@ interface CommitterInterface
      *   The staging directory.
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
      *   The active directory.
-     * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the staging directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
@@ -42,7 +42,7 @@ interface CommitterInterface
     public function commit(
         PathInterface $stagingDir,
         PathInterface $activeDir,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;

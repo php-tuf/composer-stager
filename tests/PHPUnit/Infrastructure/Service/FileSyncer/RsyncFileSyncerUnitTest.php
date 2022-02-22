@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -18,12 +18,11 @@ use Prophecy\Argument;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
  * @covers ::__construct
- * @covers ::getRelativePath
  * @covers ::sync
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
@@ -92,7 +91,7 @@ class RsyncFileSyncerUnitTest extends TestCase
             [
                 'source' => 'source/two' . DIRECTORY_SEPARATOR,
                 'destination' => 'destination/two',
-                'exclusions' => PathAggregateFactory::create([
+                'exclusions' => new PathList([
                     'three',
                     'four.txt',
                 ]),
@@ -111,7 +110,7 @@ class RsyncFileSyncerUnitTest extends TestCase
             [
                 'source' => 'source/three',
                 'destination' => 'destination/three',
-                'exclusions' => PathAggregateFactory::create([
+                'exclusions' => new PathList([
                     'four/five',
                     'six/seven',
                     'six/seven',

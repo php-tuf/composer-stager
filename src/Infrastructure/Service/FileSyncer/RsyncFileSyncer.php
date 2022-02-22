@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class RsyncFileSyncer implements FileSyncerInterface
 {
@@ -36,11 +36,12 @@ final class RsyncFileSyncer implements FileSyncerInterface
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
-        $exclusions = $exclusions ?? new PathAggregate([]);
+        $exclusions = $exclusions ?? new PathList([]);
+        $exclusions = $exclusions->getAll();
 
         if (!$this->filesystem->exists($source->resolve())) {
             throw new DirectoryNotFoundException($source->resolve(), 'The source directory does not exist at "%s"');
@@ -57,13 +58,6 @@ final class RsyncFileSyncer implements FileSyncerInterface
             // Increase verbosity.
             '--verbose',
         ];
-
-        $exclusions = array_map(function ($path) use ($destination): string {
-            return $this::getRelativePath(
-                $destination->resolve(),
-                $path->resolveRelativeTo($destination)
-            );
-        }, $exclusions->getAll());
 
         // Prevent infinite recursion if the source is inside the destination.
         $exclusions[] = $source->resolve();
@@ -89,14 +83,5 @@ final class RsyncFileSyncer implements FileSyncerInterface
         } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
-    }
-
-    private static function getRelativePath(string $ancestor, string $path): string
-    {
-        $ancestor .= DIRECTORY_SEPARATOR;
-        if (strpos($path, $ancestor) === 0) {
-            $path = substr($path, strlen($ancestor));
-        }
-        return $path;
     }
 }
