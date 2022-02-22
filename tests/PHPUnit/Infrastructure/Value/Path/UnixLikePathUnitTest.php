@@ -79,6 +79,13 @@ class UnixLikePathUnitTest extends TestCase
                 'relativeBase' => '/tmp/four',
                 'resolvedRelativeTo' => '/tmp/four',
             ],
+            'Path as dot-slash (./)' => [
+                'given' => './',
+                'cwd' => '/var/five',
+                'resolved' => '/var/five',
+                'relativeBase' => '/tmp/six',
+                'resolvedRelativeTo' => '/tmp/six',
+            ],
             // Relative paths.
             'Relative path as simple string' => [
                 'given' => 'one',

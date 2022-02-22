@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class RsyncFileSyncer implements FileSyncerInterface
 {
@@ -36,14 +36,18 @@ final class RsyncFileSyncer implements FileSyncerInterface
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
-        $exclusions = $exclusions ?? new PathAggregate([]);
+        $source = $source->resolve();
+        $destination = $destination->resolve();
 
-        if (!$this->filesystem->exists($source->resolve())) {
-            throw new DirectoryNotFoundException($source->resolve(), 'The source directory does not exist at "%s"');
+        $exclusions = $exclusions ?? new PathList([]);
+        $exclusions = $exclusions->getAll();
+
+        if (!$this->filesystem->exists($source)) {
+            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
 
         $command = [
@@ -58,15 +62,10 @@ final class RsyncFileSyncer implements FileSyncerInterface
             '--verbose',
         ];
 
-        $exclusions = array_map(function ($path) use ($destination): string {
-            return $this::getRelativePath(
-                $destination->resolve(),
-                $path->resolveRelativeTo($destination)
-            );
-        }, $exclusions->getAll());
-
         // Prevent infinite recursion if the source is inside the destination.
-        $exclusions[] = $source->resolve();
+        if ($this->isDescendant($source, $destination)) {
+            $exclusions[] = self::getRelativePath($destination, $source);
+        }
 
         // There's no reason to process duplicates.
         $exclusions = array_unique($exclusions);
@@ -77,13 +76,13 @@ final class RsyncFileSyncer implements FileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = $source->resolve() . DIRECTORY_SEPARATOR;
+        $command[] = $source . DIRECTORY_SEPARATOR;
 
-        $command[] = $destination->resolve();
+        $command[] = $destination;
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)
-        $this->filesystem->mkdir($destination->resolve());
+        $this->filesystem->mkdir($destination);
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
@@ -91,12 +90,14 @@ final class RsyncFileSyncer implements FileSyncerInterface
         }
     }
 
-    private static function getRelativePath(string $ancestor, string $path): string
+    private function isDescendant(string $descendant, string $ancestor): bool
     {
         $ancestor .= DIRECTORY_SEPARATOR;
-        if (strpos($path, $ancestor) === 0) {
-            $path = substr($path, strlen($ancestor));
-        }
-        return $path;
+        return strpos($descendant, $ancestor) === 0;
+    }
+
+    private static function getRelativePath(string $ancestor, string $path): string
+    {
+        return substr($path, strlen($ancestor) + 1);
     }
 }

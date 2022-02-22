@@ -1,20 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate;
+namespace PhpTuf\ComposerStager\Infrastructure\Value\PathList;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-final class PathAggregate implements PathAggregateInterface
+final class PathList implements PathListInterface
 {
     /**
-     * @var \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[]
+     * @var string[]
      */
     private $paths;
 
     /**
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[] $paths
+     * @param string[] $paths
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
@@ -30,18 +29,17 @@ final class PathAggregate implements PathAggregateInterface
     }
 
     /**
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface[]|array $paths
+     * @param string[]|array $paths
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     private function assertValidInput(array $paths): void
     {
         foreach ($paths as $path) {
-            if (!$path instanceof PathInterface) {
+            if (!is_string($path)) {
                 $given = is_object($path) ? get_class($path) : gettype($path);
                 throw new InvalidArgumentException(sprintf(
-                    'Paths must implement %s. Given %s.',
-                    PathInterface::class,
+                    'Paths must be strings. Given %s.',
                     $given
                 ));
             }

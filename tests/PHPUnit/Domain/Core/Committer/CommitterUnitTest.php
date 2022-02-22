@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -22,7 +22,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
@@ -105,7 +105,7 @@ class CommitterUnitTest extends TestCase
             [
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
-                'exclusions' => PathAggregateFactory::create(['/nine/ten']),
+                'exclusions' => new PathList(['/nine/ten']),
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],

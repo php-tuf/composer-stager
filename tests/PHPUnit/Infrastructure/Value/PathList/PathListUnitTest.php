@@ -1,18 +1,17 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Aggregate\PathAggregate;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\PathList;
 
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use stdClass;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate::__construct
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList::__construct
  */
-class PathAggregateUnitTest extends TestCase
+class PathListUnitTest extends TestCase
 {
     /**
      * @covers ::__construct
@@ -23,7 +22,7 @@ class PathAggregateUnitTest extends TestCase
      */
     public function testBasicFunctionality($paths): void
     {
-        $sut = new PathAggregate($paths);
+        $sut = new PathList($paths);
 
         self::assertEquals($paths, $sut->getAll(), 'Got correct value via explicit method call.');
     }
@@ -36,8 +35,8 @@ class PathAggregateUnitTest extends TestCase
             ],
             'With values' => [
                 'paths' => [
-                    PathFactory::create('one'),
-                    PathFactory::create('two'),
+                    'one',
+                    'two',
                 ],
             ],
         ];
@@ -51,18 +50,14 @@ class PathAggregateUnitTest extends TestCase
     public function testInvalidInput($paths, $givenType): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches("/Paths must implement.* {$givenType}/");
+        $this->expectExceptionMessage("Paths must be strings. Given {$givenType}");
 
-        new PathAggregate($paths);
+        new PathList($paths);
     }
 
     public function providerInvalidInput(): array
     {
         return [
-            'String value' => [
-                'paths' => ['one'],
-                'givenType' => 'string',
-            ],
             'Null value' => [
                 'paths' => [null],
                 'givenType' => 'NULL',
@@ -77,11 +72,11 @@ class PathAggregateUnitTest extends TestCase
             ],
             'Invalid value among valid ones' => [
                 'paths' => [
-                    PathFactory::create('one'),
-                    'two',
-                    PathFactory::create('three'),
+                    'one',
+                    null,
+                    'three',
                 ],
-                'givenType' => 'string',
+                'givenType' => 'NULL',
             ],
         ];
     }

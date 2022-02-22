@@ -8,9 +8,8 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PathAggregate\PathAggregate
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath

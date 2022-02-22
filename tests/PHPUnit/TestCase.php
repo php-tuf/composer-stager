@@ -131,6 +131,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
+
+        // Remove ignored paths.
         $actual = array_map(static function ($path) use ($dir, $ignoreDir) {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
@@ -148,7 +150,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $actual = array_filter($actual);
         asort($actual);
 
-        // Make diffs easier to read by eliminating noise from numeric keys.
+        // Make diffs easier to read by eliminating noise coming from numeric keys.
         $expected = array_fill_keys($expected, 0);
         $actual = array_fill_keys($actual, 0);
 

@@ -7,8 +7,8 @@ use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Factory\PathAggregate\PathAggregateFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Process\Process;
@@ -69,7 +69,7 @@ class EndToEndFunctionalTest extends TestCase
             '--name=original/name',
         ], $activeDir);
 
-        $exclusions = PathAggregateFactory::create(['EXCLUDED_file.txt']);
+        $exclusions = new PathList(['EXCLUDED_file.txt']);
 
         // Begin.
         $this->beginner->begin($activeDir, $stagingDir, $exclusions);

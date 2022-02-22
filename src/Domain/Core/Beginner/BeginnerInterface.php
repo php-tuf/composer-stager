@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -19,7 +19,7 @@ interface BeginnerInterface
      *   The active directory.
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
      *   The staging directory.
-     * @param \PhpTuf\ComposerStager\Domain\Aggregate\PathAggregate\PathAggregateInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the active directory. Careful use of
      *   exclusions can reduce execution time and disk usage. Two kinds of files
      *   and directories are good candidates for exclusion:
@@ -53,7 +53,7 @@ interface BeginnerInterface
     public function begin(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        PathAggregateInterface $exclusions = null,
+        PathListInterface $exclusions = null,
         ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;

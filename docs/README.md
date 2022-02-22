@@ -44,7 +44,7 @@ class Updater
     {
         $activeDir = PathFactory::create('/var/www/public');
         $stagingDir = PathFactory::create('/var/www/staging');
-        $exclusions = new PathAggregateFactory::create([
+        $exclusions = new PathList([
             'cache',
             'uploads',
         ]);
@@ -68,9 +68,9 @@ class Updater
 }
 ```
 
-## Known issues
+## Limitations and known issues
 
-See the current list of [known issues](known_issues.md).
+[Current limitations and known issues.](known_issues.md)
 
 ## Contributing
 
