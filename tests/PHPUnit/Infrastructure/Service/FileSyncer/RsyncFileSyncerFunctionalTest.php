@@ -12,15 +12,15 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::getRelativePath
  * @covers ::isDescendant
  * @covers ::sync
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  */
 class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {
