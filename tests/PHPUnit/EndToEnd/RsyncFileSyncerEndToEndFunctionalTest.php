@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\EndToEnd;
 
-use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Tests\PHPUnit\EndToEnd\EndToEndFunctionalTestCase;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
@@ -12,18 +12,26 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::getRelativePath
  * @covers ::isDescendant
  * @covers ::sync
+ * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
+ * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
+ * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
+ * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  */
-class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
+class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {
+    protected function fileSyncerClass(): string
+    {
+        return RsyncFileSyncer::class;
+    }
+
     public static function setUpBeforeClass(): void
     {
         if (!self::isRsyncAvailable()) {
@@ -45,20 +53,12 @@ class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
         if (!self::isRsyncAvailable()) {
             self::markTestSkipped('Rsync is not available for testing.');
         }
+        parent::setUp();
     }
 
     protected static function isRsyncAvailable(): bool
     {
         $finder = new SymfonyExecutableFinder();
         return $finder->find('rsync') !== null;
-    }
-
-    protected function createSut(): FileSyncerInterface
-    {
-        $container = self::getContainer();
-
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer $sut */
-        $sut = $container->get(RsyncFileSyncer::class);
-        return $sut;
     }
 }

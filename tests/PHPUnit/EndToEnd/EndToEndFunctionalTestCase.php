@@ -1,28 +1,77 @@
 <?php
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\EndToEnd;
 
+use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
+use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
+use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
+use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Process\Process;
 
-abstract class FileSyncerFunctionalTestCase extends TestCase
+/**
+ * Provides a base for end-to-end functional tests, including the domain and
+ * infrastructure layers. The test cases themselves are supplied by this class.
+ * Subclasses specify the file syncer to use via ::fileSyncerClass().
+ *
+ * @property \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner $beginner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner $cleaner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer $committer
+ * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager $stager
+ */
+abstract class EndToEndFunctionalTestCase extends TestCase
 {
+    protected function setUp(): void
+    {
+        // Build the service container.
+        $container = new ContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator());
+        $loader->load(__DIR__ . '/../../../config/services.yml');
+
+        // Override the FileSyncer implementation.
+        $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
+        $fileSyncer->setFactory(null);
+        $fileSyncer->setClass($this->fileSyncerClass());
+        $container->setDefinition(FileSyncerInterface::class, $fileSyncer);
+
+        // Compile the container.
+        $container->compile();
+
+        // Get services.
+        $this->beginner = $container->get(Beginner::class);
+        $this->stager = $container->get(Stager::class);
+        $this->committer = $container->get(Committer::class);
+        $this->cleaner = $container->get(Cleaner::class);
+
+        // Refresh the test environment.
+        self::removeTestEnvironment();
+        self::createTestEnvironment(self::ACTIVE_DIR);
+    }
+
     public static function tearDownAfterClass(): void
     {
         self::removeTestEnvironment();
     }
 
-    abstract protected function createSut(): FileSyncerInterface;
+    /**
+     * Specifies the file syncer implementation to use, e.g.,
+     * \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer::class.
+     */
+    abstract protected function fileSyncerClass(): string;
 
     /**
      * @dataProvider providerDirectories
      */
     public function testSync($activeDir, $stagingDir): void
     {
-        $sut = $this->createSut();
-
         // Set up environment.
         self::removeTestEnvironment();
         self::createTestEnvironment($activeDir);
@@ -59,6 +108,13 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt',
         ]);
 
+        // Create initial composer.json. (Doing so manually can be up to one
+        // third (1/3) faster than actually using Composer.)
+        self::putJson(
+            $activeDir . '/composer.json',
+            ['name' => 'original/name']
+        );
+
         $exclusions = [
             // Exact pathnames.
             'EXCLUDED_file_in_active_dir_root.txt',
@@ -78,10 +134,11 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         ];
         $exclusions = new PathList($exclusions);
 
-        // Sync files from the active directory to the new staging directory.
-        $sut->sync($activeDirPath, $stagingDirPath, $exclusions);
+        // Begin: Sync files from the active directory to the new staging directory.
+        $this->beginner->begin($activeDirPath, $stagingDirPath, $exclusions);
 
         self::assertDirectoryListing($stagingDirPath->resolve(), [
+            'composer.json',
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
             'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
@@ -91,6 +148,16 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
             'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
         ], '', sprintf('Synced correct files from active directory to new staging directory:%s%s ->%s%s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
+
+        // Stage: Execute a Composer command (that doesn't make any HTTP requests).
+        $newComposerName = 'new/name';
+        $this->stager->stage([
+            'config',
+            'name',
+            $newComposerName,
+        ], $stagingDirPath);
+
+        self::assertComposerJsonName($stagingDir, $newComposerName, 'Correctly executed Composer command.');
 
         // Change files.
         self::changeFile($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt');
@@ -108,11 +175,11 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
         $previousStagingDirContents = self::getDirectoryContents($stagingDir);
 
-        // Sync files from staging directory back to active directory. Use the
-        // same SUT object to make sure it doesn't get polluted between calls.
-        $sut->sync($stagingDirPath, $activeDirPath, $exclusions);
+        // Commit: Sync files from the staging directory back to the directory.
+        $this->committer->commit($stagingDirPath, $activeDirPath, $exclusions);
 
         self::assertDirectoryListing($activeDirPath->resolve(), [
+            'composer.json',
             // Unchanged files are left alone.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -157,6 +224,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         self::assertFileNotChanged($activeDir, 'another_subdir/CREATE_in_staging_dir.txt');
 
         // Changed file contents.
+        self::assertComposerJsonName($activeDir, $newComposerName, 'Preserved changes to composer.json.');
         self::assertFileChanged($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved in the active directory changes made to an excluded file in the active directory.');
         self::assertFileChanged($activeDir, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt', 'Preserved in the active directory changes made to a file in the staging directory.');
         self::assertFileChanged($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
@@ -168,6 +236,11 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             $currentStagingDirContents,
             sprintf('Staging directory was not changed when syncing back to active directory:%s%s ->%s%s', PHP_EOL, $stagingDir, PHP_EOL, $activeDir)
         );
+
+        // Clean: Remove the staging directory.
+        $this->cleaner->clean($stagingDirPath);
+
+        self::assertFileDoesNotExist($stagingDirPath->resolve(), 'Staging directory was completely removed.');
     }
 
     public function providerDirectories(): array
@@ -251,5 +324,17 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                 ),
             ],
         ];
+    }
+
+    private static function assertComposerJsonName($directory, $expected, $message = ''): void
+    {
+        $json = file_get_contents($directory . '/composer.json');
+        $data = json_decode($json, true);
+        self::assertEquals($expected, $data['name'], $message);
+    }
+
+    private static function putJson($filename, $json): void
+    {
+        file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
 }
