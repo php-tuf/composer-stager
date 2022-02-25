@@ -32,7 +32,11 @@ final class RsyncFileSyncer implements FileSyncerInterface
         $this->rsync = $rsync;
     }
 
-    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+    /**
+     * The unusual requirement to support syncing a directory with its own
+     * descendant required a unique approach, which has been documented here:
+     * @see https://serverfault.com/q/1094803/956603
+     */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
