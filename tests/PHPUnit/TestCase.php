@@ -55,18 +55,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected static function getContainer(): Container
-    {
-        $container = new ContainerBuilder();
-
-        $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(__DIR__ . '/../../config/services.yml');
-
-        $container->compile();
-
-        return $container;
-    }
-
     protected static function createFiles(string $baseDir, array $filenames): void
     {
         foreach ($filenames as $filename) {
