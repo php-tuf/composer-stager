@@ -16,6 +16,7 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use UnexpectedValueException;
 
 final class PhpFileSyncer implements FileSyncerInterface
 {
@@ -202,7 +203,7 @@ final class PhpFileSyncer implements FileSyncerInterface
                 $directory,
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
             );
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
