@@ -58,6 +58,10 @@ jobs:
                 php: [ "7.3", "7.4", "8.0" ]
                 dependencies: [ lowest, highest ]
         steps:
+            -   name: "Debugging info"
+                run: "rsync --version | head -1"
+                if: ${{ matrix.os != 'windows-latest' }}
+
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
