@@ -7,15 +7,12 @@ use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Process\Process;
 
 /**
  * Provides a base for end-to-end functional tests, including the domain and
