@@ -103,9 +103,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * return, alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'one/two/three.txt',
      *     'eight.txt',
      *     'four/five.txt',
+     *     'one/two/three.txt',
      *     'six/seven.txt',
      * ];
      * ```
@@ -161,9 +161,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'one/two/three.txt',
      *     'eight.txt',
      *     'four/five.txt',
+     *     'one/two/three.txt',
      *     'six/seven.txt',
      * ];
      * ```
