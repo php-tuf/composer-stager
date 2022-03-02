@@ -13,8 +13,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
 
-    protected const TEST_ENV_CONTAINER = __DIR__ . '/../../var/phpunit/test-env-container';
-    protected const TEST_ENV = self::TEST_ENV_CONTAINER . '/test-env';
+    protected const TEST_ENV = __DIR__ . '/../../var/phpunit/test-env';
+    protected const TEST_WORKING_DIR = self::TEST_ENV . '/working-dir';
     protected const ACTIVE_DIR = 'active-dir';
     protected const STAGING_DIR = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
@@ -25,8 +25,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $filesystem = new Filesystem();
 
         // Create the test environment,
-        $filesystem->mkdir(self::TEST_ENV);
-        chdir(self::TEST_ENV);
+        $filesystem->mkdir(self::TEST_WORKING_DIR);
+        chdir(self::TEST_WORKING_DIR);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
@@ -36,9 +36,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function removeTestEnvironment(): void
     {
         $filesystem = new Filesystem();
-        if ($filesystem->exists(self::TEST_ENV_CONTAINER)) {
+        if ($filesystem->exists(self::TEST_ENV)) {
             try {
-                $filesystem->remove(self::TEST_ENV_CONTAINER);
+                $filesystem->remove(self::TEST_ENV);
             } catch (IOException $e) {
                 // @todo Windows chokes on this every time, e.g.,
                 //    | Failed to remove directory

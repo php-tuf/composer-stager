@@ -265,16 +265,16 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'stagingDir' => 'staging-dir/../staging-dir/../staging-dir',
             ],
             'Siblings: absolute paths' => [
-                'activeDir' => self::TEST_ENV . '/active-dir',
-                'stagingDir' => self::TEST_ENV . '/staging-dir',
+                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
+                'stagingDir' => self::TEST_WORKING_DIR . '/staging-dir',
             ],
             'Siblings: one absolute path, one relative' => [
-                'activeDir' => self::TEST_ENV . '/active-dir',
+                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
                 'stagingDir' => 'staging-dir',
             ],
             'Siblings: one relative path, one absolute' => [
                 'activeDir' => 'active-dir',
-                'stagingDir' => self::TEST_ENV . '/staging-dir',
+                'stagingDir' => self::TEST_WORKING_DIR . '/staging-dir',
             ],
             'Siblings: active as CWD with trailing slash' => [
                 'activeDir' => './',
@@ -295,8 +295,8 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
             ],
             'Nested: absolute paths' => [
-                'activeDir' => self::TEST_ENV . '/active-dir',
-                'stagingDir' => self::TEST_ENV . '/active-dir/staging-dir',
+                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
+                'stagingDir' => self::TEST_WORKING_DIR . '/active-dir/staging-dir',
             ],
 
             // These scenarios are the most important for shared hosting
@@ -307,8 +307,8 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'stagingDir' => 'active-dir/.composer_staging',
             ],
             'Nested: both dirs absolute, staging as "hidden" dir' => [
-                'activeDir' => self::TEST_ENV . '/active-dir',
-                'stagingDir' => self::TEST_ENV . '/active-dir/.composer_staging',
+                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
+                'stagingDir' => self::TEST_WORKING_DIR . '/active-dir/.composer_staging',
             ],
 
             // Other cases.
