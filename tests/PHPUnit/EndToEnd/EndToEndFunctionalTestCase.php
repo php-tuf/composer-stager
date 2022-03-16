@@ -191,7 +191,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt',
-            // Files excluded by "hidden" directory are still in the active directory".
+            // Files excluded by "hidden" directory are still in the active directory.
             '.hidden_EXCLUDED_dir/one.txt',
             '.hidden_EXCLUDED_dir/two.txt',
             '.hidden_EXCLUDED_dir/three.txt',
