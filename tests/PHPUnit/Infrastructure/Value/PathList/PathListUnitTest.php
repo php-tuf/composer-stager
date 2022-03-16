@@ -9,6 +9,7 @@ use stdClass;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
+ *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList::__construct
  */
 class PathListUnitTest extends TestCase

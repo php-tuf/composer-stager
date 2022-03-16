@@ -13,7 +13,9 @@ use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
@@ -76,6 +78,7 @@ class PhpFileSyncerUnitTest extends TestCase
 
     /**
      * @covers ::getRelativePath
+     *
      * @dataProvider providerGetRelativePath
      */
     public function testGetRelativePath($ancestor, $path, $expected): void
@@ -93,6 +96,7 @@ class PhpFileSyncerUnitTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
+    // phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces
     public function providerGetRelativePath(): array
     {
         // UNIX-like OS paths.
@@ -140,6 +144,7 @@ class PhpFileSyncerUnitTest extends TestCase
                 ],
             ];
         }
+
         // Windows paths.
         return [
             'Match: single directory depth' => [

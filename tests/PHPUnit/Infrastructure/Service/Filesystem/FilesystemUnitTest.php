@@ -7,10 +7,12 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+ *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Filesystem\Filesystem $symfonyFilesystem
@@ -67,25 +69,23 @@ class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::copy
-     */
+    /** @covers ::copy */
     public function testCopyFailure(): void
     {
         $this->expectException(IOException::class);
 
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
-            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+            ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
         $sut->copy('source/index.php', 'destination/index.php');
     }
 
     /**
-     * @dataProvider providerExists
-     *
      * @covers ::exists
+     *
+     * @dataProvider providerExists
      */
     public function testExists($path, $expected): void
     {
@@ -135,16 +135,14 @@ class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::mkdir
-     */
+    /** @covers ::mkdir */
     public function testMkdirFailure(): void
     {
         $this->expectException(IOException::class);
 
         $this->symfonyFilesystem
             ->mkdir(Argument::any())
-            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+            ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
         $sut->mkdir('example');
@@ -185,16 +183,14 @@ class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::remove
-     */
+    /** @covers ::remove */
     public function testRemoveException(): void
     {
         $this->expectException(IOException::class);
 
         $this->symfonyFilesystem
             ->remove(Argument::any())
-            ->willThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+            ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
         $sut->remove('/example/path');

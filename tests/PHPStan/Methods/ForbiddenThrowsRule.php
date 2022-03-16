@@ -33,8 +33,10 @@ class ForbiddenThrowsRule extends AbstractRule
         }
 
         $errors = [];
+
         foreach ($throwType->getReferencedClasses() as $exception) {
             $class = $this->reflectionProvider->getClass($exception);
+
             if ($this->isProjectClass($class)) {
                 continue;
             }

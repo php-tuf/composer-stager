@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Domain\Exception;
 
-class LogicException extends \LogicException implements ExceptionInterface
+use LogicException as PHPLogicException;
+
+class LogicException extends PHPLogicException implements ExceptionInterface
 {
 }

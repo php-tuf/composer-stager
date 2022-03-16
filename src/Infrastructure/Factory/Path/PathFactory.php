@@ -24,6 +24,7 @@ final class PathFactory
         if (DIRECTORY_SEPARATOR === '\\') {
             return new WindowsPath($path); // @codeCoverageIgnore
         }
+
         return new UnixLikePath($path);
     }
 }

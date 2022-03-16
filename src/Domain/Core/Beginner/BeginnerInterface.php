@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.
@@ -39,8 +39,6 @@ interface BeginnerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
-     *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException
      *   If the staging directory already exists.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
@@ -49,12 +47,14 @@ interface BeginnerInterface
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
+     *
+     * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
      */
     public function begin(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        PathListInterface $exclusions = null,
-        ProcessOutputCallbackInterface $callback = null,
+        ?PathListInterface $exclusions = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
 }

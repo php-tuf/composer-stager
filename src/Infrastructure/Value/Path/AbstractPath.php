@@ -6,15 +6,13 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 abstract class AbstractPath implements PathInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $cwd;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $path;
+
+    abstract protected function doResolve(string $basePath): string;
 
     /**
      * @param string $path
@@ -43,19 +41,6 @@ abstract class AbstractPath implements PathInterface
         return $this->doResolve($basePath);
     }
 
-    abstract protected function doResolve(string $basePath): string;
-
-    /**
-     * In order to avoid class dependencies, PHP's internal getcwd() function is
-     * called directly here. For comparison...
-     *
-     * @see \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::getcwd
-     */
-    private function getcwd(): string
-    {
-        return (string) getcwd();
-    }
-
     protected function normalize(string $absolutePath, string $prefix = ''): string
     {
         // If the absolute path begins with a directory separator, append it to
@@ -73,6 +58,7 @@ abstract class AbstractPath implements PathInterface
         $parts = explode(DIRECTORY_SEPARATOR, $absolutePath);
 
         $normalized = [];
+
         foreach ($parts as $part) {
             // A zero-length part comes from (meaningless) double slashes. Skip it.
             if ($part === '') {
@@ -99,5 +85,16 @@ abstract class AbstractPath implements PathInterface
 
         // Replace the prefix and return.
         return $prefix . $normalized;
+    }
+
+    /**
+     * In order to avoid class dependencies, PHP's internal getcwd() function is
+     * called directly here. For comparison...
+     *
+     * @see \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::getcwd
+     */
+    private function getcwd(): string
+    {
+        return (string) getcwd();
     }
 }

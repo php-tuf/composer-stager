@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -12,17 +11,14 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 final class Committer implements CommitterInterface
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface */
     private $fileSyncer;
 
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
 
     public function __construct(FileSyncerInterface $fileSyncer, FilesystemInterface $filesystem)
@@ -34,16 +30,18 @@ final class Committer implements CommitterInterface
     public function commit(
         PathInterface $stagingDir,
         PathInterface $activeDir,
-        PathListInterface $exclusions = null,
-        ProcessOutputCallbackInterface $callback = null,
+        ?PathListInterface $exclusions = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $stagingDirResolved = $stagingDir->resolve();
+
         if (!$this->filesystem->exists($stagingDirResolved)) {
             throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
 
         $activeDirResolved = $activeDir->resolve();
+
         if (!$this->filesystem->exists($activeDirResolved)) {
             throw new DirectoryNotFoundException($activeDirResolved, 'The active directory does not exist at "%s"');
         }

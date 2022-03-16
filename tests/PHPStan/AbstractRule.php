@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\PHPStan;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -15,9 +16,7 @@ use PHPStan\ShouldNotHappenException;
  */
 abstract class AbstractRule implements Rule
 {
-    /**
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
+    /** @var \PHPStan\Reflection\ReflectionProvider */
     protected $reflectionProvider;
 
     public function __construct(ReflectionProvider $reflectionProvider)
@@ -31,8 +30,8 @@ abstract class AbstractRule implements Rule
             throw new ShouldNotHappenException();
         }
 
-        /** @var \PhpParser\Node\Name $namespace */
         $namespace = $node->namespacedName;
+        assert($namespace instanceof Name);
         return $this->reflectionProvider->getClass($namespace->toString());
     }
 

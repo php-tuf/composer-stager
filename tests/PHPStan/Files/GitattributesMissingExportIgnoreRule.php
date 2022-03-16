@@ -49,6 +49,7 @@ class GitattributesMissingExportIgnoreRule extends AbstractRule
         $errors = [];
 
         $rootPaths = scandir(__DIR__ . '/../../../');
+
         foreach ($rootPaths as $rootPath) {
             if (in_array($rootPath, self::SPECIAL_PATHS, true)) {
                 continue;

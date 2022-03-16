@@ -10,7 +10,7 @@ class FileNotFoundException extends PathException
         string $path,
         string $message = 'No such file: "%s"',
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct($path, $message, $code, $previous);
     }

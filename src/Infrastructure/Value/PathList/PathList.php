@@ -7,13 +7,11 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 final class PathList implements PathListInterface
 {
-    /**
-     * @var string[]
-     */
+    /** @var array<string> */
     private $paths;
 
     /**
-     * @param string[] $paths
+     * @param array<string> $paths
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
@@ -23,13 +21,16 @@ final class PathList implements PathListInterface
         $this->paths = $paths;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getAll(): array
     {
         return $this->paths;
     }
 
     /**
-     * @param string[]|array $paths
+     * @param array<mixed> $paths
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
@@ -37,7 +38,9 @@ final class PathList implements PathListInterface
     {
         foreach ($paths as $path) {
             if (!is_string($path)) {
-                $given = is_object($path) ? get_class($path) : gettype($path);
+                $given = is_object($path)
+                    ? get_class($path)
+                    : gettype($path);
                 throw new InvalidArgumentException(sprintf(
                     'Paths must be strings. Given %s.',
                     $given

@@ -29,7 +29,7 @@ interface CleanerInterface
      */
     public function clean(
         PathInterface $stagingDir,
-        ProcessOutputCallbackInterface $callback = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
 

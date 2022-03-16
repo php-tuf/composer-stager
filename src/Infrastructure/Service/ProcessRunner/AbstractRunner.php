@@ -14,20 +14,16 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  */
 abstract class AbstractRunner
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface */
     private $executableFinder;
+
+    /** @var \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface */
+    private $processFactory;
 
     /**
      * Returns the executable name, e.g., "composer" or "rsync".
      */
     abstract protected function executableName(): string;
-
-    /**
-     * @var \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface
-     */
-    private $processFactory;
 
     public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
     {
@@ -36,14 +32,12 @@ abstract class AbstractRunner
     }
 
     /**
-     * @param string[] $command
+     * @param array<string> $command
      *   The command to run and its arguments as separate string values, e.g.,
      *   ['require', 'example/package']. The return value of ::executableName()
      *   will be automatically prepended.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
-     *
-     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the executable cannot be found.
@@ -51,14 +45,14 @@ abstract class AbstractRunner
      *   If the command process cannot be created.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
+     *
+     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      */
-    public function run(
-        array $command,
-        ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = 120
-    ): void {
+    public function run(array $command, ?ProcessOutputCallbackInterface $callback = null, ?int $timeout = 120): void
+    {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
+
         try {
             $process->setTimeout($timeout);
             $process->mustRun($callback);

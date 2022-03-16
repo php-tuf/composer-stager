@@ -13,9 +13,11 @@
       <w>phpcodesniffer</w>
       <w>phpcs</w>
       <w>phpstan</w>
+      <w>rlptgo</w>
       <w>roave</w>
       <w>rulesets</w>
       <w>shivammathur</w>
+      <w>squizlabs</w>
       <w>stager</w>
       <w>strlen</w>
       <w>subdir</w>

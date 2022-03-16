@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
@@ -12,18 +11,15 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class RsyncFileSyncer implements FileSyncerInterface
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
 
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface */
     private $rsync;
 
     public function __construct(FilesystemInterface $filesystem, RsyncRunnerInterface $rsync)
@@ -35,13 +31,17 @@ final class RsyncFileSyncer implements FileSyncerInterface
     /**
      * The unusual requirement to support syncing a directory with its own
      * descendant required a unique approach, which has been documented here:
+     *
+     * @todo Do something with $callback.
+     *
      * @see https://serverfault.com/q/1094803/956603
+     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathListInterface $exclusions = null,
-        ProcessOutputCallbackInterface $callback = null,
+        ?PathListInterface $exclusions = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $source = $source->resolve();
@@ -87,6 +87,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)
         $this->filesystem->mkdir($destination);
+
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {

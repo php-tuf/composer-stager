@@ -5,9 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath */
 class WindowsPathUnitTest extends TestCase
 {
     /**

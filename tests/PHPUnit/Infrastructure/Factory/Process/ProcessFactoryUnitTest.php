@@ -6,9 +6,7 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Process\Process;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory */
 class ProcessFactoryUnitTest extends TestCase
 {
     /**

@@ -24,10 +24,7 @@ class ConcreteClassNotFinalRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
-        if ($class->isInterface() ||
-            $class->isAbstract() ||
-            $this->isThrowable($class)
-        ) {
+        if ($class->isInterface() || $class->isAbstract() || $this->isThrowable($class)) {
             return [];
         }
 

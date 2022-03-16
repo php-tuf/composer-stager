@@ -7,14 +7,10 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 final class ExecutableFinder implements ExecutableFinderInterface
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Exception\IOException[]|string[]|null[]
-     */
+    /** @var array<\PhpTuf\ComposerStager\Domain\Exception\IOException>|array<string>|array<null> */
     private $cache = [];
 
-    /**
-     * @var \Symfony\Component\Process\ExecutableFinder
-     */
+    /** @var \Symfony\Component\Process\ExecutableFinder */
     private $symfonyExecutableFinder;
 
     public function __construct(SymfonyExecutableFinder $symfonyExecutableFinder)
@@ -55,8 +51,6 @@ final class ExecutableFinder implements ExecutableFinderInterface
     }
 
     /**
-     * @param string $commandName
-     *
      * @return \PhpTuf\ComposerStager\Domain\Exception\IOException|string|null
      */
     private function getCache(string $commandName)
@@ -65,7 +59,6 @@ final class ExecutableFinder implements ExecutableFinderInterface
     }
 
     /**
-     * @param string $commandName
      * @param string|\PhpTuf\ComposerStager\Domain\Exception\IOException $value
      */
     private function setCache(string $commandName, $value): void

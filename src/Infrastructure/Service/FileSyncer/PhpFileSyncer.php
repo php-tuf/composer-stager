@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
@@ -11,8 +10,9 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -20,9 +20,7 @@ use UnexpectedValueException;
 
 final class PhpFileSyncer implements FileSyncerInterface
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
 
     public function __construct(FilesystemInterface $filesystem)
@@ -30,12 +28,16 @@ final class PhpFileSyncer implements FileSyncerInterface
         $this->filesystem = $filesystem;
     }
 
-    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+    /**
+     * @todo Do something with $callback.
+     *
+     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathListInterface $exclusions = null,
-        ProcessOutputCallbackInterface $callback = null,
+        ?PathListInterface $exclusions = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         set_time_limit((int) $timeout);
@@ -48,20 +50,17 @@ final class PhpFileSyncer implements FileSyncerInterface
         $this->copySourceFilesToDestination($source, $destination, $exclusions);
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
-     */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException */
     private function assertSourceExists(PathInterface $source): void
     {
         $source = $source->resolve();
+
         if (!$this->filesystem->exists($source)) {
             throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
         }
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
     private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
@@ -86,6 +85,7 @@ final class PhpFileSyncer implements FileSyncerInterface
 
         $sourceResolved = $source->resolve();
         $destinationResolved = $destination->resolve();
+
         foreach ($destinationFiles as $destinationFilePathname) {
             $relativePathname = self::getRelativePath($destinationResolved, $destinationFilePathname);
             $sourceFilePathname = $sourceResolved . DIRECTORY_SEPARATOR . $relativePathname;
@@ -97,10 +97,12 @@ final class PhpFileSyncer implements FileSyncerInterface
                 continue;
             }
 
-            // If it doesn't exist in the source, delete it from the destination.
-            if (!$this->filesystem->exists($sourceFilePathname)) {
-                $this->filesystem->remove($destinationFilePathname);
+            if ($this->filesystem->exists($sourceFilePathname)) {
+                continue;
             }
+
+            // If it doesn't exist in the source, delete it from the destination.
+            $this->filesystem->remove($destinationFilePathname);
         }
     }
 
@@ -122,6 +124,7 @@ final class PhpFileSyncer implements FileSyncerInterface
 
         $sourceResolved = $source->resolve();
         $destinationResolved = $destination->resolve();
+
         foreach ($sourceFiles as $sourceFilePathname) {
             $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
             $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
@@ -135,7 +138,7 @@ final class PhpFileSyncer implements FileSyncerInterface
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      *   A list of file pathnames, each beginning with the given directory. The
      *   iterator cannot simply be returned because its element order is uncertain,
      *   so the extraneous file deletion function would fail later when it sometimes
@@ -179,15 +182,6 @@ final class PhpFileSyncer implements FileSyncerInterface
         return iterator_to_array($iterator);
     }
 
-    private static function getRelativePath(string $ancestor, string $path): string
-    {
-        $ancestor .= DIRECTORY_SEPARATOR;
-        if (strpos($path, $ancestor) === 0) {
-            $path = substr($path, strlen($ancestor));
-        }
-        return $path;
-    }
-
     /**
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *
@@ -206,5 +200,16 @@ final class PhpFileSyncer implements FileSyncerInterface
         } catch (UnexpectedValueException $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
+    }
+
+    private static function getRelativePath(string $ancestor, string $path): string
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+
+        if (strpos($path, $ancestor) === 0) {
+            $path = substr($path, strlen($ancestor));
+        }
+
+        return $path;
     }
 }

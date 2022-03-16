@@ -13,7 +13,9 @@ use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
+
  * @covers \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner::__construct
+
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner::directoryExists
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
@@ -74,9 +76,7 @@ class CleanerUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::clean
-     */
+    /** @covers ::clean */
     public function testCleanDirectoryNotFound(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
@@ -119,9 +119,7 @@ class CleanerUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::clean
-     */
+    /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
         $exception = new IOException();

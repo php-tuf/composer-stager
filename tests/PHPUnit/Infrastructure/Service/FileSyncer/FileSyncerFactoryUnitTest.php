@@ -10,6 +10,7 @@ use Symfony\Component\Process\ExecutableFinder;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory
+ *
  * @covers ::__construct
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer

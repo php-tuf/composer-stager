@@ -16,15 +16,11 @@ interface ProcessOutputCallbackInterface
 {
     /**
      * Standard output (stdout).
-     *
-     * @var string
      */
     public const OUT = Process::OUT;
 
     /**
      * Standard error (stderr).
-     *
-     * @var string
      */
     public const ERR = Process::ERR;
 

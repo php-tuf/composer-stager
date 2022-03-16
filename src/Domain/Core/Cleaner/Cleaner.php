@@ -10,9 +10,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class Cleaner implements CleanerInterface
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
 
     public function __construct(FilesystemInterface $filesystem)
@@ -22,10 +20,11 @@ final class Cleaner implements CleanerInterface
 
     public function clean(
         PathInterface $stagingDir,
-        ProcessOutputCallbackInterface $callback = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $stagingDirResolved = $stagingDir->resolve();
+
         if (!$this->directoryExists($stagingDir)) {
             throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }

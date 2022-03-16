@@ -2,14 +2,16 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends PHPUnitTestCase
 {
     use ProphecyTrait;
 
@@ -36,18 +38,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function removeTestEnvironment(): void
     {
         $filesystem = new Filesystem();
-        if ($filesystem->exists(self::TEST_ENV)) {
-            try {
-                $filesystem->remove(self::TEST_ENV);
-            } catch (IOException $e) {
-                // @todo Windows chokes on this every time, e.g.,
-                //    | Failed to remove directory
-                //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
-                //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container):
-                //    | Resource temporarily unavailable.
-                //   Obviously, this error suppression is likely to bite us in the future
-                //   even though it doesn't seem to cause any problems now. Fix it.
-            }
+
+        if (!$filesystem->exists(self::TEST_ENV)) {
+            return;
+        }
+
+        try {
+            $filesystem->remove(self::TEST_ENV);
+        } catch (IOException $e) {
+            // @todo Windows chokes on this every time, e.g.,
+            //    | Failed to remove directory
+            //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
+            //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container):
+            //    | Resource temporarily unavailable.
+            //   Obviously, this error suppression is likely to bite us in the future
+            //   even though it doesn't seem to cause any problems now. Fix it.
         }
     }
 
@@ -62,9 +67,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $filename = "{$baseDir}/{$filename}";
         $dirname = dirname($filename);
+
         if (!file_exists($dirname)) {
             self::assertTrue(mkdir($dirname, 0777, true), "Created directory {$dirname}.");
         }
+
         self::assertTrue(touch($filename), "Created file {$filename}.");
         self::assertNotFalse(realpath($filename), "Got absolute path of {$filename}.");
     }
@@ -72,10 +79,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function changeFile($dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
-        $result = file_put_contents(
-            $pathname,
-            self::CHANGED_CONTENT
-        );
+        $result = file_put_contents($pathname, self::CHANGED_CONTENT);
         self::assertNotFalse($result, "Changed file {$pathname}.");
     }
 
@@ -91,6 +95,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     }
 
+    // phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference
     protected static function fixSeparatorsMultiple(&...$paths): void
     {
         foreach ($paths as &$path) {
@@ -110,8 +115,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * ];
      * ```
      */
-    protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = '', string $message = ''): void
-    {
+    protected static function assertDirectoryListing(
+        string $dir,
+        array $expected,
+        string $ignoreDir = '',
+        string $message = ''
+    ): void {
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
@@ -122,9 +131,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             // matching but returned un-prefixed for later expectation comparison.
             $matchPath = self::ensureTrailingSlash($dir) . $path;
             $ignoreDir = self::ensureTrailingSlash($ignoreDir);
+
             if (strpos($matchPath, $ignoreDir) === 0) {
                 return false;
             }
+
             return self::fixSeparators($path);
         }, $actual);
 
@@ -141,6 +152,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         if ($message === '') {
             $message = "Directory {$dir} contains the expected files.";
         }
+
         self::assertEquals($expected, $actual, $message);
     }
 
@@ -150,9 +162,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $dirListing = self::getFlatDirectoryListing($dir);
 
         $contents = [];
+
         foreach ($dirListing as $pathname) {
             $contents[$pathname] = file_get_contents($dir . $pathname);
         }
+
         return $contents;
     }
 
@@ -177,14 +191,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         );
 
         $listing = [];
-        /** @var \SplFileInfo $splFileInfo */
+
         foreach ($iterator as $splFileInfo) {
-            if (in_array($splFileInfo->getFilename(), ['.', '..'])) {
+            assert($splFileInfo instanceof SplFileInfo);
+
+            if (in_array($splFileInfo->getFilename(), ['.', '..'], true)) {
                 continue;
             }
+
             $pathname = $splFileInfo->getPathname();
             $listing[] = substr($pathname, strlen($dir) + 1);
         }
+
         sort($listing);
         return array_values($listing);
     }
@@ -220,8 +238,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @param string $path
      *   Any path, absolute or relative, existing or not.
-     *
-     * @return string
      */
     protected static function ensureTrailingSlash(string $path): string
     {

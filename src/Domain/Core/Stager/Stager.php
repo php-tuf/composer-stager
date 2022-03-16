@@ -15,20 +15,14 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class Stager implements StagerInterface
 {
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface */
     private $composerRunner;
 
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
 
-    public function __construct(
-        ComposerRunnerInterface $composerRunner,
-        FilesystemInterface $filesystem
-    ) {
+    public function __construct(ComposerRunnerInterface $composerRunner, FilesystemInterface $filesystem)
+    {
         $this->composerRunner = $composerRunner;
         $this->filesystem = $filesystem;
     }
@@ -36,7 +30,7 @@ final class Stager implements StagerInterface
     public function stage(
         array $composerCommand,
         PathInterface $stagingDir,
-        ProcessOutputCallbackInterface $callback = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $this->validate($stagingDir, $composerCommand);
@@ -44,7 +38,7 @@ final class Stager implements StagerInterface
     }
 
     /**
-     * @param string[] $composerCommand
+     * @param array<string> $composerCommand
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
@@ -57,7 +51,7 @@ final class Stager implements StagerInterface
     }
 
     /**
-     * @param string[] $composerCommand
+     * @param array<string> $composerCommand
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
@@ -66,12 +60,15 @@ final class Stager implements StagerInterface
         if ($composerCommand === []) {
             throw new InvalidArgumentException('The Composer command cannot be empty');
         }
+
         if (reset($composerCommand) === 'composer') {
             throw new InvalidArgumentException('The Composer command cannot begin with "composer"--it is implied');
         }
-        if (array_key_exists('--working-dir', $composerCommand)
-            || array_key_exists('-d', $composerCommand)) {
-            throw new InvalidArgumentException('Cannot stage a Composer command containing the "--working-dir" (or "-d") option');
+
+        if (array_key_exists('--working-dir', $composerCommand) || array_key_exists('-d', $composerCommand)) {
+            throw new InvalidArgumentException(
+                'Cannot stage a Composer command containing the "--working-dir" (or "-d") option'
+            );
         }
     }
 
@@ -82,25 +79,35 @@ final class Stager implements StagerInterface
     private function validatePreconditions(PathInterface $stagingDir): void
     {
         $stagingDirResolved = $stagingDir->resolve();
+
         if (!$this->filesystem->exists($stagingDirResolved)) {
             throw new DirectoryNotFoundException($stagingDirResolved, 'The staging directory does not exist at "%s"');
         }
+
         if (!$this->filesystem->isWritable($stagingDirResolved)) {
-            throw new DirectoryNotWritableException($stagingDirResolved, 'The staging directory is not writable at "%s"');
+            throw new DirectoryNotWritableException(
+                $stagingDirResolved,
+                'The staging directory is not writable at "%s"'
+            );
         }
     }
 
     /**
-     * @param string[] $composerCommand
+     * @param array<string> $composerCommand
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      */
-    private function runCommand(PathInterface $stagingDir, array $composerCommand, ?ProcessOutputCallbackInterface $callback, ?int $timeout): void
-    {
+    private function runCommand(
+        PathInterface $stagingDir,
+        array $composerCommand,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $timeout
+    ): void {
         $command = array_merge(
             ['--working-dir=' . $stagingDir->resolve()],
             $composerCommand
         );
+
         try {
             $this->composerRunner->run($command, $callback, $timeout);
         } catch (ExceptionInterface $e) {

@@ -36,8 +36,6 @@ interface FilesystemInterface
      * @param string $path
      *   A path as absolute or relative to the working directory as returned by
      *   `getcwd()` at runtime, e.g., "/var/www/public" or "public".
-     *
-     * @return bool
      */
     public function exists(string $path): bool;
 

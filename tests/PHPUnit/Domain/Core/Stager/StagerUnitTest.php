@@ -18,7 +18,9 @@ use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
@@ -82,10 +84,10 @@ class StagerUnitTest extends TestCase
                 'timeout' => null,
             ],
             [
-                'givenCommand' => [static::INERT_COMMAND],
+                'givenCommand' => [self::INERT_COMMAND],
                 'expectedCommand' => [
                     '--working-dir=' . PathFactory::create(self::STAGING_DIR)->resolve(),
-                    static::INERT_COMMAND,
+                    self::INERT_COMMAND,
                 ],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
@@ -104,7 +106,7 @@ class StagerUnitTest extends TestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $this->stagingDir);
     }
 
     public function testStagingDirectoryNotWritable(): void
@@ -118,7 +120,7 @@ class StagerUnitTest extends TestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $this->stagingDir);
     }
 
     public function testEmptyCommand(): void
@@ -140,7 +142,7 @@ class StagerUnitTest extends TestCase
 
         $sut->stage([
             'composer',
-            static::INERT_COMMAND,
+            self::INERT_COMMAND,
         ], $this->stagingDir);
     }
 
@@ -165,9 +167,7 @@ class StagerUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerProcessExceptions
-     */
+    /** @dataProvider providerProcessExceptions */
     public function testProcessExceptions($exception, $message): void
     {
         $this->expectException(ProcessFailedException::class);
@@ -179,7 +179,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([static::INERT_COMMAND], $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $this->stagingDir);
     }
 
     public function providerProcessExceptions(): array

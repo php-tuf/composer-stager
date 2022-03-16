@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 interface StagerInterface
 {
     /**
-     * @param string[] $composerCommand
+     * @param array<string> $composerCommand
      *   The Composer command parts exactly as they would be typed in the terminal.
      *   There's no need to escape them in any way, only to separate them. Example:
      *   ```php
@@ -43,7 +43,7 @@ interface StagerInterface
     public function stage(
         array $composerCommand,
         PathInterface $stagingDir,
-        ProcessOutputCallbackInterface $callback = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
 }

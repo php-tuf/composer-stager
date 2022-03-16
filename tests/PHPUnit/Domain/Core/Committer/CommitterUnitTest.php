@@ -9,15 +9,17 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
+ *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Committer\Committer::__construct
+ *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
@@ -61,13 +63,7 @@ class CommitterUnitTest extends TestCase
     public function testCommitWithMinimumParams(): void
     {
         $this->fileSyncer
-            ->sync(
-                $this->stagingDir,
-                $this->activeDir,
-                null,
-                null,
-                120
-            )
+            ->sync($this->stagingDir, $this->activeDir, null, null, 120)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -197,12 +193,12 @@ class CommitterUnitTest extends TestCase
     public function testDirectoryExists($expected): void
     {
         $this->filesystem
-            ->exists(static::STAGING_DIR)
+            ->exists(self::STAGING_DIR)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->directoryExists(static::STAGING_DIR);
+        $actual = $sut->directoryExists(self::STAGING_DIR);
 
         self::assertSame($expected, $actual, 'Correctly detected existence of staging directory.');
     }
@@ -215,9 +211,7 @@ class CommitterUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::commit
-     */
+    /** @covers ::commit */
     public function testIOError(): void
     {
         $this->expectException(ProcessFailedException::class);

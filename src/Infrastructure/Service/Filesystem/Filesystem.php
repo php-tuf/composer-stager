@@ -7,13 +7,12 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface;
+use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class Filesystem implements FilesystemInterface
 {
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
+    /** @var \Symfony\Component\Filesystem\Filesystem */
     private $symfonyFilesystem;
 
     public function __construct(SymfonyFilesystem $symfonyFilesystem)
@@ -25,7 +24,7 @@ final class Filesystem implements FilesystemInterface
     {
         try {
             $this->symfonyFilesystem->copy($source, $destination, true);
-        } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
+        } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to copy "%s" to "%s".',
                 $source,
@@ -60,7 +59,7 @@ final class Filesystem implements FilesystemInterface
     {
         try {
             $this->symfonyFilesystem->mkdir($path);
-        } catch (\Symfony\Component\Filesystem\Exception\IOException $e) {
+        } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to create directory at "%s".',
                 $path
@@ -68,6 +67,11 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
+    /**
+     * @todo Do something with $callback.
+     *
+     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     */
     public function remove(
         string $path,
         ?ProcessOutputCallbackInterface $callback = null,

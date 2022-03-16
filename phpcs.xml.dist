@@ -22,13 +22,10 @@
         <exclude name="Generic.Files.LineLength.TooLong"/>
     </rule>
 
-    <!-- Require lowerCamelCase variable names. -->
-    <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
-    <rule ref="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
-    <rule ref="Squiz.NamingConventions.ValidVariableName.StringNotCamelCaps"/>
-
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Arrays.ArrayIndent"/>
+    <rule ref="Generic.PHP.RequireStrictTypes.MissingDeclaration"/>
+
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
     <rule ref="Squiz.Arrays.ArrayDeclaration">
         <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
@@ -37,10 +34,92 @@
         <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
         <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned"/>
     </rule>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.StringNotCamelCaps"/>
 
-    <!-- Find unused code -->
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses"/>
+    <rule ref="SlevomatCodingStandard">
+        <exclude name="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.NoEmptyLineAfterOpeningBrace"/>
+        <exclude name="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.NoEmptyLineBeforeClosingBrace"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming.SuperfluousPrefix"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming.SuperfluousSuffix"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
+        <exclude name="SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment.OneLinePropertyComment"/>
+        <exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment.MultiLineDocComment"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing.IncorrectLinesCountBeforeControlStructure"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison.RequiredYodaComparison"/>
+        <exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions.NonFullyQualifiedException"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants.NonFullyQualified"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions.NonFullyQualified"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces.NonFullyQualified"/>
+        <exclude name="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator.RequiredNumericLiteralSeparator"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint"/>
 
-    <rule ref="Generic.PHP.RequireStrictTypes.MissingDeclaration"/>
+        <!-- Missing type hint sniffs don't support inherited docs. -->
+        <!-- @see https://github.com/slevomat/coding-standard/issues/1341 -->
+        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint"/>
+
+        <!-- This sniff is excluded to allow for @codeCoverageIgnore comments. -->
+        <exclude name="SlevomatCodingStandard.Commenting.DisallowCommentAfterCode.DisallowedCommentAfterCode"/>
+
+        <!-- It is not known why this sniff fails. -->
+        <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName.NoMatchBetweenTypeNameAndFileName"/>
+
+        <!-- @todo Remove these exclusions once support for PHP 7.3 is dropped. -->
+        <exclude name="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator.RequiredNullCoalesceEqualOperator"/>
+        <exclude name="SlevomatCodingStandard.Functions.RequireArrowFunction.RequiredArrowFunction"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint"/>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireYodaComparison.DisallowYodaComparison"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses.IncorrectlyOrderedUses"/>
+
+    <rule ref="SlevomatCodingStandard.Files.FunctionLength"><properties>
+        <!-- @todo It would be nice to reduce this. -->
+        <property name="maxLinesLength" value="50"/>
+    </properties></rule>
+
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
+        <!-- @todo It would be nice to reduce this. -->
+        <property name="maxLinesLength" value="50"/>
+    </properties></rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing"><properties>
+        <property name="linesCountBeforeFirstUseWhenFirstInClass" value="0"/>
+    </properties></rule>
+
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"><properties>
+        <property name="annotationsGroups" type="array">
+            <element value="@coversDefaultClass"/>
+            <element value="@covers"/>
+            <element value="@uses"/>
+            <element value="@dataProvider"/>
+            <element value="@var"/>
+            <element value="@param"/>
+            <element value="@return"/>
+            <element value="@throws"/>
+            <element value="@todo"/>
+            <element value="@noinspection"/>
+        </property>
+        <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
+    </properties></rule>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes"><properties>
+        <property name="declareOnFirstLine" value="true"/>
+        <property name="spacesCountAroundEqualsSign" value="0"/>
+    </properties></rule>
+
+    <!-- Exclusions for test classes. -->
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Files.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints"><exclude-pattern>tests</exclude-pattern></rule>
 
 </ruleset>

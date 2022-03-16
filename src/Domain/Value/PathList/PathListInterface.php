@@ -10,7 +10,7 @@ interface PathListInterface
     /**
      * Returns all path strings.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getAll(): array;
 }

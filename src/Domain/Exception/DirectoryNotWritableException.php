@@ -10,7 +10,7 @@ class DirectoryNotWritableException extends PathException
         string $path,
         string $message = 'Directory not writable: "%s"',
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct($path, $message, $code, $previous);
     }

@@ -10,7 +10,7 @@ class DirectoryAlreadyExistsException extends PathException
         string $path,
         string $message = 'Directory already exists: "%s"',
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct($path, $message, $code, $previous);
     }

@@ -11,10 +11,12 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
+ *
  * @covers ::__construct
  * @covers ::find
  * @covers ::getCache
  * @covers ::setCache
+ *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  *
@@ -78,9 +80,7 @@ class ExecutableFinderUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerFindNotFound
-     */
+    /** @dataProvider providerFindNotFound */
     public function testFindNotFound($name): void
     {
         $this->expectException(IOException::class);
@@ -126,6 +126,7 @@ class ExecutableFinderUnitTest extends TestCase
             $sut->find('composer');
         } catch (IOException $e) {
         }
+
         try {
             $sut->find('composer');
         } catch (IOException $e) {

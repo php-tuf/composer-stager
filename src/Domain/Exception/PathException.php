@@ -7,20 +7,16 @@ use Throwable;
 
 class PathException extends RuntimeException implements ExceptionInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
-    public function __construct(
-        string $path,
-        string $message = '',
-        int $code = 0,
-        Throwable $previous = null
-    ) {
-        $this->path = $path;
+    public function __construct(string $path, string $message = '', int $code = 0, ?Throwable $previous = null)
+    {
         $message = sprintf($message, $path);
+
         parent::__construct($message, $code, $previous);
+
+        $this->path = $path;
     }
 
     public function getPath(): string

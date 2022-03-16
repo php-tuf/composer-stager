@@ -12,7 +12,7 @@ interface ProcessFactoryInterface
     /**
      * Creates a process object.
      *
-     * @param string[] $command
+     * @param array<string> $command
      *   The command to run and its arguments listed as separate entries. Example:
      *   ```php
      *   $command = [
@@ -23,10 +23,10 @@ interface ProcessFactoryInterface
      *   ];
      *   ```
      *
-     * @see \Symfony\Component\Process\Process::__construct
-     *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the process cannot be created.
+     *
+     * @see \Symfony\Component\Process\Process::__construct
      */
     public function create(array $command): Process;
 }

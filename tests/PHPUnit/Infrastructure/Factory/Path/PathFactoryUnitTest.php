@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  */
 class PathFactoryUnitTest extends TestCase
@@ -40,6 +41,7 @@ class PathFactoryUnitTest extends TestCase
                 ],
             ];
         }
+
         return [
             [
                 'string' => '/',

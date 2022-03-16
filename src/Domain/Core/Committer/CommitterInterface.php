@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 /**
  * Makes the staged changes live by syncing the active directory with the staging directory.
@@ -28,8 +28,6 @@ interface CommitterInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
-     *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
      *   If the active directory or the staging directory is not found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
@@ -38,12 +36,14 @@ interface CommitterInterface
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
+     *
+     * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
      */
     public function commit(
         PathInterface $stagingDir,
         PathInterface $activeDir,
-        PathListInterface $exclusions = null,
-        ProcessOutputCallbackInterface $callback = null,
+        ?PathListInterface $exclusions = null,
+        ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
 

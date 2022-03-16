@@ -8,19 +8,13 @@ use Symfony\Component\Process\ExecutableFinder;
 
 final class FileSyncerFactory implements FileSyncerFactoryInterface
 {
-    /**
-     * @var \Symfony\Component\Process\ExecutableFinder
-     */
+    /** @var \Symfony\Component\Process\ExecutableFinder */
     private $executableFinder;
 
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface */
     private $phpFileSyncer;
 
-    /**
-     * @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
-     */
+    /** @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface */
     private $rsyncFileSyncer;
 
     public function __construct(
@@ -38,6 +32,7 @@ final class FileSyncerFactory implements FileSyncerFactoryInterface
         if ($this->executableFinder->find('rsync') !== null) {
             return $this->rsyncFileSyncer;
         }
+
         return $this->phpFileSyncer;
     }
 }

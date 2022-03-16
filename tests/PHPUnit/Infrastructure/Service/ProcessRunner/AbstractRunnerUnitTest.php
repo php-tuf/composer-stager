@@ -10,10 +10,12 @@ use PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
+ *
  * @covers ::__construct
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
@@ -53,9 +55,13 @@ class AbstractRunnerUnitTest extends TestCase
         {
             private $executableName;
 
-            public function __construct($executableName, ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
-            {
+            public function __construct(
+                string $executableName,
+                ExecutableFinderInterface $executableFinder,
+                ProcessFactoryInterface $processFactory
+            ) {
                 parent::__construct($executableFinder, $processFactory);
+
                 $this->executableName = $executableName;
             }
 
@@ -130,7 +136,7 @@ class AbstractRunnerUnitTest extends TestCase
     {
         $this->expectException(ProcessFailedException::class);
 
-        $exception = $this->prophesize(\Symfony\Component\Process\Exception\ProcessFailedException::class);
+        $exception = $this->prophesize(SymfonyProcessFailedException::class);
         $exception = $exception->reveal();
         $this->process
             ->mustRun(Argument::cetera())
@@ -138,7 +144,7 @@ class AbstractRunnerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->run([static::COMMAND_NAME]);
+        $sut->run([self::COMMAND_NAME]);
     }
 
     /**
@@ -157,6 +163,6 @@ class AbstractRunnerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->run([static::COMMAND_NAME]);
+        $sut->run([self::COMMAND_NAME]);
     }
 }

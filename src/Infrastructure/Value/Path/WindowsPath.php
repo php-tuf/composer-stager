@@ -6,6 +6,7 @@ final class WindowsPath extends AbstractPath
 {
     /**
      * Windows path rules are complex. They are only partially implemented here.
+     *
      * @see https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats
      */
     protected function doResolve(string $basePath): string

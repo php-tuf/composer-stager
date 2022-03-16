@@ -12,7 +12,7 @@ interface RsyncRunnerInterface extends ProcessRunnerInterface
     /**
      * Runs a given rsync command.
      *
-     * @param string[] $command
+     * @param array<string> $command
      *   The command to run and its arguments as separate string values. Example:
      *   ```php
      *   $command = [
@@ -28,14 +28,14 @@ interface RsyncRunnerInterface extends ProcessRunnerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
-     *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the executable cannot be found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the command process cannot be created.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
+     *
+     * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      */
     public function run(
         array $command,

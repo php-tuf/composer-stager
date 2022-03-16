@@ -9,15 +9,17 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
+ *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner::__construct
+ *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
@@ -128,9 +130,7 @@ class BeginnerUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::begin
-     */
+    /** @covers ::begin */
     public function testBeginActiveDirectoryDoesNotExist(): void
     {
         $this->expectException(DirectoryNotFoundException::class);
@@ -145,9 +145,7 @@ class BeginnerUnitTest extends TestCase
         $sut->begin($this->activeDir, $this->stagingDir);
     }
 
-    /**
-     * @covers ::begin
-     */
+    /** @covers ::begin */
     public function testBeginStagingDirectoryAlreadyExists(): void
     {
         $this->expectException(DirectoryAlreadyExistsException::class);
@@ -162,9 +160,7 @@ class BeginnerUnitTest extends TestCase
         $sut->begin($this->activeDir, $this->stagingDir);
     }
 
-    /**
-     * @covers ::begin
-     */
+    /** @covers ::begin */
     public function testIOError(): void
     {
         $this->expectException(ProcessFailedException::class);
