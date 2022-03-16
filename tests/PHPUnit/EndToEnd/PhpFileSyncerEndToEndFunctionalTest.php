@@ -13,11 +13,10 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditions
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner

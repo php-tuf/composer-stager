@@ -3,16 +3,15 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Beginner;
 
 use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -22,58 +21,45 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
- *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 class BeginnerUnitTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
+        $this->activeDir = $this->prophesize(PathInterface::class);
+        $this->activeDir
+            ->resolve()
+            ->willReturn(self::ACTIVE_DIR);
+        $this->stagingDir = $this->prophesize(PathInterface::class);
+        $this->stagingDir
+            ->resolve()
+            ->willReturn(self::STAGING_DIR);
+        $this->preconditions = $this->prophesize(BeginnerPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
-        $this->filesystem
-            ->exists($this->activeDir->resolve())
-            ->willReturn(true);
-        $this->filesystem
-            ->exists($this->stagingDir->resolve())
-            ->willReturn(false);
     }
 
     protected function createSut(): Beginner
     {
         $fileSyncer = $this->fileSyncer->reveal();
-        $filesystem = $this->filesystem->reveal();
-        return new Beginner($fileSyncer, $filesystem);
+        $preconditions = $this->preconditions->reveal();
+        return new Beginner($fileSyncer, $preconditions);
     }
 
     /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
-        $this->filesystem
-            ->exists($this->activeDir->resolve())
-            ->willReturn(true);
-        $this->filesystem
-            ->exists($this->stagingDir->resolve())
-            ->willReturn(false);
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $this->fileSyncer
-            ->sync($this->activeDir, $this->stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->sync($activeDir, $stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
+        $sut->begin($activeDir, $stagingDir);
     }
 
     /**
@@ -83,15 +69,8 @@ class BeginnerUnitTest extends TestCase
      */
     public function testBeginWithOptionalParams($activeDir, $stagingDir, $exclusions, $callback, $timeout): void
     {
-        $activeDir = PathFactory::create($activeDir);
-        $stagingDir = PathFactory::create($stagingDir);
-
-        $this->filesystem
-            ->exists($activeDir->resolve())
-            ->willReturn(true);
-        $this->filesystem
-            ->exists($stagingDir->resolve())
-            ->willReturn(false);
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
@@ -113,51 +92,27 @@ class BeginnerUnitTest extends TestCase
             [
                 'activeDir' => 'five/six',
                 'stagingDir' => 'seven/eight',
-                'givenExclusions' => new PathList(['nine/ten']),
+                'givenExclusions' => $this->prophesize(PathListInterface::class)->reveal(),
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 100,
-            ],
-            [
-                'activeDir' => 'eleven/twelve',
-                'stagingDir' => 'thirteen/fourteen',
-                'givenExclusions' => new PathList([
-                    'thirteen/fourteen',
-                    'fifteen/sixteen',
-                ]),
-                'callback' => null,
-                'timeout' => null,
             ],
         ];
     }
 
     /** @covers ::begin */
-    public function testBeginActiveDirectoryDoesNotExist(): void
+    public function testBeginPreconditionsUnfulfilled(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
-        $this->expectExceptionMessageMatches('/active directory.*not exist/');
+        $this->expectException(PreconditionException::class);
 
-        $this->filesystem
-            ->exists($this->activeDir->resolve())
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->preconditions
+            ->assertIsFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
-            ->willReturn(false);
+            ->willThrow(PreconditionException::class);
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
-    }
-
-    /** @covers ::begin */
-    public function testBeginStagingDirectoryAlreadyExists(): void
-    {
-        $this->expectException(DirectoryAlreadyExistsException::class);
-        $this->expectExceptionMessageMatches('/staging directory already exists/');
-
-        $this->filesystem
-            ->exists($this->stagingDir->resolve())
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
-        $sut = $this->createSut();
-
-        $sut->begin($this->activeDir, $this->stagingDir);
+        $sut->begin($activeDir, $stagingDir);
     }
 
     /**
@@ -170,11 +125,10 @@ class BeginnerUnitTest extends TestCase
         $this->expectException(ProcessFailedException::class);
         $this->expectExceptionMessage($message);
 
-        $activeDir = $this->activeDir;
-        $stagingDir = $this->stagingDir;
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $this->fileSyncer
             ->sync(Argument::cetera())
-            ->shouldBeCalledOnce()
             ->willThrow($exception);
         $sut = $this->createSut();
 
