@@ -12,7 +12,8 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
-    <file>.src</file>
+    <file>src</file>
+    <file>tests</file>
 
     <rule ref="PhpTuf"/>
     <rule ref="Generic.Arrays.ArrayIndent"/>
