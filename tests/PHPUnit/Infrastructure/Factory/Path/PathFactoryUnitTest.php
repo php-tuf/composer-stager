@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Factory\Path;
 

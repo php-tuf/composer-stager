@@ -17,6 +17,7 @@ grumphp:
             standard: []
             whitelist_patterns:
                 - src
+                - tests
         phplint:
             ignore_patterns:
                 - .idea
