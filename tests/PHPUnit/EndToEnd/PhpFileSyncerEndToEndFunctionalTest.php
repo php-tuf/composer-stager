@@ -20,10 +20,10 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\EndToEnd\EndToEndFunctionalTestCase;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  */
 class PhpFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {
