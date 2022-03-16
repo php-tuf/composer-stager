@@ -31,7 +31,9 @@ abstract class AbstractRule implements Rule
             throw new ShouldNotHappenException();
         }
 
-        return $this->reflectionProvider->getClass($node->namespacedName);
+        /** @var \PhpParser\Node\Name $namespace */
+        $namespace = $node->namespacedName;
+        return $this->reflectionProvider->getClass($namespace->toString());
     }
 
     protected function getMethodReflection(Scope $scope): MethodReflection

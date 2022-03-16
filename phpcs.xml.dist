@@ -15,8 +15,29 @@
     <file>src</file>
     <file>tests</file>
 
-    <rule ref="PhpTuf"/>
+    <rule ref="PSR2">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
+
+    <!-- Require lowerCamelCase variable names. -->
+    <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
+    <rule ref="Squiz.NamingConventions.ValidVariableName.StringNotCamelCaps"/>
+
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Arrays.ArrayIndent"/>
-    <rule ref="vendor/squizlabs/php_codesniffer/src/Standards/Generic/Sniffs/PHP/RequireStrictTypesSniff.php"/>
+    <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+    <rule ref="Squiz.Arrays.ArrayDeclaration">
+        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned"/>
+    </rule>
+
+    <!-- Find unused code -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses"/>
+
+    <rule ref="Generic.PHP.RequireStrictTypes.MissingDeclaration"/>
 
 </ruleset>

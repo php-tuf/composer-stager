@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "688034a8e3032a0e00da1f50cfe3a81b",
+    "content-hash": "334548f033136c0fd7c0be389e6398d8",
     "packages": [
         {
             "name": "symfony/filesystem",
@@ -1533,19 +1533,6 @@
                 "source": "https://github.com/php-parallel-lint/PHP-Parallel-Lint/tree/v1.3.2"
             },
             "time": "2022-02-21T12:50:22+00:00"
-        },
-        {
-            "name": "php-tuf/phpcodesniffer-standard",
-            "version": "dev-main",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/php-tuf/phpcodesniffer-standard/archive/refs/heads/main.zip"
-            },
-            "require": {
-                "slevomat/coding-standard": "^7.0",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "phpcodesniffer-standard"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -4978,7 +4965,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "php-tuf/phpcodesniffer-standard": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
