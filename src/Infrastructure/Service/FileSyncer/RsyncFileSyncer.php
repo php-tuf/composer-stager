@@ -35,6 +35,7 @@ final class RsyncFileSyncer implements FileSyncerInterface
      * @todo Do something with $callback.
      *
      * @see https://serverfault.com/q/1094803/956603
+     *
      * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
     public function sync(
