@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 
 class TestProcessOutputCallback implements ProcessOutputCallbackInterface
 {
-    // phpcs:disable SlevomatCodingStandard.Functions
+    /** phpcs:disable SlevomatCodingStandard.Functions */
     public function __invoke(string $type, string $buffer): void
     {
     }

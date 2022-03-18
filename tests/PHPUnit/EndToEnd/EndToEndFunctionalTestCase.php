@@ -118,8 +118,9 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'arbitrary_subdir/EXCLUDED_file.txt',
             // Directories.
             'EXCLUDED_dir',
-            'another_EXCLUDED_dir/', // With a trailing slash.
             'arbitrary_subdir/with/nested/EXCLUDED_dir',
+            // Directory with a trailing slash.
+            'another_EXCLUDED_dir/',
             // "Hidden" directory.
             '.hidden_EXCLUDED_dir',
             // Duplicative.
