@@ -40,11 +40,6 @@ interface FilesystemInterface
     public function exists(string $path): bool;
 
     /**
-     * Gets the current working directory as returned by `getcwd()` at runtime.
-     */
-    public function getcwd(): string;
-
-    /**
      * Determines whether the given path is writable.
      *
      * @param string $path

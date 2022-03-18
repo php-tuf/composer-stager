@@ -36,7 +36,6 @@ class PathExceptionsUnitTest extends TestCase
         $fileNotFoundException = new FileNotFoundException(...$args);
 
         self::assertSame($expectedPathMessage, $pathException->getMessage());
-        self::assertSame($path, $pathException->getPath());
         self::assertSame($expectedDirectoryAlreadyExistsMessage, $directoryAlreadyExistsException->getMessage());
         self::assertSame($expectedDirectoryNotFoundMessage, $directoryNotFoundException->getMessage());
         self::assertSame($expectedDirectoryNotWritableMessage, $directoryNotWritableException->getMessage());

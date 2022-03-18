@@ -31,16 +31,6 @@ class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::getcwd
-     */
-    public function testGetcwd(): void
-    {
-        $sut = $this->createSut();
-
-        self::assertSame(getcwd(), $sut->getcwd());
-    }
-
-    /**
      * @covers ::copy
      *
      * @dataProvider providerCopy

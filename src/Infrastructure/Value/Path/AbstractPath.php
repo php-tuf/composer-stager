@@ -90,11 +90,16 @@ abstract class AbstractPath implements PathInterface
     /**
      * In order to avoid class dependencies, PHP's internal getcwd() function is
      * called directly here. For comparison...
-     *
-     * @see \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::getcwd
      */
     private function getcwd(): string
     {
+        // It is technically possible for getcwd() to fail and return false. (For
+        // example, on some Unix variants, this check will fail if any one of the
+        // parent directories does not have the readable or search mode set, even
+        // if the current directory does.) But the likelihood is probably so slight
+        // that it hardly seems worth cluttering up client code handling theoretical
+        // IO exceptions. Cast the return value to a string for the purpose of
+        // static analysis and move on.
         return (string) getcwd();
     }
 }
