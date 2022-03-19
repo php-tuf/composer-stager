@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -63,7 +64,7 @@ class CommitterUnitTest extends TestCase
     public function testCommitWithMinimumParams(): void
     {
         $this->fileSyncer
-            ->sync($this->stagingDir, $this->activeDir, null, null, 120)
+            ->sync($this->stagingDir, $this->activeDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

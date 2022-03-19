@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
 
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
@@ -48,8 +49,11 @@ abstract class AbstractRunner
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      */
-    public function run(array $command, ?ProcessOutputCallbackInterface $callback = null, ?int $timeout = 120): void
-    {
+    public function run(
+        array $command,
+        ?ProcessOutputCallbackInterface $callback = null,
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+    ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
 
