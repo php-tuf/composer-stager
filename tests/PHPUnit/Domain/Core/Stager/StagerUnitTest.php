@@ -167,8 +167,8 @@ class StagerUnitTest extends TestCase
         ];
     }
 
-    /** @dataProvider providerProcessExceptions */
-    public function testProcessExceptions($exception, $message): void
+    /** @dataProvider providerExceptions */
+    public function testExceptions($exception, $message): void
     {
         $this->expectException(ProcessFailedException::class);
         $this->expectExceptionMessage($message);
@@ -182,7 +182,7 @@ class StagerUnitTest extends TestCase
         $sut->stage([self::INERT_COMMAND], $this->stagingDir);
     }
 
-    public function providerProcessExceptions(): array
+    public function providerExceptions(): array
     {
         return [
             [
