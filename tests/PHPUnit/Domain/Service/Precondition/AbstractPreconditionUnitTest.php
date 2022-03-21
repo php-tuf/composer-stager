@@ -4,30 +4,53 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition::__construct
+ *
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $path
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 class AbstractPreconditionUnitTest extends TestCase
 {
     protected function setUp(): void
     {
+        $this->activeDir = $this->prophesize(PathInterface::class);
+        $this->activeDir
+            ->resolve()
+            ->willReturn(self::ACTIVE_DIR);
+        $this->stagingDir = $this->prophesize(PathInterface::class);
+        $this->stagingDir
+            ->resolve()
+            ->willReturn(self::STAGING_DIR);
         $this->path = $this->prophesize(PathInterface::class);
     }
 
-    protected function createSut(): AbstractPrecondition
+    protected function createSut(...$subPreconditions): AbstractPrecondition
     {
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class () extends AbstractPrecondition
+        return new class (...$subPreconditions) extends AbstractPrecondition
         {
             public $isFulfilled = true;
             public $fulfilledStatusMessage = '';
             public $unfulfilledStatusMessage = '';
+
+            public static function getName(): string
+            {
+                return 'Name';
+            }
+
+            public static function getDescription(): string
+            {
+                return 'Description';
+            }
 
             protected function getFulfilledStatusMessage(): string
             {
@@ -38,6 +61,27 @@ class AbstractPreconditionUnitTest extends TestCase
             {
                 return $this->unfulfilledStatusMessage;
             }
+        };
+    }
+
+    /**
+     * @covers ::getStatusMessage
+     *
+     * @dataProvider providerBasicFunctionality
+     */
+    public function testBasicFunctionality(
+        $isFulfilled,
+        $fulfilledStatusMessage,
+        $unfulfilledStatusMessage,
+        $expectedStatusMessage
+    ): void {
+        // Create a concrete implementation for testing since the SUT, being
+        // abstract, can't be instantiated directly.
+        $sut = new class () extends AbstractPrecondition
+        {
+            public $isFulfilled = true;
+            public $fulfilledStatusMessage = '';
+            public $unfulfilledStatusMessage = '';
 
             public static function getName(): string
             {
@@ -53,19 +97,20 @@ class AbstractPreconditionUnitTest extends TestCase
             {
                 return $this->isFulfilled;
             }
-        };
-    }
 
-    /**
-     * @covers ::getStatusMessage
-     *
-     * @dataProvider providerTest
-     */
-    public function test($isFulfilled, $filledStatusMessage, $unfulfilledStatusMessage, $expectedStatusMessage): void
-    {
-        $sut = $this->createSut();
+            protected function getFulfilledStatusMessage(): string
+            {
+                return $this->fulfilledStatusMessage;
+            }
+
+            protected function getUnfulfilledStatusMessage(): string
+            {
+                return $this->unfulfilledStatusMessage;
+            }
+        };
+
         $sut->isFulfilled = $isFulfilled;
-        $sut->fulfilledStatusMessage = $filledStatusMessage;
+        $sut->fulfilledStatusMessage = $fulfilledStatusMessage;
         $sut->unfulfilledStatusMessage = $unfulfilledStatusMessage;
         $path = $this->path->reveal();
 
@@ -73,7 +118,7 @@ class AbstractPreconditionUnitTest extends TestCase
         self::assertEquals($sut->getStatusMessage($path, $path), $expectedStatusMessage);
     }
 
-    public function providerTest(): array
+    public function providerBasicFunctionality(): array
     {
         return [
             [
@@ -92,32 +137,67 @@ class AbstractPreconditionUnitTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
      * @covers ::assertIsFulfilled
-     */
-    public function testAssertFulfilled(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $sut = $this->createSut();
-        $sut->isFulfilled = true;
-        $path = $this->path->reveal();
-
-        $sut->assertIsFulfilled($path, $path);
-    }
-
-    /**
-     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      */
-    public function testAssertUnfulfilled(): void
+    public function testWithNesting(): void
     {
         $this->expectException(PreconditionException::class);
 
-        $sut = $this->createSut();
-        $sut->isFulfilled = false;
-        $path = $this->path->reveal();
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
 
-        $sut->assertIsFulfilled($path, $path);
+        $createMockSut = function (bool $return) use ($activeDir, $stagingDir): PreconditionInterface {
+            /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $prophecy */
+            $prophecy = $this->prophesize(PreconditionInterface::class);
+            $prophecy->isFulfilled($activeDir, $stagingDir)
+                ->shouldBeCalledOnce()
+                ->willReturn($return);
+            return $prophecy->reveal();
+        };
+
+        $sut = $this->createSut(
+            $createMockSut(true),
+            $this->createSut(
+                $this->createSut(
+                    $createMockSut(true)
+                )
+            ),
+            $this->createSut(
+                $this->createSut(
+                    $this->createSut(
+                        $this->createSut(
+                            $createMockSut(true)
+                        )
+                    )
+                )
+            ),
+            $this->createSut(
+                $this->createSut(
+                    $this->createSut(
+                        $this->createSut(
+                            $this->createSut(
+                                $this->createSut(
+                                    $this->createSut(
+                                        $this->createSut(
+                                            $this->createSut(
+                                                $this->createSut(
+                                                    $createMockSut(false)
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 }
