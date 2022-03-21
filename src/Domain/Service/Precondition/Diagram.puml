@@ -16,7 +16,6 @@ interface PreconditionInterface {
     +getStatusMessage()
     +isFulfilled($activeDir, $stagingDir) : bool
     +assertIsFulfilled($activeDir, $stagingDir) : void
-    +getChildren() : array<PreconditionInterface>
 }
 
 abstract AbstractPrecondition implements PreconditionInterface {
