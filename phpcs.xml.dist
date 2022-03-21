@@ -120,6 +120,7 @@
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints"><exclude-pattern>tests</exclude-pattern></rule>
 
 </ruleset>
