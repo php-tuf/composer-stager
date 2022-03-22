@@ -38,9 +38,7 @@ class ExecutableFinderUnitTest extends TestCase
         return new ExecutableFinder($executableFinder);
     }
 
-    /**
-     * @dataProvider providerFind
-     */
+    /** @dataProvider providerFind */
     public function testFind($firstCommandName, $firstPath, $secondCommandName): void
     {
         $this->symfonyExecutableFinder

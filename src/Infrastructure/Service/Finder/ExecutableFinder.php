@@ -50,17 +50,13 @@ final class ExecutableFinder implements ExecutableFinderInterface
         return $path;
     }
 
-    /**
-     * @return \PhpTuf\ComposerStager\Domain\Exception\IOException|string|null
-     */
+    /** @return \PhpTuf\ComposerStager\Domain\Exception\IOException|string|null */
     private function getCache(string $commandName)
     {
         return $this->cache[$commandName] ?? null;
     }
 
-    /**
-     * @param string|\PhpTuf\ComposerStager\Domain\Exception\IOException $value
-     */
+    /** @param string|\PhpTuf\ComposerStager\Domain\Exception\IOException $value */
     private function setCache(string $commandName, $value): void
     {
         $this->cache[$commandName] = $value;

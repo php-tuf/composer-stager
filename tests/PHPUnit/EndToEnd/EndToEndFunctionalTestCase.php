@@ -64,9 +64,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
      */
     abstract protected function fileSyncerClass(): string;
 
-    /**
-     * @dataProvider providerDirectories
-     */
+    /** @dataProvider providerDirectories */
     public function testSync($activeDir, $stagingDir): void
     {
         // Set up environment.

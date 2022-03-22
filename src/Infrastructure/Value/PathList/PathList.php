@@ -21,9 +21,7 @@ final class PathList implements PathListInterface
         $this->paths = $paths;
     }
 
-    /**
-     * @return array<string>
-     */
+    /** @return array<string> */
     public function getAll(): array
     {
         return $this->paths;

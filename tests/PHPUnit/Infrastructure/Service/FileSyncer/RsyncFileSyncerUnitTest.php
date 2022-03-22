@@ -56,9 +56,7 @@ class RsyncFileSyncerUnitTest extends TestCase
         return new RsyncFileSyncer($filesystem, $rsync);
     }
 
-    /**
-     * @dataProvider providerSync
-     */
+    /** @dataProvider providerSync */
     public function testSync($source, $destination, $exclusions, $command, $callback): void
     {
         $source = PathFactory::create($source);

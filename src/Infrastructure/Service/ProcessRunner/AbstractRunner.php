@@ -65,9 +65,7 @@ abstract class AbstractRunner
         }
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
     private function findExecutable(): string
     {
         $name = $this->executableName();
