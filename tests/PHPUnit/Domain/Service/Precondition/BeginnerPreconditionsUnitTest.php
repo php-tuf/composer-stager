@@ -2,19 +2,23 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditions;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditions
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
  *
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirDoesNotExist
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
  */
 class BeginnerPreconditionsUnitTest extends TestCase
 {
@@ -29,12 +33,14 @@ class BeginnerPreconditionsUnitTest extends TestCase
             ->resolve()
             ->willReturn(self::STAGING_DIR);
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
+        $this->stagingDirDoesNotExist = $this->prophesize(StagingDirDoesNotExistInterface::class);
     }
 
     protected function createSut(): BeginnerPreconditions
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
-        return new BeginnerPreconditions($commonPreconditions);
+        $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
+        return new BeginnerPreconditions($commonPreconditions, $stagingDirDoesNotExist);
     }
 
     /**
@@ -49,9 +55,37 @@ class BeginnerPreconditionsUnitTest extends TestCase
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
+        $this->stagingDirDoesNotExist
+            ->isFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
 
         $sut = $this->createSut();
 
         self::assertTrue($sut->isFulfilled($activeDir, $stagingDir));
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::isFulfilled
+     */
+    public function testIsUnfulfilled(): void
+    {
+        $this->expectException(PreconditionException::class);
+
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->commonPreconditions
+            ->isFulfilled($activeDir, $stagingDir)
+            ->willReturn(false);
+        $this->stagingDirDoesNotExist
+            ->isFulfilled($activeDir, $stagingDir)
+            ->willReturn(false);
+
+        $sut = $this->createSut();
+
+        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 }

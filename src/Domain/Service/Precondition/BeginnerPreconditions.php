@@ -4,8 +4,10 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 final class BeginnerPreconditions extends AbstractPrecondition implements BeginnerPreconditionsInterface
 {
-    public function __construct(CommonPreconditionsInterface $preconditions)
-    {
+    public function __construct(
+        CommonPreconditionsInterface $commonPreconditions,
+        StagingDirDoesNotExistInterface $stagingDirDoesNotExist
+    ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
 

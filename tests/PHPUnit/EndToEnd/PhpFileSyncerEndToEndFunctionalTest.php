@@ -23,6 +23,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem

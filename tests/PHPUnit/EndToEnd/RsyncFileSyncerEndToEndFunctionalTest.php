@@ -25,17 +25,17 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  */
 class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {

@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  */
-class ComposerIsAvailablePreconditionUnitTest extends TestCase
+class ComposerIsAvailableUnitTest extends TestCase
 {
     protected function setUp(): void
     {
