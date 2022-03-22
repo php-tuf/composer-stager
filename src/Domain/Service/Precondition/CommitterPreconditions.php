@@ -2,10 +2,16 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-
 final class CommitterPreconditions extends AbstractPrecondition implements CommitterPreconditionsInterface
 {
+    public function __construct(CommonPreconditionsInterface $preconditions)
+    {
+        /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
+        $children = func_get_args();
+
+        parent::__construct(...$children);
+    }
+
     public static function getName(): string
     {
         return 'Committer preconditions'; // @codeCoverageIgnore
@@ -14,11 +20,6 @@ final class CommitterPreconditions extends AbstractPrecondition implements Commi
     public static function getDescription(): string
     {
         return 'The preconditions for making staged changes live.'; // @codeCoverageIgnore
-    }
-
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
-        return true; // @codeCoverageIgnore
     }
 
     protected function getFulfilledStatusMessage(): string

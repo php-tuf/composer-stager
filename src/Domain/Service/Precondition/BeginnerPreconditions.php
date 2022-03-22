@@ -2,10 +2,16 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-
 final class BeginnerPreconditions extends AbstractPrecondition implements BeginnerPreconditionsInterface
 {
+    public function __construct(CommonPreconditionsInterface $preconditions)
+    {
+        /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
+        $children = func_get_args();
+
+        parent::__construct(...$children);
+    }
+
     public static function getName(): string
     {
         return 'Beginner preconditions'; // @codeCoverageIgnore
@@ -14,11 +20,6 @@ final class BeginnerPreconditions extends AbstractPrecondition implements Beginn
     public static function getDescription(): string
     {
         return 'The preconditions for beginning the staging process.'; // @codeCoverageIgnore
-    }
-
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
-        return true; // @codeCoverageIgnore
     }
 
     protected function getFulfilledStatusMessage(): string
