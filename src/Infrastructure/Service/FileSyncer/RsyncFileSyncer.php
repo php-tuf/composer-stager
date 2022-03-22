@@ -32,9 +32,9 @@ final class RsyncFileSyncer implements FileSyncerInterface
      * The unusual requirement to support syncing a directory with its own
      * descendant required a unique approach, which has been documented here:
      *
-     * @todo Do something with $callback.
-     *
      * @see https://serverfault.com/q/1094803/956603
+     *
+     * @todo Do something with $callback.
      *
      * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */

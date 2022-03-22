@@ -101,6 +101,7 @@
             <element value="@param"/>
             <element value="@return"/>
             <element value="@throws"/>
+            <element value="@see"/>
             <element value="@todo"/>
             <element value="@noinspection"/>
         </property>
