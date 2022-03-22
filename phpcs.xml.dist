@@ -77,15 +77,41 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireYodaComparison.DisallowYodaComparison"/>
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses.IncorrectlyOrderedUses"/>
 
-    <rule ref="SlevomatCodingStandard.Files.FunctionLength"><properties>
-        <!-- @todo It would be nice to reduce this. -->
-        <property name="maxLinesLength" value="50"/>
-    </properties></rule>
-
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
-        <!-- @todo It would be nice to reduce this. -->
-        <property name="maxLinesLength" value="50"/>
-    </properties></rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+        <properties>
+            <property name="enableFinalMethods" value="true"/>
+            <property name="groups" type="array">
+                <element value="uses"/>
+                <element value="public constants"/>
+                <element value="protected constants"/>
+                <element value="private constants"/>
+                <element value="public properties"/>
+                <element value="public static properties"/>
+                <element value="protected properties"/>
+                <element value="protected static properties"/>
+                <element value="private properties"/>
+                <element value="private static properties"/>
+                <element value="public static final methods"/>
+                <element value="public static abstract methods"/>
+                <element value="protected static final methods"/>
+                <element value="protected static abstract methods"/>
+                <element value="public final methods"/>
+                <element value="public abstract methods"/>
+                <element value="protected final methods"/>
+                <element value="protected abstract methods"/>
+                <element value="constructor"/>
+                <element value="static constructors"/>
+                <element value="destructor"/>
+                <element value="public static methods"/>
+                <element value="public methods"/>
+                <element value="protected methods"/>
+                <element value="protected static methods"/>
+                <element value="private methods"/>
+                <element value="private static methods"/>
+                <element value="magic methods"/>
+            </property>
+        </properties>
+    </rule>
 
     <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing"><properties>
         <property name="linesCountBeforeFirstUseWhenFirstInClass" value="0"/>
@@ -106,6 +132,16 @@
             <element value="@noinspection"/>
         </property>
         <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
+    </properties></rule>
+
+    <rule ref="SlevomatCodingStandard.Files.FunctionLength"><properties>
+        <!-- @todo It would be nice to reduce this. -->
+        <property name="maxLinesLength" value="50"/>
+    </properties></rule>
+
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
+        <!-- @todo It would be nice to reduce this. -->
+        <property name="maxLinesLength" value="50"/>
     </properties></rule>
 
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes"><properties>
