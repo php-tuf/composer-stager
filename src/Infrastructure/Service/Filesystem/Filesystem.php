@@ -55,11 +55,7 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    /**
-     * @todo Do something with $callback.
-     *
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-     */
+    /** @todo Do something with $callback. */
     public function remove(
         string $path,
         ?ProcessOutputCallbackInterface $callback = null,

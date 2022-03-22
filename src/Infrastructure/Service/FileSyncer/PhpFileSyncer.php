@@ -28,11 +28,7 @@ final class PhpFileSyncer implements FileSyncerInterface
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @todo Do something with $callback.
-     *
-     * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-     */
+    /** @todo Do something with $callback. */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
