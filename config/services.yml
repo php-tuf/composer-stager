@@ -4,9 +4,6 @@ services:
     _defaults:
         autoconfigure: true
         autowire: true
-        bind:
-            $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer'
-            $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer'
 
     PhpTuf\ComposerStager\:
         resource: '../src/*'
@@ -16,15 +13,14 @@ services:
             - '../src/Infrastructure/Aggregate'
             - '../src/Infrastructure/Value'
 
-    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory: ~
-
     PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory', 'create' ]
+        factory: [ 'PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory', 'create' ]
 
-    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer: ~
-
-    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer: ~
-
-    Symfony\Component\Process\ExecutableFinder: ~
+    PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory:
+        arguments:
+            $phpFileSyncer: PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+            $rsyncFileSyncer: PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
 
     Symfony\Component\Filesystem\Filesystem: ~
+
+    Symfony\Component\Process\ExecutableFinder: ~
