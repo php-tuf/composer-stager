@@ -11,16 +11,16 @@ final class FileSyncerFactory implements FileSyncerFactoryInterface
     /** @var \Symfony\Component\Process\ExecutableFinder */
     private $executableFinder;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface */
+    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface */
     private $phpFileSyncer;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface */
+    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface */
     private $rsyncFileSyncer;
 
     public function __construct(
         ExecutableFinder $executableFinder,
-        FileSyncerInterface $phpFileSyncer,
-        FileSyncerInterface $rsyncFileSyncer
+        PhpFileSyncerInterface $phpFileSyncer,
+        RsyncFileSyncerInterface $rsyncFileSyncer
     ) {
         $this->executableFinder = $executableFinder;
         $this->phpFileSyncer = $phpFileSyncer;

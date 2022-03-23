@@ -4,6 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder;
@@ -13,8 +15,8 @@ use Symfony\Component\Process\ExecutableFinder;
  *
  * @covers ::__construct
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $executableFinder
  */
 class FileSyncerFactoryUnitTest extends TestCase
@@ -25,8 +27,8 @@ class FileSyncerFactoryUnitTest extends TestCase
         $this->executableFinder
             ->find(Argument::any())
             ->willReturn(null);
-        $this->phpFileSyncer = $this->prophesize(FileSyncerInterface::class);
-        $this->rsyncFileSyncer = $this->prophesize(FileSyncerInterface::class);
+        $this->phpFileSyncer = $this->prophesize(PhpFileSyncerInterface::class);
+        $this->rsyncFileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
     }
 
     private function createSut(): FileSyncerFactory
