@@ -30,8 +30,8 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
+ * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
@@ -58,9 +58,7 @@ class CommitterUnitTest extends TestCase
         return new Committer($fileSyncer, $filesystem);
     }
 
-    /**
-     * @covers ::commit
-     */
+    /** @covers ::commit */
     public function testCommitWithMinimumParams(): void
     {
         $this->fileSyncer

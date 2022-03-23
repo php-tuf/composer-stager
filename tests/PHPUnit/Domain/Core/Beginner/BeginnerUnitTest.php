@@ -58,9 +58,7 @@ class BeginnerUnitTest extends TestCase
         return new Beginner($fileSyncer, $filesystem);
     }
 
-    /**
-     * @covers ::begin
-     */
+    /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
         $this->filesystem
