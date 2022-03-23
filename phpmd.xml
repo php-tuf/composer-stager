@@ -18,31 +18,18 @@
             <property name="exceptions">
                 <value>
                     \Closure,
-                    \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory,
-                    \PhpTuf\ComposerStager\Util\PathUtil
+                    \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
                 </value>
             </property>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml"/>
-    <rule ref="rulesets/controversial.xml">
-        <exclude name="CouplingBetweenObjects"/>
-    </rule>
-    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
-        <properties>
-            <property name="maximum">
-                <!-- @todo It would be nice to get this back down to 13. -->
-                <value>15</value>
-            </property>
-        </properties>
-    </rule>
+    <rule ref="rulesets/controversial.xml"/>
     <rule ref="rulesets/naming.xml">
+        <exclude name="LongClassName"/>
         <exclude name="LongVariable"/>
-        <exclude name="ShortVariable"/>
     </rule>
-    <rule ref="rulesets/unusedcode.xml">
-        <exclude name="UnusedFormalParameter"/>
-    </rule>
+    <rule ref="rulesets/unusedcode.xml"/>
 
     <exclude-pattern>tests</exclude-pattern>
 </ruleset>
