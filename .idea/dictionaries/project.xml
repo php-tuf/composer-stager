@@ -8,6 +8,7 @@
       <w>getcwd</w>
       <w>gitattributes</w>
       <w>grumphp</w>
+      <w>kkeisuke</w>
       <w>pathnames</w>
       <w>phpcbf</w>
       <w>phpcodesniffer</w>
@@ -18,6 +19,7 @@
       <w>rulesets</w>
       <w>shivammathur</w>
       <w>slevomat</w>
+      <w>squiz</w>
       <w>squizlabs</w>
       <w>stager</w>
       <w>strlen</w>
