@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReady;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
@@ -13,6 +14,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
@@ -29,12 +31,14 @@ class StagingDirIsReadyUnitTest extends TestCase
             ->resolve()
             ->willReturn(self::STAGING_DIR);
         $this->stagingDirExists = $this->prophesize(StagingDirExistsInterface::class);
+        $this->stagingDirIsWritable = $this->prophesize(StagingDirIsWritableInterface::class);
     }
 
     protected function createSut(): StagingDirIsReady
     {
         $stagingDirExists = $this->stagingDirExists->reveal();
-        return new StagingDirIsReady($stagingDirExists);
+        $stagingDirIsWritable = $this->stagingDirIsWritable->reveal();
+        return new StagingDirIsReady($stagingDirExists, $stagingDirIsWritable);
     }
 
     /**
@@ -46,6 +50,10 @@ class StagingDirIsReadyUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->stagingDirExists
+            ->isFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
+        $this->stagingDirIsWritable
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);

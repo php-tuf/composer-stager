@@ -30,6 +30,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReady
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem

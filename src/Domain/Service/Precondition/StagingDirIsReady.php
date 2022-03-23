@@ -4,8 +4,10 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 final class StagingDirIsReady extends AbstractPrecondition implements StagingDirIsReadyInterface
 {
-    public function __construct(StagingDirExistsInterface $stagingDirExists)
-    {
+    public function __construct(
+        StagingDirExistsInterface $stagingDirExists,
+        StagingDirIsWritableInterface $stagingDirIsWritable
+    ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
 
