@@ -121,7 +121,7 @@
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"><properties>
         <property name="annotationsGroups" type="array">
             <element value="@coversDefaultClass"/>
-            <element value="@covers"/>
+            <element value="@covers,@coversNothing"/>
             <element value="@uses"/>
             <element value="@dataProvider"/>
             <element value="@var"/>
