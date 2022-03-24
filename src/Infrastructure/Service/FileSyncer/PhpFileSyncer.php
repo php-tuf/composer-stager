@@ -156,9 +156,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static function (
             string $foundPathname
-        ) use (
-            $exclusions
-        ): bool {
+        ) use ($exclusions): bool {
             // On the surface, it may look like individual descendants of an excluded
             // directory (i.e., files "underneath" or "inside" it) won't be excluded
             // because they aren't individually in the array in order to be matched.
