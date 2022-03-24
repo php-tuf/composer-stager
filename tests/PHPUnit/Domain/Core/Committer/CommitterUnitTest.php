@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Committer;
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
+use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
@@ -210,17 +211,42 @@ class CommitterUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::commit */
-    public function testIOError(): void
+    /**
+     * @covers ::commit
+     *
+     * @dataProvider providerExceptions
+     */
+    public function testExceptions($exception, $message): void
     {
         $this->expectException(ProcessFailedException::class);
+        $this->expectExceptionMessage($message);
 
+        $activeDir = $this->activeDir;
+        $stagingDir = $this->stagingDir;
         $this->fileSyncer
             ->sync(Argument::cetera())
             ->shouldBeCalledOnce()
-            ->willThrow(IOException::class);
+            ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->commit($this->stagingDir, $this->activeDir);
+        $sut->commit($activeDir, $stagingDir);
+    }
+
+    public function providerExceptions(): array
+    {
+        return [
+            [
+                'exception' => new InvalidArgumentException('one'),
+                'message' => 'one',
+            ],
+            [
+                'exception' => new IOException('two'),
+                'message' => 'two',
+            ],
+            [
+                'exception' => new ProcessFailedException('three'),
+                'message' => 'three',
+            ],
+        ];
     }
 }

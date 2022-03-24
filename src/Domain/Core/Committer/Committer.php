@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
@@ -52,7 +52,7 @@ final class Committer implements CommitterInterface
 
         try {
             $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
-        } catch (IOException $e) {
+        } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }

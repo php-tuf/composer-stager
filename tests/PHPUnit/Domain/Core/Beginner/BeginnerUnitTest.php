@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Beginner;
 use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
@@ -159,17 +160,42 @@ class BeginnerUnitTest extends TestCase
         $sut->begin($this->activeDir, $this->stagingDir);
     }
 
-    /** @covers ::begin */
-    public function testIOError(): void
+    /**
+     * @covers ::begin
+     *
+     * @dataProvider providerExceptions
+     */
+    public function testExceptions($exception, $message): void
     {
         $this->expectException(ProcessFailedException::class);
+        $this->expectExceptionMessage($message);
 
+        $activeDir = $this->activeDir;
+        $stagingDir = $this->stagingDir;
         $this->fileSyncer
             ->sync(Argument::cetera())
             ->shouldBeCalledOnce()
-            ->willThrow(IOException::class);
+            ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
+        $sut->begin($activeDir, $stagingDir);
+    }
+
+    public function providerExceptions(): array
+    {
+        return [
+            [
+                'exception' => new InvalidArgumentException('one'),
+                'message' => 'one',
+            ],
+            [
+                'exception' => new IOException('two'),
+                'message' => 'two',
+            ],
+            [
+                'exception' => new ProcessFailedException('three'),
+                'message' => 'three',
+            ],
+        ];
     }
 }

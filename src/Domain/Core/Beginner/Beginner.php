@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
@@ -51,7 +51,7 @@ final class Beginner implements BeginnerInterface
 
         try {
             $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
-        } catch (IOException $e) {
+        } catch (ExceptionInterface $e) {
             throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
