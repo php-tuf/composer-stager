@@ -29,7 +29,11 @@
         <exclude name="LongClassName"/>
         <exclude name="LongVariable"/>
     </rule>
-    <rule ref="rulesets/unusedcode.xml"/>
+    <rule ref="rulesets/unusedcode.xml">
+        <!-- This rule fails to take interfaces into account. -->
+        <!-- @see https://github.com/phpmd/phpmd/issues/515 -->
+        <exclude name="UnusedFormalParameter"/>
+    </rule>
 
     <exclude-pattern>tests</exclude-pattern>
 </ruleset>
