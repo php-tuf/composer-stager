@@ -17,12 +17,12 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
         parent::__construct();
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Active directory is writable'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The active directory must be writable before any operations can be performed.'; // @codeCoverageIgnore
     }

@@ -14,12 +14,12 @@ final class CommitterPreconditions extends AbstractPrecondition implements Commi
         parent::__construct(...$children);
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Committer preconditions'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The preconditions for making staged changes live.'; // @codeCoverageIgnore
     }

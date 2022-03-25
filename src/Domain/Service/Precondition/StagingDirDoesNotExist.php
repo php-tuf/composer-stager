@@ -17,12 +17,12 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
         parent::__construct();
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Staging directory does not exist'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The staging directory must not already exist before beginning the staging process.'; // @codeCoverageIgnore
     }

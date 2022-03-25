@@ -14,12 +14,12 @@ final class CleanerPreconditions extends AbstractPrecondition implements Cleaner
         parent::__construct(...$children);
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Cleaner preconditions'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The preconditions for removing the staging directory.'; // @codeCoverageIgnore
     }

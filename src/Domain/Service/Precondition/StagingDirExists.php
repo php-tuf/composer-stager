@@ -17,12 +17,12 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
         parent::__construct();
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Staging directory exists'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The staging directory must exist before any operations can be performed.'; // @codeCoverageIgnore
     }

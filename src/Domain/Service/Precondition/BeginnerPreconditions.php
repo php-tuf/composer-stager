@@ -14,12 +14,12 @@ final class BeginnerPreconditions extends AbstractPrecondition implements Beginn
         parent::__construct(...$children);
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Beginner preconditions'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The preconditions for beginning the staging process.'; // @codeCoverageIgnore
     }

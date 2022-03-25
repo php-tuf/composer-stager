@@ -42,12 +42,12 @@ class AbstractPreconditionUnitTest extends TestCase
             public $fulfilledStatusMessage = '';
             public $unfulfilledStatusMessage = '';
 
-            public static function getName(): string
+            public function getName(): string
             {
                 return 'Name';
             }
 
-            public static function getDescription(): string
+            public function getDescription(): string
             {
                 return 'Description';
             }
@@ -70,6 +70,8 @@ class AbstractPreconditionUnitTest extends TestCase
      * @dataProvider providerBasicFunctionality
      */
     public function testBasicFunctionality(
+        $name,
+        $description,
         $isFulfilled,
         $fulfilledStatusMessage,
         $unfulfilledStatusMessage,
@@ -79,18 +81,20 @@ class AbstractPreconditionUnitTest extends TestCase
         // abstract, can't be instantiated directly.
         $sut = new class () extends AbstractPrecondition
         {
+            public $name = '';
+            public $description = '';
             public $isFulfilled = true;
             public $fulfilledStatusMessage = '';
             public $unfulfilledStatusMessage = '';
 
-            public static function getName(): string
+            public function getName(): string
             {
-                return 'Name';
+                return $this->name;
             }
 
-            public static function getDescription(): string
+            public function getDescription(): string
             {
-                return 'Description';
+                return $this->description;
             }
 
             public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
@@ -109,11 +113,15 @@ class AbstractPreconditionUnitTest extends TestCase
             }
         };
 
+        $sut->name = $name;
+        $sut->description = $description;
         $sut->isFulfilled = $isFulfilled;
         $sut->fulfilledStatusMessage = $fulfilledStatusMessage;
         $sut->unfulfilledStatusMessage = $unfulfilledStatusMessage;
         $path = $this->path->reveal();
 
+        self::assertEquals($sut->getName(), $name);
+        self::assertEquals($sut->getDescription(), $description);
         self::assertEquals($sut->isFulfilled($path, $path), $isFulfilled);
         self::assertEquals($sut->getStatusMessage($path, $path), $expectedStatusMessage);
     }
@@ -122,12 +130,16 @@ class AbstractPreconditionUnitTest extends TestCase
     {
         return [
             [
+                'name' => 'Name 1',
+                'description' => 'Description 1',
                 'isFulfilled' => true,
                 'fulfilledStatusMessage' => 'Fulfilled status message 1',
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 1',
                 'expectedStatusMessage' => 'Fulfilled status message 1',
             ],
             [
+                'name' => 'Name 2',
+                'description' => 'Description 2',
                 'isFulfilled' => false,
                 'fulfilledStatusMessage' => 'Fulfilled status message 2',
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 2',

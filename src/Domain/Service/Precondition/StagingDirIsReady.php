@@ -14,12 +14,12 @@ final class StagingDirIsReady extends AbstractPrecondition implements StagingDir
         parent::__construct(...$children);
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Staging directory is ready'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The preconditions for using the staging directory.'; // @codeCoverageIgnore
     }

@@ -14,12 +14,12 @@ final class StagerPreconditions extends AbstractPrecondition implements StagerPr
         parent::__construct(...$children);
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Stager preconditions'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The preconditions for staging Composer commands.'; // @codeCoverageIgnore
     }

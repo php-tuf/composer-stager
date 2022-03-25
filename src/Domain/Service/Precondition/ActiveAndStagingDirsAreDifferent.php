@@ -7,12 +7,12 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 /** phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong */
 final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implements ActiveAndStagingDirsAreDifferentInterface
 {
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Active and staging directories are different'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The active and staging directories cannot be the same.'; // @codeCoverageIgnore
     }

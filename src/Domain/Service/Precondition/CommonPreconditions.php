@@ -16,12 +16,12 @@ final class CommonPreconditions extends AbstractPrecondition implements CommonPr
         parent::__construct(...$children);
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Common preconditions'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The preconditions common to all operations.'; // @codeCoverageIgnore
     }

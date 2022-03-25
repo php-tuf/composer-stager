@@ -14,7 +14,7 @@ interface PreconditionInterface
      *
      * E.g., "Example dependency".
      */
-    public static function getName(): string;
+    public function getName(): string;
 
     /**
      * Gets a short description.
@@ -22,7 +22,7 @@ interface PreconditionInterface
      * This should probably be kept to one or two sentences, e.g., "The example
      * dependency is required in order to perform some relevant action."
      */
-    public static function getDescription(): string;
+    public function getDescription(): string;
 
     /**
      * Gets a short status message.

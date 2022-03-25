@@ -17,12 +17,12 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
         parent::__construct();
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Active directory exists'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'There must be an active directory present before any operations can be performed.'; // @codeCoverageIgnore
     }

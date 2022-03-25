@@ -18,12 +18,12 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         parent::__construct();
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Composer'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'Composer must be available in order to stage commands.'; // @codeCoverageIgnore
     }

@@ -17,12 +17,12 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
         parent::__construct();
     }
 
-    public static function getName(): string
+    public function getName(): string
     {
         return 'Staging directory is writable'; // @codeCoverageIgnore
     }
 
-    public static function getDescription(): string
+    public function getDescription(): string
     {
         return 'The staging directory must be writable before any operations can be performed.'; // @codeCoverageIgnore
     }
