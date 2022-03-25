@@ -45,4 +45,26 @@ abstract class AbstractPrecondition implements PreconditionInterface
             throw new PreconditionException($this);
         }
     }
+
+    /** @return array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> */
+    public function getChildren(): array
+    {
+        // This is a leaf. Return it.
+        if (count($this->children) === 0) {
+            return [$this];
+        }
+
+        $leaves = [];
+
+        // This is a branch. Get its children.
+        foreach ($this->children as $child) {
+            $grandchildren = $child->getChildren();
+
+            foreach ($grandchildren as $grandchild) {
+                $leaves[] = $grandchild;
+            }
+        }
+
+        return $leaves;
+    }
 }

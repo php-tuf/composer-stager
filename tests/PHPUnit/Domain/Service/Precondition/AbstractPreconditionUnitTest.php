@@ -193,4 +193,65 @@ class AbstractPreconditionUnitTest extends TestCase
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getChildren
+     */
+    public function testGetChildren(): void
+    {
+        $createLeaf = function (string $name): PreconditionInterface {
+            $leaf = $this->createSut();
+            $leaf->name = $name;
+
+            return $leaf;
+        };
+
+        $leafOne = $createLeaf('One');
+        $leafTwo = $createLeaf('Two');
+        $leafThree = $createLeaf('Three');
+        $leafFour = $createLeaf('Four');
+        $leafFive = $createLeaf('Five');
+        $leafSix = $createLeaf('Six');
+
+        $sut = $this->createSut(
+            $this->createSut(
+                $leafOne
+            ),
+            $this->createSut(
+                $leafTwo,
+                $this->createSut(
+                    $leafThree
+                )
+            ),
+            $this->createSut(
+                $this->createSut(
+                    $this->createSut(
+                        $this->createSut(
+                            $this->createSut(
+                                $leafFour,
+                                $leafFive,
+                                $leafSix
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        $children = [
+            $leafOne,
+            $leafTwo,
+            $leafThree,
+            $leafFour,
+            $leafFive,
+            $leafSix,
+        ];
+        self::assertSame($children, $sut->getChildren());
+
+        // Sanity checks to verify the assumption made by the above assertion--
+        // that it strictly distinguishes between arrays of objects, including
+        // the order of elements.
+        self::assertSame([$leafOne, $leafTwo], [$leafOne, $leafTwo]);
+        self::assertNotSame([$leafOne, $leafTwo], [$leafThree, $leafFour]);
+    }
 }

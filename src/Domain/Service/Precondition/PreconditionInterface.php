@@ -45,4 +45,17 @@ interface PreconditionInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      */
     public function assertIsFulfilled(PathInterface $activeDir, PathInterface $stagingDir): void;
+
+    /**
+     * Recursively gets all child preconditions, leaves only.
+     *
+     * This returns leaves only, i.e., only preconditions that do not themselves
+     * contain other preconditions, as a flat array. An implication of this
+     * behavior is that a precondition should either handle business logic OR
+     * contain other preconditions. But it should not do both, which could
+     * result in infinite recursion or other unexpected behavior.
+     *
+     * @return array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface>
+     */
+    public function getChildren(): array;
 }
