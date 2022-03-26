@@ -28,12 +28,10 @@ interface CommitterInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
-     *   If the active directory or the staging directory is not found.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
-     *   If the active directory is not writable.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+     *   If the preconditions for committer are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      *
@@ -46,12 +44,4 @@ interface CommitterInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
-
-    /**
-     * Determines whether the staging directory exists.
-     *
-     * @param string $stagingDir
-     *   The staging directory.
-     */
-    public function directoryExists(string $stagingDir): bool;
 }

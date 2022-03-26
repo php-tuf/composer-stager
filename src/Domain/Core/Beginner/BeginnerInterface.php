@@ -39,12 +39,10 @@ interface BeginnerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryAlreadyExistsException
-     *   If the staging directory already exists.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
-     *   If the active directory is not found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+     *   If the preconditions for the beginner are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
      *   If the command process doesn't terminate successfully.
      *

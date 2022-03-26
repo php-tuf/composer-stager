@@ -17,6 +17,20 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferent
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExists
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritable
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReady
+ * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem

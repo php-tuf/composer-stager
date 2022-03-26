@@ -3,15 +3,14 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Stager;
 
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -21,18 +20,12 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotWritableException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 class StagerUnitTest extends TestCase
 {
@@ -40,22 +33,26 @@ class StagerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
+        $this->activeDir = $this->prophesize(PathInterface::class);
+        $this->activeDir
+            ->resolve()
+            ->willReturn(self::ACTIVE_DIR);
+        $this->stagingDir = $this->prophesize(PathInterface::class);
+        $this->stagingDir
+            ->resolve()
+            ->willReturn(self::STAGING_DIR);
         $this->composerRunner = $this->prophesize(ComposerRunnerInterface::class);
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
-        $this->filesystem
-            ->exists($this->stagingDir->resolve())
-            ->willReturn(true);
-        $this->filesystem
-            ->isWritable($this->stagingDir->resolve())
-            ->willReturn(true);
+        $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
     }
 
     protected function createSut(): Stager
     {
+        $this->activeDir = $this->activeDir->reveal();
+        $this->stagingDir = $this->stagingDir->reveal();
+
         $composerRunner = $this->composerRunner->reveal();
-        $filesystem = $this->filesystem->reveal();
-        return new Stager($composerRunner, $filesystem);
+        $preconditions = $this->preconditions->reveal();
+        return new Stager($composerRunner, $preconditions);
     }
 
     /**
@@ -68,7 +65,7 @@ class StagerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, $this->stagingDir, $callback, $timeout);
+        $sut->stage($givenCommand, $this->activeDir, $this->stagingDir, $callback, $timeout);
     }
 
     public function providerHappyPath(): array
@@ -77,7 +74,7 @@ class StagerUnitTest extends TestCase
             [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
-                    '--working-dir=' . PathFactory::create(self::STAGING_DIR)->resolve(),
+                    '--working-dir=' . self::STAGING_DIR,
                     'update',
                 ],
                 'callback' => null,
@@ -86,41 +83,13 @@ class StagerUnitTest extends TestCase
             [
                 'givenCommand' => [self::INERT_COMMAND],
                 'expectedCommand' => [
-                    '--working-dir=' . PathFactory::create(self::STAGING_DIR)->resolve(),
+                    '--working-dir=' . self::STAGING_DIR,
                     self::INERT_COMMAND,
                 ],
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],
         ];
-    }
-
-    public function testStagingDirectoryDoesNotExist(): void
-    {
-        $this->expectException(DirectoryNotFoundException::class);
-        $this->expectExceptionMessageMatches('/staging directory.*not exist/');
-
-        $this->filesystem
-            ->exists($this->stagingDir->resolve())
-            ->shouldBeCalledOnce()
-            ->willReturn(false);
-        $sut = $this->createSut();
-
-        $sut->stage([self::INERT_COMMAND], $this->stagingDir);
-    }
-
-    public function testStagingDirectoryNotWritable(): void
-    {
-        $this->expectException(DirectoryNotWritableException::class);
-        $this->expectExceptionMessageMatches('/staging directory.*not writable/');
-
-        $this->filesystem
-            ->isWritable($this->stagingDir->resolve())
-            ->shouldBeCalledOnce()
-            ->willReturn(false);
-        $sut = $this->createSut();
-
-        $sut->stage([self::INERT_COMMAND], $this->stagingDir);
     }
 
     public function testEmptyCommand(): void
@@ -130,7 +99,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([], $this->stagingDir);
+        $sut->stage([], $this->activeDir, $this->stagingDir);
     }
 
     public function testCommandContainsComposer(): void
@@ -143,7 +112,7 @@ class StagerUnitTest extends TestCase
         $sut->stage([
             'composer',
             self::INERT_COMMAND,
-        ], $this->stagingDir);
+        ], $this->activeDir, $this->stagingDir);
     }
 
     /**
@@ -156,7 +125,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage($command, $this->stagingDir);
+        $sut->stage($command, $this->activeDir, $this->stagingDir);
     }
 
     public function providerCommandContainsWorkingDirOption(): array
@@ -165,6 +134,20 @@ class StagerUnitTest extends TestCase
             [['--working-dir' => 'example/package']],
             [['-d' => 'example/package']],
         ];
+    }
+
+    /** @covers ::stage */
+    public function testStagePreconditionsUnfulfilled(): void
+    {
+        $this->expectException(PreconditionException::class);
+
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->shouldBeCalledOnce()
+            ->willThrow(PreconditionException::class);
+        $sut = $this->createSut();
+
+        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
     }
 
     /** @dataProvider providerExceptions */
@@ -179,7 +162,7 @@ class StagerUnitTest extends TestCase
 
         $sut = $this->createSut();
 
-        $sut->stage([self::INERT_COMMAND], $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
     }
 
     public function providerExceptions(): array

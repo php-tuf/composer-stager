@@ -151,7 +151,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'config',
             'name',
             $newComposerName,
-        ], $stagingDirPath);
+        ], $activeDirPath, $stagingDirPath);
 
         self::assertComposerJsonName($stagingDir, $newComposerName, 'Correctly executed Composer command.');
 
@@ -234,7 +234,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         );
 
         // Clean: Remove the staging directory.
-        $this->cleaner->clean($stagingDirPath);
+        $this->cleaner->clean($activeDirPath, $stagingDirPath);
 
         self::assertFileDoesNotExist($stagingDirPath->resolve(), 'Staging directory was completely removed.');
     }
