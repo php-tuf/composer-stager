@@ -38,18 +38,20 @@ class AbstractPreconditionUnitTest extends TestCase
         // abstract, can't be instantiated directly.
         return new class (...$subPreconditions) extends AbstractPrecondition
         {
+            public $name = 'Name';
+            public $description = 'Description';
             public $isFulfilled = true;
             public $fulfilledStatusMessage = '';
             public $unfulfilledStatusMessage = '';
 
             public function getName(): string
             {
-                return 'Name';
+                return $this->name;
             }
 
             public function getDescription(): string
             {
-                return 'Description';
+                return $this->description;
             }
 
             protected function getFulfilledStatusMessage(): string
@@ -65,7 +67,10 @@ class AbstractPreconditionUnitTest extends TestCase
     }
 
     /**
+     * @covers ::getDescription
+     * @covers ::getName
      * @covers ::getStatusMessage
+     * @covers ::isFulfilled
      *
      * @dataProvider providerBasicFunctionality
      */
@@ -77,48 +82,24 @@ class AbstractPreconditionUnitTest extends TestCase
         $unfulfilledStatusMessage,
         $expectedStatusMessage
     ): void {
-        // Create a concrete implementation for testing since the SUT, being
-        // abstract, can't be instantiated directly.
-        $sut = new class () extends AbstractPrecondition
-        {
-            public $name = '';
-            public $description = '';
-            public $isFulfilled = true;
-            public $fulfilledStatusMessage = '';
-            public $unfulfilledStatusMessage = '';
+        $path = $this->path->reveal();
 
-            public function getName(): string
-            {
-                return $this->name;
-            }
+        // Pass a mock child into the SUT so the behavior of ::isFulfilled can
+        // be controlled indirectly, without overriding the method on the SUT
+        // itself and preventing it from actually being exercised.
+        /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
+        $child = $this->prophesize(PreconditionInterface::class);
+        $child->isFulfilled($path, $path)
+            ->willReturn($isFulfilled);
+        $child = $child->reveal();
 
-            public function getDescription(): string
-            {
-                return $this->description;
-            }
-
-            public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-            {
-                return $this->isFulfilled;
-            }
-
-            protected function getFulfilledStatusMessage(): string
-            {
-                return $this->fulfilledStatusMessage;
-            }
-
-            protected function getUnfulfilledStatusMessage(): string
-            {
-                return $this->unfulfilledStatusMessage;
-            }
-        };
+        $sut = $this->createSut($child);
 
         $sut->name = $name;
         $sut->description = $description;
         $sut->isFulfilled = $isFulfilled;
         $sut->fulfilledStatusMessage = $fulfilledStatusMessage;
         $sut->unfulfilledStatusMessage = $unfulfilledStatusMessage;
-        $path = $this->path->reveal();
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
