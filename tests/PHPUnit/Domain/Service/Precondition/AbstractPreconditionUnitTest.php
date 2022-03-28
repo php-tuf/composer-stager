@@ -41,8 +41,8 @@ class AbstractPreconditionUnitTest extends TestCase
             public $name = 'Name';
             public $description = 'Description';
             public $isFulfilled = true;
-            public $fulfilledStatusMessage = '';
-            public $unfulfilledStatusMessage = '';
+            public $fulfilledStatusMessage = 'Fulfilled';
+            public $unfulfilledStatusMessage = 'Unfulfilled';
 
             public function getName(): string
             {
@@ -136,7 +136,7 @@ class AbstractPreconditionUnitTest extends TestCase
      *
      * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      */
-    public function testWithNesting(): void
+    public function testIsFulfilledBubbling(): void
     {
         $this->expectException(PreconditionException::class);
 
@@ -144,12 +144,12 @@ class AbstractPreconditionUnitTest extends TestCase
         $stagingDir = $this->stagingDir->reveal();
 
         $createMockSut = function (bool $return) use ($activeDir, $stagingDir): PreconditionInterface {
-            /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $prophecy */
-            $prophecy = $this->prophesize(PreconditionInterface::class);
-            $prophecy->isFulfilled($activeDir, $stagingDir)
+            /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $mock */
+            $mock = $this->prophesize(PreconditionInterface::class);
+            $mock->isFulfilled($activeDir, $stagingDir)
                 ->shouldBeCalledOnce()
                 ->willReturn($return);
-            return $prophecy->reveal();
+            return $mock->reveal();
         };
 
         $sut = $this->createSut(
