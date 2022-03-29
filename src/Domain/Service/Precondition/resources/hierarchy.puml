@@ -1,0 +1,55 @@
+@startuml
+
+' This is the PlantUML (https://plantuml.com/) source used to generate the UML
+' diagram of the implementation hierarchy of the preconditions system (hierarchy.png). Said
+' diagram can be regenerated from this source at https://plantuml-editor.kkeisuke.com/ or with
+' the PhpStorm plugin at https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
+
+!include settings.puml
+
+hide circle
+
+skinparam ClassFontStyle bold
+skinparam RoundCorner 15
+skinparam LineType polyline
+
+class BeginnerPreconditions {
+    CommonPreconditions
+    StagingDirDoesNotExist
+}
+BeginnerPreconditions --o CommonPreconditions
+
+class StagerPreconditions {
+    CommonPreconditions
+    StagingDirIsReady
+}
+StagerPreconditions --o CommonPreconditions
+StagerPreconditions --o StagingDirIsReady
+
+class CommitterPreconditions {
+    CommonPreconditions
+    StagingDirIsReady
+}
+CommitterPreconditions --o CommonPreconditions
+CommitterPreconditions --o StagingDirIsReady
+
+class CleanerPreconditions {
+    CommonPreconditions
+    StagingDirIsReady
+}
+CleanerPreconditions --o CommonPreconditions
+CleanerPreconditions --o StagingDirIsReady
+
+class CommonPreconditions {
+    ComposerIsAvailable
+    ActiveDirExists
+    ActiveDirIsWritable
+    ActiveAndStagingDirsAreDifferent
+}
+
+class StagingDirIsReady {
+    StagingDirExists
+    StagingDirIsWritable
+}
+
+@enduml

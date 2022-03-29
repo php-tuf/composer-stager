@@ -1,0 +1,82 @@
+@startuml
+
+' This is the PlantUML (https://plantuml.com/) source used to generate
+' the UML detail view diagram of the preconditions system (detail.png). Said
+' diagram can be regenerated from this source with the PhpStorm plugin at
+' https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
+
+!include settings.puml
+
+namespace Exception {
+
+    class PreconditionException <<RuntimeException>> {
+        PreconditionInterface $precondition
+        +getPrecondition() : PreconditionInterface
+    }
+
+}
+
+namespace Precondition {
+
+    interface PreconditionInterface {
+        +getName() : string
+        +getDescription() : string
+        +getStatusMessage($activeDir, $stagingDir) : string
+        +isFulfilled($activeDir, $stagingDir) : bool
+        +assertIsFulfilled($activeDir, $stagingDir) : void
+    }
+
+    abstract class AbstractPrecondition implements PreconditionInterface {
+        +final getStatusMessage($activeDir, $stagingDir) : string
+        +final assertIsFulfilled($activeDir, $stagingDir) : void
+        {abstract} #getFulfilledStatusMessage() : string
+        {abstract} #getUnfulfilledStatusMessage() : string
+    }
+
+    class ConcretePrecondition {
+        +getName() : string
+        +getDescription() : string
+        +isFulfilled($activeDir, $stagingDir) : bool
+        #getFulfilledStatusMessage() : string
+        #getUnfulfilledStatusMessage() : string
+    }
+
+    ConcretePrecondition " *  " -up-|> AbstractPrecondition
+
+}
+
+namespace PreconditionsTree {
+
+    interface PreconditionsTreeInterface {
+        +getLeaves() : PreconditionInterface[]
+    }
+
+    abstract AbstractPreconditionsTree {
+        -PreconditionInterface[] $children
+        +__construct(...$children)
+        +final getStatusMessage($activeDir, $stagingDir) : string
+        +final isFulfilled($activeDir, $stagingDir) : bool
+        +final assertIsFulfilled($activeDir, $stagingDir) : void
+        +final getLeaves() : PreconditionInterface[]
+        {abstract} #getFulfilledStatusMessage() : string
+        {abstract} #getUnfulfilledStatusMessage() : string
+    }
+
+    class ConcretePreconditionsTree {
+        +__construct(...$children)
+        +getName() : string
+        +getDescription() : string
+        #getFulfilledStatusMessage() : string
+        #getUnfulfilledStatusMessage() : string
+    }
+
+    ConcretePreconditionsTree " *  " -up-|> AbstractPreconditionsTree
+
+}
+
+Exception.PreconditionException -down-o "1  " Precondition.PreconditionInterface
+PreconditionsTree.AbstractPreconditionsTree .up.|> PreconditionsTree.PreconditionsTreeInterface
+PreconditionsTree.PreconditionsTreeInterface -left-o "1..*" Precondition.PreconditionInterface
+PreconditionsTree.PreconditionsTreeInterface -left-|> Precondition.PreconditionInterface
+
+@enduml

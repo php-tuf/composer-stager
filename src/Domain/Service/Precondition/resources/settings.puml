@@ -1,0 +1,15 @@
+@startuml
+
+scale 1.2
+
+skinparam ClassFontStyle bold
+skinparam ClassStereotypeFontSize 10
+skinparam LineType ortho
+skinparam NoteFontSize 11
+skinparam PackageBorderThickness 1
+skinparam PackageFontSize 11
+skinparam PackageFontStyle normal
+
+hide empty members
+
+@enduml
