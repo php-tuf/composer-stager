@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\EndToEnd;
 
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
-use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
@@ -45,38 +44,14 @@ class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
     public static function setUpBeforeClass(): void
     {
         if (!self::isRsyncAvailable()) {
-            return;
+            self::markTestSkipped('Rsync is not available for testing.');
         }
 
         self::createTestEnvironment(self::ACTIVE_DIR);
     }
 
-    public static function tearDownAfterClass(): void
-    {
-        if (!self::isRsyncAvailable()) {
-            return;
-        }
-
-        parent::tearDownAfterClass();
-    }
-
-    protected function setUp(): void
-    {
-        if (!self::isRsyncAvailable()) {
-            self::markTestSkipped('Rsync is not available for testing.');
-        }
-
-        parent::setUp();
-    }
-
     protected function fileSyncerClass(): string
     {
         return RsyncFileSyncer::class;
-    }
-
-    protected static function isRsyncAvailable(): bool
-    {
-        $finder = new SymfonyExecutableFinder();
-        return $finder->find('rsync') !== null;
     }
 }

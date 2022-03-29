@@ -34,6 +34,15 @@ use Prophecy\Argument;
  */
 class RsyncFileSyncerUnitTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        if (self::isRsyncAvailable()) {
+            return;
+        }
+
+        self::markTestSkipped('Rsync is not available for testing.');
+    }
+
     public function setUp(): void
     {
         $this->source = $this->prophesize(PathInterface::class);

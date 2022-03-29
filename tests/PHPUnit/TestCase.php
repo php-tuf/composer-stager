@@ -9,6 +9,7 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 use Symfony\Component\Process\Process;
 
 abstract class TestCase extends PHPUnitTestCase
@@ -304,5 +305,11 @@ abstract class TestCase extends PHPUnitTestCase
     protected static function isWindows(): bool
     {
         return DIRECTORY_SEPARATOR !== '/';
+    }
+
+    protected static function isRsyncAvailable(): bool
+    {
+        $finder = new SymfonyExecutableFinder();
+        return $finder->find('rsync') !== null;
     }
 }
