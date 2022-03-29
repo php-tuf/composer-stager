@@ -6,7 +6,7 @@ use Closure;
 use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -16,27 +16,24 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
- * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
- * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
- * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
- * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
  */
 class PhpFileSyncerUnitTest extends TestCase
 {
     public function setUp(): void
     {
+        $this->source = $this->prophesize(PathInterface::class);
+        $this->source
+            ->resolve()
+            ->willReturn(self::ACTIVE_DIR);
+        $this->destination = $this->prophesize(PathInterface::class);
+        $this->destination
+            ->resolve()
+            ->willReturn(self::STAGING_DIR);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->mkdir(Argument::any());
@@ -59,14 +56,14 @@ class PhpFileSyncerUnitTest extends TestCase
     {
         $this->expectException(DirectoryNotFoundException::class);
 
-        $source = PathFactory::create('source');
+        $source = $this->source->reveal();
+        $destination = $this->destination->reveal();
         $this->filesystem
             ->exists($source->resolve())
             ->willReturn(false);
 
         $sut = $this->createSut();
 
-        $destination = PathFactory::create('destination');
         $sut->sync($source, $destination);
     }
 
@@ -74,14 +71,14 @@ class PhpFileSyncerUnitTest extends TestCase
     {
         $this->expectException(IOException::class);
 
-        $destination = PathFactory::create('destination');
+        $source = $this->source->reveal();
+        $destination = $this->destination->reveal();
         $this->filesystem
             ->mkdir($destination->resolve())
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();
 
-        $source = PathFactory::create('source');
         $sut->sync($source, $destination);
     }
 
