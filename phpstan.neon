@@ -7,7 +7,6 @@ parameters:
     treatPhpDocTypesAsCertain: false
 
 rules:
-    - PhpTuf\ComposerStager\Tests\PHPStan\Classes\ConcreteClassNotFinalRule # Requires concrete classes to be final.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\MissingInterfaceRule # Requires non-utility classes to implement an interface.
     - PhpTuf\ComposerStager\Tests\PHPStan\Classes\NonAbstractUtilityClassRule # Requires utility classes to be abstract.
