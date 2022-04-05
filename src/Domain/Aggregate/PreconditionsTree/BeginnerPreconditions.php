@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-final class BeginnerPreconditions extends AbstractPrecondition implements BeginnerPreconditionsInterface
+use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
+
+final class BeginnerPreconditions extends AbstractPreconditionsTree implements BeginnerPreconditionsInterface
 {
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,
