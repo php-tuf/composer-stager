@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferent
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExists
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritable
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
