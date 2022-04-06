@@ -13,8 +13,6 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
     public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
-
-        parent::__construct();
     }
 
     public function getName(): string

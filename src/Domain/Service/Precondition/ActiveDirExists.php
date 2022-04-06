@@ -13,8 +13,6 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
     public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
-
-        parent::__construct();
     }
 
     public function getName(): string

@@ -4,14 +4,13 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
  *
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition::__construct
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
@@ -31,11 +30,11 @@ class AbstractPreconditionUnitTest extends TestCase
         $this->path = $this->prophesize(PathInterface::class);
     }
 
-    protected function createSut(...$subPreconditions): AbstractPrecondition
+    protected function createSut(): AbstractPrecondition
     {
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class (...$subPreconditions) extends AbstractPrecondition
+        return new class () extends AbstractPrecondition
         {
             public $name = 'Name';
             public $description = 'Description';
@@ -62,6 +61,11 @@ class AbstractPreconditionUnitTest extends TestCase
             {
                 return $this->unfulfilledStatusMessage;
             }
+
+            public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
+            {
+                return $this->isFulfilled;
+            }
         };
     }
 
@@ -69,7 +73,6 @@ class AbstractPreconditionUnitTest extends TestCase
      * @covers ::getDescription
      * @covers ::getName
      * @covers ::getStatusMessage
-     * @covers ::isFulfilled
      *
      * @dataProvider providerBasicFunctionality
      */
@@ -84,17 +87,7 @@ class AbstractPreconditionUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
 
-        // Pass a mock child into the SUT so the behavior of ::isFulfilled can
-        // be controlled indirectly, without overriding the method on the SUT
-        // itself and preventing it from actually being exercised.
-        /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
-        $child = $this->prophesize(PreconditionInterface::class);
-        $child->isFulfilled($activeDir, $stagingDir)
-            ->willReturn($isFulfilled);
-        $child = $child->reveal();
-
-        $sut = $this->createSut($child);
-
+        $sut = $this->createSut();
         $sut->name = $name;
         $sut->description = $description;
         $sut->isFulfilled = $isFulfilled;
@@ -129,67 +122,29 @@ class AbstractPreconditionUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     *
-     * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     */
-    public function testIsFulfilledBubbling(): void
+    /** @covers ::assertIsFulfilled */
+    public function testAssertIsFulfilledTrue(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+
+        $sut = $this->createSut();
+        $sut->isFulfilled = true;
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
+    }
+
+    /** @covers ::assertIsFulfilled */
+    public function testAssertIsFulfilledFalse(): void
     {
         $this->expectException(PreconditionException::class);
 
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
-
-        $createMockSut = function (bool $return) use ($activeDir, $stagingDir): PreconditionInterface {
-            /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $mock */
-            $mock = $this->prophesize(PreconditionInterface::class);
-            $mock->isFulfilled($activeDir, $stagingDir)
-                ->shouldBeCalledOnce()
-                ->willReturn($return);
-            return $mock->reveal();
-        };
-
-        $sut = $this->createSut(
-            $createMockSut(true),
-            $this->createSut(
-                $this->createSut(
-                    $createMockSut(true)
-                )
-            ),
-            $this->createSut(
-                $this->createSut(
-                    $this->createSut(
-                        $this->createSut(
-                            $createMockSut(true)
-                        )
-                    )
-                )
-            ),
-            $this->createSut(
-                $this->createSut(
-                    $this->createSut(
-                        $this->createSut(
-                            $this->createSut(
-                                $this->createSut(
-                                    $this->createSut(
-                                        $this->createSut(
-                                            $this->createSut(
-                                                $this->createSut(
-                                                    $createMockSut(false)
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        $sut = $this->createSut();
+        $sut->isFulfilled = false;
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
