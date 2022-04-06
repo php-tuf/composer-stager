@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 
 final class BeginnerPreconditions extends AbstractPreconditionsTree implements BeginnerPreconditionsInterface

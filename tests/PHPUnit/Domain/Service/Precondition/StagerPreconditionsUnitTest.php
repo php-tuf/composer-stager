@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditions;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -15,7 +15,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir

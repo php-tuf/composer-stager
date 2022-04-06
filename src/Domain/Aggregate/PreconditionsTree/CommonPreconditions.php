@@ -1,8 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-final class CommonPreconditions extends AbstractPrecondition implements CommonPreconditionsInterface
+use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
+
+final class CommonPreconditions extends AbstractPreconditionsTree implements CommonPreconditionsInterface
 {
     public function __construct(
         ComposerIsAvailableInterface $composerIsAvailable,

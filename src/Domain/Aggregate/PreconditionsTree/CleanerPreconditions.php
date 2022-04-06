@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 
 final class CleanerPreconditions extends AbstractPreconditionsTree implements CleanerPreconditionsInterface

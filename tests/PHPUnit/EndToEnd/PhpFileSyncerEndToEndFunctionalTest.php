@@ -21,7 +21,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritable
  * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
  * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
