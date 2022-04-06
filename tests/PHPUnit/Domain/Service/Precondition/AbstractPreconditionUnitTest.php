@@ -14,7 +14,6 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition::__construct
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $path
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 class AbstractPreconditionUnitTest extends TestCase
@@ -82,14 +81,15 @@ class AbstractPreconditionUnitTest extends TestCase
         $unfulfilledStatusMessage,
         $expectedStatusMessage
     ): void {
-        $path = $this->path->reveal();
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
 
         // Pass a mock child into the SUT so the behavior of ::isFulfilled can
         // be controlled indirectly, without overriding the method on the SUT
         // itself and preventing it from actually being exercised.
         /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
         $child = $this->prophesize(PreconditionInterface::class);
-        $child->isFulfilled($path, $path)
+        $child->isFulfilled($activeDir, $stagingDir)
             ->willReturn($isFulfilled);
         $child = $child->reveal();
 
@@ -103,8 +103,8 @@ class AbstractPreconditionUnitTest extends TestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($path, $path), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($path, $path), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir), $expectedStatusMessage);
     }
 
     public function providerBasicFunctionality(): array
