@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
-
 final class CommitterPreconditions extends AbstractPreconditionsTree implements CommitterPreconditionsInterface
 {
     public function __construct(

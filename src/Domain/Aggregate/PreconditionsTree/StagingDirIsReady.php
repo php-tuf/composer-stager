@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-final class StagingDirIsReady extends AbstractPrecondition implements StagingDirIsReadyInterface
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
+
+final class StagingDirIsReady extends AbstractPreconditionsTree implements StagingDirIsReadyInterface
 {
     public function __construct(
         StagingDirExistsInterface $stagingDirExists,
