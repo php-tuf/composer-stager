@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath */
-class WindowsPathUnitTest extends TestCase
+final class WindowsPathUnitTest extends TestCase
 {
     /**
      * @covers ::__construct()

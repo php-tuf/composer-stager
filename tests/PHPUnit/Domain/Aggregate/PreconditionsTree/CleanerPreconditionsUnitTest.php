@@ -21,7 +21,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class CleanerPreconditionsUnitTest extends TestCase
+final class CleanerPreconditionsUnitTest extends TestCase
 {
     protected function setUp(): void
     {

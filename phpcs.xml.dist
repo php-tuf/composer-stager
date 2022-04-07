@@ -158,7 +158,6 @@
     <!-- Exclusions for test classes. -->
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Classes.RequireAbstractOrFinal"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>

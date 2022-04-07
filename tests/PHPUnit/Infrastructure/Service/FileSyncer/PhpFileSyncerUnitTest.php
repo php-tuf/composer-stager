@@ -22,7 +22,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
  */
-class PhpFileSyncerUnitTest extends TestCase
+final class PhpFileSyncerUnitTest extends TestCase
 {
     public function setUp(): void
     {

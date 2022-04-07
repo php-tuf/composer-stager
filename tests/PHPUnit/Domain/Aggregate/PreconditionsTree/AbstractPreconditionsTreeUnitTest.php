@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $path
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class AbstractPreconditionsTreeUnitTest extends TestCase
+final class AbstractPreconditionsTreeUnitTest extends TestCase
 {
     protected function setUp(): void
     {

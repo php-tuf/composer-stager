@@ -38,7 +38,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  */
-class PhpFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
+final class PhpFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {
     protected function fileSyncerClass(): string
     {

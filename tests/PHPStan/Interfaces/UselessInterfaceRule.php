@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Forbids empty interfaces, i.e., without methods or constants.
  */
-class UselessInterfaceRule extends AbstractRule
+final class UselessInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {

@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Forbids throwing non-PhpTuf exceptions from public methods.
  */
-class ForbiddenThrowsRule extends AbstractRule
+final class ForbiddenThrowsRule extends AbstractRule
 {
     public function getNodeType(): string
     {

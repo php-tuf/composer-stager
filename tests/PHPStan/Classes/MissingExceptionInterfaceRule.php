@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Requires throwable classes to implement ExceptionInterface.
  */
-class MissingExceptionInterfaceRule extends AbstractRule
+final class MissingExceptionInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {

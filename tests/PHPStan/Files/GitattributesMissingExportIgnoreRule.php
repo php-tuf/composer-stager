@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
  */
-class GitattributesMissingExportIgnoreRule extends AbstractRule
+final class GitattributesMissingExportIgnoreRule extends AbstractRule
 {
     // Paths that are included in archive files, i.e., not excluded by .gitattributes.
     private const INCLUDED_PATHS = [

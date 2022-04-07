@@ -19,7 +19,7 @@ use Symfony\Component\Process\ExecutableFinder;
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $executableFinder
  */
-class FileSyncerFactoryUnitTest extends TestCase
+final class FileSyncerFactoryUnitTest extends TestCase
 {
     public function setUp(): void
     {

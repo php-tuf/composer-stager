@@ -12,7 +12,7 @@ use stdClass;
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList::__construct
  */
-class PathListUnitTest extends TestCase
+final class PathListUnitTest extends TestCase
 {
     /**
      * @covers ::__construct

@@ -32,7 +32,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
  */
-class RsyncFileSyncerUnitTest extends TestCase
+final class RsyncFileSyncerUnitTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {

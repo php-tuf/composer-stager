@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 /**
  * @coversNothing
  */
-class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
+final class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {
     public static function setUpBeforeClass(): void
     {

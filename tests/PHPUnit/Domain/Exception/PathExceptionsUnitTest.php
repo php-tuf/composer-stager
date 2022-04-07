@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
-class PathExceptionsUnitTest extends TestCase
+final class PathExceptionsUnitTest extends TestCase
 {
     /**
      * @covers \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException

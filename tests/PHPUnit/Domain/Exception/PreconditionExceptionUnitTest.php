@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
-class PreconditionExceptionUnitTest extends TestCase
+final class PreconditionExceptionUnitTest extends TestCase
 {
     /**
      * @covers \PhpTuf\ComposerStager\Domain\Exception\PreconditionException

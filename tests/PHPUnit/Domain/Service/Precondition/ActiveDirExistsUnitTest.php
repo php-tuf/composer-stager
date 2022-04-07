@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
-class ActiveDirExistsUnitTest extends TestCase
+final class ActiveDirExistsUnitTest extends TestCase
 {
     protected function setUp(): void
     {

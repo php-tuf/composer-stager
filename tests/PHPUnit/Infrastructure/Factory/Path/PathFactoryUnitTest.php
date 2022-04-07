@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  */
-class PathFactoryUnitTest extends TestCase
+final class PathFactoryUnitTest extends TestCase
 {
     /**
      * It's difficult to meaningfully test this class because it is a static

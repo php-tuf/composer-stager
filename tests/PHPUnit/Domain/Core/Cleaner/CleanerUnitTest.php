@@ -22,7 +22,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class CleanerUnitTest extends TestCase
+final class CleanerUnitTest extends TestCase
 {
     public function setUp(): void
     {

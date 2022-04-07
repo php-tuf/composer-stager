@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class StagingDirIsReadyUnitTest extends TestCase
+final class StagingDirIsReadyUnitTest extends TestCase
 {
     protected function setUp(): void
     {

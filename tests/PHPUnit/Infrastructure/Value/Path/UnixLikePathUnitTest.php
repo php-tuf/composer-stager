@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
  */
-class UnixLikePathUnitTest extends TestCase
+final class UnixLikePathUnitTest extends TestCase
 {
     /**
      * @covers ::__construct()

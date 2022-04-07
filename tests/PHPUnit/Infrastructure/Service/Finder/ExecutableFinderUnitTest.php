@@ -22,7 +22,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  *
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $symfonyExecutableFinder
  */
-class ExecutableFinderUnitTest extends TestCase
+final class ExecutableFinderUnitTest extends TestCase
 {
     protected function setUp(): void
     {

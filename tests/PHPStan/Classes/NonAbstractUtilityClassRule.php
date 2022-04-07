@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Requires utility classes to be abstract.
  */
-class NonAbstractUtilityClassRule extends AbstractRule
+final class NonAbstractUtilityClassRule extends AbstractRule
 {
     public function getNodeType(): string
     {

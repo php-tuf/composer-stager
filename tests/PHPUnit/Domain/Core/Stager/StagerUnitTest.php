@@ -27,7 +27,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class StagerUnitTest extends TestCase
+final class StagerUnitTest extends TestCase
 {
     private const INERT_COMMAND = 'about';
 

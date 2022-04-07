@@ -26,7 +26,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class BeginnerUnitTest extends TestCase
+final class BeginnerUnitTest extends TestCase
 {
     protected function setUp(): void
     {

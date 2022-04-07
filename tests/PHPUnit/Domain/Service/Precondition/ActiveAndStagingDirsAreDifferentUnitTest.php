@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
-class ActiveAndStagingDirsAreDifferentUnitTest extends TestCase
+final class ActiveAndStagingDirsAreDifferentUnitTest extends TestCase
 {
     protected function setUp(): void
     {

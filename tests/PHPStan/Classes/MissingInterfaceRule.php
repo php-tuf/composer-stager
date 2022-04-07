@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Requires non-factory, non-utility classes to implement an interface.
  */
-class MissingInterfaceRule extends AbstractRule
+final class MissingInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {

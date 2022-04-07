@@ -22,7 +22,7 @@ use Symfony\Component\Process\Process;
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\Process $process
  */
-class AbstractRunnerUnitTest extends TestCase
+final class AbstractRunnerUnitTest extends TestCase
 {
     private const COMMAND_NAME = 'test';
 
