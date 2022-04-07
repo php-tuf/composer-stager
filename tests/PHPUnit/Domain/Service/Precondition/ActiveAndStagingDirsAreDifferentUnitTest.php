@@ -53,7 +53,6 @@ class ActiveAndStagingDirsAreDifferentUnitTest extends TestCase
     }
 
     /**
-     * @covers ::__construct
      * @covers ::isFulfilled
      */
     public function testIsUnfulfilled(): void

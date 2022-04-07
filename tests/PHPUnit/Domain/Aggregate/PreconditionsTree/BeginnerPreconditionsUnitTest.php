@@ -1,26 +1,26 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Aggregate\PreconditionsTree;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditions;
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditions;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditions
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditions
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
+ * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirDoesNotExist
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-class StagerPreconditionsUnitTest extends TestCase
+class BeginnerPreconditionsUnitTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -33,14 +33,14 @@ class StagerPreconditionsUnitTest extends TestCase
             ->resolve()
             ->willReturn(self::STAGING_DIR);
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
-        $this->stagingDirIsReady = $this->prophesize(StagingDirIsReadyInterface::class);
+        $this->stagingDirDoesNotExist = $this->prophesize(StagingDirDoesNotExistInterface::class);
     }
 
-    protected function createSut(): StagerPreconditions
+    protected function createSut(): BeginnerPreconditions
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
-        $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        return new StagerPreconditions($commonPreconditions, $stagingDirIsReady);
+        $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
+        return new BeginnerPreconditions($commonPreconditions, $stagingDirDoesNotExist);
     }
 
     /**
@@ -55,7 +55,7 @@ class StagerPreconditionsUnitTest extends TestCase
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
-        $this->stagingDirIsReady
+        $this->stagingDirDoesNotExist
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
@@ -78,7 +78,7 @@ class StagerPreconditionsUnitTest extends TestCase
         $this->commonPreconditions
             ->isFulfilled($activeDir, $stagingDir)
             ->willReturn(false);
-        $this->stagingDirIsReady
+        $this->stagingDirDoesNotExist
             ->isFulfilled($activeDir, $stagingDir)
             ->willReturn(false);
 

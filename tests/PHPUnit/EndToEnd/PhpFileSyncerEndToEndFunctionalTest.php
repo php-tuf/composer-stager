@@ -9,6 +9,8 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
@@ -17,15 +19,14 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferent
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExists
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritable
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditions
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReady
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReady
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory

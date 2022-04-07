@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Stager;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;

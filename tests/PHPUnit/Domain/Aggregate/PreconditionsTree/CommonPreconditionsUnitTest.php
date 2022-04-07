@@ -1,19 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Aggregate\PreconditionsTree;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditions
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
  *

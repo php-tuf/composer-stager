@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-final class CleanerPreconditions extends AbstractPrecondition implements CleanerPreconditionsInterface
+final class StagerPreconditions extends AbstractPreconditionsTree implements StagerPreconditionsInterface
 {
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,
@@ -16,21 +16,21 @@ final class CleanerPreconditions extends AbstractPrecondition implements Cleaner
 
     public function getName(): string
     {
-        return 'Cleaner preconditions'; // @codeCoverageIgnore
+        return 'Stager preconditions'; // @codeCoverageIgnore
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for removing the staging directory.'; // @codeCoverageIgnore
+        return 'The preconditions for staging Composer commands.'; // @codeCoverageIgnore
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The preconditions for removing the staging directory are fulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for staging Composer commands are fulfilled.'; // @codeCoverageIgnore
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The preconditions for removing the staging directory are unfulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for staging Composer commands are unfulfilled.'; // @codeCoverageIgnore
     }
 }

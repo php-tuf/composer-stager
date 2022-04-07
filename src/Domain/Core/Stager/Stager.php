@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core\Stager;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;

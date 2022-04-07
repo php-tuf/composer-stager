@@ -13,8 +13,6 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
     public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
-
-        parent::__construct();
     }
 
     public function getName(): string

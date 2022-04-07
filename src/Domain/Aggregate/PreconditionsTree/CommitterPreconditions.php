@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
-final class CommitterPreconditions extends AbstractPrecondition implements CommitterPreconditionsInterface
+final class CommitterPreconditions extends AbstractPreconditionsTree implements CommitterPreconditionsInterface
 {
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,

@@ -14,8 +14,6 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     public function __construct(ExecutableFinderInterface $executableFinder)
     {
         $this->executableFinder = $executableFinder;
-
-        parent::__construct();
     }
 
     public function getName(): string

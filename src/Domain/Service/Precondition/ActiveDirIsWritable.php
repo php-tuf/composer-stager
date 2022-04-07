@@ -13,8 +13,6 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
     public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
-
-        parent::__construct();
     }
 
     public function getName(): string
