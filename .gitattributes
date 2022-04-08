@@ -3,6 +3,7 @@
 /.gitignore          export-ignore
 /.idea               export-ignore
 /composer.lock       export-ignore
+/deptrac.yaml        export-ignore
 /grumphp.yml.dist    export-ignore
 /infection.json      export-ignore
 /phpcs.xml.dist      export-ignore

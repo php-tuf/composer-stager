@@ -45,6 +45,9 @@ jobs:
             -   name: "Run all quality checks"
                 run: "composer test"
 
+            -   name: "Check architecture"
+                run: "composer deptrac"
+
             -   name: "Run security scan"
                 run: "composer security"
 
