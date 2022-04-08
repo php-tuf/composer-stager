@@ -9,25 +9,25 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\AbstractPreconditionsTree
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions
  * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferent
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExists
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritable
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailable
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditions
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExist
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists
- * @uses \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReady
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritable
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem

@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class StagingDirIsWritable extends AbstractPrecondition implements StagingDirIsWritableInterface
+final class StagingDirExists extends AbstractPrecondition implements StagingDirExistsInterface
 {
     /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
@@ -17,26 +18,26 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
 
     public function getName(): string
     {
-        return 'Staging directory is writable'; // @codeCoverageIgnore
+        return 'Staging directory exists'; // @codeCoverageIgnore
     }
 
     public function getDescription(): string
     {
-        return 'The staging directory must be writable before any operations can be performed.'; // @codeCoverageIgnore
+        return 'The staging directory must exist before any operations can be performed.'; // @codeCoverageIgnore
     }
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->isWritable($stagingDir->resolve());
+        return $this->filesystem->exists($stagingDir->resolve());
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The staging directory is writable.'; // @codeCoverageIgnore
+        return 'The staging directory exists.'; // @codeCoverageIgnore
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The staging directory is not writable.'; // @codeCoverageIgnore
+        return 'The staging directory does not exist.'; // @codeCoverageIgnore
     }
 }

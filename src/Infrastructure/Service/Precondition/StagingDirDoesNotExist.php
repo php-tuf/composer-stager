@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExistsInterface
+final class StagingDirDoesNotExist extends AbstractPrecondition implements StagingDirDoesNotExistInterface
 {
     /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
@@ -17,26 +18,26 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
 
     public function getName(): string
     {
-        return 'Active directory exists'; // @codeCoverageIgnore
+        return 'Staging directory does not exist'; // @codeCoverageIgnore
     }
 
     public function getDescription(): string
     {
-        return 'There must be an active directory present before any operations can be performed.'; // @codeCoverageIgnore
+        return 'The staging directory must not already exist before beginning the staging process.'; // @codeCoverageIgnore
     }
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->exists($activeDir->resolve());
+        return !$this->filesystem->exists($stagingDir->resolve());
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The active directory exists.'; // @codeCoverageIgnore
+        return 'The staging directory does not already exist.'; // @codeCoverageIgnore
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The active directory does not exist.'; // @codeCoverageIgnore
+        return 'The staging directory already exists.'; // @codeCoverageIgnore
     }
 }
