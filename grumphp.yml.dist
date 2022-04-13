@@ -46,11 +46,4 @@ grumphp:
         test:
             tasks:
                 - clover_coverage
-                - composer
-                - composer_normalize
-                - phpcs
-                - phplint
-                - phpmd
-                - phpstan
                 - phpunit
-                - psalm
