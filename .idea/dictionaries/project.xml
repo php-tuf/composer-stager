@@ -17,6 +17,7 @@
       <w>phpcs</w>
       <w>phpstan</w>
       <w>puml</w>
+      <w>qossmic</w>
       <w>rlptgo</w>
       <w>roave</w>
       <w>rulesets</w>

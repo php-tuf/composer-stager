@@ -39,7 +39,6 @@
         "phpstan/phpstan-symfony": "^0.12.37",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^4.8",
-        "qossmic/deptrac-shim": "^0.19.3",
         "roave/security-advisories": "dev-latest",
         "slevomat/coding-standard": "^7.0",
         "squizlabs/php_codesniffer": "^3.5",
@@ -81,7 +80,10 @@
         }
     },
     "scripts": {
-        "all": "grumphp run",
+        "all": [
+            "grumphp run",
+            "@deptrac"
+        ],
         "c": "rm -r var/*/* &> /dev/null || true",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"coverage\" command to generate the coverage report.'",
         "deptrac": "deptrac --cache-file=var/deptrac/cache.json",
@@ -99,10 +101,7 @@
             "grumphp run --testsuite=static",
             "@deptrac"
         ],
-        "test": [
-            "grumphp run --testsuite=test",
-            "@deptrac"
-        ],
+        "test": "grumphp run --testsuite=test",
         "unit": "phpunit --testsuite=Unit"
     },
     "scripts-descriptions": {
