@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
@@ -23,7 +23,7 @@ use Prophecy\Argument;
  * @covers ::isDescendant
  * @covers ::sync
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
@@ -203,7 +203,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function testSyncSourceDirectoryNotFound(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
+        $this->expectException(PathException::class);
 
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();

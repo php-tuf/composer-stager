@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Exception;
 
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -10,7 +9,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 final class PathExceptionsUnitTest extends TestCase
 {
     /**
-     * @covers \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
+     * @covers \PhpTuf\ComposerStager\Domain\Exception\PathException
      * @covers \PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException
      * @covers \PhpTuf\ComposerStager\Domain\Exception\PathException
      *
@@ -26,11 +25,9 @@ final class PathExceptionsUnitTest extends TestCase
         $expectedFileNotFoundMessage
     ): void {
         $pathException = new PathException(...$args);
-        $directoryNotFoundException = new DirectoryNotFoundException(...$args);
         $fileNotFoundException = new FileNotFoundException(...$args);
 
         self::assertSame($expectedPathMessage, $pathException->getMessage());
-        self::assertSame($expectedDirectoryNotFoundMessage, $directoryNotFoundException->getMessage());
         self::assertSame($expectedFileNotFoundMessage, $fileNotFoundException->getMessage());
     }
 

@@ -17,7 +17,6 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::getCache
  * @covers ::setCache
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  *
  * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $symfonyExecutableFinder

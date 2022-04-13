@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use Closure;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
@@ -48,16 +48,15 @@ final class PhpFileSyncerUnitTest extends TestCase
         return new PhpFileSyncer($filesystem);
     }
 
-    /**
-     * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
-     * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
-     */
+    /** @uses \PhpTuf\ComposerStager\Domain\Exception\PathException */
     public function testSyncSourceNotFound(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
-
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
+
+        $this->expectException(PathException::class);
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+
         $this->filesystem
             ->exists($source->resolve())
             ->willReturn(false);

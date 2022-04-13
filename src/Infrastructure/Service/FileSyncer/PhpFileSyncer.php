@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
+use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
@@ -45,13 +45,13 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $this->copySourceFilesToDestination($source, $destination, $exclusions);
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PathException */
     private function assertSourceExists(PathInterface $source): void
     {
         $source = $source->resolve();
 
         if (!$this->filesystem->exists($source)) {
-            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
+            throw new PathException($source, 'The source directory does not exist at "%s"');
         }
     }
 
