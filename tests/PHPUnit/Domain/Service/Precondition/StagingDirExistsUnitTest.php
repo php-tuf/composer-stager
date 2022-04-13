@@ -4,17 +4,17 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists
  *
- * @covers \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExists::__construct
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir

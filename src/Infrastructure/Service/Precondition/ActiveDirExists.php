@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class StagingDirExists extends AbstractPrecondition implements StagingDirExistsInterface
+final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExistsInterface
 {
     /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
@@ -17,26 +18,26 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
 
     public function getName(): string
     {
-        return 'Staging directory exists'; // @codeCoverageIgnore
+        return 'Active directory exists'; // @codeCoverageIgnore
     }
 
     public function getDescription(): string
     {
-        return 'The staging directory must exist before any operations can be performed.'; // @codeCoverageIgnore
+        return 'There must be an active directory present before any operations can be performed.'; // @codeCoverageIgnore
     }
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->exists($stagingDir->resolve());
+        return $this->filesystem->exists($activeDir->resolve());
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The staging directory exists.'; // @codeCoverageIgnore
+        return 'The active directory exists.'; // @codeCoverageIgnore
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The staging directory does not exist.'; // @codeCoverageIgnore
+        return 'The active directory does not exist.'; // @codeCoverageIgnore
     }
 }

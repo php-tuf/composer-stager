@@ -3,12 +3,12 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Service\Precondition\AbstractPrecondition
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *

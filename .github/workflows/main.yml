@@ -18,7 +18,7 @@ on:
         -   cron: "0 0 * * 1"
 
 jobs:
-    static_analysis:
+    quality_check:
         name: "Quality Check"
         runs-on: macos-latest
         strategy:
@@ -42,8 +42,12 @@ jobs:
                     # @see https://github.com/ramsey/composer-install/issues/79
                     composer-options: "--no-cache"
 
+            # Deptrac cannot be installed in PHP 7.3, so it will only run on the
+            # PHP 7.4-based quality check job as long as 7.3 is supported.
             -   name: "Run all quality checks"
-                run: "composer test"
+                run: |
+                    composer require --dev qossmic/deptrac-shim
+                    composer static
 
             -   name: "Run security scan"
                 run: "composer security"

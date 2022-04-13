@@ -1,0 +1,15 @@
+parameters:
+  paths:
+    - ./src
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          regex: Domain.*
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          regex: Infrastructure.*
+  ruleset:
+    Infrastructure:
+      - Domain
