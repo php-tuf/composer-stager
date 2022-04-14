@@ -12,7 +12,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Provides a base class for PHPStan class rules.
+ * Provides a base class for PHPStan rules.
  */
 abstract class AbstractRule implements Rule
 {
@@ -51,25 +51,10 @@ abstract class AbstractRule implements Rule
         return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\\');
     }
 
-    protected function isProtectedMethod(MethodReflection $method): bool
-    {
-        return !$method->isPublic() && !$method->isPrivate();
-    }
-
-    protected function isDomainClass(ClassReflection $class): bool
-    {
-        return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Domain\\');
-    }
-
     protected function isFactoryClass(ClassReflection $class): bool
     {
         $factory = 'Factory';
         return substr($class->getName(), -strlen($factory)) === $factory;
-    }
-
-    protected function isUtilClass(ClassReflection $class): bool
-    {
-        return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Util\\');
     }
 
     protected function isThrowable(ClassReflection $class): bool

@@ -9,7 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Forbids throwing non-PhpTuf exceptions from public methods.
+ * Forbids throwing third party exceptions from public methods.
  */
 final class ForbiddenThrowsRule extends AbstractRule
 {
