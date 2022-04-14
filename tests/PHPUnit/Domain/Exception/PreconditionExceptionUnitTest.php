@@ -11,7 +11,7 @@ final class PreconditionExceptionUnitTest extends TestCase
     /**
      * @covers \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      */
-    public function test(): void
+    public function testBasicFunctionality(): void
     {
         /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $precondition */
         $precondition = $this->prophesize(PreconditionInterface::class);

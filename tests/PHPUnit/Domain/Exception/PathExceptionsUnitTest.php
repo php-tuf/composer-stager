@@ -14,9 +14,9 @@ final class PathExceptionsUnitTest extends TestCase
      * @covers \PhpTuf\ComposerStager\Domain\Exception\FileNotFoundException
      * @covers \PhpTuf\ComposerStager\Domain\Exception\PathException
      *
-     * @dataProvider provider
+     * @dataProvider providerBasicFunctionality
      */
-    public function test(
+    public function testBasicFunctionality(
         $args,
         $path,
         $expectedPathMessage,
@@ -34,7 +34,7 @@ final class PathExceptionsUnitTest extends TestCase
         self::assertSame($expectedFileNotFoundMessage, $fileNotFoundException->getMessage());
     }
 
-    public function provider(): array
+    public function providerBasicFunctionality(): array
     {
         return [
             // Defaults.
