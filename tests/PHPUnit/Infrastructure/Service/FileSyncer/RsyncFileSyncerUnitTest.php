@@ -23,8 +23,6 @@ use Prophecy\Argument;
  * @covers ::isDescendant
  * @covers ::sync
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
@@ -203,10 +201,12 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function testSyncSourceDirectoryNotFound(): void
     {
-        $this->expectException(PathException::class);
-
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
+
+        $this->expectException(PathException::class);
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(false);

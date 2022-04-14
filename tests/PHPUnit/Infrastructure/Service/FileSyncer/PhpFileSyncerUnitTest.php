@@ -48,7 +48,6 @@ final class PhpFileSyncerUnitTest extends TestCase
         return new PhpFileSyncer($filesystem);
     }
 
-    /** @uses \PhpTuf\ComposerStager\Domain\Exception\PathException */
     public function testSyncSourceNotFound(): void
     {
         $source = $this->source->reveal();

@@ -51,7 +51,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $source = $source->resolve();
 
         if (!$this->filesystem->exists($source)) {
-            throw new PathException($source, 'The source directory does not exist at "%s"');
+            throw new PathException(sprintf('The source directory does not exist at "%s"', $source));
         }
     }
 
