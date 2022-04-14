@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\PathException;
 use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -204,7 +204,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
 
-        $this->expectException(PathException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
 
         $this->filesystem
