@@ -2,11 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use Symfony\Component\Process\ExecutableFinder;
 
-final class FileSyncerFactory implements FileSyncerFactoryInterface
+final class FileSyncerFactory
 {
     /** @var \Symfony\Component\Process\ExecutableFinder */
     private $executableFinder;
