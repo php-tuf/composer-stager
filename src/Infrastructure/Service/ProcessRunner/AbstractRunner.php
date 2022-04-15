@@ -13,7 +13,7 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  * Provides a base for process runners for consistent process creation and
  * exception-handling.
  */
-abstract class AbstractRunner
+abstract class AbstractRunner implements ProcessRunnerInterface
 {
     /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface */
     private $executableFinder;
@@ -52,7 +52,7 @@ abstract class AbstractRunner
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = self::DEFAULT_TIMEOUT
     ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
