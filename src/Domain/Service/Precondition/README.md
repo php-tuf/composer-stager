@@ -4,12 +4,18 @@ The preconditions system defines and inspects the conditions necessary to perfor
 
 The class design contains three main concepts: 1) A precondition defines one atomic boolean condition, e.g., directory exists or application is available, and the ability to test for its fulfillment. 2) A precondition aggregate collects one or more individual preconditions, implementing (a superset of) the same interface, so they can be treated as a single, compound precondition. Preconditions and aggregates can be mixed and nested indefinitely. 3) An exception that can be thrown in case of an unfulfilled precondition. The design is essentially an instance of [the decorator design pattern](https://sourcemaking.com/design_patterns/decorator).
 
-![Overview diagram](resources/overview.png)
+<div align="center">
+<img src="resources/overview.png" alt="Overview diagram" />
+</div>
 
 This diagram depicts the detailed interfaces and relationships. New concrete preconditions should inherit their corresponding abstract classes, which handle precondition-nonspecific features like recursion and exception-handling. 
 
-![Detail diagram](resources/detail.png)
+<div align="center">
+<img src="resources/detail.png" alt="Detail diagram" />
+</div>
 
 Below is a depiction of the actual hierarchy of preconditions at the time of this writing. In short, all domain operations have the same preconditions except the beginner, which has a different relationship with the staging directory.
 
-![Hierarchy diagram](resources/hierarchy.png)
+<div align="center">
+<img src="resources/hierarchy.png" alt="Hierarchy diagram" />
+</div>
