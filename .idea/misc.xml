@@ -3,6 +3,47 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="PhpEntryPointsManager">
+    <entry_point>
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Beginner" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface begin" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Cleaner" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Cleaner\CleanerInterface clean" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Cleaner\CleanerInterface" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Committer" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface commit" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Stager" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Stager\StagerInterface stage" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Stager\StagerInterface" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface getStatusMessage" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\ComposerRunner" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\ComposerRunner executableName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner executableName" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner" />
+    </entry_point>
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" member="begin" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Cleaner\CleanerInterface" member="clean" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Cleaner\CleanerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface" member="commit" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Stager\StagerInterface" member="stage" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Stager\StagerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface" member="getStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\ComposerRunner" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\ComposerRunner" member="executableName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner" member="executableName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner" />
+  </component>
   <component name="ProjectResources">
     <resource url="https://pmd.sourceforge.io/ruleset/2.0.0" location="$PROJECT_DIR$" />
   </component>

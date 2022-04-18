@@ -11,6 +11,8 @@ use Symfony\Component\Process\Process;
  * It is designed for compatibility with the Symfony Process component.
  *
  * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
+ *
+ * @noinspection PhpUnused
  */
 interface ProcessOutputCallbackInterface
 {
