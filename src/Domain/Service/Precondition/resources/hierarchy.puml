@@ -1,7 +1,7 @@
 @startuml
 
 ' This is the PlantUML (https://plantuml.com/) source used to generate the UML
-' diagram of the implementation hierarchy of the preconditions system (hierarchy.png). Said
+' diagram of the implementation hierarchy of the precondition system (hierarchy.png). Said
 ' diagram can be regenerated from this source at https://plantuml-editor.kkeisuke.com/ or with
 ' the PhpStorm plugin at https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
 
