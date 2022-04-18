@@ -7,7 +7,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 final class ExecutableFinder implements ExecutableFinderInterface
 {
-    /** @var array<\PhpTuf\ComposerStager\Domain\Exception\IOException>|array<string>|array<null> */
+    /** @var array<\PhpTuf\ComposerStager\Domain\Exception\IOException|string|null> */
     private $cache = [];
 
     /** @var \Symfony\Component\Process\ExecutableFinder */

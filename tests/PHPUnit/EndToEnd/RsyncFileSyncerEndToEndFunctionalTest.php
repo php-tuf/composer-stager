@@ -4,9 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\EndToEnd;
 
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 
-/**
- * @coversNothing
- */
+/** @coversNothing */
 final class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {
     public static function setUpBeforeClass(): void

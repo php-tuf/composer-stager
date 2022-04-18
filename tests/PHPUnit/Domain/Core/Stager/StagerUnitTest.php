@@ -55,9 +55,7 @@ final class StagerUnitTest extends TestCase
         return new Stager($composerRunner, $preconditions);
     }
 
-    /**
-     * @dataProvider providerHappyPath
-     */
+    /** @dataProvider providerHappyPath */
     public function testHappyPath($givenCommand, $expectedCommand, $callback, $timeout): void
     {
         $this->composerRunner
@@ -115,9 +113,7 @@ final class StagerUnitTest extends TestCase
         ], $this->activeDir, $this->stagingDir);
     }
 
-    /**
-     * @dataProvider providerCommandContainsWorkingDirOption
-     */
+    /** @dataProvider providerCommandContainsWorkingDirOption */
     public function testCommandContainsWorkingDirOption($command): void
     {
         $this->expectException(InvalidArgumentException::class);

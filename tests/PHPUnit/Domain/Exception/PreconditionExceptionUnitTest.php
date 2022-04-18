@@ -8,9 +8,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 final class PreconditionExceptionUnitTest extends TestCase
 {
-    /**
-     * @covers \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     */
+    /** @covers \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
     public function testBasicFunctionality(): void
     {
         /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $precondition */

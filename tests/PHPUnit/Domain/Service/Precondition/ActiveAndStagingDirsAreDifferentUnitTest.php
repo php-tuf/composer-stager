@@ -52,9 +52,7 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends TestCase
         self::assertEquals(true, $sut->isFulfilled($activeDir, $stagingDir));
     }
 
-    /**
-     * @covers ::isFulfilled
-     */
+    /** @covers ::isFulfilled */
     public function testIsUnfulfilled(): void
     {
         $this->expectException(PreconditionException::class);
