@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -19,8 +19,6 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
- *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
@@ -149,7 +147,7 @@ final class StagerUnitTest extends TestCase
     /** @dataProvider providerExceptions */
     public function testExceptions($exception, $message): void
     {
-        $this->expectException(ProcessFailedException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($message);
 
         $this->composerRunner
@@ -171,10 +169,6 @@ final class StagerUnitTest extends TestCase
             [
                 'exception' => new LogicException('two'),
                 'message' => 'two',
-            ],
-            [
-                'exception' => new ProcessFailedException('three'),
-                'message' => 'three',
             ],
         ];
     }

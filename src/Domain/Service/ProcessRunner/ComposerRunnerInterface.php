@@ -32,8 +32,8 @@ interface ComposerRunnerInterface extends ProcessRunnerInterface
      *   If the executable cannot be found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the command process cannot be created due to host configuration.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     *   If the command process doesn't terminate successfully.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails.
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      */

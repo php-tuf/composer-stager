@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
 
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
@@ -44,8 +44,8 @@ abstract class AbstractRunner implements ProcessRunnerInterface
      *   If the executable cannot be found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the command process cannot be created due to host configuration.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     *   If the command process doesn't terminate successfully.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails.
      *
      * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
      */
@@ -61,7 +61,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
             $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 

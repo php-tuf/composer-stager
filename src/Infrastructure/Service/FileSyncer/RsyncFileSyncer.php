@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
@@ -89,7 +88,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 

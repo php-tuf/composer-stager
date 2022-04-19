@@ -35,14 +35,12 @@ interface FileSyncerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
-     *   If the source directory is not found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the destination directory cannot be created.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     *   If the command process doesn't terminate successfully.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails, because the source directory is not found, for example.
      */
     public function sync(
         PathInterface $source,

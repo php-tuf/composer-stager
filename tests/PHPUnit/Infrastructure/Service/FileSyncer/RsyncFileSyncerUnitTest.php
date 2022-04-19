@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
@@ -178,7 +177,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     /** @dataProvider providerSyncFailure */
     public function testSyncFailure($exception): void
     {
-        $this->expectException(ProcessFailedException::class);
+        $this->expectException(RuntimeException::class);
 
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
@@ -195,7 +194,6 @@ final class RsyncFileSyncerUnitTest extends TestCase
         return [
             [IOException::class],
             [LogicException::class],
-            [ProcessFailedException::class],
         ];
     }
 

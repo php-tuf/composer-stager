@@ -37,8 +37,8 @@ interface StagerInterface
      *   If the given Composer command is invalid.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the preconditions for stager are unfulfilled.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     *   If the command process doesn't terminate successfully.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails.
      */
     public function stage(
         array $composerCommand,

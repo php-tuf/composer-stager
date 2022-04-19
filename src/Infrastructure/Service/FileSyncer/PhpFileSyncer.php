@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
@@ -64,7 +63,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
     /**
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      */
     private function deleteExtraneousFilesFromDestination(
         PathInterface $destination,
@@ -108,7 +107,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
     /**
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      */
     private function copySourceFilesToDestination(
         PathInterface $source,
@@ -139,7 +138,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
      *   so the extraneous file deletion function would fail later when it sometimes
      *   tried to delete files after it had already deleted their ancestors.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *
      * @todo This class is (unsurprisingly) the largest and most complex in the
      *   codebase, and this method with its helpers accounts for over a third of
@@ -178,7 +177,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *
      * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator
      *   to throw an exception here (because the given directory has disappeared)
@@ -193,7 +192,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
             );
         } catch (UnexpectedValueException $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 
