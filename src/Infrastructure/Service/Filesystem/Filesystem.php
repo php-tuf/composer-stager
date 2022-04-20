@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use Symfony\Component\Filesystem\Exception\ExceptionInterface;
+use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -67,7 +67,7 @@ final class Filesystem implements FilesystemInterface
             set_time_limit((int) $timeout);
 
             $this->symfonyFilesystem->remove($path);
-        } catch (ExceptionInterface $e) {
+        } catch (SymfonyExceptionInterface $e) {
             throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
