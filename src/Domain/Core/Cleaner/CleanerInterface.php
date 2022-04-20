@@ -26,8 +26,8 @@ interface CleanerInterface
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the preconditions for the cleaner are unfulfilled.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If removal fails.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails.
      */
     public function clean(
         PathInterface $activeDir,
