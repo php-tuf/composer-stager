@@ -3,6 +3,8 @@
 namespace PhpTuf\ComposerStager\Domain\Core\Cleaner;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -30,6 +32,11 @@ final class Cleaner implements CleanerInterface
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
         $stagingDirResolved = $stagingDir->resolve();
-        $this->filesystem->remove($stagingDirResolved, $callback, $timeout);
+
+        try {
+            $this->filesystem->remove($stagingDirResolved, $callback, $timeout);
+        } catch (IOException $e) {
+            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
+        }
     }
 }

@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPrecondition
 use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -100,12 +101,11 @@ final class CleanerUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
 
-        $exception = new IOException();
-        $this->expectExceptionObject($exception);
+        $this->expectException(RuntimeException::class);
         $this->filesystem
             ->remove($stagingDir->resolve(), Argument::cetera())
             ->shouldBeCalledOnce()
-            ->willThrow($exception);
+            ->willThrow(IOException::class);
         $sut = $this->createSut();
 
         $sut->clean($activeDir, $stagingDir);

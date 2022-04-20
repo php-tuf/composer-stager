@@ -2,10 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -23,8 +22,6 @@ use Prophecy\Argument;
  * @covers ::isDescendant
  * @covers ::sync
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PathException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
@@ -178,15 +175,15 @@ final class RsyncFileSyncerUnitTest extends TestCase
     }
 
     /** @dataProvider providerSyncFailure */
-    public function testSyncFailure($exception): void
+    public function testSyncFailure($caught, $thrown): void
     {
-        $this->expectException(ProcessFailedException::class);
+        $this->expectException($thrown);
 
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
         $this->rsync
             ->run(Argument::cetera())
-            ->willThrow($exception);
+            ->willThrow($caught);
         $sut = $this->createSut();
 
         $sut->sync($source, $destination);
@@ -195,18 +192,25 @@ final class RsyncFileSyncerUnitTest extends TestCase
     public function providerSyncFailure(): array
     {
         return [
-            [IOException::class],
-            [LogicException::class],
-            [ProcessFailedException::class],
+            [
+                'caught' => LogicException::class,
+                'thrown' => IOException::class,
+            ],
+            [
+                'caught' => RuntimeException::class,
+                'thrown' => IOException::class,
+            ],
         ];
     }
 
     public function testSyncSourceDirectoryNotFound(): void
     {
-        $this->expectException(DirectoryNotFoundException::class);
-
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(false);

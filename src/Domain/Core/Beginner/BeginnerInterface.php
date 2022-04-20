@@ -43,8 +43,8 @@ interface BeginnerInterface
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the preconditions for the beginner are unfulfilled.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     *   If the command process doesn't terminate successfully.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails.
      *
      * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
      */

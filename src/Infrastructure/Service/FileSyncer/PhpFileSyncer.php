@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -45,13 +45,13 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $this->copySourceFilesToDestination($source, $destination, $exclusions);
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceExists(PathInterface $source): void
     {
         $source = $source->resolve();
 
         if (!$this->filesystem->exists($source)) {
-            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
+            throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
         }
     }
 
@@ -62,10 +62,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $this->filesystem->mkdir($destination->resolve());
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
     private function deleteExtraneousFilesFromDestination(
         PathInterface $destination,
         PathInterface $source,
@@ -106,10 +103,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         return scandir($destination->resolve()) === ['.', '..'];
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
     private function copySourceFilesToDestination(
         PathInterface $source,
         PathInterface $destination,
@@ -139,7 +133,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
      *   so the extraneous file deletion function would fail later when it sometimes
      *   tried to delete files after it had already deleted their ancestors.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *
      * @todo This class is (unsurprisingly) the largest and most complex in the
      *   codebase, and this method with its helpers accounts for over a third of
@@ -178,7 +172,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     *   If the directory cannot be found or is not actually a directory.
      *
      * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator
      *   to throw an exception here (because the given directory has disappeared)
@@ -193,7 +188,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
             );
         } catch (UnexpectedValueException $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 

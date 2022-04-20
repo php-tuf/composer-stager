@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Domain\Core\Stager;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -62,7 +62,7 @@ final class Stager implements StagerInterface
     /**
      * @param array<string> $composerCommand
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      */
     private function runCommand(
         PathInterface $stagingDir,
@@ -78,7 +78,7 @@ final class Stager implements StagerInterface
         try {
             $this->composerRunner->run($command, $callback, $timeout);
         } catch (ExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }

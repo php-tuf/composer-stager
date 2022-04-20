@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -122,7 +122,7 @@ final class BeginnerUnitTest extends TestCase
      */
     public function testExceptions($exception, $message): void
     {
-        $this->expectException(ProcessFailedException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($message);
 
         $activeDir = $this->activeDir->reveal();
@@ -145,10 +145,6 @@ final class BeginnerUnitTest extends TestCase
             [
                 'exception' => new IOException('two'),
                 'message' => 'two',
-            ],
-            [
-                'exception' => new ProcessFailedException('three'),
-                'message' => 'three',
             ],
         ];
     }

@@ -32,8 +32,8 @@ interface CommitterInterface
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the preconditions for committer are unfulfilled.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException
-     *   If the command process doesn't terminate successfully.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     *   If the operation fails.
      *
      * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
      */

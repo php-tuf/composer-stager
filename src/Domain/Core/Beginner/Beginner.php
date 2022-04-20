@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -37,7 +37,7 @@ final class Beginner implements BeginnerInterface
         try {
             $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
         } catch (ExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 }

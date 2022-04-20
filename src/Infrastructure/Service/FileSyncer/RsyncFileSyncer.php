@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Exception\DirectoryNotFoundException;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -49,7 +49,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         $exclusions = $exclusions->getAll();
 
         if (!$this->filesystem->exists($source)) {
-            throw new DirectoryNotFoundException($source, 'The source directory does not exist at "%s"');
+            throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
         }
 
         $command = [
@@ -89,7 +89,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new ProcessFailedException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 
