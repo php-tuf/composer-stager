@@ -150,6 +150,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
 
         $exclusions = array_map(static function ($path) use ($directory): string {
+            // @todo It's not good to depend on a static factory here. Find a
+            //   different approach or at least make it overridable somehow.
             $path = PathFactory::create($path);
             return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
