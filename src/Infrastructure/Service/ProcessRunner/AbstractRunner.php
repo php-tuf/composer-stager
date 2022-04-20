@@ -40,8 +40,6 @@ abstract class AbstractRunner implements ProcessRunnerInterface
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If the executable cannot be found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the command process cannot be created due to host configuration.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
@@ -65,7 +63,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function findExecutable(): string
     {
         $name = $this->executableName();

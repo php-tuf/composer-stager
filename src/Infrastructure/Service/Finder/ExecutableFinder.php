@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 final class ExecutableFinder implements ExecutableFinderInterface
 {
-    /** @var array<\PhpTuf\ComposerStager\Domain\Exception\IOException|string|null> */
+    /** @var array<\PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null> */
     private $cache = [];
 
     /** @var \Symfony\Component\Process\ExecutableFinder */
@@ -23,7 +23,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
         $cache = $this->getCache($name);
 
         // Throw cached exception.
-        if ($cache instanceof IOException) {
+        if ($cache instanceof LogicException) {
             throw $cache;
         }
 
@@ -38,7 +38,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
 
         // Cache and throw exception if not found.
         if (is_null($path)) {
-            $cache = new IOException(
+            $cache = new LogicException(
                 sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH.', $name)
             );
             $this->setCache($name, $cache);
@@ -50,13 +50,13 @@ final class ExecutableFinder implements ExecutableFinderInterface
         return $path;
     }
 
-    /** @return \PhpTuf\ComposerStager\Domain\Exception\IOException|string|null */
+    /** @return \PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null */
     private function getCache(string $commandName)
     {
         return $this->cache[$commandName] ?? null;
     }
 
-    /** @param string|\PhpTuf\ComposerStager\Domain\Exception\IOException $value */
+    /** @param string|\PhpTuf\ComposerStager\Domain\Exception\LogicException $value */
     private function setCache(string $commandName, $value): void
     {
         $this->cache[$commandName] = $value;

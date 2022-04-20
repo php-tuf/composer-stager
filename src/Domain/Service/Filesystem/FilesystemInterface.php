@@ -26,7 +26,7 @@ interface FilesystemInterface
      *   be created.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If the operation is unsuccessful.
+     *   If copying fails.
      */
     public function copy(string $source, string $destination): void;
 

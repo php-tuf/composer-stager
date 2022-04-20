@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable;
@@ -56,7 +56,7 @@ final class ComposerIsAvailableUnitTest extends TestCase
         $this->executableFinder
             ->find('composer')
             ->shouldBeCalledOnce()
-            ->willThrow(IOException::class);
+            ->willThrow(LogicException::class);
         $sut = $this->createSut();
 
         self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));

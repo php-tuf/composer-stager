@@ -28,8 +28,6 @@ interface RsyncRunnerInterface extends ProcessRunnerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If the executable cannot be found.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      *   If the command process cannot be created due to host configuration.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
@@ -31,7 +31,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     {
         try {
             $this->executableFinder->find('composer');
-        } catch (IOException $e) {
+        } catch (LogicException $e) {
             return false;
         }
 

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Finder;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -78,7 +78,7 @@ final class ExecutableFinderUnitTest extends TestCase
     /** @dataProvider providerFindNotFound */
     public function testFindNotFound($name): void
     {
-        $this->expectException(IOException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches("/{$name}.*found/");
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
@@ -102,9 +102,7 @@ final class ExecutableFinderUnitTest extends TestCase
         ];
     }
 
-    /**
-     * Make sure ::find caches result when Composer is not found.
-     */
+    /** Make sure ::find caches result when Composer is not found. */
     public function testFindNotFoundCaching(): void
     {
         $this->symfonyExecutableFinder
@@ -119,12 +117,12 @@ final class ExecutableFinderUnitTest extends TestCase
 
         try {
             $sut->find('composer');
-        } catch (IOException $e) {
+        } catch (LogicException $e) {
         }
 
         try {
             $sut->find('composer');
-        } catch (IOException $e) {
+        } catch (LogicException $e) {
         }
     }
 }

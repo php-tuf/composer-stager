@@ -173,6 +173,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
     /**
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     *   If the directory cannot be found or is not actually a directory.
      *
      * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator
      *   to throw an exception here (because the given directory has disappeared)
