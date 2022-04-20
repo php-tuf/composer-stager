@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
 
 use Closure;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
@@ -53,7 +53,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
 
         $this->filesystem

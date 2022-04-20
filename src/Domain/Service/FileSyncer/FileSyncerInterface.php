@@ -39,8 +39,8 @@ interface FileSyncerInterface
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the destination directory cannot be created.
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
-     *   If the operation fails, because the source directory is not found, for example.
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
+     *   If the source directory does not exist.
      */
     public function sync(
         PathInterface $source,
