@@ -11,9 +11,10 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 interface FilesystemInterface
 {
     /**
-     * Copies a file from one place to another.
+     * Copies a given file from one place to another.
      *
      * If the file already exists at the destination it will be overwritten.
+     * Copying directories is not supported.
      *
      * @param string $source
      *   The file to copy, as an absolute path or relative to the current
