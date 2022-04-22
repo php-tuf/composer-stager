@@ -15,10 +15,10 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
 {
     // Paths that are included in archive files, i.e., not excluded by .gitattributes.
     private const INCLUDED_PATHS = [
+        'LICENSE',
+        'README.md',
         'composer.json',
         'config',
-        'docs',
-        'LICENSE',
         'src',
         'tests',
         'vendor',

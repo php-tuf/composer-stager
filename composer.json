@@ -3,7 +3,7 @@
     "description": "Stages Composer commands so they can be safely run on a production codebase.",
     "license": "MIT",
     "type": "library",
-    "readme": "docs/README.md",
+    "readme": "README.md",
     "authors": [
         {
             "name": "Travis Carden",

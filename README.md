@@ -68,20 +68,10 @@ class Updater
 }
 ```
 
-## Limitations and known issues
-
-[Current limitations and known issues.](known_issues.md)
-
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+[Pull requests](https://github.com/php-tuf/composer-stager/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) are welcome. For major changes, please [open an issue](https://github.com/php-tuf/composer-stager/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) first to discuss what you would like to change. Observe [the coding standards](https://github.com/php-tuf/composer-stager/wiki/Coding-standards) and make sure to add and update tests as appropriate.
 
-Please make sure to update tests as appropriate.
+---
 
-## User documentation
-
-* [Glossary](glossary.md)
-
-## Maintainers documentation
-
-* [Style guide](style_guide.md)
+[More info in the Wiki.](https://github.com/php-tuf/composer-stager/wiki)
