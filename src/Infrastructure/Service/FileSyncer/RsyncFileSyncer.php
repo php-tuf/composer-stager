@@ -48,6 +48,12 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         $exclusions = $exclusions ?? new PathList([]);
         $exclusions = $exclusions->getAll();
 
+        if ($source === $destination) {
+            throw new LogicException(
+                sprintf('The source and destination directories cannot be the same at "%s"', $source)
+            );
+        }
+
         if (!$this->filesystem->exists($source)) {
             throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
         }

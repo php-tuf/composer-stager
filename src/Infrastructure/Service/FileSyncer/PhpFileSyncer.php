@@ -39,10 +39,23 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         $exclusions = $exclusions ?? new PathList([]);
 
+        $this->assertSourceAndDestinationAreDifferent($source, $destination);
         $this->assertSourceExists($source);
         $this->ensureDestinationExists($destination);
         $this->deleteExtraneousFilesFromDestination($destination, $source, $exclusions);
         $this->copySourceFilesToDestination($source, $destination, $exclusions);
+    }
+
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
+    private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
+    {
+        $source = $source->resolve();
+
+        if ($source === $destination->resolve()) {
+            throw new LogicException(
+                sprintf('The source and destination directories cannot be the same at "%s"', $source)
+            );
+        }
     }
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */

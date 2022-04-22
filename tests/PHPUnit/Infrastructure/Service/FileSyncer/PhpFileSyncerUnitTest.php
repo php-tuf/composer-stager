@@ -65,6 +65,25 @@ final class PhpFileSyncerUnitTest extends TestCase
         $sut->sync($source, $destination);
     }
 
+    public function testSyncDirectoriesTheSame(): void
+    {
+        $this->source
+            ->resolve()
+            ->willReturn('same');
+        $source = $this->source->reveal();
+        $this->destination
+            ->resolve()
+            ->willReturn('same');
+        $destination = $this->destination->reveal();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
+
+        $sut = $this->createSut();
+
+        $sut->sync($source, $destination);
+    }
+
     public function testSyncDestinationCouldNotBeCreated(): void
     {
         $this->expectException(IOException::class);
