@@ -78,6 +78,10 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## Documentation
+## User documentation
 
-* [Project glossary](glossary.md)
+* [Glossary](glossary.md)
+
+## Maintainers documentation
+
+* [Style guide](style_guide.md)
