@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Factory\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory;
+use PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -11,7 +11,7 @@ use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\FileSyncerFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory
  *
  * @covers ::__construct
  *

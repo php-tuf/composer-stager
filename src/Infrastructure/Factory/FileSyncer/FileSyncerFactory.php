@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use Symfony\Component\Process\ExecutableFinder;
 
 /** This is for selecting and creating the appropriate file syncer for the host. */
