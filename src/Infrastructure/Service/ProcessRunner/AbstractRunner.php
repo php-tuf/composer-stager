@@ -21,9 +21,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
     /** @var \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface */
     private $processFactory;
 
-    /**
-     * Returns the executable name, e.g., "composer" or "rsync".
-     */
+    /** Returns the executable name, e.g., "composer" or "rsync". */
     abstract protected function executableName(): string;
 
     public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
@@ -35,8 +33,8 @@ abstract class AbstractRunner implements ProcessRunnerInterface
     /**
      * @param array<string> $command
      *   The command to run and its arguments as separate string values, e.g.,
-     *   ['require', 'example/package']. The return value of ::executableName()
-     *   will be automatically prepended.
+     *   ['require', 'example/package'] or ['source', 'destination']. The return
+     *   value of ::executableName() will be automatically prepended.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *

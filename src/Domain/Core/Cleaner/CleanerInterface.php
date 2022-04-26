@@ -6,9 +6,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/**
- * Removes the staging directory.
- */
+/** Removes the staging directory. */
 interface CleanerInterface
 {
     /**
@@ -25,7 +23,7 @@ interface CleanerInterface
      *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     *   If the preconditions for the cleaner are unfulfilled.
+     *   If the preconditions are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      */

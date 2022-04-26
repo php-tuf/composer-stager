@@ -6,9 +6,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
-/**
- * Creates path value objects.
- */
+/** Creates path value objects. */
 final class PathFactory
 {
     /**

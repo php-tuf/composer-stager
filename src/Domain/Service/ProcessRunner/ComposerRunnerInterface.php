@@ -4,9 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\ProcessRunner;
 
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 
-/**
- * Runs Composer commands.
- */
+/** Runs Composer commands. */
 interface ComposerRunnerInterface extends ProcessRunnerInterface
 {
     /**

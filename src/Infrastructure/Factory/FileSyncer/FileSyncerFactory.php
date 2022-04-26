@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterfa
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use Symfony\Component\Process\ExecutableFinder;
 
-/** This is for selecting and creating the appropriate file syncer for the host. */
+/** Selects and creates the appropriate file syncer for the host. */
 final class FileSyncerFactory
 {
     /** @var \Symfony\Component\Process\ExecutableFinder */
@@ -29,6 +29,7 @@ final class FileSyncerFactory
         $this->rsyncFileSyncer = $rsyncFileSyncer;
     }
 
+    /** Creates the appropriate file syncer. */
     public function create(): FileSyncerInterface
     {
         if ($this->executableFinder->find('rsync') !== null) {

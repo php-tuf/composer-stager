@@ -33,7 +33,9 @@ final class Stager implements StagerInterface
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
+
         $this->validateCommand($composerCommand);
+
         $this->runCommand($stagingDir, $composerCommand, $callback, $timeout);
     }
 

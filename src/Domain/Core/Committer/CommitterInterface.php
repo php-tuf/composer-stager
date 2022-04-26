@@ -7,9 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/**
- * Makes the staged changes live by syncing the active directory with the staging directory.
- */
+/** Makes the staged changes live by syncing the active directory with the staging directory. */
 interface CommitterInterface
 {
     /**
@@ -31,7 +29,7 @@ interface CommitterInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     *   If the preconditions for committer are unfulfilled.
+     *   If the preconditions are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      *

@@ -29,11 +29,9 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
     /**
      * The unusual requirement to support syncing a directory with its own
-     * descendant required a unique approach, which has been documented here:
+     * descendant requires a unique approach, which has been documented here:
      *
      * @see https://serverfault.com/q/1094803/956603
-     *
-     * @todo Do something with $callback.
      */
     public function sync(
         PathInterface $source,

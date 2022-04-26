@@ -31,6 +31,7 @@ final class Cleaner implements CleanerInterface
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
+
         $stagingDirResolved = $stagingDir->resolve();
 
         try {

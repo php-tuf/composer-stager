@@ -7,9 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/**
- * Begins the staging process by copying the active directory to the staging directory.
- */
+/** Begins the staging process by copying the active directory to the staging directory. */
 interface BeginnerInterface
 {
     /**
@@ -42,7 +40,7 @@ interface BeginnerInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     *   If the preconditions for the beginner are unfulfilled.
+     *   If the preconditions are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      *

@@ -6,9 +6,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/**
- * Executes a Composer command in the staging directory.
- */
+/** Executes a Composer command in the staging directory. */
 interface StagerInterface
 {
     /**
@@ -36,7 +34,7 @@ interface StagerInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      *   If the given Composer command is invalid.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     *   If the preconditions for stager are unfulfilled.
+     *   If the preconditions are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      */

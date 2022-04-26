@@ -8,9 +8,7 @@ use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
-/**
- * Forbids throwing third party exceptions from public methods.
- */
+/** Forbids throwing third party exceptions from public methods. */
 final class ForbiddenThrowsRule extends AbstractRule
 {
     public function getNodeType(): string

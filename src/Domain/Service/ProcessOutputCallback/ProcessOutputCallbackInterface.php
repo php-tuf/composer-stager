@@ -16,14 +16,10 @@ use Symfony\Component\Process\Process;
  */
 interface ProcessOutputCallbackInterface
 {
-    /**
-     * Standard output (stdout).
-     */
+    /** Standard output (stdout). */
     public const OUT = Process::OUT;
 
-    /**
-     * Standard error (stderr).
-     */
+    /** Standard error (stderr). */
     public const ERR = Process::ERR;
 
     /**

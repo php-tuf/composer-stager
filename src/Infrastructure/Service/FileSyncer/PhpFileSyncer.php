@@ -27,7 +27,6 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $this->filesystem = $filesystem;
     }
 
-    /** @todo Do something with $callback. */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
@@ -96,8 +95,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             $sourceFilePathname = $sourceResolved . DIRECTORY_SEPARATOR . $relativePathname;
 
             // Don't iterate over the destination directory if it is a descendant
-            // of the source directory (i.e., if it is "underneath" or "inside"
-            // it) or it will itself be deleted in the process.
+            // of the source directory, i.e., if it is "underneath" or "inside"
+            // it, or it will itself be deleted in the process.
             if (strpos($destinationFilePathname, $sourceResolved) === 0) {
                 continue;
             }
@@ -167,7 +166,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             string $foundPathname
         ) use ($exclusions): bool {
             // On the surface, it may look like individual descendants of an excluded
-            // directory (i.e., files "underneath" or "inside" it) won't be excluded
+            // directory, i.e., files "underneath" or "inside" it, won't be excluded
             // because they aren't individually in the array in order to be matched.
             // But because the directory iterator is recursive, their excluded
             // ancestor WILL BE found, and they will be excluded by extension.

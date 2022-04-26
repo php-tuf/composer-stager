@@ -2,9 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Value\PathList;
 
-/**
- * Handles a list of path strings.
- */
+/** Handles a list of path strings. */
 interface PathListInterface
 {
     /**
