@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPStan;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -11,13 +12,11 @@ use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Provides a base class for PHPStan class rules.
+ * Provides a base class for PHPStan rules.
  */
 abstract class AbstractRule implements Rule
 {
-    /**
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
+    /** @var \PHPStan\Reflection\ReflectionProvider */
     protected $reflectionProvider;
 
     public function __construct(ReflectionProvider $reflectionProvider)
@@ -31,7 +30,9 @@ abstract class AbstractRule implements Rule
             throw new ShouldNotHappenException();
         }
 
-        return $this->reflectionProvider->getClass($node->namespacedName);
+        $namespace = $node->namespacedName;
+        assert($namespace instanceof Name);
+        return $this->reflectionProvider->getClass($namespace->toString());
     }
 
     protected function getMethodReflection(Scope $scope): MethodReflection
@@ -50,19 +51,10 @@ abstract class AbstractRule implements Rule
         return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\\');
     }
 
-    protected function isProtectedMethod(MethodReflection $method): bool
+    protected function isFactoryClass(ClassReflection $class): bool
     {
-        return !$method->isPublic() && !$method->isPrivate();
-    }
-
-    protected function isDomainClass(ClassReflection $class): bool
-    {
-        return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Domain\\');
-    }
-
-    protected function isUtilClass(ClassReflection $class): bool
-    {
-        return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\Util\\');
+        $factory = 'Factory';
+        return substr($class->getName(), -strlen($factory)) === $factory;
     }
 
     protected function isThrowable(ClassReflection $class): bool

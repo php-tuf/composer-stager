@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPStan\Files;
 
@@ -11,15 +11,14 @@ use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 /**
  * Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
  */
-class GitattributesMissingExportIgnoreRule extends AbstractRule
+final class GitattributesMissingExportIgnoreRule extends AbstractRule
 {
     // Paths that are included in archive files, i.e., not excluded by .gitattributes.
     private const INCLUDED_PATHS = [
         'LICENSE',
-        'bin',
+        'README.md',
         'composer.json',
         'config',
-        'docs',
         'src',
         'tests',
         'vendor',
@@ -49,6 +48,7 @@ class GitattributesMissingExportIgnoreRule extends AbstractRule
         $errors = [];
 
         $rootPaths = scandir(__DIR__ . '/../../../');
+
         foreach ($rootPaths as $rootPath) {
             if (in_array($rootPath, self::SPECIAL_PATHS, true)) {
                 continue;
@@ -58,7 +58,7 @@ class GitattributesMissingExportIgnoreRule extends AbstractRule
                 continue;
             }
 
-            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS.";
+            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS";
             $errors[] = RuleErrorBuilder::message($message)->build();
         }
 

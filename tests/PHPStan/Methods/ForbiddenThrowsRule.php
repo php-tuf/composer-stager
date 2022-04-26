@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPStan\Methods;
 
@@ -8,10 +8,8 @@ use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
-/**
- * Forbids throwing non-PhpTuf exceptions from public methods.
- */
-class ForbiddenThrowsRule extends AbstractRule
+/** Forbids throwing third party exceptions from public methods. */
+final class ForbiddenThrowsRule extends AbstractRule
 {
     public function getNodeType(): string
     {
@@ -33,14 +31,16 @@ class ForbiddenThrowsRule extends AbstractRule
         }
 
         $errors = [];
+
         foreach ($throwType->getReferencedClasses() as $exception) {
             $class = $this->reflectionProvider->getClass($exception);
+
             if ($this->isProjectClass($class)) {
                 continue;
             }
 
             $message = sprintf(
-                'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead.',
+                'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead',
                 $exception
             );
             $errors[] = RuleErrorBuilder::message($message)->build();

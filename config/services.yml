@@ -4,28 +4,17 @@ services:
     _defaults:
         autoconfigure: true
         autowire: true
-        public: false
 
     PhpTuf\ComposerStager\:
         resource: '../src/*'
         public: true
         exclude:
-            - '../src/Exception'
+            - '../src/Domain/Exception'
+            - '../src/Infrastructure/Value'
 
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory:
-        arguments:
-            $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer'
-            $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer'
-
-    PhpTuf\ComposerStager\Domain\FileSyncer\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\FileSyncerFactory', 'create' ]
-
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\PhpFileSyncer:
-        public: true
-
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\RsyncFileSyncer:
-        public: true
-
-    Symfony\Component\Process\ExecutableFinder: ~
+    PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:
+        factory: [ 'PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory', 'create' ]
 
     Symfony\Component\Filesystem\Filesystem: ~
+
+    Symfony\Component\Process\ExecutableFinder: ~

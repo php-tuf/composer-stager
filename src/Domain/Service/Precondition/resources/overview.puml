@@ -1,0 +1,28 @@
+@startuml
+
+' This is the PlantUML (https://plantuml.com/) source used to generate
+' the UML overview diagram of the precondition system (overview.png). Said
+' diagram can be regenerated from this source with the PhpStorm plugin at
+' https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
+
+!include settings.puml
+
+skinparam ClassFontStyle normal
+
+interface Precondition
+
+interface PreconditionsTree extends Precondition
+
+class PreconditionException
+
+note right of PreconditionsTree {
+    A PreconditionsTree
+    contains one or more
+    Preconditions and/or other
+    PreconditionsTrees.
+}
+
+PreconditionsTree -down-o Precondition
+PreconditionException -left-o Precondition
+
+@enduml

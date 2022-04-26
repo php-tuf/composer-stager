@@ -1,8 +1,11 @@
-/.idea/workspace.xml
-/.idea/dictionaries/*
 !/.idea/dictionaries/project.xml
+!/var/*/.gitkeep
+/.idea/dictionaries/*
 /.idea/php.xml
-/var/
-/vendor/
-!/var/.gitkeep
+/.idea/workspace.xml
+/grumphp.yml
+/phpcs.xml
 /phpunit.xml
+/psalm.xml
+/var/*/*
+/vendor/

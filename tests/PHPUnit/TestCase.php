@@ -1,25 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
-use PhpTuf\ComposerStager\Util\PathUtil;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use SplFileInfo;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 use Symfony\Component\Process\Process;
 
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends PHPUnitTestCase
 {
     use ProphecyTrait;
 
-    protected const TEST_ENV_CONTAINER = __DIR__ . '/../../var/phpunit/test-env-container';
-    protected const TEST_ENV = self::TEST_ENV_CONTAINER . '/test-env';
+    protected const TEST_ENV = __DIR__ . '/../../var/phpunit/test-env';
+    protected const TEST_WORKING_DIR = self::TEST_ENV . '/working-dir';
     protected const ACTIVE_DIR = 'active-dir';
     protected const STAGING_DIR = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
@@ -30,8 +28,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $filesystem = new Filesystem();
 
         // Create the test environment,
-        $filesystem->mkdir(self::TEST_ENV);
-        chdir(self::TEST_ENV);
+        $filesystem->mkdir(self::TEST_WORKING_DIR);
+        chdir(self::TEST_WORKING_DIR);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
@@ -41,31 +39,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function removeTestEnvironment(): void
     {
         $filesystem = new Filesystem();
-        if ($filesystem->exists(self::TEST_ENV_CONTAINER)) {
-            try {
-                $filesystem->remove(self::TEST_ENV_CONTAINER);
-            } catch (IOException $e) {
-                // @todo Windows chokes on this every time, e.g.,
-                //    | Failed to remove directory
-                //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
-                //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container):
-                //    | Resource temporarily unavailable.
-                //   Obviously, this error suppression is likely to bite us in the future
-                //   even though it doesn't seem to cause any problems now. Fix it.
-            }
+
+        if (!$filesystem->exists(self::TEST_ENV)) {
+            return;
         }
-    }
 
-    protected static function getContainer(): Container
-    {
-        $container = new ContainerBuilder();
-
-        $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(__DIR__ . '/../../config/services.yml');
-
-        $container->compile();
-
-        return $container;
+        try {
+            $filesystem->remove(self::TEST_ENV);
+        } catch (IOException $e) {
+            // @todo Windows chokes on this every time, e.g.,
+            //    | Failed to remove directory
+            //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
+            //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container):
+            //    | Resource temporarily unavailable.
+            //   Obviously, this error suppression is likely to bite us in the future
+            //   even though it doesn't seem to cause any problems now. Fix it.
+        }
     }
 
     protected static function createFiles(string $baseDir, array $filenames): void
@@ -79,26 +68,25 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $filename = "{$baseDir}/{$filename}";
         $dirname = dirname($filename);
+
         if (!file_exists($dirname)) {
             self::assertTrue(mkdir($dirname, 0777, true), "Created directory {$dirname}.");
         }
+
         self::assertTrue(touch($filename), "Created file {$filename}.");
         self::assertNotFalse(realpath($filename), "Got absolute path of {$filename}.");
     }
 
     protected static function changeFile($dir, $filename): void
     {
-        $pathname = PathUtil::ensureTrailingSlash($dir) . $filename;
-        $result = file_put_contents(
-            $pathname,
-            self::CHANGED_CONTENT
-        );
+        $pathname = self::ensureTrailingSlash($dir) . $filename;
+        $result = file_put_contents($pathname, self::CHANGED_CONTENT);
         self::assertNotFalse($result, "Changed file {$pathname}.");
     }
 
     protected static function deleteFile($dir, $filename): void
     {
-        $pathname = PathUtil::ensureTrailingSlash($dir) . $filename;
+        $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
         self::assertTrue($result, "Deleted file {$pathname}.");
     }
@@ -108,6 +96,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     }
 
+    /** phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
     protected static function fixSeparatorsMultiple(&...$paths): void
     {
         foreach ($paths as &$path) {
@@ -120,26 +109,34 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * return, alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'elit.txt',
-     *     'lorem/ipsum/dolor.txt',
-     *     'sit/amet.txt',
-     *     'consectetur/adipiscing.txt',
+     *     'eight.txt',
+     *     'four/five.txt',
+     *     'one/two/three.txt',
+     *     'six/seven.txt',
      * ];
      * ```
      */
-    protected static function assertDirectoryListing(string $dir, array $expected, string $ignoreDir = '', string $message = ''): void
-    {
+    protected static function assertDirectoryListing(
+        string $dir,
+        array $expected,
+        string $ignoreDir = '',
+        string $message = ''
+    ): void {
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
+
+        // Remove ignored paths.
         $actual = array_map(static function ($path) use ($dir, $ignoreDir) {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
-            $matchPath = PathUtil::ensureTrailingSlash($dir) . $path;
-            $ignoreDir = PathUtil::ensureTrailingSlash($ignoreDir);
+            $matchPath = self::ensureTrailingSlash($dir) . $path;
+            $ignoreDir = self::ensureTrailingSlash($ignoreDir);
+
             if (strpos($matchPath, $ignoreDir) === 0) {
                 return false;
             }
+
             return self::fixSeparators($path);
         }, $actual);
 
@@ -149,25 +146,28 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $actual = array_filter($actual);
         asort($actual);
 
-        // Make diffs easier to read by eliminating noise from numeric keys.
+        // Make diffs easier to read by eliminating noise coming from numeric keys.
         $expected = array_fill_keys($expected, 0);
         $actual = array_fill_keys($actual, 0);
 
         if ($message === '') {
             $message = "Directory {$dir} contains the expected files.";
         }
+
         self::assertEquals($expected, $actual, $message);
     }
 
     protected static function getDirectoryContents(string $dir): array
     {
-        $dir = PathUtil::ensureTrailingSlash($dir);
+        $dir = self::ensureTrailingSlash($dir);
         $dirListing = self::getFlatDirectoryListing($dir);
 
         $contents = [];
+
         foreach ($dirListing as $pathname) {
             $contents[$pathname] = file_get_contents($dir . $pathname);
         }
+
         return $contents;
     }
 
@@ -176,38 +176,83 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * alphabetized for easier comparison. Example:
      * ```php
      * [
-     *     'elit.txt',
-     *     'lorem/ipsum/dolor.txt',
-     *     'sit/amet.txt',
-     *     'consectetur/adipiscing.txt',
+     *     'eight.txt',
+     *     'four/five.txt',
+     *     'one/two/three.txt',
+     *     'six/seven.txt',
      * ];
      * ```
      */
     protected static function getFlatDirectoryListing(string $dir): array
     {
-        $dir = PathUtil::stripTrailingSlash($dir);
+        $dir = self::stripTrailingSlash($dir);
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir)
         );
 
         $listing = [];
-        /** @var \SplFileInfo $splFileInfo */
+
         foreach ($iterator as $splFileInfo) {
-            if (in_array($splFileInfo->getFilename(), ['.', '..'])) {
+            assert($splFileInfo instanceof SplFileInfo);
+
+            if (in_array($splFileInfo->getFilename(), ['.', '..'], true)) {
                 continue;
             }
+
             $pathname = $splFileInfo->getPathname();
             $listing[] = substr($pathname, strlen($dir) + 1);
         }
+
         sort($listing);
         return array_values($listing);
+    }
+
+    /**
+     * Strips the trailing slash (directory separator) from a given path.
+     *
+     * @param string $path
+     *   Any path, absolute or relative, existing or not. Empty paths and device
+     *   roots will be returned unchanged. Remote paths and UNC (Universal
+     *   Naming Convention) paths are not supported. No validation is done to
+     *   ensure that given paths are valid.
+     */
+    protected static function stripTrailingSlash(string $path): string
+    {
+        // Don't change a Windows drive letter root path, e.g., "C:\".
+        if (preg_match('/^[a-z]:\\\\?$/i', $path) === 1) {
+            return $path;
+        }
+
+        $trimmedPath = rtrim($path, '/\\');
+
+        // Don't change a UNIX-like root path.
+        if ($trimmedPath === '') {
+            return $path;
+        }
+
+        return $trimmedPath;
+    }
+
+    /**
+     * Ensures that the given path ends with a slash (directory separator).
+     *
+     * @param string $path
+     *   Any path, absolute or relative, existing or not.
+     */
+    protected static function ensureTrailingSlash(string $path): string
+    {
+        if ($path === '') {
+            $path = '.';
+        }
+
+        return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
     }
 
     protected static function assertFileChanged($dir, $path, $message = ''): void
     {
         self::assertStringEqualsFile(
-            PathUtil::ensureTrailingSlash($dir) . $path,
+            self::ensureTrailingSlash($dir) . $path,
             self::CHANGED_CONTENT,
             $message
         );
@@ -216,7 +261,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function assertFileNotChanged($dir, $path, $message = ''): void
     {
         self::assertStringEqualsFile(
-            PathUtil::ensureTrailingSlash($dir) . $path,
+            self::ensureTrailingSlash($dir) . $path,
             self::ORIGINAL_CONTENT,
             $message
         );
@@ -260,5 +305,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static function isWindows(): bool
     {
         return DIRECTORY_SEPARATOR !== '/';
+    }
+
+    protected static function isRsyncAvailable(): bool
+    {
+        $finder = new SymfonyExecutableFinder();
+        return $finder->find('rsync') !== null;
     }
 }

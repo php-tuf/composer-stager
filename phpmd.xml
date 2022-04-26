@@ -11,26 +11,29 @@
     <description>PHP Mess Detector rule set for Composer Stager</description>
 
     <rule ref="rulesets/cleancode.xml">
-        <exclude name="StaticAccess" />
+        <exclude name="StaticAccess"/>
     </rule>
     <rule ref="rulesets/cleancode.xml/StaticAccess">
         <properties>
             <property name="exceptions">
                 <value>
                     \Closure,
-                    \PhpTuf\ComposerStager\Util\PathUtil
+                    \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
                 </value>
             </property>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml"/>
     <rule ref="rulesets/controversial.xml"/>
-    <rule ref="rulesets/design.xml"/>
     <rule ref="rulesets/naming.xml">
+        <exclude name="LongClassName"/>
         <exclude name="LongVariable"/>
-        <exclude name="ShortVariable"/>
     </rule>
     <rule ref="rulesets/unusedcode.xml">
+        <!-- This rule fails to take interfaces into account. -->
+        <!-- @see https://github.com/phpmd/phpmd/issues/515 -->
         <exclude name="UnusedFormalParameter"/>
     </rule>
+
+    <exclude-pattern>tests</exclude-pattern>
 </ruleset>

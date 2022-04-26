@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
 
@@ -9,9 +9,9 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
- * Requires non-utility classes to implement an interface.
+ * Requires non-factory classes to implement an interface.
  */
-class MissingInterfaceRule extends AbstractRule
+final class MissingInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {
@@ -22,7 +22,7 @@ class MissingInterfaceRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
-        if ($this->isUtilClass($class) ||
+        if ($this->isFactoryClass($class) ||
             $class->isInterface() ||
             $class->isAbstract() ||
             $this->isThrowable($class)
@@ -34,7 +34,7 @@ class MissingInterfaceRule extends AbstractRule
             return [];
         }
 
-        $message = sprintf('Non-utility classes to implement an interface.');
+        $message = 'Non-factory class must implement an interface';
         return [RuleErrorBuilder::message($message)->build()];
     }
 }

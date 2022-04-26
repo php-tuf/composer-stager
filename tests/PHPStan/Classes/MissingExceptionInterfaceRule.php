@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
 
@@ -6,13 +6,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
 
 /**
  * Requires throwable classes to implement ExceptionInterface.
  */
-class MissingExceptionInterfaceRule extends AbstractRule
+final class MissingExceptionInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {
