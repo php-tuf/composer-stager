@@ -18,9 +18,9 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferentPrecondition
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExistsPrecondition
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsWritablePrecondition
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsWritable
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface|\Prophecy\Prophecy\ObjectProphecy $composerIsAvailable
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
@@ -38,22 +38,22 @@ final class CommonPreconditionsUnitTest extends TestCase
             ->resolve()
             ->willReturn(self::STAGING_DIR);
         $this->composerIsAvailable = $this->prophesize(ComposerIsAvailableInterface::class);
-        $this->activeDirExistsPrecondition = $this->prophesize(ActiveDirExistsInterface::class);
-        $this->activeDirIsWritablePrecondition = $this->prophesize(ActiveDirIsWritableInterface::class);
-        $this->activeAndStagingDirsAreDifferentPrecondition = $this->prophesize(ActiveAndStagingDirsAreDifferentInterface::class);
+        $this->activeDirExists = $this->prophesize(ActiveDirExistsInterface::class);
+        $this->activeDirIsWritable = $this->prophesize(ActiveDirIsWritableInterface::class);
+        $this->activeAndStagingDirsAreDifferent = $this->prophesize(ActiveAndStagingDirsAreDifferentInterface::class);
     }
 
     protected function createSut(): CommonPreconditions
     {
         $composerIsAvailable = $this->composerIsAvailable->reveal();
-        $activeDirExistsPrecondition = $this->activeDirExistsPrecondition->reveal();
-        $activeDirIsWritablePrecondition = $this->activeDirIsWritablePrecondition->reveal();
-        $activeAndStagingDirsAreDifferentPrecondition = $this->activeAndStagingDirsAreDifferentPrecondition->reveal();
+        $activeDirExists = $this->activeDirExists->reveal();
+        $activeDirIsWritable = $this->activeDirIsWritable->reveal();
+        $activeAndStagingDirsAreDifferent = $this->activeAndStagingDirsAreDifferent->reveal();
         return new CommonPreconditions(
             $composerIsAvailable,
-            $activeDirExistsPrecondition,
-            $activeDirIsWritablePrecondition,
-            $activeAndStagingDirsAreDifferentPrecondition
+            $activeDirExists,
+            $activeDirIsWritable,
+            $activeAndStagingDirsAreDifferent
         );
     }
 
@@ -69,15 +69,15 @@ final class CommonPreconditionsUnitTest extends TestCase
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
-        $this->activeDirExistsPrecondition
+        $this->activeDirExists
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
-        $this->activeDirIsWritablePrecondition
+        $this->activeDirIsWritable
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
-        $this->activeAndStagingDirsAreDifferentPrecondition
+        $this->activeAndStagingDirsAreDifferent
             ->isFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
@@ -100,13 +100,13 @@ final class CommonPreconditionsUnitTest extends TestCase
         $this->composerIsAvailable
             ->isFulfilled($activeDir, $stagingDir)
             ->willReturn(false);
-        $this->activeDirExistsPrecondition
+        $this->activeDirExists
             ->isFulfilled($activeDir, $stagingDir)
             ->willReturn(false);
-        $this->activeDirIsWritablePrecondition
+        $this->activeDirIsWritable
             ->isFulfilled($activeDir, $stagingDir)
             ->willReturn(false);
-        $this->activeAndStagingDirsAreDifferentPrecondition
+        $this->activeAndStagingDirsAreDifferent
             ->isFulfilled($activeDir, $stagingDir)
             ->willReturn(false);
 
