@@ -6,7 +6,9 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\TestSpyInterface;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
@@ -67,6 +69,7 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
     }
 
     /**
+     * @covers ::assertIsFulfilled
      * @covers ::getDescription
      * @covers ::getName
      * @covers ::getStatusMessage
@@ -85,13 +88,17 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
 
-        // Pass a mock child into the SUT so the behavior of ::isFulfilled can
-        // be controlled indirectly, without overriding the method on the SUT
+        // Pass a mock child into the SUT so the behavior of ::assertIsFulfilled
+        // can be controlled indirectly, without overriding the method on the SUT
         // itself and preventing it from actually being exercised.
         /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
         $child = $this->prophesize(PreconditionInterface::class);
-        $child->isFulfilled($activeDir, $stagingDir)
-            ->willReturn($isFulfilled);
+
+        if (!$isFulfilled) {
+            $child->assertIsFulfilled($activeDir, $stagingDir)
+                ->willThrow(PreconditionException::class);
+        }
+
         $child = $child->reveal();
 
         $sut = $this->createSut($child);
@@ -137,22 +144,61 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
      * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
      */
     public function testIsFulfilledBubbling(): void
     {
+        $message = 'Lorem ipsum';
+
         $this->expectException(PreconditionException::class);
+        $this->expectExceptionMessage($message);
 
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
 
-        $createLeaf = function (bool $return) use ($activeDir, $stagingDir): PreconditionInterface {
-            /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $mock */
-            $mock = $this->prophesize(PreconditionInterface::class);
-            $mock->isFulfilled($activeDir, $stagingDir)
+        $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
+            /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\PHPUnit\TestSpyInterface $spy */
+            $spy = $this->prophesize(TestSpyInterface::class);
+            $spy->report()
                 // Call once for ::isFulfilled() and a second time for ::assertIsFulfilled().
-                ->shouldBeCalledTimes(2)
-                ->willReturn($return);
-            return $mock->reveal();
+                ->shouldBeCalledTimes(2);
+            $spy = $spy->reveal();
+
+            return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
+            {
+                public function __construct(bool $isFulfilled, string $message, TestSpyInterface $spy)
+                {
+                    $this->isFulfilled = $isFulfilled;
+                    $this->message = $message;
+                    $this->spy = $spy;
+                }
+
+                protected function getFulfilledStatusMessage(): string
+                {
+                    return '';
+                }
+
+                protected function getUnfulfilledStatusMessage(): string
+                {
+                    return $this->message;
+                }
+
+                public function getName(): string
+                {
+                    return '';
+                }
+
+                public function getDescription(): string
+                {
+                    return '';
+                }
+
+                public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
+                {
+                    $this->spy->report();
+                    return $this->isFulfilled;
+                }
+            };
         };
 
         $leaves = [

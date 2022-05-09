@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Aggregate\PreconditionsTree;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
@@ -44,6 +45,7 @@ final class StagingDirIsReadyUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsFulfilled(): void
@@ -51,16 +53,41 @@ final class StagingDirIsReadyUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->stagingDirExists
-            ->isFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledOnce();
         $this->stagingDirIsWritable
-            ->isFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
-
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        self::assertTrue($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
+    public function testIsUnfulfilled(): void
+    {
+        $this->expectException(PreconditionException::class);
+
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->stagingDirExists
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->willThrow(PreconditionException::class);
+        $this->stagingDirIsWritable
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->willThrow(PreconditionException::class);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 }

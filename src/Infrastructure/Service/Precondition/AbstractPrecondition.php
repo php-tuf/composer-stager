@@ -11,7 +11,7 @@ abstract class AbstractPrecondition implements PreconditionInterface
     final public function assertIsFulfilled(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         if (!$this->isFulfilled($activeDir, $stagingDir)) {
-            throw new PreconditionException($this);
+            throw new PreconditionException($this, $this->getUnfulfilledStatusMessage());
         }
     }
 

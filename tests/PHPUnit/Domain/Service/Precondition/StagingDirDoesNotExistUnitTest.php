@@ -41,7 +41,11 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         return new StagingDirDoesNotExist($filesystem);
     }
 
-    /** @covers ::isFulfilled*/
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
     public function testIsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -56,6 +60,7 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsUnfulfilled(): void
@@ -67,10 +72,11 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         $this->filesystem
             ->exists($stagingDir->resolve())
             ->willReturn(true);
-
         $sut = $this->createSut();
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
