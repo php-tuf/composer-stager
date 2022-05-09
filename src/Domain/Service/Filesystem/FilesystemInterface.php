@@ -5,9 +5,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\Filesystem;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 
-/**
- * Provides basic utilities for interacting with the file system.
- */
+/** Provides basic utilities for interacting with the file system. */
 interface FilesystemInterface
 {
     /**
