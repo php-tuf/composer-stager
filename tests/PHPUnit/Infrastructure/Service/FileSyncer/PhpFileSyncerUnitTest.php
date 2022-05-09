@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
@@ -21,6 +22,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
+ * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  */
 final class PhpFileSyncerUnitTest extends TestCase
 {
@@ -40,12 +42,14 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(true);
+        $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
     }
 
     protected function createSut(): PhpFileSyncer
     {
         $filesystem = $this->filesystem->reveal();
-        return new PhpFileSyncer($filesystem);
+        $pathFactory = $this->pathFactory->reveal();
+        return new PhpFileSyncer($filesystem, $pathFactory);
     }
 
     public function testSyncSourceNotFound(): void

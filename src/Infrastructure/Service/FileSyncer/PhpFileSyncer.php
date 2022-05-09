@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -22,9 +22,13 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
     private $filesystem;
 
-    public function __construct(FilesystemInterface $filesystem)
+    /** @var \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface */
+    private $pathFactory;
+
+    public function __construct(FilesystemInterface $filesystem, PathFactoryInterface $pathFactory)
     {
         $this->filesystem = $filesystem;
+        $this->pathFactory = $pathFactory;
     }
 
     public function sync(
@@ -155,10 +159,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     {
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
 
-        $exclusions = array_map(static function ($path) use ($directory): string {
-            // @todo It's not good to depend on a static factory here. Find a
-            //   different approach or at least make it overridable somehow.
-            $path = PathFactory::create($path);
+        $exclusions = array_map(function ($path) use ($directory): string {
+            $path = $this->pathFactory::create($path);
             return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
 
