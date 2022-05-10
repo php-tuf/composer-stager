@@ -41,7 +41,11 @@ final class ActiveDirExistsUnitTest extends TestCase
         return new ActiveDirExists($filesystem);
     }
 
-    /** @covers ::isFulfilled */
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
     public function testIsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -57,6 +61,7 @@ final class ActiveDirExistsUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsUnfulfilled(): void
@@ -68,10 +73,11 @@ final class ActiveDirExistsUnitTest extends TestCase
         $this->filesystem
             ->exists($activeDir->resolve())
             ->willReturn(false);
-
         $sut = $this->createSut();
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }

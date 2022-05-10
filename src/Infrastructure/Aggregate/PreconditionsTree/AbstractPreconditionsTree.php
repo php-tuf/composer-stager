@@ -32,10 +32,10 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        foreach ($this->children as $child) {
-            if (!$child->isFulfilled($activeDir, $stagingDir)) {
-                return false;
-            }
+        try {
+            $this->assertIsFulfilled($activeDir, $stagingDir);
+        } catch (PreconditionException $e) {
+            return false;
         }
 
         return true;
@@ -43,8 +43,8 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
 
     public function assertIsFulfilled(PathInterface $activeDir, PathInterface $stagingDir): void
     {
-        if (!$this->isFulfilled($activeDir, $stagingDir)) {
-            throw new PreconditionException($this);
+        foreach ($this->children as $child) {
+            $child->assertIsFulfilled($activeDir, $stagingDir);
         }
     }
 

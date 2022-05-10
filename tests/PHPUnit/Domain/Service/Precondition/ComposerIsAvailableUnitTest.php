@@ -34,7 +34,11 @@ final class ComposerIsAvailableUnitTest extends TestCase
         return new ComposerIsAvailable($executableFinder);
     }
 
-    /** @covers ::isFulfilled */
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
     public function testIsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -45,10 +49,16 @@ final class ComposerIsAvailableUnitTest extends TestCase
             ->willReturn('/usr/local/bin/composer');
         $sut = $this->createSut();
 
-        self::assertTrue($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled);
     }
 
-    /** @covers ::isFulfilled */
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
     public function testIsUnfulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -59,6 +69,8 @@ final class ComposerIsAvailableUnitTest extends TestCase
             ->willThrow(LogicException::class);
         $sut = $this->createSut();
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
     }
 }
