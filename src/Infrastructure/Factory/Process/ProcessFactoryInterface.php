@@ -4,9 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Factory\Process;
 
 use Symfony\Component\Process\Process;
 
-/**
- * Creates Symfony Process objects.
- */
+/** Creates Symfony Process objects. */
 interface ProcessFactoryInterface
 {
     /**

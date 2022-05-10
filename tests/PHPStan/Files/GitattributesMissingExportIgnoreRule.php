@@ -74,9 +74,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
         return in_array($filename, self::INCLUDED_PATHS, true);
     }
 
-    /**
-     * Determines whether the given filename is excluded from archive files by .gitattributes.
-     */
+    /** Determines whether the given filename is excluded from archive files by .gitattributes. */
     private function isExcluded(string $filename): bool
     {
         $gitattributes = file(__DIR__ . '/../../../.gitattributes');

@@ -46,6 +46,7 @@ final class CommitterPreconditionsUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsFulfilled(): void
@@ -53,21 +54,21 @@ final class CommitterPreconditionsUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->commonPreconditions
-            ->isFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledOnce();
         $this->stagingDirIsReady
-            ->isFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
-
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        self::assertTrue($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled);
     }
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsUnfulfilled(): void
@@ -77,15 +78,16 @@ final class CommitterPreconditionsUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->commonPreconditions
-            ->isFulfilled($activeDir, $stagingDir)
-            ->willReturn(false);
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->willThrow(PreconditionException::class);
         $this->stagingDirIsReady
-            ->isFulfilled($activeDir, $stagingDir)
-            ->willReturn(false);
-
+            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->willThrow(PreconditionException::class);
         $sut = $this->createSut();
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }

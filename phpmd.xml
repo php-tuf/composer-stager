@@ -10,19 +10,7 @@
 >
     <description>PHP Mess Detector rule set for Composer Stager</description>
 
-    <rule ref="rulesets/cleancode.xml">
-        <exclude name="StaticAccess"/>
-    </rule>
-    <rule ref="rulesets/cleancode.xml/StaticAccess">
-        <properties>
-            <property name="exceptions">
-                <value>
-                    \Closure,
-                    \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
-                </value>
-            </property>
-        </properties>
-    </rule>
+    <rule ref="rulesets/cleancode.xml"/>
     <rule ref="rulesets/codesize.xml"/>
     <rule ref="rulesets/controversial.xml"/>
     <rule ref="rulesets/naming.xml">

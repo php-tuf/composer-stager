@@ -41,7 +41,11 @@ final class ActiveDirIsWritableUnitTest extends TestCase
         return new ActiveDirIsWritable($filesystem);
     }
 
-    /** @covers ::isFulfilled*/
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
     public function testIsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -52,11 +56,14 @@ final class ActiveDirIsWritableUnitTest extends TestCase
             ->willReturn(true);
         $sut = $this->createSut();
 
-        self::assertEquals(true, $sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertEquals(true, $isFulfilled);
     }
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsUnfulfilled(): void
@@ -68,10 +75,11 @@ final class ActiveDirIsWritableUnitTest extends TestCase
         $this->filesystem
             ->isWritable($activeDir->resolve())
             ->willReturn(false);
-
         $sut = $this->createSut();
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }

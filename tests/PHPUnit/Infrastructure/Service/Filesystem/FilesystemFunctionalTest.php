@@ -47,7 +47,7 @@ final class FilesystemFunctionalTest extends TestCase
         return $filesystem;
     }
 
-    public function xtestCopy(): void
+    public function testCopy(): void
     {
         $filename = 'file.txt';
         self::createFile(self::SOURCE_DIR, $filename);

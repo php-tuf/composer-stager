@@ -41,7 +41,11 @@ final class StagingDirIsWritableUnitTest extends TestCase
         return new StagingDirIsWritable($filesystem);
     }
 
-    /** @covers ::isFulfilled */
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
+     */
     public function testIsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -57,6 +61,7 @@ final class StagingDirIsWritableUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testIsUnfulfilled(): void
@@ -68,10 +73,11 @@ final class StagingDirIsWritableUnitTest extends TestCase
         $this->filesystem
             ->isWritable($stagingDir->resolve())
             ->willReturn(false);
-
         $sut = $this->createSut();
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertFalse($isFulfilled);
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
