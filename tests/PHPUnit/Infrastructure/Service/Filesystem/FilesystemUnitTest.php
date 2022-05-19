@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -15,12 +16,22 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
  * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
  */
 final class FilesystemUnitTest extends TestCase
 {
     protected function setUp(): void
     {
+        $this->destination = $this->prophesize(PathInterface::class);
+        $this->destination
+            ->resolve()
+            ->willReturn(self::ACTIVE_DIR);
+        $this->source = $this->prophesize(PathInterface::class);
+        $this->source
+            ->resolve()
+            ->willReturn(self::STAGING_DIR);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
@@ -37,12 +48,21 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopy($source, $destination): void
     {
+        $this->source
+            ->resolve()
+            ->willReturn($source);
+        $this->destination
+            ->resolve()
+            ->willReturn($destination);
         $this->symfonyFilesystem
             ->copy($source, $destination, true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($source, $destination);
+        $sut->copy(
+            $this->source->reveal(),
+            $this->destination->reveal()
+        );
     }
 
     public function providerCopy(): array
@@ -69,7 +89,10 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->copy('source/index.php', 'destination/index.php');
+        $sut->copy(
+            $this->source->reveal(),
+            $this->destination->reveal()
+        );
     }
 
     /**

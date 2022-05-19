@@ -134,6 +134,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
             $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
 
+            $sourceFilePathname = $this->pathFactory::create($sourceFilePathname);
+            $destinationFilePathname = $this->pathFactory::create($destinationFilePathname);
+
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but
             // for lots of small files (the primary use case), the cost of

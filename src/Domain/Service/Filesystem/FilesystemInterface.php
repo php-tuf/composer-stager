@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /** Provides basic utilities for interacting with the file system. */
 interface FilesystemInterface
@@ -14,20 +15,15 @@ interface FilesystemInterface
      * If the file already exists at the destination it will be overwritten.
      * Copying directories is not supported.
      *
-     * @param string $source
-     *   The file to copy, as an absolute path or relative to the current
-     *   working directory as returned by `getcwd()` at runtime, e.g.,
-     *   "/var/www/source" or "source".
-     * @param string $destination
-     *   The file to copy to, as an absolute path or relative to the current
-     *   working directory as returned by `getcwd()` at runtime, e.g.,
-     *   "/var/www/destination" or "destination". If it does not exist it will
-     *   be created.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
+     *   The file to copy.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
+     *   The file to copy to. If it does not exist it will be created.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the source directory doesn't exist or copying fails.
      */
-    public function copy(string $source, string $destination): void;
+    public function copy(PathInterface $source, PathInterface $destination): void;
 
     /**
      * Determines whether the given path exists.

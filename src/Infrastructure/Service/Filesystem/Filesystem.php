@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -25,15 +26,18 @@ final class Filesystem implements FilesystemInterface
      *   are files (not directories) and throw a LogicException if not. (Don't
      *   forget to add the appropriate annotation to the interface.)
      */
-    public function copy(string $source, string $destination): void
+    public function copy(PathInterface $source, PathInterface $destination): void
     {
+        $sourceResolved = $source->resolve();
+        $destinationResolved = $destination->resolve();
+
         try {
-            $this->symfonyFilesystem->copy($source, $destination, true);
+            $this->symfonyFilesystem->copy($sourceResolved, $destinationResolved, true);
         } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to copy "%s" to "%s".',
-                $source,
-                $destination
+                $sourceResolved,
+                $destinationResolved
             ), (int) $e->getCode(), $e);
         }
     }
