@@ -36,11 +36,10 @@ interface FilesystemInterface
     /**
      * Determines whether the given path is writable.
      *
-     * @param string $path
-     *   A path as absolute or relative to the working directory as returned
-     *   by `getcwd()` at runtime, e.g., "/var/www/public" or "public".
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
      */
-    public function isWritable(string $path): bool;
+    public function isWritable(PathInterface $path): bool;
 
     /**
      * Recursively creates a directory at the given path.

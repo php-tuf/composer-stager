@@ -28,7 +28,7 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->isWritable($activeDir->resolve());
+        return $this->filesystem->isWritable($activeDir);
     }
 
     protected function getFulfilledStatusMessage(): string

@@ -47,9 +47,9 @@ final class Filesystem implements FilesystemInterface
         return $this->symfonyFilesystem->exists($path->resolve());
     }
 
-    public function isWritable(string $path): bool
+    public function isWritable(PathInterface $path): bool
     {
-        return is_writable($path); // @codeCoverageIgnore
+        return is_writable($path->resolve()); // @codeCoverageIgnore
     }
 
     public function mkdir(string $path): void
