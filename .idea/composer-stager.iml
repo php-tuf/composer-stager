@@ -14,7 +14,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/composer-normalize" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/json-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/json-printer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/ergebnis/json-schema-validator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jangregor/phpstan-prophecy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/justinrainbow/json-schema" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/localheinz/diff" />
