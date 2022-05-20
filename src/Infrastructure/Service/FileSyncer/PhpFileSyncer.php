@@ -112,8 +112,10 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 continue;
             }
 
+            $destinationFilePath = $this->pathFactory::create($destinationFilePathname);
+
             // If it doesn't exist in the source, delete it from the destination.
-            $this->filesystem->remove($destinationFilePathname);
+            $this->filesystem->remove($destinationFilePath);
         }
     }
 

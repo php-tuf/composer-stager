@@ -53,10 +53,13 @@ final class CleanerUnitTest extends TestCase
      */
     public function testCleanHappyPath($path, $callback, $timeout): void
     {
+        $this->activeDir
+            ->resolve()
+            ->willReturn($path);
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->remove($stagingDir->resolve(), $callback, $timeout)
+            ->remove($stagingDir, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -103,7 +106,7 @@ final class CleanerUnitTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->filesystem
-            ->remove($stagingDir->resolve(), Argument::cetera())
+            ->remove($stagingDir, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(IOException::class);
         $sut = $this->createSut();

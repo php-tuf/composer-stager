@@ -176,12 +176,15 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testRemove($path, $callback, $givenTimeout, $expectedTimeout): void
     {
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($path);
         $this->symfonyFilesystem
             ->remove($path)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($path, $callback, $givenTimeout);
+        $sut->remove($this->stagingDir->reveal(), $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -214,6 +217,6 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->remove('/example/path');
+        $sut->remove($this->stagingDir->reveal());
     }
 }

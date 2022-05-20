@@ -55,9 +55,8 @@ interface FilesystemInterface
     /**
      * Removes the given path.
      *
-     * @param string $path
-     *   A path as absolute or relative to the working directory as returned by
-     *   `getcwd()` at runtime, e.g., "/var/www/public" or "public".
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to remove.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
@@ -68,7 +67,7 @@ interface FilesystemInterface
      *   If removal fails.
      */
     public function remove(
-        string $path,
+        PathInterface $path,
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void;
