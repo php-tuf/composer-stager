@@ -95,7 +95,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
         $this->filesystem
-            ->mkdir($destination->resolve())
+            ->mkdir($destination)
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();

@@ -76,7 +76,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
-        $this->filesystem->mkdir($destination->resolve());
+        $this->filesystem->mkdir($destination);
     }
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */

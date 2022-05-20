@@ -137,12 +137,15 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testMkdir($dir): void
     {
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($dir);
         $this->symfonyFilesystem
             ->mkdir($dir)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->mkdir($dir);
+        $sut->mkdir($this->stagingDir->reveal());
     }
 
     public function providerMkdir(): array
@@ -163,7 +166,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->mkdir('example');
+        $sut->mkdir($this->stagingDir->reveal());
     }
 
     /**

@@ -52,14 +52,16 @@ final class Filesystem implements FilesystemInterface
         return is_writable($path->resolve()); // @codeCoverageIgnore
     }
 
-    public function mkdir(string $path): void
+    public function mkdir(PathInterface $path): void
     {
+        $pathResolved = $path->resolve();
+
         try {
-            $this->symfonyFilesystem->mkdir($path);
+            $this->symfonyFilesystem->mkdir($pathResolved);
         } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to create directory at "%s".',
-                $path
+                $pathResolved
             ), (int) $e->getCode(), $e);
         }
     }

@@ -92,7 +92,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)
-        $this->filesystem->mkdir($destinationResolved);
+        $this->filesystem->mkdir($destination);
 
         try {
             $this->rsync->run($command, $callback);

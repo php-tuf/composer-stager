@@ -44,13 +44,13 @@ interface FilesystemInterface
     /**
      * Recursively creates a directory at the given path.
      *
-     * @param string $path
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
      *   The directory to create.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If creation fails.
      */
-    public function mkdir(string $path): void;
+    public function mkdir(PathInterface $path): void;
 
     /**
      * Removes the given path.

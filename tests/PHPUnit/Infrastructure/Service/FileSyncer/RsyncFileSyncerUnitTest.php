@@ -79,7 +79,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $destination = $this->destination->reveal();
 
         $this->filesystem
-            ->mkdir($destination->resolve())
+            ->mkdir($destination)
             ->shouldBeCalledOnce();
         $this->rsync
             ->run($command, $callback)
@@ -245,7 +245,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
         $this->filesystem
-            ->mkdir($destination->resolve())
+            ->mkdir($destination)
             ->willThrow(IOException::class);
         $sut = $this->createSut();
 
