@@ -64,10 +64,11 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceExists(PathInterface $source): void
     {
-        $source = $source->resolve();
-
         if (!$this->filesystem->exists($source)) {
-            throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
+            throw new LogicException(sprintf(
+                'The source directory does not exist at "%s"',
+                $source->resolve()
+            ));
         }
     }
 
@@ -75,7 +76,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
-        $this->filesystem->mkdir($destination->resolve());
+        $this->filesystem->mkdir($destination);
     }
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
@@ -105,12 +106,16 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 continue;
             }
 
-            if ($this->filesystem->exists($sourceFilePathname)) {
+            $sourceFilePath = $this->pathFactory::create($sourceFilePathname);
+
+            if ($this->filesystem->exists($sourceFilePath)) {
                 continue;
             }
 
+            $destinationFilePath = $this->pathFactory::create($destinationFilePathname);
+
             // If it doesn't exist in the source, delete it from the destination.
-            $this->filesystem->remove($destinationFilePathname);
+            $this->filesystem->remove($destinationFilePath);
         }
     }
 
@@ -133,6 +138,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         foreach ($sourceFiles as $sourceFilePathname) {
             $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
             $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
+
+            $sourceFilePathname = $this->pathFactory::create($sourceFilePathname);
+            $destinationFilePathname = $this->pathFactory::create($destinationFilePathname);
 
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but

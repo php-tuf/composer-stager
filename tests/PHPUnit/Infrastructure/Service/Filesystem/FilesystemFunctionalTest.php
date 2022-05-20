@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Config\FileLocator;
@@ -54,11 +55,11 @@ final class FilesystemFunctionalTest extends TestCase
 
         $filesystem = $this->createSut();
 
+        $source = PathFactory::create(self::SOURCE_DIR . DIRECTORY_SEPARATOR . $filename);
+        $destination = PathFactory::create(self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $filename);
+
         // Copy an individual file.
-        $filesystem->copy(
-            self::SOURCE_DIR . DIRECTORY_SEPARATOR . $filename,
-            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $filename
-        );
+        $filesystem->copy($source, $destination);
 
         self::assertDirectoryListing(self::DESTINATION_DIR, [$filename]);
     }

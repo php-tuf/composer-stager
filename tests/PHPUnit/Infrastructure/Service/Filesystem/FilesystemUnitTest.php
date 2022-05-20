@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -15,12 +16,22 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
  */
 final class FilesystemUnitTest extends TestCase
 {
     protected function setUp(): void
     {
+        $this->activeDir = $this->prophesize(PathInterface::class);
+        $this->activeDir
+            ->resolve()
+            ->willReturn(self::ACTIVE_DIR);
+        $this->stagingDir = $this->prophesize(PathInterface::class);
+        $this->stagingDir
+            ->resolve()
+            ->willReturn(self::STAGING_DIR);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
@@ -37,12 +48,21 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopy($source, $destination): void
     {
+        $this->activeDir
+            ->resolve()
+            ->willReturn($source);
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($destination);
         $this->symfonyFilesystem
             ->copy($source, $destination, true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($source, $destination);
+        $sut->copy(
+            $this->activeDir->reveal(),
+            $this->stagingDir->reveal()
+        );
     }
 
     public function providerCopy(): array
@@ -69,7 +89,10 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->copy('source/index.php', 'destination/index.php');
+        $sut->copy(
+            $this->activeDir->reveal(),
+            $this->stagingDir->reveal()
+        );
     }
 
     /**
@@ -79,13 +102,18 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testExists($path, $expected): void
     {
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($path);
         $this->symfonyFilesystem
             ->exists($path)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        self::assertEquals($expected, $sut->exists($path), 'Correctly detected existence of path.');
+        $actual = $sut->exists($this->stagingDir->reveal());
+
+        self::assertEquals($expected, $actual, 'Correctly detected existence of path.');
     }
 
     public function providerExists(): array
@@ -109,12 +137,15 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testMkdir($dir): void
     {
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($dir);
         $this->symfonyFilesystem
             ->mkdir($dir)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->mkdir($dir);
+        $sut->mkdir($this->stagingDir->reveal());
     }
 
     public function providerMkdir(): array
@@ -135,7 +166,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->mkdir('example');
+        $sut->mkdir($this->stagingDir->reveal());
     }
 
     /**
@@ -145,12 +176,15 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testRemove($path, $callback, $givenTimeout, $expectedTimeout): void
     {
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($path);
         $this->symfonyFilesystem
             ->remove($path)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($path, $callback, $givenTimeout);
+        $sut->remove($this->stagingDir->reveal(), $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -183,6 +217,6 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->remove('/example/path');
+        $sut->remove($this->stagingDir->reveal());
     }
 }

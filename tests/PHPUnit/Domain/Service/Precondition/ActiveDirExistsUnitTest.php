@@ -51,7 +51,7 @@ final class ActiveDirExistsUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($activeDir->resolve())
+            ->exists($activeDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
@@ -71,7 +71,7 @@ final class ActiveDirExistsUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($activeDir->resolve())
+            ->exists($activeDir)
             ->willReturn(false);
         $sut = $this->createSut();
 

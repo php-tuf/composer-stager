@@ -51,7 +51,7 @@ final class ActiveDirIsWritableUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->isWritable($activeDir->resolve())
+            ->isWritable($activeDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
@@ -73,7 +73,7 @@ final class ActiveDirIsWritableUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->isWritable($activeDir->resolve())
+            ->isWritable($activeDir)
             ->willReturn(false);
         $sut = $this->createSut();
 

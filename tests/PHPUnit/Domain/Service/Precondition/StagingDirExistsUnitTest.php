@@ -25,13 +25,7 @@ final class StagingDirExistsUnitTest extends TestCase
     protected function setUp(): void
     {
         $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
         $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
 
@@ -50,7 +44,7 @@ final class StagingDirExistsUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir->resolve())
+            ->exists($stagingDir)
             ->willReturn(true);
         $sut = $this->createSut();
 
@@ -69,7 +63,7 @@ final class StagingDirExistsUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir->resolve())
+            ->exists($stagingDir)
             ->willReturn(false);
         $sut = $this->createSut();
 

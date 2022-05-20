@@ -61,7 +61,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
 
         $this->filesystem
-            ->exists($source->resolve())
+            ->exists($source)
             ->willReturn(false);
 
         $sut = $this->createSut();
@@ -95,7 +95,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $source = $this->source->reveal();
         $destination = $this->destination->reveal();
         $this->filesystem
-            ->mkdir($destination->resolve())
+            ->mkdir($destination)
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();

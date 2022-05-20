@@ -28,7 +28,7 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->exists($activeDir->resolve());
+        return $this->filesystem->exists($activeDir);
     }
 
     protected function getFulfilledStatusMessage(): string
