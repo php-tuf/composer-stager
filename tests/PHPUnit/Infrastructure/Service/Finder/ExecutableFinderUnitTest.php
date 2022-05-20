@@ -17,7 +17,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::getCache
  * @covers ::setCache
  *
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $symfonyExecutableFinder
+ * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $symfonyExecutableFinder
  */
 final class ExecutableFinderUnitTest extends TestCase
 {

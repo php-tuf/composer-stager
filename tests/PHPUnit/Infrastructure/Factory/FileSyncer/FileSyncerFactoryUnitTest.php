@@ -17,7 +17,7 @@ use Symfony\Component\Process\ExecutableFinder;
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Process\ExecutableFinder $executableFinder
+ * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  */
 final class FileSyncerFactoryUnitTest extends TestCase
 {

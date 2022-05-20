@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
- * @property \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\Filesystem\Filesystem $symfonyFilesystem
+ * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
  */
 final class FilesystemUnitTest extends TestCase
 {
