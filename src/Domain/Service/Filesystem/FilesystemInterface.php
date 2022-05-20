@@ -28,11 +28,10 @@ interface FilesystemInterface
     /**
      * Determines whether the given path exists.
      *
-     * @param string $path
-     *   A path as absolute or relative to the working directory as returned by
-     *   `getcwd()` at runtime, e.g., "/var/www/public" or "public".
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
      */
-    public function exists(string $path): bool;
+    public function exists(PathInterface $path): bool;
 
     /**
      * Determines whether the given path is writable.

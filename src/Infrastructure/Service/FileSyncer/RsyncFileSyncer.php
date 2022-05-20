@@ -40,20 +40,24 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
-        $source = $source->resolve();
-        $destination = $destination->resolve();
+        $sourceResolved = $source->resolve();
+        $destinationResolved = $destination->resolve();
 
         $exclusions = $exclusions ?? new PathList([]);
         $exclusions = $exclusions->getAll();
 
-        if ($source === $destination) {
-            throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source)
-            );
+        if ($sourceResolved === $destinationResolved) {
+            throw new LogicException(sprintf(
+                'The source and destination directories cannot be the same at "%s"',
+                $sourceResolved
+            ));
         }
 
         if (!$this->filesystem->exists($source)) {
-            throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
+            throw new LogicException(sprintf(
+                'The source directory does not exist at "%s"',
+                $sourceResolved
+            ));
         }
 
         $command = [
@@ -69,8 +73,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         ];
 
         // Prevent infinite recursion if the source is inside the destination.
-        if ($this->isDescendant($source, $destination)) {
-            $exclusions[] = self::getRelativePath($destination, $source);
+        if ($this->isDescendant($sourceResolved, $destinationResolved)) {
+            $exclusions[] = self::getRelativePath($destinationResolved, $sourceResolved);
         }
 
         // There's no reason to process duplicates.
@@ -82,13 +86,13 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = $source . DIRECTORY_SEPARATOR;
+        $command[] = $sourceResolved . DIRECTORY_SEPARATOR;
 
-        $command[] = $destination;
+        $command[] = $destinationResolved;
 
         // Ensure the destination directory's existence. (This has no effect
         // if it already exists.)
-        $this->filesystem->mkdir($destination);
+        $this->filesystem->mkdir($destinationResolved);
 
         try {
             $this->rsync->run($command, $callback);

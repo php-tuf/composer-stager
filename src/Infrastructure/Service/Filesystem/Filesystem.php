@@ -42,9 +42,9 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    public function exists(string $path): bool
+    public function exists(PathInterface $path): bool
     {
-        return $this->symfonyFilesystem->exists($path);
+        return $this->symfonyFilesystem->exists($path->resolve());
     }
 
     public function isWritable(string $path): bool

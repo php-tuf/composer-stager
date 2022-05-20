@@ -16,20 +16,20 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
  */
 final class FilesystemUnitTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->destination = $this->prophesize(PathInterface::class);
-        $this->destination
+        $this->activeDir = $this->prophesize(PathInterface::class);
+        $this->activeDir
             ->resolve()
             ->willReturn(self::ACTIVE_DIR);
-        $this->source = $this->prophesize(PathInterface::class);
-        $this->source
+        $this->stagingDir = $this->prophesize(PathInterface::class);
+        $this->stagingDir
             ->resolve()
             ->willReturn(self::STAGING_DIR);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
@@ -48,10 +48,10 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopy($source, $destination): void
     {
-        $this->source
+        $this->activeDir
             ->resolve()
             ->willReturn($source);
-        $this->destination
+        $this->stagingDir
             ->resolve()
             ->willReturn($destination);
         $this->symfonyFilesystem
@@ -60,8 +60,8 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $sut->copy(
-            $this->source->reveal(),
-            $this->destination->reveal()
+            $this->activeDir->reveal(),
+            $this->stagingDir->reveal()
         );
     }
 
@@ -90,8 +90,8 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $sut->copy(
-            $this->source->reveal(),
-            $this->destination->reveal()
+            $this->activeDir->reveal(),
+            $this->stagingDir->reveal()
         );
     }
 
@@ -102,13 +102,18 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testExists($path, $expected): void
     {
+        $this->stagingDir
+            ->resolve()
+            ->willReturn($path);
         $this->symfonyFilesystem
             ->exists($path)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        self::assertEquals($expected, $sut->exists($path), 'Correctly detected existence of path.');
+        $actual = $sut->exists($this->stagingDir->reveal());
+
+        self::assertEquals($expected, $actual, 'Correctly detected existence of path.');
     }
 
     public function providerExists(): array

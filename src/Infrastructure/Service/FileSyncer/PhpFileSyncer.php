@@ -64,10 +64,11 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceExists(PathInterface $source): void
     {
-        $source = $source->resolve();
-
         if (!$this->filesystem->exists($source)) {
-            throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
+            throw new LogicException(sprintf(
+                'The source directory does not exist at "%s"',
+                $source->resolve()
+            ));
         }
     }
 
@@ -105,7 +106,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 continue;
             }
 
-            if ($this->filesystem->exists($sourceFilePathname)) {
+            $sourceFilePath = $this->pathFactory::create($sourceFilePathname);
+
+            if ($this->filesystem->exists($sourceFilePath)) {
                 continue;
             }
 

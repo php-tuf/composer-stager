@@ -28,7 +28,7 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->exists($stagingDir->resolve());
+        return $this->filesystem->exists($stagingDir);
     }
 
     protected function getFulfilledStatusMessage(): string

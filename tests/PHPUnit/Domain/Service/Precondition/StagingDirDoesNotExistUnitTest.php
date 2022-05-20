@@ -51,7 +51,7 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir->resolve())
+            ->exists($stagingDir)
             ->willReturn(false);
         $sut = $this->createSut();
 
@@ -70,7 +70,7 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir->resolve())
+            ->exists($stagingDir)
             ->willReturn(true);
         $sut = $this->createSut();
 
