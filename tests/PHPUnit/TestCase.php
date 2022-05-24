@@ -188,7 +188,7 @@ abstract class TestCase extends PHPUnitTestCase
         $dir = self::stripTrailingSlash($dir);
 
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir)
+            new RecursiveDirectoryIterator($dir),
         );
 
         $listing = [];
@@ -254,7 +254,7 @@ abstract class TestCase extends PHPUnitTestCase
         self::assertStringEqualsFile(
             self::ensureTrailingSlash($dir) . $path,
             self::CHANGED_CONTENT,
-            $message
+            $message,
         );
     }
 
@@ -263,7 +263,7 @@ abstract class TestCase extends PHPUnitTestCase
         self::assertStringEqualsFile(
             self::ensureTrailingSlash($dir) . $path,
             self::ORIGINAL_CONTENT,
-            $message
+            $message,
         );
     }
 
@@ -277,7 +277,7 @@ abstract class TestCase extends PHPUnitTestCase
         self::assertSame(
             '',
             self::getActiveAndStagingDirectoriesDiff(),
-            'Active and staging directories are the same.'
+            'Active and staging directories are the same.',
         );
     }
 
@@ -286,7 +286,7 @@ abstract class TestCase extends PHPUnitTestCase
         self::assertNotSame(
             '',
             self::getActiveAndStagingDirectoriesDiff(),
-            'Active and staging directories are not the same.'
+            'Active and staging directories are not the same.',
         );
     }
 

@@ -63,7 +63,7 @@ final class FilesystemUnitTest extends TestCase
 
         $sut->copy(
             $this->activeDir->reveal(),
-            $this->stagingDir->reveal()
+            $this->stagingDir->reveal(),
         );
     }
 
@@ -93,7 +93,7 @@ final class FilesystemUnitTest extends TestCase
 
         $sut->copy(
             $this->activeDir->reveal(),
-            $this->stagingDir->reveal()
+            $this->stagingDir->reveal(),
         );
     }
 

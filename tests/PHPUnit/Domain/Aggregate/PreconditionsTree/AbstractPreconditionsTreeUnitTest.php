@@ -212,17 +212,17 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
             $leaves[0],
             $this->createSut(
                 $this->createSut(
-                    $leaves[1]
-                )
+                    $leaves[1],
+                ),
             ),
             $this->createSut(
                 $this->createSut(
                     $this->createSut(
                         $this->createSut(
-                            $leaves[2]
-                        )
-                    )
-                )
+                            $leaves[2],
+                        ),
+                    ),
+                ),
             ),
             $this->createSut(
                 $this->createSut(
@@ -234,17 +234,17 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
                                         $this->createSut(
                                             $this->createSut(
                                                 $this->createSut(
-                                                    $leaves[3]
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
+                                                    $leaves[3],
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         );
 
         self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));

@@ -56,7 +56,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         if ($source === $destination->resolve()) {
             throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source)
+                sprintf('The source and destination directories cannot be the same at "%s"', $source),
             );
         }
     }
@@ -67,7 +67,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         if (!$this->filesystem->exists($source)) {
             throw new LogicException(sprintf(
                 'The source directory does not exist at "%s"',
-                $source->resolve()
+                $source->resolve(),
             ));
         }
     }
@@ -210,7 +210,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         try {
             return new RecursiveDirectoryIterator(
                 $directory,
-                FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
+                FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (UnexpectedValueException $e) {
             throw new IOException($e->getMessage(), (int) $e->getCode(), $e);

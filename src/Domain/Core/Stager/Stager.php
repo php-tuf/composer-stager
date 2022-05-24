@@ -56,7 +56,7 @@ final class Stager implements StagerInterface
 
         if (array_key_exists('--working-dir', $composerCommand) || array_key_exists('-d', $composerCommand)) {
             throw new InvalidArgumentException(
-                'Cannot stage a Composer command containing the "--working-dir" (or "-d") option'
+                'Cannot stage a Composer command containing the "--working-dir" (or "-d") option',
             );
         }
     }
@@ -74,7 +74,7 @@ final class Stager implements StagerInterface
     ): void {
         $command = array_merge(
             ['--working-dir=' . $stagingDir->resolve()],
-            $composerCommand
+            $composerCommand,
         );
 
         try {

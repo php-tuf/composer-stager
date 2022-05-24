@@ -89,13 +89,13 @@ final class FilesystemFunctionalTest extends TestCase
         // Single file copy: this should work.
         $symfonyFilesystem->copy(
             self::SOURCE_DIR . DIRECTORY_SEPARATOR . $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file1',
-            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file1'
+            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file1',
         );
 
         // Directory copy: this should fail.
         $symfonyFilesystem->copy(
             self::SOURCE_DIR . DIRECTORY_SEPARATOR . $dirname,
-            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $dirname
+            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $dirname,
         );
     }
 }

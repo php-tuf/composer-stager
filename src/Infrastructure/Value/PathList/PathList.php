@@ -42,7 +42,7 @@ final class PathList implements PathListInterface
                     : gettype($path);
                 throw new InvalidArgumentException(sprintf(
                     'Paths must be strings. Given %s.',
-                    $given
+                    $given,
                 ));
             }
         }

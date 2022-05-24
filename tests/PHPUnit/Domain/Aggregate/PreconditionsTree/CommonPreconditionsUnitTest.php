@@ -53,7 +53,7 @@ final class CommonPreconditionsUnitTest extends TestCase
             $composerIsAvailable,
             $activeDirExists,
             $activeDirIsWritable,
-            $activeAndStagingDirsAreDifferent
+            $activeAndStagingDirsAreDifferent,
         );
     }
 

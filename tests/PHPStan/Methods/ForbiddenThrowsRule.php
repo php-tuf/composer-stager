@@ -41,7 +41,7 @@ final class ForbiddenThrowsRule extends AbstractRule
 
             $message = sprintf(
                 'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead',
-                $exception
+                $exception,
             );
             $errors[] = RuleErrorBuilder::message($message)->build();
         }

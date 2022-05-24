@@ -107,7 +107,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         // third (1/3) faster than actually using Composer.)
         self::putJson(
             $activeDir . '/composer.json',
-            ['name' => 'original/name']
+            ['name' => 'original/name'],
         );
 
         $exclusions = [
@@ -230,7 +230,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::assertEquals(
             $previousStagingDirContents,
             $currentStagingDirContents,
-            sprintf('Staging directory was not changed when syncing back to active directory:%s%s ->%s%s', PHP_EOL, $stagingDir, PHP_EOL, $activeDir)
+            sprintf('Staging directory was not changed when syncing back to active directory:%s%s ->%s%s', PHP_EOL, $stagingDir, PHP_EOL, $activeDir),
         );
 
         // Clean: Remove the staging directory.
@@ -316,7 +316,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'stagingDir' => sprintf(
                     '%s/composer-stager/%s',
                     sys_get_temp_dir(),
-                    uniqid('', true)
+                    uniqid('', true),
                 ),
             ],
         ];

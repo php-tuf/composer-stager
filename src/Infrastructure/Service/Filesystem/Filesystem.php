@@ -36,7 +36,7 @@ final class Filesystem implements FilesystemInterface
         if ($sourceResolved === $destinationResolved) {
             throw new LogicException(sprintf(
                 'The source and destination files cannot be the same at "%s"',
-                $sourceResolved
+                $sourceResolved,
             ));
         }
 
@@ -45,13 +45,13 @@ final class Filesystem implements FilesystemInterface
         } catch (SymfonyFileNotFoundException $e) {
             throw new LogicException(sprintf(
                 'The source file does not exist or is not a file at "%s"',
-                $sourceResolved
+                $sourceResolved,
             ));
         } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to copy "%s" to "%s".',
                 $sourceResolved,
-                $destinationResolved
+                $destinationResolved,
             ), (int) $e->getCode(), $e);
         }
     }
@@ -75,7 +75,7 @@ final class Filesystem implements FilesystemInterface
         } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to create directory at "%s".',
-                $pathResolved
+                $pathResolved,
             ), (int) $e->getCode(), $e);
         }
     }
