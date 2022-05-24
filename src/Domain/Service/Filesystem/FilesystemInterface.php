@@ -48,7 +48,7 @@ interface FilesystemInterface
      *   The directory to create.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If creation fails.
+     *   If the directory cannot be created.
      */
     public function mkdir(PathInterface $path): void;
 
@@ -64,7 +64,7 @@ interface FilesystemInterface
      *   to disable.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If removal fails.
+     *   If the file cannot be removed.
      */
     public function remove(
         PathInterface $path,
