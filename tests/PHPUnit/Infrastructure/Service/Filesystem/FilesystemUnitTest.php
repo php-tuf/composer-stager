@@ -104,7 +104,7 @@ final class FilesystemUnitTest extends TestCase
         $destination = $this->stagingDir->reveal();
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $source->resolve()));
 
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
@@ -124,7 +124,7 @@ final class FilesystemUnitTest extends TestCase
         $destination = $this->activeDir->reveal();
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source and destination files cannot be the same at "%s"', $source->resolve()));
 
         $sut = $this->createSut();
 

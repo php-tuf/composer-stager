@@ -23,7 +23,8 @@ interface FilesystemInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the file cannot be copied.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
-     *   If the source file does not exist or is the same as the destination.
+     *   If the source file does not exist, is not actually a file, or is the
+     *   same as the destination.
      */
     public function copy(PathInterface $source, PathInterface $destination): void;
 
