@@ -9,11 +9,6 @@
 
 Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
 
-<!-- @todo Remove warning once there's a stable release. -->
-## Warning!
-
-Composer Stager is in the very early stages of development and _highly_ unstable. Unless you are part of the PHP-TUF development team, do not use it.
-
 ## Composer library
 
 The Composer library is installed, of course, via Composer:
