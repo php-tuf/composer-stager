@@ -43,6 +43,7 @@ final class CleanerUnitTest extends TestCase
     {
         $filesystem = $this->filesystem->reveal();
         $preconditions = $this->preconditions->reveal();
+
         return new Cleaner($filesystem, $preconditions);
     }
 

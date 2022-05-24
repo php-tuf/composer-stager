@@ -38,6 +38,7 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
     protected function createSut(): StagingDirDoesNotExist
     {
         $filesystem = $this->filesystem->reveal();
+
         return new StagingDirDoesNotExist($filesystem);
     }
 

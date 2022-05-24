@@ -40,6 +40,7 @@ final class BeginnerPreconditionsUnitTest extends TestCase
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
+
         return new BeginnerPreconditions($commonPreconditions, $stagingDirDoesNotExist);
     }
 

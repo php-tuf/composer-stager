@@ -55,6 +55,7 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         foreach ($this->children as $child) {
             if ($child instanceof PreconditionsTreeInterface) {
                 $leaves[] = $child->getLeaves();
+
                 continue;
             }
 

@@ -38,6 +38,7 @@ abstract class AbstractPath implements PathInterface
     public function resolveRelativeTo(PathInterface $path): string
     {
         $basePath = $path->resolve();
+
         return $this->doResolve($basePath);
     }
 
@@ -73,6 +74,7 @@ abstract class AbstractPath implements PathInterface
             // Two dots goes "up" a directory. Pop one off the current normalized array.
             if ($part === '..') {
                 array_pop($normalized);
+
                 continue;
             }
 

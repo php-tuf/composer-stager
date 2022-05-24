@@ -205,6 +205,7 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         sort($listing);
+
         return array_values($listing);
     }
 
@@ -299,6 +300,7 @@ abstract class TestCase extends PHPUnitTestCase
             self::STAGING_DIR,
         ]);
         $process->run();
+
         return $process->getOutput();
     }
 
@@ -310,6 +312,7 @@ abstract class TestCase extends PHPUnitTestCase
     protected static function isRsyncAvailable(): bool
     {
         $finder = new SymfonyExecutableFinder();
+
         return $finder->find('rsync') !== null;
     }
 }

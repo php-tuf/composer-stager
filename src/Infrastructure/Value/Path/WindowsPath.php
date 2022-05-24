@@ -41,6 +41,7 @@ final class WindowsPath extends AbstractPath
     private function normalizeAbsoluteFromSpecificDrive(string $path): string
     {
         $driveRoot = substr($path, 0, 3);
+
         return $this->normalize($path, $driveRoot);
     }
 
@@ -67,6 +68,7 @@ final class WindowsPath extends AbstractPath
 
         // Normalize and return.
         $driveRoot = substr($path, 0, 3);
+
         return $this->normalize($path, $driveRoot);
     }
 }

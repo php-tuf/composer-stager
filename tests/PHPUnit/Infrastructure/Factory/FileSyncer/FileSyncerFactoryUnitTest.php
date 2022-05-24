@@ -36,6 +36,7 @@ final class FileSyncerFactoryUnitTest extends TestCase
         $executableFinder = $this->executableFinder->reveal();
         $phpFileSyncer = $this->phpFileSyncer->reveal();
         $rsyncFileSyncer = $this->rsyncFileSyncer->reveal();
+
         return new FileSyncerFactory($executableFinder, $phpFileSyncer, $rsyncFileSyncer);
     }
 

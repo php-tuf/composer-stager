@@ -46,6 +46,7 @@ final class BeginnerUnitTest extends TestCase
     {
         $fileSyncer = $this->fileSyncer->reveal();
         $preconditions = $this->preconditions->reveal();
+
         return new Beginner($fileSyncer, $preconditions);
     }
 

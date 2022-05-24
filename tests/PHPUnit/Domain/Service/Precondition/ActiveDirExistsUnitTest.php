@@ -38,6 +38,7 @@ final class ActiveDirExistsUnitTest extends TestCase
     protected function createSut(): ActiveDirExists
     {
         $filesystem = $this->filesystem->reveal();
+
         return new ActiveDirExists($filesystem);
     }
 

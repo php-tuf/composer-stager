@@ -35,6 +35,7 @@ final class MissingInterfaceRule extends AbstractRule
         }
 
         $message = 'Non-factory class must implement an interface';
+
         return [RuleErrorBuilder::message($message)->build()];
     }
 }

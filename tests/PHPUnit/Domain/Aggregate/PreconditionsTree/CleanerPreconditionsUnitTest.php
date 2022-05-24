@@ -41,6 +41,7 @@ final class CleanerPreconditionsUnitTest extends TestCase
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
+
         return new CleanerPreconditions($commonPreconditions, $stagingDirIsReady);
     }
 

@@ -63,6 +63,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     {
         $filesystem = $this->filesystem->reveal();
         $rsync = $this->rsync->reveal();
+
         return new RsyncFileSyncer($filesystem, $rsync);
     }
 

@@ -31,6 +31,7 @@ final class ComposerIsAvailableUnitTest extends TestCase
     protected function createSut(): ComposerIsAvailable
     {
         $executableFinder = $this->executableFinder->reveal();
+
         return new ComposerIsAvailable($executableFinder);
     }
 

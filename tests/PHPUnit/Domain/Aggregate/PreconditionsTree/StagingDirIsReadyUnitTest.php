@@ -40,6 +40,7 @@ final class StagingDirIsReadyUnitTest extends TestCase
     {
         $stagingDirExists = $this->stagingDirExists->reveal();
         $stagingDirIsWritable = $this->stagingDirIsWritable->reveal();
+
         return new StagingDirIsReady($stagingDirExists, $stagingDirIsWritable);
     }
 

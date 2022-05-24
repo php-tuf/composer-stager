@@ -42,11 +42,13 @@ final class ExecutableFinder implements ExecutableFinderInterface
                 sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH.', $name),
             );
             $this->setCache($name, $cache);
+
             throw $cache;
         }
 
         // Cache and return path if found.
         $this->setCache($name, $path);
+
         return $path;
     }
 

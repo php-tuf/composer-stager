@@ -65,6 +65,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
     private function findExecutable(): string
     {
         $name = $this->executableName();
+
         return $this->executableFinder->find($name);
     }
 }

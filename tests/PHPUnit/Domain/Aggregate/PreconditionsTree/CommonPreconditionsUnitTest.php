@@ -49,6 +49,7 @@ final class CommonPreconditionsUnitTest extends TestCase
         $activeDirExists = $this->activeDirExists->reveal();
         $activeDirIsWritable = $this->activeDirIsWritable->reveal();
         $activeAndStagingDirsAreDifferent = $this->activeAndStagingDirsAreDifferent->reveal();
+
         return new CommonPreconditions(
             $composerIsAvailable,
             $activeDirExists,

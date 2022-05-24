@@ -38,6 +38,7 @@ final class StagingDirIsWritableUnitTest extends TestCase
     protected function createSut(): StagingDirIsWritable
     {
         $filesystem = $this->filesystem->reveal();
+
         return new StagingDirIsWritable($filesystem);
     }
 

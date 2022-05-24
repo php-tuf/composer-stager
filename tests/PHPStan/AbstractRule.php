@@ -32,6 +32,7 @@ abstract class AbstractRule implements Rule
 
         $namespace = $node->namespacedName;
         assert($namespace instanceof Name);
+
         return $this->reflectionProvider->getClass($namespace->toString());
     }
 
@@ -54,6 +55,7 @@ abstract class AbstractRule implements Rule
     protected function isFactoryClass(ClassReflection $class): bool
     {
         $factory = 'Factory';
+
         return substr($class->getName(), -strlen($factory)) === $factory;
     }
 
@@ -71,6 +73,7 @@ abstract class AbstractRule implements Rule
     {
         $nameParts = explode('\\', $name);
         array_pop($nameParts);
+
         return implode('\\', $nameParts);
     }
 }

@@ -38,6 +38,7 @@ final class ActiveDirIsWritableUnitTest extends TestCase
     protected function createSut(): ActiveDirIsWritable
     {
         $filesystem = $this->filesystem->reveal();
+
         return new ActiveDirIsWritable($filesystem);
     }
 

@@ -196,6 +196,7 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
                 public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
                 {
                     $this->spy->report();
+
                     return $this->isFulfilled;
                 }
             };

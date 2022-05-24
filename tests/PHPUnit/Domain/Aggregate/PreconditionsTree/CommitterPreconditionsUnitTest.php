@@ -41,6 +41,7 @@ final class CommitterPreconditionsUnitTest extends TestCase
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
+
         return new CommitterPreconditions($commonPreconditions, $stagingDirIsReady);
     }
 

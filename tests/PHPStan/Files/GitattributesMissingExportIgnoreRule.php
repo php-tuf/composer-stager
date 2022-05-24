@@ -81,9 +81,11 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
         $gitattributes = array_map(static function ($value) {
             $value = ltrim($value, DIRECTORY_SEPARATOR);
             preg_match('/^(.*)\s*export-ignore$/', $value, $matches);
+
             return trim($matches[1]);
         }, $gitattributes);
         $gitattributes = array_filter($gitattributes);
+
         return in_array($filename, $gitattributes, true);
     }
 }

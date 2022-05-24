@@ -40,6 +40,7 @@ final class FilesystemUnitTest extends TestCase
     protected function createSut(): Filesystem
     {
         $symfonyFilesystem = $this->symfonyFilesystem->reveal();
+
         return new Filesystem($symfonyFilesystem);
     }
 

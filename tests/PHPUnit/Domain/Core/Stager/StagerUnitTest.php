@@ -50,6 +50,7 @@ final class StagerUnitTest extends TestCase
 
         $composerRunner = $this->composerRunner->reveal();
         $preconditions = $this->preconditions->reveal();
+
         return new Stager($composerRunner, $preconditions);
     }
 

@@ -29,6 +29,7 @@ final class MissingExceptionInterfaceRule extends AbstractRule
 
         if (!array_key_exists(ExceptionInterface::class, $class->getInterfaces())) {
             $message = sprintf('Throwable class must implement %s', ExceptionInterface::class);
+
             return [RuleErrorBuilder::message($message)->build()];
         }
 

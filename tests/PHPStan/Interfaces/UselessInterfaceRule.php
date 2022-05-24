@@ -28,6 +28,7 @@ final class UselessInterfaceRule extends AbstractRule
         }
 
         $message = 'Interface is useless: it has no methods or constants';
+
         return [RuleErrorBuilder::message($message)->build()];
     }
 }

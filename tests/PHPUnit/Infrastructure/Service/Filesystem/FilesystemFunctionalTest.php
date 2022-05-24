@@ -45,6 +45,7 @@ final class FilesystemFunctionalTest extends TestCase
     {
         /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem $filesystem */
         $filesystem = $this->container->get(Filesystem::class);
+
         return $filesystem;
     }
 

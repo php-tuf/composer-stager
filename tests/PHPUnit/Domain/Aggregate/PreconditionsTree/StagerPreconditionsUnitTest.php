@@ -40,6 +40,7 @@ final class StagerPreconditionsUnitTest extends TestCase
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
+
         return new StagerPreconditions($commonPreconditions, $stagingDirIsReady);
     }
 

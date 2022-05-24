@@ -40,6 +40,7 @@ final class PathList implements PathListInterface
                 $given = is_object($path)
                     ? get_class($path)
                     : gettype($path);
+
                 throw new InvalidArgumentException(sprintf(
                     'Paths must be strings. Given %s.',
                     $given,

@@ -49,6 +49,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     {
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+
         return new PhpFileSyncer($filesystem, $pathFactory);
     }
 

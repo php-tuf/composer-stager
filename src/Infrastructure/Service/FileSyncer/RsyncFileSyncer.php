@@ -104,6 +104,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     private function isDescendant(string $descendant, string $ancestor): bool
     {
         $ancestor .= DIRECTORY_SEPARATOR;
+
         return strpos($descendant, $ancestor) === 0;
     }
 

@@ -172,6 +172,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         $exclusions = array_map(function ($path) use ($directory): string {
             $path = $this->pathFactory::create($path);
+
             return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
 
