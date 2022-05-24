@@ -3,11 +3,13 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -31,8 +33,20 @@ final class Filesystem implements FilesystemInterface
         $sourceResolved = $source->resolve();
         $destinationResolved = $destination->resolve();
 
+        if ($sourceResolved === $destinationResolved) {
+            throw new LogicException(sprintf(
+                'The source and destination directories cannot be the same at "%s"',
+                $sourceResolved
+            ));
+        }
+
         try {
             $this->symfonyFilesystem->copy($sourceResolved, $destinationResolved, true);
+        } catch (SymfonyFileNotFoundException $e) {
+            throw new LogicException(sprintf(
+                'The source directory does not exist at "%s"',
+                $sourceResolved
+            ));
         } catch (SymfonyIOException $e) {
             throw new IOException(sprintf(
                 'Failed to copy "%s" to "%s".',

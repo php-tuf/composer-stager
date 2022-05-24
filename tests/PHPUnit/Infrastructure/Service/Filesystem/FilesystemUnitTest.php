@@ -3,11 +3,13 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -93,6 +95,40 @@ final class FilesystemUnitTest extends TestCase
             $this->activeDir->reveal(),
             $this->stagingDir->reveal()
         );
+    }
+
+    /** @covers ::copy */
+    public function testCopySourceDirectoryNotFound(): void
+    {
+        $source = $this->activeDir->reveal();
+        $destination = $this->stagingDir->reveal();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+
+        $this->symfonyFilesystem
+            ->copy(Argument::cetera())
+            ->willThrow(SymfonyFileNotFoundException::class);
+        $sut = $this->createSut();
+
+        $sut->copy($source, $destination);
+    }
+
+    /** @covers ::copy */
+    public function testCopyDirectoriesTheSame(): void
+    {
+        $this->activeDir
+            ->resolve()
+            ->willReturn('same');
+        $source = $this->activeDir->reveal();
+        $destination = $this->activeDir->reveal();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
+
+        $sut = $this->createSut();
+
+        $sut->copy($source, $destination);
     }
 
     /**

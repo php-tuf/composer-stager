@@ -124,7 +124,10 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         return scandir($destination->resolve()) === ['.', '..'];
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
+    /**
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
+     */
     private function copySourceFilesToDestination(
         PathInterface $source,
         PathInterface $destination,
