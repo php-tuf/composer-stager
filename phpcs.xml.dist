@@ -16,6 +16,7 @@
     <file>tests</file>
 
     <rule ref="PHPCompatibility"/>
+    <!-- @todo Don't forget to update this once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->
     <config name="testVersion" value="7.3-"/>
 
     <rule ref="PSR2">
