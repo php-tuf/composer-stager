@@ -209,21 +209,22 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
             $createLeaf(false),
         ];
 
+        // phpcs:disable SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma
         $sut = $this->createSut(
             $leaves[0],
             $this->createSut(
                 $this->createSut(
                     $leaves[1],
-                ),
+                )
             ),
             $this->createSut(
                 $this->createSut(
                     $this->createSut(
                         $this->createSut(
                             $leaves[2],
-                        ),
-                    ),
-                ),
+                        )
+                    )
+                )
             ),
             $this->createSut(
                 $this->createSut(
@@ -236,17 +237,18 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
                                             $this->createSut(
                                                 $this->createSut(
                                                     $leaves[3],
-                                                ),
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         );
+        // phpcs:enable
 
         self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
         self::assertSame($leaves, $sut->getLeaves());
