@@ -17,10 +17,10 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="UnitTest.php">tests/PHPUnit</directory>
+            <directory suffix="UnitTest.php">tests</directory>
         </testsuite>
         <testsuite name="Functional">
-            <directory suffix="FunctionalTest.php">tests/PHPUnit</directory>
+            <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
     </testsuites>
 
