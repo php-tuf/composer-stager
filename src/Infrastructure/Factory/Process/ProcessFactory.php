@@ -13,7 +13,7 @@ final class ProcessFactory implements ProcessFactoryInterface
         try {
             return new Process($command);
         } catch (ExceptionInterface $e) { // @codeCoverageIgnore
-            throw new LogicException($e->getMessage(), (int) $e->getCode(), $e); // @codeCoverageIgnore
+            throw new LogicException($e->getMessage(), $e->getCode(), $e); // @codeCoverageIgnore
         }
     }
 }

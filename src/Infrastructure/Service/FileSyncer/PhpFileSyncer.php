@@ -217,7 +217,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (UnexpectedValueException $e) {
-            throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new IOException($e->getMessage(), $e->getCode(), $e);
         }
     }
 

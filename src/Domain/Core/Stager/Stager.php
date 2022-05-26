@@ -80,7 +80,7 @@ final class Stager implements StagerInterface
         try {
             $this->composerRunner->run($command, $callback, $timeout);
         } catch (ExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

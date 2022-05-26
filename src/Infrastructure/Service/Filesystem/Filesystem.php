@@ -52,7 +52,7 @@ final class Filesystem implements FilesystemInterface
                 'Failed to copy "%s" to "%s".',
                 $sourceResolved,
                 $destinationResolved,
-            ), (int) $e->getCode(), $e);
+            ), $e->getCode(), $e);
         }
     }
 
@@ -76,7 +76,7 @@ final class Filesystem implements FilesystemInterface
             throw new IOException(sprintf(
                 'Failed to create directory at "%s".',
                 $pathResolved,
-            ), (int) $e->getCode(), $e);
+            ), $e->getCode(), $e);
         }
     }
 
@@ -92,7 +92,7 @@ final class Filesystem implements FilesystemInterface
 
             $this->symfonyFilesystem->remove($path->resolve());
         } catch (SymfonyExceptionInterface $e) {
-            throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new IOException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

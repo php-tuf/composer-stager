@@ -35,7 +35,7 @@ final class Cleaner implements CleanerInterface
         try {
             $this->filesystem->remove($stagingDir, $callback, $timeout);
         } catch (IOException $e) {
-            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }
