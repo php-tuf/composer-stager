@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Classes;
+namespace PhpTuf\ComposerStager\PHPStan\Classes;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 
 /**
  * Requires non-factory classes to implement an interface.

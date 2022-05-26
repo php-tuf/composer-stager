@@ -8,6 +8,7 @@
 /infection.json      export-ignore
 /phpcs.xml.dist      export-ignore
 /phpmd.xml           export-ignore
+/phpstan             export-ignore
 /phpstan.neon        export-ignore
 /phpunit.xml.dist    export-ignore
 /psalm.xml.dist      export-ignore

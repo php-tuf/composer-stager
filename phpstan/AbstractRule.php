@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan;
+namespace PhpTuf\ComposerStager\PHPStan;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;

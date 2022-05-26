@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Files;
+namespace PhpTuf\ComposerStager\PHPStan\Files;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\FileNode;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 
 /**
  * Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
@@ -20,7 +20,6 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
         'composer.json',
         'config',
         'src',
-        'tests',
         'vendor',
     ];
 
@@ -47,7 +46,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
 
         $errors = [];
 
-        $rootPaths = scandir(__DIR__ . '/../../../');
+        $rootPaths = scandir(__DIR__ . '/../../');
 
         foreach ($rootPaths as $rootPath) {
             if (in_array($rootPath, self::SPECIAL_PATHS, true)) {
@@ -58,7 +57,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
                 continue;
             }
 
-            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\Tests\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS";
+            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS";
             $errors[] = RuleErrorBuilder::message($message)->build();
         }
 
@@ -77,7 +76,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
     /** Determines whether the given filename is excluded from archive files by .gitattributes. */
     private function isExcluded(string $filename): bool
     {
-        $gitattributes = file(__DIR__ . '/../../../.gitattributes');
+        $gitattributes = file(__DIR__ . '/../../.gitattributes');
         $gitattributes = array_map(static function ($value) {
             $value = ltrim($value, DIRECTORY_SEPARATOR);
             preg_match('/^(.*)\s*export-ignore$/', $value, $matches);
