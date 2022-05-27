@@ -12,6 +12,7 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
+    <file>phpcs</file>
     <file>phpstan</file>
     <file>src</file>
     <file>tests</file>
@@ -235,6 +236,8 @@
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
+    <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
+
     <!-- @todo Enable once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->
     <!-- <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/> -->
     <!-- <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/> -->
@@ -247,16 +250,16 @@
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.traversableTypeHints"/> -->
 
     <!-- Exclusions for test classes. -->
-    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
 
 </ruleset>
