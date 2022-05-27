@@ -25,8 +25,8 @@
         <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
     </rule>
 
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Arrays.ArrayIndent"/>
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.PHP.RequireStrictTypes.MissingDeclaration"/>
 
     <rule ref="PEAR.Commenting.ClassComment.Missing">
@@ -37,10 +37,10 @@
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
     <rule ref="Squiz.Arrays.ArrayDeclaration">
         <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
-        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/>
-        <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>
-        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
         <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/>
     </rule>
     <rule ref="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
     <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
@@ -85,7 +85,6 @@
     <rule ref="SlevomatCodingStandard.Classes.UselessLateStaticBinding"/>
 
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
-    <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"><properties>
         <property name="annotationsGroups" type="array">
             <element value="@coversDefaultClass"/>
@@ -102,6 +101,7 @@
         </property>
         <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
     </properties></rule>
+    <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
     <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
@@ -120,8 +120,8 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
 
@@ -146,16 +146,14 @@
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration"/>
-    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>
-
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
         <!-- @todo It would be nice to reduce this. -->
         <property name="maxLinesLength" value="40"/>
     </properties></rule>
-
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall"/>
     <rule ref="SlevomatCodingStandard.Functions.RequireSingleLineCall"/>
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
     <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
@@ -178,8 +176,8 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
-    <rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
 
     <rule ref="SlevomatCodingStandard.Numbers.DisallowNumericLiteralSeparator"/>
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator"/>
@@ -259,19 +257,6 @@
     <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
 
 </ruleset>
