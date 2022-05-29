@@ -44,7 +44,7 @@ final class AlphabeticallySortedThrowsSniff implements Sniff
         );
     }
 
-    private function getCurrentThrows(File $phpcsFile, $stackPtr)
+    private function getCurrentThrows(File $phpcsFile, $stackPtr): string
     {
         $tokens = $phpcsFile->getTokens();
         $commentStringPtr = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $stackPtr);
