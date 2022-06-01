@@ -135,9 +135,7 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator"/>
 
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
-    <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>
     <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
-    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>
 
     <rule ref="SlevomatCodingStandard.Files.LineLength"/>
 
@@ -243,7 +241,11 @@
     <!-- <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/> -->
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/> -->
 
+    <!-- @todo Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
+    <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>
+
     <!-- @todo Enable once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
+    <!-- <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/> -->
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.enableUnionTypeHint"/> -->
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableMixedTypeHint"/> -->
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableUnionTypeHint"/> -->
