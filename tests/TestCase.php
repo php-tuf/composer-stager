@@ -16,7 +16,8 @@ abstract class TestCase extends PHPUnitTestCase
 {
     use ProphecyTrait;
 
-    protected const TEST_ENV = __DIR__ . '/../../var/phpunit/test-env';
+    protected const PROJECT_ROOT = __DIR__ . '/..';
+    protected const TEST_ENV = self::PROJECT_ROOT . '/var/phpunit/test-env';
     protected const TEST_WORKING_DIR = self::TEST_ENV . '/working-dir';
     protected const ACTIVE_DIR = 'active-dir';
     protected const STAGING_DIR = 'staging-dir';
@@ -27,7 +28,7 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $filesystem = new Filesystem();
 
-        // Create the test environment,
+        // Create the test environment.
         $filesystem->mkdir(self::TEST_WORKING_DIR);
         chdir(self::TEST_WORKING_DIR);
 

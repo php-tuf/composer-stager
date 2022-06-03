@@ -26,7 +26,7 @@ final class FilesystemFunctionalTest extends TestCase
         // Build the service container.
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(__DIR__ . '/../../../../config/services.yml');
+        $loader->load(TestCase::PROJECT_ROOT . '/config/services.yml');
         $container->compile();
         $this->container = $container;
 

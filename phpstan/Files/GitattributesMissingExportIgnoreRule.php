@@ -46,7 +46,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
 
         $errors = [];
 
-        $rootPaths = scandir(__DIR__ . '/../../');
+        $rootPaths = scandir(self::PROJECT_ROOT);
 
         foreach ($rootPaths as $rootPath) {
             if (in_array($rootPath, self::SPECIAL_PATHS, true)) {
@@ -76,7 +76,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
     /** Determines whether the given filename is excluded from archive files by .gitattributes. */
     private function isExcluded(string $filename): bool
     {
-        $gitattributes = file(__DIR__ . '/../../.gitattributes');
+        $gitattributes = file(self::PROJECT_ROOT . '/.gitattributes');
         $gitattributes = array_map(static function ($value) {
             $value = ltrim($value, DIRECTORY_SEPARATOR);
             preg_match('/^(.*)\s*export-ignore$/', $value, $matches);

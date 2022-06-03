@@ -31,7 +31,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         // Build the service container.
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(__DIR__ . '/../../config/services.yml');
+        $loader->load(TestCase::PROJECT_ROOT . '/config/services.yml');
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
