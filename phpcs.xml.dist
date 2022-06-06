@@ -234,6 +234,7 @@
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
+    <rule ref="ComposerStager.Commenting.AlphabeticallySortedCovers"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
 
     <!-- @todo Enable once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->

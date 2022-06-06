@@ -37,8 +37,8 @@ final class StagingDirExistsUnitTest extends TestCase
     }
 
     /**
-     * @covers ::isFulfilled
      * @covers ::assertIsFulfilled
+     * @covers ::isFulfilled
      */
     public function testIsFulfilled(): void
     {
