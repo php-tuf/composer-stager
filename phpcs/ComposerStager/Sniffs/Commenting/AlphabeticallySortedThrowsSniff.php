@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace ComposerStager\Sniffs\Commenting;
+namespace PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
