@@ -235,6 +235,7 @@
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedCovers"/>
+    <rule ref="ComposerStager.Commenting.AlphabeticallySortedProperty"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedUses"/>
 
