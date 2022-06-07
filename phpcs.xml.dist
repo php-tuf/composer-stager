@@ -28,7 +28,6 @@
 
     <rule ref="Generic.Arrays.ArrayIndent"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
-    <rule ref="Generic.PHP.RequireStrictTypes.MissingDeclaration"/>
 
     <rule ref="PEAR.Commenting.ClassComment.Missing">
         <include-pattern>*Exception.php$</include-pattern>
