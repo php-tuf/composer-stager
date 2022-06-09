@@ -120,7 +120,6 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
@@ -257,7 +256,6 @@
     <!-- Exclusions for test classes. -->
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
