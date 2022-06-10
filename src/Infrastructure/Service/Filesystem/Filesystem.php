@@ -24,9 +24,9 @@ final class Filesystem implements FilesystemInterface
     }
 
     /**
-     * @todo Assert that source and destination are not the same and that both
-     *   are files (not directories) and throw a LogicException if not. (Don't
-     *   forget to add the appropriate annotation to the interface.)
+     * @todo Assert that source and destination are both are files (not
+     *   directories) and throw a LogicException if not. (Don't forget to
+     *   add the appropriate annotation to the interface.)
      */
     public function copy(PathInterface $source, PathInterface $destination): void
     {
