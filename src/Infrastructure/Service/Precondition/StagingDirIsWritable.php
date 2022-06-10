@@ -28,7 +28,7 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        return $this->filesystem->isWritable($stagingDir->resolve());
+        return $this->filesystem->isWritable($stagingDir);
     }
 
     protected function getFulfilledStatusMessage(): string

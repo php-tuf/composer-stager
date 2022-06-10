@@ -7,6 +7,7 @@ final class UnixLikePath extends AbstractPath
     protected function doResolve(string $basePath): string
     {
         $absolute = $this->makeAbsolute($basePath);
+
         return $this->normalize($absolute);
     }
 

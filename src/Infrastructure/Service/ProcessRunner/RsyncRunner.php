@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
  * Before using this class outside the infrastructure layer, consider a
  * higher-level abstraction, e.g.:
  *
- * @see \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
  * @see \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerFactoryInterface
+ * @see \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
  */
 final class RsyncRunner extends AbstractRunner implements RsyncRunnerInterface
 {

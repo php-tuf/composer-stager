@@ -28,20 +28,22 @@ final class PathList implements PathListInterface
     }
 
     /**
-     * @param array<mixed> $paths
+     * @param array<string> $paths
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
     private function assertValidInput(array $paths): void
     {
         foreach ($paths as $path) {
+            /** @psalm-suppress DocblockTypeContradiction */
             if (!is_string($path)) {
                 $given = is_object($path)
                     ? get_class($path)
                     : gettype($path);
+
                 throw new InvalidArgumentException(sprintf(
                     'Paths must be strings. Given %s.',
-                    $given
+                    $given,
                 ));
             }
         }

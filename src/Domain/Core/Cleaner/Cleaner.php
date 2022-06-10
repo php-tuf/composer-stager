@@ -32,12 +32,10 @@ final class Cleaner implements CleanerInterface
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
 
-        $stagingDirResolved = $stagingDir->resolve();
-
         try {
-            $this->filesystem->remove($stagingDirResolved, $callback, $timeout);
+            $this->filesystem->remove($stagingDir, $callback, $timeout);
         } catch (IOException $e) {
-            throw new RuntimeException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

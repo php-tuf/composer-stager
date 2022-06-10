@@ -58,6 +58,8 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "PhpTuf\\ComposerStager\\PHPCS\\": "phpcs/",
+            "PhpTuf\\ComposerStager\\PHPStan\\": "phpstan/",
             "PhpTuf\\ComposerStager\\Tests\\": "tests/"
         }
     },
@@ -80,6 +82,7 @@
         }
     },
     "scripts": {
+        "post-install-cmd": "phpcs --config-set installed_paths ../../phpcompatibility/php-compatibility,../../slevomat/coding-standard,phpcs/ComposerStager",
         "all": [
             "grumphp run",
             "@deptrac"

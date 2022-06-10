@@ -56,7 +56,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         if ($source === $destination->resolve()) {
             throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source)
+                sprintf('The source and destination directories cannot be the same at "%s"', $source),
             );
         }
     }
@@ -64,10 +64,11 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceExists(PathInterface $source): void
     {
-        $source = $source->resolve();
-
         if (!$this->filesystem->exists($source)) {
-            throw new LogicException(sprintf('The source directory does not exist at "%s"', $source));
+            throw new LogicException(sprintf(
+                'The source directory does not exist at "%s"',
+                $source->resolve(),
+            ));
         }
     }
 
@@ -75,7 +76,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
-        $this->filesystem->mkdir($destination->resolve());
+        $this->filesystem->mkdir($destination);
     }
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
@@ -105,12 +106,16 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
                 continue;
             }
 
-            if ($this->filesystem->exists($sourceFilePathname)) {
+            $sourceFilePath = $this->pathFactory::create($sourceFilePathname);
+
+            if ($this->filesystem->exists($sourceFilePath)) {
                 continue;
             }
 
+            $destinationFilePath = $this->pathFactory::create($destinationFilePathname);
+
             // If it doesn't exist in the source, delete it from the destination.
-            $this->filesystem->remove($destinationFilePathname);
+            $this->filesystem->remove($destinationFilePath);
         }
     }
 
@@ -119,7 +124,10 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         return scandir($destination->resolve()) === ['.', '..'];
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
+    /**
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
+     */
     private function copySourceFilesToDestination(
         PathInterface $source,
         PathInterface $destination,
@@ -131,8 +139,14 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $destinationResolved = $destination->resolve();
 
         foreach ($sourceFiles as $sourceFilePathname) {
+            // @todo Once support for Symfony 4 is dropped, see if any of this logic can
+            //   be eliminated in favor of the new path manipulation utilities in Symfony 5.4:
+            //   https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
             $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
             $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
+
+            $sourceFilePathname = $this->pathFactory::create($sourceFilePathname);
+            $destinationFilePathname = $this->pathFactory::create($destinationFilePathname);
 
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but
@@ -161,6 +175,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         $exclusions = array_map(function ($path) use ($directory): string {
             $path = $this->pathFactory::create($path);
+
             return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
 
@@ -199,10 +214,10 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         try {
             return new RecursiveDirectoryIterator(
                 $directory,
-                FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
+                FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (UnexpectedValueException $e) {
-            throw new IOException($e->getMessage(), (int) $e->getCode(), $e);
+            throw new IOException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
