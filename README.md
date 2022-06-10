@@ -1,6 +1,6 @@
 # Composer Stager
 
-[![Latest Unstable Version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
+[![Latest stable version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
 [![Tests status](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
@@ -9,15 +9,23 @@
 
 Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
 
-## Composer library
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuring services](#configuring-services)
+- [Example](#example)
+- [Contributing](#contributing)
 
-The Composer library is installed, of course, via Composer:
+## Installation
+
+The library is installed via Composer:
 
 ```shell
 composer require php-tuf/composer-stager
 ```
 
-It is invoked via its PHP API. Given a configured service container that supports autowiring (e.g., [Symfony's](https://symfony.com/doc/current/service_container.html)) its services can be used like the following, for example:
+## Usage
+
+It is invoked via its PHP API. Given a configured service container ([see below](#configuring-services)), its services can be used like the following, for example:
 
 ```php
 class Updater
@@ -62,6 +70,41 @@ class Updater
     }
 }
 ```
+
+## Configuring services
+
+Composer Stager uses the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) pattern, and its services are best accessed via a container that supports autowiring, e.g., [Symfony's](https://symfony.com/doc/current/service_container.html). A basic implementation could look something like this:
+
+```yaml
+---
+services:
+
+    _defaults:
+        autoconfigure: true
+        autowire: true
+        public: false
+
+    PhpTuf\ComposerStager\:
+        resource: '../vendor/php-tuf/composer-stager/src/*'
+        public: true
+        exclude:
+            - '../vendor/php-tuf/composer-stager/src/Domain/Exception'
+            - '../vendor/php-tuf/composer-stager/src/Infrastructure/Value'
+
+    PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory:
+        arguments:
+            $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer'
+            $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer'
+    PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory', 'create' ]
+
+    Symfony\Component\Filesystem\Filesystem: ~
+    Symfony\Component\Process\ExecutableFinder: ~
+```
+
+## Example
+
+A complete, functioning example implementation of Composer Stager can be found in the [Composer Stager Console](https://github.com/php-tuf/composer-stager-console) repository.
 
 ## Contributing
 
