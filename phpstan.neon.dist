@@ -1,3 +1,6 @@
+parametersSchema:
+	gitattributesExportInclude: listOf(string())
+
 parameters:
     level: max
     tmpDir: var/phpstan
@@ -5,10 +8,24 @@ parameters:
         - src
         - .gitattributes
     treatPhpDocTypesAsCertain: false
+    gitattributesExportInclude:
+        - composer.json
+        - config
+        - LICENSE
+        - README.md
+        - src
 
 rules:
     - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
-    - PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
     - PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+
+services:
+    -
+        # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
+        class: PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule
+        arguments:
+            gitattributesExportInclude: %gitattributesExportInclude%
+        tags:
+            - phpstan.rules.rule
