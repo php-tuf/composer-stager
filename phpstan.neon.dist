@@ -1,5 +1,6 @@
 parametersSchema:
 	gitattributesExportInclude: listOf(string())
+	preconditionSystemHash: string()
 
 parameters:
     level: max
@@ -8,12 +9,15 @@ parameters:
         - src
         - .gitattributes
     treatPhpDocTypesAsCertain: false
+
+    # Custom parameters.
     gitattributesExportInclude:
         - composer.json
         - config
         - LICENSE
         - README.md
         - src
+    preconditionSystemHash: 53c6bc489fbde02df4ef1f2dd300ab13
 
 rules:
     - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
@@ -22,6 +26,13 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
 
 services:
+    -
+        # Ensures that precondtion system diagrams stay current.
+        class: PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule
+        arguments:
+            preconditionSystemHash: %preconditionSystemHash%
+        tags:
+            - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
         class: PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule
