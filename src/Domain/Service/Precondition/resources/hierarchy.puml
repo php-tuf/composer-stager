@@ -9,7 +9,6 @@
 
 hide circle
 
-skinparam ClassFontStyle bold
 skinparam RoundCorner 15
 skinparam LineType polyline
 
