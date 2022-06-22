@@ -19,6 +19,7 @@
       <w>phpcs</w>
       <w>phplint</w>
       <w>phpstan</w>
+      <w>precondition</w>
       <w>puml</w>
       <w>qossmic</w>
       <w>rlptgo</w>
