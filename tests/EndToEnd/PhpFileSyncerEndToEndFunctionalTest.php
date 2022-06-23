@@ -29,6 +29,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists

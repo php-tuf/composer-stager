@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 
 final class CommonPreconditions extends AbstractPreconditionsTree implements CommonPreconditionsInterface
@@ -14,7 +15,8 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
         ComposerIsAvailableInterface $composerIsAvailable,
         ActiveDirExistsInterface $activeDirExists,
         ActiveDirIsWritableInterface $activeDirIsWritable,
-        ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent
+        ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
+        CodebaseContainsNoSymlinksInterface $codebaseContainsNoSymlinks
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
