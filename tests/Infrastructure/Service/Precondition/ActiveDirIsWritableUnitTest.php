@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable::__construct
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class StagingDirIsWritableUnitTest extends TestCase
+final class ActiveDirIsWritableUnitTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -35,11 +35,11 @@ final class StagingDirIsWritableUnitTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
 
-    protected function createSut(): StagingDirIsWritable
+    protected function createSut(): ActiveDirIsWritable
     {
         $filesystem = $this->filesystem->reveal();
 
-        return new StagingDirIsWritable($filesystem);
+        return new ActiveDirIsWritable($filesystem);
     }
 
     /**
@@ -52,12 +52,14 @@ final class StagingDirIsWritableUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->isWritable($stagingDir)
+            ->isWritable($activeDir)
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        self::assertEquals(true, $sut->isFulfilled($activeDir, $stagingDir));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertEquals(true, $isFulfilled);
     }
 
     /**
@@ -72,7 +74,7 @@ final class StagingDirIsWritableUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->isWritable($stagingDir)
+            ->isWritable($activeDir)
             ->willReturn(false);
         $sut = $this->createSut();
 

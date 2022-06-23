@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;

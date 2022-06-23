@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions;
+use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
@@ -21,7 +21,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class CommitterPreconditionsUnitTest extends TestCase
+final class CleanerPreconditionsUnitTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -37,12 +37,12 @@ final class CommitterPreconditionsUnitTest extends TestCase
         $this->stagingDirIsReady = $this->prophesize(StagingDirIsReadyInterface::class);
     }
 
-    protected function createSut(): CommitterPreconditions
+    protected function createSut(): CleanerPreconditions
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
 
-        return new CommitterPreconditions($commonPreconditions, $stagingDirIsReady);
+        return new CleanerPreconditions($commonPreconditions, $stagingDirIsReady);
     }
 
     /**

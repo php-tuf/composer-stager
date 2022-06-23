@@ -1,17 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists
- *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists::__construct
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
@@ -20,7 +17,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class ActiveDirExistsUnitTest extends TestCase
+final class ActiveAndStagingDirsAreDifferentUnitTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -32,53 +29,43 @@ final class ActiveDirExistsUnitTest extends TestCase
         $this->stagingDir
             ->resolve()
             ->willReturn(self::STAGING_DIR);
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
 
-    protected function createSut(): ActiveDirExists
+    protected function createSut(): ActiveAndStagingDirsAreDifferent
     {
-        $filesystem = $this->filesystem->reveal();
-
-        return new ActiveDirExists($filesystem);
+        return new ActiveAndStagingDirsAreDifferent();
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     */
+    /** @covers ::isFulfilled */
     public function testIsFulfilled(): void
     {
+        $this->activeDir
+            ->resolve()
+            ->willReturn('/one/different');
         $activeDir = $this->activeDir->reveal();
+        $this->stagingDir
+            ->resolve()
+            ->willReturn('/two/different');
         $stagingDir = $this->stagingDir->reveal();
-        $this->filesystem
-            ->exists($activeDir)
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
         $sut = $this->createSut();
 
         self::assertEquals(true, $sut->isFulfilled($activeDir, $stagingDir));
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     */
+    /** @covers ::isFulfilled */
     public function testIsUnfulfilled(): void
     {
         $this->expectException(PreconditionException::class);
 
+        $this->activeDir
+            ->resolve()
+            ->willReturn('/same');
         $activeDir = $this->activeDir->reveal();
+        $this->stagingDir
+            ->resolve()
+            ->willReturn('/same');
         $stagingDir = $this->stagingDir->reveal();
-        $this->filesystem
-            ->exists($activeDir)
-            ->willReturn(false);
         $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertFalse($isFulfilled);
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
