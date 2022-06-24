@@ -10,9 +10,6 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Provides a base for end-to-end functional tests, including the domain and
@@ -28,10 +25,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        // Build the service container.
-        $container = new ContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(TestCase::PROJECT_ROOT . '/config/services.yml');
+        $container = $this->getContainer();
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
