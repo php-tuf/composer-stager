@@ -9,9 +9,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 
-/**
- * Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
- */
+/** Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files. */
 final class GitattributesMissingExportIgnoreRule extends AbstractRule
 {
     private const SPECIAL_PATHS = [

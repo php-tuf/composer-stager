@@ -8,9 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 
-/**
- * Requires non-factory classes to implement an interface.
- */
+/** Requires non-factory classes to implement an interface. */
 final class MissingInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string

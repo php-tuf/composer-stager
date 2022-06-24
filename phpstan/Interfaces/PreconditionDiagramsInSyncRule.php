@@ -11,9 +11,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 use ReflectionClass;
 
-/**
- * Ensures that precondtion system diagrams stay current.
- */
+/** Ensures that precondtion system diagrams stay current. */
 final class PreconditionDiagramsInSyncRule extends AbstractRule
 {
     /** @var string */

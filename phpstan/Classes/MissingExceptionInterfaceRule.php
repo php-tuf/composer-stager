@@ -9,9 +9,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 
-/**
- * Requires throwable classes to implement ExceptionInterface.
- */
+/** Requires throwable classes to implement ExceptionInterface. */
 final class MissingExceptionInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
