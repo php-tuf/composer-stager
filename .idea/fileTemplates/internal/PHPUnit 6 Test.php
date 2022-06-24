@@ -10,8 +10,8 @@ use ${TESTED_NAME};
 #elseif (${TESTED_NAME} && ${TESTED_NAMESPACE} && ${NAMESPACE} != ${TESTED_NAMESPACE})
 use ${TESTED_NAMESPACE}\\${TESTED_NAME};
 #end
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Tests\TestCase;
 
-class ${NAME} extends TestCase {
+final class ${NAME} extends TestCase {
 
 }
