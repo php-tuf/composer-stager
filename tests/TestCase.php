@@ -26,6 +26,8 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createTestEnvironment(string $activeDir): void
     {
+        self::removeTestEnvironment();
+
         $filesystem = new Filesystem();
 
         // Create the test environment.

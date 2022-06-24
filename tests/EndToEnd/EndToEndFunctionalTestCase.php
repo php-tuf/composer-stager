@@ -48,8 +48,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $this->committer = $container->get(Committer::class);
         $this->cleaner = $container->get(Cleaner::class);
 
-        // Refresh the test environment.
-        self::removeTestEnvironment();
+        // Create the test environment.
         self::createTestEnvironment(self::ACTIVE_DIR);
     }
 
@@ -67,10 +66,6 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     /** @dataProvider providerDirectories */
     public function testSync($activeDir, $stagingDir): void
     {
-        // Set up environment.
-        self::removeTestEnvironment();
-        self::createTestEnvironment($activeDir);
-
         $activeDirPath = PathFactory::create($activeDir);
         $stagingDirPath = PathFactory::create($stagingDir);
 
