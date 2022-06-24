@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -23,6 +24,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
 final class PhpFileSyncerUnitTest extends TestCase
 {
@@ -36,6 +38,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->destination
             ->resolve()
             ->willReturn(self::STAGING_DIR);
+        $this->fileFinder = $this->prophesize(RecursiveFileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->mkdir(Argument::any());
@@ -47,10 +50,11 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     protected function createSut(): PhpFileSyncer
     {
+        $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
 
-        return new PhpFileSyncer($filesystem, $pathFactory);
+        return new PhpFileSyncer($fileFinder, $filesystem, $pathFactory);
     }
 
     public function testSyncSourceNotFound(): void
