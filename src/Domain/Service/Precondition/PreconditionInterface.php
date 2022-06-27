@@ -36,6 +36,8 @@ interface PreconditionInterface
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool;
 
     /**
+     * Asserts that the precondition is fulfilled.
+     *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the precondition is unfulfilled.
      */

@@ -76,6 +76,8 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
      * @covers ::isFulfilled
      *
      * @dataProvider providerBasicFunctionality
+     *
+     * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
     public function testBasicFunctionality(
         $name,
@@ -210,6 +212,8 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
         ];
 
         // phpcs:disable SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma
+        //   Trailing commas on this array make it cross PhpStorm's complexity threshold:
+        //   "Code fragment is too complex to parse and will be treated as plain text."
         $sut = $this->createSut(
             $leaves[0],
             $this->createSut(
