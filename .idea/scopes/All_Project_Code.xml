@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="All Project Code" pattern="file[composer-stager]:src//*||file[composer-stager]:tests//*||file[composer-stager]:phpcs//*||file[composer-stager]:phpstan//*||file[composer-stager]:config//*||file[composer-stager]:.github//*||file:.gitattributes||file:.gitignore||file:composer.json||file:deptrac.yaml||file:grumphp.yml.dist||file:infection.json||file:phpcs.xml.dist||file:phpmd.xml||file:phpstan.neon.dist||file:phpunit.xml.dist||file:psalm.xml.dist" />
+</component>
