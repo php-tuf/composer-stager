@@ -55,6 +55,7 @@ final class BeginnerUnitTest extends TestCase
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
@@ -128,6 +129,7 @@ final class BeginnerUnitTest extends TestCase
 
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        /** @noinspection PhpParamsInspection */
         $this->fileSyncer
             ->sync(Argument::cetera())
             ->willThrow($exception);

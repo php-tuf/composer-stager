@@ -28,6 +28,7 @@ final class PathFactoryUnitTest extends TestCase
     {
         $path = PathFactory::create($directorySeparator);
 
+        /** @noinspection UnnecessaryAssertionInspection */
         self::assertInstanceOf($instanceOf, $path, 'Returned correct path object.');
     }
 

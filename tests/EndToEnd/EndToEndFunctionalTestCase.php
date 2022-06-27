@@ -314,10 +314,11 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertComposerJsonName($directory, $expected, $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
-        $data = json_decode($json, true);
+        $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         self::assertEquals($expected, $data['name'], $message);
     }
 
+    /** @noinspection PhpSameParameterValueInspection */
     private static function putJson($filename, $json): void
     {
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));

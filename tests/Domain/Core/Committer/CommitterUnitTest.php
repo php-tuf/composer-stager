@@ -55,6 +55,7 @@ final class CommitterUnitTest extends TestCase
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->fileSyncer
             ->sync($stagingDir, $activeDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
@@ -108,7 +109,7 @@ final class CommitterUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, Argument::cetera())
+            ->assertIsFulfilled($activeDir, $stagingDir)
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();

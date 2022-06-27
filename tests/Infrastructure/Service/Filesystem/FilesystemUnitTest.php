@@ -87,6 +87,7 @@ final class FilesystemUnitTest extends TestCase
     {
         $this->expectException(IOException::class);
 
+        /** @noinspection PhpParamsInspection */
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->willThrow(SymfonyIOException::class);
@@ -107,6 +108,7 @@ final class FilesystemUnitTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $source->resolve()));
 
+        /** @noinspection PhpParamsInspection */
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->willThrow(SymfonyFileNotFoundException::class);

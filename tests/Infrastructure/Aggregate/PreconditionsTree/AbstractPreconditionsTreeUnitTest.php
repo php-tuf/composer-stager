@@ -168,6 +168,7 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
 
             return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
             {
+                /** @noinspection PhpUndefinedFieldInspection */
                 public function __construct(bool $isFulfilled, string $message, TestSpyInterface $spy)
                 {
                     $this->isFulfilled = $isFulfilled;

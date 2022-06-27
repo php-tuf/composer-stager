@@ -27,6 +27,469 @@
       <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\ComposerRunner executableName" />
       <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner executableName" />
       <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\PreconditionException getPrecondition" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\PreconditionException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\PreconditionException __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface getName" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\Process" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory create" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent getFulfilledStatusMessage" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent getUnfulfilledStatusMessage" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent isFulfilled" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Exception" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Service\FileSyncer" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Filesystem" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Service\ProcessRunner" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Value\Path" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Domain\Value\PathList" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\Path" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Filesystem" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Value\Path" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\PHPStan" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\PHPStan\Methods" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Exception" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path" />
+      <entry_point TYPE="phpNamespace" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Committer\Committer __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Committer\Committer" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Stager\Stager __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Core\Stager\Stager" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\ __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\ __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback __invoke" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedCoversSniff" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedPropertySniff" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedSeeSniff" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedThrowsSniff" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedUsesSniff" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase assertActiveAndStagingDirectoriesNotSame" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase assertActiveAndStagingDirectoriesSame" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase assertComposerJsonName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase assertDirectoryListing" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase assertFileChanged" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase assertFileNotChanged" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase assertStagingDirectoryDoesNotExist" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase changeFile" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditionsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase createFile" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase createFiles" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest createSut" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest createSut" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase createTestEnvironment" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase deleteFile" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase ensureTrailingSlash" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff errorCode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedCoversSniff errorCode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedPropertySniff errorCode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedSeeSniff errorCode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedThrowsSniff errorCode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedUsesSniff errorCode" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\ executableName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase fileSyncerClass" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\PhpFileSyncerEndToEndFunctionalTest fileSyncerClass" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\PhpFileSyncerEndToEndFunctionalTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest fileSyncerClass" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase fixSeparators" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase fixSeparatorsMultiple" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase getActiveAndStagingDirectoriesDiff" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule getClassReflection" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase getContainer" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff getCurrentAnnotation" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions getDescription" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady getDescription" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist getDescription" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists getDescription" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable getDescription" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\ getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase getDirectoryContents" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase getFlatDirectoryListing" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\ getFulfilledStatusMessage" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ getFulfilledStatusMessage" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule getMethodReflection" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\ getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule getNamespace" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule getNodeType" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule getNodeType" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule getNodeType" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule getNodeType" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule getNodeType" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule getNodeType" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff getPreviousThrows" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\ getUnfulfilledStatusMessage" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ getUnfulfilledStatusMessage" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\IOException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule isExcluded" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule isFactoryClass" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\ isFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ isFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule isIncluded" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule isInNamespace" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule isProjectClass" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase isRsyncAvailable" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff isTargetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\AbstractRule isThrowable" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase isWindows" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\LogicException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest normalizePaths" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path\PathFactoryUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Value\Path\PathInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Exception\PreconditionExceptionUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff process" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process\ProcessFactoryUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule processNode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule processNode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule processNode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule processNode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule processNode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule processNode" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest providerBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path\PathFactoryUnitTest providerBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest providerBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\UnixLikePathUnitTest providerBasicFunctionality" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\UnixLikePathUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\WindowsPathUnitTest providerBasicFunctionality" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\WindowsPathUnitTest" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest providerBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest providerBeginWithOptionalParams" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest providerCleanHappyPath" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest providerCommandContainsWorkingDirOption" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest providerCommitWithOptionalParams" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest providerCopy" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest providerCreate" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase providerDirectories" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest providerExceptions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest providerExceptions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest providerExceptions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest providerExists" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process\ProcessFactoryUnitTest providerFactory" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest providerFind" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest providerFind" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest providerFindNotFound" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest providerGetRelativePath" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest providerHappyPath" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest providerInvalidInput" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest providerMkdir" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest providerRemove" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest providerRun" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest providerSync" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest providerSyncFailure" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase putJson" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff register" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase removeTestEnvironment" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestSpyInterface report" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Tests\TestSpyInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Exception\RuntimeException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest setUp" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest setUpBeforeClass" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest setUpBeforeClass" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\TestCase stripTrailingSlash" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff targetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedCoversSniff targetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedPropertySniff targetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedSeeSniff targetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedThrowsSniff targetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedUsesSniff targetTag" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest tearDown" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest tearDown" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase tearDownAfterClass" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest testAssertIsFulfilledFalse" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest testAssertIsFulfilledTrue" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Exception\PreconditionExceptionUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path\PathFactoryUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\UnixLikePathUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\WindowsPathUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest testBasicFunctionality" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest testBeginPreconditionsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest testBeginWithMinimumParams" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest testBeginWithOptionalParams" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest testCleanFailToRemove" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest testCleanHappyPath" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest testCleanPreconditionsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest testCommandContainsComposer" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest testCommandContainsWorkingDirOption" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest testCommitPreconditionsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest testCommitWithMinimumParams" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest testCommitWithOptionalParams" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest testCopy" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testCopy" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testCopyDirectoriesTheSame" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testCopyFailure" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testCopySourceDirectoryNotFound" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest testCreate" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest testEmptyCommand" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest testExceptions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest testExceptions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest testExceptions" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testExists" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process\ProcessFactoryUnitTest testFactory" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest testFind" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest testFind" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest testFindNotFound" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest testFindNotFoundCaching" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest testGetRelativePath" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest testHappyPath" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest testInvalidInput" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest testIsFulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest testIsFulfilledBubbling" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest testIsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testMkdir" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testMkdirFailure" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testRemove" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest testRemoveException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest testRun" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest testRunFailedException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest testRunFindExecutableException" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest testStagePreconditionsUnfulfilled" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest testSymfonyCopyDirectory" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase testSync" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest testSync" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest testSyncCreateDestinationDirectoryFailed" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest testSyncDestinationCouldNotBeCreated" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest testSyncDirectoriesTheSame" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest testSyncDirectoriesTheSame" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest testSyncFailure" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest testSyncSourceDirectoryNotFound" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest testSyncSourceNotFound" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath" />
     </entry_point>
     <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" member="begin" />
     <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" />
@@ -43,6 +506,428 @@
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\ComposerRunner" member="executableName" />
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner" member="executableName" />
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\RsyncRunner" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\PreconditionException" member="getPrecondition" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\PreconditionException" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\PreconditionException" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory" member="create" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" member="getFulfilledStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" member="getUnfulfilledStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent" member="isFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Committer\Committer" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Committer\Committer" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Stager\Stager" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Core\Stager\Stager" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback" member="__invoke" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedCoversSniff" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedPropertySniff" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedSeeSniff" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedThrowsSniff" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedUsesSniff" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="assertActiveAndStagingDirectoriesNotSame" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="assertActiveAndStagingDirectoriesSame" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="assertComposerJsonName" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="assertDirectoryListing" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="assertFileChanged" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="assertFileNotChanged" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="assertStagingDirectoryDoesNotExist" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="changeFile" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditionsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="createFile" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="createFiles" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" member="createSut" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="createTestEnvironment" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="deleteFile" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="ensureTrailingSlash" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="errorCode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedCoversSniff" member="errorCode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedPropertySniff" member="errorCode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedSeeSniff" member="errorCode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedThrowsSniff" member="errorCode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedUsesSniff" member="errorCode" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\" member="executableName" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="fileSyncerClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\PhpFileSyncerEndToEndFunctionalTest" member="fileSyncerClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\PhpFileSyncerEndToEndFunctionalTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest" member="fileSyncerClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="fixSeparators" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="fixSeparatorsMultiple" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="getActiveAndStagingDirectoriesDiff" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="getClassReflection" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="getContainer" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="getCurrentAnnotation" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="getDirectoryContents" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="getFlatDirectoryListing" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\" member="getFulfilledStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\" member="getFulfilledStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="getMethodReflection" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditions" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="getNamespace" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule" member="getNodeType" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule" member="getNodeType" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" member="getNodeType" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule" member="getNodeType" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule" member="getNodeType" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule" member="getNodeType" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="getPreviousThrows" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\" member="getUnfulfilledStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\" member="getUnfulfilledStatusMessage" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\IOException" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" member="isExcluded" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="isFactoryClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\" member="isFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\" member="isFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" member="isIncluded" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="isInNamespace" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="isProjectClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="isRsyncAvailable" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="isTargetTag" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\AbstractRule" member="isThrowable" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="isWindows" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\LogicException" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" member="normalizePaths" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path\PathFactoryUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Value\Path\PathInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Exception\PreconditionExceptionUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="process" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process\ProcessFactoryUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule" member="processNode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule" member="processNode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule" member="processNode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule" member="processNode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule" member="processNode" />
+    <pattern value="\PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule" member="processNode" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" member="providerBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path\PathFactoryUnitTest" member="providerBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" member="providerBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\UnixLikePathUnitTest" member="providerBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\UnixLikePathUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\WindowsPathUnitTest" member="providerBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\WindowsPathUnitTest" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest" member="providerBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="providerBeginWithOptionalParams" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" member="providerCleanHappyPath" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="providerCommandContainsWorkingDirOption" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="providerCommitWithOptionalParams" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="providerCopy" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest" member="providerCreate" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="providerDirectories" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="providerExceptions" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="providerExceptions" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="providerExceptions" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="providerExists" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process\ProcessFactoryUnitTest" member="providerFactory" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="providerFind" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" member="providerFind" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="providerFindNotFound" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="providerGetRelativePath" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="providerHappyPath" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest" member="providerInvalidInput" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="providerMkdir" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="providerRemove" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" member="providerRun" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="providerSync" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="providerSyncFailure" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="putJson" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="register" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="removeTestEnvironment" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestSpyInterface" member="report" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestSpyInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Exception\RuntimeException" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" member="setUp" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest" member="setUpBeforeClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="setUpBeforeClass" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\TestCase" member="stripTrailingSlash" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AbstractAlphabeticallySortedTageSniff" member="targetTag" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedCoversSniff" member="targetTag" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedPropertySniff" member="targetTag" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedSeeSniff" member="targetTag" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedThrowsSniff" member="targetTag" />
+    <pattern value="\PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting\AlphabeticallySortedUsesSniff" member="targetTag" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" member="tearDown" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" member="tearDown" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="tearDownAfterClass" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" member="testAssertIsFulfilledFalse" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" member="testAssertIsFulfilledTrue" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Exception\PreconditionExceptionUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path\PathFactoryUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\AbstractPreconditionUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\UnixLikePathUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\WindowsPathUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest" member="testBasicFunctionality" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="testBeginPreconditionsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="testBeginWithMinimumParams" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="testBeginWithOptionalParams" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" member="testCleanFailToRemove" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" member="testCleanHappyPath" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner\CleanerUnitTest" member="testCleanPreconditionsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="testCommandContainsComposer" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="testCommandContainsWorkingDirOption" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="testCommitPreconditionsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="testCommitWithMinimumParams" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="testCommitWithOptionalParams" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" member="testCopy" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testCopy" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testCopyDirectoriesTheSame" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testCopyFailure" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testCopySourceDirectoryNotFound" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\FileSyncer\FileSyncerFactoryUnitTest" member="testCreate" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="testEmptyCommand" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Beginner\BeginnerUnitTest" member="testExceptions" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Committer\CommitterUnitTest" member="testExceptions" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="testExceptions" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testExists" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process\ProcessFactoryUnitTest" member="testFactory" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="testFind" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\RecursiveFileFinderFunctionalTest" member="testFind" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="testFindNotFound" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder\ExecutableFinderUnitTest" member="testFindNotFoundCaching" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="testGetRelativePath" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="testHappyPath" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\PathListUnitTest" member="testInvalidInput" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest" member="testIsFulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTreeUnitTest" member="testIsFulfilledBubbling" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditionsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditionsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditionsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditionsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagerPreconditionsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReadyUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferentUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirExistsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ActiveDirIsWritableUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\ComposerIsAvailableUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirDoesNotExistUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirExistsUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\StagingDirIsWritableUnitTest" member="testIsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testMkdir" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testMkdirFailure" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testRemove" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemUnitTest" member="testRemoveException" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" member="testRun" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" member="testRunFailedException" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner\AbstractRunnerUnitTest" member="testRunFindExecutableException" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Domain\Core\Stager\StagerUnitTest" member="testStagePreconditionsUnfulfilled" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem\FilesystemFunctionalTest" member="testSymfonyCopyDirectory" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase" member="testSync" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="testSync" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="testSyncCreateDestinationDirectoryFailed" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="testSyncDestinationCouldNotBeCreated" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="testSyncDirectoriesTheSame" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="testSyncDirectoriesTheSame" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="testSyncFailure" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\RsyncFileSyncerUnitTest" member="testSyncSourceDirectoryNotFound" />
+    <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="testSyncSourceNotFound" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath" />
   </component>
   <component name="ProjectResources">
     <resource url="https://pmd.sourceforge.io/ruleset/2.0.0" location="$PROJECT_DIR$" />
