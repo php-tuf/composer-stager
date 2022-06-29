@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
@@ -76,6 +76,8 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
      * @covers ::isFulfilled
      *
      * @dataProvider providerBasicFunctionality
+     *
+     * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
     public function testBasicFunctionality(
         $name,
@@ -166,6 +168,7 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
 
             return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
             {
+                /** @noinspection PhpUndefinedFieldInspection */
                 public function __construct(bool $isFulfilled, string $message, TestSpyInterface $spy)
                 {
                     $this->isFulfilled = $isFulfilled;
@@ -210,6 +213,8 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
         ];
 
         // phpcs:disable SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma
+        //   Trailing commas on this array make it cross PhpStorm's complexity threshold:
+        //   "Code fragment is too complex to parse and will be treated as plain text."
         $sut = $this->createSut(
             $leaves[0],
             $this->createSut(

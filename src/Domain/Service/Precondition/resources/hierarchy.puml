@@ -9,7 +9,6 @@
 
 hide circle
 
-skinparam ClassFontStyle bold
 skinparam RoundCorner 15
 skinparam LineType polyline
 
@@ -45,6 +44,7 @@ class CommonPreconditions {
     ActiveDirExists
     ActiveDirIsWritable
     ActiveAndStagingDirsAreDifferent
+    CodebaseContainsNoSymlinks
 }
 
 class StagingDirIsReady {

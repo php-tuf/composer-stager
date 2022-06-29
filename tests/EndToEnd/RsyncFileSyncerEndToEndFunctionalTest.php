@@ -9,11 +9,11 @@ final class RsyncFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTest
 {
     public static function setUpBeforeClass(): void
     {
-        if (!self::isRsyncAvailable()) {
-            self::markTestSkipped('Rsync is not available for testing.');
+        if (self::isRsyncAvailable()) {
+            return;
         }
 
-        self::createTestEnvironment(self::ACTIVE_DIR);
+        self::markTestSkipped('Rsync is not available for testing.');
     }
 
     protected function fileSyncerClass(): string

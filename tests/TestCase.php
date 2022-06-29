@@ -7,6 +7,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
@@ -24,8 +27,19 @@ abstract class TestCase extends PHPUnitTestCase
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
 
+    public function getContainer(): ContainerBuilder
+    {
+        $container = new ContainerBuilder();
+        $loader = new YamlFileLoader($container, new FileLocator());
+        $loader->load(self::PROJECT_ROOT . '/config/services.yml');
+
+        return $container;
+    }
+
     protected static function createTestEnvironment(string $activeDir): void
     {
+        self::removeTestEnvironment();
+
         $filesystem = new Filesystem();
 
         // Create the test environment.

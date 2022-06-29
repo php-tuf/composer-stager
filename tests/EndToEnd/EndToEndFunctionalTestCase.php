@@ -10,9 +10,6 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Provides a base for end-to-end functional tests, including the domain and
@@ -28,10 +25,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        // Build the service container.
-        $container = new ContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(TestCase::PROJECT_ROOT . '/config/services.yml');
+        $container = $this->getContainer();
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
@@ -48,8 +42,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $this->committer = $container->get(Committer::class);
         $this->cleaner = $container->get(Cleaner::class);
 
-        // Refresh the test environment.
-        self::removeTestEnvironment();
+        // Create the test environment.
         self::createTestEnvironment(self::ACTIVE_DIR);
     }
 
@@ -67,10 +60,6 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     /** @dataProvider providerDirectories */
     public function testSync($activeDir, $stagingDir): void
     {
-        // Set up environment.
-        self::removeTestEnvironment();
-        self::createTestEnvironment($activeDir);
-
         $activeDirPath = PathFactory::create($activeDir);
         $stagingDirPath = PathFactory::create($stagingDir);
 
@@ -325,10 +314,11 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertComposerJsonName($directory, $expected, $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
-        $data = json_decode($json, true);
+        $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         self::assertEquals($expected, $data['name'], $message);
     }
 
+    /** @noinspection PhpSameParameterValueInspection */
     private static function putJson($filename, $json): void
     {
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));

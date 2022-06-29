@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Service\Precondition;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist::__construct
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class StagingDirDoesNotExistUnitTest extends TestCase
+final class ActiveDirExistsUnitTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -35,11 +35,11 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
 
-    protected function createSut(): StagingDirDoesNotExist
+    protected function createSut(): ActiveDirExists
     {
         $filesystem = $this->filesystem->reveal();
 
-        return new StagingDirDoesNotExist($filesystem);
+        return new ActiveDirExists($filesystem);
     }
 
     /**
@@ -52,8 +52,9 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir)
-            ->willReturn(false);
+            ->exists($activeDir)
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
         $sut = $this->createSut();
 
         self::assertEquals(true, $sut->isFulfilled($activeDir, $stagingDir));
@@ -71,8 +72,8 @@ final class StagingDirDoesNotExistUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir)
-            ->willReturn(true);
+            ->exists($activeDir)
+            ->willReturn(false);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);

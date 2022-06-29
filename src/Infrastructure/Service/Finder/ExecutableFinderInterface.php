@@ -2,9 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 
-/**
- * Finds executables.
- */
+/** Finds executables. */
 interface ExecutableFinderInterface
 {
     /**

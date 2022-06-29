@@ -1,0 +1,42 @@
+parametersSchema:
+	gitattributesExportInclude: listOf(string())
+	preconditionSystemHash: string()
+
+parameters:
+    level: max
+    tmpDir: var/phpstan
+    paths:
+        - src
+        - .gitattributes
+    treatPhpDocTypesAsCertain: false
+
+    # Custom parameters.
+    gitattributesExportInclude:
+        - composer.json
+        - config
+        - LICENSE
+        - README.md
+        - src
+    preconditionSystemHash: ed565f00d5bce6a6cde229174f2a7d42
+
+rules:
+    - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
+    - PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
+    - PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
+    - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+
+services:
+    -
+        # Ensures that precondtion system diagrams stay current.
+        class: PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule
+        arguments:
+            preconditionSystemHash: %preconditionSystemHash%
+        tags:
+            - phpstan.rules.rule
+    -
+        # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
+        class: PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule
+        arguments:
+            gitattributesExportInclude: %gitattributesExportInclude%
+        tags:
+            - phpstan.rules.rule

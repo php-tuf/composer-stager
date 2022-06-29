@@ -11,9 +11,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
-/**
- * Provides a base class for PHPStan rules.
- */
+/** Provides a base class for PHPStan rules. */
 abstract class AbstractRule implements Rule
 {
     protected const PROJECT_ROOT = __DIR__ . '/..';

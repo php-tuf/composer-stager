@@ -5,30 +5,30 @@ namespace PhpTuf\ComposerStager\PHPStan\Files;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\FileNode;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\AbstractRule;
 
-/**
- * Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
- */
+/** Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files. */
 final class GitattributesMissingExportIgnoreRule extends AbstractRule
 {
-    // Paths that are included in archive files, i.e., not excluded by .gitattributes.
-    private const INCLUDED_PATHS = [
-        'LICENSE',
-        'README.md',
-        'composer.json',
-        'config',
-        'src',
-        'vendor',
-    ];
-
     private const SPECIAL_PATHS = [
         '.',
         '..',
         '.DS_Store',
         '.git',
+        'vendor',
     ];
+
+    /** @var array<string> */
+    private $gitattributesExportInclude;
+
+    public function __construct(array $gitattributesExportInclude, ReflectionProvider $reflectionProvider)
+    {
+        parent::__construct($reflectionProvider);
+
+        $this->gitattributesExportInclude = $gitattributesExportInclude;
+    }
 
     public function getNodeType(): string
     {
@@ -57,7 +57,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
                 continue;
             }
 
-            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in \PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule::INCLUDED_PATHS";
+            $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in phpstan.neon.dist:parameters.gitattributesExportInclude";
             $errors[] = RuleErrorBuilder::message($message)->build();
         }
 
@@ -70,7 +70,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
      */
     private function isIncluded(string $filename): bool
     {
-        return in_array($filename, self::INCLUDED_PATHS, true);
+        return in_array($filename, $this->gitattributesExportInclude, true);
     }
 
     /** Determines whether the given filename is excluded from archive files by .gitattributes. */
