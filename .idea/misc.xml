@@ -490,6 +490,10 @@
       <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest testSyncSourceNotFound" />
       <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath" />
       <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath" />
+      <entry_point TYPE="phpClass" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks getDescription" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks getName" />
     </entry_point>
     <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" member="begin" />
     <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" />
@@ -928,6 +932,10 @@
     <pattern value="\PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer\PhpFileSyncerUnitTest" member="testSyncSourceNotFound" />
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath" />
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" member="__construct" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" member="getDescription" />
+    <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" member="getName" />
   </component>
   <component name="ProjectResources">
     <resource url="https://pmd.sourceforge.io/ruleset/2.0.0" location="$PROJECT_DIR$" />

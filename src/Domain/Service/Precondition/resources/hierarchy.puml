@@ -44,6 +44,7 @@ class CommonPreconditions {
     ActiveDirExists
     ActiveDirIsWritable
     ActiveAndStagingDirsAreDifferent
+    CodebaseContainsNoSymlinks
 }
 
 class StagingDirIsReady {
