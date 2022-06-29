@@ -102,7 +102,7 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
         $directory = PathFactory::create($directory)->resolve();
         self::createFiles($directory, ['one/two/three/four/five/six.txt']);
         self::createFile('symlink', 'target.txt');
-        symlink('symlink/target.txt', "{$directory}/{$source}");
+        self::assertTrue(symlink('symlink/target.txt', "{$directory}/{$source}"));
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
