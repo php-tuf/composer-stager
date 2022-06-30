@@ -44,10 +44,10 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks $fileFinder */
-        $fileFinder = $container->get(CodeBaseContainsNoSymlinks::class);
+        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks $sut */
+        $sut = $container->get(CodeBaseContainsNoSymlinks::class);
 
-        return $fileFinder;
+        return $sut;
     }
 
     /**
