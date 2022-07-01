@@ -87,10 +87,12 @@ final class AbstractRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $this->process
             ->setTimeout($timeout)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledOnce()
+            ->willReturn($this->process);
         $this->process
             ->mustRun($callback)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledOnce()
+            ->willReturn($this->process);
         $this->processFactory
             ->create($expectedCommand)
             ->shouldBeCalled()
