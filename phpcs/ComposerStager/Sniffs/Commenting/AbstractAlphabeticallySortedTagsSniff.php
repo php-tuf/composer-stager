@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
-abstract class AbstractAlphabeticallySortedTageSniff implements Sniff
+abstract class AbstractAlphabeticallySortedTagsSniff implements Sniff
 {
     final public function register(): array
     {
@@ -23,8 +23,8 @@ abstract class AbstractAlphabeticallySortedTageSniff implements Sniff
             return;
         }
 
-        $current = $this->getCurrentAnnotation($phpcsFile, $stackPtr);
-        $previous = $this->getPreviousThrows($phpcsFile, $stackPtr);
+        $current = $this->getCurrentTag($phpcsFile, $stackPtr);
+        $previous = $this->getPreviousTag($phpcsFile, $stackPtr);
 
         // Ignore the first @throws tag in a doc comment.
         if ($previous === false) {
@@ -47,7 +47,7 @@ abstract class AbstractAlphabeticallySortedTageSniff implements Sniff
         );
     }
 
-    private function getCurrentAnnotation(File $phpcsFile, $stackPtr): string
+    private function getCurrentTag(File $phpcsFile, $stackPtr): string
     {
         $tokens = $phpcsFile->getTokens();
         $commentStringPtr = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $stackPtr);
@@ -55,7 +55,7 @@ abstract class AbstractAlphabeticallySortedTageSniff implements Sniff
         return trim($tokens[$commentStringPtr]['content']);
     }
 
-    protected function getPreviousThrows(File $phpcsFile, int $stackPtr)
+    protected function getPreviousTag(File $phpcsFile, int $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
