@@ -6,11 +6,9 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 abstract class AbstractPath implements PathInterface
 {
-    /** @var string */
-    protected $cwd;
+    protected string $cwd;
 
-    /** @var string */
-    protected $path;
+    protected string $path;
 
     abstract protected function doResolve(string $basePath): string;
 

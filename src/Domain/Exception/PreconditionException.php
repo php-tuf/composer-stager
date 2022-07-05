@@ -13,8 +13,7 @@ use Throwable;
  */
 class PreconditionException extends RuntimeException implements ExceptionInterface
 {
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface */
-    private $precondition;
+    private PreconditionInterface $precondition;
 
     public function __construct(
         PreconditionInterface $precondition,

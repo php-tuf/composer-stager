@@ -18,8 +18,8 @@
     <file>tests</file>
 
     <rule ref="PHPCompatibility"/>
-    <!-- @todo Don't forget to update this once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->
-    <config name="testVersion" value="7.3-"/>
+    <!-- @todo Don't forget to update this once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
+    <config name="testVersion" value="7.4-"/>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
@@ -123,7 +123,7 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
-
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
@@ -138,7 +138,7 @@
     <rule ref="SlevomatCodingStandard.Files.LineLength"/>
 
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
+    <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
@@ -219,6 +219,7 @@
     <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableObjectTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHintSpacing"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
@@ -237,11 +238,6 @@
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedSee"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedUses"/>
-
-    <!-- @todo Enable once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->
-    <!-- <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/> -->
 
     <!-- @todo Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
     <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>

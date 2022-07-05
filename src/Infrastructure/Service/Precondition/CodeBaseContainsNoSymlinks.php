@@ -11,14 +11,11 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInter
 
 final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements CodebaseContainsNoSymlinksInterface
 {
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface */
-    private $fileFinder;
+    private RecursiveFileFinderInterface $fileFinder;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
-    /** @var string */
-    private $unfulfilledStatusMessage = 'The codebase contains symlinks.';
+    private string $unfulfilledStatusMessage = 'The codebase contains symlinks.';
 
     public function __construct(RecursiveFileFinderInterface $fileFinder, FilesystemInterface $filesystem)
     {

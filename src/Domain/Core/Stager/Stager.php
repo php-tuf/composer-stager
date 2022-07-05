@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditions
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -13,11 +14,9 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class Stager implements StagerInterface
 {
-    /** @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface */
-    private $composerRunner;
+    private ComposerRunnerInterface $composerRunner;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface */
-    private $preconditions;
+    private PreconditionInterface $preconditions;
 
     public function __construct(ComposerRunnerInterface $composerRunner, StagerPreconditionsInterface $preconditions)
     {

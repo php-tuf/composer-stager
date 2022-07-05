@@ -6,17 +6,16 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPrecondition
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class Cleaner implements CleanerInterface
 {
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface */
-    private $preconditions;
+    private PreconditionInterface $preconditions;
 
     public function __construct(FilesystemInterface $filesystem, CleanerPreconditionsInterface $preconditions)
     {

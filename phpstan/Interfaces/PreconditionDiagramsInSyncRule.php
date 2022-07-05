@@ -14,8 +14,7 @@ use ReflectionClass;
 /** Ensures that precondtion system diagrams stay current. */
 final class PreconditionDiagramsInSyncRule extends AbstractRule
 {
-    /** @var string */
-    private $preconditionSystemHash;
+    private string $preconditionSystemHash;
 
     public function __construct(string $preconditionSystemHash, ReflectionProvider $reflectionProvider)
     {

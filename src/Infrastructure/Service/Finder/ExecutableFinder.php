@@ -8,10 +8,9 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null> */
-    private $cache = [];
+    private array $cache = [];
 
-    /** @var \Symfony\Component\Process\ExecutableFinder */
-    private $symfonyExecutableFinder;
+    private SymfonyExecutableFinder $symfonyExecutableFinder;
 
     public function __construct(SymfonyExecutableFinder $symfonyExecutableFinder)
     {

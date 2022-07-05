@@ -8,8 +8,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class StagingDirIsWritable extends AbstractPrecondition implements StagingDirIsWritableInterface
 {
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     public function __construct(FilesystemInterface $filesystem)
     {

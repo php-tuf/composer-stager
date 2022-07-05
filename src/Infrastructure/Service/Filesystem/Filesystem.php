@@ -15,8 +15,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class Filesystem implements FilesystemInterface
 {
-    /** @var \Symfony\Component\Filesystem\Filesystem */
-    private $symfonyFilesystem;
+    private SymfonyFilesystem $symfonyFilesystem;
 
     public function __construct(SymfonyFilesystem $symfonyFilesystem)
     {
