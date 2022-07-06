@@ -36,11 +36,11 @@ final class AbstractPreconditionUnitTest extends TestCase
         // abstract, can't be instantiated directly.
         return new class () extends AbstractPrecondition
         {
-            public $name = 'Name';
-            public $description = 'Description';
-            public $isFulfilled = true;
-            public $fulfilledStatusMessage = 'Fulfilled';
-            public $unfulfilledStatusMessage = 'Unfulfilled';
+            public string $name = 'Name';
+            public string $description = 'Description';
+            public bool $isFulfilled = true;
+            public string $fulfilledStatusMessage = 'Fulfilled';
+            public string $unfulfilledStatusMessage = 'Unfulfilled';
 
             public function getName(): string
             {

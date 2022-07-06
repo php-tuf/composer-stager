@@ -8,8 +8,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class StagingDirDoesNotExist extends AbstractPrecondition implements StagingDirDoesNotExistInterface
 {
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
     public function __construct(FilesystemInterface $filesystem)
     {
