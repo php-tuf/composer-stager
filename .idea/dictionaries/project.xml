@@ -37,6 +37,8 @@
       <w>testsuites</w>
       <w>unusedcode</w>
       <w>xargs</w>
+      <w>xmllint</w>
+      <w>yamllint</w>
     </words>
   </dictionary>
 </component>

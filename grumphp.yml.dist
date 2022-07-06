@@ -22,6 +22,7 @@ grumphp:
         phplint:
             ignore_patterns:
                 - .idea
+                - var
                 - vendor
         phpmd:
             whitelist_patterns:
@@ -33,6 +34,20 @@ grumphp:
         phpunit: ~
         psalm: ~
         securitychecker_roave: ~
+        xmllint:
+            ignore_patterns:
+                - .idea
+                - var
+                - vendor
+            triggered_by:
+                - xml
+                - xml.dist
+        yamllint:
+            whitelist_patterns:
+                - .github
+                - /^.*.ya?ml(.dist)?$/
+                - config
+                - src
 
     testsuites:
         static:
@@ -45,6 +60,8 @@ grumphp:
                 - phpmd
                 - psalm
                 - phpstan
+                - xmllint
+                - yamllint
         test:
             tasks:
                 - clover_coverage
