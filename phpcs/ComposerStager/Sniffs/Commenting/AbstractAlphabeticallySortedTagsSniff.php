@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting;
 
+use ComposerStager\Sniffs\Util\DocCommentTag;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
@@ -18,21 +19,25 @@ abstract class AbstractAlphabeticallySortedTagsSniff implements Sniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        // Only process @throws tags.
-        if ($this->isTargetTag($phpcsFile, $stackPtr) === false) {
+        $tag = new DocCommentTag($phpcsFile, $stackPtr);
+
+        // Only process the target tag.
+        if ($tag->getName() !== $this->targetTag()) {
             return;
         }
 
-        $current = $this->getCurrentTag($phpcsFile, $stackPtr);
-        $previous = $this->getPreviousTag($phpcsFile, $stackPtr);
+        $previous = $tag->getPrevious();
 
-        // Ignore the first @throws tag in a doc comment.
-        if ($previous === false) {
+        // Ignore the first tag in a docblock.
+        if ($previous === null) {
             return;
         }
+
+        $current = strtolower($tag->getContent());
+        $previous = strtolower($previous->getContent());
 
         // Current tag (correctly) comes alphabetically after previous.
-        if (strcmp(strtolower($current), strtolower($previous)) > 0) {
+        if (strcmp($current, $previous) > 0) {
             return;
         }
 
@@ -40,48 +45,10 @@ abstract class AbstractAlphabeticallySortedTagsSniff implements Sniff
             sprintf(
                 '%s annotations should be sorted alphabetically. The first wrong one is %s.',
                 $this->targetTag(),
-                $current,
+                $tag->getContent(),
             ),
             $stackPtr,
             $this->errorCode(),
         );
-    }
-
-    private function getCurrentTag(File $phpcsFile, $stackPtr): string
-    {
-        $tokens = $phpcsFile->getTokens();
-        $commentStringPtr = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $stackPtr);
-
-        return trim($tokens[$commentStringPtr]['content']);
-    }
-
-    protected function getPreviousTag(File $phpcsFile, int $stackPtr)
-    {
-        $tokens = $phpcsFile->getTokens();
-
-        $commentOpenPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $stackPtr);
-        $commentOpen = $tokens[$commentOpenPtr]['line'];
-
-        $previousTagPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_TAG, $stackPtr - 1, $commentOpen);
-
-        // Doc block is a single line.
-        if ($tokens[$previousTagPtr]['line'] < $tokens[$commentOpenPtr]['line']) {
-            return false;
-        }
-
-        if ($this->isTargetTag($phpcsFile, $previousTagPtr) === false) {
-            return false;
-        }
-
-        $previousPtr = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $previousTagPtr);
-
-        return trim($tokens[$previousPtr]['content']);
-    }
-
-    private function isTargetTag(File $phpcsFile, $stackPtr): bool
-    {
-        $tokens = $phpcsFile->getTokens();
-
-        return $tokens[$stackPtr]['content'] === $this->targetTag();
     }
 }

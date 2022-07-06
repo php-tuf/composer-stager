@@ -258,6 +258,7 @@
     <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
 

@@ -17,6 +17,8 @@ grumphp:
         phpcs:
             standard: []
             whitelist_patterns:
+                - phpcs
+                - phpstan
                 - src
                 - tests
         phplint:
