@@ -8,7 +8,7 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null> */
-    private array $cache = [];
+    private array $caches = [];
 
     private SymfonyExecutableFinder $symfonyExecutableFinder;
 
@@ -54,12 +54,12 @@ final class ExecutableFinder implements ExecutableFinderInterface
     /** @return \PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null */
     private function getCache(string $commandName)
     {
-        return $this->cache[$commandName] ?? null;
+        return $this->caches[$commandName] ?? null;
     }
 
     /** @param string|\PhpTuf\ComposerStager\Domain\Exception\LogicException $value */
     private function setCache(string $commandName, $value): void
     {
-        $this->cache[$commandName] = $value;
+        $this->caches[$commandName] = $value;
     }
 }
