@@ -259,7 +259,7 @@
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.traversableTypeHints"/> -->
 
     <!-- Exclusions for test classes. -->
-    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>

@@ -8,14 +8,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 abstract class AbstractAlphabeticallySortedTagsSniff implements Sniff
 {
+    abstract protected function errorCode(): string;
+
+    abstract protected function targetTag(): string;
+
     final public function register(): array
     {
         return [T_DOC_COMMENT_TAG];
     }
-
-    abstract protected function errorCode(): string;
-
-    abstract protected function targetTag(): string;
 
     public function process(File $phpcsFile, $stackPtr): void
     {
