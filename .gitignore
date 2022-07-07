@@ -4,6 +4,8 @@
 /.idea/composer-stager.iml
 /.idea/dictionaries/*
 /.idea/php.xml
+/.idea/sonarlint-state.xml
+/.idea/sonarlint/issuestore
 /.idea/workspace.xml
 /grumphp.yml
 /phpcs.xml
