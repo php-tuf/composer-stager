@@ -36,7 +36,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
         $path = $this->symfonyExecutableFinder->find($name);
 
         // Cache and throw exception if not found.
-        if (is_null($path)) {
+        if ($path === null) {
             $cache = new LogicException(
                 sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH.', $name),
             );

@@ -28,6 +28,15 @@
 
     <rule ref="Generic.Arrays.ArrayIndent"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="delete" value="unset"/>
+                <element key="is_null" value="null"/>
+                <element key="sizeof" value="count"/>
+            </property>
+        </properties>
+    </rule>
 
     <rule ref="PEAR.Commenting.ClassComment.Missing">
         <include-pattern>*Exception.php$</include-pattern>
