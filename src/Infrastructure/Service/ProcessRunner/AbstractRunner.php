@@ -15,11 +15,9 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  */
 abstract class AbstractRunner implements ProcessRunnerInterface
 {
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface */
-    private $executableFinder;
+    private ExecutableFinderInterface $executableFinder;
 
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface */
-    private $processFactory;
+    private ProcessFactoryInterface $processFactory;
 
     /** Returns the executable name, e.g., "composer" or "rsync". */
     abstract protected function executableName(): string;

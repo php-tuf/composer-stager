@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\PHPCS\ComposerStager\Sniffs\Commenting;
 
-final class AlphabeticallySortedUsesSniff extends AbstractAlphabeticallySortedTageSniff
+final class AlphabeticallySortedUsesSniff extends AbstractAlphabeticallySortedTagsSniff
 {
     protected function errorCode(): string
     {

@@ -6,11 +6,9 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 abstract class AbstractPath implements PathInterface
 {
-    /** @var string */
-    protected $cwd;
+    protected string $cwd;
 
-    /** @var string */
-    protected $path;
+    protected string $path;
 
     abstract protected function doResolve(string $basePath): string;
 
@@ -42,11 +40,9 @@ abstract class AbstractPath implements PathInterface
         return $this->doResolve($basePath);
     }
 
-    /**
-     * @todo Once support for Symfony 4 is dropped, see if any of this logic can
-     *   be eliminated in favor of the new path manipulation utilities in Symfony 5.4:
-     *   https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
-     */
+    // Once support for Symfony 4 is dropped, some of this logic could possibly be
+    // eliminated in favor of the new path manipulation utilities in Symfony 5.4:
+    // https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
     protected function normalize(string $absolutePath, string $prefix = ''): string
     {
         // If the absolute path begins with a directory separator, append it to

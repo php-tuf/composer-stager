@@ -18,8 +18,7 @@
     <file>tests</file>
 
     <rule ref="PHPCompatibility"/>
-    <!-- @todo Don't forget to update this once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->
-    <config name="testVersion" value="7.3-"/>
+    <config name="testVersion" value="7.4-"/>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
@@ -28,6 +27,15 @@
 
     <rule ref="Generic.Arrays.ArrayIndent"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="delete" value="unset"/>
+                <element key="is_null" value="null"/>
+                <element key="sizeof" value="count"/>
+            </property>
+        </properties>
+    </rule>
 
     <rule ref="PEAR.Commenting.ClassComment.Missing">
         <include-pattern>*Exception.php$</include-pattern>
@@ -123,7 +131,7 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator"/>
-
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
@@ -138,7 +146,7 @@
     <rule ref="SlevomatCodingStandard.Files.LineLength"/>
 
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
+    <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
@@ -219,6 +227,7 @@
     <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableObjectTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHintSpacing"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
@@ -237,16 +246,12 @@
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedSee"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedUses"/>
+    <rule ref="ComposerStager.Commenting.PropertyVarNameHasDollarSign"/>
 
-    <!-- @todo Enable once support for PHP 7.3 is dropped (i.e., minimum is 7.4 or above). -->
-    <!-- <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/> -->
-
-    <!-- @todo Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
+    <!-- Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
     <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>
 
-    <!-- @todo Enable once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
+    <!-- Enable once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
     <!-- <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/> -->
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.enableUnionTypeHint"/> -->
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableMixedTypeHint"/> -->
@@ -254,7 +259,7 @@
     <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.traversableTypeHints"/> -->
 
     <!-- Exclusions for test classes. -->
-    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
@@ -262,6 +267,7 @@
     <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>phpstan</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
 

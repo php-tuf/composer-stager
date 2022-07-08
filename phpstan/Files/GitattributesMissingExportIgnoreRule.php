@@ -21,7 +21,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
     ];
 
     /** @var array<string> */
-    private $gitattributesExportInclude;
+    private array $gitattributesExportInclude;
 
     public function __construct(array $gitattributesExportInclude, ReflectionProvider $reflectionProvider)
     {

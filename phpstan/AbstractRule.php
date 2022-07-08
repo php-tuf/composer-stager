@@ -16,8 +16,7 @@ abstract class AbstractRule implements Rule
 {
     protected const PROJECT_ROOT = __DIR__ . '/..';
 
-    /** @var \PHPStan\Reflection\ReflectionProvider */
-    protected $reflectionProvider;
+    protected ReflectionProvider $reflectionProvider;
 
     public function __construct(ReflectionProvider $reflectionProvider)
     {

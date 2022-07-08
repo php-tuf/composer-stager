@@ -9,8 +9,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterfac
 
 final class ComposerIsAvailable extends AbstractPrecondition implements ComposerIsAvailableInterface
 {
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface */
-    private $executableFinder;
+    private ExecutableFinderInterface $executableFinder;
 
     public function __construct(ExecutableFinderInterface $executableFinder)
     {

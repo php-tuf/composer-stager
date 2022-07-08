@@ -13,14 +13,18 @@ grumphp:
             level: 100
         composer: ~
         composer_normalize: ~
+        deptrac: ~
         phpcs:
             standard: []
             whitelist_patterns:
+                - phpcs
+                - phpstan
                 - src
                 - tests
         phplint:
             ignore_patterns:
                 - .idea
+                - var
                 - vendor
         phpmd:
             whitelist_patterns:
@@ -32,17 +36,34 @@ grumphp:
         phpunit: ~
         psalm: ~
         securitychecker_roave: ~
+        xmllint:
+            ignore_patterns:
+                - .idea
+                - var
+                - vendor
+            triggered_by:
+                - xml
+                - xml.dist
+        yamllint:
+            whitelist_patterns:
+                - .github
+                - /^.*.ya?ml(.dist)?$/
+                - config
+                - src
 
     testsuites:
         static:
             tasks:
                 - composer
                 - composer_normalize
+                - deptrac
                 - phpcs
                 - phplint
                 - phpmd
                 - psalm
                 - phpstan
+                - xmllint
+                - yamllint
         test:
             tasks:
                 - clover_coverage

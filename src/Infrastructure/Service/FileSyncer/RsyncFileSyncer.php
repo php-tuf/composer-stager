@@ -15,11 +15,9 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class RsyncFileSyncer implements RsyncFileSyncerInterface
 {
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface */
-    private $rsync;
+    private RsyncRunnerInterface $rsync;
 
     public function __construct(FilesystemInterface $filesystem, RsyncRunnerInterface $rsync)
     {
@@ -43,7 +41,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         $sourceResolved = $source->resolve();
         $destinationResolved = $destination->resolve();
 
-        $exclusions = $exclusions ?? new PathList([]);
+        $exclusions ??= new PathList([]);
         $exclusions = $exclusions->getAll();
 
         if ($sourceResolved === $destinationResolved) {

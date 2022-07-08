@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> */
-    private $children;
+    private array $children;
 
     /** Gets a status message for when the precondition is fulfilled. */
     abstract protected function getFulfilledStatusMessage(): string;

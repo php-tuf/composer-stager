@@ -33,7 +33,7 @@ jobs:
                     coverage: xdebug2
 
             -   name: "Checkout code"
-                uses: actions/checkout@v2 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v1 # https://github.com/marketplace/actions/install-composer-dependencies
@@ -42,12 +42,8 @@ jobs:
                     # @see https://github.com/ramsey/composer-install/issues/79
                     composer-options: "--no-cache"
 
-            # Deptrac cannot be installed in PHP 7.3, so it will only run on the
-            # PHP 7.4-based quality check job as long as 7.3 is supported.
             -   name: "Run all quality checks"
-                run: |
-                    composer require --dev qossmic/deptrac-shim
-                    composer static
+                run: "composer static"
 
             -   name: "Run security scan"
                 run: "composer security"
@@ -59,7 +55,7 @@ jobs:
             fail-fast: false
             matrix:
                 os: [ ubuntu-latest, macos-latest, windows-latest ]
-                php: [ "7.3", "7.4", "8.0" ]
+                php: [ "7.4", "8.0", "8.1" ]
                 dependencies: [ lowest, highest ]
         steps:
             -   name: "Debugging info"
@@ -73,7 +69,7 @@ jobs:
                     coverage: xdebug2
 
             -   name: "Checkout code"
-                uses: actions/checkout@v2 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v1 # https://github.com/marketplace/actions/install-composer-dependencies

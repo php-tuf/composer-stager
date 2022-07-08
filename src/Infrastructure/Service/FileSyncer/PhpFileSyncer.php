@@ -14,14 +14,11 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class PhpFileSyncer implements PhpFileSyncerInterface
 {
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface */
-    private $fileFinder;
+    private RecursiveFileFinderInterface $fileFinder;
 
-    /** @var \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface */
-    private $pathFactory;
+    private PathFactoryInterface $pathFactory;
 
     public function __construct(
         RecursiveFileFinderInterface $fileFinder,
@@ -42,7 +39,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     ): void {
         set_time_limit((int) $timeout);
 
-        $exclusions = $exclusions ?? new PathList([]);
+        $exclusions ??= new PathList([]);
 
         $this->assertSourceAndDestinationAreDifferent($source, $destination);
         $this->assertSourceExists($source);
@@ -145,9 +142,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $destinationResolved = $destination->resolve();
 
         foreach ($sourceFiles as $sourceFilePathname) {
-            // @todo Once support for Symfony 4 is dropped, see if any of this logic can
-            //   be eliminated in favor of the new path manipulation utilities in Symfony 5.4:
-            //   https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
+            // Once support for Symfony 4 is dropped, see if any of this logic can be
+            // eliminated in favor of the new path manipulation utilities in Symfony 5.4:
+            // https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
             $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
             $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
 

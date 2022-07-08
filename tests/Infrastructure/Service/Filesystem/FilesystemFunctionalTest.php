@@ -66,10 +66,10 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /**
-     * Our filesystem service currently depends on the Symfony Filesystem component.
+     * Our filesystem service currently depends on the Symfony Filesystem component
      * and currently delegates its copy() method directly to it. Therefore, it is
      * precisely equivalent to its implementation. Symfony's copy() documentation
-     * does not specify whether it support directories as well as files. This
+     * does not specify whether it supports directories as well as files. This
      * test is to discover whether it does. (At this time it does not.)
      */
     public function testSymfonyCopyDirectory(): void

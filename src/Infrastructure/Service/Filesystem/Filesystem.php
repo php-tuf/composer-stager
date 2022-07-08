@@ -15,19 +15,13 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class Filesystem implements FilesystemInterface
 {
-    /** @var \Symfony\Component\Filesystem\Filesystem */
-    private $symfonyFilesystem;
+    private SymfonyFilesystem $symfonyFilesystem;
 
     public function __construct(SymfonyFilesystem $symfonyFilesystem)
     {
         $this->symfonyFilesystem = $symfonyFilesystem;
     }
 
-    /**
-     * @todo Assert that source and destination are both are files (not
-     *   directories) and throw a LogicException if not. (Don't forget to
-     *   add the appropriate annotation to the interface.)
-     */
     public function copy(PathInterface $source, PathInterface $destination): void
     {
         $sourceResolved = $source->resolve();

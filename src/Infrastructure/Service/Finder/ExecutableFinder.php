@@ -8,10 +8,9 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null> */
-    private $cache = [];
+    private array $caches = [];
 
-    /** @var \Symfony\Component\Process\ExecutableFinder */
-    private $symfonyExecutableFinder;
+    private SymfonyExecutableFinder $symfonyExecutableFinder;
 
     public function __construct(SymfonyExecutableFinder $symfonyExecutableFinder)
     {
@@ -37,7 +36,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
         $path = $this->symfonyExecutableFinder->find($name);
 
         // Cache and throw exception if not found.
-        if (is_null($path)) {
+        if ($path === null) {
             $cache = new LogicException(
                 sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH.', $name),
             );
@@ -55,12 +54,12 @@ final class ExecutableFinder implements ExecutableFinderInterface
     /** @return \PhpTuf\ComposerStager\Domain\Exception\LogicException|string|null */
     private function getCache(string $commandName)
     {
-        return $this->cache[$commandName] ?? null;
+        return $this->caches[$commandName] ?? null;
     }
 
     /** @param string|\PhpTuf\ComposerStager\Domain\Exception\LogicException $value */
     private function setCache(string $commandName, $value): void
     {
-        $this->cache[$commandName] = $value;
+        $this->caches[$commandName] = $value;
     }
 }

@@ -41,7 +41,7 @@ final class AbstractRunnerUnitTest extends TestCase
 
     protected function createSut($executableName = null): AbstractRunner
     {
-        $executableName = $executableName ?? self::COMMAND_NAME;
+        $executableName ??= self::COMMAND_NAME;
         $executableFinder = $this->executableFinder->reveal();
         $process = $this->process->reveal();
         $this->processFactory
@@ -53,7 +53,7 @@ final class AbstractRunnerUnitTest extends TestCase
         // abstract, can't be instantiated directly.
         return new class ($executableName, $executableFinder, $processFactory) extends AbstractRunner
         {
-            private $executableName;
+            private string $executableName;
 
             public function __construct(
                 string $executableName,
@@ -87,10 +87,12 @@ final class AbstractRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $this->process
             ->setTimeout($timeout)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledOnce()
+            ->willReturn($this->process);
         $this->process
             ->mustRun($callback)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledOnce()
+            ->willReturn($this->process);
         $this->processFactory
             ->create($expectedCommand)
             ->shouldBeCalled()

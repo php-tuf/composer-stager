@@ -15,8 +15,7 @@ use UnexpectedValueException;
 
 final class RecursiveFileFinder implements RecursiveFileFinderInterface
 {
-    /** @var \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface */
-    private $pathFactory;
+    private PathFactoryInterface $pathFactory;
 
     public function __construct(PathFactoryInterface $pathFactory)
     {
@@ -25,7 +24,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
     {
-        $exclusions = $exclusions ?? new PathList([]);
+        $exclusions ??= new PathList([]);
 
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
 
@@ -35,16 +34,14 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
             return $path->resolveRelativeTo($directory);
         }, $exclusions->getAll());
 
-        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static function (
+        // Apply exclusions. On the surface, it may look like individual descendants
+        // of an excluded directory, i.e., files "underneath" or "inside" it, won't
+        // be excluded because they aren't individually in the array in order to be
+        // matched. But because the directory iterator is recursive, their excluded
+        // ancestor WILL BE found, and they will be excluded by extension.
+        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static fn (
             string $foundPathname
-        ) use ($exclusions): bool {
-            // On the surface, it may look like individual descendants of an excluded
-            // directory, i.e., files "underneath" or "inside" it, won't be excluded
-            // because they aren't individually in the array in order to be matched.
-            // But because the directory iterator is recursive, their excluded
-            // ancestor WILL BE found, and they will be excluded by extension.
-            return !in_array($foundPathname, $exclusions, true);
-        });
+        ): bool => !in_array($foundPathname, $exclusions, true));
 
         /** @var \Traversable<string> $iterator */
         $iterator = new RecursiveIteratorIterator($filterIterator);

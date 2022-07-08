@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 final class PathList implements PathListInterface
 {
     /** @var array<string> */
-    private $paths;
+    private array $paths;
 
     /**
      * @param array<string> $paths
