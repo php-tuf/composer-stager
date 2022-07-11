@@ -41,7 +41,7 @@
         "psalm/phar": "^4.8",
         "qossmic/deptrac-shim": "^0.23.0",
         "roave/security-advisories": "dev-latest",
-        "slevomat/coding-standard": "^7.0",
+        "slevomat/coding-standard": "^7.0 || ^8.0",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/config": "^5.3",
         "symfony/dependency-injection": "^5.3",
