@@ -46,6 +46,6 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
 
     protected function errorCode(): string
     {
-        return 'IncorrectlyOrderedClassParam';
+        return 'MissingDollarSign';
     }
 }
