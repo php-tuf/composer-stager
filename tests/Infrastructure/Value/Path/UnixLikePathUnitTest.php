@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 final class UnixLikePathUnitTest extends TestCase
 {
     /**
-     * @covers ::__construct()
+     * @covers ::__construct
      * @covers ::doResolve
      * @covers ::isAbsolute
      * @covers ::makeAbsolute

@@ -244,6 +244,7 @@
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedSee"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
     <rule ref="ComposerStager.Commenting.AlphabeticallySortedUses"/>
+    <rule ref="ComposerStager.Commenting.CoverageAnnotationHasNoParentheses"/>
     <rule ref="ComposerStager.Commenting.PropertyVarNameHasDollarSign"/>
 
     <!-- Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
