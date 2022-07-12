@@ -27,7 +27,7 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
         $content = array_filter($content);
         $content = array_values((array) $content);
 
-        $varName = $content[1];
+        $varName = end($content);
 
         // The variable name (correctly) begins with a dollar sign.
         if (strpos($varName, '$') === 0) {
