@@ -17,7 +17,7 @@ parameters:
         - LICENSE
         - README.md
         - src
-    preconditionSystemHash: d0fb46381fb36cd0efae35019c2726a0
+    preconditionSystemHash: c9704430befff8e4b42384b0f3ef2097
 
 rules:
     - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
