@@ -18,7 +18,7 @@ final class Committer implements CommitterInterface
 
     private PreconditionInterface $preconditions;
 
-    public function __construct(CommitterPreconditionsInterface $preconditions, FileSyncerInterface $fileSyncer)
+    public function __construct(FileSyncerInterface $fileSyncer, CommitterPreconditionsInterface $preconditions)
     {
         $this->fileSyncer = $fileSyncer;
         $this->preconditions = $preconditions;

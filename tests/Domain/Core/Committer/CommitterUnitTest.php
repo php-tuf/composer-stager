@@ -47,7 +47,7 @@ final class CommitterUnitTest extends TestCase
         $preconditions = $this->preconditions->reveal();
         $fileSyncer = $this->fileSyncer->reveal();
 
-        return new Committer($preconditions, $fileSyncer);
+        return new Committer($fileSyncer, $preconditions);
     }
 
     /** @covers ::commit */

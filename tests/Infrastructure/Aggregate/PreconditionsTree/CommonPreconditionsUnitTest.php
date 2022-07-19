@@ -55,11 +55,11 @@ final class CommonPreconditionsUnitTest extends TestCase
         $codebaseContainsNoSymlinksInterface = $this->codebaseContainsNoSymlinksInterface->reveal();
 
         return new CommonPreconditions(
-            $composerIsAvailable,
+            $activeAndStagingDirsAreDifferent,
             $activeDirExists,
             $activeDirIsWritable,
-            $activeAndStagingDirsAreDifferent,
             $codebaseContainsNoSymlinksInterface,
+            $composerIsAvailable,
         );
     }
 
