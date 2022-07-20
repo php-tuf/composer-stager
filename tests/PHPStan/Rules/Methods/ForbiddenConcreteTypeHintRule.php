@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\PHPStan\Methods;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\PHPStan\AbstractRule;
+use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 
 /** Forbids using concrete classes in type hints when an interface is available. */

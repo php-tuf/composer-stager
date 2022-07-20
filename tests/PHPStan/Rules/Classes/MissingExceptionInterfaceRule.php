@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\PHPStan\Classes;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\PHPStan\AbstractRule;
+use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
 
 /** Requires throwable classes to implement ExceptionInterface. */
 final class MissingExceptionInterfaceRule extends AbstractRule

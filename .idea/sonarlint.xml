@@ -4,7 +4,6 @@
     <option name="fileExclusions">
       <list>
         <option value="DIRECTORY:phpcs" />
-        <option value="DIRECTORY:phpstan" />
         <option value="DIRECTORY:tests" />
         <option value="DIRECTORY:var" />
         <option value="DIRECTORY:vendor" />

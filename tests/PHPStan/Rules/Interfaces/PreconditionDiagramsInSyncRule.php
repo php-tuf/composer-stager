@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\PHPStan\Interfaces;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
-use PhpTuf\ComposerStager\PHPStan\AbstractRule;
+use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 
 /** Ensures that precondtion system diagrams stay current. */
