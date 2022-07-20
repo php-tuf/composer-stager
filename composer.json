@@ -63,7 +63,7 @@
         "psr-4": {
             "PhpTuf\\ComposerStager\\PHPCS\\": "phpcs/",
             "PhpTuf\\ComposerStager\\PHPStan\\": "phpstan/",
-            "PhpTuf\\ComposerStager\\Tests\\": "tests/"
+            "PhpTuf\\ComposerStager\\Tests\\PHPUnit\\": "tests/PHPUnit"
         }
     },
     "config": {
