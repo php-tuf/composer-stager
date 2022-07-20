@@ -26,6 +26,7 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
     - PhpTuf\ComposerStager\PHPStan\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
+    - PhpTuf\ComposerStager\PHPStan\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
     -
