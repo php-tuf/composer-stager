@@ -62,7 +62,7 @@
     "autoload-dev": {
         "psr-4": {
             "PhpTuf\\ComposerStager\\PHPCS\\": "phpcs/",
-            "PhpTuf\\ComposerStager\\PHPStan\\": "phpstan/",
+            "PhpTuf\\ComposerStager\\Tests\\PHPStan\\": "tests/PHPStan",
             "PhpTuf\\ComposerStager\\Tests\\PHPUnit\\": "tests/PHPUnit"
         }
     },

@@ -20,25 +20,25 @@ parameters:
     preconditionSystemHash: 4774ea54cb69d8ed11ee75bf384c388d
 
 rules:
-    - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
-    - PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
-    - PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
-    - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
-    - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
-    - PhpTuf\ComposerStager\PHPStan\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
-    - PhpTuf\ComposerStager\PHPStan\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
     -
         # Ensures that precondtion system diagrams stay current.
-        class: PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule
+        class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
         arguments:
             preconditionSystemHash: %preconditionSystemHash%
         tags:
             - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
-        class: PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule
+        class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
         arguments:
             gitattributesExportInclude: %gitattributesExportInclude%
         tags:

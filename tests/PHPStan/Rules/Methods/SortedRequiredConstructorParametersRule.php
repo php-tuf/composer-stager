@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\PHPStan\Methods;
+namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\PHPStan\AbstractRule;
+use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
 
 /** Requires non-optional constructor parameters to be alphabetized. */
 final class SortedRequiredConstructorParametersRule extends AbstractRule
