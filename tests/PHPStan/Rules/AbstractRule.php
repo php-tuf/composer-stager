@@ -23,10 +23,10 @@ abstract class AbstractRule implements Rule
         $this->reflectionProvider = $reflectionProvider;
     }
 
-    protected function getClassReflection(Node $node): ClassReflection
+    protected function getClassReflection(Node $node): ?ClassReflection
     {
         if (!isset($node->namespacedName)) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         $namespace = $node->namespacedName;

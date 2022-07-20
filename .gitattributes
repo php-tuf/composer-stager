@@ -7,7 +7,6 @@
 /deptrac.yaml        export-ignore
 /grumphp.yml.dist    export-ignore
 /infection.json.dist export-ignore
-/phpcs               export-ignore
 /phpcs.xml.dist      export-ignore
 /phpmd.xml           export-ignore
 /phpstan.neon.dist   export-ignore

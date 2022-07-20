@@ -69,6 +69,7 @@ abstract class TestCase extends PHPUnitTestCase
             //    | Resource temporarily unavailable.
             //   Obviously, this error suppression is likely to bite us in the future
             //   even though it doesn't seem to cause any problems now. Fix it.
+            // @ignoreException
         }
     }
 

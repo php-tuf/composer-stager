@@ -117,6 +117,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     {
         // Expose private method for testing.
         // @see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/
+        // @phpstan-ignore-next-line
         $method = static fn (PhpFileSyncer $sut, $ancestor, $path): string => $sut::getRelativePath($ancestor, $path);
         $sut = $this->createSut();
         $method = Closure::bind($method, null, $sut);

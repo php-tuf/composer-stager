@@ -19,7 +19,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
- * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder|\Prophecy\Prophecy\ObjectProphecy $fileFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
 final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
 {

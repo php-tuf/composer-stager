@@ -38,7 +38,11 @@ final class UnixLikePathUnitTest extends TestCase
 
         // Dynamically override CWD.
         $setCwd = function ($cwd) {
-            /** @noinspection PhpUndefinedFieldInspection */
+            /**
+             * @noinspection PhpUndefinedFieldInspection
+             *
+             * @phpstan-ignore-next-line
+             */
             $this->cwd = $cwd;
         };
         $setCwd->call($sut, $cwd);

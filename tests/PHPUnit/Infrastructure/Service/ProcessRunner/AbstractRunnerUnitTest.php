@@ -51,13 +51,13 @@ final class AbstractRunnerUnitTest extends TestCase
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class ($executableName, $executableFinder, $processFactory) extends AbstractRunner
+        return new class ($executableFinder, $executableName, $processFactory) extends AbstractRunner
         {
             private string $executableName;
 
             public function __construct(
-                string $executableName,
                 ExecutableFinderInterface $executableFinder,
+                string $executableName,
                 ProcessFactoryInterface $processFactory
             ) {
                 parent::__construct($executableFinder, $processFactory);

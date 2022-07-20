@@ -20,7 +20,7 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
@@ -45,9 +45,6 @@ final class StagerUnitTest extends TestCase
 
     protected function createSut(): Stager
     {
-        $this->activeDir = $this->activeDir->reveal();
-        $this->stagingDir = $this->stagingDir->reveal();
-
         $composerRunner = $this->composerRunner->reveal();
         $preconditions = $this->preconditions->reveal();
 
@@ -57,12 +54,14 @@ final class StagerUnitTest extends TestCase
     /** @dataProvider providerHappyPath */
     public function testHappyPath($givenCommand, $expectedCommand, $callback, $timeout): void
     {
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $this->composerRunner
             ->run($expectedCommand, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, $this->activeDir, $this->stagingDir, $callback, $timeout);
+        $sut->stage($givenCommand, $activeDir, $stagingDir, $callback, $timeout);
     }
 
     public function providerHappyPath(): array
@@ -94,9 +93,11 @@ final class StagerUnitTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/empty/');
 
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
-        $sut->stage([], $this->activeDir, $this->stagingDir);
+        $sut->stage([], $activeDir, $stagingDir);
     }
 
     public function testCommandContainsComposer(): void
@@ -104,12 +105,14 @@ final class StagerUnitTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/cannot begin/');
 
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
         $sut->stage([
             'composer',
             self::INERT_COMMAND,
-        ], $this->activeDir, $this->stagingDir);
+        ], $activeDir, $stagingDir);
     }
 
     /** @dataProvider providerCommandContainsWorkingDirOption */
@@ -118,9 +121,11 @@ final class StagerUnitTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/--working-dir/');
 
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
-        $sut->stage($command, $this->activeDir, $this->stagingDir);
+        $sut->stage($command, $activeDir, $stagingDir);
     }
 
     public function providerCommandContainsWorkingDirOption(): array
@@ -136,13 +141,15 @@ final class StagerUnitTest extends TestCase
     {
         $this->expectException(PreconditionException::class);
 
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir)
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();
 
-        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $activeDir, $stagingDir);
     }
 
     /** @dataProvider providerExceptions */
@@ -151,13 +158,15 @@ final class StagerUnitTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($message);
 
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
         $this->composerRunner
             ->run(Argument::cetera())
             ->willThrow($exception);
 
         $sut = $this->createSut();
 
-        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $activeDir, $stagingDir);
     }
 
     public function providerExceptions(): array

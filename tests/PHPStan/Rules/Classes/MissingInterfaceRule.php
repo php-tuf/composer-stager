@@ -20,6 +20,10 @@ final class MissingInterfaceRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
+        if ($class === null) {
+            return [];
+        }
+
         if ($this->isFactoryClass($class) ||
             $class->isInterface() ||
             $class->isAbstract() ||

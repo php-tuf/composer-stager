@@ -20,7 +20,11 @@ final class SortedPropertiesRule extends AbstractRule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $classReflection = $this->getClassReflection($node);
+        $class = $this->getClassReflection($node);
+
+        if ($class === null) {
+            return [];
+        }
 
         $current = $previous = [
             'private' => '',
@@ -30,9 +34,9 @@ final class SortedPropertiesRule extends AbstractRule
 
         $errors = [];
 
-        foreach ($classReflection->getNativeReflection()->getProperties() as $property) {
+        foreach ($class->getNativeReflection()->getProperties() as $property) {
             // Skip inherited properties.
-            if ($property->getDeclaringClass()->getName() !== $classReflection->getName()) {
+            if ($property->getDeclaringClass()->getName() !== $class->getName()) {
                 continue;
             }
 
@@ -46,7 +50,7 @@ final class SortedPropertiesRule extends AbstractRule
                 }
 
                 $message = sprintf(
-                    '%s properties should be sorted alphabetically by variable. The first wrong one is $%s.',
+                    '%s properties should be sorted alphabetically by variable. The first wrong one is "$%s".',
                     ucfirst($visibility),
                     $current[$visibility],
                 );
@@ -59,7 +63,7 @@ final class SortedPropertiesRule extends AbstractRule
         return array_values($errors);
     }
 
-    public function getVisibility(ReflectionProperty $property): string
+    private function getVisibility(ReflectionProperty $property): string
     {
         if ($property->isPublic()) {
             return 'public';
