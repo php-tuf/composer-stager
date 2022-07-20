@@ -61,7 +61,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PhpTuf\\ComposerStager\\PHPCS\\": "phpcs/",
             "PhpTuf\\ComposerStager\\Tests\\PHPStan\\": "tests/PHPStan",
             "PhpTuf\\ComposerStager\\Tests\\PHPUnit\\": "tests/PHPUnit"
         }
@@ -86,7 +85,6 @@
         }
     },
     "scripts": {
-        "post-install-cmd": "phpcs --config-set installed_paths ../../phpcompatibility/php-compatibility,../../slevomat/coding-standard,phpcs/ComposerStager",
         "all": "grumphp run",
         "c": "rm -r var/*/* &> /dev/null || true",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",

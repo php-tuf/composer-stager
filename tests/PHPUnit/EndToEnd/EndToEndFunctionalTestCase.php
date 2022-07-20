@@ -314,7 +314,10 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertComposerJsonName($directory, $expected, $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
+        assert(is_string($json));
         $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        assert(is_array($data));
+        assert(array_key_exists('name', $data));
         self::assertEquals($expected, $data['name'], $message);
     }
 

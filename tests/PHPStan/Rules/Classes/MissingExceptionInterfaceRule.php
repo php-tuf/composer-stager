@@ -21,6 +21,10 @@ final class MissingExceptionInterfaceRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
+        if ($class === null) {
+            return [];
+        }
+
         if (!$this->isThrowable($class)) {
             return[];
         }

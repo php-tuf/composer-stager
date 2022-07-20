@@ -12,7 +12,6 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
-    <file>phpcs</file>
     <file>src</file>
     <file>tests</file>
 
@@ -238,15 +237,6 @@
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
-    <rule ref="ComposerStager.Commenting.AlphabeticallySortedCovers"/>
-    <rule ref="ComposerStager.Commenting.AlphabeticallySortedProperty"/>
-    <rule ref="ComposerStager.Commenting.AlphabeticallySortedSee"/>
-    <rule ref="ComposerStager.Commenting.AlphabeticallySortedThrows"/>
-    <rule ref="ComposerStager.Commenting.AlphabeticallySortedUses"/>
-    <rule ref="ComposerStager.Commenting.CoverageAnnotationHasNoParentheses"/>
-    <rule ref="ComposerStager.Commenting.PropertyDataTypePutsObjectProphecyLast"/>
-    <rule ref="ComposerStager.Commenting.PropertyVarNameHasDollarSign"/>
-
     <!-- Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
     <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>
 
@@ -259,15 +249,15 @@
 
     <!-- Exclusions for test classes. -->
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>phpcs</exclude-pattern><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
 
 </ruleset>

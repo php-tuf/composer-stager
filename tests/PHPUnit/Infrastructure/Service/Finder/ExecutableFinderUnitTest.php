@@ -119,11 +119,13 @@ final class ExecutableFinderUnitTest extends TestCase
         try {
             $sut->find('composer');
         } catch (LogicException $e) {
+            // @ignoreException
         }
 
         try {
             $sut->find('composer');
         } catch (LogicException $e) {
+            // @ignoreException
         }
     }
 }
