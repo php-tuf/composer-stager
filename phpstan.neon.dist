@@ -17,13 +17,16 @@ parameters:
         - LICENSE
         - README.md
         - src
-    preconditionSystemHash: d687cae720f229902c38fd3f007984a9
+    preconditionSystemHash: 4774ea54cb69d8ed11ee75bf384c388d
 
 rules:
     - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
     - PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
+    - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+    - PhpTuf\ComposerStager\PHPStan\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
+    - PhpTuf\ComposerStager\PHPStan\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
     -

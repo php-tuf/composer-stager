@@ -21,9 +21,9 @@ final class UselessInterfaceRule extends AbstractRule
         $interface = $this->getClassReflection($node);
         $reflection = $interface->getNativeReflection();
         $methods = $reflection->getMethods();
-        $members = $reflection->getConstants();
+        $constants = $reflection->getReflectionConstants();
 
-        if (count($methods) > 0 || count($members) > 0) {
+        if (count($methods) > 0 || count($constants) > 0) {
             return [];
         }
 

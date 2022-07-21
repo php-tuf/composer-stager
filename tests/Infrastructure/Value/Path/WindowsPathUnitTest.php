@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 final class WindowsPathUnitTest extends TestCase
 {
     /**
-     * @covers ::__construct()
+     * @covers ::__construct
      * @covers ::doResolve
      * @covers ::getAbsoluteFromRelative
      * @covers ::isAbsoluteFromCurrentDrive

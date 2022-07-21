@@ -12,11 +12,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterfa
 final class CommonPreconditions extends AbstractPreconditionsTree implements CommonPreconditionsInterface
 {
     public function __construct(
-        ComposerIsAvailableInterface $composerIsAvailable,
+        ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirExistsInterface $activeDirExists,
         ActiveDirIsWritableInterface $activeDirIsWritable,
-        ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
-        CodebaseContainsNoSymlinksInterface $codebaseContainsNoSymlinks
+        CodebaseContainsNoSymlinksInterface $codebaseContainsNoSymlinks,
+        ComposerIsAvailableInterface $composerIsAvailable
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

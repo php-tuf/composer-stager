@@ -6,7 +6,7 @@ use ComposerStager\Sniffs\Util\DocCommentTag;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
-final class PropertyVarNameHasDollarSignSniff implements Sniff
+final class CoverageAnnotationHasNoParenthesesSniff implements Sniff
 {
     public function register(): array
     {
@@ -18,7 +18,7 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
         $tag = new DocCommentTag($phpcsFile, $stackPtr);
 
         // Only process the target tag.
-        if ($tag->getName() !== '@property') {
+        if (!in_array($tag->getName(), ['@covers', '@uses'], true)) {
             return;
         }
 
@@ -27,17 +27,18 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
         $content = array_filter($content);
         $content = array_values((array) $content);
 
-        $varName = end($content);
+        $funcName = array_pop($content);
 
-        // The variable name (correctly) begins with a dollar sign.
-        if (strpos($varName, '$') === 0) {
+        // The function name does not end with parentheses.
+        if (substr($funcName, -2) !== '()') {
             return;
         }
 
         $phpcsFile->addError(
             sprintf(
-                '@property variable name must begin with a dollar sign, i.e., "$%s".',
-                $varName,
+                '%s function name "%s" must not end with parentheses.',
+                $tag->getName(),
+                $funcName,
             ),
             $stackPtr,
             $this->errorCode(),
@@ -46,6 +47,6 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
 
     protected function errorCode(): string
     {
-        return 'MissingDollarSign';
+        return 'ForbiddenParentheses';
     }
 }
