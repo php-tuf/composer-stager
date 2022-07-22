@@ -8,6 +8,7 @@
       <w>codesize</w>
       <w>dealerdirect</w>
       <w>deptrac</w>
+      <w>dirname</w>
       <w>getcwd</w>
       <w>gitattributes</w>
       <w>grumphp</w>
@@ -19,7 +20,8 @@
       <w>phpcs</w>
       <w>phplint</w>
       <w>phpstan</w>
-      <w>precondition</w>
+      <w>polyline</w>
+      <w>precondtion</w>
       <w>puml</w>
       <w>qossmic</w>
       <w>rlptgo</w>
