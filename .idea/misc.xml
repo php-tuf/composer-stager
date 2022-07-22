@@ -494,6 +494,7 @@
       <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks __construct" />
       <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks getDescription" />
       <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks getName" />
+      <entry_point TYPE="phpMethod" FQNAME="\PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface getAll" />
     </entry_point>
     <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" member="begin" />
     <pattern value="\PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface" />
@@ -936,6 +937,7 @@
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" member="__construct" />
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" member="getDescription" />
     <pattern value="\PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks" member="getName" />
+    <pattern value="\PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface" member="getAll" />
   </component>
   <component name="ProjectResources">
     <resource url="https://pmd.sourceforge.io/ruleset/2.0.0" location="$PROJECT_DIR$" />
