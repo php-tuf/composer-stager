@@ -10,6 +10,9 @@ grumphp:
     tasks:
         clover_coverage:
             clover_file: var/phpunit/clover.xml
+            # Requiring 100% code coverage here makes it safe to just put a static
+            # badge in the README rather than using some third-party service. If
+            # this ever changes, that strategy will have to change accordingly.
             level: 100
         composer: ~
         composer_normalize: ~
