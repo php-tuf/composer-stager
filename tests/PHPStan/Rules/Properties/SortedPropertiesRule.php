@@ -26,11 +26,12 @@ final class SortedPropertiesRule extends AbstractRule
             return [];
         }
 
-        $current = $previous = [
+        $current = [
             'private' => '',
             'protected' => '',
             'public' => '',
         ];
+        $previous = $current;
 
         $errors = [];
 
