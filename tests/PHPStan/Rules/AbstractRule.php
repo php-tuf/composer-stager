@@ -58,11 +58,6 @@ abstract class AbstractRule implements Rule
         return substr($class->getName(), -strlen($factory)) === $factory;
     }
 
-    protected function isThrowable(ClassReflection $class): bool
-    {
-        return array_key_exists('Throwable', $class->getInterfaces());
-    }
-
     protected function isInNamespace(string $name, string $namespace): bool
     {
         return strpos($name, $namespace) === 0;

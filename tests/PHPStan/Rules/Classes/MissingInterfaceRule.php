@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use Throwable;
 
 /** Requires non-factory classes to implement an interface. */
 final class MissingInterfaceRule extends AbstractRule
@@ -27,7 +28,7 @@ final class MissingInterfaceRule extends AbstractRule
         if ($this->isFactoryClass($class) ||
             $class->isInterface() ||
             $class->isAbstract() ||
-            $this->isThrowable($class)
+            $class->is(Throwable::class)
         ) {
             return [];
         }

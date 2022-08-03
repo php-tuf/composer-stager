@@ -8,6 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use Throwable;
 
 /** Requires throwable classes to implement ExceptionInterface. */
 final class MissingExceptionInterfaceRule extends AbstractRule
@@ -25,11 +26,11 @@ final class MissingExceptionInterfaceRule extends AbstractRule
             return [];
         }
 
-        if (!$this->isThrowable($class)) {
+        if (!$class->is(Throwable::class)) {
             return[];
         }
 
-        if (!array_key_exists(ExceptionInterface::class, $class->getInterfaces())) {
+        if (!$class->is(ExceptionInterface::class)) {
             $message = sprintf('Throwable class must implement %s', ExceptionInterface::class);
 
             return [RuleErrorBuilder::message($message)->build()];
