@@ -73,8 +73,11 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $this->filesystem
+            ->exists(Argument::type(PathInterface::class))
+            ->willReturn(true);
         $this->fileFinder
-            ->find(Argument::cetera())
+            ->find(Argument::type(PathInterface::class))
             ->willThrow($exception);
         $sut = $this->createSut();
 
