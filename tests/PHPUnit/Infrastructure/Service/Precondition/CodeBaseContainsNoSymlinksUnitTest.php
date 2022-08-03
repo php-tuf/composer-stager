@@ -30,7 +30,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
         $this->fileFinder = $this->prophesize(RecursiveFileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::any())
+            ->exists(Argument::type(PathInterface::class))
             ->willReturn(false);
     }
 
@@ -51,7 +51,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->fileFinder
-            ->find(Argument::cetera())
+            ->find(Argument::type(PathInterface::class))
             ->willReturn([]);
         $sut = $this->createSut();
 
