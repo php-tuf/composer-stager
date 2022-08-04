@@ -68,17 +68,17 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
     public function providerDoesNotContainSymlinks(): array
     {
         return [
-            'Empty directory' => [[]],
-            'One file' => [['file.txt']],
+            'Empty directory' => ['files' => []],
+            'One file' => ['files' => ['file.txt']],
             'Multiple files' => [
-                [
+                'files' => [
                     'one.txt',
                     'two.txt',
                     'three.txt',
                 ],
             ],
             'Files with directory depth' => [
-                [
+                'files' => [
                     'one/two.txt',
                     'three/four/five.txt',
                     'six/seven/eight/nine/ten.txt',
