@@ -15,7 +15,7 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
 
     private FilesystemInterface $filesystem;
 
-    private string $unfulfilledStatusMessage = 'The codebase contains symlinks.';
+    private string $unfulfilledStatusMessage = 'The %s directory at "%s" contains symlinks, which is not supported.';
 
     public function __construct(RecursiveFileFinderInterface $fileFinder, FilesystemInterface $filesystem)
     {
@@ -35,20 +35,33 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
 
     public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
     {
-        try {
-            $files = $this->findFiles($activeDir, $stagingDir);
-        } catch (InvalidArgumentException|IOException $e) {
-            // If something goes wrong searching for symlinks, don't throw an
-            // exception--just consider the precondition unfulfilled and pass
-            // details along to the user via the status message.
-            $this->unfulfilledStatusMessage = $e->getMessage();
+        $directories = [
+            'active' => $activeDir,
+            'staging' => $stagingDir,
+        ];
 
-            return false;
-        }
+        foreach ($directories as $name => $path) {
+            try {
+                $files = $this->findFiles($path);
+            } catch (InvalidArgumentException|IOException $e) {
+                // If something goes wrong searching for symlinks, don't throw an
+                // exception--just consider the precondition unfulfilled and pass
+                // details along to the user via the status message.
+                $this->unfulfilledStatusMessage = $e->getMessage();
 
-        foreach ($files as $file) {
-            if (is_link($file)) {
                 return false;
+            }
+
+            foreach ($files as $file) {
+                if (is_link($file)) {
+                    $this->unfulfilledStatusMessage = sprintf(
+                        $this->unfulfilledStatusMessage,
+                        $name,
+                        $path->resolve(),
+                    );
+
+                    return false;
+                }
             }
         }
 
@@ -73,16 +86,12 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
-    private function findFiles(PathInterface $activeDir, PathInterface $stagingDir): array
+    private function findFiles(PathInterface $activeDir): array
     {
-        $activeDirFiles = $this->fileFinder->find($activeDir);
-
-        if (!$this->filesystem->exists($stagingDir)) {
-            return $activeDirFiles;
+        if (!$this->filesystem->exists($activeDir)) {
+            return [];
         }
 
-        $stagingDirFiles = $this->fileFinder->find($stagingDir);
-
-        return array_merge($activeDirFiles, $stagingDirFiles);
+        return $this->fileFinder->find($activeDir);
     }
 }

@@ -97,46 +97,57 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
      *
      * @dataProvider providerContainsSymlinks
      */
-    public function testContainsSymlinks($directory, $source): void
+    public function testContainsSymlinks($dirName, $dirPath, $source): void
     {
-        $directory = PathFactory::create($directory)->resolve();
-        self::createFiles($directory, ['one/two/three/four/five/six.txt']);
+        $dirPath = PathFactory::create($dirPath)->resolve();
+        self::createFiles($dirPath, ['one/two/three/four/five/six.txt']);
         self::createFile('symlink', 'target.txt');
-        self::assertTrue(symlink('symlink/target.txt', "{$directory}/{$source}"));
+        self::assertTrue(symlink('symlink/target.txt', "{$dirPath}/{$source}"));
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
         $statusMessage = $sut->getStatusMessage($this->activeDir, $this->stagingDir);
 
         self::assertFalse($isFulfilled, 'Found symlinks.');
-        self::assertSame('The codebase contains symlinks.', $statusMessage, 'Returned correct status message.');
+        $pattern = sprintf(
+            '@^The %s directory at "%s" contains symlinks, which is not supported.$@',
+            $dirName,
+            preg_quote($dirPath, '@'),
+        );
+        self::assertMatchesRegularExpression($pattern, $statusMessage, 'Returned correct status message.');
     }
 
     public function providerContainsSymlinks(): array
     {
         return [
             'Active directory: root' => [
-                'directory' => self::ACTIVE_DIR,
+                'dirName' => 'active',
+                'dirPath' => self::ACTIVE_DIR,
                 'source' => 'symlink.txt',
             ],
             'Active directory: subdir' => [
-                'directory' => self::ACTIVE_DIR,
+                'dirName' => 'active',
+                'dirPath' => self::ACTIVE_DIR,
                 'source' => 'one/symlink.txt',
             ],
             'Active directory: subdir with depth' => [
-                'directory' => self::ACTIVE_DIR,
+                'dirName' => 'active',
+                'dirPath' => self::ACTIVE_DIR,
                 'source' => 'one/two/three/four/five/symlink.txt',
             ],
             'Staging directory: root' => [
-                'directory' => self::STAGING_DIR,
+                'dirName' => 'staging',
+                'dirPath' => self::STAGING_DIR,
                 'source' => 'symlink.txt',
             ],
             'Staging directory: subdir' => [
-                'directory' => self::STAGING_DIR,
+                'dirName' => 'staging',
+                'dirPath' => self::STAGING_DIR,
                 'source' => 'one/symlink.txt',
             ],
             'Staging directory: subdir with depth' => [
-                'directory' => self::STAGING_DIR,
+                'dirName' => 'staging',
+                'dirPath' => self::STAGING_DIR,
                 'source' => 'one/two/three/four/five/symlink.txt',
             ],
         ];
