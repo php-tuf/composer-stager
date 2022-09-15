@@ -7,8 +7,31 @@ parameters:
     tmpDir: var/phpstan
     paths:
         - src
+        - tests/PHPUnit/Domain
+        - tests/PHPUnit/Infrastructure
         - .gitattributes
     treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        -
+            message: '#Access to an undefined property class@anonymous/.*#'
+            path: tests/PHPUnit
+        -
+            message: '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+\.#'
+            paths:
+                - tests/PHPUnit/Infrastructure/Aggregate/PreconditionsTree/AbstractPreconditionsTreeUnitTest.php
+                - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractPreconditionUnitTest.php
+        -
+            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+.+ with no type specified.#'
+            path: tests/PHPUnit
+        -
+            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) return type has no value type specified in iterable type array.#'
+            path: tests/PHPUnit
+        -
+            message: '#Missing @throws [a-zA-Z0-9\\_]+ annotation#'
+            path: tests/PHPUnit
+        -
+            message: '#Property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+ \([a-zA-Z0-9\\_]+\) does not accept object\|null.*#'
+            path: tests/PHPUnit/EndToEnd/EndToEndFunctionalTestCase.php
 
     # Custom parameters.
     gitattributesExportInclude:
@@ -17,28 +40,35 @@ parameters:
         - LICENSE
         - README.md
         - src
-    preconditionSystemHash: 4774ea54cb69d8ed11ee75bf384c388d
+    preconditionSystemHash: f41703e49800bce6744b9116afb30d6a
 
 rules:
-    - PhpTuf\ComposerStager\PHPStan\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
-    - PhpTuf\ComposerStager\PHPStan\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
-    - PhpTuf\ComposerStager\PHPStan\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
-    - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
-    - PhpTuf\ComposerStager\PHPStan\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
-    - PhpTuf\ComposerStager\PHPStan\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
-    - PhpTuf\ComposerStager\PHPStan\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedCoversAnnotationsRule # Requires "@covers" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedPropertyAnnotationsRule # Requires "@property" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
     -
         # Ensures that precondtion system diagrams stay current.
-        class: PhpTuf\ComposerStager\PHPStan\Interfaces\PreconditionDiagramsInSyncRule
+        class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
         arguments:
             preconditionSystemHash: %preconditionSystemHash%
         tags:
             - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
-        class: PhpTuf\ComposerStager\PHPStan\Files\GitattributesMissingExportIgnoreRule
+        class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
         arguments:
             gitattributesExportInclude: %gitattributesExportInclude%
         tags:

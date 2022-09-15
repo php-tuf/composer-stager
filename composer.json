@@ -31,6 +31,7 @@
         "php-parallel-lint/php-parallel-lint": "^1.3",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "^2.10",
+        "phpmetrics/phpmetrics": "^2.8",
         "phpro/grumphp-shim": "^1.5",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.1",
@@ -61,9 +62,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PhpTuf\\ComposerStager\\PHPCS\\": "phpcs/",
-            "PhpTuf\\ComposerStager\\PHPStan\\": "phpstan/",
-            "PhpTuf\\ComposerStager\\Tests\\": "tests/"
+            "PhpTuf\\ComposerStager\\Tests\\PHPStan\\": "tests/PHPStan",
+            "PhpTuf\\ComposerStager\\Tests\\PHPUnit\\": "tests/PHPUnit"
         }
     },
     "config": {
@@ -79,14 +79,13 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.x-dev"
+            "dev-develop": "1.x-dev"
         },
         "grumphp": {
             "disable-plugin": true
         }
     },
     "scripts": {
-        "post-install-cmd": "phpcs --config-set installed_paths ../../phpcompatibility/php-compatibility,../../slevomat/coding-standard,phpcs/ComposerStager",
         "all": "grumphp run",
         "c": "rm -r var/*/* &> /dev/null || true",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",
@@ -118,7 +117,7 @@
         "phpcbf": "Automatically fixes standards violations where possible.",
         "phpcs": "Checks code for standards compliance.",
         "phpmd": "Looks for potential problems within the source code.",
-        "phpmetrics": "Provides various metrics about PHP projects. (Assumes that phpmetrics/phpmetrics is installed globally.)",
+        "phpmetrics": "Provides various metrics about PHP projects.",
         "phpstan": "Analyzes code to find bugs.",
         "phpunit": "Runs PHPUnit tests.",
         "psalm": "Automatically fixes Psalm errors where possible.",
