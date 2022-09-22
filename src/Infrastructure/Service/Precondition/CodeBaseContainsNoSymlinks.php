@@ -86,12 +86,13 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
-    private function findFiles(PathInterface $activeDir): array
+    private function findFiles(PathInterface $path): array
     {
-        if (!$this->filesystem->exists($activeDir)) {
+        // Ignore non-existent directories.
+        if (!$this->filesystem->exists($path)) {
             return [];
         }
 
-        return $this->fileFinder->find($activeDir);
+        return $this->fileFinder->find($path);
     }
 }
