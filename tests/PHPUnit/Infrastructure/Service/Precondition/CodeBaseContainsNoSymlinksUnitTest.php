@@ -31,7 +31,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::type(PathInterface::class))
-            ->willReturn(false);
+            ->willReturn(true);
     }
 
     private function createSut(): CodeBaseContainsNoSymlinks
@@ -58,6 +58,49 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
 
         self::assertTrue($isFulfilled, 'Treated empty codebase as fulfilled.');
+    }
+
+    /**
+     * @covers ::findFiles
+     * @covers ::isFulfilled
+     *
+     * @dataProvider providerDirectoryNotFound
+     */
+    public function testDirectoryNotFound($activeDirExists, $stagingDirExists): void
+    {
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->filesystem
+            ->exists($activeDir)
+            ->willReturn($activeDirExists);
+        $this->filesystem
+            ->exists($stagingDir)
+            ->willReturn($stagingDirExists);
+        $this->fileFinder
+            ->find($activeDir)
+            ->shouldBeCalledTimes((int) $activeDirExists);
+        $this->fileFinder
+            ->find($stagingDir)
+            ->shouldBeCalledTimes((int) $stagingDirExists);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled, 'Treated empty codebase as fulfilled.');
+    }
+
+    public function providerDirectoryNotFound(): array
+    {
+        return [
+            'Active directory not found' => [
+                'activeDirExists' => false,
+                'stagingDirExists' => true,
+            ],
+            'Staging directory not found' => [
+                'activeDirExists' => true,
+                'stagingDirExists' => false,
+            ],
+        ];
     }
 
     /**
