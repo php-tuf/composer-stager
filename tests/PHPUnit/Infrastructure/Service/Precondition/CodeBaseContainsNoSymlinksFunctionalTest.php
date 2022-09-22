@@ -152,4 +152,40 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @covers ::findFiles
+     * @covers ::isFulfilled
+     *
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+     *
+     * @dataProvider providerDirectoryDoesNotExist
+     */
+    public function testDirectoryDoesNotExist($activeDir, $stagingDir): void
+    {
+        $activeDir = PathFactory::create($activeDir);
+        $stagingDir = PathFactory::create($stagingDir);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled, 'Silently ignored non-existent directory');
+    }
+
+    public function providerDirectoryDoesNotExist(): array
+    {
+        $nonexistentDir = self::TEST_WORKING_DIR . '/65eb69a274470dd84e9b5371f7e1e8c8';
+
+        return [
+            'Active directory' => [
+                'activeDir' => $nonexistentDir,
+                'stagingDir' => self::STAGING_DIR,
+            ],
+            'Staging directory' => [
+                'activeDir' => self::ACTIVE_DIR,
+                'stagingDir' => $nonexistentDir,
+            ],
+        ];
+    }
 }
