@@ -86,25 +86,29 @@ abstract class TestCase extends PHPUnitTestCase
         $dirname = dirname($filename);
 
         if (!file_exists($dirname)) {
-            self::assertTrue(mkdir($dirname, 0777, true), "Created directory {$dirname}.");
+            $mkdirResult = mkdir($dirname, 0777, true);
+            assert($mkdirResult, "Created directory {$dirname}.");
         }
 
-        self::assertTrue(touch($filename), "Created file {$filename}.");
-        self::assertNotFalse(realpath($filename), "Got absolute path of {$filename}.");
+        $touchResult = touch($filename);
+        $realpathResult = realpath($filename);
+
+        assert($touchResult, "Created file {$filename}.");
+        assert($realpathResult !== false, "Got absolute path of {$filename}.");
     }
 
     protected static function changeFile($dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($pathname, self::CHANGED_CONTENT);
-        self::assertNotFalse($result, "Changed file {$pathname}.");
+        assert($result !== false, "Changed file {$pathname}.");
     }
 
     protected static function deleteFile($dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
-        self::assertTrue($result, "Deleted file {$pathname}.");
+        assert($result, "Deleted file {$pathname}.");
     }
 
     protected static function fixSeparators(string $path): string
