@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Factory\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
@@ -66,13 +65,13 @@ final class FileSyncerFactoryUnitTest extends TestCase
                 'executable' => 'rsync',
                 'calledTimes' => 1,
                 'path' => '/usr/bin/rsync',
-                'instanceOf' => FileSyncerInterface::class,
+                'instanceOf' => RsyncFileSyncerInterface::class,
             ],
             [
                 'executable' => 'n/a',
                 'calledTimes' => 0,
                 'path' => null,
-                'instanceOf' => FileSyncerInterface::class,
+                'instanceOf' => PhpFileSyncerInterface::class,
             ],
         ];
     }
