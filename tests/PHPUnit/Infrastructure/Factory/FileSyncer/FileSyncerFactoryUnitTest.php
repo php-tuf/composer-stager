@@ -44,7 +44,7 @@ final class FileSyncerFactoryUnitTest extends TestCase
      *
      * @dataProvider providerCreate
      */
-    public function testCreate($executable, $calledTimes, $path, $instanceOf): void
+    public function testCreate(string $executable, int $calledTimes, ?string $path, string $instanceOf): void
     {
         $this->executableFinder
             ->find($executable)

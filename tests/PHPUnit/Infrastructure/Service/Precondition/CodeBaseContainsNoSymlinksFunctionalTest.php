@@ -55,7 +55,7 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
      *
      * @dataProvider providerDoesNotContainSymlinks
      */
-    public function testDoesNotContainSymlinks($files): void
+    public function testDoesNotContainSymlinks(array $files): void
     {
         self::createFiles(self::ACTIVE_DIR, $files);
         $sut = $this->createSut();
@@ -97,7 +97,7 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
      *
      * @dataProvider providerContainsSymlinks
      */
-    public function testContainsSymlinks($dirName, $dirPath, $source): void
+    public function testContainsSymlinks(string $dirName, string $dirPath, string $source): void
     {
         $dirPath = PathFactory::create($dirPath)->resolve();
         self::createFiles($dirPath, ['one/two/three/four/five/six.txt']);
@@ -162,7 +162,7 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
      *
      * @dataProvider providerDirectoryDoesNotExist
      */
-    public function testDirectoryDoesNotExist($activeDir, $stagingDir): void
+    public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
         $activeDir = PathFactory::create($activeDir);
         $stagingDir = PathFactory::create($stagingDir);

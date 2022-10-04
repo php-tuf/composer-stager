@@ -58,7 +58,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     abstract protected function fileSyncerClass(): string;
 
     /** @dataProvider providerDirectories */
-    public function testSync($activeDir, $stagingDir): void
+    public function testSync(string $activeDir, string $stagingDir): void
     {
         $activeDirPath = PathFactory::create($activeDir);
         $stagingDirPath = PathFactory::create($stagingDir);

@@ -113,7 +113,7 @@ final class PhpFileSyncerUnitTest extends TestCase
      *
      * @dataProvider providerGetRelativePath
      */
-    public function testGetRelativePath($ancestor, $path, $expected): void
+    public function testGetRelativePath(string $ancestor, string $path, string $expected): void
     {
         // Expose private method for testing.
         // @see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/

@@ -37,7 +37,7 @@ final class ExecutableFinderUnitTest extends TestCase
     }
 
     /** @dataProvider providerFind */
-    public function testFind($firstCommandName, $firstPath, $secondCommandName): void
+    public function testFind(string $firstCommandName, string $firstPath, string $secondCommandName): void
     {
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
@@ -77,7 +77,7 @@ final class ExecutableFinderUnitTest extends TestCase
     }
 
     /** @dataProvider providerFindNotFound */
-    public function testFindNotFound($name): void
+    public function testFindNotFound(string $name): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessageMatches("/{$name}.*found/");

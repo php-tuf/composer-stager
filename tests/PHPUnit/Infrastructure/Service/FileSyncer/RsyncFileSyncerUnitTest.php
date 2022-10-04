@@ -6,8 +6,10 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -68,8 +70,13 @@ final class RsyncFileSyncerUnitTest extends TestCase
     }
 
     /** @dataProvider providerSync */
-    public function testSync($source, $destination, $exclusions, $command, $callback): void
-    {
+    public function testSync(
+        string $source,
+        string $destination,
+        ?PathListInterface $exclusions,
+        array $command,
+        ?ProcessOutputCallbackInterface $callback
+    ): void {
         $this->source
             ->resolve()
             ->willReturn($source);
@@ -176,7 +183,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     }
 
     /** @dataProvider providerSyncFailure */
-    public function testSyncFailure($caught, $thrown): void
+    public function testSyncFailure(string $caught, string $thrown): void
     {
         $this->expectException($thrown);
 

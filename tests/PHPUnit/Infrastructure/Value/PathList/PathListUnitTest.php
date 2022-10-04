@@ -21,7 +21,7 @@ final class PathListUnitTest extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality($paths): void
+    public function testBasicFunctionality(array $paths): void
     {
         $sut = new PathList($paths);
 
@@ -48,7 +48,7 @@ final class PathListUnitTest extends TestCase
      *
      * @dataProvider providerInvalidInput
      */
-    public function testInvalidInput($paths, $givenType): void
+    public function testInvalidInput(array $paths, string $givenType): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Paths must be strings. Given {$givenType}");

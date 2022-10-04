@@ -4,11 +4,13 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Stager;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -52,8 +54,12 @@ final class StagerUnitTest extends TestCase
     }
 
     /** @dataProvider providerHappyPath */
-    public function testHappyPath($givenCommand, $expectedCommand, $callback, $timeout): void
-    {
+    public function testHappyPath(
+        array $givenCommand,
+        array $expectedCommand,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $timeout
+    ): void {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->composerRunner
@@ -116,7 +122,7 @@ final class StagerUnitTest extends TestCase
     }
 
     /** @dataProvider providerCommandContainsWorkingDirOption */
-    public function testCommandContainsWorkingDirOption($command): void
+    public function testCommandContainsWorkingDirOption(array $command): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/--working-dir/');
@@ -153,7 +159,7 @@ final class StagerUnitTest extends TestCase
     }
 
     /** @dataProvider providerExceptions */
-    public function testExceptions($exception, $message): void
+    public function testExceptions(ExceptionInterface $exception, string $message): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($message);

@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -49,7 +50,7 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerCopy
      */
-    public function testCopy($source, $destination): void
+    public function testCopy(string $source, string $destination): void
     {
         $this->activeDir
             ->resolve()
@@ -139,7 +140,7 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerExists
      */
-    public function testExists($path, $expected): void
+    public function testExists(string $path, bool $expected): void
     {
         $this->stagingDir
             ->resolve()
@@ -174,7 +175,7 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerMkdir
      */
-    public function testMkdir($dir): void
+    public function testMkdir(string $dir): void
     {
         $this->stagingDir
             ->resolve()
@@ -213,8 +214,12 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerRemove
      */
-    public function testRemove($path, $callback, $givenTimeout, $expectedTimeout): void
-    {
+    public function testRemove(
+        string $path,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $givenTimeout,
+        int $expectedTimeout
+    ): void {
         $this->stagingDir
             ->resolve()
             ->willReturn($path);

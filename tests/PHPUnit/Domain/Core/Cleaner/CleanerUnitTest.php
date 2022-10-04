@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -52,7 +53,7 @@ final class CleanerUnitTest extends TestCase
      *
      * @dataProvider providerCleanHappyPath
      */
-    public function testCleanHappyPath($path, $callback, $timeout): void
+    public function testCleanHappyPath(string $path, ?ProcessOutputCallbackInterface $callback, ?int $timeout): void
     {
         $this->activeDir
             ->resolve()

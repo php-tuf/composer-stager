@@ -4,11 +4,13 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Committer;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
@@ -69,8 +71,13 @@ final class CommitterUnitTest extends TestCase
      *
      * @dataProvider providerCommitWithOptionalParams
      */
-    public function testCommitWithOptionalParams($stagingDir, $activeDir, $exclusions, $callback, $timeout): void
-    {
+    public function testCommitWithOptionalParams(
+        string $stagingDir,
+        string $activeDir,
+        ?PathListInterface $exclusions,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $timeout
+    ): void {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->fileSyncer
@@ -122,7 +129,7 @@ final class CommitterUnitTest extends TestCase
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions($exception, $message): void
+    public function testExceptions(ExceptionInterface $exception, string $message): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($message);

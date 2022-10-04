@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
@@ -66,7 +67,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
      *
      * @dataProvider providerDirectoryNotFound
      */
-    public function testDirectoryNotFound($activeDirExists, $stagingDirExists): void
+    public function testDirectoryNotFound(bool $activeDirExists, bool $stagingDirExists): void
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
@@ -112,7 +113,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
      *
      * @dataProvider providerFinderError
      */
-    public function testFinderException($exception, $expectedMessage): void
+    public function testFinderException(ExceptionInterface $exception, string $expectedMessage): void
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();

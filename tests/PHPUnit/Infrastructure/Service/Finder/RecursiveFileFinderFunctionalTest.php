@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Finder;
 
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
@@ -48,7 +49,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
      *
      * @dataProvider providerFind
      */
-    public function testFind($files, $exclusions, $expected): void
+    public function testFind(array $files, ?PathListInterface $exclusions, array $expected): void
     {
         $directory = PathFactory::create(self::ACTIVE_DIR);
         self::createFiles($directory->resolve(), $files);

@@ -14,7 +14,7 @@ final class ProcessFactoryUnitTest extends TestCase
      *
      * @dataProvider providerFactory
      */
-    public function testFactory($command): void
+    public function testFactory(array $command): void
     {
         $sut = new ProcessFactory();
 
