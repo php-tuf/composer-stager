@@ -8,16 +8,17 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommonPreconditions
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @covers ::__construct
+ * @covers ::assertIsFulfilled
+ * @covers ::isFulfilled
+ *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
@@ -27,23 +28,17 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class CommonPreconditionsUnitTest extends TestCase
+final class CommonPreconditionsUnitTest extends PreconditionTestCase
 {
     protected function setUp(): void
     {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
         $this->composerIsAvailable = $this->prophesize(ComposerIsAvailableInterface::class);
         $this->activeDirExists = $this->prophesize(ActiveDirExistsInterface::class);
         $this->activeDirIsWritable = $this->prophesize(ActiveDirIsWritableInterface::class);
         $this->activeAndStagingDirsAreDifferent = $this->prophesize(ActiveAndStagingDirsAreDifferentInterface::class);
         $this->codebaseContainsNoSymlinksInterface = $this->prophesize(CodebaseContainsNoSymlinksInterface::class);
+
+        parent::setUp();
     }
 
     protected function createSut(): CommonPreconditions
@@ -63,63 +58,37 @@ final class CommonPreconditionsUnitTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     */
-    public function testIsFulfilled(): void
+    public function testFulfilled(): void
     {
+        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->composerIsAvailable
             ->assertIsFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledTimes(2);
         $this->activeDirExists
             ->assertIsFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledTimes(2);
         $this->activeDirIsWritable
             ->assertIsFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce();
+            ->shouldBeCalledTimes(2);
         $this->activeAndStagingDirsAreDifferent
             ->assertIsFulfilled($activeDir, $stagingDir)
-            ->shouldBeCalledOnce();
-        $sut = $this->createSut();
+            ->shouldBeCalledTimes(2);
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertTrue($isFulfilled);
+        parent::testFulfilled();
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     */
-    public function testIsUnfulfilled(): void
+    public function testUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
+        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->composerIsAvailable
             ->assertIsFulfilled($activeDir, $stagingDir)
+            ->shouldBeCalledTimes(2)
             ->willThrow(PreconditionException::class);
-        $this->activeDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir)
-            ->willThrow(PreconditionException::class);
-        $this->activeDirIsWritable
-            ->assertIsFulfilled($activeDir, $stagingDir)
-            ->willThrow(PreconditionException::class);
-        $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDir, $stagingDir)
-            ->willThrow(PreconditionException::class);
-        $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertFalse($isFulfilled);
-
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        parent::testUnfulfilled();
     }
 }

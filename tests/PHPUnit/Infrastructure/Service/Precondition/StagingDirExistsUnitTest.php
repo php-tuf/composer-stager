@@ -2,25 +2,24 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists::__construct
+ * @covers ::__construct
+ * @covers ::assertIsFulfilled
+ * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class StagingDirExistsUnitTest extends TestCase
+final class StagingDirExistsUnitTest extends PreconditionTestCase
 {
     protected function setUp(): void
     {
@@ -36,42 +35,27 @@ final class StagingDirExistsUnitTest extends TestCase
         return new StagingDirExists($filesystem);
     }
 
-    /**
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     */
-    public function testIsFulfilled(): void
+    public function testFulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
+        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
             ->exists($stagingDir)
+            ->shouldBeCalledTimes(2)
             ->willReturn(true);
-        $sut = $this->createSut();
 
-        self::assertEquals(true, $sut->isFulfilled($activeDir, $stagingDir));
+        parent::testFulfilled();
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::isFulfilled
-     */
-    public function testIsUnfulfilled(): void
+    public function testUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
-        $activeDir = $this->activeDir->reveal();
+        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
             ->exists($stagingDir)
+            ->shouldBeCalledTimes(2)
             ->willReturn(false);
-        $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertFalse($isFulfilled);
-
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        parent::testUnfulfilled();
     }
 }

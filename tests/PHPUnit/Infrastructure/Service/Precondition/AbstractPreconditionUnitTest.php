@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Preconditio
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
@@ -15,21 +14,8 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class AbstractPreconditionUnitTest extends TestCase
+final class AbstractPreconditionUnitTest extends PreconditionTestCase
 {
-    protected function setUp(): void
-    {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
-        $this->path = $this->prophesize(PathInterface::class);
-    }
-
     protected function createSut(): AbstractPrecondition
     {
         // Create a concrete implementation for testing since the SUT, being
@@ -123,7 +109,7 @@ final class AbstractPreconditionUnitTest extends TestCase
     }
 
     /** @covers ::assertIsFulfilled */
-    public function testAssertIsFulfilledTrue(): void
+    public function testFulfilled(): void
     {
         $this->expectNotToPerformAssertions();
 
@@ -137,7 +123,7 @@ final class AbstractPreconditionUnitTest extends TestCase
     }
 
     /** @covers ::assertIsFulfilled */
-    public function testAssertIsFulfilledFalse(): void
+    public function testUnfulfilled(): void
     {
         $this->expectException(PreconditionException::class);
 

@@ -7,33 +7,24 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestSpyInterface;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree::__construct
+ * @covers ::__construct
+ * @covers ::assertIsFulfilled
+ * @covers ::isFulfilled
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $path
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class AbstractPreconditionsTreeUnitTest extends TestCase
+final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 {
-    protected function setUp(): void
-    {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
-        $this->path = $this->prophesize(PathInterface::class);
-    }
-
     protected function createSut(...$children): AbstractPreconditionsTree
     {
         // Create a concrete implementation for testing since the SUT, being
@@ -69,11 +60,9 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
     }
 
     /**
-     * @covers ::assertIsFulfilled
      * @covers ::getDescription
      * @covers ::getName
      * @covers ::getStatusMessage
-     * @covers ::isFulfilled
      *
      * @dataProvider providerBasicFunctionality
      *
@@ -139,15 +128,7 @@ final class AbstractPreconditionsTreeUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertIsFulfilled
-     * @covers ::getLeaves
-     * @covers ::isFulfilled
-     *
-     * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
-     */
+    /** @covers ::getLeaves */
     public function testIsFulfilledBubbling(): void
     {
         $message = 'Lorem ipsum';

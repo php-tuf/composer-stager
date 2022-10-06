@@ -9,33 +9,34 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks
  *
  * @covers ::__construct
+ * @covers ::assertIsFulfilled
+ * @covers ::isFulfilled
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
-final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
+final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
 {
     protected function setUp(): void
     {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
         $this->fileFinder = $this->prophesize(RecursiveFileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::type(PathInterface::class))
             ->willReturn(true);
+
+        parent::setUp();
     }
 
-    private function createSut(): CodeBaseContainsNoSymlinks
+    protected function createSut(): CodeBaseContainsNoSymlinks
     {
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
@@ -43,10 +44,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
         return new CodeBaseContainsNoSymlinks($fileFinder, $filesystem);
     }
 
-    /**
-     * @covers ::findFiles
-     * @covers ::isFulfilled
-     */
+    /** @covers ::findFiles */
     public function testNoFilesFound(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -63,31 +61,30 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
 
     /**
      * @covers ::findFiles
-     * @covers ::isFulfilled
      *
      * @dataProvider providerDirectoryNotFound
      */
     public function testDirectoryNotFound(bool $activeDirExists, bool $stagingDirExists): void
     {
+        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
             ->exists($activeDir)
+            ->shouldBeCalledTimes(2)
             ->willReturn($activeDirExists);
         $this->filesystem
             ->exists($stagingDir)
+            ->shouldBeCalledTimes(2)
             ->willReturn($stagingDirExists);
         $this->fileFinder
             ->find($activeDir)
-            ->shouldBeCalledTimes((int) $activeDirExists);
+            ->shouldBeCalledTimes(2 * (int) $activeDirExists);
         $this->fileFinder
             ->find($stagingDir)
-            ->shouldBeCalledTimes((int) $stagingDirExists);
-        $sut = $this->createSut();
+            ->shouldBeCalledTimes(2 * (int) $stagingDirExists);
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertTrue($isFulfilled, 'Treated empty codebase as fulfilled.');
+        $this->testFulfilled();
     }
 
     public function providerDirectoryNotFound(): array
@@ -107,7 +104,6 @@ final class CodeBaseContainsNoSymlinksUnitTest extends TestCase
     /**
      * @covers ::findFiles
      * @covers ::getUnfulfilledStatusMessage
-     * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition::getStatusMessage
      *
