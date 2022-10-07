@@ -108,7 +108,7 @@ A complete, functioning example implementation of Composer Stager can be found i
 
 ## Contributing
 
-[Pull requests](https://github.com/php-tuf/composer-stager/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) are welcome. For major changes, please [open an issue](https://github.com/php-tuf/composer-stager/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) first to discuss what you would like to change. Observe [the coding standards](https://github.com/php-tuf/composer-stager/wiki/Coding-standards-&-style-guide) and make sure to add and update tests as appropriate.
+[Pull requests](https://github.com/php-tuf/composer-stager/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) are welcome. For major changes, please [open an issue](https://github.com/php-tuf/composer-stager/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) first to discuss what you would like to change. Observe [the coding standards](https://github.com/php-tuf/composer-stager/wiki/Coding-standards-&-style-guide), and if you're able, add and update tests as appropriate.
 
 ---
 
