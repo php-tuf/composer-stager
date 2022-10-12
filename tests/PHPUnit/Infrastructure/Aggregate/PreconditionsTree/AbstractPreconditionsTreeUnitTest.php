@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Aggregate\Precondit
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
@@ -177,8 +178,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                     return '';
                 }
 
-                public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-                {
+                public function isFulfilled(
+                    PathInterface $activeDir,
+                    PathInterface $stagingDir,
+                    ?PathListInterface $exclusions = null
+                ): bool {
                     $this->spy->report();
 
                     return $this->isFulfilled;

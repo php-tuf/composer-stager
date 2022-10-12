@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\PreconditionsTreeIn
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
 {
@@ -23,15 +24,21 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         $this->children = $children;
     }
 
-    public function getStatusMessage(PathInterface $activeDir, PathInterface $stagingDir): string
-    {
+    public function getStatusMessage(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): string {
         return $this->isFulfilled($activeDir, $stagingDir)
             ? $this->getFulfilledStatusMessage()
             : $this->getUnfulfilledStatusMessage();
     }
 
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
+    public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): bool {
         try {
             $this->assertIsFulfilled($activeDir, $stagingDir);
         } catch (PreconditionException $e) {
@@ -41,8 +48,11 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         return true;
     }
 
-    public function assertIsFulfilled(PathInterface $activeDir, PathInterface $stagingDir): void
-    {
+    public function assertIsFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): void {
         foreach ($this->children as $child) {
             $child->assertIsFulfilled($activeDir, $stagingDir);
         }

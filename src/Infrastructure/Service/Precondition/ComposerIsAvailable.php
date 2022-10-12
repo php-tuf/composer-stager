@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 
 final class ComposerIsAvailable extends AbstractPrecondition implements ComposerIsAvailableInterface
@@ -26,8 +27,11 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         return 'Composer must be available in order to stage commands.'; // @codeCoverageIgnore
     }
 
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
+    public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): bool {
         try {
             $this->executableFinder->find('composer');
         } catch (LogicException $e) {

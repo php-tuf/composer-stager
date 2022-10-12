@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 /** Defines a precondition for a domain operation and how to verify it. */
 interface PreconditionInterface
@@ -30,10 +31,18 @@ interface PreconditionInterface
      * example dependency is ready," or if unfulfilled, "The example dependency
      * cannot be found. Make sure it's installed."
      */
-    public function getStatusMessage(PathInterface $activeDir, PathInterface $stagingDir): string;
+    public function getStatusMessage(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): string;
 
     /** Determines whether the precondition is fulfilled. */
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool;
+    public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): bool;
 
     /**
      * Asserts that the precondition is fulfilled.
@@ -41,5 +50,9 @@ interface PreconditionInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the precondition is unfulfilled.
      */
-    public function assertIsFulfilled(PathInterface $activeDir, PathInterface $stagingDir): void;
+    public function assertIsFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): void;
 }
