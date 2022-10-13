@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\PathList\TestPathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -101,7 +102,7 @@ final class CommitterUnitTest extends TestCase
             [
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
-                'exclusions' => $this->prophesize(PathListInterface::class)->reveal(),
+                'exclusions' => new TestPathList(),
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 10,
             ],
