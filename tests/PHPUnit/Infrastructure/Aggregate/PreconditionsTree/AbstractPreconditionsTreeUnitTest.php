@@ -143,7 +143,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
             /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\PHPUnit\TestSpyInterface $spy */
             $spy = $this->prophesize(TestSpyInterface::class);
             $spy->report()
-                // Call once for ::isFulfilled() and a second time for ::assertIsFulfilled().
+                // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
                 ->shouldBeCalledTimes(2);
             $spy = $spy->reveal();
 
