@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -21,21 +21,15 @@ use Prophecy\Argument;
  *
  * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $activeDir
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $stagingDir
  */
 final class CleanerUnitTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR);
+        $this->stagingDir = new TestPath(self::STAGING_DIR);
         $this->preconditions = $this->prophesize(CleanerPreconditionsInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
@@ -55,17 +49,13 @@ final class CleanerUnitTest extends TestCase
      */
     public function testCleanHappyPath(string $path, ?ProcessOutputCallbackInterface $callback, ?int $timeout): void
     {
-        $this->activeDir
-            ->resolve()
-            ->willReturn($path);
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
+        $path = new TestPath($path);
         $this->filesystem
-            ->remove($stagingDir, $callback, $timeout)
+            ->remove($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean($activeDir, $stagingDir, $callback, $timeout);
+        $sut->clean($this->activeDir, $path, $callback, $timeout);
     }
 
     public function providerCleanHappyPath(): array
@@ -89,30 +79,25 @@ final class CleanerUnitTest extends TestCase
     {
         $this->expectException(PreconditionException::class);
 
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();
 
-        $sut->clean($activeDir, $stagingDir);
+        $sut->clean($this->activeDir, $this->stagingDir);
     }
 
     /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-
         $this->expectException(RuntimeException::class);
         $this->filesystem
-            ->remove($stagingDir, Argument::cetera())
+            ->remove($this->stagingDir, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(IOException::class);
         $sut = $this->createSut();
 
-        $sut->clean($activeDir, $stagingDir);
+        $sut->clean($this->activeDir, $this->stagingDir);
     }
 }
