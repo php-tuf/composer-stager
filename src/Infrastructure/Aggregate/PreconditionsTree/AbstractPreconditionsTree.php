@@ -29,7 +29,7 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null
     ): string {
-        return $this->isFulfilled($activeDir, $stagingDir)
+        return $this->isFulfilled($activeDir, $stagingDir, $exclusions)
             ? $this->getFulfilledStatusMessage()
             : $this->getUnfulfilledStatusMessage();
     }
@@ -40,7 +40,7 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         ?PathListInterface $exclusions = null
     ): bool {
         try {
-            $this->assertIsFulfilled($activeDir, $stagingDir);
+            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
         } catch (PreconditionException $e) {
             return false;
         }
@@ -54,7 +54,7 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         ?PathListInterface $exclusions = null
     ): void {
         foreach ($this->children as $child) {
-            $child->assertIsFulfilled($activeDir, $stagingDir);
+            $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
         }
     }
 

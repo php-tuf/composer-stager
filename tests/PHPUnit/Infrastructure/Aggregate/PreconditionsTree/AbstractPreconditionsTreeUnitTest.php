@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\PathList\TestPathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestSpyInterface;
 
 /**
@@ -23,6 +24,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestSpyInterface;
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface $exclusions
  */
 final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 {
@@ -75,7 +77,8 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $isFulfilled,
         $fulfilledStatusMessage,
         $unfulfilledStatusMessage,
-        $expectedStatusMessage
+        $expectedStatusMessage,
+        $exclusions
     ): void {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
@@ -86,8 +89,12 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
         $child = $this->prophesize(PreconditionInterface::class);
 
+        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
+        $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledTimes(2);
+
         if (!$isFulfilled) {
-            $child->assertIsFulfilled($activeDir, $stagingDir)
+            $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
                 ->willThrow(PreconditionException::class);
         }
 
@@ -103,8 +110,8 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir, $exclusions), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir, $exclusions), $expectedStatusMessage);
     }
 
     public function providerBasicFunctionality(): array
@@ -117,6 +124,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 'fulfilledStatusMessage' => 'Fulfilled status message 1',
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 1',
                 'expectedStatusMessage' => 'Fulfilled status message 1',
+                'exclusions' => null,
             ],
             [
                 'name' => 'Name 2',
@@ -125,6 +133,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 'fulfilledStatusMessage' => 'Fulfilled status message 2',
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 2',
                 'expectedStatusMessage' => 'Unfulfilled status message 2',
+                'exclusions' => new TestPathList(),
             ],
         ];
     }

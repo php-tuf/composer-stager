@@ -26,6 +26,8 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
         $this->activeDir = $this->prophesize(PathInterface::class);
         $this->stagingDir = $this->prophesize(PathInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+
+        parent::setUp();
     }
 
     protected function createSut(): StagingDirExists

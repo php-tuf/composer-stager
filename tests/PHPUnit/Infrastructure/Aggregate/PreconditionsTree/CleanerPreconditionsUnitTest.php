@@ -21,6 +21,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface $exclusions
  */
 final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 {
@@ -45,11 +46,12 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
         $this->stagingDirIsReady
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
 
         parent::testFulfilled();
@@ -60,8 +62,9 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2)
             ->willThrow(PreconditionException::class);
 
