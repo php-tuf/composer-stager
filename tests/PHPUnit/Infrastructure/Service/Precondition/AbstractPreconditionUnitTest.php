@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 
 /**
@@ -19,7 +20,39 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     {
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new TestPrecondition();
+        return new class () extends AbstractPrecondition
+        {
+            public string $name = 'Name';
+            public string $description = 'Description';
+            public bool $isFulfilled = true;
+            public string $fulfilledStatusMessage = 'Fulfilled';
+            public string $unfulfilledStatusMessage = 'Unfulfilled';
+
+            public function getName(): string
+            {
+                return $this->name;
+            }
+
+            public function getDescription(): string
+            {
+                return $this->description;
+            }
+
+            protected function getFulfilledStatusMessage(): string
+            {
+                return $this->fulfilledStatusMessage;
+            }
+
+            protected function getUnfulfilledStatusMessage(): string
+            {
+                return $this->unfulfilledStatusMessage;
+            }
+
+            public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
+            {
+                return $this->isFulfilled;
+            }
+        };
     }
 
     /**
