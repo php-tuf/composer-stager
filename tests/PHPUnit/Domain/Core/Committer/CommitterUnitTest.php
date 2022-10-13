@@ -71,12 +71,14 @@ final class CommitterUnitTest extends TestCase
         ?ProcessOutputCallbackInterface $callback,
         ?int $timeout
     ): void {
+        $activeDir = new TestPath($activeDir);
+        $stagingDir = new TestPath($stagingDir);
         $this->fileSyncer
-            ->sync($this->stagingDir, $this->activeDir, $exclusions, $callback, $timeout)
+            ->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit($this->stagingDir, $this->activeDir, $exclusions, $callback, $timeout);
+        $sut->commit($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 
     public function providerCommitWithOptionalParams(): array

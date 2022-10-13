@@ -71,12 +71,14 @@ final class BeginnerUnitTest extends TestCase
         ?ProcessOutputCallbackInterface $callback,
         ?int $timeout
     ): void {
+        $activeDir = new TestPath($activeDir);
+        $stagingDir = new TestPath($stagingDir);
         $this->fileSyncer
-            ->sync($this->activeDir, $this->stagingDir, $exclusions, $callback, $timeout)
+            ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir, $exclusions, $callback, $timeout);
+        $sut->begin($activeDir, $stagingDir, $exclusions, $callback, $timeout);
     }
 
     public function providerBeginWithOptionalParams(): array
