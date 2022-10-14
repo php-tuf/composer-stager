@@ -50,7 +50,6 @@ final class BeginnerUnitTest extends TestCase
     /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->fileSyncer
             ->sync($this->activeDir, $this->stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();

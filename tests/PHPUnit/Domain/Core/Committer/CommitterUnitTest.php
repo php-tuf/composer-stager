@@ -50,7 +50,6 @@ final class CommitterUnitTest extends TestCase
     /** @covers ::commit */
     public function testCommitWithMinimumParams(): void
     {
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
         $this->fileSyncer
             ->sync($this->stagingDir, $this->activeDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
