@@ -51,6 +51,9 @@ final class StagerUnitTest extends TestCase
     /** @covers ::stage */
     public function testStageWithMinimumParams(): void
     {
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->shouldBeCalledOnce();
         $expectedCommand = [
             '--working-dir=' . self::STAGING_DIR,
             self::INERT_COMMAND,
@@ -70,6 +73,9 @@ final class StagerUnitTest extends TestCase
         ?ProcessOutputCallbackInterface $callback,
         ?int $timeout
     ): void {
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->shouldBeCalledOnce();
         $this->composerRunner
             ->run($expectedCommand, $callback, $timeout)
             ->shouldBeCalledOnce();
@@ -150,7 +156,7 @@ final class StagerUnitTest extends TestCase
         $this->expectException(PreconditionException::class);
 
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();

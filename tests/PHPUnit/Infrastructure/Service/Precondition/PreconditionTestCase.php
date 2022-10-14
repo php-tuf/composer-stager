@@ -5,11 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Preconditio
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\PathList\TestPathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface $exclusions
  */
 abstract class PreconditionTestCase extends TestCase
 {
@@ -23,6 +25,7 @@ abstract class PreconditionTestCase extends TestCase
         $this->stagingDir
             ->resolve()
             ->willReturn(self::STAGING_DIR);
+        $this->exclusions = new TestPathList();
     }
 
     abstract protected function createSut(): PreconditionInterface;
@@ -33,8 +36,8 @@ abstract class PreconditionTestCase extends TestCase
         $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
+        $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions);
 
         self::assertTrue($isFulfilled);
     }
@@ -47,12 +50,12 @@ abstract class PreconditionTestCase extends TestCase
         $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
 
         self::assertFalse($isFulfilled);
 
         // This is called last so as not to throw the exception until all other
         // assertions have been made.
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions);
     }
 }

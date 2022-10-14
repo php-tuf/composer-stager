@@ -31,7 +31,7 @@ final class Beginner implements BeginnerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
     ): void {
-        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
+        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
 
         try {
             $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);

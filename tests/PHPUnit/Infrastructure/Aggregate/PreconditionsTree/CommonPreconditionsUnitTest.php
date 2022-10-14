@@ -63,17 +63,18 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
         $this->composerIsAvailable
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
         $this->activeDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
         $this->activeDirIsWritable
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
 
         parent::testFulfilled();
@@ -84,8 +85,9 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
         $this->composerIsAvailable
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2)
             ->willThrow(PreconditionException::class);
 

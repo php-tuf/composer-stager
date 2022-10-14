@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 
 final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements CodebaseContainsNoSymlinksInterface
@@ -33,8 +34,11 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
         return 'The codebase cannot contain symlinks.'; // @codeCoverageIgnore
     }
 
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
+    public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): bool {
         $directories = [
             'active' => $activeDir,
             'staging' => $stagingDir,

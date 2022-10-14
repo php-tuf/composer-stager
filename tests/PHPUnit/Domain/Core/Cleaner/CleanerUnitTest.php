@@ -46,6 +46,9 @@ final class CleanerUnitTest extends TestCase
     /** @covers ::clean */
     public function testCleanWithMinimumParams(): void
     {
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->shouldBeCalledOnce();
         $this->filesystem
             ->remove($this->stagingDir, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
@@ -65,6 +68,9 @@ final class CleanerUnitTest extends TestCase
         ?int $timeout
     ): void {
         $path = new TestPath($path);
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $path)
+            ->shouldBeCalledOnce();
         $this->filesystem
             ->remove($path, $callback, $timeout)
             ->shouldBeCalledOnce();
@@ -95,7 +101,7 @@ final class CleanerUnitTest extends TestCase
         $this->expectException(PreconditionException::class);
 
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();

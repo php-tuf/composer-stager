@@ -45,11 +45,12 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
         $this->stagingDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
         $this->stagingDirIsWritable
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
 
         parent::testFulfilled();
@@ -60,8 +61,9 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
         $this->stagingDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(2)
             ->willThrow(PreconditionException::class);
 

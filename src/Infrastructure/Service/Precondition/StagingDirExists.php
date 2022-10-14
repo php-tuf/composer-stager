@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 final class StagingDirExists extends AbstractPrecondition implements StagingDirExistsInterface
 {
@@ -25,8 +26,11 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
         return 'The staging directory must exist before any operations can be performed.'; // @codeCoverageIgnore
     }
 
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
+    public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): bool {
         return $this->filesystem->exists($stagingDir);
     }
 
