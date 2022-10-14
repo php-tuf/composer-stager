@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -47,8 +48,23 @@ final class StagerUnitTest extends TestCase
         return new Stager($composerRunner, $preconditions);
     }
 
-    /** @dataProvider providerHappyPath */
-    public function testHappyPath(
+    /** @covers ::stage */
+    public function testStageWithMinimumParams(): void
+    {
+        $expectedCommand = [
+            '--working-dir=' . self::STAGING_DIR,
+            self::INERT_COMMAND,
+        ];
+        $this->composerRunner
+            ->run($expectedCommand, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+    }
+
+    /** @dataProvider providerStageWithOptionalParams */
+    public function testStageWithOptionalParams(
         array $givenCommand,
         array $expectedCommand,
         ?ProcessOutputCallbackInterface $callback,
@@ -62,7 +78,7 @@ final class StagerUnitTest extends TestCase
         $sut->stage($givenCommand, $this->activeDir, $this->stagingDir, $callback, $timeout);
     }
 
-    public function providerHappyPath(): array
+    public function providerStageWithOptionalParams(): array
     {
         return [
             [

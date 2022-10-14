@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -42,13 +43,27 @@ final class CleanerUnitTest extends TestCase
         return new Cleaner($filesystem, $preconditions);
     }
 
+    /** @covers ::clean */
+    public function testCleanWithMinimumParams(): void
+    {
+        $this->filesystem
+            ->remove($this->stagingDir, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        $sut->clean($this->activeDir, $this->stagingDir);
+    }
+
     /**
      * @covers ::clean
      *
-     * @dataProvider providerCleanHappyPath
+     * @dataProvider providerCleanWithOptionalParams
      */
-    public function testCleanHappyPath(string $path, ?ProcessOutputCallbackInterface $callback, ?int $timeout): void
-    {
+    public function testCleanWithOptionalParams(
+        string $path,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $timeout
+    ): void {
         $path = new TestPath($path);
         $this->filesystem
             ->remove($path, $callback, $timeout)
@@ -58,7 +73,7 @@ final class CleanerUnitTest extends TestCase
         $sut->clean($this->activeDir, $path, $callback, $timeout);
     }
 
-    public function providerCleanHappyPath(): array
+    public function providerCleanWithOptionalParams(): array
     {
         return [
             [
