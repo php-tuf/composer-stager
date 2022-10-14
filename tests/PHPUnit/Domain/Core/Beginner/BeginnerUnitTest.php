@@ -50,6 +50,9 @@ final class BeginnerUnitTest extends TestCase
     /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($this->activeDir, $this->stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
@@ -72,6 +75,9 @@ final class BeginnerUnitTest extends TestCase
     ): void {
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);
+        $this->preconditions
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
@@ -106,7 +112,7 @@ final class BeginnerUnitTest extends TestCase
         $this->expectException(PreconditionException::class);
 
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();
