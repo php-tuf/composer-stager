@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks;
 use Prophecy\Argument;
@@ -17,6 +18,8 @@ use Prophecy\Argument;
  * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::isFulfilled
+ *
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
@@ -50,7 +53,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->fileFinder
-            ->find(Argument::type(PathInterface::class))
+            ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
             ->willReturn([]);
         $sut = $this->createSut();
 
@@ -78,10 +81,10 @@ final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(2)
             ->willReturn($stagingDirExists);
         $this->fileFinder
-            ->find($activeDir)
+            ->find($activeDir, Argument::type(PathListInterface::class))
             ->shouldBeCalledTimes(2 * (int) $activeDirExists);
         $this->fileFinder
-            ->find($stagingDir)
+            ->find($stagingDir, Argument::type(PathListInterface::class))
             ->shouldBeCalledTimes(2 * (int) $stagingDirExists);
 
         $this->testFulfilled();
@@ -117,7 +120,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
             ->exists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->fileFinder
-            ->find(Argument::type(PathInterface::class))
+            ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
             ->willThrow($exception);
         $sut = $this->createSut();
 

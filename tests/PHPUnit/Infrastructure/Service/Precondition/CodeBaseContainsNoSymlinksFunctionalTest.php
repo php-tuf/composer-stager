@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Preconditio
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
@@ -100,9 +101,9 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
     public function testContainsSymlinks(string $dirName, string $dirPath, string $link): void
     {
         $dirPath = PathFactory::create($dirPath)->resolve();
-        $link = self::fixSeparators($link);
-        self::createFile($dirPath, 'one/two/three/four/five/six.txt');
-        assert(symlink(__FILE__, "{$dirPath}/{$link}"));
+        self::createFile($dirPath, 'target.txt');
+        self::createSymlink($dirPath, $link, 'target.txt');
+
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
@@ -113,7 +114,7 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
             'The %s directory at "%s" contains symlinks, which is not supported. The first one is "%s".',
             $dirName,
             $dirPath,
-            self::fixSeparators("{$dirPath}/{$link}"),
+            PathFactory::create("{$dirPath}/{$link}")->resolve(),
         );
         self::assertSame($pattern, $statusMessage, 'Returned correct status message.');
     }
@@ -150,6 +151,62 @@ final class CodeBaseContainsNoSymlinksFunctionalTest extends TestCase
                 'dirName' => 'staging',
                 'dirPath' => self::STAGING_DIR,
                 'link' => 'one/two/three/four/five/symlink.txt',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::isFulfilled
+     *
+     * @dataProvider providerExclusions
+     */
+    public function testExclusions(array $symlinks, array $exclusions, bool $shouldBeFulfilled): void
+    {
+        $targetFile = 'target.txt';
+        $symlinks = array_fill_keys($symlinks, $targetFile);
+        $exclusions = new PathList($exclusions);
+        $dirPath = $this->activeDir->resolve();
+        self::createFile($dirPath, $targetFile);
+        self::createSymlinks($dirPath, $symlinks);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
+
+        self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
+    }
+
+    public function providerExclusions(): array
+    {
+        return [
+            'No symlinks or exclusions' => [
+                'symlinks' => [],
+                'exclusions' => [],
+                'shouldBeFulfilled' => true,
+            ],
+            'One symlink with one exact exclusion' => [
+                'symlinks' => ['symlink.txt'],
+                'exclusions' => ['symlink.txt'],
+                'shouldBeFulfilled' => true,
+            ],
+            'Multiple symlinks with exact exclusions' => [
+                'symlinks' => ['one.txt', 'two.txt', 'three.txt'],
+                'exclusions' => ['one.txt', 'two.txt', 'three.txt'],
+                'shouldBeFulfilled' => true,
+            ],
+            'Multiple symlinks in an excluded directory' => [
+                'symlinks' => ['directory/one.txt', 'directory/two.txt'],
+                'exclusions' => ['directory'],
+                'shouldBeFulfilled' => true,
+            ],
+            'One symlink with no exclusions' => [
+                'symlinks' => ['symlink.txt'],
+                'exclusions' => [],
+                'shouldBeFulfilled' => false,
+            ],
+            'One symlink with a non-matching exclusion' => [
+                'symlinks' => ['symlink.txt'],
+                'exclusions' => ['non_match.txt'],
+                'shouldBeFulfilled' => false,
             ],
         ];
     }
