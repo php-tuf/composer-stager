@@ -17,6 +17,7 @@ class BeginnerPreconditions {
     StagingDirDoesNotExist
 }
 BeginnerPreconditions --o CommonPreconditions
+BeginnerPreconditions --o CodebaseContainsNoSymlinks
 
 class StagerPreconditions {
     CommonPreconditions
@@ -31,6 +32,7 @@ class CommitterPreconditions {
 }
 CommitterPreconditions --o CommonPreconditions
 CommitterPreconditions --o StagingDirIsReady
+CommitterPreconditions --o CodebaseContainsNoSymlinks
 
 class CleanerPreconditions {
     CommonPreconditions
@@ -44,12 +46,13 @@ class CommonPreconditions {
     ActiveDirExists
     ActiveDirIsWritable
     ActiveAndStagingDirsAreDifferent
-    CodebaseContainsNoSymlinks
 }
 
 class StagingDirIsReady {
     StagingDirExists
     StagingDirIsWritable
 }
+
+class CodebaseContainsNoSymlinks
 
 @enduml
