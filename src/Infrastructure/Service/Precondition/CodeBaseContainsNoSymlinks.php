@@ -16,7 +16,9 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
 
     private FilesystemInterface $filesystem;
 
-    private string $unfulfilledStatusMessage = 'The %s directory at "%s" contains symlinks, which is not supported.';
+    private string $unfulfilledStatusMessage = <<<'EOF'
+The %s directory at "%s" contains symlinks, which is not supported. The first one is "%s".
+EOF;
 
     public function __construct(RecursiveFileFinderInterface $fileFinder, FilesystemInterface $filesystem)
     {
@@ -62,6 +64,7 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
                         $this->unfulfilledStatusMessage,
                         $name,
                         $path->resolve(),
+                        $file,
                     );
 
                     return false;
