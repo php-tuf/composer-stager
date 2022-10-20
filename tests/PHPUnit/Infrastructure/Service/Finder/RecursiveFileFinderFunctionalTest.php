@@ -63,28 +63,28 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
     public function providerFind(): array
     {
         return [
-            [
+            'No files, null exclusions' => [
                 'files' => [],
                 'exclusions' => null,
                 'expected' => [],
             ],
-            [
+            'No files, no exclusions' => [
                 'files' => [],
                 'exclusions' => new PathList([]),
                 'expected' => [],
             ],
-            [
+            'Multiple files, null exclusions' => [
                 'files' => [
                     'one.txt',
                     'two.txt',
                 ],
-                'exclusions' => new PathList([]),
+                'exclusions' => null,
                 'expected' => $this->normalizePaths([
                     'one.txt',
                     'two.txt',
                 ]),
             ],
-            [
+            'Multiple files, no exclusions' => [
                 'files' => [
                     'one.txt',
                     'two.txt',
@@ -97,12 +97,12 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                     'two.txt',
                 ]),
             ],
-            [
+            'One file excluded by name' => [
                 'files' => ['excluded.txt'],
                 'exclusions' => new PathList(['excluded.txt']),
                 'expected' => $this->normalizePaths([]),
             ],
-            [
+            'Multiple files, partially excluded by name' => [
                 'files' => [
                     'included.txt',
                     'excluded.txt',
@@ -110,7 +110,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                 'exclusions' => new PathList(['excluded.txt']),
                 'expected' => $this->normalizePaths(['included.txt']),
             ],
-            [
+            'Complex scenario' => [
                 'files' => [
                     'file_in_dir_root.txt',
                     'arbitrary_subdir/file.txt',
