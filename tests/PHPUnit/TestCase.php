@@ -82,7 +82,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $baseDir, string $filename): void
     {
-        $filename = "{$baseDir}/{$filename}";
+        $filename = self::fixSeparators("{$baseDir}/{$filename}");
         $dirname = dirname($filename);
 
         if (!file_exists($dirname)) {
