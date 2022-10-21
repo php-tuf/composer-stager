@@ -16,28 +16,67 @@ final class PathListUnitTest extends TestCase
 {
     /**
      * @covers ::__construct
+     * @covers ::add
      * @covers ::assertValidInput
      * @covers ::getAll
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(array $paths): void
+    public function testBasicFunctionality(array $given, array $add, array $expected): void
     {
-        $sut = new PathList($paths);
+        $sut = new PathList($given);
 
-        self::assertEquals($paths, $sut->getAll(), 'Got correct value via explicit method call.');
+        self::assertEquals($given, $sut->getAll(), 'Correctly set paths via constructor and got them.');
+
+        $sut->add($add);
+
+        self::assertEquals($expected, $sut->getAll(), 'Correctly added paths and got them.');
     }
 
     public function providerBasicFunctionality(): array
     {
         return [
-            'Empty array' => [
+            'None given, none added' => [
                 'paths' => [],
+                'add' => [],
+                'expected' => [],
             ],
-            'With values' => [
+            'Some given, none added' => [
                 'paths' => [
                     'one',
                     'two',
+                ],
+                'add' => [],
+                'expected' => [
+                    'one',
+                    'two',
+                ],
+            ],
+            'None given, some added' => [
+                'paths' => [],
+                'add' => [
+                    'one',
+                    'two',
+                ],
+                'expected' => [
+                    'one',
+                    'two',
+                ],
+            ],
+            'Some given, some added' => [
+                'paths' => [
+                    'one',
+                    'two',
+                ],
+                'add' => [
+                    'three',
+                    'four',
+                ],
+                'expected' => [
+                    'one',
+                    'two',
+                    'three',
+                    'four',
                 ],
             ],
         ];
@@ -46,14 +85,32 @@ final class PathListUnitTest extends TestCase
     /**
      * @covers ::assertValidInput
      *
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList::add
+     *
      * @dataProvider providerInvalidInput
      */
-    public function testInvalidInput(array $paths, string $givenType): void
+    public function testConstructWithInvalidInput(array $paths, string $givenType): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Paths must be strings. Given {$givenType}");
 
         new PathList($paths);
+    }
+
+    /**
+     * @covers ::add
+     * @covers ::assertValidInput
+     *
+     * @dataProvider providerInvalidInput
+     */
+    public function testAddInvalidInput(array $paths, string $givenType): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Paths must be strings. Given {$givenType}");
+
+        $sut = new PathList([]);
+
+        $sut->add($paths);
     }
 
     public function providerInvalidInput(): array
