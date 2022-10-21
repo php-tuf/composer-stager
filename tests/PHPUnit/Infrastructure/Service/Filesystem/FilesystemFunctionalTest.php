@@ -5,9 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -23,13 +20,6 @@ final class FilesystemFunctionalTest extends TestCase
 
     protected function setUp(): void
     {
-        // Build the service container.
-        $container = new ContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(TestCase::PROJECT_ROOT . '/config/services.yml');
-        $container->compile();
-        $this->container = $container;
-
         $filesystem = new SymfonyFilesystem();
 
         $filesystem->mkdir(self::SOURCE_DIR);
@@ -43,8 +33,11 @@ final class FilesystemFunctionalTest extends TestCase
 
     protected function createSut(): Filesystem
     {
+        $container = $this->getContainer();
+        $container->compile();
+
         /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem $filesystem */
-        $filesystem = $this->container->get(Filesystem::class);
+        $filesystem = $container->get(Filesystem::class);
 
         return $filesystem;
     }
