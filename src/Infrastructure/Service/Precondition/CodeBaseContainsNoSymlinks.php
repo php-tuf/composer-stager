@@ -42,37 +42,38 @@ EOF;
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null
     ): bool {
-        $directories = [
-            'active' => $activeDir,
-            'staging' => $stagingDir,
-        ];
+        try {
+            $exclusions ??= new PathList([]);
+            $exclusions->add([$stagingDir->resolve()]);
 
-        foreach ($directories as $name => $path) {
-            try {
-                $exclusions ??= new PathList([]);
-                $exclusions->add([$stagingDir->resolve()]);
+            $directories = [
+                'active' => $activeDir,
+                'staging' => $stagingDir,
+            ];
+
+            foreach ($directories as $name => $path) {
                 $files = $this->findFiles($path, $exclusions);
-            } catch (InvalidArgumentException|IOException $e) {
-                // If something goes wrong searching for symlinks, don't throw an
-                // exception--just consider the precondition unfulfilled and pass
-                // details along to the user via the status message.
-                $this->unfulfilledStatusMessage = $e->getMessage();
 
-                return false;
-            }
+                foreach ($files as $file) {
+                    if (is_link($file)) {
+                        $this->unfulfilledStatusMessage = sprintf(
+                            $this->unfulfilledStatusMessage,
+                            $name,
+                            $path->resolve(),
+                            $file,
+                        );
 
-            foreach ($files as $file) {
-                if (is_link($file)) {
-                    $this->unfulfilledStatusMessage = sprintf(
-                        $this->unfulfilledStatusMessage,
-                        $name,
-                        $path->resolve(),
-                        $file,
-                    );
-
-                    return false;
+                        return false;
+                    }
                 }
             }
+        } catch (InvalidArgumentException|IOException $e) {
+            // If something goes wrong searching for symlinks, don't throw an
+            // exception--just consider the precondition unfulfilled and pass
+            // details along to the user via the status message.
+            $this->unfulfilledStatusMessage = $e->getMessage();
+
+            return false;
         }
 
         return true;
