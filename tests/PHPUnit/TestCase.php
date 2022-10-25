@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
@@ -82,19 +83,43 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $baseDir, string $filename): void
     {
-        $filename = self::fixSeparators("{$baseDir}/{$filename}");
-        $dirname = dirname($filename);
-
-        if (!file_exists($dirname)) {
-            $mkdirResult = mkdir($dirname, 0777, true);
-            assert($mkdirResult, "Created directory {$dirname}.");
-        }
+        $filename = PathFactory::create("{$baseDir}/{$filename}")->resolve();
+        static::ensureParentDirectory($filename);
 
         $touchResult = touch($filename);
         $realpathResult = realpath($filename);
 
         assert($touchResult, "Created file {$filename}.");
         assert($realpathResult !== false, "Got absolute path of {$filename}.");
+    }
+
+    protected static function createSymlinks(string $baseDir, array $symlinks): void
+    {
+        foreach ($symlinks as $link => $target) {
+            self::createSymlink($baseDir, $link, $target);
+        }
+    }
+
+    protected static function createSymlink(string $baseDir, string $link, string $target): void
+    {
+        $link = PathFactory::create("{$baseDir}/{$link}")->resolve();
+        $target = PathFactory::create("{$baseDir}/{$target}")->resolve();
+        static::ensureParentDirectory($link);
+        $filesystem = new Filesystem();
+        $filesystem->symlink($target, $link);
+        assert(is_link($link), "Created symlink at {$link}.");
+    }
+
+    private static function ensureParentDirectory(string $filename): void
+    {
+        $dirname = dirname($filename);
+
+        if (file_exists($dirname)) {
+            return;
+        }
+
+        $mkdirResult = mkdir($dirname, 0777, true);
+        assert($mkdirResult, "Created directory {$dirname}.");
     }
 
     protected static function changeFile($dir, $filename): void
@@ -185,6 +210,12 @@ abstract class TestCase extends PHPUnitTestCase
         $contents = [];
 
         foreach ($dirListing as $pathname) {
+            if (is_link($dir . $pathname)) {
+                $contents[$pathname] = '';
+
+                continue;
+            }
+
             $contents[$pathname] = file_get_contents($dir . $pathname);
         }
 

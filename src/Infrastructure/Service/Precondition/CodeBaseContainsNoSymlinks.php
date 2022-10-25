@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinks
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements CodebaseContainsNoSymlinksInterface
 {
@@ -41,35 +42,38 @@ EOF;
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null
     ): bool {
-        $directories = [
-            'active' => $activeDir,
-            'staging' => $stagingDir,
-        ];
+        try {
+            $exclusions ??= new PathList([]);
+            $exclusions->add([$stagingDir->resolve()]);
 
-        foreach ($directories as $name => $path) {
-            try {
-                $files = $this->findFiles($path);
-            } catch (InvalidArgumentException|IOException $e) {
-                // If something goes wrong searching for symlinks, don't throw an
-                // exception--just consider the precondition unfulfilled and pass
-                // details along to the user via the status message.
-                $this->unfulfilledStatusMessage = $e->getMessage();
+            $directories = [
+                'active' => $activeDir,
+                'staging' => $stagingDir,
+            ];
 
-                return false;
-            }
+            foreach ($directories as $name => $path) {
+                $files = $this->findFiles($path, $exclusions);
 
-            foreach ($files as $file) {
-                if (is_link($file)) {
-                    $this->unfulfilledStatusMessage = sprintf(
-                        $this->unfulfilledStatusMessage,
-                        $name,
-                        $path->resolve(),
-                        $file,
-                    );
+                foreach ($files as $file) {
+                    if (is_link($file)) {
+                        $this->unfulfilledStatusMessage = sprintf(
+                            $this->unfulfilledStatusMessage,
+                            $name,
+                            $path->resolve(),
+                            $file,
+                        );
 
-                    return false;
+                        return false;
+                    }
                 }
             }
+        } catch (InvalidArgumentException|IOException $e) {
+            // If something goes wrong searching for symlinks, don't throw an
+            // exception--just consider the precondition unfulfilled and pass
+            // details along to the user via the status message.
+            $this->unfulfilledStatusMessage = $e->getMessage();
+
+            return false;
         }
 
         return true;
@@ -93,13 +97,13 @@ EOF;
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
-    private function findFiles(PathInterface $path): array
+    private function findFiles(PathInterface $path, ?PathListInterface $exclusions): array
     {
         // Ignore non-existent directories.
         if (!$this->filesystem->exists($path)) {
             return [];
         }
 
-        return $this->fileFinder->find($path);
+        return $this->fileFinder->find($path, $exclusions);
     }
 }
