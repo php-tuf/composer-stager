@@ -97,7 +97,7 @@ EOF;
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
-    private function findFiles(PathInterface $path, ?PathListInterface $exclusions): array
+    private function findFiles(PathInterface $path, PathListInterface $exclusions): array
     {
         // Ignore non-existent directories.
         if (!$this->filesystem->exists($path)) {
