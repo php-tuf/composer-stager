@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Finder;
 
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
@@ -48,7 +49,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
      *
      * @dataProvider providerFind
      */
-    public function testFind($files, $exclusions, $expected): void
+    public function testFind(array $files, ?PathListInterface $exclusions, array $expected): void
     {
         $directory = PathFactory::create(self::ACTIVE_DIR);
         self::createFiles($directory->resolve(), $files);
@@ -62,28 +63,28 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
     public function providerFind(): array
     {
         return [
-            [
+            'No files, null exclusions' => [
                 'files' => [],
                 'exclusions' => null,
                 'expected' => [],
             ],
-            [
+            'No files, no exclusions' => [
                 'files' => [],
                 'exclusions' => new PathList([]),
                 'expected' => [],
             ],
-            [
+            'Multiple files, null exclusions' => [
                 'files' => [
                     'one.txt',
                     'two.txt',
                 ],
-                'exclusions' => new PathList([]),
+                'exclusions' => null,
                 'expected' => $this->normalizePaths([
                     'one.txt',
                     'two.txt',
                 ]),
             ],
-            [
+            'Multiple files, no exclusions' => [
                 'files' => [
                     'one.txt',
                     'two.txt',
@@ -96,12 +97,12 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                     'two.txt',
                 ]),
             ],
-            [
+            'One file excluded by name' => [
                 'files' => ['excluded.txt'],
                 'exclusions' => new PathList(['excluded.txt']),
                 'expected' => $this->normalizePaths([]),
             ],
-            [
+            'Multiple files, partially excluded by name' => [
                 'files' => [
                     'included.txt',
                     'excluded.txt',
@@ -109,7 +110,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                 'exclusions' => new PathList(['excluded.txt']),
                 'expected' => $this->normalizePaths(['included.txt']),
             ],
-            [
+            'Complex scenario' => [
                 'files' => [
                     'file_in_dir_root.txt',
                     'arbitrary_subdir/file.txt',

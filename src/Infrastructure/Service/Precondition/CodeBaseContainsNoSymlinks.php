@@ -7,7 +7,9 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements CodebaseContainsNoSymlinksInterface
 {
@@ -15,7 +17,9 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
 
     private FilesystemInterface $filesystem;
 
-    private string $unfulfilledStatusMessage = 'The %s directory at "%s" contains symlinks, which is not supported.';
+    private string $unfulfilledStatusMessage = <<<'EOF'
+The %s directory at "%s" contains symlinks, which is not supported. The first one is "%s".
+EOF;
 
     public function __construct(RecursiveFileFinderInterface $fileFinder, FilesystemInterface $filesystem)
     {
@@ -33,36 +37,43 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
         return 'The codebase cannot contain symlinks.'; // @codeCoverageIgnore
     }
 
-    public function isFulfilled(PathInterface $activeDir, PathInterface $stagingDir): bool
-    {
-        $directories = [
-            'active' => $activeDir,
-            'staging' => $stagingDir,
-        ];
+    public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null
+    ): bool {
+        try {
+            $exclusions ??= new PathList([]);
+            $exclusions->add([$stagingDir->resolve()]);
 
-        foreach ($directories as $name => $path) {
-            try {
-                $files = $this->findFiles($path);
-            } catch (InvalidArgumentException|IOException $e) {
-                // If something goes wrong searching for symlinks, don't throw an
-                // exception--just consider the precondition unfulfilled and pass
-                // details along to the user via the status message.
-                $this->unfulfilledStatusMessage = $e->getMessage();
+            $directories = [
+                'active' => $activeDir,
+                'staging' => $stagingDir,
+            ];
 
-                return false;
-            }
+            foreach ($directories as $name => $path) {
+                $files = $this->findFiles($path, $exclusions);
 
-            foreach ($files as $file) {
-                if (is_link($file)) {
-                    $this->unfulfilledStatusMessage = sprintf(
-                        $this->unfulfilledStatusMessage,
-                        $name,
-                        $path->resolve(),
-                    );
+                foreach ($files as $file) {
+                    if (is_link($file)) {
+                        $this->unfulfilledStatusMessage = sprintf(
+                            $this->unfulfilledStatusMessage,
+                            $name,
+                            $path->resolve(),
+                            $file,
+                        );
 
-                    return false;
+                        return false;
+                    }
                 }
             }
+        } catch (InvalidArgumentException|IOException $e) {
+            // If something goes wrong searching for symlinks, don't throw an
+            // exception--just consider the precondition unfulfilled and pass
+            // details along to the user via the status message.
+            $this->unfulfilledStatusMessage = $e->getMessage();
+
+            return false;
         }
 
         return true;
@@ -86,12 +97,13 @@ final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements C
      * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
-    private function findFiles(PathInterface $activeDir): array
+    private function findFiles(PathInterface $path, PathListInterface $exclusions): array
     {
-        if (!$this->filesystem->exists($activeDir)) {
+        // Ignore non-existent directories.
+        if (!$this->filesystem->exists($path)) {
             return [];
         }
 
-        return $this->fileFinder->find($activeDir);
+        return $this->fileFinder->find($path, $exclusions);
     }
 }

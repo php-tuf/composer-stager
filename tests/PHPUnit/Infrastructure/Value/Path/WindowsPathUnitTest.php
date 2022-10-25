@@ -23,8 +23,13 @@ final class WindowsPathUnitTest extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality($given, $cwd, $resolved, $relativeBase, $resolvedRelativeTo): void
-    {
+    public function testBasicFunctionality(
+        string $given,
+        string $cwd,
+        string $resolved,
+        string $relativeBase,
+        string $resolvedRelativeTo
+    ): void {
         // "Fix" directory separators on non-Windows systems so unit tests can
         // be run on them as smoke tests, if nothing else.
         if (!self::isWindows()) {

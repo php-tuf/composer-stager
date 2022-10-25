@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\ProcessRunn
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner;
@@ -79,8 +80,13 @@ final class AbstractRunnerUnitTest extends TestCase
      *
      * @dataProvider providerRun
      */
-    public function testRun($executableName, $givenCommand, $expectedCommand, $callback, $timeout): void
-    {
+    public function testRun(
+        string $executableName,
+        array $givenCommand,
+        array $expectedCommand,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $timeout
+    ): void {
         $this->executableFinder
             ->find($executableName)
             ->willReturnArgument()

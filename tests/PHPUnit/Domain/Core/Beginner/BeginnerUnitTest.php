@@ -4,15 +4,18 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Core\Beginner;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\PathList\TestPathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -23,21 +26,15 @@ use Prophecy\Argument;
  *
  * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $activeDir
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $stagingDir
  */
 final class BeginnerUnitTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR);
+        $this->stagingDir = new TestPath(self::STAGING_DIR);
         $this->preconditions = $this->prophesize(BeginnerPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
@@ -53,15 +50,15 @@ final class BeginnerUnitTest extends TestCase
     /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
+        $this->preconditions
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($activeDir, $stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->sync($this->activeDir, $this->stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir);
+        $sut->begin($this->activeDir, $this->stagingDir);
     }
 
     /**
@@ -69,10 +66,18 @@ final class BeginnerUnitTest extends TestCase
      *
      * @dataProvider providerBeginWithOptionalParams
      */
-    public function testBeginWithOptionalParams($activeDir, $stagingDir, $exclusions, $callback, $timeout): void
-    {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
+    public function testBeginWithOptionalParams(
+        string $activeDir,
+        string $stagingDir,
+        ?PathListInterface $exclusions,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $timeout
+    ): void {
+        $activeDir = new TestPath($activeDir);
+        $stagingDir = new TestPath($stagingDir);
+        $this->preconditions
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
@@ -94,7 +99,7 @@ final class BeginnerUnitTest extends TestCase
             [
                 'activeDir' => 'five/six',
                 'stagingDir' => 'seven/eight',
-                'givenExclusions' => $this->prophesize(PathListInterface::class)->reveal(),
+                'givenExclusions' => new TestPathList(),
                 'callback' => new TestProcessOutputCallback(),
                 'timeout' => 100,
             ],
@@ -106,15 +111,13 @@ final class BeginnerUnitTest extends TestCase
     {
         $this->expectException(PreconditionException::class);
 
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir);
+        $sut->begin($this->activeDir, $this->stagingDir);
     }
 
     /**
@@ -122,20 +125,18 @@ final class BeginnerUnitTest extends TestCase
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions($exception, $message): void
+    public function testExceptions(ExceptionInterface $exception, string $message): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($message);
 
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         /** @noinspection PhpParamsInspection */
         $this->fileSyncer
             ->sync(Argument::cetera())
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir);
+        $sut->begin($this->activeDir, $this->stagingDir);
     }
 
     public function providerExceptions(): array

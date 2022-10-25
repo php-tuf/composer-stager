@@ -21,13 +21,19 @@ parameters:
                 - tests/PHPUnit/Infrastructure/Aggregate/PreconditionsTree/AbstractPreconditionsTreeUnitTest.php
                 - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractPreconditionUnitTest.php
         -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+.+ with no type specified.#'
+            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no type specified.#'
+            path: tests/PHPUnit
+        -
+            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no value type specified in iterable type array.#'
             path: tests/PHPUnit
         -
             message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) return type has no value type specified in iterable type array.#'
             path: tests/PHPUnit
         -
             message: '#Missing @throws [a-zA-Z0-9\\_]+ annotation#'
+            path: tests/PHPUnit
+        -
+            message: '#Parameter \#\d+ \$[a-zA-Z0-9\\_]+ of (static )?method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) expects [a-zA-Z0-9\|<>\\_\-]+, [a-zA-Z0-9\\_]+ given.#'
             path: tests/PHPUnit
         -
             message: '#Property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+ \([a-zA-Z0-9\\_]+\) does not accept object\|null.*#'
@@ -40,7 +46,7 @@ parameters:
         - LICENSE
         - README.md
         - src
-    preconditionSystemHash: f41703e49800bce6744b9116afb30d6a
+    preconditionSystemHash: e242a8a8bbe02357e191b6ea927a26eb
 
 rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.

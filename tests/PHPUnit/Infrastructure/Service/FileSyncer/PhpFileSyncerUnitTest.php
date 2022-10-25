@@ -6,10 +6,10 @@ use Closure;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -21,23 +21,17 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $destination
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $source
  */
 final class PhpFileSyncerUnitTest extends TestCase
 {
     public function setUp(): void
     {
-        $this->source = $this->prophesize(PathInterface::class);
-        $this->source
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->destination = $this->prophesize(PathInterface::class);
-        $this->destination
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
+        $this->source = new TestPath(self::ACTIVE_DIR);
+        $this->destination = new TestPath(self::STAGING_DIR);
         $this->fileFinder = $this->prophesize(RecursiveFileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
@@ -59,31 +53,22 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     public function testSyncSourceNotFound(): void
     {
-        $source = $this->source->reveal();
-        $destination = $this->destination->reveal();
-
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolve()));
 
         $this->filesystem
-            ->exists($source)
+            ->exists($this->source)
             ->willReturn(false);
 
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $sut->sync($this->source, $this->destination);
     }
 
     public function testSyncDirectoriesTheSame(): void
     {
-        $this->source
-            ->resolve()
-            ->willReturn('same');
-        $source = $this->source->reveal();
-        $this->destination
-            ->resolve()
-            ->willReturn('same');
-        $destination = $this->destination->reveal();
+        $source = new TestPath('same');
+        $destination = $source;
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
@@ -97,15 +82,13 @@ final class PhpFileSyncerUnitTest extends TestCase
     {
         $this->expectException(IOException::class);
 
-        $source = $this->source->reveal();
-        $destination = $this->destination->reveal();
         $this->filesystem
-            ->mkdir($destination)
+            ->mkdir($this->destination)
             ->willThrow(IOException::class);
 
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $sut->sync($this->source, $this->destination);
     }
 
     /**
@@ -113,7 +96,7 @@ final class PhpFileSyncerUnitTest extends TestCase
      *
      * @dataProvider providerGetRelativePath
      */
-    public function testGetRelativePath($ancestor, $path, $expected): void
+    public function testGetRelativePath(string $ancestor, string $path, string $expected): void
     {
         // Expose private method for testing.
         // @see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/

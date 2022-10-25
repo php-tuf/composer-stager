@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 final class PathList implements PathListInterface
 {
     /** @var array<string> */
-    private array $paths;
+    private array $paths = [];
 
     /**
      * @param array<string> $paths
@@ -17,14 +17,19 @@ final class PathList implements PathListInterface
      */
     public function __construct(array $paths)
     {
-        $this->assertValidInput($paths);
-        $this->paths = $paths;
+        $this->add($paths);
     }
 
     /** @return array<string> */
     public function getAll(): array
     {
         return $this->paths;
+    }
+
+    public function add(array $paths): void
+    {
+        $this->assertValidInput($paths);
+        $this->paths = array_merge($this->paths, $paths);
     }
 
     /**

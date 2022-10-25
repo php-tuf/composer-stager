@@ -4,9 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
@@ -18,22 +19,16 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $activeDir
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $stagingDir
  * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
  */
 final class FilesystemUnitTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->activeDir
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR);
+        $this->stagingDir = new TestPath(self::STAGING_DIR);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
@@ -49,23 +44,16 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerCopy
      */
-    public function testCopy($source, $destination): void
+    public function testCopy(string $source, string $destination): void
     {
-        $this->activeDir
-            ->resolve()
-            ->willReturn($source);
-        $this->stagingDir
-            ->resolve()
-            ->willReturn($destination);
+        $source = new TestPath($source);
+        $destination = new TestPath($destination);
         $this->symfonyFilesystem
-            ->copy($source, $destination, true)
+            ->copy($source->resolve(), $destination->resolve(), true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy(
-            $this->activeDir->reveal(),
-            $this->stagingDir->reveal(),
-        );
+        $sut->copy($source, $destination);
     }
 
     public function providerCopy(): array
@@ -93,20 +81,14 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->copy(
-            $this->activeDir->reveal(),
-            $this->stagingDir->reveal(),
-        );
+        $sut->copy($this->activeDir, $this->stagingDir);
     }
 
     /** @covers ::copy */
     public function testCopySourceDirectoryNotFound(): void
     {
-        $source = $this->activeDir->reveal();
-        $destination = $this->stagingDir->reveal();
-
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $this->activeDir->resolve()));
 
         /** @noinspection PhpParamsInspection */
         $this->symfonyFilesystem
@@ -114,17 +96,14 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyFileNotFoundException::class);
         $sut = $this->createSut();
 
-        $sut->copy($source, $destination);
+        $sut->copy($this->activeDir, $this->stagingDir);
     }
 
     /** @covers ::copy */
     public function testCopyDirectoriesTheSame(): void
     {
-        $this->activeDir
-            ->resolve()
-            ->willReturn('same');
-        $source = $this->activeDir->reveal();
-        $destination = $this->activeDir->reveal();
+        $source = new TestPath('same');
+        $destination = $source;
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage(sprintf('The source and destination files cannot be the same at "%s"', $source->resolve()));
@@ -139,18 +118,16 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerExists
      */
-    public function testExists($path, $expected): void
+    public function testExists(string $path, bool $expected): void
     {
-        $this->stagingDir
-            ->resolve()
-            ->willReturn($path);
+        $stagingDir = new TestPath($path);
         $this->symfonyFilesystem
             ->exists($path)
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->exists($this->stagingDir->reveal());
+        $actual = $sut->exists($stagingDir);
 
         self::assertEquals($expected, $actual, 'Correctly detected existence of path.');
     }
@@ -174,17 +151,15 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerMkdir
      */
-    public function testMkdir($dir): void
+    public function testMkdir(string $dir): void
     {
-        $this->stagingDir
-            ->resolve()
-            ->willReturn($dir);
+        $stagingDir = new TestPath($dir);
         $this->symfonyFilesystem
             ->mkdir($dir)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->mkdir($this->stagingDir->reveal());
+        $sut->mkdir($stagingDir);
     }
 
     public function providerMkdir(): array
@@ -205,7 +180,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->mkdir($this->stagingDir->reveal());
+        $sut->mkdir($this->stagingDir);
     }
 
     /**
@@ -213,17 +188,19 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerRemove
      */
-    public function testRemove($path, $callback, $givenTimeout, $expectedTimeout): void
-    {
-        $this->stagingDir
-            ->resolve()
-            ->willReturn($path);
+    public function testRemove(
+        string $path,
+        ?ProcessOutputCallbackInterface $callback,
+        ?int $givenTimeout,
+        int $expectedTimeout
+    ): void {
+        $stagingDir = new TestPath($path);
         $this->symfonyFilesystem
             ->remove($path)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($this->stagingDir->reveal(), $callback, $givenTimeout);
+        $sut->remove($stagingDir, $callback, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -256,6 +233,6 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow(SymfonyIOException::class);
         $sut = $this->createSut();
 
-        $sut->remove($this->stagingDir->reveal());
+        $sut->remove($this->stagingDir);
     }
 }

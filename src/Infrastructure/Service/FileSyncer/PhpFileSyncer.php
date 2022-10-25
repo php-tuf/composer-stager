@@ -101,13 +101,6 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             $relativePathname = self::getRelativePath($destinationResolved, $destinationFilePathname);
             $sourceFilePathname = $sourceResolved . DIRECTORY_SEPARATOR . $relativePathname;
 
-            // Don't iterate over the destination directory if it is a descendant
-            // of the source directory, i.e., if it is "underneath" or "inside"
-            // it, or it will itself be deleted in the process.
-            if (strpos($destinationFilePathname, $sourceResolved) === 0) {
-                continue;
-            }
-
             $sourceFilePath = $this->pathFactory::create($sourceFilePathname);
 
             if ($this->filesystem->exists($sourceFilePath)) {

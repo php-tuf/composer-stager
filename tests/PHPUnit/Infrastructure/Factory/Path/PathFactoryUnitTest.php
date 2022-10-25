@@ -24,7 +24,7 @@ final class PathFactoryUnitTest extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality($directorySeparator, $instanceOf): void
+    public function testBasicFunctionality(string $directorySeparator, string $instanceOf): void
     {
         $path = PathFactory::create($directorySeparator);
 

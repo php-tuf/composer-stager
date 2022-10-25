@@ -319,6 +319,9 @@
     <inspection_tool class="PhpPossiblePolymorphicInvocationInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
       <scope name="Production Code" level="WEAK WARNING" enabled="true" />
     </inspection_tool>
+    <inspection_tool class="PhpRedundantOptionalArgumentInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <scope name="Test Code" level="INFORMATION" enabled="true" editorAttributes="INFORMATION_ATTRIBUTES" />
+    </inspection_tool>
     <inspection_tool class="PhpStanGlobal" enabled="false" level="INFORMATION" enabled_by_default="false">
       <scope name="Project Files" level="WEAK WARNING" enabled="false">
         <option name="level" value="5" />
@@ -334,6 +337,9 @@
       <scope name="Production Code" level="WEAK WARNING" enabled="true" />
     </inspection_tool>
     <inspection_tool class="PhpUsageOfSilenceOperatorInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpVoidFunctionResultUsedInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <scope name="Test Code" level="INFORMATION" enabled="true" editorAttributes="INFORMATION_ATTRIBUTES" />
+    </inspection_tool>
     <inspection_tool class="PointlessArithmeticExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PointlessBooleanExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="RedundantTypeConversion" enabled="false" level="WARNING" enabled_by_default="false">

@@ -6,11 +6,13 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Prophecy\Argument;
 
@@ -26,8 +28,8 @@ use Prophecy\Argument;
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $destination
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $source
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $destination
+ * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $source
  */
 final class RsyncFileSyncerUnitTest extends TestCase
 {
@@ -42,14 +44,8 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->source = $this->prophesize(PathInterface::class);
-        $this->source
-            ->resolve()
-            ->willReturn(self::ACTIVE_DIR);
-        $this->destination = $this->prophesize(PathInterface::class);
-        $this->destination
-            ->resolve()
-            ->willReturn(self::STAGING_DIR);
+        $this->source = new TestPath(self::ACTIVE_DIR);
+        $this->destination = new TestPath(self::STAGING_DIR);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())
@@ -68,16 +64,15 @@ final class RsyncFileSyncerUnitTest extends TestCase
     }
 
     /** @dataProvider providerSync */
-    public function testSync($source, $destination, $exclusions, $command, $callback): void
-    {
-        $this->source
-            ->resolve()
-            ->willReturn($source);
-        $source = $this->source->reveal();
-        $this->destination
-            ->resolve()
-            ->willReturn($destination);
-        $destination = $this->destination->reveal();
+    public function testSync(
+        string $source,
+        string $destination,
+        ?PathListInterface $exclusions,
+        array $command,
+        ?ProcessOutputCallbackInterface $callback
+    ): void {
+        $source = new TestPath($source);
+        $destination = new TestPath($destination);
 
         $this->filesystem
             ->mkdir($destination)
@@ -176,18 +171,16 @@ final class RsyncFileSyncerUnitTest extends TestCase
     }
 
     /** @dataProvider providerSyncFailure */
-    public function testSyncFailure($caught, $thrown): void
+    public function testSyncFailure(string $caught, string $thrown): void
     {
         $this->expectException($thrown);
 
-        $source = $this->source->reveal();
-        $destination = $this->destination->reveal();
         $this->rsync
             ->run(Argument::cetera())
             ->willThrow($caught);
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $sut->sync($this->source, $this->destination);
     }
 
     public function providerSyncFailure(): array
@@ -206,30 +199,21 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function testSyncSourceDirectoryNotFound(): void
     {
-        $source = $this->source->reveal();
-        $destination = $this->destination->reveal();
-
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolve()));
 
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $sut->sync($this->source, $this->destination);
     }
 
     public function testSyncDirectoriesTheSame(): void
     {
-        $this->source
-            ->resolve()
-            ->willReturn('same');
-        $source = $this->source->reveal();
-        $this->destination
-            ->resolve()
-            ->willReturn('same');
-        $destination = $this->destination->reveal();
+        $source = new TestPath('same');
+        $destination = $source;
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
@@ -243,13 +227,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
     {
         $this->expectException(IOException::class);
 
-        $source = $this->source->reveal();
-        $destination = $this->destination->reveal();
         $this->filesystem
-            ->mkdir($destination)
+            ->mkdir($this->destination)
             ->willThrow(IOException::class);
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $sut->sync($this->source, $this->destination);
     }
 }
