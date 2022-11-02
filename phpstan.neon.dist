@@ -21,6 +21,9 @@ parameters:
                 - tests/PHPUnit/Infrastructure/Aggregate/PreconditionsTree/AbstractPreconditionsTreeUnitTest.php
                 - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractPreconditionUnitTest.php
         -
+            message: '#Call to deprecated method prophesize\(\) of class PhpTuf\\ComposerStager\\Tests\\PHPUnit\\TestCase#'
+            path: tests/PHPUnit
+        -
             message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no type specified.#'
             path: tests/PHPUnit
         -
