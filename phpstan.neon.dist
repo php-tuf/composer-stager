@@ -1,8 +1,12 @@
 parametersSchema:
-	gitattributesExportInclude: listOf(string())
-	preconditionSystemHash: string()
+    gitattributesExportInclude: listOf(string())
+    preconditionSystemHash: string()
 
 parameters:
+    exceptions:
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
     level: max
     tmpDir: var/phpstan
     paths:
@@ -33,7 +37,7 @@ parameters:
             message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) return type has no value type specified in iterable type array.#'
             path: tests/PHPUnit
         -
-            message: '#Missing @throws [a-zA-Z0-9\\_]+ annotation#'
+            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) throws checked exception [a-zA-Z0-9\\_]+ but it.s missing from the PHPDoc @throws tag.#'
             path: tests/PHPUnit
         -
             message: '#Parameter \#\d+ \$[a-zA-Z0-9\\_]+ of (static )?method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) expects [a-zA-Z0-9\|<>\\_\-]+, [a-zA-Z0-9\\_]+ given.#'
