@@ -53,7 +53,7 @@ final class CoverageAnnotationHasNoParenthesesRule extends AbstractRule
                     continue;
                 }
 
-                $message = sprintf('"%s" function name "%s" must not end with parentheses.', $tag, $value);
+                $message = sprintf('%s function name %s must not end with parentheses.', $tag, $value);
                 $errors[] = RuleErrorBuilder::message($message)->build();
             }
         }

@@ -51,7 +51,7 @@ abstract class AbstractSortedAnnotationsRule implements Rule
 
             if (strcasecmp($current, $previous) < 0) {
                 $message = sprintf(
-                    '"%s" annotations should be sorted alphabetically. The first wrong one is "%s".',
+                    '%s annotations should be sorted alphabetically. The first wrong one is %s.',
                     $this->targetTag(),
                     $current,
                 );

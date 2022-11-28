@@ -60,7 +60,7 @@ final class PropertyDataTypePutsObjectProphecyLastRule extends AbstractRule
                     }
 
                     $message = sprintf(
-                        '"ObjectProphecy" should be last in the list of @property data types in "%s".',
+                        '"ObjectProphecy" should be last in the list of @property data types in %s.',
                         $linePart . ' ' . end($lineParts),
                     );
                     $errors[] = RuleErrorBuilder::message($message)->build();
