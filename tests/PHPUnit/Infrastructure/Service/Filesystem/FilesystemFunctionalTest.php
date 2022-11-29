@@ -8,11 +8,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-/**
- * @coversNothing
- *
- * @property \Symfony\Component\DependencyInjection\ContainerBuilder $container
- */
+/** @coversNothing */
 final class FilesystemFunctionalTest extends TestCase
 {
     private const SOURCE_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'source';
