@@ -43,11 +43,11 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'Composer is available.'; // @codeCoverageIgnore
+        return 'Composer is available.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'Composer cannot be found.'; // @codeCoverageIgnore
+        return 'Composer cannot be found.';
     }
 }

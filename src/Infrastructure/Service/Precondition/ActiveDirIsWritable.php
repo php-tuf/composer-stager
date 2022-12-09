@@ -36,11 +36,11 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The active directory is writable.'; // @codeCoverageIgnore
+        return 'The active directory is writable.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The active directory is not writable.'; // @codeCoverageIgnore
+        return 'The active directory is not writable.';
     }
 }

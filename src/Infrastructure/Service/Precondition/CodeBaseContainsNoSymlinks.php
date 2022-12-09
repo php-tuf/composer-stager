@@ -81,7 +81,7 @@ EOF;
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The codebase contains no symlinks.'; // @codeCoverageIgnore
+        return 'The codebase contains no symlinks.';
     }
 
     protected function getUnfulfilledStatusMessage(): string

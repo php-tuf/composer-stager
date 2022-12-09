@@ -17,6 +17,8 @@ use Prophecy\Argument;
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
@@ -69,25 +71,24 @@ final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
      */
     public function testDirectoryNotFound(bool $activeDirExists, bool $stagingDirExists): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
             ->exists($activeDir)
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn($activeDirExists);
         $this->filesystem
             ->exists($stagingDir)
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn($stagingDirExists);
         $this->fileFinder
             ->find($activeDir, Argument::type(PathListInterface::class))
-            ->shouldBeCalledTimes(2 * (int) $activeDirExists);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE * (int) $activeDirExists);
         $this->fileFinder
             ->find($stagingDir, Argument::type(PathListInterface::class))
-            ->shouldBeCalledTimes(2 * (int) $stagingDirExists);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE * (int) $stagingDirExists);
 
-        $this->testFulfilled();
+        $this->doTestFulfilled('The codebase contains no symlinks.');
     }
 
     public function providerDirectoryNotFound(): array

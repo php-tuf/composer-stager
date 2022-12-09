@@ -36,11 +36,11 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The staging directory does not already exist.'; // @codeCoverageIgnore
+        return 'The staging directory does not already exist.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The staging directory already exists.'; // @codeCoverageIgnore
+        return 'The staging directory already exists.';
     }
 }

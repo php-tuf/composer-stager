@@ -36,11 +36,11 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The staging directory exists.'; // @codeCoverageIgnore
+        return 'The staging directory exists.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The staging directory does not exist.'; // @codeCoverageIgnore
+        return 'The staging directory does not exist.';
     }
 }

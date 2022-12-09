@@ -8,6 +8,9 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDi
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
  *
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getStatusMessage
+ * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
@@ -24,31 +27,29 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
 
     public function testFulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->activeDir
             ->resolve()
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/one/different');
         $this->stagingDir
             ->resolve()
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/two/different');
 
-        parent::testFulfilled();
+        $this->doTestFulfilled('The active and staging directories are different.');
     }
 
     public function testUnfulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->activeDir
             ->resolve()
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/same');
         $this->stagingDir
             ->resolve()
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/same');
 
-        parent::testUnfulfilled();
+        $this->doTestUnfulfilled('The active and staging directories are the same.');
     }
 }

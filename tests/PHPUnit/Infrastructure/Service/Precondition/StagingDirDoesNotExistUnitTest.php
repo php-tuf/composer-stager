@@ -10,6 +10,9 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotE
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getStatusMessage
+ * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
@@ -36,23 +39,21 @@ final class StagingDirDoesNotExistUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->filesystem
             ->exists($this->stagingDir->reveal())
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(false);
 
-        parent::testFulfilled();
+        $this->doTestFulfilled('The staging directory does not already exist.');
     }
 
     public function testUnfulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->filesystem
             ->exists($this->stagingDir->reveal())
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        parent::testUnfulfilled();
+        $this->doTestUnfulfilled('The staging directory already exists.');
     }
 }

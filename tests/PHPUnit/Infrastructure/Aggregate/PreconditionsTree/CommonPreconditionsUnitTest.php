@@ -15,6 +15,8 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
@@ -55,37 +57,35 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->composerIsAvailable
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirExists
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsWritable
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeAndStagingDirsAreDifferent
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        parent::testFulfilled();
+        $this->doTestFulfilled('The common preconditions are fulfilled.');
     }
 
     public function testUnfulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->composerIsAvailable
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 
-        parent::testUnfulfilled();
+        $this->doTestUnfulfilled('The common preconditions are unfulfilled.');
     }
 }

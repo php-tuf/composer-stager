@@ -29,11 +29,11 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The active and staging directories are different.'; // @codeCoverageIgnore
+        return 'The active and staging directories are different.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The active and staging directories are the same.'; // @codeCoverageIgnore
+        return 'The active and staging directories are the same.';
     }
 }

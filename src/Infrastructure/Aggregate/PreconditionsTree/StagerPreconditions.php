@@ -30,11 +30,11 @@ final class StagerPreconditions extends AbstractPreconditionsTree implements Sta
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The preconditions for staging Composer commands are fulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for staging Composer commands are fulfilled.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The preconditions for staging Composer commands are unfulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for staging Composer commands are unfulfilled.';
     }
 }

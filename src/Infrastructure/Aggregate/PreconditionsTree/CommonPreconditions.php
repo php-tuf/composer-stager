@@ -34,11 +34,11 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The common preconditions are fulfilled.'; // @codeCoverageIgnore
+        return 'The common preconditions are fulfilled.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The common preconditions are unfulfilled.'; // @codeCoverageIgnore
+        return 'The common preconditions are unfulfilled.';
     }
 }

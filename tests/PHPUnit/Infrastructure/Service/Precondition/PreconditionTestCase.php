@@ -15,6 +15,10 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  */
 abstract class PreconditionTestCase extends TestCase
 {
+    // Multiply expected calls to prophecies to account for multiple calls to ::isFulfilled()
+    // and assertIsFulfilled() in ::doTestFulfilled() and ::doTestUnfulfilled(), respectively.
+    protected const EXPECTED_CALLS_MULTIPLE = 3;
+
     protected function setUp(): void
     {
         $this->activeDir = $this->prophesize(PathInterface::class);
@@ -30,19 +34,21 @@ abstract class PreconditionTestCase extends TestCase
 
     abstract protected function createSut(): PreconditionInterface;
 
-    protected function testFulfilled(): void
+    protected function doTestFulfilled(string $expectedStatusMessage): void
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
+        $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions);
         $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions);
 
         self::assertTrue($isFulfilled);
+        self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
     }
 
-    protected function testUnfulfilled(): void
+    protected function doTestUnfulfilled(string $expectedStatusMessage): void
     {
         $this->expectException(PreconditionException::class);
 
@@ -51,8 +57,10 @@ abstract class PreconditionTestCase extends TestCase
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
+        $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions);
 
         self::assertFalse($isFulfilled);
+        self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
 
         // This is called last so as not to throw the exception until all other
         // assertions have been made.

@@ -10,6 +10,9 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists;
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getStatusMessage
+ * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
@@ -36,25 +39,23 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $this->filesystem
             ->exists($activeDir)
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        parent::testFulfilled();
+        $this->doTestFulfilled('The active directory exists.');
     }
 
     public function testUnfulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $this->filesystem
             ->exists($activeDir)
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(false);
 
-        parent::testUnfulfilled();
+        $this->doTestUnfulfilled('The active directory does not exist.');
     }
 }

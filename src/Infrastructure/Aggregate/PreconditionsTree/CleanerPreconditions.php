@@ -30,11 +30,11 @@ final class CleanerPreconditions extends AbstractPreconditionsTree implements Cl
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The preconditions for removing the staging directory are fulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for removing the staging directory are fulfilled.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The preconditions for removing the staging directory are unfulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for removing the staging directory are unfulfilled.';
     }
 }

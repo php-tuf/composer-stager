@@ -13,6 +13,8 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
@@ -42,31 +44,29 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->commonPreconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsReady
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        parent::testFulfilled();
+        $this->doTestFulfilled('The preconditions for staging Composer commands are fulfilled.');
     }
 
     public function testUnfulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->commonPreconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 
-        parent::testUnfulfilled();
+        $this->doTestUnfulfilled('The preconditions for staging Composer commands are unfulfilled.');
     }
 }

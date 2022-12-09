@@ -36,11 +36,11 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The staging directory is writable.'; // @codeCoverageIgnore
+        return 'The staging directory is writable.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The staging directory is not writable.'; // @codeCoverageIgnore
+        return 'The staging directory is not writable.';
     }
 }

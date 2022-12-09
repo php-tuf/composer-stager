@@ -36,11 +36,11 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The active directory exists.'; // @codeCoverageIgnore
+        return 'The active directory exists.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The active directory does not exist.'; // @codeCoverageIgnore
+        return 'The active directory does not exist.';
     }
 }

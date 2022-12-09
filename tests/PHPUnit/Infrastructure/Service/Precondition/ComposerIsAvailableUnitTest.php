@@ -11,6 +11,9 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailabl
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getFulfilledStatusMessage
+ * @covers ::getStatusMessage
+ * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
@@ -37,23 +40,21 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->executableFinder
             ->find('composer')
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/usr/local/bin/composer');
 
-        parent::testFulfilled();
+        $this->doTestFulfilled('Composer is available.');
     }
 
     public function testUnfulfilled(): void
     {
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->executableFinder
             ->find('composer')
-            ->shouldBeCalledTimes(2)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(LogicException::class);
 
-        parent::testUnfulfilled();
+        $this->doTestUnfulfilled('Composer cannot be found.');
     }
 }
