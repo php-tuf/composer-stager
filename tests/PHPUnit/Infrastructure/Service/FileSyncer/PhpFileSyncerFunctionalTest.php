@@ -30,6 +30,9 @@ final class PhpFileSyncerFunctionalTest extends TestCase
 
         $filesystem = new SymfonyFilesystem();
 
+        $filesystem->mkdir(self::TEST_WORKING_DIR);
+        chdir(self::TEST_WORKING_DIR);
+
         $filesystem->mkdir($this->source->resolve());
         $filesystem->mkdir($this->destination->resolve());
     }
