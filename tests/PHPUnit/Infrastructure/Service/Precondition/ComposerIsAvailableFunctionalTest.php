@@ -71,6 +71,22 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
         $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
     }
+
+    public function testInvalidComposerFound(): void
+    {
+        $this->expectException(PreconditionException::class);
+        $this->expectExceptionMessage(InvalidComposerFoundExecutableFinder::getExceptionMessage());
+
+        $this->executableFinderClass = InvalidComposerFoundExecutableFinder::class;
+
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+
+        self::assertFalse($isFulfilled, 'Correctly handled invalid Composer executable.');
+
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+    }
 }
 
 // @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
@@ -81,5 +97,19 @@ final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterfac
     public function find(string $name): string
     {
         throw new LogicException(self::EXCEPTION_MESSAGE);
+    }
+}
+
+// @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
+final class InvalidComposerFoundExecutableFinder implements ExecutableFinderInterface
+{
+    public function find(string $name): string
+    {
+        return __FILE__;
+    }
+
+    public static function getExceptionMessage(): string
+    {
+        return sprintf('The Composer executable at %s is invalid.', __FILE__);
     }
 }
