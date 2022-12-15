@@ -28,6 +28,9 @@ parameters:
             message: '#Call to deprecated method prophesize\(\) of class PhpTuf\\ComposerStager\\Tests\\PHPUnit\\TestCase#'
             path: tests/PHPUnit
         -
+            message: '#Cannot access offset .(application|name). on mixed.#'
+            path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
+        -
             message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no type specified.#'
             path: tests/PHPUnit
         -

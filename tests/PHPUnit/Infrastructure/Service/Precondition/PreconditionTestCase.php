@@ -59,7 +59,7 @@ abstract class PreconditionTestCase extends TestCase
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
         $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions);
 
-        self::assertFalse($isFulfilled);
+        self::assertFalse($isFulfilled, 'Precondition failed as expected.');
         self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
 
         // This is called last so as not to throw the exception until all other
