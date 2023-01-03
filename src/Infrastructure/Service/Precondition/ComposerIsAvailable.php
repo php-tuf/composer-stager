@@ -106,11 +106,6 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
             return false;
         }
 
-        // phpcs:ignore SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn.UselessIfCondition
-        if ($data['application']['name'] !== 'Composer') {
-            return false;
-        }
-
-        return true;
+        return $data['application']['name'] === 'Composer';
     }
 }
