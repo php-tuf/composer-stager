@@ -76,7 +76,7 @@ rules:
 
 services:
     -
-        # Ensures that precondtion system diagrams stay current.
+        # Ensures that precondition system diagrams stay current.
         class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
         arguments:
             preconditionSystemHash: %preconditionSystemHash%
