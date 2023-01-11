@@ -1,7 +1,7 @@
+!/.idea/composer-stager.iml
 !/.idea/dictionaries/project.xml
 !/var/*/.gitkeep
 /.deptrac.cache
-/.idea/composer-stager.iml
 /.idea/dictionaries/*
 /.idea/php.xml
 /.idea/workspace.xml
