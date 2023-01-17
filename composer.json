@@ -42,16 +42,12 @@
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^4.27",
         "qossmic/deptrac-shim": "^0.24.0",
-        "roave/security-advisories": "dev-latest",
         "slevomat/coding-standard": "^8.4",
         "squizlabs/php_codesniffer": "^3.7",
         "symfony/config": "^5.4",
         "symfony/dependency-injection": "^5.4",
         "symfony/yaml": "^5.4",
         "thecodingmachine/phpstan-strict-rules": "^1.0"
-    },
-    "suggest": {
-        "roave/security-advisories": "Ensures that your application doesn't have installed dependencies with known security vulnerabilities."
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -101,7 +97,6 @@
         "phpunit": "phpunit",
         "psalm": "psalm.phar",
         "psalter": "psalm.phar --alter --issues=all",
-        "security": "@composer update --dry-run roave/security-advisories",
         "static": "grumphp run --testsuite=static",
         "test": "grumphp run --testsuite=test",
         "unit": "phpunit --testsuite=Unit"
@@ -122,7 +117,6 @@
         "phpunit": "Runs PHPUnit tests.",
         "psalm": "Automatically fixes Psalm errors where possible.",
         "psalter": "Automatically fixes Psalm errors where possible.",
-        "security": "Checks installed dependencies for known security vulnerabilities.",
         "static": "Runs all static analysis tools.",
         "test": "Runs automated tests.",
         "unit": "Runs unit tests."
