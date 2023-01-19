@@ -10,6 +10,6 @@ This diagram depicts the detailed interfaces and relationships. New concrete pre
 
 <div align="center"><img src="resources/detail.png" alt="Detail diagram" /></div>
 
-Below is a depiction of the actual hierarchy of preconditions. In short, all domain operations have the same preconditions except the beginner, which has a different relationship with the staging directory.
+Below is a depiction of the actual hierarchy of preconditions.
 
 <div align="center"><img src="resources/hierarchy.png" alt="Hierarchy diagram" /></div>
