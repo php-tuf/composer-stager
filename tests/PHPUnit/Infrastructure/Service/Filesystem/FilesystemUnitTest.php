@@ -184,6 +184,55 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
+     * @covers ::readlink
+     *
+     * @dataProvider providerReadlink
+     */
+    public function testReadlink(string $link, string $expected): void
+    {
+        $linkPath = new TestPath($link);
+        $this->symfonyFilesystem
+            ->readlink($link)
+            ->shouldBeCalledOnce()
+            ->willReturn($expected);
+        $sut = $this->createSut();
+
+        $actual = $sut->readlink($linkPath);
+
+        self::assertSame($expected, $actual);
+    }
+
+    public function providerReadlink(): array
+    {
+        return [
+            [
+                'path' => '/one/two',
+                'expected' => '/three/four',
+            ],
+            [
+                'path' => '/five/six',
+                'expected' => '/seven/eight',
+            ],
+        ];
+    }
+
+    /** @covers ::readlink */
+    public function testReadlinkFailure(): void
+    {
+        $link = '/var/www';
+
+        $this->expectException(IOException::class);
+        $this->expectExceptionMessage('Failed to read link at "/var/www"');
+
+        $this->symfonyFilesystem
+            ->readlink($link)
+            ->willReturn(null);
+        $sut = $this->createSut();
+
+        $sut->readlink(new TestPath($link));
+    }
+
+    /**
      * @covers ::remove
      *
      * @dataProvider providerRemove

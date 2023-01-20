@@ -74,6 +74,19 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
+    public function readlink(PathInterface $path): string
+    {
+        $resolvedPath = $path->resolve();
+
+        $target = $this->symfonyFilesystem->readlink($resolvedPath);
+
+        if ($target === null) {
+            throw new IOException(sprintf('Failed to read link at "%s"', $resolvedPath));
+        }
+
+        return $target;
+    }
+
     public function remove(
         PathInterface $path,
         ?ProcessOutputCallbackInterface $callback = null,

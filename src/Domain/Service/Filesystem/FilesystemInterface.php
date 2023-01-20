@@ -56,6 +56,17 @@ interface FilesystemInterface
     public function mkdir(PathInterface $path): void;
 
     /**
+     * Returns the target of a symbolic link.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   The link path.
+     *
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     *   If the the path is not a symbolic link or cannot be read.
+     */
+    public function readlink(PathInterface $path): string;
+
+    /**
      * Removes the given path.
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
