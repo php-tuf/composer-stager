@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
@@ -21,6 +22,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noUnsupportedLinksExist
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface|\Prophecy\Prophecy\ObjectProphecy $codebaseContainsNoSymlinksInterface
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirDoesNotExist
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
@@ -31,6 +33,7 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
+        $this->noUnsupportedLinksExist = $this->prophesize(NoUnsupportedLinksExistInterface::class);
         $this->stagingDirDoesNotExist = $this->prophesize(StagingDirDoesNotExistInterface::class);
         $this->codebaseContainsNoSymlinksInterface = $this->prophesize(CodebaseContainsNoSymlinksInterface::class);
 
@@ -40,12 +43,14 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
     protected function createSut(): BeginnerPreconditions
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
+        $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
         $codebaseContainsNoSymlinksInterface = $this->codebaseContainsNoSymlinksInterface->reveal();
 
         return new BeginnerPreconditions(
             $codebaseContainsNoSymlinksInterface,
             $commonPreconditions,
+            $noUnsupportedLinksExist,
             $stagingDirDoesNotExist,
         );
     }
@@ -56,6 +61,9 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->commonPreconditions
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->noUnsupportedLinksExist
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirDoesNotExist
