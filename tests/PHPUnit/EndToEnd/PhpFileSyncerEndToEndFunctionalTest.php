@@ -27,6 +27,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
@@ -36,6 +37,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable
