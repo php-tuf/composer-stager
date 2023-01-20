@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Aggregate\Precondit
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\NoUnsupportedLinksExist;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
 
@@ -19,6 +20,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteLinksExist
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
@@ -27,6 +29,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->noAbsoluteLinksExist = $this->prophesize(NoAbsoluteLinksExistInterface::class);
+        $this->noHardLinksExist = $this->prophesize(NoHardLinksExistInterface::class);
 
         parent::setUp();
     }
@@ -34,8 +37,9 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
     protected function createSut(): NoUnsupportedLinksExist
     {
         $noAbsoluteLinksExist = $this->noAbsoluteLinksExist->reveal();
+        $noHardLinksExist = $this->noHardLinksExist->reveal();
 
-        return new NoUnsupportedLinksExist($noAbsoluteLinksExist);
+        return new NoUnsupportedLinksExist($noAbsoluteLinksExist, $noHardLinksExist);
     }
 
     public function testFulfilled(): void
@@ -44,6 +48,9 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->noAbsoluteLinksExist
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->noHardLinksExist
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 

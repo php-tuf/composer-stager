@@ -4,11 +4,14 @@ namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
-    public function __construct(NoAbsoluteLinksExistInterface $noAbsoluteLinksExist)
-    {
+    public function __construct(
+        NoAbsoluteLinksExistInterface $noAbsoluteLinksExist,
+        NoHardLinksExistInterface $noHardLinksExist
+    ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
 
