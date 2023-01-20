@@ -101,8 +101,7 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
         PathInterface $stagingDir,
         ?PathListInterface $exclusions
     ): bool {
-        // @todo Remove codeCoverageIgnore.
-        return false; // @codeCoverageIgnore
+        return false;
     }
 
     /**

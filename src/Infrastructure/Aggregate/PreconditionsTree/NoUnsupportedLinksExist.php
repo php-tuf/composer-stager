@@ -3,10 +3,11 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
 
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
-    public function __construct()
+    public function __construct(NoAbsoluteLinksExistInterface $noAbsoluteLinksExist)
     {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
@@ -31,7 +32,6 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        // @todo Remove codeCoverageIgnore.
-        return 'There are unsupported links in the codebase.'; // @codeCoverageIgnore
+        return 'There are unsupported links in the codebase.';
     }
 }

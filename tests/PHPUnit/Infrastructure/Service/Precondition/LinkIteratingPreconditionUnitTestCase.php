@@ -101,11 +101,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 
-    /**
-     * @covers ::exitEarly
-     * @covers ::findFiles
-     * @covers ::getUnfulfilledStatusMessage
-     */
+    /** @covers ::getUnfulfilledStatusMessage */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -122,11 +118,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /**
-     * @covers ::exitEarly
-     * @covers ::findFiles
-     * @covers ::getUnfulfilledStatusMessage
-     */
+    /** @covers ::getUnfulfilledStatusMessage */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -143,11 +135,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /**
-     * @covers ::exitEarly
-     * @covers ::findFiles
-     * @covers ::getUnfulfilledStatusMessage
-     */
+    /** @covers ::getUnfulfilledStatusMessage */
     public function testNoFilesFound(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -164,8 +152,6 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
     }
 
     /**
-     * @covers ::exitEarly
-     * @covers ::findFiles
      * @covers ::getUnfulfilledStatusMessage
      *
      * @dataProvider providerFileFinderExceptions

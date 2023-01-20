@@ -15,6 +15,7 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
  *
  * @covers ::__construct
+ * @covers ::findFiles
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException

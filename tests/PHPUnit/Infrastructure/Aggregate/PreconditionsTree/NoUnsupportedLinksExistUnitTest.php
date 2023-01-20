@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Aggregate\PreconditionsTree;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\NoUnsupportedLinksExist;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
 
@@ -15,22 +17,49 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ *
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteLinksExist
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 {
+    protected function setUp(): void
+    {
+        $this->noAbsoluteLinksExist = $this->prophesize(NoAbsoluteLinksExistInterface::class);
+
+        parent::setUp();
+    }
+
     protected function createSut(): NoUnsupportedLinksExist
     {
-        return new NoUnsupportedLinksExist();
+        $noAbsoluteLinksExist = $this->noAbsoluteLinksExist->reveal();
+
+        return new NoUnsupportedLinksExist($noAbsoluteLinksExist);
     }
 
     public function testFulfilled(): void
     {
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
+        $this->noAbsoluteLinksExist
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+
         $this->doTestFulfilled('There are no unsupported links in the codebase.');
     }
 
     public function testUnfulfilled(): void
     {
-        // @todo Implement once the corresponding functionality is added.
-        $this->expectNotToPerformAssertions();
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $exclusions = $this->exclusions;
+        $this->noAbsoluteLinksExist
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
+            ->willThrow(PreconditionException::class);
+
+        $this->doTestUnfulfilled('There are unsupported links in the codebase.');
     }
 }
