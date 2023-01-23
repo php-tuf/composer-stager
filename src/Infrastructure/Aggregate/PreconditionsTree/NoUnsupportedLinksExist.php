@@ -6,13 +6,15 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksE
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksPointOutsideTheCodebaseInterface;
 
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
     public function __construct(
         NoAbsoluteLinksExistInterface $noAbsoluteLinksExist,
         NoHardLinksExistInterface $noHardLinksExist,
-        NoLinksExistOnWindowsInterface $noLinksExistOnWindows
+        NoLinksExistOnWindowsInterface $noLinksExistOnWindows,
+        NoLinksPointOutsideTheCodebaseInterface $noLinksPointOutsideTheCodebase
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
