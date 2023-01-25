@@ -59,9 +59,39 @@ final class Filesystem implements FilesystemInterface
         return $this->symfonyFilesystem->exists($path->resolve());
     }
 
+    /**
+     * @noinspection PhpUsageOfSilenceOperatorInspection
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
     public function isLink(PathInterface $path): bool
     {
-        return is_link($path->resolve());
+        // It seems intuitive to just use PHP's `is_link()` function here, but
+        // it only catches symlinks, whereas this method is meant to catch hard
+        // links, too. Error reporting is suppressed because using `lstat()` on
+        // a non-link emits E_WARNING, which may or may not throw an exception
+        // depending on the error_reporting configuration.
+        $lstat = @lstat($path->resolve());
+
+        // Path does not exist.
+        if ($lstat === false) {
+            return false;
+        }
+
+        $mode = $lstat['mode'];
+        $mode = (int) decoct($mode);
+        $mode = (int) floor($mode / 10_000) * 10_000;
+
+        // Path is a symlink.
+        if ($mode === 120_000) {
+            return true;
+        }
+
+        // Path is a hard link.
+        if ($lstat['nlink'] > 1) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isWritable(PathInterface $path): bool

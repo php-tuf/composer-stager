@@ -70,14 +70,22 @@ final class FilesystemFunctionalTest extends TestCase
      *
      * @dataProvider providerIsLink
      */
-    public function testIsLink(array $files, array $links, bool $expected): void
-    {
+    public function testIsLink(
+        array $files,
+        array $directories,
+        array $symlinks,
+        array $hardLinks,
+        string $subject,
+        bool $expected
+    ): void {
         self::createFiles(self::SOURCE_DIR, $files);
-        self::createSymlinks(self::SOURCE_DIR, $links);
-        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'link.txt';
+        self::createDirectories(self::SOURCE_DIR, $directories);
+        self::createSymlinks(self::SOURCE_DIR, $symlinks);
+        self::createHardlinks(self::SOURCE_DIR, $hardLinks);
+        $subject = PathFactory::create(self::SOURCE_DIR . '/' . $subject);
         $sut = $this->createSut();
 
-        $actual = $sut->isLink(PathFactory::create($path));
+        $actual = $sut->isLink($subject);
 
         self::assertSame($expected, $actual, 'Correctly determined whether path was a link.');
     }
@@ -85,19 +93,54 @@ final class FilesystemFunctionalTest extends TestCase
     public function providerIsLink(): array
     {
         return [
-            'File is a link' => [
+            'Path is a symlink to a file' => [
                 'files' => ['target.txt'],
-                'links' => ['link.txt' => 'target.txt'],
+                'directories' => [],
+                'symlinks' => ['symlink.txt' => 'target.txt'],
+                'hardLinks' => [],
+                'subject' => 'symlink.txt',
                 'expected' => true,
             ],
-            'File is not a link' => [
+            'Path is a symlink to a directory' => [
+                'files' => [],
+                'directories' => ['target_directory'],
+                'symlinks' => ['directory_link' => 'target_directory'],
+                'hardLinks' => [],
+                'subject' => 'directory_link',
+                'expected' => true,
+            ],
+            // Creating a hard link to a directory is not a permitted
+            // operation. Just test with a file.
+            'Path is a hard link' => [
+                'files' => ['target.txt'],
+                'directories' => [],
+                'symlinks' => [],
+                'hardLinks' => ['hard_link.txt' => 'target.txt'],
+                'subject' => 'hard_link.txt',
+                'expected' => true,
+            ],
+            'Path is a file' => [
                 'files' => ['file.txt'],
-                'links' => [],
+                'directories' => [],
+                'symlinks' => [],
+                'hardLinks' => [],
+                'subject' => 'file.txt',
                 'expected' => false,
             ],
-            'No file there' => [
+            'Path is a directory' => [
                 'files' => [],
-                'links' => [],
+                'directories' => ['directory'],
+                'symlinks' => [],
+                'hardLinks' => [],
+                'subject' => 'directory',
+                'expected' => false,
+            ],
+            'Path does not exist' => [
+                'files' => [],
+                'directories' => [],
+                'symlinks' => [],
+                'hardLinks' => [],
+                'subject' => 'non_existent_path.txt',
                 'expected' => false,
             ],
         ];
