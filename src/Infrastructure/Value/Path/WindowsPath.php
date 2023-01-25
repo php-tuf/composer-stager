@@ -4,6 +4,21 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
 final class WindowsPath extends AbstractPath
 {
+    public function isAbsolute(): bool
+    {
+        if ($this->isAbsoluteFromSpecificDrive($this->path)) {
+            return true;
+        }
+
+        if ($this->isAbsoluteFromCurrentDrive($this->path)) {
+            return true;
+        }
+
+        // If the path doesn't match known, supported patterns (there are technically
+        // others), assume it to be relative, e.g., `Example' or `..\Example`.
+        return false;
+    }
+
     /**
      * Windows path rules are complex. They are only partially implemented here.
      *
@@ -13,21 +28,20 @@ final class WindowsPath extends AbstractPath
     {
         $path = $this->path;
 
-        // If the path is absolute from a specified drive, e.g., `C:\Program Files\Example`.
         if ($this->isAbsoluteFromSpecificDrive($path)) {
             return $this->normalizeAbsoluteFromSpecificDrive($path);
         }
 
-        // If the path is absolute from the current drive, e.g., `\Program Files\Example`.
         if ($this->isAbsoluteFromCurrentDrive($path)) {
             return $this->normalizeAbsoluteFromCurrentDrive($path, $basePath);
         }
 
-        // Otherwise, the path is assumed to be relative--there are technically
-        // other possibilities--e.g., `Example' or `..\Example`.
+        // If the path doesn't match known, supported patterns (there are technically
+        // others), assume it to be relative, e.g., `Example' or `..\Example`.
         return $this->getAbsoluteFromRelative($path, $basePath);
     }
 
+    /** Determines whether the path is absolute from a specified drive, e.g., "C:\Program Files\Example". */
     private function isAbsoluteFromSpecificDrive(string $path): bool
     {
         // A Windows drive name is a single letter followed by a colon. An
@@ -45,6 +59,7 @@ final class WindowsPath extends AbstractPath
         return $this->normalize($path, $driveRoot);
     }
 
+    /** Determines whether the path is absolute from the current drive, e.g., "\Program Files\Example". */
     private function isAbsoluteFromCurrentDrive(string $path): bool
     {
         // An absolute path to the current drive begins with a directory separator.
