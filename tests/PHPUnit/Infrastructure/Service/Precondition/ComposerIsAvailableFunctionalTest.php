@@ -11,6 +11,8 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailabl
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
+
 /**
  * @coversNothing
  *
@@ -89,7 +91,6 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
     }
 }
 
-// @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterface
 {
     public const EXCEPTION_MESSAGE = 'Composer cannot be found.';
@@ -100,7 +101,6 @@ final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterfac
     }
 }
 
-// @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 final class InvalidComposerFoundExecutableFinder implements ExecutableFinderInterface
 {
     public function find(string $name): string

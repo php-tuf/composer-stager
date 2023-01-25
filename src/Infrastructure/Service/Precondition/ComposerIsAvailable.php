@@ -67,7 +67,6 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
 
         $isValid = $this->isValidExecutable($process, $executablePath);
 
-        // phpcs:ignore SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn.UselessIfCondition
         if (!$isValid) {
             return false;
         }
