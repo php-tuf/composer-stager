@@ -8,7 +8,16 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-/** @coversNothing */
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+ *
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \Symfony\Component\Filesystem\Filesystem
+ */
 final class FilesystemFunctionalTest extends TestCase
 {
     private const SOURCE_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'source';
@@ -38,6 +47,7 @@ final class FilesystemFunctionalTest extends TestCase
         return $filesystem;
     }
 
+    /** @covers ::copy */
     public function testCopy(): void
     {
         $filename = 'file.txt';
@@ -55,11 +65,52 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /**
+     * @covers ::isLink
+     *
+     * @dataProvider providerIsLink
+     */
+    public function testIsLink(array $files, array $links, bool $expected): void
+    {
+        self::createFiles(self::SOURCE_DIR, $files);
+        self::createSymlinks(self::SOURCE_DIR, $links);
+
+        $sut = $this->createSut();
+
+        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'link.txt';
+        $actual = $sut->isLink(PathFactory::create($path));
+
+        self::assertSame($expected, $actual, 'Correctly determined whether path was a link.');
+    }
+
+    public function providerIsLink(): array
+    {
+        return [
+            'File is a link' => [
+                'files' => ['target.txt'],
+                'links' => ['link.txt' => 'target.txt'],
+                'expected' => true,
+            ],
+            'File is not a link' => [
+                'files' => ['file.txt'],
+                'links' => [],
+                'expected' => false,
+            ],
+            'No file there' => [
+                'files' => [],
+                'links' => [],
+                'expected' => false,
+            ],
+        ];
+    }
+
+    /**
      * Our filesystem service currently depends on the Symfony Filesystem component
      * and currently delegates its copy() method directly to it. Therefore, it is
      * precisely equivalent to its implementation. Symfony's copy() documentation
      * does not specify whether it supports directories as well as files. This
      * test is to discover whether it does. (At this time it does not.)
+     *
+     * @coversNothing
      */
     public function testSymfonyCopyDirectory(): void
     {

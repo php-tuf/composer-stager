@@ -105,8 +105,14 @@ abstract class TestCase extends PHPUnitTestCase
         $link = PathFactory::create("{$baseDir}/{$link}")->resolve();
         $target = PathFactory::create("{$baseDir}/{$target}")->resolve();
         static::ensureParentDirectory($link);
-        $filesystem = new Filesystem();
-        $filesystem->symlink($target, $link);
+
+        // If the symlink target doesn't exist, the tests will pass on Unix-like
+        // systems but fail on Windows. Avoid hard-to-debug problems by making
+        // sure it fails everywhere in that case.
+        assert(file_exists($target), 'Symlink targets exists.');
+
+        symlink($target, $link);
+
         assert(is_link($link), "Created symlink at {$link}.");
     }
 

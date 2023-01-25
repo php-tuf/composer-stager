@@ -55,6 +55,11 @@ final class Filesystem implements FilesystemInterface
         return $this->symfonyFilesystem->exists($path->resolve());
     }
 
+    public function isLink(PathInterface $path): bool
+    {
+        return is_link($path->resolve());
+    }
+
     public function isWritable(PathInterface $path): bool
     {
         return is_writable($path->resolve()); // @codeCoverageIgnore

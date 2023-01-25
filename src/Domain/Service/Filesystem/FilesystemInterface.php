@@ -37,6 +37,17 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
+     * Determines whether the given path is a symbolic link.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a symbolic link, false otherwise.
+     */
+    public function isLink(PathInterface $path): bool;
+
+    /**
      * Determines whether the given path is writable.
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
