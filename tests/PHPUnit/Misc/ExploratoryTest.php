@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPUnit\Misc;
+namespace PhpTuf\ComposerStager\Tests\PHPUnit\Misc;
 
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
