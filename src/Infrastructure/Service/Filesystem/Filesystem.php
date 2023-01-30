@@ -79,7 +79,7 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    public function readlink(PathInterface $path): string
+    public function readLink(PathInterface $path): string
     {
         $resolvedPath = $path->resolve();
 

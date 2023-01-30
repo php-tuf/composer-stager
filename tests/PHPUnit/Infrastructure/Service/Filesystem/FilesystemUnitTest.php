@@ -184,7 +184,7 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::readlink
+     * @covers ::readLink
      *
      * @dataProvider providerReadlink
      */
@@ -197,7 +197,7 @@ final class FilesystemUnitTest extends TestCase
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->readlink($linkPath);
+        $actual = $sut->readLink($linkPath);
 
         self::assertSame($expected, $actual);
     }
@@ -216,7 +216,7 @@ final class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::readlink */
+    /** @covers ::readLink */
     public function testReadlinkFailure(): void
     {
         $link = '/var/www';
@@ -229,7 +229,7 @@ final class FilesystemUnitTest extends TestCase
             ->willReturn(null);
         $sut = $this->createSut();
 
-        $sut->readlink(new TestPath($link));
+        $sut->readLink(new TestPath($link));
     }
 
     /**
