@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 
+use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
@@ -73,10 +74,9 @@ final class FilesystemFunctionalTest extends TestCase
     {
         self::createFiles(self::SOURCE_DIR, $files);
         self::createSymlinks(self::SOURCE_DIR, $links);
-
+        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'link.txt';
         $sut = $this->createSut();
 
-        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'link.txt';
         $actual = $sut->isLink(PathFactory::create($path));
 
         self::assertSame($expected, $actual, 'Correctly determined whether path was a link.');
@@ -101,6 +101,31 @@ final class FilesystemFunctionalTest extends TestCase
                 'expected' => false,
             ],
         ];
+    }
+
+    /** @covers ::readLink */
+    public function testReadlink(): void
+    {
+        self::createFile(self::SOURCE_DIR, 'target.txt');
+        self::createSymlink(self::SOURCE_DIR, 'link.txt', 'target.txt');
+        $link = PathFactory::create(self::SOURCE_DIR . '/link.txt');
+        $target = PathFactory::create(self::SOURCE_DIR . '/target.txt');
+        $sut = $this->createSut();
+
+        $actual = $sut->readLink($link);
+
+        self::assertSame($target->resolve(), $actual->resolve(), 'Correctly read link.');
+    }
+
+    /** @covers ::readLink */
+    public function testReadlinkFailure(): void
+    {
+        $this->expectException(IOException::class);
+
+        $sut = $this->createSut();
+
+        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'non-existent_file.txt';
+        $sut->readLink(PathFactory::create($path));
     }
 
     /**

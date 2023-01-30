@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Filesystem;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
@@ -19,6 +20,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
  *
+ * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath $stagingDir
  * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
@@ -29,14 +31,16 @@ final class FilesystemUnitTest extends TestCase
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);
         $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
     protected function createSut(): Filesystem
     {
+        $pathFactory = $this->pathFactory->reveal();
         $symfonyFilesystem = $this->symfonyFilesystem->reveal();
 
-        return new Filesystem($symfonyFilesystem);
+        return new Filesystem($pathFactory, $symfonyFilesystem);
     }
 
     /**
@@ -181,55 +185,6 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $sut->mkdir($this->stagingDir);
-    }
-
-    /**
-     * @covers ::readLink
-     *
-     * @dataProvider providerReadlink
-     */
-    public function testReadlink(string $link, string $expected): void
-    {
-        $linkPath = new TestPath($link);
-        $this->symfonyFilesystem
-            ->readlink($link)
-            ->shouldBeCalledOnce()
-            ->willReturn($expected);
-        $sut = $this->createSut();
-
-        $actual = $sut->readLink($linkPath);
-
-        self::assertSame($expected, $actual);
-    }
-
-    public function providerReadlink(): array
-    {
-        return [
-            [
-                'path' => '/one/two',
-                'expected' => '/three/four',
-            ],
-            [
-                'path' => '/five/six',
-                'expected' => '/seven/eight',
-            ],
-        ];
-    }
-
-    /** @covers ::readLink */
-    public function testReadlinkFailure(): void
-    {
-        $link = '/var/www';
-
-        $this->expectException(IOException::class);
-        $this->expectExceptionMessage('Failed to read link at "/var/www"');
-
-        $this->symfonyFilesystem
-            ->readlink($link)
-            ->willReturn(null);
-        $sut = $this->createSut();
-
-        $sut->readLink(new TestPath($link));
     }
 
     /**

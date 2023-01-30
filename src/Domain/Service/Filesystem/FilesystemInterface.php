@@ -75,7 +75,7 @@ interface FilesystemInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the the path is not a symbolic link or cannot be read.
      */
-    public function readLink(PathInterface $path): string;
+    public function readLink(PathInterface $path): PathInterface;
 
     /**
      * Removes the given path.

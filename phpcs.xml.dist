@@ -102,7 +102,7 @@
             <element value="@throws"/>
             <element value="@see"/>
             <element value="@todo"/>
-            <element value="@noinspection"/>
+            <element value="@noinspection,@SuppressWarnings"/>
         </property>
         <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
     </properties></rule>

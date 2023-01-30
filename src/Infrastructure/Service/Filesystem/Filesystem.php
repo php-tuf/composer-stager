@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -15,10 +16,13 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class Filesystem implements FilesystemInterface
 {
+    private PathFactoryInterface $pathFactory;
+
     private SymfonyFilesystem $symfonyFilesystem;
 
-    public function __construct(SymfonyFilesystem $symfonyFilesystem)
+    public function __construct(PathFactoryInterface $pathFactory, SymfonyFilesystem $symfonyFilesystem)
     {
+        $this->pathFactory = $pathFactory;
         $this->symfonyFilesystem = $symfonyFilesystem;
     }
 
@@ -79,17 +83,24 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    public function readLink(PathInterface $path): string
+    /**
+     * @noinspection PhpUsageOfSilenceOperatorInspection
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    public function readLink(PathInterface $path): PathInterface
     {
-        $resolvedPath = $path->resolve();
+        // It seems more intuitive to use PHP's `is_link()` function, but that
+        // only catches symlinks--whereas this test is meant to catch hard links,
+        // too. Error reporting is suppressed because using `stat()` on a non-link
+        // not only returns false but emits E_WARNING, which may or may not throw
+        // an exception depending on the error_reporting configuration.
+        $target = @readlink($path->resolve());
 
-        $target = $this->symfonyFilesystem->readlink($resolvedPath);
-
-        if ($target === null) {
-            throw new IOException(sprintf('Failed to read link at "%s"', $resolvedPath));
+        if ($target === false) {
+            throw new IOException(sprintf('Failed to read link at "%s"', $path->resolve()));
         }
 
-        return $target;
+        return $this->pathFactory::create($target);
     }
 
     public function remove(
