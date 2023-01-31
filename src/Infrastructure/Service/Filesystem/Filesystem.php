@@ -113,18 +113,14 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    /**
-     * @noinspection PhpUsageOfSilenceOperatorInspection
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
     public function readLink(PathInterface $path): PathInterface
     {
-        $target = @readlink($path->resolve());
-
-        if ($target === false) {
-            /** @noinspection PhpUnhandledExceptionInspection False positive. */
-            throw new IOException(sprintf('Failed to read link at "%s"', $path->resolve()));
+        if (!$this->isLink($path)) {
+            throw new IOException(sprintf('The path does not exist or is not a link at "%s"', $path->resolve()));
         }
+
+        $target = readlink($path->resolve());
+        assert(is_string($target));
 
         return $this->pathFactory::create($target);
     }

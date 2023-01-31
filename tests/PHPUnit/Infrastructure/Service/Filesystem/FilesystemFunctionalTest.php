@@ -193,14 +193,31 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /** @covers ::readLink */
-    public function testReadlinkFailure(): void
+    public function testReadlinkOnNonLink(): void
     {
+        self::createFile(self::SOURCE_DIR, 'file.txt');
+        $file = PathFactory::create(self::SOURCE_DIR . '/file.txt');
+
         $this->expectException(IOException::class);
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a link at "%s"', $file->resolve()));
 
         $sut = $this->createSut();
 
+        $sut->readLink($file);
+    }
+
+    /** @covers ::readLink */
+    public function testReadlinkOnNonExistentFile(): void
+    {
         $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'non-existent_file.txt';
-        $sut->readLink(PathFactory::create($path));
+        $path = PathFactory::create($path);
+
+        $this->expectException(IOException::class);
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a link at "%s"', $path->resolve()));
+
+        $sut = $this->createSut();
+
+        $sut->readLink($path);
     }
 
     /**
