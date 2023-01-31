@@ -180,7 +180,6 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
 
-    <rule ref="SlevomatCodingStandard.Numbers.DisallowNumericLiteralSeparator"/>
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator"/>
 
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
