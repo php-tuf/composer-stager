@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition;
 use Prophecy\Argument;
 
 /**
@@ -39,7 +40,69 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
         parent::setUp();
     }
 
+    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition::exitEarly */
+    public function testExitEarly(): void
+    {
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->filesystem
+            ->exists(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->fileFinder
+            ->find(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        $fileFinder = $this->fileFinder->reveal();
+        $filesystem = $this->filesystem->reveal();
+        $pathFactory = $this->pathFactory->reveal();
+
+        // Create a concrete implementation for testing since the SUT in
+        // this case, being abstract, can't be instantiated directly.
+        $sut = new class ($fileFinder, $filesystem, $pathFactory) extends AbstractLinkIteratingPrecondition
+        {
+            protected function getDefaultUnfulfilledStatusMessage(): string
+            {
+                return '';
+            }
+
+            protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
+            {
+                return true;
+            }
+
+            protected function getFulfilledStatusMessage(): string
+            {
+                return '';
+            }
+
+            public function getName(): string
+            {
+                return '';
+            }
+
+            public function getDescription(): string
+            {
+                return '';
+            }
+
+            protected function exitEarly(
+                PathInterface $activeDir,
+                PathInterface $stagingDir,
+                ?PathListInterface $exclusions
+            ): bool {
+                return true;
+            }
+        };
+
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled);
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
+    }
+
     /**
+     * @covers ::exitEarly
      * @covers ::findFiles
      * @covers ::getUnfulfilledStatusMessage
      */
@@ -60,6 +123,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
     }
 
     /**
+     * @covers ::exitEarly
      * @covers ::findFiles
      * @covers ::getUnfulfilledStatusMessage
      */
@@ -80,6 +144,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
     }
 
     /**
+     * @covers ::exitEarly
      * @covers ::findFiles
      * @covers ::getUnfulfilledStatusMessage
      */
@@ -99,6 +164,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
     }
 
     /**
+     * @covers ::exitEarly
      * @covers ::findFiles
      * @covers ::getUnfulfilledStatusMessage
      *

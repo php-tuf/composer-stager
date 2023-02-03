@@ -59,6 +59,8 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
         // this case, being abstract, can't be instantiated directly.
         return new class ($fileFinder, $filesystem, $pathFactory) extends AbstractLinkIteratingPrecondition
         {
+            public bool $exitEarly = false;
+
             protected function getDefaultUnfulfilledStatusMessage(): string
             {
                 return '';
@@ -83,6 +85,35 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
             {
                 return '';
             }
+
+            protected function exitEarly(
+                PathInterface $activeDir,
+                PathInterface $stagingDir,
+                ?PathListInterface $exclusions
+            ): bool {
+                return $this->exitEarly;
+            }
         };
+    }
+
+    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition::exitEarly */
+    public function testExitEarly(): void
+    {
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->filesystem
+            ->exists(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->fileFinder
+            ->find(Argument::cetera())
+            ->shouldNotBeCalled();
+        $sut = $this->createSut();
+        $sut->exitEarly = true;
+
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled);
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 }

@@ -23,6 +23,7 @@ parameters:
             message: '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+\.#'
             paths:
                 - tests/PHPUnit/Infrastructure/Aggregate/PreconditionsTree/AbstractPreconditionsTreeUnitTest.php
+                - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractLinkIteratingPreconditionUnitTest.php
                 - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractPreconditionUnitTest.php
         -
             message: '#Call to deprecated method prophesize\(\) of class PhpTuf\\ComposerStager\\Tests\\PHPUnit\\TestCase#'

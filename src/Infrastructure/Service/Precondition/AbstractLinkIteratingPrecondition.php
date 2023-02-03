@@ -51,6 +51,10 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
             $exclusions ??= new PathList([]);
             $exclusions->add([$stagingDir->resolve()]);
 
+            if ($this->exitEarly($activeDir, $stagingDir, $exclusions)) {
+                return true;
+            }
+
             $directories = [
                 'active' => $activeDir,
                 'staging' => $stagingDir,
@@ -89,6 +93,16 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
         }
 
         return true;
+    }
+
+    /** Determines whether to exit the "is fulfilled" test early, before expensive scanning for links. */
+    protected function exitEarly(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions
+    ): bool {
+        // @todo Remove codeCoverageIgnore.
+        return false; // @codeCoverageIgnore
     }
 
     /**
