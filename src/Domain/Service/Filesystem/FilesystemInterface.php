@@ -37,6 +37,20 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
+     * Determines whether the given path is a hard link.
+     *
+     * Symbolic links (symlinks) are distinct from hard links and do not count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a hard link (not a symlink)
+     *   false otherwise.
+     */
+    public function isHardLink(PathInterface $path): bool;
+
+    /**
      * Determines whether the given path is a link.
      *
      * Symbolic links (symlinks) and hard links both count.
@@ -48,6 +62,20 @@ interface FilesystemInterface
      *   Returns true if the filename exists and is a link, false otherwise.
      */
     public function isLink(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a symbolic link.
+     *
+     * Hard links are distinct from symbolic links (symlinks) and do not count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a symlink (not a hard link),
+     *   false otherwise.
+     */
+    public function isSymlink(PathInterface $path): bool;
 
     /**
      * Determines whether the given path is writable.
