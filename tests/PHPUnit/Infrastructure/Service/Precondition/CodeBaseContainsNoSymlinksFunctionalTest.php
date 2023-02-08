@@ -12,10 +12,13 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  *
  * @covers ::__construct
  * @covers ::findFiles
+ * @covers ::getDefaultUnfulfilledStatusMessage
+ * @covers ::isSupportedLink
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath

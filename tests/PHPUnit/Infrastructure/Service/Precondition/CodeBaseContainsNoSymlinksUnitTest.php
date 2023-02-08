@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks;
 use Prophecy\Argument;
@@ -17,15 +18,18 @@ use Prophecy\Argument;
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::getDefaultUnfulfilledStatusMessage
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
+ * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
 final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
@@ -37,6 +41,7 @@ final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
         $this->filesystem
             ->exists(Argument::type(PathInterface::class))
             ->willReturn(true);
+        $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
     }
@@ -45,8 +50,9 @@ final class CodeBaseContainsNoSymlinksUnitTest extends PreconditionTestCase
     {
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
+        $pathFactory = $this->pathFactory->reveal();
 
-        return new CodeBaseContainsNoSymlinks($fileFinder, $filesystem);
+        return new CodeBaseContainsNoSymlinks($fileFinder, $filesystem, $pathFactory);
     }
 
     /** @covers ::findFiles */

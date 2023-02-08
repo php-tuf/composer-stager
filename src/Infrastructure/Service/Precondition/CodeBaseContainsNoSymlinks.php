@@ -2,31 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
-final class CodeBaseContainsNoSymlinks extends AbstractPrecondition implements CodebaseContainsNoSymlinksInterface
+// phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+final class CodeBaseContainsNoSymlinks extends AbstractLinkIteratingPrecondition implements CodebaseContainsNoSymlinksInterface
 {
-    private RecursiveFileFinderInterface $fileFinder;
-
-    private FilesystemInterface $filesystem;
-
-    private string $unfulfilledStatusMessage = <<<'EOF'
-The %s directory at "%s" contains symlinks, which is not supported. The first one is "%s".
-EOF;
-
-    public function __construct(RecursiveFileFinderInterface $fileFinder, FilesystemInterface $filesystem)
-    {
-        $this->fileFinder = $fileFinder;
-        $this->filesystem = $filesystem;
-    }
-
     public function getName(): string
     {
         return 'Codebase contains no symlinks'; // @codeCoverageIgnore
@@ -37,73 +18,18 @@ EOF;
         return 'The codebase cannot contain symlinks.'; // @codeCoverageIgnore
     }
 
-    public function isFulfilled(
-        PathInterface $activeDir,
-        PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
-    ): bool {
-        try {
-            $exclusions ??= new PathList([]);
-            $exclusions->add([$stagingDir->resolve()]);
-
-            $directories = [
-                'active' => $activeDir,
-                'staging' => $stagingDir,
-            ];
-
-            foreach ($directories as $name => $path) {
-                $files = $this->findFiles($path, $exclusions);
-
-                foreach ($files as $file) {
-                    if (is_link($file)) {
-                        $this->unfulfilledStatusMessage = sprintf(
-                            $this->unfulfilledStatusMessage,
-                            $name,
-                            $path->resolve(),
-                            $file,
-                        );
-
-                        return false;
-                    }
-                }
-            }
-        } catch (InvalidArgumentException|IOException $e) {
-            // If something goes wrong searching for symlinks, don't throw an
-            // exception--just consider the precondition unfulfilled and pass
-            // details along to the user via the status message.
-            $this->unfulfilledStatusMessage = $e->getMessage();
-
-            return false;
-        }
-
-        return true;
-    }
-
     protected function getFulfilledStatusMessage(): string
     {
         return 'The codebase contains no symlinks.';
     }
 
-    protected function getUnfulfilledStatusMessage(): string
+    protected function getDefaultUnfulfilledStatusMessage(): string
     {
-        // This message is defined dynamically so it can be overridden to pass
-        // along an exception message from a dependency. See ::isFulfilled.
-        return $this->unfulfilledStatusMessage;
+        return 'The %s directory at "%s" contains symlinks, which is not supported. The first one is "%s".';
     }
 
-    /**
-     * @return array<string>
-     *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     */
-    private function findFiles(PathInterface $path, PathListInterface $exclusions): array
+    protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
     {
-        // Ignore non-existent directories.
-        if (!$this->filesystem->exists($path)) {
-            return [];
-        }
-
-        return $this->fileFinder->find($path, $exclusions);
+        return !$this->filesystem->isLink($file);
     }
 }
