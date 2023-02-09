@@ -75,13 +75,14 @@ rules:
     - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
-    -
-        # Ensures that precondition system diagrams stay current.
-        class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
-        arguments:
-            preconditionSystemHash: %preconditionSystemHash%
-        tags:
-            - phpstan.rules.rule
+    # @todo Temporarily disable due to regression. Stopped working in 25edda57963f65c298d899c05ea9ed1efee06eb6.
+    # -
+    #     # Ensures that precondition system diagrams stay current.
+    #     class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
+    #     arguments:
+    #         preconditionSystemHash: %preconditionSystemHash%
+    #     tags:
+    #         - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
         class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
