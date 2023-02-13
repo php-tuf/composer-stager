@@ -6,11 +6,19 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class TestPath implements PathInterface
 {
+    private bool $isAbsolute;
+
     private string $path;
 
-    public function __construct(string $path = 'test')
+    public function __construct(string $path = 'test', bool $isAbsolute = true)
     {
         $this->path = $path;
+        $this->isAbsolute = $isAbsolute;
+    }
+
+    public function isAbsolute(): bool
+    {
+        return $this->isAbsolute;
     }
 
     public function resolve(): string
