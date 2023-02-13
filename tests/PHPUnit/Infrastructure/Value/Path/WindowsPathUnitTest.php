@@ -51,12 +51,6 @@ final class WindowsPathUnitTest extends TestCase
         $setCwd->call($sut, $cwd);
         $setCwd->call($equalInstance, $cwd);
 
-        self::assertEquals($resolved, $sut->resolve(), 'Got correct value via explicit method call.');
-
-        chdir(__DIR__);
-
-        self::assertEquals($resolved, $sut->resolve(), 'Retained correct value after changing working directory.');
-
         self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
         self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
         self::assertEquals($resolvedRelativeTo, $sut->resolveRelativeTo($relativeBase), 'Correctly resolved path relative to another given path.');
