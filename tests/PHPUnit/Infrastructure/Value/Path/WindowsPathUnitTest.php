@@ -18,6 +18,7 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @covers ::normalize
  * @covers ::normalizeAbsoluteFromCurrentDrive
  * @covers ::normalizeAbsoluteFromSpecificDrive
+ * @covers ::raw
  * @covers ::resolve
  * @covers ::resolveRelativeTo
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
@@ -49,6 +50,7 @@ final class WindowsPathUnitTest extends TestCase
         $setCwd->call($equalInstance, $cwd);
 
         self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
+        self::assertEquals($given, $sut->raw(), 'Correctly returned raw path.');
         self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
         self::assertEquals($resolvedRelativeTo, $sut->resolveRelativeTo($relativeBase), 'Correctly resolved path relative to another given path.');
         self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');
