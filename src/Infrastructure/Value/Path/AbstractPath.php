@@ -35,6 +35,11 @@ abstract class AbstractPath implements PathInterface
             : $this->getcwd();
     }
 
+    public function raw(): string
+    {
+        return $this->path;
+    }
+
     public function resolve(): string
     {
         return $this->doResolve($this->cwd);

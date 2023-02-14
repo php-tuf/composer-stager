@@ -21,6 +21,11 @@ final class TestPath implements PathInterface
         return $this->isAbsolute;
     }
 
+    public function raw(): string
+    {
+        return $this->path;
+    }
+
     public function resolve(): string
     {
         return $this->path;
