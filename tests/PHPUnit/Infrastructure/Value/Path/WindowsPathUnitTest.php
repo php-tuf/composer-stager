@@ -2,28 +2,29 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path;
 
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath */
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ *
+ * @covers ::__construct
+ * @covers ::doResolve
+ * @covers ::getAbsoluteFromRelative
+ * @covers ::isAbsolute
+ * @covers ::isAbsoluteFromCurrentDrive
+ * @covers ::isAbsoluteFromSpecificDrive
+ * @covers ::normalize
+ * @covers ::normalizeAbsoluteFromCurrentDrive
+ * @covers ::normalizeAbsoluteFromSpecificDrive
+ * @covers ::resolve
+ * @covers ::resolveRelativeTo
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
+ */
 final class WindowsPathUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::doResolve
-     * @covers ::getAbsoluteFromRelative
-     * @covers ::isAbsolute
-     * @covers ::isAbsoluteFromCurrentDrive
-     * @covers ::isAbsoluteFromSpecificDrive
-     * @covers ::normalize
-     * @covers ::normalizeAbsoluteFromCurrentDrive
-     * @covers ::normalizeAbsoluteFromSpecificDrive
-     * @covers ::resolve
-     * @covers ::resolveRelativeTo
-     * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
         string $cwd,
@@ -32,11 +33,7 @@ final class WindowsPathUnitTest extends TestCase
         string $relativeBase,
         string $resolvedRelativeTo
     ): void {
-        // "Fix" directory separators on non-Windows systems so unit tests can
-        // be run on them as smoke tests, if nothing else.
-        if (!self::isWindows()) {
-            self::fixSeparatorsMultiple($given, $cwd, $resolved, $relativeBase, $resolvedRelativeTo);
-        }
+        self::fixSeparatorsMultiple($given, $cwd, $resolved, $relativeBase, $resolvedRelativeTo);
 
         $sut = new WindowsPath($given);
         $equalInstance = new WindowsPath($given);
@@ -230,6 +227,37 @@ final class WindowsPathUnitTest extends TestCase
                 'resolved' => 'C:\\One\\Six',
                 'relativeBase' => 'D:\\Users',
                 'resolvedRelativeTo' => 'D:\\One\\Six',
+            ],
+        ];
+    }
+
+    /** @dataProvider providerCwdArgument */
+    public function testOptionalCwdArgument(string $path, ?PathInterface $cwd, string $resolved): void
+    {
+        // This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
+        if (!self::isWindows()) {
+            $this->expectNotToPerformAssertions();
+
+            return;
+        }
+
+        $sut = new WindowsPath($path, $cwd);
+
+        self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
+    }
+
+    public function providerCwdArgument(): array
+    {
+        return [
+            'With $cwd argument.' => [
+                'path' => 'One',
+                'cwd' => new TestPath('C:\\Arg'),
+                'resolved' => 'C:\\Arg\\One',
+            ],
+            'With explicit null $cwd argument' => [
+                'path' => 'One',
+                'cwd' => null,
+                'resolved' => sprintf('%s\\One', getcwd()),
             ],
         ];
     }

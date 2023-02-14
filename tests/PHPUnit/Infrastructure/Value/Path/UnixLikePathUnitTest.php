@@ -2,27 +2,34 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path;
 
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  *
+ * @covers ::__construct
+ * @covers ::doResolve
+ * @covers ::isAbsolute
+ * @covers ::makeAbsolute
+ * @covers ::normalize
+ * @covers ::resolve
+ * @covers ::resolveRelativeTo
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
  */
 final class UnixLikePathUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::doResolve
-     * @covers ::isAbsolute
-     * @covers ::makeAbsolute
-     * @covers ::normalize
-     * @covers ::resolve
-     * @covers ::resolveRelativeTo
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    public static function setUpBeforeClass(): void
+    {
+        if (!self::isWindows()) {
+            return;
+        }
+
+        self::markTestSkipped('This test covers non-Windows functionality.');
+    }
+
+    /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
         string $cwd,
@@ -31,12 +38,6 @@ final class UnixLikePathUnitTest extends TestCase
         string $relativeBase,
         string $resolvedRelativeTo
     ): void {
-        // "Fix" directory separators on Windows systems so unit tests can
-        // be run on them as smoke tests, if nothing else.
-        if (self::isWindows()) {
-            self::fixSeparatorsMultiple($given, $cwd, $resolved, $relativeBase, $resolvedRelativeTo);
-        }
-
         $sut = new UnixLikePath($given);
         $equalInstance = new UnixLikePath($given);
         $unequalInstance = new UnixLikePath(__DIR__);
@@ -202,6 +203,30 @@ final class UnixLikePathUnitTest extends TestCase
                 'resolved' => '/one/six',
                 'relativeBase' => '/tmp/ten/eleven/twelve',
                 'resolvedRelativeTo' => '/one/six',
+            ],
+        ];
+    }
+
+    /** @dataProvider providerCwdArgument */
+    public function testOptionalCwdArgument(string $path, ?PathInterface $cwd, string $resolved): void
+    {
+        $sut = new UnixLikePath($path, $cwd);
+
+        self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
+    }
+
+    public function providerCwdArgument(): array
+    {
+        return [
+            'With $cwd argument.' => [
+                'path' => 'one',
+                'cwd' => new TestPath('/arg'),
+                'resolved' => '/arg/one',
+            ],
+            'With explicit null $cwd argument' => [
+                'path' => 'one',
+                'cwd' => null,
+                'resolved' => sprintf('%s/one', getcwd()),
             ],
         ];
     }
