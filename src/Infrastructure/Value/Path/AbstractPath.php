@@ -17,15 +17,22 @@ abstract class AbstractPath implements PathInterface
      *   The path string may be absolute or relative to the current working
      *   directory as returned by `getcwd()` at runtime, e.g., "/var/www/example"
      *   or "example". Nothing needs to actually exist at the path.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|null $cwd
+     *   Optionally override the working directory used as the base for relative
+     *   paths. Nothing needs to actually exist at the path. Therefore, it is
+     *   simply assumed to represent a directory, as opposed to a file--even if
+     *   it has an extension, which is no guarantee of type.
      */
-    public function __construct(string $path)
+    public function __construct(string $path, ?PathInterface $cwd = null)
     {
         $this->path = $path;
 
         // Especially since it accepts relative paths, an immutable path value
         // object should be immune to environmental details like the current
         // working directory. Cache the CWD at time of creation.
-        $this->cwd = $this->getcwd();
+        $this->cwd = $cwd instanceof PathInterface
+            ? $cwd->resolve()
+            : $this->getcwd();
     }
 
     public function resolve(): string
