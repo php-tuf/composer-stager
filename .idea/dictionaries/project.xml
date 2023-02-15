@@ -23,7 +23,6 @@
       <w>phpcompatibility</w>
       <w>phpcs</w>
       <w>phplint</w>
-      <w>phpmetrics</w>
       <w>phpro</w>
       <w>phpstan</w>
       <w>polyline</w>
