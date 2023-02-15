@@ -71,11 +71,20 @@ interface FilesystemInterface
     /**
      * Returns the target of a symbolic link.
      *
+     * Hard links are not included and will throw an exception. Consider using
+     * ::isSymlink() first.
+     *
+     * Note: PHP does not distinguish between absolute and relative links on
+     * Windows, so the returned path object there will be based on a canonicalized,
+     * absolute raw path string. In other words, ALL link paths on Windows will
+     * behave like absolute links, whether they really are or not.
+     *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
      *   The link path.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If the the path is not a symbolic link or cannot be read.
+     *   If the the path is not a symbolic link (symlink) or cannot be read. Hard
+     *   links are distinct from symlinks and will still throw an exception.
      */
     public function readLink(PathInterface $path): PathInterface;
 

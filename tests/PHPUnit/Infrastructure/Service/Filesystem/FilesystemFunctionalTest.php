@@ -146,18 +146,50 @@ final class FilesystemFunctionalTest extends TestCase
         ];
     }
 
-    /** @covers ::readLink */
-    public function testReadlink(): void
+    /**
+     * @covers ::readLink
+     *
+     * @dataProvider providerReadlink
+     */
+    public function testReadlink(string $given, string $expected): void
     {
-        self::createFile(self::SOURCE_DIR, 'target.txt');
-        self::createSymlink(self::SOURCE_DIR, 'link.txt', 'target.txt');
-        $link = PathFactory::create(self::SOURCE_DIR . '/link.txt');
-        $target = PathFactory::create(self::SOURCE_DIR . '/target.txt');
+        $baseDir = PathFactory::create(self::SOURCE_DIR);
+        $linkPath = PathFactory::create('link.txt', $baseDir);
+        $targetPath = PathFactory::create($given, $baseDir);
+        chdir($baseDir->resolve());
+        touch($targetPath->resolve());
+        symlink($given, $linkPath->resolve());
         $sut = $this->createSut();
 
-        $actual = $sut->readLink($link);
+        $readlink = $sut->readLink($linkPath);
 
-        self::assertSame($target->resolve(), $actual->resolve(), 'Correctly read link.');
+        self::assertEquals($expected, $readlink->raw(), 'Got the correct link target.');
+    }
+
+    public function providerReadlink(): array
+    {
+        $fileName = 'target.txt';
+        $absolutePath = PathFactory::create($fileName, PathFactory::create(self::SOURCE_DIR))->resolve();
+
+        $data = [
+            'Absolute link' => [
+                'given' => $absolutePath,
+                'expected' => $absolutePath,
+            ],
+        ];
+
+        // Relative links cannot be distinguished from absolute links on Windows,
+        // where readlink() canonicalizes the target path, making them appear identical.
+        // At least test that the behavior is as expected in either case.
+        $data['Relative link'] = self::isWindows() ? [
+            'given' => $fileName,
+            'expected' => $absolutePath,
+        ] : [
+            'given' => $fileName,
+            'expected' => $fileName,
+        ];
+
+        return $data;
     }
 
     /** @covers ::readLink */

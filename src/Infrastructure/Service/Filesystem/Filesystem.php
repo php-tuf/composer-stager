@@ -122,6 +122,7 @@ final class Filesystem implements FilesystemInterface
         $target = @readlink($path->resolve());
 
         if ($target === false) {
+            /** @noinspection PhpUnhandledExceptionInspection False positive. */
             throw new IOException(sprintf('Failed to read link at "%s"', $path->resolve()));
         }
 
