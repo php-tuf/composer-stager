@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Factory\Path;
 
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
 /**
@@ -24,12 +26,17 @@ final class PathFactoryUnitTest extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(string $directorySeparator, string $instanceOf): void
-    {
-        $path = PathFactory::create($directorySeparator);
+    public function testBasicFunctionality(
+        string $string,
+        PathInterface $cwd,
+        PathInterface $expected,
+        PathInterface $expectedWithCwd
+    ): void {
+        $actual = PathFactory::create($string);
+        $actualWithCwd = PathFactory::create($string, $cwd);
 
-        /** @noinspection UnnecessaryAssertionInspection */
-        self::assertInstanceOf($instanceOf, $path, 'Returned correct path object.');
+        self::assertEquals($expected, $actual, 'Returned correct path object.');
+        self::assertEquals($expectedWithCwd, $actualWithCwd, 'Returned correct path object given a $cwd argument.');
     }
 
     public function providerBasicFunctionality(): array
@@ -37,16 +44,20 @@ final class PathFactoryUnitTest extends TestCase
         if (self::isWindows()) {
             return [
                 [
-                    'string' => '\\',
-                    'instanceOf' => WindowsPath::class,
+                    'string' => 'test.txt',
+                    'cwd' => new TestPath(),
+                    'expected' => new WindowsPath('test.txt'),
+                    'expectedWithCwd' => new WindowsPath('test.txt', new TestPath()),
                 ],
             ];
         }
 
         return [
             [
-                'string' => '/',
-                'instanceOf' => UnixLikePath::class,
+                'string' => 'test.txt',
+                'cwd' => new TestPath(),
+                'expected' => new UnixLikePath('test.txt'),
+                'expectedWithCwd' => new UnixLikePath('test.txt', new TestPath()),
             ],
         ];
     }
