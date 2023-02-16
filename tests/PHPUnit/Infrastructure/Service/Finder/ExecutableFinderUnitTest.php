@@ -14,8 +14,6 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  *
  * @covers ::__construct
  * @covers ::find
- * @covers ::getCache
- * @covers ::setCache
  *
  * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $symfonyExecutableFinder
  */
@@ -51,8 +49,6 @@ final class ExecutableFinderUnitTest extends TestCase
         $sut = $this->createSut();
 
         $firstExpected = $sut->find($firstCommandName);
-        // Call again to test result caching.
-        $sut->find($firstCommandName);
         // Find something else to test cache isolation.
         $secondPath = $sut->find($secondCommandName);
 
@@ -106,26 +102,17 @@ final class ExecutableFinderUnitTest extends TestCase
     /** Make sure ::find caches result when Composer is not found. */
     public function testFindNotFoundCaching(): void
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('The "composer" executable cannot be found. Make sure it\'s installed and in the $PATH.');
+
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
-            ->shouldBeCalledOnce()
             ->willReturn(null);
         $this->symfonyExecutableFinder
             ->find('composer')
-            ->shouldBeCalledOnce()
             ->willReturn(null);
         $sut = $this->createSut();
 
-        try {
-            $sut->find('composer');
-        } catch (LogicException $e) {
-            // @ignoreException
-        }
-
-        try {
-            $sut->find('composer');
-        } catch (LogicException $e) {
-            // @ignoreException
-        }
+        $sut->find('composer');
     }
 }
