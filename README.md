@@ -1,7 +1,7 @@
 # Composer Stager
 
 [![Latest stable version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
-[![Tests status](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
+[![Tests status](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml) <!-- A static "100%" value can be used safely here because grumphp will fail builds if coverage falls below that. See grumphp.yml.dist. -->
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![Psalm](https://img.shields.io/badge/Psalm-1-brightgreen.svg?style=flat)](https://psalm.dev/)
