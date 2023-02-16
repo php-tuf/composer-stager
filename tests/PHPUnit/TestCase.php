@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\PHPUnit;
 
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -93,6 +94,13 @@ abstract class TestCase extends PHPUnitTestCase
         assert($realpathResult !== false, "Got absolute path of {$filename}.");
     }
 
+    protected static function createDirectories(string $baseDir, array $dirnames): void
+    {
+        foreach ($dirnames as $dirname) {
+            self::createFile($baseDir, $dirname);
+        }
+    }
+
     protected static function createSymlinks(string $baseDir, array $symlinks): void
     {
         foreach ($symlinks as $link => $target) {
@@ -102,18 +110,39 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createSymlink(string $baseDir, string $link, string $target): void
     {
-        $link = PathFactory::create("{$baseDir}/{$link}")->resolve();
-        $target = PathFactory::create("{$baseDir}/{$target}")->resolve();
-        static::ensureParentDirectory($link);
+        $link = PathFactory::create("{$baseDir}/{$link}");
+        $target = PathFactory::create("{$baseDir}/{$target}");
+
+        self::prepareForLink($link, $target);
+
+        symlink($target->resolve(), $link->resolve());
+    }
+
+    protected static function createHardlinks(string $baseDir, array $symlinks): void
+    {
+        foreach ($symlinks as $link => $target) {
+            self::createHardlink($baseDir, $link, $target);
+        }
+    }
+
+    protected static function createHardlink(string $baseDir, string $link, string $target): void
+    {
+        $link = PathFactory::create("{$baseDir}/{$link}");
+        $target = PathFactory::create("{$baseDir}/{$target}");
+
+        self::prepareForLink($link, $target);
+
+        link($target->resolve(), $link->resolve());
+    }
+
+    private static function prepareForLink(PathInterface $link, PathInterface $target): void
+    {
+        static::ensureParentDirectory($link->resolve());
 
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
-        assert(file_exists($target), 'Symlink targets exists.');
-
-        symlink($target, $link);
-
-        assert(is_link($link), "Created symlink at {$link}.");
+        assert(file_exists($target->resolve()), 'Symlink targets exists.');
     }
 
     private static function ensureParentDirectory(string $filename): void

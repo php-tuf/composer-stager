@@ -16,6 +16,14 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class Filesystem implements FilesystemInterface
 {
+    private const FILE_DOES_NOT_EXIST = 'FILE_DOES_NOT_EXIST';
+
+    private const FILE_IS_HARD_LINK = 'FILE_IS_HARD_LINK';
+
+    private const FILE_IS_OTHER_TYPE = 'FILE_IS_OTHER_TYPE';
+
+    private const FILE_IS_SYMLINK = 'FILE_IS_SYMLINK';
+
     private PathFactoryInterface $pathFactory;
 
     private SymfonyFilesystem $symfonyFilesystem;
@@ -56,12 +64,59 @@ final class Filesystem implements FilesystemInterface
 
     public function exists(PathInterface $path): bool
     {
-        return $this->symfonyFilesystem->exists($path->resolve());
+        return $this->getFileType($path) !== self::FILE_DOES_NOT_EXIST;
+    }
+
+    public function isHardLink(PathInterface $path): bool
+    {
+        return $this->getFileType($path) === self::FILE_IS_HARD_LINK;
     }
 
     public function isLink(PathInterface $path): bool
     {
-        return is_link($path->resolve());
+        return in_array($this->getFileType($path), [
+            self::FILE_IS_HARD_LINK,
+            self::FILE_IS_SYMLINK,
+        ], true);
+    }
+
+    public function isSymlink(PathInterface $path): bool
+    {
+        return $this->getFileType($path) === self::FILE_IS_SYMLINK;
+    }
+
+    /**
+     * @noinspection PhpUsageOfSilenceOperatorInspection
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    public function getFileType(PathInterface $path): string
+    {
+        // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
+        // and `is_link()`, not to mention being the only way to detect hard links at all.
+        // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
+        // which may or may not throw an exception depending on error_reporting configuration.
+        $lstat = @lstat($path->resolve());
+
+        // Path does not exist.
+        if ($lstat === false) {
+            return self::FILE_DOES_NOT_EXIST;
+        }
+
+        $mode = $lstat['mode'];
+        $mode = (int) decoct($mode);
+        $mode = (int) floor($mode / 10_000) * 10_000;
+
+        // Path is a symlink.
+        if ($mode === 120_000) {
+            return self::FILE_IS_SYMLINK;
+        }
+
+        // Path is a hard link.
+        if ($lstat['nlink'] > 1) {
+            return self::FILE_IS_HARD_LINK;
+        }
+
+        return self::FILE_IS_OTHER_TYPE;
     }
 
     public function isWritable(PathInterface $path): bool
@@ -83,17 +138,14 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    /**
-     * @noinspection PhpUsageOfSilenceOperatorInspection
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
     public function readLink(PathInterface $path): PathInterface
     {
-        $target = @readlink($path->resolve());
-
-        if ($target === false) {
-            throw new IOException(sprintf('Failed to read link at "%s"', $path->resolve()));
+        if (!$this->isSymlink($path)) {
+            throw new IOException(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolve()));
         }
+
+        $target = readlink($path->resolve());
+        assert(is_string($target));
 
         return $this->pathFactory::create($target);
     }

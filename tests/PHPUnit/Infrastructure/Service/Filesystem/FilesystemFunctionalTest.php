@@ -66,66 +66,196 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /**
+     * @covers ::exists
+     * @covers ::getFileType
+     * @covers ::isHardLink
      * @covers ::isLink
+     * @covers ::isSymlink
      *
-     * @dataProvider providerIsLink
+     * @dataProvider providerExistsAndLinkChecks
      */
-    public function testIsLink(array $files, array $links, bool $expected): void
-    {
+    public function testExistsAndLinkChecks(
+        array $files,
+        array $directories,
+        array $symlinks,
+        array $hardLinks,
+        string $subject,
+        bool $exists,
+        bool $isLink,
+        bool $isHardLink,
+        bool $isSymlink
+    ): void {
         self::createFiles(self::SOURCE_DIR, $files);
-        self::createSymlinks(self::SOURCE_DIR, $links);
-        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'link.txt';
+        self::createDirectories(self::SOURCE_DIR, $directories);
+        self::createSymlinks(self::SOURCE_DIR, $symlinks);
+        self::createHardlinks(self::SOURCE_DIR, $hardLinks);
+        $subject = PathFactory::create(self::SOURCE_DIR . '/' . $subject);
         $sut = $this->createSut();
 
-        $actual = $sut->isLink(PathFactory::create($path));
+        $actualExists = $sut->exists($subject);
+        $actualIsLink = $sut->isLink($subject);
+        $actualIsHardLink = $sut->isHardLink($subject);
+        $actualIsSymlink = $sut->isSymlink($subject);
 
-        self::assertSame($expected, $actual, 'Correctly determined whether path was a link.');
+        self::assertSame($exists, $actualExists, 'Correctly determined whether path exists.');
+        self::assertSame($isLink, $actualIsLink, 'Correctly determined whether path is a link.');
+        self::assertSame($isHardLink, $actualIsHardLink, 'Correctly determined whether path is a hard link.');
+        self::assertSame($isSymlink, $actualIsSymlink, 'Correctly determined whether path is a symlink.');
     }
 
-    public function providerIsLink(): array
+    public function providerExistsAndLinkChecks(): array
     {
         return [
-            'File is a link' => [
+            'Path is a symlink to a file' => [
                 'files' => ['target.txt'],
-                'links' => ['link.txt' => 'target.txt'],
-                'expected' => true,
+                'directories' => [],
+                'symlinks' => ['symlink.txt' => 'target.txt'],
+                'hardLinks' => [],
+                'subject' => 'symlink.txt',
+                'exists' => true,
+                'isLink' => true,
+                'isHardLink' => false,
+                'isSymlink' => true,
             ],
-            'File is not a link' => [
-                'files' => ['file.txt'],
-                'links' => [],
-                'expected' => false,
-            ],
-            'No file there' => [
+            'Path is a symlink to a directory' => [
                 'files' => [],
-                'links' => [],
-                'expected' => false,
+                'directories' => ['target_directory'],
+                'symlinks' => ['directory_link' => 'target_directory'],
+                'hardLinks' => [],
+                'subject' => 'directory_link',
+                'exists' => true,
+                'isLink' => true,
+                'isHardLink' => false,
+                'isSymlink' => true,
+            ],
+            // Creating a hard link to a directory is not a permitted
+            // operation. Just test with a file.
+            'Path is a hard link' => [
+                'files' => ['target.txt'],
+                'directories' => [],
+                'symlinks' => [],
+                'hardLinks' => ['hard_link.txt' => 'target.txt'],
+                'subject' => 'hard_link.txt',
+                'exists' => true,
+                'isLink' => true,
+                'isHardLink' => true,
+                'isSymlink' => false,
+            ],
+            'Path is a file' => [
+                'files' => ['file.txt'],
+                'directories' => [],
+                'symlinks' => [],
+                'hardLinks' => [],
+                'subject' => 'file.txt',
+                'exists' => true,
+                'isLink' => false,
+                'isHardLink' => false,
+                'isSymlink' => false,
+            ],
+            'Path is a directory' => [
+                'files' => [],
+                'directories' => ['directory'],
+                'symlinks' => [],
+                'hardLinks' => [],
+                'subject' => 'directory',
+                'exists' => true,
+                'isLink' => false,
+                'isHardLink' => false,
+                'isSymlink' => false,
+            ],
+            'Path does not exist' => [
+                'files' => [],
+                'directories' => [],
+                'symlinks' => [],
+                'hardLinks' => [],
+                'subject' => 'non_existent_path.txt',
+                'exists' => false,
+                'isLink' => false,
+                'isHardLink' => false,
+                'isSymlink' => false,
             ],
         ];
     }
 
-    /** @covers ::readLink */
-    public function testReadlink(): void
+    /**
+     * @covers ::readLink
+     *
+     * @dataProvider providerReadlink
+     */
+    public function testReadlink(string $given, string $expected): void
     {
-        self::createFile(self::SOURCE_DIR, 'target.txt');
-        self::createSymlink(self::SOURCE_DIR, 'link.txt', 'target.txt');
-        $link = PathFactory::create(self::SOURCE_DIR . '/link.txt');
-        $target = PathFactory::create(self::SOURCE_DIR . '/target.txt');
+        $baseDir = PathFactory::create(self::SOURCE_DIR);
+        $symlinkPath = PathFactory::create('symlink.txt', $baseDir);
+        $hardLinkPath = PathFactory::create('hard_link.txt', $baseDir);
+        $targetPath = PathFactory::create($given, $baseDir);
+        chdir($baseDir->resolve());
+        touch($targetPath->resolve());
+        symlink($given, $symlinkPath->resolve());
+        link($given, $hardLinkPath->resolve());
         $sut = $this->createSut();
 
-        $actual = $sut->readLink($link);
+        $symlinkTarget = $sut->readLink($symlinkPath);
 
-        self::assertSame($target->resolve(), $actual->resolve(), 'Correctly read link.');
+        self::assertEquals($expected, $symlinkTarget->raw(), 'Got the correct symlink target.');
+
+        $this->expectException(IOException::class);
+        $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolve());
+        $this->expectExceptionMessage($message);
+        $sut->readLink($hardLinkPath);
+    }
+
+    public function providerReadlink(): array
+    {
+        $fileName = 'target.txt';
+        $absolutePath = PathFactory::create($fileName, PathFactory::create(self::SOURCE_DIR))->resolve();
+
+        $data = [
+            'Absolute link' => [
+                'given' => $absolutePath,
+                'expected' => $absolutePath,
+            ],
+        ];
+
+        // Relative links cannot be distinguished from absolute links on Windows,
+        // where readlink() canonicalizes the target path, making them appear identical.
+        // At least test that the behavior is as expected in either case.
+        $data['Relative link'] = self::isWindows() ? [
+            'given' => $fileName,
+            'expected' => $absolutePath,
+        ] : [
+            'given' => $fileName,
+            'expected' => $fileName,
+        ];
+
+        return $data;
     }
 
     /** @covers ::readLink */
-    public function testReadlinkFailure(): void
+    public function testReadlinkOnNonLink(): void
     {
+        self::createFile(self::SOURCE_DIR, 'file.txt');
+        $file = PathFactory::create(self::SOURCE_DIR . '/file.txt');
+
         $this->expectException(IOException::class);
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $file->resolve()));
 
         $sut = $this->createSut();
 
+        $sut->readLink($file);
+    }
+
+    /** @covers ::readLink */
+    public function testReadlinkOnNonExistentFile(): void
+    {
         $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'non-existent_file.txt';
-        $sut->readLink(PathFactory::create($path));
+        $path = PathFactory::create($path);
+
+        $this->expectException(IOException::class);
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolve()));
+
+        $sut = $this->createSut();
+
+        $sut->readLink($path);
     }
 
     /**

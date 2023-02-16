@@ -118,39 +118,6 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::exists
-     *
-     * @dataProvider providerExists
-     */
-    public function testExists(string $path, bool $expected): void
-    {
-        $stagingDir = new TestPath($path);
-        $this->symfonyFilesystem
-            ->exists($path)
-            ->shouldBeCalledOnce()
-            ->willReturn($expected);
-        $sut = $this->createSut();
-
-        $actual = $sut->exists($stagingDir);
-
-        self::assertEquals($expected, $actual, 'Correctly detected existence of path.');
-    }
-
-    public function providerExists(): array
-    {
-        return [
-            [
-                'path' => '/one/two',
-                'expected' => true,
-            ],
-            [
-                'path' => 'three/four',
-                'expected' => false,
-            ],
-        ];
-    }
-
-    /**
      * @covers ::mkdir
      *
      * @dataProvider providerMkdir

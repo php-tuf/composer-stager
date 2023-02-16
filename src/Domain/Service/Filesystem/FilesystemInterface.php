@@ -37,15 +37,45 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
-     * Determines whether the given path is a symbolic link.
+     * Determines whether the given path is a hard link.
+     *
+     * Symbolic links (symlinks) are distinct from hard links and do not count.
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
      *   A path to test.
      *
      * @return bool
-     *   Returns true if the filename exists and is a symbolic link, false otherwise.
+     *   Returns true if the filename exists and is a hard link (not a symlink)
+     *   false otherwise.
+     */
+    public function isHardLink(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a link.
+     *
+     * Symbolic links (symlinks) and hard links both count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a link, false otherwise.
      */
     public function isLink(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a symbolic link.
+     *
+     * Hard links are distinct from symbolic links (symlinks) and do not count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a symlink (not a hard link),
+     *   false otherwise.
+     */
+    public function isSymlink(PathInterface $path): bool;
 
     /**
      * Determines whether the given path is writable.
@@ -69,11 +99,20 @@ interface FilesystemInterface
     /**
      * Returns the target of a symbolic link.
      *
+     * Hard links are not included and will throw an exception. Consider using
+     * ::isSymlink() first.
+     *
+     * Note: PHP does not distinguish between absolute and relative links on
+     * Windows, so the returned path object there will be based on a canonicalized,
+     * absolute raw path string. In other words, ALL link paths on Windows will
+     * behave like absolute links, whether they really are or not.
+     *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
      *   The link path.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If the the path is not a symbolic link or cannot be read.
+     *   If the the path is not a symbolic link (symlink) or cannot be read. Hard
+     *   links are distinct from symlinks and will still throw an exception.
      */
     public function readLink(PathInterface $path): PathInterface;
 
