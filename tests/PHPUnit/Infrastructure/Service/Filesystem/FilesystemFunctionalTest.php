@@ -185,16 +185,23 @@ final class FilesystemFunctionalTest extends TestCase
     public function testReadlink(string $given, string $expected): void
     {
         $baseDir = PathFactory::create(self::SOURCE_DIR);
-        $linkPath = PathFactory::create('link.txt', $baseDir);
+        $symlinkPath = PathFactory::create('symlink.txt', $baseDir);
+        $hardLinkPath = PathFactory::create('hard_link.txt', $baseDir);
         $targetPath = PathFactory::create($given, $baseDir);
         chdir($baseDir->resolve());
         touch($targetPath->resolve());
-        symlink($given, $linkPath->resolve());
+        symlink($given, $symlinkPath->resolve());
+        link($given, $hardLinkPath->resolve());
         $sut = $this->createSut();
 
-        $readlink = $sut->readLink($linkPath);
+        $symlinkTarget = $sut->readLink($symlinkPath);
 
-        self::assertEquals($expected, $readlink->raw(), 'Got the correct link target.');
+        self::assertEquals($expected, $symlinkTarget->raw(), 'Got the correct symlink target.');
+
+        $this->expectException(IOException::class);
+        $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolve());
+        $this->expectExceptionMessage($message);
+        $sut->readLink($hardLinkPath);
     }
 
     public function providerReadlink(): array
@@ -230,7 +237,7 @@ final class FilesystemFunctionalTest extends TestCase
         $file = PathFactory::create(self::SOURCE_DIR . '/file.txt');
 
         $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf('The path does not exist or is not a link at "%s"', $file->resolve()));
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $file->resolve()));
 
         $sut = $this->createSut();
 
@@ -244,7 +251,7 @@ final class FilesystemFunctionalTest extends TestCase
         $path = PathFactory::create($path);
 
         $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf('The path does not exist or is not a link at "%s"', $path->resolve()));
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolve()));
 
         $sut = $this->createSut();
 

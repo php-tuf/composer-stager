@@ -140,8 +140,8 @@ final class Filesystem implements FilesystemInterface
 
     public function readLink(PathInterface $path): PathInterface
     {
-        if (!$this->isLink($path)) {
-            throw new IOException(sprintf('The path does not exist or is not a link at "%s"', $path->resolve()));
+        if (!$this->isSymlink($path)) {
+            throw new IOException(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolve()));
         }
 
         $target = readlink($path->resolve());
