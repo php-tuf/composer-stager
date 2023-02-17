@@ -142,7 +142,7 @@ abstract class TestCase extends PHPUnitTestCase
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
-        assert(file_exists($target->resolve()), 'Symlink targets exists.');
+        assert(file_exists($target->resolve()), 'Symlink target exists.');
     }
 
     private static function ensureParentDirectory(string $filename): void
