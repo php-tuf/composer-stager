@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
- * Determines whether the Composer executable is available.
+ * Asserts that the Composer executable is available.
  *
  * This interface exists solely to facilitate autowiring dependencies through type hinting.
  *
