@@ -6,12 +6,10 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommitterPreconditi
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 
 final class CommitterPreconditions extends AbstractPreconditionsTree implements CommitterPreconditionsInterface
 {
     public function __construct(
-        CodebaseContainsNoSymlinksInterface $codebaseContainsNoSymlinks,
         CommonPreconditionsInterface $commonPreconditions,
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
         StagingDirIsReadyInterface $stagingDirIsReady

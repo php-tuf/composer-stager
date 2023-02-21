@@ -5,13 +5,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 
 final class BeginnerPreconditions extends AbstractPreconditionsTree implements BeginnerPreconditionsInterface
 {
     public function __construct(
-        CodebaseContainsNoSymlinksInterface $codebaseContainsNoSymlinks,
         CommonPreconditionsInterface $commonPreconditions,
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
         StagingDirDoesNotExistInterface $stagingDirDoesNotExist

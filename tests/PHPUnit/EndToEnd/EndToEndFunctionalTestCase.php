@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CodeBaseContainsNoSymlinks;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
 
@@ -128,7 +128,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ];
         $exclusions = new PathList($exclusions);
 
-        // Confirm that the beginner fails with symlinks present in the codebase.
+        // Confirm that the beginner fails with unsupported symlinks present in the codebase.
         try {
             // Invoke the beginner without exclusions to cause it to find symlinks in the active directory.
             $this->beginner->begin($activeDirPath, $stagingDirPath);
@@ -136,7 +136,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
             $preconditionMet = false;
-            self::assertEquals(CodeBaseContainsNoSymlinks::class, get_class($failedPrecondition), 'Correct "codebase contains symlinks" unmet.');
+            self::assertEquals(NoAbsoluteLinksExist::class, get_class($failedPrecondition), 'Correct "codebase contains symlinks" unmet.');
         } finally {
             assert(filetype($activeDirPath->resolve() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
@@ -197,6 +197,20 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ]), '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
 
         $previousStagingDirContents = self::getDirectoryContents($stagingDir);
+
+        // Confirm that the committer fails with unsupported symlinks present in the codebase.
+        try {
+            // Invoke the committer without exclusions to cause it to find symlinks in the active directory.
+            $this->beginner->begin($activeDirPath, $stagingDirPath);
+            $preconditionMet = true;
+        } catch (PreconditionException $e) {
+            $failedPrecondition = $e->getPrecondition();
+            $preconditionMet = false;
+            self::assertEquals(NoAbsoluteLinksExist::class, get_class($failedPrecondition), 'Correct "codebase contains symlinks" unmet.');
+        } finally {
+            assert(filetype($activeDirPath->resolve() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
+            self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
+        }
 
         // Commit: Sync files from the staging directory back to the directory.
         $this->committer->commit($stagingDirPath, $activeDirPath, $exclusions);
