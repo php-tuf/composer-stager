@@ -5,7 +5,8 @@ namespace PHPUnit\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\LinkPreconditionsFunctionalTestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
@@ -27,23 +28,9 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
-final class NoHardLinksExistFunctionalTest extends TestCase
+final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
-    protected function setUp(): void
-    {
-        self::createTestEnvironment(self::ACTIVE_DIR);
-        mkdir(self::STAGING_DIR, 0777, true);
-
-        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
-    }
-
-    protected function tearDown(): void
-    {
-        self::removeTestEnvironment();
-    }
-
-    private function createSut(): NoHardLinksExist
+    protected function createSut(): NoHardLinksExist
     {
         $container = $this->getContainer();
         $container->compile();
@@ -67,8 +54,8 @@ final class NoHardLinksExistFunctionalTest extends TestCase
     /** @covers ::isSupportedLink */
     public function testFulfilledWithSymlink(): void
     {
-        $target = $this->activeDir->resolve() . DIRECTORY_SEPARATOR . 'target.txt';
-        $link = $this->activeDir->resolve() . DIRECTORY_SEPARATOR . 'link.txt';
+        $target = PathFactory::create('target.txt', $this->activeDir)->resolve();
+        $link = PathFactory::create('link.txt', $this->activeDir)->resolve();
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -132,28 +119,32 @@ final class NoHardLinksExistFunctionalTest extends TestCase
      */
     public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $activeDir = PathFactory::create($activeDir);
-        $stagingDir = PathFactory::create($stagingDir);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertTrue($isFulfilled, 'Silently ignored non-existent directory');
+        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
-    public function providerDirectoryDoesNotExist(): array
+    /**
+     * @covers ::isFulfilled
+     * @covers ::isSupportedLink
+     *
+     * @dataProvider providerExclusions
+     */
+    public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
-        $nonexistentDir = self::TEST_WORKING_DIR . '/65eb69a274470dd84e9b5371f7e1e8c8';
+        $targetFile = 'target.txt';
 
-        return [
-            'Active directory' => [
-                'activeDir' => $nonexistentDir,
-                'stagingDir' => self::STAGING_DIR,
-            ],
-            'Staging directory' => [
-                'activeDir' => self::ACTIVE_DIR,
-                'stagingDir' => $nonexistentDir,
-            ],
-        ];
+        // The target file is effectively a link just as much as the source, because
+        // it has an nlink count of greater than one. So it must be excluded, too.
+        $exclusions[] = $targetFile;
+
+        $links = array_fill_keys($links, $targetFile);
+        $exclusions = new PathList($exclusions);
+        $dirPath = $this->activeDir->resolve();
+        self::createFile($dirPath, $targetFile);
+        self::createHardlinks($dirPath, $links);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
+
+        self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }
 }

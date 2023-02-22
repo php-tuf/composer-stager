@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Preconditio
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase
@@ -27,23 +27,9 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
-final class NoLinksPointOutsideTheCodebaseFunctionalTest extends TestCase
+final class NoLinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
-    protected function setUp(): void
-    {
-        self::createTestEnvironment(self::ACTIVE_DIR);
-        mkdir(self::STAGING_DIR, 0777, true);
-
-        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
-    }
-
-    protected function tearDown(): void
-    {
-        self::removeTestEnvironment();
-    }
-
-    private function createSut(): NoLinksPointOutsideTheCodebase
+    protected function createSut(): NoLinksPointOutsideTheCodebase
     {
         $container = $this->getContainer();
         $container->compile();
@@ -147,28 +133,29 @@ final class NoLinksPointOutsideTheCodebaseFunctionalTest extends TestCase
      */
     public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $activeDir = PathFactory::create($activeDir);
-        $stagingDir = PathFactory::create($stagingDir);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertTrue($isFulfilled, 'Silently ignored non-existent directory');
+        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
-    public function providerDirectoryDoesNotExist(): array
+    /**
+     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::isDescendant
+     * @covers ::isFulfilled
+     * @covers ::isSupportedLink
+     * @covers ::linkPointsOutsidePath
+     *
+     * @dataProvider providerExclusions
+     */
+    public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
-        $nonexistentDir = self::TEST_WORKING_DIR . '/65eb69a274470dd84e9b5371f7e1e8c8';
+        $targetFile = '../';
+        $links = array_fill_keys($links, $targetFile);
+        $exclusions = new PathList($exclusions);
+        $dirPath = $this->activeDir->resolve();
+        self::createSymlinks($dirPath, $links);
+        $sut = $this->createSut();
 
-        return [
-            'Active directory' => [
-                'activeDir' => $nonexistentDir,
-                'stagingDir' => self::STAGING_DIR,
-            ],
-            'Staging directory' => [
-                'activeDir' => self::ACTIVE_DIR,
-                'stagingDir' => $nonexistentDir,
-            ],
-        ];
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
+
+        self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }
 }

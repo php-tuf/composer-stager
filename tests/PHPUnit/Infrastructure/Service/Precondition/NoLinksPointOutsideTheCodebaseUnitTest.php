@@ -131,7 +131,7 @@ final class NoLinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCase
         ];
     }
 
-    public function assertFulfilledStatusMessage(
+    protected function assertFulfilledStatusMessage(
         bool $isFulfilled,
         string $statusMessage,
         string $assertionMessage

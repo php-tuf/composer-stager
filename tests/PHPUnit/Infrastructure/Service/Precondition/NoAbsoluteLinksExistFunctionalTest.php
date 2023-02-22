@@ -5,7 +5,7 @@ namespace PHPUnit\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
-use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
+use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\LinkPreconditionsFunctionalTestCase;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist
@@ -27,23 +27,9 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
-final class NoAbsoluteLinksExistFunctionalTest extends TestCase
+final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
-    protected function setUp(): void
-    {
-        self::createTestEnvironment(self::ACTIVE_DIR);
-        mkdir(self::STAGING_DIR, 0777, true);
-
-        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
-    }
-
-    protected function tearDown(): void
-    {
-        self::removeTestEnvironment();
-    }
-
-    private function createSut(): NoAbsoluteLinksExist
+    protected function createSut(): NoAbsoluteLinksExist
     {
         $container = $this->getContainer();
         $container->compile();
@@ -162,62 +148,6 @@ final class NoAbsoluteLinksExistFunctionalTest extends TestCase
     }
 
     /**
-     * @covers ::isFulfilled
-     *
-     * @dataProvider providerExclusions
-     */
-    public function testExclusions(array $symlinks, array $exclusions, bool $shouldBeFulfilled): void
-    {
-        $targetFile = 'target.txt';
-        $symlinks = array_fill_keys($symlinks, $targetFile);
-        $exclusions = new PathList($exclusions);
-        $dirPath = $this->activeDir->resolve();
-        self::createFile($dirPath, $targetFile);
-        self::createSymlinks($dirPath, $symlinks);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
-
-        self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
-    }
-
-    public function providerExclusions(): array
-    {
-        return [
-            'No symlinks or exclusions' => [
-                'symlinks' => [],
-                'exclusions' => [],
-                'shouldBeFulfilled' => true,
-            ],
-            'One symlink with one exact exclusion' => [
-                'symlinks' => ['symlink.txt'],
-                'exclusions' => ['symlink.txt'],
-                'shouldBeFulfilled' => true,
-            ],
-            'Multiple symlinks with exact exclusions' => [
-                'symlinks' => ['one.txt', 'two.txt', 'three.txt'],
-                'exclusions' => ['one.txt', 'two.txt', 'three.txt'],
-                'shouldBeFulfilled' => true,
-            ],
-            'Multiple symlinks in an excluded directory' => [
-                'symlinks' => ['directory/one.txt', 'directory/two.txt'],
-                'exclusions' => ['directory'],
-                'shouldBeFulfilled' => true,
-            ],
-            'One symlink with no exclusions' => [
-                'symlinks' => ['symlink.txt'],
-                'exclusions' => [],
-                'shouldBeFulfilled' => false,
-            ],
-            'One symlink with a non-matching exclusion' => [
-                'symlinks' => ['symlink.txt'],
-                'exclusions' => ['non_match.txt'],
-                'shouldBeFulfilled' => false,
-            ],
-        ];
-    }
-
-    /**
      * @covers ::findFiles
      * @covers ::isFulfilled
      *
@@ -228,28 +158,26 @@ final class NoAbsoluteLinksExistFunctionalTest extends TestCase
      */
     public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $activeDir = PathFactory::create($activeDir);
-        $stagingDir = PathFactory::create($stagingDir);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertTrue($isFulfilled, 'Silently ignored non-existent directory');
+        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
-    public function providerDirectoryDoesNotExist(): array
+    /**
+     * @covers ::isFulfilled
+     *
+     * @dataProvider providerExclusions
+     */
+    public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
-        $nonexistentDir = self::TEST_WORKING_DIR . '/65eb69a274470dd84e9b5371f7e1e8c8';
+        $targetFile = 'target.txt';
+        $links = array_fill_keys($links, $targetFile);
+        $exclusions = new PathList($exclusions);
+        $dirPath = $this->activeDir->resolve();
+        self::createFile($dirPath, $targetFile);
+        self::createSymlinks($dirPath, $links);
+        $sut = $this->createSut();
 
-        return [
-            'Active directory' => [
-                'activeDir' => $nonexistentDir,
-                'stagingDir' => self::STAGING_DIR,
-            ],
-            'Staging directory' => [
-                'activeDir' => self::ACTIVE_DIR,
-                'stagingDir' => $nonexistentDir,
-            ],
-        ];
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
+
+        self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }
 }
