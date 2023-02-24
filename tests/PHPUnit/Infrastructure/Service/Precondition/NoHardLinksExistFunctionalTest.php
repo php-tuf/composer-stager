@@ -133,7 +133,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $targetFile = 'target.txt';
 
         // The target file is effectively a link just as much as the source, because
-        // it has an nlink count of greater than one. So it must be excluded, too.
+        // it has an nlink value of greater than one. So it must be excluded, too.
         $exclusions[] = $targetFile;
 
         $links = array_fill_keys($links, $targetFile);

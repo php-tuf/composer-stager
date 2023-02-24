@@ -59,18 +59,52 @@ final class NoLinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditio
      * @covers ::isFulfilled
      * @covers ::isSupportedLink
      * @covers ::linkPointsOutsidePath
+     *
+     * @dataProvider providerFulfilledWithValidLink
      */
-    public function testFulfilledWithValidLink(): void
+    public function testFulfilledWithValidLink(string $link, string $target): void
     {
-        $target = $this->activeDir->resolve() . DIRECTORY_SEPARATOR . 'target.txt';
-        $link = $this->activeDir->resolve() . DIRECTORY_SEPARATOR . 'link.txt';
-        touch($target);
+        $link = PathFactory::create($link, $this->activeDir)->resolve();
+        self::ensureParentDirectory($link);
+        $target = PathFactory::create($target, $this->activeDir)->resolve();
+        self::ensureParentDirectory($target);
+        touch($target, 077);
         symlink($target, $link);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
 
         self::assertTrue($isFulfilled, 'Allowed link pointing within the codebase.');
+    }
+
+    public function providerFulfilledWithValidLink(): array
+    {
+        return [
+            'Not in any package' => [
+                'link' => 'link.txt',
+                'target' => 'target.txt',
+            ],
+            'Pointing within a package' => [
+                'link' => 'vendor/package/link.txt',
+                'target' => 'vendor/package/target.txt',
+            ],
+            'Pointing into a package' => [
+                'link' => 'link.txt',
+                'target' => 'vendor/package/target.txt',
+            ],
+            'Pointing out of a package' => [
+                'link' => 'vendor/package/link.txt',
+                'target' => 'target.txt',
+            ],
+            'Pointing from one package to another' => [
+                'link' => 'vendor/package1/link.txt',
+                'target' => 'vendor/package2/target.txt',
+            ],
+            'Weird relative paths' => [
+                'link' => 'some/absurd/subdirectory/../with/../../a/link.txt',
+                'target' => 'another/../weird/../arbitrary/target.txt',
+            ],
+        ];
     }
 
     /**
@@ -110,12 +144,12 @@ final class NoLinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditio
     {
         return [
             'In active directory' => [
-                'targetDir' => self::STAGING_DIR,
+                'targetDir' => self::TEST_WORKING_DIR,
                 'linkDir' => self::ACTIVE_DIR,
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
-                'targetDir' => self::ACTIVE_DIR,
+                'targetDir' => self::TEST_WORKING_DIR,
                 'linkDir' => self::STAGING_DIR,
                 'linkDirName' => 'staging',
             ],

@@ -138,6 +138,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      */
     public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
+        // This test is host-sensitive and can only be run on Windows.
         if (!self::isWindows()) {
             $this->expectNotToPerformAssertions();
 

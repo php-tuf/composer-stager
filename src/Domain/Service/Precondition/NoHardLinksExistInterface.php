@@ -6,7 +6,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  * Asserts that there are no hard links in the codebase.
  *
  * Note: the target of a hard link is effectively a link just as much as the source, because it, too, represents one of
- * multiple nlinks to the same inode. Therefore it, too, must be excluded from domain operations if it is not to fail
+ * multiple links to the same inode. Therefore it, too, must be excluded from domain operations if it is not to fail
  * this preconditions.
  *
  * This includes both the active and staging directories.
