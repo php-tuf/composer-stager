@@ -29,6 +29,8 @@ final class NoAbsoluteLinksExist extends AbstractLinkIteratingPrecondition imple
 
     protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
     {
-        return !$file->isAbsolute();
+        $target = $this->filesystem->readLink($file);
+
+        return !$target->isAbsolute();
     }
 }

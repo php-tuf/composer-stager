@@ -29,6 +29,15 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Link
  */
 final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        if (!self::isWindows()) {
+            return;
+        }
+
+        self::markTestSkipped('This test covers non-Windows functionality.');
+    }
+
     protected function createSut(): NoAbsoluteLinksExist
     {
         $container = $this->getContainer();
@@ -85,7 +94,7 @@ final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunction
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
      *
-     * @dataProvider providerAbsoluteLinksExist
+     * @dataProvider providerLinksExist
      */
     public function testAbsoluteLinksExist(string $dirName, string $dirPath, string $link): void
     {
@@ -95,6 +104,7 @@ final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunction
         $parentDir = dirname($link->resolve());
         @mkdir($parentDir, 0777, true);
         touch($target->resolve());
+        // Point at the resolved target, i.e., its absolute path.
         symlink($target->resolve(), $link->resolve());
         $sut = $this->createSut();
 
@@ -111,7 +121,35 @@ final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunction
         self::assertSame($pattern, $statusMessage, 'Returned correct status message.');
     }
 
-    public function providerAbsoluteLinksExist(): array
+    /**
+     * @covers ::findFiles
+     * @covers ::getUnfulfilledStatusMessage
+     * @covers ::isFulfilled
+     *
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+     *
+     * @dataProvider providerLinksExist
+     */
+    public function testOnlyRelativeLinksExist(string $dirName, string $dirPath, string $link): void
+    {
+        $dirPath = PathFactory::create($dirPath);
+        $link = PathFactory::create($link, $dirPath);
+        $target = PathFactory::create('target.txt', $dirPath);
+        $parentDir = dirname($link->resolve());
+        @mkdir($parentDir, 0777, true);
+        touch($target->resolve());
+        chdir($parentDir);
+        // Point at the raw target, i.e., its relative path.
+        symlink($target->raw(), $link->resolve());
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+
+        self::assertTrue($isFulfilled, 'Ignored relative links.');
+    }
+
+    public function providerLinksExist(): array
     {
         return [
             'Active directory: root' => [
