@@ -31,6 +31,6 @@ interface CleanerInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void;
 }

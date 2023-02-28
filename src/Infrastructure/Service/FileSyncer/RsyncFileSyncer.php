@@ -15,14 +15,10 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class RsyncFileSyncer implements RsyncFileSyncerInterface
 {
-    private FilesystemInterface $filesystem;
-
-    private RsyncRunnerInterface $rsync;
-
-    public function __construct(FilesystemInterface $filesystem, RsyncRunnerInterface $rsync)
-    {
-        $this->filesystem = $filesystem;
-        $this->rsync = $rsync;
+    public function __construct(
+        private readonly FilesystemInterface $filesystem,
+        private readonly RsyncRunnerInterface $rsync,
+    ) {
     }
 
     /**
@@ -36,7 +32,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
         $sourceResolved = $source->resolve();
         $destinationResolved = $destination->resolve();

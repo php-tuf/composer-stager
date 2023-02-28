@@ -14,7 +14,7 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirExistsInterface $activeDirExists,
         ActiveDirIsWritableInterface $activeDirIsWritable,
-        ComposerIsAvailableInterface $composerIsAvailable
+        ComposerIsAvailableInterface $composerIsAvailable,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

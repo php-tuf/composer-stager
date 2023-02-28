@@ -12,17 +12,13 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInter
 
 final class NoLinksExistOnWindows extends AbstractLinkIteratingPrecondition implements NoLinksExistOnWindowsInterface
 {
-    private HostInterface $host;
-
     public function __construct(
         RecursiveFileFinderInterface $fileFinder,
         FilesystemInterface $filesystem,
-        HostInterface $host,
-        PathFactoryInterface $pathFactory
+        private readonly HostInterface $host,
+        PathFactoryInterface $pathFactory,
     ) {
         parent::__construct($fileFinder, $filesystem, $pathFactory);
-
-        $this->host = $host;
     }
 
     public function getName(): string
@@ -38,7 +34,7 @@ final class NoLinksExistOnWindows extends AbstractLinkIteratingPrecondition impl
     protected function exitEarly(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions
+        ?PathListInterface $exclusions,
     ): bool {
         // This is a Windows-specific precondition. No need to run it anywhere else.
         return !$this->host->isWindows();

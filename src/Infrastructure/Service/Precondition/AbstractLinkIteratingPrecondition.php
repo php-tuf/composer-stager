@@ -15,12 +15,6 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
 {
     protected string $defaultUnfulfilledStatusMessage;
 
-    protected RecursiveFileFinderInterface $fileFinder;
-
-    protected FilesystemInterface $filesystem;
-
-    protected PathFactoryInterface $pathFactory;
-
     final protected function getUnfulfilledStatusMessage(): string
     {
         return $this->defaultUnfulfilledStatusMessage;
@@ -32,20 +26,17 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
     abstract protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool;
 
     public function __construct(
-        RecursiveFileFinderInterface $fileFinder,
-        FilesystemInterface $filesystem,
-        PathFactoryInterface $pathFactory
+        protected readonly RecursiveFileFinderInterface $fileFinder,
+        protected readonly FilesystemInterface $filesystem,
+        protected readonly PathFactoryInterface $pathFactory,
     ) {
-        $this->fileFinder = $fileFinder;
-        $this->filesystem = $filesystem;
-        $this->pathFactory = $pathFactory;
         $this->defaultUnfulfilledStatusMessage = $this->getDefaultUnfulfilledStatusMessage();
     }
 
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool {
         try {
             $exclusions ??= new PathList([]);
@@ -99,7 +90,7 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
     protected function exitEarly(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions
+        ?PathListInterface $exclusions,
     ): bool {
         return false;
     }

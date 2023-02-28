@@ -12,7 +12,7 @@ final class CommitterPreconditions extends AbstractPreconditionsTree implements 
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
-        StagingDirIsReadyInterface $stagingDirIsReady
+        StagingDirIsReadyInterface $stagingDirIsReady,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

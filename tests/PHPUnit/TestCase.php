@@ -63,7 +63,7 @@ abstract class TestCase extends PHPUnitTestCase
 
         try {
             $filesystem->remove(self::TEST_ENV);
-        } catch (IOException $e) {
+        } catch (IOException) {
             // @todo Windows chokes on this every time, e.g.,
             //    | Failed to remove directory
             //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
@@ -200,7 +200,7 @@ abstract class TestCase extends PHPUnitTestCase
         string $dir,
         array $expected,
         string $ignoreDir = '',
-        string $message = ''
+        string $message = '',
     ): void {
         $expected = array_map([self::class, 'fixSeparators'], $expected);
 

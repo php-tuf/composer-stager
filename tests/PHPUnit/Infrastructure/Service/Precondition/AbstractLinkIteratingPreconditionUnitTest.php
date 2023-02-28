@@ -90,7 +90,7 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
             protected function exitEarly(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
-                ?PathListInterface $exclusions
+                ?PathListInterface $exclusions,
             ): bool {
                 return $this->exitEarly;
             }

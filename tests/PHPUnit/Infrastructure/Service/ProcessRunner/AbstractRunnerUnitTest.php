@@ -54,16 +54,12 @@ final class AbstractRunnerUnitTest extends TestCase
         // abstract, can't be instantiated directly.
         return new class ($executableFinder, $executableName, $processFactory) extends AbstractRunner
         {
-            private string $executableName;
-
             public function __construct(
                 ExecutableFinderInterface $executableFinder,
-                string $executableName,
-                ProcessFactoryInterface $processFactory
+                private string $executableName,
+                ProcessFactoryInterface $processFactory,
             ) {
                 parent::__construct($executableFinder, $processFactory);
-
-                $this->executableName = $executableName;
             }
 
             protected function executableName(): string
@@ -85,7 +81,7 @@ final class AbstractRunnerUnitTest extends TestCase
         array $givenCommand,
         array $expectedCommand,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout
+        ?int $timeout,
     ): void {
         $this->executableFinder
             ->find($executableName)

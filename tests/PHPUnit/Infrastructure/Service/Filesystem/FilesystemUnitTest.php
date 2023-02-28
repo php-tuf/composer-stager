@@ -163,7 +163,7 @@ final class FilesystemUnitTest extends TestCase
         string $path,
         ?ProcessOutputCallbackInterface $callback,
         ?int $givenTimeout,
-        int $expectedTimeout
+        int $expectedTimeout,
     ): void {
         $stagingDir = new TestPath($path);
         $this->symfonyFilesystem

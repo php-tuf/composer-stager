@@ -24,14 +24,10 @@ final class Filesystem implements FilesystemInterface
 
     private const FILE_IS_SYMLINK = 'FILE_IS_SYMLINK';
 
-    private PathFactoryInterface $pathFactory;
-
-    private SymfonyFilesystem $symfonyFilesystem;
-
-    public function __construct(PathFactoryInterface $pathFactory, SymfonyFilesystem $symfonyFilesystem)
-    {
-        $this->pathFactory = $pathFactory;
-        $this->symfonyFilesystem = $symfonyFilesystem;
+    public function __construct(
+        private readonly PathFactoryInterface $pathFactory,
+        private readonly SymfonyFilesystem $symfonyFilesystem,
+    ) {
     }
 
     public function copy(PathInterface $source, PathInterface $destination): void
@@ -153,7 +149,7 @@ final class Filesystem implements FilesystemInterface
     public function remove(
         PathInterface $path,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
         try {
             // Symfony Filesystem doesn't have a builtin mechanism for setting a

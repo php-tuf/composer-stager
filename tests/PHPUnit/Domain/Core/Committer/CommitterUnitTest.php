@@ -71,7 +71,7 @@ final class CommitterUnitTest extends TestCase
         string $activeDir,
         ?PathListInterface $exclusions,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout
+        ?int $timeout,
     ): void {
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);

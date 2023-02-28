@@ -20,14 +20,11 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
         'vendor',
     ];
 
-    /** @var array<string> */
-    private array $gitattributesExportInclude;
-
-    public function __construct(array $gitattributesExportInclude, ReflectionProvider $reflectionProvider)
-    {
+    public function __construct(
+        private readonly array $gitattributesExportInclude,
+        ReflectionProvider $reflectionProvider,
+    ) {
         parent::__construct($reflectionProvider);
-
-        $this->gitattributesExportInclude = $gitattributesExportInclude;
     }
 
     public function getNodeType(): string

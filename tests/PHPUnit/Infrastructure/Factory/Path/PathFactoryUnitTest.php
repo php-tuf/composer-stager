@@ -30,7 +30,7 @@ final class PathFactoryUnitTest extends TestCase
         string $string,
         PathInterface $cwd,
         PathInterface $expected,
-        PathInterface $expectedWithCwd
+        PathInterface $expectedWithCwd,
     ): void {
         $actual = PathFactory::create($string);
         $actualWithCwd = PathFactory::create($string, $cwd);

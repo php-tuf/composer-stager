@@ -22,7 +22,7 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool {
         return $activeDir->resolve() !== $stagingDir->resolve();
     }

@@ -32,7 +32,7 @@ final class WindowsPathUnitTest extends TestCase
         bool $isAbsolute,
         string $resolved,
         string $relativeBase,
-        string $resolvedRelativeTo
+        string $resolvedRelativeTo,
     ): void {
         self::fixSeparatorsMultiple($given, $cwd, $resolved, $relativeBase, $resolvedRelativeTo);
 

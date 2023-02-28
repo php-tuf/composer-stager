@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditions
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -14,14 +13,10 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class Stager implements StagerInterface
 {
-    private ComposerRunnerInterface $composerRunner;
-
-    private PreconditionInterface $preconditions;
-
-    public function __construct(ComposerRunnerInterface $composerRunner, StagerPreconditionsInterface $preconditions)
-    {
-        $this->composerRunner = $composerRunner;
-        $this->preconditions = $preconditions;
+    public function __construct(
+        private readonly ComposerRunnerInterface $composerRunner,
+        private readonly StagerPreconditionsInterface $preconditions,
+    ) {
     }
 
     public function stage(
@@ -29,7 +24,7 @@ final class Stager implements StagerInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
 
@@ -69,7 +64,7 @@ final class Stager implements StagerInterface
         PathInterface $stagingDir,
         array $composerCommand,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout
+        ?int $timeout,
     ): void {
         $command = array_merge(
             ['--working-dir=' . $stagingDir->resolve()],

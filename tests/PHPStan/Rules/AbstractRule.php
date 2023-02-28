@@ -16,11 +16,8 @@ abstract class AbstractRule implements Rule
 {
     protected const PROJECT_ROOT = __DIR__ . '/../../../';
 
-    protected ReflectionProvider $reflectionProvider;
-
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(protected readonly ReflectionProvider $reflectionProvider)
     {
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     protected function getClassReflection(Node $node): ?ClassReflection

@@ -65,7 +65,7 @@ final class CleanerUnitTest extends TestCase
     public function testCleanWithOptionalParams(
         string $path,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout
+        ?int $timeout,
     ): void {
         $path = new TestPath($path);
         $this->preconditions
