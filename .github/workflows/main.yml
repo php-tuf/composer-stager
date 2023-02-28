@@ -70,9 +70,6 @@ jobs:
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
                 with:
                     dependency-versions: "${{ matrix.dependencies }}"
-                    # Disable Composer caching due to random failures it causes, particularly on Windows jobs.
-                    # @see https://github.com/ramsey/composer-install/issues/79
-                    composer-options: "--no-cache"
 
             -   name: "Run tests"
                 run: "composer phpunit"
