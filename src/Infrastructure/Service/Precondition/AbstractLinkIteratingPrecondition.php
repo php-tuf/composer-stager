@@ -29,7 +29,7 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
     abstract protected function getDefaultUnfulfilledStatusMessage(): string;
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
-    abstract protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool;
+    abstract protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool;
 
     public function __construct(
         RecursiveFileFinderInterface $fileFinder,
@@ -60,8 +60,8 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
                 'staging' => $stagingDir,
             ];
 
-            foreach ($directories as $name => $path) {
-                $files = $this->findFiles($path, $exclusions);
+            foreach ($directories as $name => $directoryRoot) {
+                $files = $this->findFiles($directoryRoot, $exclusions);
 
                 foreach ($files as $file) {
                     $file = $this->pathFactory::create($file);
@@ -70,11 +70,11 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
                         continue;
                     }
 
-                    if (!$this->isSupportedLink($file, $path)) {
+                    if (!$this->isSupportedLink($file, $directoryRoot)) {
                         $this->defaultUnfulfilledStatusMessage = sprintf(
                             $this->defaultUnfulfilledStatusMessage,
                             $name,
-                            $path->resolve(),
+                            $directoryRoot->resolve(),
                             $file->resolve(),
                         );
 

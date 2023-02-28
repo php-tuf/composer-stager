@@ -67,7 +67,7 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
                 return '';
             }
 
-            protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
+            protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
             {
                 return true;
             }

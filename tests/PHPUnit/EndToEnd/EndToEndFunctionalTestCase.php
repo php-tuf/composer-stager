@@ -346,7 +346,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
             // These scenarios are the most important for shared hosting
             // situations, which may not provide access to paths outside the
-            // application root, e.g., the web root.
+            // codebase, e.g., the web root.
             'Nested: both dirs relative, staging as "hidden" dir' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/.composer_staging',

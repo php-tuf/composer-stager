@@ -27,7 +27,7 @@ final class NoHardLinksExist extends AbstractLinkIteratingPrecondition implement
         return 'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".';
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
+    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
         return !$this->filesystem->isHardLink($file);
     }

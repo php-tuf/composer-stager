@@ -65,7 +65,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
                 return '';
             }
 
-            protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
+            protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
             {
                 return true;
             }

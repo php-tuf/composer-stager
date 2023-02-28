@@ -27,7 +27,7 @@ final class NoAbsoluteLinksExist extends AbstractLinkIteratingPrecondition imple
         return 'The %s directory at "%s" contains absolute links, which is not supported. The first one is "%s".';
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
+    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
         $target = $this->filesystem->readLink($file);
 

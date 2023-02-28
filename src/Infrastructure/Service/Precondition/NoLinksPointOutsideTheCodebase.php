@@ -30,9 +30,9 @@ The %s directory at "%s" contains links that point outside the codebase, which i
 EOF;
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $directory): bool
+    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
-        return !$this->linkPointsOutsidePath($file, $directory);
+        return !$this->linkPointsOutsidePath($file, $codebaseRootDir);
     }
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
