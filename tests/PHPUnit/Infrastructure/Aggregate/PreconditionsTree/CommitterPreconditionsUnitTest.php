@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions;
 use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\PreconditionTestCase;
 
@@ -21,8 +21,8 @@ use PhpTuf\ComposerStager\Tests\PHPUnit\Infrastructure\Service\Precondition\Prec
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noUnsupportedLinksExist
  * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface|\Prophecy\Prophecy\ObjectProphecy $codebaseContainsNoSymlinksInterface
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
@@ -31,8 +31,8 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
+        $this->noUnsupportedLinksExist = $this->prophesize(NoUnsupportedLinksExistInterface::class);
         $this->stagingDirIsReady = $this->prophesize(StagingDirIsReadyInterface::class);
-        $this->codebaseContainsNoSymlinksInterface = $this->prophesize(CodebaseContainsNoSymlinksInterface::class);
 
         parent::setUp();
     }
@@ -40,10 +40,10 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
     protected function createSut(): CommitterPreconditions
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
+        $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $codebaseContainsNoSymlinksInterface = $this->codebaseContainsNoSymlinksInterface->reveal();
 
-        return new CommitterPreconditions($codebaseContainsNoSymlinksInterface, $commonPreconditions, $stagingDirIsReady);
+        return new CommitterPreconditions($commonPreconditions, $noUnsupportedLinksExist, $stagingDirIsReady);
     }
 
     public function testFulfilled(): void
@@ -54,10 +54,10 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
         $this->commonPreconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
-        $this->stagingDirIsReady
+        $this->noUnsupportedLinksExist
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
-        $this->codebaseContainsNoSymlinksInterface
+        $this->stagingDirIsReady
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 

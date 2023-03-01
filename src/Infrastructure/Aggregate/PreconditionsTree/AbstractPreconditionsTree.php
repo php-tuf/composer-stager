@@ -19,6 +19,12 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
     /** Gets a status message for when the precondition is unfulfilled. */
     abstract protected function getUnfulfilledStatusMessage(): string;
 
+    /**
+     * The order in which children are evaluated is unspecified and should not be depended upon. There is no
+     * guarantee that the order they are supplied in will have, or continue to have, any determinate effect.
+     *
+     * @see https://github.com/php-tuf/composer-stager/issues/75
+     */
     public function __construct(PreconditionInterface ...$children)
     {
         $this->children = $children;

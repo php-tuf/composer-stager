@@ -36,10 +36,10 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         // abstract, can't be instantiated directly.
         return new class ($spy) extends AbstractPrecondition
         {
-            public string $name = 'Name';
-            public string $description = 'Description';
-            public string $fulfilledStatusMessage = 'Fulfilled';
-            public string $unfulfilledStatusMessage = 'Unfulfilled';
+            public string $theName = 'Name';
+            public string $theDescription = 'Description';
+            public string $theFulfilledStatusMessage = 'Fulfilled';
+            public string $theUnfulfilledStatusMessage = 'Unfulfilled';
             protected TestSpyInterface $spy;
 
             public function __construct(TestSpyInterface $spy)
@@ -49,22 +49,22 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
             public function getName(): string
             {
-                return $this->name;
+                return $this->theName;
             }
 
             public function getDescription(): string
             {
-                return $this->description;
+                return $this->theDescription;
             }
 
             protected function getFulfilledStatusMessage(): string
             {
-                return $this->fulfilledStatusMessage;
+                return $this->theFulfilledStatusMessage;
             }
 
             protected function getUnfulfilledStatusMessage(): string
             {
-                return $this->unfulfilledStatusMessage;
+                return $this->theUnfulfilledStatusMessage;
             }
 
             public function isFulfilled(
@@ -103,10 +103,10 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
             ->willReturn($isFulfilled);
 
         $sut = $this->createSut();
-        $sut->name = $name;
-        $sut->description = $description;
-        $sut->fulfilledStatusMessage = $fulfilledStatusMessage;
-        $sut->unfulfilledStatusMessage = $unfulfilledStatusMessage;
+        $sut->theName = $name;
+        $sut->theDescription = $description;
+        $sut->theFulfilledStatusMessage = $fulfilledStatusMessage;
+        $sut->theUnfulfilledStatusMessage = $unfulfilledStatusMessage;
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);

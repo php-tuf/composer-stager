@@ -145,7 +145,7 @@ abstract class TestCase extends PHPUnitTestCase
         assert(file_exists($target->resolve()), 'Symlink target exists.');
     }
 
-    private static function ensureParentDirectory(string $filename): void
+    protected static function ensureParentDirectory(string $filename): void
     {
         $dirname = dirname($filename);
 
