@@ -36,7 +36,6 @@
         "phpstan/phpstan": "^1.9",
         "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpstan/phpstan-strict-rules": "^1.4",
-        "phpstan/phpstan-symfony": "^1.2",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^5.6",
         "qossmic/deptrac-shim": "^0.24.0",
