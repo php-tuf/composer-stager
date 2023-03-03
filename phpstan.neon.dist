@@ -11,44 +11,12 @@ parameters:
     tmpDir: var/phpstan
     paths:
         - src
-        - tests/PHPUnit/Domain
-        - tests/PHPUnit/Infrastructure
         - .gitattributes
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         -
-            message: '#Access to an undefined property class@anonymous/.*#'
-            path: tests/PHPUnit
-        -
-            message: '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+\.#'
-            paths:
-                - tests/PHPUnit/Infrastructure/Aggregate/PreconditionsTree/AbstractPreconditionsTreeUnitTest.php
-                - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractLinkIteratingPreconditionUnitTest.php
-                - tests/PHPUnit/Infrastructure/Service/Precondition/AbstractPreconditionUnitTest.php
-        -
-            message: '#Call to deprecated method prophesize\(\) of class PhpTuf\\ComposerStager\\Tests\\PHPUnit\\TestCase#'
-            path: tests/PHPUnit
-        -
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
-        -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no type specified.#'
-            path: tests/PHPUnit
-        -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) has parameter \$[a-zA-Z0-9\\_]+ with no value type specified in iterable type array.#'
-            path: tests/PHPUnit
-        -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) return type has no value type specified in iterable type array.#'
-            path: tests/PHPUnit
-        -
-            message: '#Method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) throws checked exception [a-zA-Z0-9\\_]+ but it.s missing from the PHPDoc @throws tag.#'
-            path: tests/PHPUnit
-        -
-            message: '#Parameter \#\d+ \$[a-zA-Z0-9\\_]+ of (static )?method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\) expects [a-zA-Z0-9\|<>\\_\-]+, [a-zA-Z0-9\\_]+ given.#'
-            path: tests/PHPUnit
-        -
-            message: '#Property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+ \([a-zA-Z0-9\\_]+\) does not accept object\|null.*#'
-            path: tests/PHPUnit/EndToEnd/EndToEndFunctionalTestCase.php
 
     # Custom parameters.
     gitattributesExportInclude:
