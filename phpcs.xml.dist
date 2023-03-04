@@ -15,9 +15,6 @@
     <file>src</file>
     <file>tests</file>
 
-    <rule ref="PHPCompatibility"/>
-    <config name="testVersion" value="7.4-"/>
-
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
         <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
