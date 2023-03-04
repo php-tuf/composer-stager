@@ -9,6 +9,7 @@
       <w>cleancode</w>
       <w>codesize</w>
       <w>dealerdirect</w>
+      <w>depfile</w>
       <w>deptrac</w>
       <w>dirname</w>
       <w>ergebnis</w>
