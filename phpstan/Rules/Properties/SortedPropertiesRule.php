@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Properties;
+namespace PhpTuf\ComposerStager\PHPStan\Rules\Properties;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionProperty;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
-use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Requires class properties to be alphabetized within their visibility grouping. */
 final class SortedPropertiesRule extends AbstractRule

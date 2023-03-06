@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces;
+namespace PhpTuf\ComposerStager\PHPStan\Rules\Interfaces;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Forbids empty interfaces, i.e., without methods or constants. */
 final class UselessInterfaceRule extends AbstractRule

@@ -27,33 +27,33 @@ parameters:
     preconditionSystemHash: e242a8a8bbe02357e191b6ea927a26eb
 
 rules:
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedCoversAnnotationsRule # Requires "@covers" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedPropertyAnnotationsRule # Requires "@property" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\Tests\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedCoversAnnotationsRule # Requires "@covers" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedPropertyAnnotationsRule # Requires "@property" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
     # @todo Temporarily disable due to regression. Stopped working in 25edda57963f65c298d899c05ea9ed1efee06eb6.
     # -
     #     # Ensures that precondition system diagrams stay current.
-    #     class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
+    #     class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
     #     arguments:
     #         preconditionSystemHash: %preconditionSystemHash%
     #     tags:
     #         - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
-        class: PhpTuf\ComposerStager\Tests\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
+        class: PhpTuf\ComposerStager\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
         arguments:
             gitattributesExportInclude: %gitattributesExportInclude%
         tags:

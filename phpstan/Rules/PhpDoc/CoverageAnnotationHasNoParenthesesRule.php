@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\PhpDoc;
+namespace PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Ensures that coverage annotations have no trailing parentheses. */
 final class CoverageAnnotationHasNoParenthesesRule extends AbstractRule

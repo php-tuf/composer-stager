@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Methods;
+namespace PhpTuf\ComposerStager\PHPStan\Rules\Methods;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Forbids throwing third party exceptions from public methods. */
 final class ForbiddenThrowsRule extends AbstractRule

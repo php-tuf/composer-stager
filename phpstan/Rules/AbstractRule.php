@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules;
+namespace PhpTuf\ComposerStager\PHPStan\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
@@ -14,7 +14,7 @@ use PHPStan\ShouldNotHappenException;
 /** Provides a base class for PHPStan rules. */
 abstract class AbstractRule implements Rule
 {
-    protected const PROJECT_ROOT = __DIR__ . '/../../../';
+    protected const PROJECT_ROOT = __DIR__ . '/../../';
 
     public function __construct(protected readonly ReflectionProvider $reflectionProvider)
     {

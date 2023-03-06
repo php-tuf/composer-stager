@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\PHPStan\Rules\Files;
+namespace PhpTuf\ComposerStager\PHPStan\Rules\Files;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\FileNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
-use PhpTuf\ComposerStager\Tests\PHPStan\Rules\AbstractRule;
+use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files. */
 final class GitattributesMissingExportIgnoreRule extends AbstractRule
