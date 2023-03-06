@@ -10,7 +10,7 @@ final class StagingDirIsReady extends AbstractPreconditionsTree implements Stagi
 {
     public function __construct(
         StagingDirExistsInterface $stagingDirExists,
-        StagingDirIsWritableInterface $stagingDirIsWritable
+        StagingDirIsWritableInterface $stagingDirIsWritable,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

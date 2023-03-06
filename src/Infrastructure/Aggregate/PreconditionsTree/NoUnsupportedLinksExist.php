@@ -14,7 +14,7 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
         NoAbsoluteLinksExistInterface $noAbsoluteLinksExist,
         NoHardLinksExistInterface $noHardLinksExist,
         NoLinksExistOnWindowsInterface $noLinksExistOnWindows,
-        NoLinksPointOutsideTheCodebaseInterface $noLinksPointOutsideTheCodebase
+        NoLinksPointOutsideTheCodebaseInterface $noLinksPointOutsideTheCodebase,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

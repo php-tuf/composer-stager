@@ -40,11 +40,9 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
             public string $theDescription = 'Description';
             public string $theFulfilledStatusMessage = 'Fulfilled';
             public string $theUnfulfilledStatusMessage = 'Unfulfilled';
-            protected TestSpyInterface $spy;
 
-            public function __construct(TestSpyInterface $spy)
+            public function __construct(protected TestSpyInterface $spy)
             {
-                $this->spy = $spy;
             }
 
             public function getName(): string
@@ -70,7 +68,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
             public function isFulfilled(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
-                ?PathListInterface $exclusions = null
+                ?PathListInterface $exclusions = null,
             ): bool {
                 return $this->spy->report(func_get_args());
             }
@@ -91,7 +89,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         $isFulfilled,
         $fulfilledStatusMessage,
         $unfulfilledStatusMessage,
-        $expectedStatusMessage
+        $expectedStatusMessage,
     ): void {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();

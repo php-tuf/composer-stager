@@ -78,7 +78,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $fulfilledStatusMessage,
         $unfulfilledStatusMessage,
         $expectedStatusMessage,
-        $exclusions
+        $exclusions,
     ): void {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
@@ -159,11 +159,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
             return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
             {
-                public function __construct(bool $isFulfilled, string $message, TestSpyInterface $spy)
-                {
-                    $this->isFulfilled = $isFulfilled;
-                    $this->message = $message;
-                    $this->spy = $spy;
+                public function __construct(
+                    private readonly bool $isFulfilled,
+                    private readonly string $message,
+                    private readonly TestSpyInterface $spy,
+                ) {
                 }
 
                 protected function getFulfilledStatusMessage(): string
@@ -189,7 +189,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 public function isFulfilled(
                     PathInterface $activeDir,
                     PathInterface $stagingDir,
-                    ?PathListInterface $exclusions = null
+                    ?PathListInterface $exclusions = null,
                 ): bool {
                     $this->spy->report();
 

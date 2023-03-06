@@ -133,6 +133,6 @@ interface FilesystemInterface
     public function remove(
         PathInterface $path,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void;
 }

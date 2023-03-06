@@ -5,7 +5,7 @@
 /.idea               export-ignore
 /composer.lock       export-ignore
 /config              export-ignore
-/deptrac.yaml        export-ignore
+/deptrac.yml         export-ignore
 /grumphp.yml.dist    export-ignore
 /phpcs.xml.dist      export-ignore
 /phpmd.xml           export-ignore

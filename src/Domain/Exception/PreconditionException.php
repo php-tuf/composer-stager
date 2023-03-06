@@ -13,16 +13,12 @@ use Throwable;
  */
 class PreconditionException extends RuntimeException implements ExceptionInterface
 {
-    private PreconditionInterface $precondition;
-
     public function __construct(
-        PreconditionInterface $precondition,
+        private readonly PreconditionInterface $precondition,
         string $message = '',
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ) {
-        $this->precondition = $precondition;
-
         parent::__construct($message, $code, $previous);
     }
 

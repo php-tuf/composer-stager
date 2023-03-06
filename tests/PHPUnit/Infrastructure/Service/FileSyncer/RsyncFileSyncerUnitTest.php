@@ -69,7 +69,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         string $destination,
         ?PathListInterface $exclusions,
         array $command,
-        ?ProcessOutputCallbackInterface $callback
+        ?ProcessOutputCallbackInterface $callback,
     ): void {
         $source = new TestPath($source);
         $destination = new TestPath($destination);

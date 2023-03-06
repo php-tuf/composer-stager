@@ -88,7 +88,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
             protected function exitEarly(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
-                ?PathListInterface $exclusions
+                ?PathListInterface $exclusions,
             ): bool {
                 return true;
             }

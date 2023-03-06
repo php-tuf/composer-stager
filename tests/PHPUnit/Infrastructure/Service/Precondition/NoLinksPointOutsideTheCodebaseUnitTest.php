@@ -134,7 +134,7 @@ final class NoLinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCase
     protected function assertFulfilledStatusMessage(
         bool $isFulfilled,
         string $statusMessage,
-        string $assertionMessage
+        string $assertionMessage,
     ): void {
         self::assertTrue($isFulfilled, $assertionMessage);
         self::assertSame('There are no links that point outside the codebase.', $statusMessage, 'Got correct status message');

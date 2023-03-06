@@ -36,6 +36,6 @@ interface ComposerRunnerInterface extends ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT
+        ?int $timeout = self::DEFAULT_TIMEOUT,
     ): void;
 }

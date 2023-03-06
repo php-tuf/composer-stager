@@ -6,14 +6,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 final class TestPath implements PathInterface
 {
-    private bool $isAbsolute;
-
-    private string $path;
-
-    public function __construct(string $path = 'test', bool $isAbsolute = true)
+    public function __construct(private readonly string $path = 'test', private readonly bool $isAbsolute = true)
     {
-        $this->path = $path;
-        $this->isAbsolute = $isAbsolute;
     }
 
     public function isAbsolute(): bool

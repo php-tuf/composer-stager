@@ -10,20 +10,11 @@ use Symfony\Component\Process\ExecutableFinder;
 /** Selects and creates the appropriate file syncer for the host. */
 final class FileSyncerFactory
 {
-    private ExecutableFinder $executableFinder;
-
-    private PhpFileSyncerInterface $phpFileSyncer;
-
-    private RsyncFileSyncerInterface $rsyncFileSyncer;
-
     public function __construct(
-        ExecutableFinder $executableFinder,
-        PhpFileSyncerInterface $phpFileSyncer,
-        RsyncFileSyncerInterface $rsyncFileSyncer
+        private readonly ExecutableFinder $executableFinder,
+        private readonly PhpFileSyncerInterface $phpFileSyncer,
+        private readonly RsyncFileSyncerInterface $rsyncFileSyncer,
     ) {
-        $this->executableFinder = $executableFinder;
-        $this->phpFileSyncer = $phpFileSyncer;
-        $this->rsyncFileSyncer = $rsyncFileSyncer;
     }
 
     /** Creates the appropriate file syncer. */

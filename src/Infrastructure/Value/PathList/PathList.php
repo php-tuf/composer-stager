@@ -43,7 +43,7 @@ final class PathList implements PathListInterface
             /** @psalm-suppress DocblockTypeContradiction */
             if (!is_string($path)) {
                 $given = is_object($path)
-                    ? get_class($path)
+                    ? $path::class
                     : gettype($path);
 
                 throw new InvalidArgumentException(sprintf(

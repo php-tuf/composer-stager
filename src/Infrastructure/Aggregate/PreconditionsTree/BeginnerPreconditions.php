@@ -12,7 +12,7 @@ final class BeginnerPreconditions extends AbstractPreconditionsTree implements B
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
-        StagingDirDoesNotExistInterface $stagingDirDoesNotExist
+        StagingDirDoesNotExistInterface $stagingDirDoesNotExist,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

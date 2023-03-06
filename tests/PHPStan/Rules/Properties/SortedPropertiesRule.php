@@ -41,6 +41,11 @@ final class SortedPropertiesRule extends AbstractRule
                 continue;
             }
 
+            // Skip promoted properties.
+            if ($property->isPromoted()) {
+                continue;
+            }
+
             $visibility = $this->getVisibility($property);
 
             $current[$visibility] = $property->getName();

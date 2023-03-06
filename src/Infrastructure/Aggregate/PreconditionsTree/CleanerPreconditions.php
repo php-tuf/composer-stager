@@ -10,7 +10,7 @@ final class CleanerPreconditions extends AbstractPreconditionsTree implements Cl
 {
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,
-        StagingDirIsReadyInterface $stagingDirIsReady
+        StagingDirIsReadyInterface $stagingDirIsReady,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

@@ -15,11 +15,8 @@ use UnexpectedValueException;
 
 final class RecursiveFileFinder implements RecursiveFileFinderInterface
 {
-    private PathFactoryInterface $pathFactory;
-
-    public function __construct(PathFactoryInterface $pathFactory)
+    public function __construct(private readonly PathFactoryInterface $pathFactory)
     {
-        $this->pathFactory = $pathFactory;
     }
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
@@ -40,7 +37,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
         // matched. But because the directory iterator is recursive, their excluded
         // ancestor WILL BE found, and they will be excluded by extension.
         $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static fn (
-            string $foundPathname
+            string $foundPathname,
         ): bool => !in_array($foundPathname, $exclusions, true));
 
         /** @var \Traversable<string> $iterator */

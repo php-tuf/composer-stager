@@ -37,7 +37,7 @@ final class UnixLikePathUnitTest extends TestCase
         bool $isAbsolute,
         string $resolved,
         string $relativeBase,
-        string $resolvedRelativeTo
+        string $resolvedRelativeTo,
     ): void {
         $sut = new UnixLikePath($given);
         $equalInstance = new UnixLikePath($given);

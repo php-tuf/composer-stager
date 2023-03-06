@@ -83,7 +83,7 @@ final class FilesystemFunctionalTest extends TestCase
         bool $exists,
         bool $isLink,
         bool $isHardLink,
-        bool $isSymlink
+        bool $isSymlink,
     ): void {
         self::createFiles(self::SOURCE_DIR, $files);
         self::createDirectories(self::SOURCE_DIR, $directories);

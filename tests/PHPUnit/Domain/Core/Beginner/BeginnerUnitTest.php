@@ -71,7 +71,7 @@ final class BeginnerUnitTest extends TestCase
         string $stagingDir,
         ?PathListInterface $exclusions,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout
+        ?int $timeout,
     ): void {
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);

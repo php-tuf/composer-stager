@@ -71,7 +71,7 @@ final class StagerUnitTest extends TestCase
         array $givenCommand,
         array $expectedCommand,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout
+        ?int $timeout,
     ): void {
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir)

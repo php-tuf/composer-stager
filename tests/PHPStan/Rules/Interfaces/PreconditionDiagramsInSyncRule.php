@@ -14,13 +14,9 @@ use ReflectionClass;
 /** Ensures that precondtion system diagrams stay current. */
 final class PreconditionDiagramsInSyncRule extends AbstractRule
 {
-    private string $preconditionSystemHash;
-
-    public function __construct(string $preconditionSystemHash, ReflectionProvider $reflectionProvider)
+    public function __construct(private readonly string $preconditionSystemHash, ReflectionProvider $reflectionProvider)
     {
         parent::__construct($reflectionProvider);
-
-        $this->preconditionSystemHash = $preconditionSystemHash;
     }
 
     public function getNodeType(): string

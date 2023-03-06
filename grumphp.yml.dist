@@ -16,7 +16,9 @@ grumphp:
             level: 100
         composer: ~
         composer_normalize: ~
-        deptrac: ~
+        deptrac:
+            cache_file: var/deptrac/cache.json
+            depfile: deptrac.yml
         phpcs:
             standard: []
             whitelist_patterns:

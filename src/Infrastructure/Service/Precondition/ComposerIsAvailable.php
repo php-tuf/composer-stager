@@ -15,16 +15,12 @@ use Symfony\Component\Process\Process;
 
 final class ComposerIsAvailable extends AbstractPrecondition implements ComposerIsAvailableInterface
 {
-    private ExecutableFinderInterface $executableFinder;
-
-    private ProcessFactoryInterface $processFactory;
-
     private string $unfulfilledStatusMessage = '';
 
-    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
-    {
-        $this->executableFinder = $executableFinder;
-        $this->processFactory = $processFactory;
+    public function __construct(
+        private readonly ExecutableFinderInterface $executableFinder,
+        private readonly ProcessFactoryInterface $processFactory,
+    ) {
     }
 
     public function getName(): string
@@ -40,7 +36,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool {
         try {
             $executablePath = $this->executableFinder->find('composer');
@@ -91,13 +87,13 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         try {
             $process->mustRun();
             $output = $process->getOutput();
-        } catch (SymfonyLogicException|ProcessFailedException $e) {
+        } catch (SymfonyLogicException|ProcessFailedException) {
             return false;
         }
 
         try {
             $data = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             return false;
         }
 
