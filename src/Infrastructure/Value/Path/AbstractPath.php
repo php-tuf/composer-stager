@@ -56,7 +56,7 @@ abstract class AbstractPath implements PathInterface
         // If the absolute path begins with a directory separator, append it to
         // the prefix, or it will be lost below when exploding the string. (A
         // trailing directory separator SHOULD BE lost.)
-        if (strpos($absolutePath, DIRECTORY_SEPARATOR) === 0) {
+        if (str_starts_with($absolutePath, DIRECTORY_SEPARATOR)) {
             $prefix .= DIRECTORY_SEPARATOR;
         }
 

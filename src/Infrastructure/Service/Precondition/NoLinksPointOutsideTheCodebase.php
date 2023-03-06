@@ -47,6 +47,6 @@ EOF;
     {
         $ancestor .= DIRECTORY_SEPARATOR;
 
-        return strpos($descendant, $ancestor) === 0;
+        return str_starts_with($descendant, $ancestor);
     }
 }

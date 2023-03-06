@@ -52,12 +52,12 @@ abstract class AbstractRule implements Rule
     {
         $factory = 'Factory';
 
-        return substr($class->getName(), -strlen($factory)) === $factory;
+        return str_ends_with($class->getName(), $factory);
     }
 
     protected function isInNamespace(string $name, string $namespace): bool
     {
-        return strpos($name, $namespace) === 0;
+        return str_starts_with($name, $namespace);
     }
 
     protected function getNamespace(string $name): string

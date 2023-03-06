@@ -99,7 +99,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     {
         $ancestor .= DIRECTORY_SEPARATOR;
 
-        return strpos($descendant, $ancestor) === 0;
+        return str_starts_with($descendant, $ancestor);
     }
 
     private static function getRelativePath(string $ancestor, string $path): string

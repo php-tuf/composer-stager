@@ -49,7 +49,7 @@ final class CoverageAnnotationHasNoParenthesesRule extends AbstractRule
                 $value = end($lineParts);
 
                 // The function name does not end with parentheses.
-                if (substr(trim($value), -2) !== '()') {
+                if (!str_ends_with(trim($value), '()')) {
                     continue;
                 }
 

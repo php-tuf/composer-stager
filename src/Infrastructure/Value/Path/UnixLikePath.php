@@ -6,7 +6,7 @@ final class UnixLikePath extends AbstractPath
 {
     public function isAbsolute(): bool
     {
-        return strpos($this->path, DIRECTORY_SEPARATOR) === 0;
+        return str_starts_with($this->path, DIRECTORY_SEPARATOR);
     }
 
     protected function doResolve(string $basePath): string

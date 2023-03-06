@@ -213,7 +213,7 @@ abstract class TestCase extends PHPUnitTestCase
             $matchPath = self::ensureTrailingSlash($dir) . $path;
             $ignoreDir = self::ensureTrailingSlash($ignoreDir);
 
-            if (strpos($matchPath, $ignoreDir) === 0) {
+            if (str_starts_with($matchPath, $ignoreDir)) {
                 return false;
             }
 

@@ -42,7 +42,7 @@ final class PropertyDataTypePutsObjectProphecyLastRule extends AbstractRule
 
             foreach ($lineParts as $linePart) {
                 // Not a (union) data type.
-                if (strpos($linePart, '|') === false) {
+                if (!str_contains($linePart, '|')) {
                     continue;
                 }
 
