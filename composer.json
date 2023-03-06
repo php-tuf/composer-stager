@@ -54,8 +54,7 @@
     "autoload-dev": {
         "psr-4": {
             "PhpTuf\\ComposerStager\\PHPStan\\": "phpstan",
-            "PhpTuf\\ComposerStager\\Temp\\": "temp",
-            "PhpTuf\\ComposerStager\\Tests\\PHPUnit\\": "tests/PHPUnit"
+            "PhpTuf\\ComposerStager\\Tests\\": "tests"
         }
     },
     "config": {
