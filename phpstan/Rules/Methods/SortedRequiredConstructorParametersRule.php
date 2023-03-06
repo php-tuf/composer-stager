@@ -38,10 +38,10 @@ final class SortedRequiredConstructorParametersRule extends AbstractRule
             $current = $parameter->getName();
 
             if (strcmp($current, $previous) < 0) {
-                $message = sprintf(
-                    'Non-required constructor parameters should be sorted alphabetically by variable name. The first wrong one is "$%s".',
-                    $current,
-                );
+                $format = <<<'EOF'
+Non-required constructor parameters should be sorted alphabetically by variable name. The first wrong one is "$%s"
+EOF;
+                $message = sprintf($format, $current);
 
                 return [RuleErrorBuilder::message($message)->build()];
             }

@@ -12,6 +12,7 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
+    <file>phpstan</file>
     <file>src</file>
     <file>tests</file>
 

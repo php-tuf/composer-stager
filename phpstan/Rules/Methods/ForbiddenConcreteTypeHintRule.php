@@ -49,8 +49,11 @@ final class ForbiddenConcreteTypeHintRule extends AbstractRule
                     }
 
                     // The type hint is a concrete class that implements interfaces it could use.
+                    $format = <<<'EOF'
+Constructor parameter $%s cannot type hint to concrete class %s. Use an interface it implements instead
+EOF;
                     $message = sprintf(
-                        'Constructor parameter $%s cannot type hint to concrete class %s. Use an interface it implements instead',
+                        $format,
                         $parameter->getName(),
                         $class->getName(),
                     );

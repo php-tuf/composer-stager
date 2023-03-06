@@ -14,12 +14,12 @@ use PHPStan\Rules\RuleErrorBuilder;
 /** Provides a base class for alphabetized annotation rules. */
 abstract class AbstractSortedAnnotationsRule implements Rule
 {
-    abstract protected function targetTag(): string;
-
     final public function getNodeType(): string
     {
         return Node::class;
     }
+
+    abstract protected function targetTag(): string;
 
     public function processNode(Node $node, Scope $scope): array
     {

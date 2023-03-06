@@ -9,7 +9,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
-/** Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files. */
+/** Ensures that a conscious decision is made to include new repository root paths in Git archive files or not. */
 final class GitattributesMissingExportIgnoreRule extends AbstractRule
 {
     private const SPECIAL_PATHS = [
@@ -54,6 +54,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
                 continue;
             }
 
+            // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
             $message = "Repository root path /{$rootPath} must be either defined as \"export-ignore\" in .gitattributes or declared in phpstan.neon.dist:parameters.gitattributesExportInclude";
             $errors[] = RuleErrorBuilder::message($message)->build();
         }

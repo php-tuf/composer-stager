@@ -39,10 +39,9 @@ final class ForbiddenThrowsRule extends AbstractRule
                 continue;
             }
 
-            $message = sprintf(
-                'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead',
-                $exception,
-            );
+            // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+            $format = 'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead';
+            $message = sprintf($format, $exception);
             $errors[] = RuleErrorBuilder::message($message)->build();
         }
 
