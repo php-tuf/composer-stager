@@ -40,7 +40,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     ): bool {
         try {
             $executablePath = $this->executableFinder->find('composer');
-        } catch (LogicException $e) {
+        } catch (LogicException) {
             $this->unfulfilledStatusMessage = 'Composer cannot be found.';
 
             return false;
