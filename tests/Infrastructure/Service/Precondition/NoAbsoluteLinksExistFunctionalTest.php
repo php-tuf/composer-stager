@@ -200,6 +200,26 @@ final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunction
 
     /**
      * @covers ::isFulfilled
+     * @covers ::isSupportedLink
+     */
+    public function testWithHardLink(): void
+    {
+        $dirPath = PathFactory::create(self::ACTIVE_DIR);
+        $link = PathFactory::create('link.txt', $dirPath)->resolve();
+        $target = PathFactory::create('target.txt', $dirPath)->resolve();
+        $parentDir = dirname($link);
+        @mkdir($parentDir, 0777, true);
+        touch($target);
+        link($target, $link);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+
+        self::assertTrue($isFulfilled, 'Ignored hard link link.');
+    }
+
+    /**
+     * @covers ::isFulfilled
      *
      * @dataProvider providerExclusions
      */

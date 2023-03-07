@@ -171,6 +171,49 @@ final class NoLinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditio
     }
 
     /**
+     * @covers ::isFulfilled
+     * @covers ::isSupportedLink
+     */
+    public function testWithHardLink(): void
+    {
+        $dirPath = PathFactory::create(self::ACTIVE_DIR);
+        $link = PathFactory::create('link.txt', $dirPath)->resolve();
+        $target = PathFactory::create('target.txt', $dirPath)->resolve();
+        $parentDir = dirname($link);
+        @mkdir($parentDir, 0777, true);
+        touch($target);
+        link($target, $link);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+
+        self::assertTrue($isFulfilled, 'Ignored hard link link.');
+    }
+
+    /**
+     * @covers ::isDescendant
+     * @covers ::isFulfilled
+     * @covers ::isSupportedLink
+     * @covers ::linkPointsOutsidePath
+     */
+    public function testWithAbsoluteLink(): void
+    {
+        $dirPath = PathFactory::create(self::ACTIVE_DIR);
+        $link = PathFactory::create('link.txt', $dirPath)->resolve();
+        $target = PathFactory::create('target.txt', $dirPath)->resolve();
+        $parentDir = dirname($link);
+        @mkdir($parentDir, 0777, true);
+        touch($target);
+        symlink($target, $link);
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+
+        self::assertTrue($isFulfilled, 'Ignored hard link link.');
+    }
+
+    /**
      * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isDescendant
      * @covers ::isFulfilled
