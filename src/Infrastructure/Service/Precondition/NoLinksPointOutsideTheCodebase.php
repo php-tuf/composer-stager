@@ -32,6 +32,10 @@ EOF;
 
     protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
+        if (!$this->filesystem->isSymlink($file)) {
+            return true;
+        }
+
         return !$this->linkPointsOutsidePath($file, $codebaseRootDir);
     }
 
