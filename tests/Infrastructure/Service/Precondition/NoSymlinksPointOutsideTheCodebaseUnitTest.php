@@ -11,11 +11,11 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
@@ -34,7 +34,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
-final class NoLinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCase
+final class NoSymlinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCase
 {
     protected function setUp(): void
     {
@@ -51,13 +51,13 @@ final class NoLinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCase
         parent::setUp();
     }
 
-    protected function createSut(): NoLinksPointOutsideTheCodebase
+    protected function createSut(): NoSymlinksPointOutsideTheCodebase
     {
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
 
-        return new NoLinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory);
+        return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory);
     }
 
     /**

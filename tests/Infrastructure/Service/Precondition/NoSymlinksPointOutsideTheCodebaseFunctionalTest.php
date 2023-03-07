@@ -4,11 +4,11 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase
  *
  * @covers ::__construct
  * @covers ::exitEarly
@@ -27,15 +27,15 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
-final class NoLinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
+final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
-    protected function createSut(): NoLinksPointOutsideTheCodebase
+    protected function createSut(): NoSymlinksPointOutsideTheCodebase
     {
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase $sut */
-        $sut = $container->get(NoLinksPointOutsideTheCodebase::class);
+        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase $sut */
+        $sut = $container->get(NoSymlinksPointOutsideTheCodebase::class);
 
         return $sut;
     }

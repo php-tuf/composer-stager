@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksE
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
@@ -14,7 +14,7 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
         NoAbsoluteLinksExistInterface $noAbsoluteLinksExist,
         NoHardLinksExistInterface $noHardLinksExist,
         NoLinksExistOnWindowsInterface $noLinksExistOnWindows,
-        NoLinksPointOutsideTheCodebaseInterface $noLinksPointOutsideTheCodebase,
+        NoSymlinksPointOutsideTheCodebaseInterface $noSymlinksPointOutsideTheCodebase,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

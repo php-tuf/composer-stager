@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
- * Asserts that there are no links that point outside the codebase.
+ * Asserts that there are no symlinks that point outside the codebase.
  *
- * This includes both the active and staging directories.
+ * This includes both the active and staging directories. Hard links are ignored.
  *
  * It doesn't matter whether the given directories actually exist. In order to isolate failures and avoid redundancy,
  * that question is left to its own preconditions. Except in the event of an IO error (which will throw an exception
@@ -16,6 +16,6 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  *
  * @see https://symfony.com/doc/current/service_container/autowiring.html
  */
-interface NoLinksPointOutsideTheCodebaseInterface extends PreconditionInterface
+interface NoSymlinksPointOutsideTheCodebaseInterface extends PreconditionInterface
 {
 }

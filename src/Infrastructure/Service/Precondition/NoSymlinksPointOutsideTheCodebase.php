@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class NoLinksPointOutsideTheCodebase extends AbstractLinkIteratingPrecondition implements
-    NoLinksPointOutsideTheCodebaseInterface
+final class NoSymlinksPointOutsideTheCodebase extends AbstractLinkIteratingPrecondition implements
+    NoSymlinksPointOutsideTheCodebaseInterface
 {
     public function getName(): string
     {

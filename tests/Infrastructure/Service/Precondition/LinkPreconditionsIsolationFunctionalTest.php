@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIterat
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Throwable;
 
@@ -25,7 +25,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoAbsoluteLinksExist::class,
         NoHardLinksExist::class,
         NoLinksExistOnWindows::class,
-        NoLinksPointOutsideTheCodebase::class,
+        NoSymlinksPointOutsideTheCodebase::class,
     ];
 
     public static function setUpBeforeClass(): void
@@ -114,7 +114,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $this->markTestIncomplete();
     }
 
-    public function testNoLinksPointOutsideTheCodebase(): void
+    public function testNoSymlinksPointOutsideTheCodebase(): void
     {
         $activeDir = $this->activeDir;
         $source = PathFactory::create('source.txt', $activeDir)->resolve();
@@ -122,7 +122,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         touch($target);
         symlink($target, $source);
 
-        $this->assertPreconditionIsIsolated(NoLinksPointOutsideTheCodebase::class);
+        $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
     }
 
     public function testNoHardLinksExistExist(): void
