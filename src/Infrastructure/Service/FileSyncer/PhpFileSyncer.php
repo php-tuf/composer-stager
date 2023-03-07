@@ -42,11 +42,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
     {
-        $source = $source->resolve();
-
-        if ($source === $destination->resolve()) {
+        if ($source->resolve() === $destination->resolve()) {
             throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source),
+                sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()),
             );
         }
     }
