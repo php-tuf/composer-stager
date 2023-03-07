@@ -2,10 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteLinksExistInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class NoAbsoluteLinksExist extends AbstractLinkIteratingPrecondition implements NoAbsoluteLinksExistInterface
+/** phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong */
+final class NoAbsoluteSymlinksExist extends AbstractLinkIteratingPrecondition implements NoAbsoluteSymlinksExistInterface
 {
     public function getName(): string
     {

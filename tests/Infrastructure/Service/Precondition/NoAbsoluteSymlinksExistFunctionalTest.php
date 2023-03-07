@@ -3,11 +3,11 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist
  *
  * @covers ::__construct
  * @covers ::findFiles
@@ -26,7 +26,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
-final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
+final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
     public static function setUpBeforeClass(): void
     {
@@ -37,13 +37,13 @@ final class NoAbsoluteLinksExistFunctionalTest extends LinkPreconditionsFunction
         self::markTestSkipped('This test covers non-Windows functionality.');
     }
 
-    protected function createSut(): NoAbsoluteLinksExist
+    protected function createSut(): NoAbsoluteSymlinksExist
     {
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist $sut */
-        $sut = $container->get(NoAbsoluteLinksExist::class);
+        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist $sut */
+        $sut = $container->get(NoAbsoluteSymlinksExist::class);
 
         return $sut;
     }

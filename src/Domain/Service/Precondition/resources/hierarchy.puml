@@ -57,7 +57,7 @@ class StagingDirIsReady {
 }
 
 class NoUnsupportedLinksExist {
-    NoAbsoluteLinksExist
+    NoAbsoluteSymlinksExist
     NoHardLinksExist
     NoLinksExistOnWindows
     NoSymlinksPointOutsideTheCodebase

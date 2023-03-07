@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -136,7 +136,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
             $preconditionMet = false;
-            self::assertEquals(NoAbsoluteLinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
+            self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
             assert(filetype($activeDirPath->resolve() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
@@ -206,7 +206,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
             $preconditionMet = false;
-            self::assertEquals(NoAbsoluteLinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
+            self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
             assert(filetype($activeDirPath->resolve() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');

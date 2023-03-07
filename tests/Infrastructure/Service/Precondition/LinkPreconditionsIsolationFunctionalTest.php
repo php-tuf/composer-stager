@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase;
@@ -22,7 +22,7 @@ use Throwable;
 final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 {
     private const COVERED_PRECONDITIONS = [
-        NoAbsoluteLinksExist::class,
+        NoAbsoluteSymlinksExist::class,
         NoHardLinksExist::class,
         NoLinksExistOnWindows::class,
         NoSymlinksPointOutsideTheCodebase::class,
@@ -97,7 +97,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         self::assertTrue($sut->isFulfilled($activeDir, $stagingDir), 'All preconditions passed together without any links present.');
     }
 
-    public function testNoAbsoluteLinksExist(): void
+    public function testNoAbsoluteSymlinksExist(): void
     {
         $activeDir = $this->activeDir;
         $source = PathFactory::create('source.txt', $activeDir)->resolve();
@@ -105,7 +105,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         touch($target);
         symlink($target, $source);
 
-        $this->assertPreconditionIsIsolated(NoAbsoluteLinksExist::class);
+        $this->assertPreconditionIsIsolated(NoAbsoluteSymlinksExist::class);
     }
 
     public function testNoLinksExistOnWindows(): void

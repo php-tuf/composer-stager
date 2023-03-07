@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist
  *
  * @covers ::assertIsFulfilled
  * @covers ::exitEarly
@@ -23,15 +23,15 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExi
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class NoAbsoluteLinksExistUnitTest extends LinkIteratingPreconditionUnitTestCase
+final class NoAbsoluteSymlinksExistUnitTest extends LinkIteratingPreconditionUnitTestCase
 {
-    protected function createSut(): NoAbsoluteLinksExist
+    protected function createSut(): NoAbsoluteSymlinksExist
     {
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
 
-        return new NoAbsoluteLinksExist($fileFinder, $filesystem, $pathFactory);
+        return new NoAbsoluteSymlinksExist($fileFinder, $filesystem, $pathFactory);
     }
 
     protected function fulfilledStatusMessage(): string

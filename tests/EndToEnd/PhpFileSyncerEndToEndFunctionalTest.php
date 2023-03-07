@@ -34,7 +34,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteLinksExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase
