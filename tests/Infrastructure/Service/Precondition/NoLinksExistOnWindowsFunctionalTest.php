@@ -18,7 +18,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
@@ -62,7 +62,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::getUnfulfilledStatusMessage
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      *
      * @dataProvider providerUnfulfilled
      */

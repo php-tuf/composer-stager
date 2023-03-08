@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 
-final class NoLinksExistOnWindows extends AbstractLinkIteratingPrecondition implements NoLinksExistOnWindowsInterface
+final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition implements NoLinksExistOnWindowsInterface
 {
     public function __construct(
         RecursiveFileFinderInterface $fileFinder,
@@ -50,7 +50,7 @@ final class NoLinksExistOnWindows extends AbstractLinkIteratingPrecondition impl
         return 'The %s directory at "%s" contains links, which is not supported on Windows. The first one is "%s".';
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
+    protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
         // This code is host-specific, so it shouldn't be counted against code coverage
         // numbers. Nevertheless, it IS covered by tests on Windows-based CI jobs.

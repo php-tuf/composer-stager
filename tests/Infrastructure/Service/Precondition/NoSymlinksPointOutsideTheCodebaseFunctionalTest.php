@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
@@ -57,7 +57,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      *
      * @dataProvider providerFulfilledWithValidLink
@@ -111,7 +111,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      *
      * @dataProvider providerUnfulfilled
@@ -172,7 +172,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
     /**
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      */
     public function testWithHardLink(): void
     {
@@ -193,7 +193,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     /**
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      */
     public function testWithAbsoluteLink(): void
@@ -217,7 +217,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      *
      * @dataProvider providerExclusions

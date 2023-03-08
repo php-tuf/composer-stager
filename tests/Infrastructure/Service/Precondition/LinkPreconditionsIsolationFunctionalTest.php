@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
@@ -64,7 +64,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
             }
 
             // Limit to link iterating preconditions.
-            if (!($service instanceof AbstractLinkIteratingPrecondition)) {
+            if (!($service instanceof AbstractFileIteratingPrecondition)) {
                 continue;
             }
 

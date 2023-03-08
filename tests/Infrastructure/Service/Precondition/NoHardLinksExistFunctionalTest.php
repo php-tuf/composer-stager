@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
@@ -40,7 +40,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         return $sut;
     }
 
-    /** @covers ::isSupportedLink */
+    /** @covers ::isSupportedFile */
     public function testFulfilledWithNoLinks(): void
     {
         $sut = $this->createSut();
@@ -50,7 +50,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }
 
-    /** @covers ::isSupportedLink */
+    /** @covers ::isSupportedFile */
     public function testFulfilledWithSymlink(): void
     {
         $target = PathFactory::create('target.txt', $this->activeDir)->resolve();
@@ -66,7 +66,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 
     /**
      * @covers ::getUnfulfilledStatusMessage
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      *
      * @dataProvider providerUnfulfilled
      */
@@ -123,7 +123,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 
     /**
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      *
      * @dataProvider providerExclusions
      */

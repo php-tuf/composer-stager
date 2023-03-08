@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInt
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /** phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong */
-final class NoAbsoluteSymlinksExist extends AbstractLinkIteratingPrecondition implements NoAbsoluteSymlinksExistInterface
+final class NoAbsoluteSymlinksExist extends AbstractFileIteratingPrecondition implements NoAbsoluteSymlinksExistInterface
 {
     public function getName(): string
     {
@@ -28,7 +28,7 @@ final class NoAbsoluteSymlinksExist extends AbstractLinkIteratingPrecondition im
         return 'The %s directory at "%s" contains absolute links, which is not supported. The first one is "%s".';
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
+    protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
         if (!$this->filesystem->isSymlink($file)) {
             return true;

@@ -16,14 +16,14 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinks
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
-final class NoAbsoluteSymlinksExistUnitTest extends LinkIteratingPreconditionUnitTestCase
+final class NoAbsoluteSymlinksExistUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected function createSut(): NoAbsoluteSymlinksExist
     {

@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
-abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
+abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
 {
     protected string $defaultUnfulfilledStatusMessage;
 
@@ -23,7 +23,7 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
     abstract protected function getDefaultUnfulfilledStatusMessage(): string;
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
-    abstract protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool;
+    abstract protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool;
 
     public function __construct(
         protected readonly RecursiveFileFinderInterface $fileFinder,
@@ -57,11 +57,7 @@ abstract class AbstractLinkIteratingPrecondition extends AbstractPrecondition
                 foreach ($files as $file) {
                     $file = $this->pathFactory::create($file);
 
-                    if (!$this->filesystem->isLink($file)) {
-                        continue;
-                    }
-
-                    if (!$this->isSupportedLink($file, $directoryRoot)) {
+                    if (!$this->isSupportedFile($file, $directoryRoot)) {
                         $this->defaultUnfulfilledStatusMessage = sprintf(
                             $this->defaultUnfulfilledStatusMessage,
                             $name,
