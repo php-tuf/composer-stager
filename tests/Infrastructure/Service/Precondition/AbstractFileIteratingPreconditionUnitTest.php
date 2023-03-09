@@ -8,11 +8,11 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  *
  * @covers ::__construct
  * @covers ::findFiles
@@ -28,7 +28,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
-final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreconditionUnitTestCase
+final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected function fulfilledStatusMessage(): string
     {
@@ -58,7 +58,7 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        return new class ($fileFinder, $filesystem, $pathFactory) extends AbstractLinkIteratingPrecondition
+        return new class ($fileFinder, $filesystem, $pathFactory) extends AbstractFileIteratingPrecondition
         {
             public bool $exitEarly = false;
 
@@ -67,7 +67,7 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
                 return '';
             }
 
-            protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
+            protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
             {
                 return true;
             }
@@ -97,7 +97,7 @@ final class AbstractLinkIteratingPreconditionUnitTest extends LinkIteratingPreco
         };
     }
 
-    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition::exitEarly */
+    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition::exitEarly */
     public function testExitEarly(): void
     {
         $activeDir = $this->activeDir->reveal();

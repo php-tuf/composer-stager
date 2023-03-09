@@ -12,12 +12,12 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @covers ::__construct
  * @covers ::findFiles
  * @covers ::getDefaultUnfulfilledStatusMessage
- * @covers ::isSupportedLink
+ * @covers ::isSupportedFile
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
@@ -200,7 +200,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
     /**
      * @covers ::isFulfilled
-     * @covers ::isSupportedLink
+     * @covers ::isSupportedFile
      */
     public function testWithHardLink(): void
     {

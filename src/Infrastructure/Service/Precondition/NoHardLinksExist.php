@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class NoHardLinksExist extends AbstractLinkIteratingPrecondition implements NoHardLinksExistInterface
+final class NoHardLinksExist extends AbstractFileIteratingPrecondition implements NoHardLinksExistInterface
 {
     public function getName(): string
     {
@@ -27,7 +27,7 @@ final class NoHardLinksExist extends AbstractLinkIteratingPrecondition implement
         return 'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".';
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
+    protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
         return !$this->filesystem->isHardLink($file);
     }

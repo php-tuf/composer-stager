@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
 use Prophecy\Argument;
 
 /**
@@ -21,7 +21,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
-abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCase
+abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCase
 {
     abstract protected function fulfilledStatusMessage(): string;
 
@@ -40,7 +40,7 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
         parent::setUp();
     }
 
-    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractLinkIteratingPrecondition::exitEarly */
+    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition::exitEarly */
     public function testExitEarly(): void
     {
         $activeDir = $this->activeDir->reveal();
@@ -58,14 +58,14 @@ abstract class LinkIteratingPreconditionUnitTestCase extends PreconditionTestCas
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        $sut = new class ($fileFinder, $filesystem, $pathFactory) extends AbstractLinkIteratingPrecondition
+        $sut = new class ($fileFinder, $filesystem, $pathFactory) extends AbstractFileIteratingPrecondition
         {
             protected function getDefaultUnfulfilledStatusMessage(): string
             {
                 return '';
             }
 
-            protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
+            protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
             {
                 return true;
             }

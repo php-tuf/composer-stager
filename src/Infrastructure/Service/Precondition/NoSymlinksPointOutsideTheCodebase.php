@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-final class NoSymlinksPointOutsideTheCodebase extends AbstractLinkIteratingPrecondition implements
+final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPrecondition implements
     NoSymlinksPointOutsideTheCodebaseInterface
 {
     public function getName(): string
@@ -30,7 +30,7 @@ The %s directory at "%s" contains links that point outside the codebase, which i
 EOF;
     }
 
-    protected function isSupportedLink(PathInterface $file, PathInterface $codebaseRootDir): bool
+    protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
     {
         if (!$this->filesystem->isSymlink($file)) {
             return true;
