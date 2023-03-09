@@ -26,6 +26,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
      * descendant requires a unique approach, which has been documented here:
      *
      * @see https://serverfault.com/q/1094803/956603
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function sync(
         PathInterface $source,
