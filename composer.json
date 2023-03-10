@@ -25,6 +25,7 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "ergebnis/composer-normalize": "^2.30",
+        "jangregor/phpstan-prophecy": "^1.0",
         "php-parallel-lint/php-parallel-lint": "^1.3",
         "phpmd/phpmd": "^2.13",
         "phpro/grumphp-shim": "^1.15",
