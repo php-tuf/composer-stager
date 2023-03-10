@@ -11,12 +11,38 @@ parameters:
     tmpDir: var/phpstan
     paths:
         - src
+        - tests/Domain
+        - tests/Infrastructure
         - .gitattributes
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
+        # Production code.
         -
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
+
+        # Test code.
+        -
+            message: '#Access to an undefined property.*#'
+            path: tests
+        -
+            message: '#Call to deprecated method.*#'
+            path: tests
+        -
+            message: '#.*caught .* must be rethrown.*#'
+            path: tests
+        -
+            message: '#Dynamic call to static method.*#'
+            path: tests
+        -
+            message: '#Method .* no (value )?type specified.*#'
+            path: tests
+        -
+            message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
+            path: tests
+        -
+            message: '#Parameter .* of (static )?method .* expects .* given.#'
+            path: tests
 
     # Custom parameters.
     gitattributesExportInclude:
