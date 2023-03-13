@@ -81,40 +81,6 @@ final class Filesystem implements FilesystemInterface
         return $this->getFileType($path) === self::FILE_IS_SYMLINK;
     }
 
-    /**
-     * @noinspection PhpUsageOfSilenceOperatorInspection
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
-    public function getFileType(PathInterface $path): string
-    {
-        // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
-        // and `is_link()`, not to mention being the only way to detect hard links at all.
-        // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
-        // which may or may not throw an exception depending on error_reporting configuration.
-        $lstat = @lstat($path->resolve());
-
-        // Path does not exist.
-        if ($lstat === false) {
-            return self::FILE_DOES_NOT_EXIST;
-        }
-
-        $mode = $lstat['mode'];
-        $mode = (int) decoct($mode);
-        $mode = (int) floor($mode / 10_000) * 10_000;
-
-        // Path is a symlink.
-        if ($mode === 120_000) {
-            return self::FILE_IS_SYMLINK;
-        }
-
-        // Path is a hard link.
-        if ($lstat['nlink'] > 1) {
-            return self::FILE_IS_HARD_LINK;
-        }
-
-        return self::FILE_IS_OTHER_TYPE;
-    }
-
     public function isWritable(PathInterface $path): bool
     {
         return is_writable($path->resolve()); // @codeCoverageIgnore
@@ -160,5 +126,39 @@ final class Filesystem implements FilesystemInterface
         } catch (SymfonyExceptionInterface $e) {
             throw new IOException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @noinspection PhpUsageOfSilenceOperatorInspection
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    private function getFileType(PathInterface $path): string
+    {
+        // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
+        // and `is_link()`, not to mention being the only way to detect hard links at all.
+        // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
+        // which may or may not throw an exception depending on error_reporting configuration.
+        $lstat = @lstat($path->resolve());
+
+        // Path does not exist.
+        if ($lstat === false) {
+            return self::FILE_DOES_NOT_EXIST;
+        }
+
+        $mode = $lstat['mode'];
+        $mode = (int) decoct($mode);
+        $mode = (int) floor($mode / 10_000) * 10_000;
+
+        // Path is a symlink.
+        if ($mode === 120_000) {
+            return self::FILE_IS_SYMLINK;
+        }
+
+        // Path is a hard link.
+        if ($lstat['nlink'] > 1) {
+            return self::FILE_IS_HARD_LINK;
+        }
+
+        return self::FILE_IS_OTHER_TYPE;
     }
 }
