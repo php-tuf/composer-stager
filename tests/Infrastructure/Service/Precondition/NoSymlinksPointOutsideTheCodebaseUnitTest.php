@@ -51,7 +51,7 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
 
     protected function fulfilledStatusMessage(): string
     {
-        return 'There are no links that point outside the codebase.';
+        return 'There are no symlinks that point outside the codebase.';
     }
 
     protected function createSut(): NoSymlinksPointOutsideTheCodebase
@@ -77,6 +77,6 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         string $assertionMessage,
     ): void {
         self::assertTrue($isFulfilled, $assertionMessage);
-        self::assertSame('There are no links that point outside the codebase.', $statusMessage, 'Got correct status message');
+        self::assertSame('There are no symlinks that point outside the codebase.', $statusMessage, 'Got correct status message');
     }
 }

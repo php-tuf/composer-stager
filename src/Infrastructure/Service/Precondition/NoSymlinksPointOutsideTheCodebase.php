@@ -10,17 +10,17 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
 {
     public function getName(): string
     {
-        return 'No links point outside the codebase'; // @codeCoverageIgnore
+        return 'No symlinks point outside the codebase'; // @codeCoverageIgnore
     }
 
     public function getDescription(): string
     {
-        return 'The codebase cannot contain links that point outside the codebase.'; // @codeCoverageIgnore
+        return 'The codebase cannot contain symlinks that point outside the codebase.'; // @codeCoverageIgnore
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'There are no links that point outside the codebase.';
+        return 'There are no symlinks that point outside the codebase.';
     }
 
     protected function getDefaultUnfulfilledStatusMessage(): string
