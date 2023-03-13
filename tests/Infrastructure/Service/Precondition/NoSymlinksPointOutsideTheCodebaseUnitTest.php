@@ -2,10 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
@@ -34,7 +32,7 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
-final class NoSymlinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCase
+final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected function setUp(): void
     {
@@ -51,6 +49,11 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCa
         parent::setUp();
     }
 
+    protected function fulfilledStatusMessage(): string
+    {
+        return 'There are no links that point outside the codebase.';
+    }
+
     protected function createSut(): NoSymlinksPointOutsideTheCodebase
     {
         $fileFinder = $this->fileFinder->reveal();
@@ -58,69 +61,6 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends PreconditionTestCa
         $pathFactory = $this->pathFactory->reveal();
 
         return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory);
-    }
-
-    /**
-     * @covers ::findFiles
-     * @covers ::getDefaultUnfulfilledStatusMessage
-     */
-    public function testDirectoryDoesNotExist(): void
-    {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-        $this->filesystem
-            ->exists(Argument::type(PathInterface::class))
-            ->willReturn(false);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-        $statusMessage = $sut->getStatusMessage($activeDir, $stagingDir);
-
-        $this->assertFulfilledStatusMessage($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
-    }
-
-    /**
-     * @covers ::findFiles
-     * @covers ::getDefaultUnfulfilledStatusMessage
-     */
-    public function testNoFilesFound(): void
-    {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-        $this->fileFinder
-            ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
-            ->willReturn([]);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-        $statusMessage = $sut->getStatusMessage($activeDir, $stagingDir);
-
-        $this->assertFulfilledStatusMessage($isFulfilled, $statusMessage, 'Treated empty codebase as fulfilled.');
-    }
-
-    /**
-     * @covers ::findFiles
-     * @covers ::getDefaultUnfulfilledStatusMessage
-     *
-     * @dataProvider providerExceptions
-     */
-    public function testExceptions(ExceptionInterface $exception): void
-    {
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage($exception->getMessage());
-
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-        $this->fileFinder
-            ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
-            ->willThrow($exception);
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
-
-        self::assertFalse($isFulfilled);
-
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 
     public function providerExceptions(): array
