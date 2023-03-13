@@ -97,8 +97,20 @@ abstract class TestCase extends PHPUnitTestCase
     protected static function createDirectories(string $baseDir, array $dirnames): void
     {
         foreach ($dirnames as $dirname) {
-            self::createFile($baseDir, $dirname);
+            self::createDirectory($baseDir, $dirname);
         }
+    }
+
+    protected static function createDirectory(string $baseDir, string $dirname): void
+    {
+        $dirname = PathFactory::create("{$baseDir}/{$dirname}")->resolve();
+        static::ensureParentDirectory($dirname);
+
+        $touchResult = mkdir($dirname);
+        $realpathResult = realpath($dirname);
+
+        assert($touchResult, "Created file {$dirname}.");
+        assert($realpathResult !== false, "Got absolute path of {$dirname}.");
     }
 
     protected static function createSymlinks(string $baseDir, array $symlinks): void

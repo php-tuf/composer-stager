@@ -68,19 +68,23 @@ final class FilesystemFunctionalTest extends TestCase
     /**
      * @covers ::exists
      * @covers ::getFileType
+     * @covers ::isDir
+     * @covers ::isFile
      * @covers ::isHardLink
      * @covers ::isLink
      * @covers ::isSymlink
      *
-     * @dataProvider providerExistsAndLinkChecks
+     * @dataProvider providerTypeCheckMethods
      */
-    public function testExistsAndLinkChecks(
+    public function testTypeCheckMethods(
         array $files,
         array $directories,
         array $symlinks,
         array $hardLinks,
         string $subject,
         bool $exists,
+        bool $isDir,
+        bool $isFile,
         bool $isLink,
         bool $isHardLink,
         bool $isSymlink,
@@ -93,17 +97,21 @@ final class FilesystemFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $actualExists = $sut->exists($subject);
+        $actualIsDir = $sut->isDir($subject);
+        $actualIsFile = $sut->isFile($subject);
         $actualIsLink = $sut->isLink($subject);
         $actualIsHardLink = $sut->isHardLink($subject);
         $actualIsSymlink = $sut->isSymlink($subject);
 
         self::assertSame($exists, $actualExists, 'Correctly determined whether path exists.');
+        self::assertSame($isDir, $actualIsDir, 'Correctly determined whether path is a directory.');
+        self::assertSame($isFile, $actualIsFile, 'Correctly determined whether path is a regular file.');
         self::assertSame($isLink, $actualIsLink, 'Correctly determined whether path is a link.');
         self::assertSame($isHardLink, $actualIsHardLink, 'Correctly determined whether path is a hard link.');
         self::assertSame($isSymlink, $actualIsSymlink, 'Correctly determined whether path is a symlink.');
     }
 
-    public function providerExistsAndLinkChecks(): array
+    public function providerTypeCheckMethods(): array
     {
         return [
             'Path is a symlink to a file' => [
@@ -113,6 +121,8 @@ final class FilesystemFunctionalTest extends TestCase
                 'hardLinks' => [],
                 'subject' => 'symlink.txt',
                 'exists' => true,
+                'isDir' => false,
+                'isFile' => false,
                 'isLink' => true,
                 'isHardLink' => false,
                 'isSymlink' => true,
@@ -124,30 +134,36 @@ final class FilesystemFunctionalTest extends TestCase
                 'hardLinks' => [],
                 'subject' => 'directory_link',
                 'exists' => true,
+                'isDir' => false,
+                'isFile' => false,
                 'isLink' => true,
                 'isHardLink' => false,
                 'isSymlink' => true,
             ],
             // Creating a hard link to a directory is not a permitted
             // operation. Just test with a file.
-            'Path is a hard link' => [
+            'Path is a hard link to a file' => [
                 'files' => ['target.txt'],
                 'directories' => [],
                 'symlinks' => [],
                 'hardLinks' => ['hard_link.txt' => 'target.txt'],
                 'subject' => 'hard_link.txt',
                 'exists' => true,
+                'isDir' => false,
+                'isFile' => false,
                 'isLink' => true,
                 'isHardLink' => true,
                 'isSymlink' => false,
             ],
-            'Path is a file' => [
+            'Path is a regular file' => [
                 'files' => ['file.txt'],
                 'directories' => [],
                 'symlinks' => [],
                 'hardLinks' => [],
                 'subject' => 'file.txt',
                 'exists' => true,
+                'isDir' => false,
+                'isFile' => true,
                 'isLink' => false,
                 'isHardLink' => false,
                 'isSymlink' => false,
@@ -159,6 +175,8 @@ final class FilesystemFunctionalTest extends TestCase
                 'hardLinks' => [],
                 'subject' => 'directory',
                 'exists' => true,
+                'isDir' => true,
+                'isFile' => false,
                 'isLink' => false,
                 'isHardLink' => false,
                 'isSymlink' => false,
@@ -170,6 +188,8 @@ final class FilesystemFunctionalTest extends TestCase
                 'hardLinks' => [],
                 'subject' => 'non_existent_path.txt',
                 'exists' => false,
+                'isDir' => false,
+                'isFile' => false,
                 'isLink' => false,
                 'isHardLink' => false,
                 'isSymlink' => false,
