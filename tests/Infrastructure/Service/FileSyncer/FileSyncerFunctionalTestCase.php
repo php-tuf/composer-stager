@@ -13,10 +13,13 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
+    private const SOURCE_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'source';
+    private const DESTINATION_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'destination';
+
     protected function setUp(): void
     {
-        $this->source = new TestPath(self::ACTIVE_DIR);
-        $this->destination = new TestPath(self::STAGING_DIR);
+        $this->source = new TestPath(self::SOURCE_DIR);
+        $this->destination = new TestPath(self::DESTINATION_DIR);
 
         $filesystem = new SymfonyFilesystem();
 
