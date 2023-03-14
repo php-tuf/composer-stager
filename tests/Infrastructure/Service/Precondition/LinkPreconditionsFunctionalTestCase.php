@@ -28,13 +28,13 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     abstract protected function createSut(): PreconditionInterface;
 
-    /** @dataProvider providerDirectoryDoesNotExist */
-    public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    /** @dataProvider providerFulfilledDirectoryDoesNotExist */
+    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
+        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
-    final protected function doTestDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    final protected function doTestFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
         $activeDir = PathFactory::create($activeDir);
         $stagingDir = PathFactory::create($stagingDir);
@@ -45,7 +45,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
         self::assertTrue($isFulfilled, 'Silently ignored non-existent directory');
     }
 
-    final public function providerDirectoryDoesNotExist(): array
+    final public function providerFulfilledDirectoryDoesNotExist(): array
     {
         $nonexistentDir = self::TEST_WORKING_DIR . '/65eb69a274470dd84e9b5371f7e1e8c8';
 
@@ -61,7 +61,20 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
         ];
     }
 
-    abstract public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void;
+    /**
+     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::isFulfilled
+     */
+    public function testFulfilledWithNoLinks(): void
+    {
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+
+        self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
+    }
+
+    abstract public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void;
 
     final public function providerExclusions(): array
     {

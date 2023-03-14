@@ -121,11 +121,11 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
      *
-     * @dataProvider providerDirectoryDoesNotExist
+     * @dataProvider providerFulfilledDirectoryDoesNotExist
      */
-    public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
+        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
     /**
@@ -135,7 +135,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      *
      * @dataProvider providerExclusions
      */
-    public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
+    public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         // This test is host-sensitive and can only be run on Windows.
         if (!self::isWindows()) {

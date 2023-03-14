@@ -191,11 +191,11 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
      *
-     * @dataProvider providerDirectoryDoesNotExist
+     * @dataProvider providerFulfilledDirectoryDoesNotExist
      */
-    public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
+        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
     /**
@@ -223,7 +223,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      *
      * @dataProvider providerExclusions
      */
-    public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
+    public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);

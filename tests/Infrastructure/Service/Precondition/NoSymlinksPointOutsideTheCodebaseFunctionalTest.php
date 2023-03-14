@@ -42,19 +42,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
     /**
      * @covers ::getDefaultUnfulfilledStatusMessage
-     * @covers ::isFulfilled
-     */
-    public function testFulfilledWithNoLinks(): void
-    {
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-
-        self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
-    }
-
-    /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isDescendant
      * @covers ::isFulfilled
      * @covers ::isSupportedFile
@@ -163,11 +150,11 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
      *
-     * @dataProvider providerDirectoryDoesNotExist
+     * @dataProvider providerFulfilledDirectoryDoesNotExist
      */
-    public function testDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
     {
-        $this->doTestDirectoryDoesNotExist($activeDir, $stagingDir);
+        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
     /**
@@ -222,7 +209,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      *
      * @dataProvider providerExclusions
      */
-    public function testExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
+    public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetFile = '../';
         $links = array_fill_keys($links, $targetFile);
