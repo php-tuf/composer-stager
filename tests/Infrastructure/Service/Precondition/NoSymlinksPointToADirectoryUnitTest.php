@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory;
 use Prophecy\Argument;
@@ -17,6 +17,7 @@ use Prophecy\Argument;
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
+ * @covers ::exitEarly
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::getUnfulfilledStatusMessage
@@ -26,6 +27,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
+ * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
@@ -44,6 +46,7 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $this->filesystem
             ->exists(Argument::type(PathInterface::class))
             ->willReturn(true);
+        $this->fileSyncer = $this->prophesize(PhpFileSyncerInterface::class);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
@@ -57,26 +60,31 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
     protected function createSut(): NoSymlinksPointToADirectory
     {
         $fileFinder = $this->fileFinder->reveal();
+        $fileSyncer = $this->fileSyncer->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
 
-        return new NoSymlinksPointToADirectory($fileFinder, $filesystem, $pathFactory);
+        return new NoSymlinksPointToADirectory($fileFinder, $fileSyncer, $filesystem, $pathFactory);
     }
 
-    public function providerExceptions(): array
+    public function testExitEarlyWithRsyncFilesyncer(): void
     {
-        return [
-            [new InvalidArgumentException('Exclusions include invalid paths.')],
-            [new IOException('The directory cannot be found or is not actually a directory.')],
-        ];
-    }
+        $activeDir = $this->activeDir->reveal();
+        $stagingDir = $this->stagingDir->reveal();
+        $this->fileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
+        $this->filesystem
+            ->exists(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->fileFinder
+            ->find(Argument::cetera())
+            ->shouldNotBeCalled();
 
-    protected function assertFulfilledStatusMessage(
-        bool $isFulfilled,
-        string $statusMessage,
-        string $assertionMessage,
-    ): void {
-        self::assertTrue($isFulfilled, $assertionMessage);
-        self::assertSame('There are no links that point outside the codebase.', $statusMessage, 'Got correct status message');
+        $sut = $this->createSut();
+
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+
+        self::assertTrue($isFulfilled);
+
+        $sut->assertIsFulfilled($activeDir, $stagingDir);
     }
 }

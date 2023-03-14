@@ -3,7 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
@@ -14,11 +16,16 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @covers ::exitEarly
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
@@ -32,6 +39,14 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     protected function createSut(): NoSymlinksPointToADirectory
     {
         $container = $this->getContainer();
+
+        // Override the FileSyncer implementation.
+        $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
+        $fileSyncer->setFactory(null);
+        $fileSyncer->setClass(PhpFileSyncer::class);
+        $container->setDefinition(FileSyncerInterface::class, $fileSyncer);
+
+        // Compile the container.
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory $sut */
