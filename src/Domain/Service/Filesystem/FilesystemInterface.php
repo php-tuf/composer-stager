@@ -37,6 +37,36 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
+     * Determines whether the given path is a directory.
+     *
+     * Unlike PHP's built-in is_dir() function, this function distinguishes
+     * between directories and LINKS to directories. In other words, if the path
+     * is a link, even if the target is a directory, this method will return false.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the path exists and is a directory.
+     */
+    public function isDir(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a regular file.
+     *
+     * Unlike PHP's built-in is_file() function, this function distinguishes
+     * between regular files and LINKS to files. In other words, if the path is
+     * a link, even if the target is a regular file, this method will return false.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the path exists and is a regular file.
+     */
+    public function isFile(PathInterface $path): bool;
+
+    /**
      * Determines whether the given path is a hard link.
      *
      * Symbolic links (symlinks) are distinct from hard links and do not count.
