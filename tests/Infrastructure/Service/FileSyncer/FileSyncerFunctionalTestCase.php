@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -10,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 /**
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
+ * @property \Symfony\Component\Filesystem\Filesystem $filesystem
  */
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
@@ -21,13 +23,13 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $this->source = new TestPath(self::SOURCE_DIR);
         $this->destination = new TestPath(self::DESTINATION_DIR);
 
-        $filesystem = new SymfonyFilesystem();
+        $this->filesystem = new SymfonyFilesystem();
 
-        $filesystem->mkdir(self::TEST_WORKING_DIR);
+        $this->filesystem->mkdir(self::TEST_WORKING_DIR);
         chdir(self::TEST_WORKING_DIR);
 
-        $filesystem->mkdir($this->source->resolve());
-        $filesystem->mkdir($this->destination->resolve());
+        $this->filesystem->mkdir($this->source->resolve());
+        $this->filesystem->mkdir($this->destination->resolve());
     }
 
     protected function tearDown(): void
@@ -74,5 +76,24 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                 'expectedTimeout' => 10,
             ],
         ];
+    }
+
+    /** @covers ::sync */
+    public function testSyncWithDirectorySymlinks(): void
+    {
+        $link = PathFactory::create('link', $this->source);
+        $target = PathFactory::create('directory', $this->source);
+        $this->filesystem->mkdir($target->resolve());
+        $file = PathFactory::create('directory/file.txt', $this->source)->resolve();
+        $this->filesystem->touch($file);
+        symlink($target->resolve(), $link->resolve());
+        $sut = $this->createSut();
+
+        $sut->sync($this->source, $this->destination);
+
+        self::assertDirectoryListing($this->destination->resolve(), [
+            'link',
+            'directory/file.txt',
+        ], '', 'Correctly synced files, including a symlink to a directory.');
     }
 }

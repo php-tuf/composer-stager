@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInt
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\NoUnsupportedLinksExist;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\PreconditionTestCase;
 
@@ -25,6 +26,7 @@ use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\Precondition
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface|\Prophecy\Prophecy\ObjectProphecy $noLinksExistOnWindows
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointOutsideTheCodebase
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointToADirectory
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
@@ -36,6 +38,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $this->noHardLinksExist = $this->prophesize(NoHardLinksExistInterface::class);
         $this->noLinksExistOnWindows = $this->prophesize(NoLinksExistOnWindowsInterface::class);
         $this->noSymlinksPointOutsideTheCodebase = $this->prophesize(NoSymlinksPointOutsideTheCodebaseInterface::class);
+        $this->noSymlinksPointToADirectory = $this->prophesize(NoSymlinksPointToADirectoryInterface::class);
 
         parent::setUp();
     }
@@ -46,8 +49,15 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $noHardLinksExist = $this->noHardLinksExist->reveal();
         $noLinksExistOnWindows = $this->noLinksExistOnWindows->reveal();
         $noSymlinksPointOutsideTheCodebase = $this->noSymlinksPointOutsideTheCodebase->reveal();
+        $noSymlinksPointToADirectory = $this->noSymlinksPointToADirectory->reveal();
 
-        return new NoUnsupportedLinksExist($noAbsoluteSymlinksExist, $noHardLinksExist, $noLinksExistOnWindows, $noSymlinksPointOutsideTheCodebase);
+        return new NoUnsupportedLinksExist(
+            $noAbsoluteSymlinksExist,
+            $noHardLinksExist,
+            $noLinksExistOnWindows,
+            $noSymlinksPointOutsideTheCodebase,
+            $noSymlinksPointToADirectory,
+        );
     }
 
     public function testFulfilled(): void
@@ -65,6 +75,9 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointOutsideTheCodebase
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->noSymlinksPointToADirectory
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 

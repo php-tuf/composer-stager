@@ -24,4 +24,10 @@ final class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
     {
         return PhpFileSyncer::class;
     }
+
+    public function testSyncWithDirectorySymlinks(): void
+    {
+        // @todo https://github.com/php-tuf/composer-stager/issues/99
+        $this->markTestIncomplete('PHPFileSyncer does not yet support symlinks to directories.');
+    }
 }

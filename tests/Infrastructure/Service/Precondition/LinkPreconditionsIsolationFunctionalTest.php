@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinks
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Throwable;
 
@@ -26,6 +27,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoHardLinksExist::class,
         NoLinksExistOnWindows::class,
         NoSymlinksPointOutsideTheCodebase::class,
+        NoSymlinksPointToADirectory::class,
     ];
 
     public static function setUpBeforeClass(): void
@@ -44,6 +46,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
         $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
         $this->stagingDir = PathFactory::create(self::STAGING_DIR);
+
+        chdir($this->activeDir->resolve());
     }
 
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
@@ -123,6 +127,17 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
+    }
+
+    public function testNoSymlinksPointToADirectory(): void
+    {
+        $activeDir = $this->activeDir;
+        $source = PathFactory::create('link', $activeDir)->resolve();
+        $target = PathFactory::create('directory', $activeDir)->raw();
+        mkdir($target);
+        symlink($target, $source);
+
+        $this->assertPreconditionIsIsolated(NoSymlinksPointToADirectory::class);
     }
 
     public function testNoHardLinksExistExist(): void

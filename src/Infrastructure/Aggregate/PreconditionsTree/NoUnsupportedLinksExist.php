@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInt
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface;
 
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
@@ -15,6 +16,7 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
         NoHardLinksExistInterface $noHardLinksExist,
         NoLinksExistOnWindowsInterface $noLinksExistOnWindows,
         NoSymlinksPointOutsideTheCodebaseInterface $noSymlinksPointOutsideTheCodebase,
+        NoSymlinksPointToADirectoryInterface $noSymlinksPointToADirectory,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();

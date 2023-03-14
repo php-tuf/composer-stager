@@ -38,6 +38,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable
