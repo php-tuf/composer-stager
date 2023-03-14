@@ -109,7 +109,7 @@ abstract class TestCase extends PHPUnitTestCase
         $touchResult = mkdir($dirname);
         $realpathResult = realpath($dirname);
 
-        assert($touchResult, "Created file {$dirname}.");
+        assert($touchResult, "Created directory {$dirname}.");
         assert($realpathResult !== false, "Got absolute path of {$dirname}.");
     }
 

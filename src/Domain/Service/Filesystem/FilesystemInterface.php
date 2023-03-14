@@ -39,7 +39,7 @@ interface FilesystemInterface
     /**
      * Determines whether the given path is a directory.
      *
-     * Unlike PHP's built-in is_dir() function, this function distinguishes
+     * Unlike PHP's built-in is_dir() function, this method distinguishes
      * between directories and LINKS to directories. In other words, if the path
      * is a link, even if the target is a directory, this method will return false.
      *
@@ -54,7 +54,7 @@ interface FilesystemInterface
     /**
      * Determines whether the given path is a regular file.
      *
-     * Unlike PHP's built-in is_file() function, this function distinguishes
+     * Unlike PHP's built-in is_file() function, this method distinguishes
      * between regular files and LINKS to files. In other words, if the path is
      * a link, even if the target is a regular file, this method will return false.
      *
