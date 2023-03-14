@@ -16,17 +16,17 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class Filesystem implements FilesystemInterface
 {
-    private const FILE_DOES_NOT_EXIST = 'FILE_DOES_NOT_EXIST';
+    private const PATH_DOES_NOT_EXIST = 'PATH_DOES_NOT_EXIST';
 
-    private const FILE_IS_DIRECTORY = 'FILE_IS_DIRECTORY';
+    private const PATH_IS_DIRECTORY = 'PATH_IS_DIRECTORY';
 
-    private const FILE_IS_HARD_LINK = 'FILE_IS_HARD_LINK';
+    private const PATH_IS_HARD_LINK = 'PATH_IS_HARD_LINK';
 
-    private const FILE_IS_OTHER_TYPE = 'FILE_IS_OTHER_TYPE';
+    private const PATH_IS_OTHER_TYPE = 'PATH_IS_OTHER_TYPE';
 
-    private const FILE_IS_REGULAR_FILE = 'FILE_IS_REGULAR_FILE';
+    private const PATH_IS_REGULAR_FILE = 'PATH_IS_REGULAR_FILE';
 
-    private const FILE_IS_SYMLINK = 'FILE_IS_SYMLINK';
+    private const PATH_IS_SYMLINK = 'PATH_IS_SYMLINK';
 
     public function __construct(
         private readonly PathFactoryInterface $pathFactory,
@@ -64,35 +64,35 @@ final class Filesystem implements FilesystemInterface
 
     public function exists(PathInterface $path): bool
     {
-        return $this->getFileType($path) !== self::FILE_DOES_NOT_EXIST;
+        return $this->getFileType($path) !== self::PATH_DOES_NOT_EXIST;
     }
 
     public function isDir(PathInterface $path): bool
     {
-        return $this->getFileType($path) === self::FILE_IS_DIRECTORY;
+        return $this->getFileType($path) === self::PATH_IS_DIRECTORY;
     }
 
     public function isFile(PathInterface $path): bool
     {
-        return $this->getFileType($path) === self::FILE_IS_REGULAR_FILE;
+        return $this->getFileType($path) === self::PATH_IS_REGULAR_FILE;
     }
 
     public function isHardLink(PathInterface $path): bool
     {
-        return $this->getFileType($path) === self::FILE_IS_HARD_LINK;
+        return $this->getFileType($path) === self::PATH_IS_HARD_LINK;
     }
 
     public function isLink(PathInterface $path): bool
     {
         return in_array($this->getFileType($path), [
-            self::FILE_IS_HARD_LINK,
-            self::FILE_IS_SYMLINK,
+            self::PATH_IS_HARD_LINK,
+            self::PATH_IS_SYMLINK,
         ], true);
     }
 
     public function isSymlink(PathInterface $path): bool
     {
-        return $this->getFileType($path) === self::FILE_IS_SYMLINK;
+        return $this->getFileType($path) === self::PATH_IS_SYMLINK;
     }
 
     public function isWritable(PathInterface $path): bool
@@ -156,7 +156,7 @@ final class Filesystem implements FilesystemInterface
 
         // Path does not exist.
         if ($lstat === false) {
-            return self::FILE_DOES_NOT_EXIST;
+            return self::PATH_DOES_NOT_EXIST;
         }
 
         // @see https://www.php.net/manual/en/function.stat.php
@@ -166,25 +166,25 @@ final class Filesystem implements FilesystemInterface
 
         // Path is a symlink.
         if ($mode === 120_000) {
-            return self::FILE_IS_SYMLINK;
+            return self::PATH_IS_SYMLINK;
         }
 
         // Path is a directory.
         if ($mode === 40_000) {
-            return self::FILE_IS_DIRECTORY;
+            return self::PATH_IS_DIRECTORY;
         }
 
         // Path is a hard link.
         if ($lstat['nlink'] > 1) {
-            return self::FILE_IS_HARD_LINK;
+            return self::PATH_IS_HARD_LINK;
         }
 
         // Path is a regular file.
         if ($mode === 100_000) {
-            return self::FILE_IS_REGULAR_FILE;
+            return self::PATH_IS_REGULAR_FILE;
         }
 
         // This is unlikely to happen in practice, and it's impractical to test.
-        return self::FILE_IS_OTHER_TYPE; // @codeCoverageIgnore
+        return self::PATH_IS_OTHER_TYPE; // @codeCoverageIgnore
     }
 }
