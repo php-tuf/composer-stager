@@ -85,28 +85,28 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
                 'shouldBeFulfilled' => true,
             ],
             'One link with one exact exclusion' => [
-                'links' => ['link.txt'],
-                'exclusions' => ['link.txt'],
+                'links' => ['link'],
+                'exclusions' => ['link'],
                 'shouldBeFulfilled' => true,
             ],
             'Multiple links with exact exclusions' => [
-                'links' => ['one.txt', 'two.txt', 'three.txt'],
-                'exclusions' => ['one.txt', 'two.txt', 'three.txt'],
+                'links' => ['one', 'two', 'three'],
+                'exclusions' => ['one', 'two', 'three'],
                 'shouldBeFulfilled' => true,
             ],
             'Multiple links in an excluded directory' => [
-                'links' => ['directory/one.txt', 'directory/two.txt'],
+                'links' => ['directory/one', 'directory/two'],
                 'exclusions' => ['directory'],
                 'shouldBeFulfilled' => true,
             ],
             'One link with no exclusions' => [
-                'links' => ['link.txt'],
+                'links' => ['link'],
                 'exclusions' => [],
                 'shouldBeFulfilled' => false,
             ],
             'One link with a non-matching exclusion' => [
-                'links' => ['link.txt'],
-                'exclusions' => ['non_match.txt'],
+                'links' => ['link'],
+                'exclusions' => ['non_match'],
                 'shouldBeFulfilled' => false,
             ],
         ];
