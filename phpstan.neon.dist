@@ -43,6 +43,9 @@ parameters:
         -
             message: '#Parameter .* of (static )?method .* expects .* given.#'
             path: tests
+        -
+            message: '#Property .*::\$fileSyncer .* does not accept .*.#'
+            path: tests/Infrastructure/Service/Precondition/NoSymlinksPointToADirectoryUnitTest.php
 
     # Custom parameters.
     gitattributesExportInclude:
