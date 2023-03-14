@@ -68,7 +68,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         self::ensureParentDirectory($link);
         $target = PathFactory::create($target, $this->activeDir)->resolve();
         self::ensureParentDirectory($target);
-        touch($target, 077);
+        touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
