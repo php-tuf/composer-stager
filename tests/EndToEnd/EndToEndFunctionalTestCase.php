@@ -129,10 +129,11 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $exclusions = new PathList($exclusions);
 
         // Confirm that the beginner fails with unsupported symlinks present in the codebase.
+        $preconditionMet = true;
+
         try {
             // Invoke the beginner without exclusions to cause it to find symlinks in the active directory.
             $this->beginner->begin($activeDirPath, $stagingDirPath);
-            $preconditionMet = true;
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
             $preconditionMet = false;

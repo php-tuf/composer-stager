@@ -36,7 +36,9 @@ final class SortedPropertiesRule extends AbstractRule
         $errors = [];
 
         foreach ($class->getNativeReflection()->getProperties() as $property) {
-            // Skip inherited properties.
+            // Skip inherited properties. This doesn't catch properties
+            // declared on an interface, such as \Prophecy\PhpUnit\ProphecyTrait.
+            // For now, exclude errors from such properties in phpstan.neon.dist.
             if ($property->getDeclaringClass()->getName() !== $class->getName()) {
                 continue;
             }

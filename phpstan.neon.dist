@@ -11,8 +11,7 @@ parameters:
     tmpDir: var/phpstan
     paths:
         - src
-        - tests/Domain
-        - tests/Infrastructure
+        - tests
         - .gitattributes
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
@@ -44,8 +43,11 @@ parameters:
             message: '#Parameter .* of (static )?method .* expects .* given.#'
             path: tests
         -
-            message: '#Property .*::\$fileSyncer .* does not accept .*.#'
-            path: tests/Infrastructure/Service/Precondition/NoSymlinksPointToADirectoryUnitTest.php
+            message: '#Property .* does not accept .*.#'
+            path: tests
+        -
+            message: '#.* properties should be sorted .* "\$prophecy.*".#'
+            path: tests
 
     # Custom parameters.
     gitattributesExportInclude:
