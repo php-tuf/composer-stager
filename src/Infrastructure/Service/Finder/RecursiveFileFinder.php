@@ -70,7 +70,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (UnexpectedValueException $e) {
-            throw new IOException($e->getMessage(), $e->getCode(), $e);
+            throw new IOException($e->getMessage(), 0, $e);
         }
     }
 }
