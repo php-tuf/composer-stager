@@ -157,7 +157,6 @@ final class Filesystem implements FilesystemInterface
         // which may or may not throw an exception depending on error_reporting configuration.
         $lstat = @lstat($path->resolve());
 
-        // Path does not exist.
         if ($lstat === false) {
             return self::PATH_DOES_NOT_EXIST;
         }
@@ -167,22 +166,18 @@ final class Filesystem implements FilesystemInterface
         $mode = (int) decoct($mode);
         $mode = (int) floor($mode / 10_000) * 10_000;
 
-        // Path is a symlink.
         if ($mode === 120_000) {
             return self::PATH_IS_SYMLINK;
         }
 
-        // Path is a directory.
         if ($mode === 40_000) {
             return self::PATH_IS_DIRECTORY;
         }
 
-        // Path is a hard link.
         if ($lstat['nlink'] > 1) {
             return self::PATH_IS_HARD_LINK;
         }
 
-        // Path is a regular file.
         if ($mode === 100_000) {
             return self::PATH_IS_REGULAR_FILE;
         }
