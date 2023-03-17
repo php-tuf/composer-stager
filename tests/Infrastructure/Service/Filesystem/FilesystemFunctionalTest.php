@@ -202,7 +202,7 @@ final class FilesystemFunctionalTest extends TestCase
      *
      * @dataProvider providerReadlink
      */
-    public function testReadlink(string $given, string $expected): void
+    public function testReadlink(string $given, string $expectedRaw, string $expectedResolved): void
     {
         $baseDir = PathFactory::create(self::SOURCE_DIR);
         $symlinkPath = PathFactory::create('symlink.txt', $baseDir);
@@ -216,7 +216,8 @@ final class FilesystemFunctionalTest extends TestCase
 
         $symlinkTarget = $sut->readLink($symlinkPath);
 
-        self::assertEquals($expected, $symlinkTarget->raw(), 'Got the correct symlink target.');
+        self::assertEquals($expectedRaw, $symlinkTarget->raw(), 'Got the correct raw target value.');
+        self::assertEquals($expectedResolved, $symlinkTarget->resolve(), 'Got the correct resolved target value.');
 
         $this->expectException(IOException::class);
         $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolve());
@@ -226,28 +227,27 @@ final class FilesystemFunctionalTest extends TestCase
 
     public function providerReadlink(): array
     {
-        $fileName = 'target.txt';
-        $absolutePath = PathFactory::create($fileName, PathFactory::create(self::SOURCE_DIR))->resolve();
+        $absolute = static function ($path): string {
+            $baseDir = PathFactory::create(self::SOURCE_DIR);
 
-        $data = [
+            return PathFactory::create($path, $baseDir)->resolve();
+        };
+
+        // Note: relative links cannot be distinguished from absolute links on Windows,
+        // where readlink() canonicalizes the target path, making them appear identical.
+        // Hence the below expected values conditioned on host.
+        return [
             'Absolute link' => [
-                'given' => $absolutePath,
-                'expected' => $absolutePath,
+                'given' => $absolute('target.txt'),
+                'expectedRaw' => $absolute('target.txt'),
+                'expectedResolved' => $absolute('target.txt'),
+            ],
+            'Relative link' => [
+                'given' => 'target.txt',
+                'expectedRaw' => self::isWindows() ? $absolute('target.txt') : 'target.txt',
+                'expectedResolved' => $absolute('target.txt'),
             ],
         ];
-
-        // Relative links cannot be distinguished from absolute links on Windows,
-        // where readlink() canonicalizes the target path, making them appear identical.
-        // At least test that the behavior is as expected in either case.
-        $data['Relative link'] = self::isWindows() ? [
-            'given' => $fileName,
-            'expected' => $absolutePath,
-        ] : [
-            'given' => $fileName,
-            'expected' => $fileName,
-        ];
-
-        return $data;
     }
 
     /** @covers ::readLink */
