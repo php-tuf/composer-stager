@@ -3,10 +3,13 @@
     <words>
       <w>autowire</w>
       <w>autowiring</w>
+      <w>canonicalized</w>
+      <w>canonicalizes</w>
       <w>carden</w>
       <w>cleancode</w>
       <w>codesize</w>
       <w>dealerdirect</w>
+      <w>depfile</w>
       <w>deptrac</w>
       <w>dirname</w>
       <w>ergebnis</w>
@@ -15,6 +18,8 @@
       <w>grumphp</w>
       <w>jangregor</w>
       <w>kkeisuke</w>
+      <w>nlinks</w>
+      <w>optim</w>
       <w>ortho</w>
       <w>pathnames</w>
       <w>pepakriz</w>
@@ -23,7 +28,6 @@
       <w>phpcompatibility</w>
       <w>phpcs</w>
       <w>phplint</w>
-      <w>phpmetrics</w>
       <w>phpro</w>
       <w>phpstan</w>
       <w>polyline</w>

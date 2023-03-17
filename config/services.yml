@@ -13,7 +13,9 @@ services:
             - '../src/Infrastructure/Value'
 
     PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:
-        factory: [ 'PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory', 'create' ]
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory', 'create' ]
+
+    PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory: ~
 
     Symfony\Component\Filesystem\Filesystem: ~
 

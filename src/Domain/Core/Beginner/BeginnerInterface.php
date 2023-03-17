@@ -51,6 +51,6 @@ interface BeginnerInterface
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void;
 }

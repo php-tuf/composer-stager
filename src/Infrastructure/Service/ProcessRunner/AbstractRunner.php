@@ -15,17 +15,13 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  */
 abstract class AbstractRunner implements ProcessRunnerInterface
 {
-    private ExecutableFinderInterface $executableFinder;
-
-    private ProcessFactoryInterface $processFactory;
-
     /** Returns the executable name, e.g., "composer" or "rsync". */
     abstract protected function executableName(): string;
 
-    public function __construct(ExecutableFinderInterface $executableFinder, ProcessFactoryInterface $processFactory)
-    {
-        $this->executableFinder = $executableFinder;
-        $this->processFactory = $processFactory;
+    public function __construct(
+        private readonly ExecutableFinderInterface $executableFinder,
+        private readonly ProcessFactoryInterface $processFactory,
+    ) {
     }
 
     /**
@@ -46,7 +42,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT
+        ?int $timeout = self::DEFAULT_TIMEOUT,
     ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
@@ -55,7 +51,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
             $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 

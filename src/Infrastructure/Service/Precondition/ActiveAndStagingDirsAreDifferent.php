@@ -22,18 +22,18 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool {
         return $activeDir->resolve() !== $stagingDir->resolve();
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The active and staging directories are different.'; // @codeCoverageIgnore
+        return 'The active and staging directories are different.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The active and staging directories are the same.'; // @codeCoverageIgnore
+        return 'The active and staging directories are the same.';
     }
 }

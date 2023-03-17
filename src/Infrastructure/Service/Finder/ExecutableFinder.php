@@ -7,11 +7,8 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 final class ExecutableFinder implements ExecutableFinderInterface
 {
-    private SymfonyExecutableFinder $symfonyExecutableFinder;
-
-    public function __construct(SymfonyExecutableFinder $symfonyExecutableFinder)
+    public function __construct(private readonly SymfonyExecutableFinder $symfonyExecutableFinder)
     {
-        $this->symfonyExecutableFinder = $symfonyExecutableFinder;
     }
 
     public function find(string $name): string

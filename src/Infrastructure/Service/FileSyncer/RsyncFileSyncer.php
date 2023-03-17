@@ -15,14 +15,10 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class RsyncFileSyncer implements RsyncFileSyncerInterface
 {
-    private FilesystemInterface $filesystem;
-
-    private RsyncRunnerInterface $rsync;
-
-    public function __construct(FilesystemInterface $filesystem, RsyncRunnerInterface $rsync)
-    {
-        $this->filesystem = $filesystem;
-        $this->rsync = $rsync;
+    public function __construct(
+        private readonly FilesystemInterface $filesystem,
+        private readonly RsyncRunnerInterface $rsync,
+    ) {
     }
 
     /**
@@ -30,16 +26,20 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
      * descendant requires a unique approach, which has been documented here:
      *
      * @see https://serverfault.com/q/1094803/956603
+     *
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
         $sourceResolved = $source->resolve();
         $destinationResolved = $destination->resolve();
+
+        set_time_limit((int) $timeout);
 
         $exclusions ??= new PathList([]);
         $exclusions = $exclusions->getAll();
@@ -95,7 +95,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new IOException($e->getMessage(), $e->getCode(), $e);
+            throw new IOException($e->getMessage(), 0, $e);
         }
     }
 
@@ -103,7 +103,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     {
         $ancestor .= DIRECTORY_SEPARATOR;
 
-        return strpos($descendant, $ancestor) === 0;
+        return str_starts_with($descendant, $ancestor);
     }
 
     private static function getRelativePath(string $ancestor, string $path): string

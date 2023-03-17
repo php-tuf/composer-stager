@@ -14,20 +14,11 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
 final class PhpFileSyncer implements PhpFileSyncerInterface
 {
-    private RecursiveFileFinderInterface $fileFinder;
-
-    private FilesystemInterface $filesystem;
-
-    private PathFactoryInterface $pathFactory;
-
     public function __construct(
-        RecursiveFileFinderInterface $fileFinder,
-        FilesystemInterface $filesystem,
-        PathFactoryInterface $pathFactory
+        private readonly RecursiveFileFinderInterface $fileFinder,
+        private readonly FilesystemInterface $filesystem,
+        private readonly PathFactoryInterface $pathFactory,
     ) {
-        $this->fileFinder = $fileFinder;
-        $this->filesystem = $filesystem;
-        $this->pathFactory = $pathFactory;
     }
 
     public function sync(
@@ -35,7 +26,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
         set_time_limit((int) $timeout);
 
@@ -51,11 +42,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
     {
-        $source = $source->resolve();
-
-        if ($source === $destination->resolve()) {
+        if ($source->resolve() === $destination->resolve()) {
             throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source),
+                sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()),
             );
         }
     }
@@ -85,7 +74,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     private function deleteExtraneousFilesFromDestination(
         PathInterface $destination,
         PathInterface $source,
-        PathListInterface $exclusions
+        PathListInterface $exclusions,
     ): void {
         // There's no reason to look for deletions if the destination is already empty.
         if ($this->destinationIsEmpty($destination)) {
@@ -127,7 +116,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     private function copySourceFilesToDestination(
         PathInterface $source,
         PathInterface $destination,
-        PathListInterface $exclusions
+        PathListInterface $exclusions,
     ): void {
         $sourceFiles = $this->fileFinder->find($source, $exclusions);
 
@@ -156,7 +145,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     {
         $ancestor .= DIRECTORY_SEPARATOR;
 
-        if (strpos($path, $ancestor) === 0) {
+        if (str_starts_with($path, $ancestor)) {
             $path = substr($path, strlen($ancestor));
         }
 

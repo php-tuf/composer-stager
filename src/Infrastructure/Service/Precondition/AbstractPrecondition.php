@@ -12,7 +12,7 @@ abstract class AbstractPrecondition implements PreconditionInterface
     final public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): void {
         if (!$this->isFulfilled($activeDir, $stagingDir, $exclusions)) {
             throw new PreconditionException($this, $this->getUnfulfilledStatusMessage());
@@ -28,7 +28,7 @@ abstract class AbstractPrecondition implements PreconditionInterface
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): string {
         return $this->isFulfilled($activeDir, $stagingDir, $exclusions)
             ? $this->getFulfilledStatusMessage()

@@ -9,11 +9,8 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 final class StagingDirExists extends AbstractPrecondition implements StagingDirExistsInterface
 {
-    private FilesystemInterface $filesystem;
-
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(private readonly FilesystemInterface $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
     public function getName(): string
@@ -29,18 +26,18 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool {
         return $this->filesystem->exists($stagingDir);
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The staging directory exists.'; // @codeCoverageIgnore
+        return 'The staging directory exists.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The staging directory does not exist.'; // @codeCoverageIgnore
+        return 'The staging directory does not exist.';
     }
 }

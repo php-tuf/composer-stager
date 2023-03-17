@@ -8,12 +8,12 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
 final class PathFactory implements PathFactoryInterface
 {
-    public static function create(string $path): PathInterface
+    public static function create(string $path, ?PathInterface $cwd = null): PathInterface
     {
         if (DIRECTORY_SEPARATOR === '\\') {
-            return new WindowsPath($path); // @codeCoverageIgnore
+            return new WindowsPath($path, $cwd); // @codeCoverageIgnore
         }
 
-        return new UnixLikePath($path);
+        return new UnixLikePath($path, $cwd);
     }
 }

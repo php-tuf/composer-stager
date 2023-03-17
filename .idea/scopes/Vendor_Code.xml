@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Vendor Code" pattern="file[composer-stager]:vendor//*" />
+</component>

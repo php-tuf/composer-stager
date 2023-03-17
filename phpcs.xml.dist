@@ -12,11 +12,9 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
+    <file>phpstan</file>
     <file>src</file>
     <file>tests</file>
-
-    <rule ref="PHPCompatibility"/>
-    <config name="testVersion" value="7.4-"/>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
@@ -61,14 +59,13 @@
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure"/>
     <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing"/>
-    <rule ref="SlevomatCodingStandard.Classes.DisallowConstructorPropertyPromotion"/>
     <rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
     <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition"/>
     <rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
     <rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces">
         <properties>
-            <property name="linesCountAfterOpeningBrace">0</property>
-            <property name="linesCountBeforeClosingBrace">0</property>
+            <property name="linesCountAfterOpeningBrace" value="0"/>
+            <property name="linesCountBeforeClosingBrace" value="0"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty"/>
@@ -102,7 +99,7 @@
             <element value="@throws"/>
             <element value="@see"/>
             <element value="@todo"/>
-            <element value="@noinspection"/>
+            <element value="@noinspection,@SuppressWarnings"/>
         </property>
         <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
     </properties></rule>
@@ -134,11 +131,11 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireSingleLineCondition"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator"/>
-    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator"/>
 
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
     <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
+    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>
 
     <rule ref="SlevomatCodingStandard.Files.LineLength"/>
 
@@ -147,7 +144,6 @@
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration"/>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
         <!-- @todo It would be nice to reduce this. -->
         <property name="maxLinesLength" value="40"/>
@@ -181,7 +177,6 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
 
-    <rule ref="SlevomatCodingStandard.Numbers.DisallowNumericLiteralSeparator"/>
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator"/>
 
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
@@ -222,7 +217,10 @@
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
     <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableMixedTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableObjectTypeHint"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableUnionTypeHint"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.traversableTypeHints"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
@@ -236,16 +234,6 @@
     <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
-
-    <!-- Remove once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
-    <rule ref="SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch"/>
-
-    <!-- Enable once support for PHP 7 is dropped (i.e., minimum is 8.0 or above). -->
-    <!-- <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.TypeHints.enableUnionTypeHint"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableMixedTypeHint"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.enableUnionTypeHint"/> -->
-    <!-- <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint.traversableTypeHints"/> -->
 
     <!-- Exclusions for test classes. -->
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>

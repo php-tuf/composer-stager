@@ -9,11 +9,8 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDirIsWritableInterface
 {
-    private FilesystemInterface $filesystem;
-
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(private readonly FilesystemInterface $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
     public function getName(): string
@@ -29,18 +26,18 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool {
         return $this->filesystem->isWritable($activeDir);
     }
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The active directory is writable.'; // @codeCoverageIgnore
+        return 'The active directory is writable.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The active directory is not writable.'; // @codeCoverageIgnore
+        return 'The active directory is not writable.';
     }
 }

@@ -15,11 +15,8 @@ use UnexpectedValueException;
 
 final class RecursiveFileFinder implements RecursiveFileFinderInterface
 {
-    private PathFactoryInterface $pathFactory;
-
-    public function __construct(PathFactoryInterface $pathFactory)
+    public function __construct(private readonly PathFactoryInterface $pathFactory)
     {
-        $this->pathFactory = $pathFactory;
     }
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
@@ -28,11 +25,9 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
 
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
 
-        $exclusions = array_map(function ($path) use ($directory): string {
-            $path = $this->pathFactory::create($path);
-
-            return $path->resolveRelativeTo($directory);
-        }, $exclusions->getAll());
+        // Resolve the exclusions relative to the search directory.
+        $exclusions = array_map(fn ($path): string => $this->pathFactory::create($path)
+            ->resolveRelativeTo($directory), $exclusions->getAll());
 
         // Apply exclusions. On the surface, it may look like individual descendants
         // of an excluded directory, i.e., files "underneath" or "inside" it, won't
@@ -40,7 +35,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
         // matched. But because the directory iterator is recursive, their excluded
         // ancestor WILL BE found, and they will be excluded by extension.
         $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static fn (
-            string $foundPathname
+            string $foundPathname,
         ): bool => !in_array($foundPathname, $exclusions, true));
 
         /** @var \Traversable<string> $iterator */
@@ -75,7 +70,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (UnexpectedValueException $e) {
-            throw new IOException($e->getMessage(), $e->getCode(), $e);
+            throw new IOException($e->getMessage(), 0, $e);
         }
     }
 }

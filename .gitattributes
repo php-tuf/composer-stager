@@ -4,11 +4,13 @@
 /.gitignore          export-ignore
 /.idea               export-ignore
 /composer.lock       export-ignore
-/deptrac.yaml        export-ignore
+/config              export-ignore
+/deptrac.yml         export-ignore
 /grumphp.yml.dist    export-ignore
 /infection.json.dist export-ignore
 /phpcs.xml.dist      export-ignore
 /phpmd.xml           export-ignore
+/phpstan             export-ignore
 /phpstan.neon.dist   export-ignore
 /phpunit.xml.dist    export-ignore
 /psalm.xml.dist      export-ignore

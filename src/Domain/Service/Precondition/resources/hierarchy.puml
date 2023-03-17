@@ -4,6 +4,7 @@
 ' diagram of the implementation hierarchy of the precondition system (hierarchy.png). Said
 ' diagram can be regenerated from this source at https://plantuml-editor.kkeisuke.com/ or with
 ' the PhpStorm plugin at https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
+' Optimize it with ImageOptim: https://imageoptim.com/.
 
 !include settings.puml
 
@@ -14,10 +15,11 @@ skinparam LineType polyline
 
 class BeginnerPreconditions {
     CommonPreconditions
+    NoUnsupportedLinksExist
     StagingDirDoesNotExist
 }
 BeginnerPreconditions --o CommonPreconditions
-BeginnerPreconditions --o CodebaseContainsNoSymlinks
+BeginnerPreconditions --o NoUnsupportedLinksExist
 
 class StagerPreconditions {
     CommonPreconditions
@@ -28,11 +30,12 @@ StagerPreconditions --o StagingDirIsReady
 
 class CommitterPreconditions {
     CommonPreconditions
+    NoUnsupportedLinksExist
     StagingDirIsReady
 }
 CommitterPreconditions --o CommonPreconditions
+CommitterPreconditions --o NoUnsupportedLinksExist
 CommitterPreconditions --o StagingDirIsReady
-CommitterPreconditions --o CodebaseContainsNoSymlinks
 
 class CleanerPreconditions {
     CommonPreconditions
@@ -42,10 +45,10 @@ CleanerPreconditions --o CommonPreconditions
 CleanerPreconditions --o StagingDirIsReady
 
 class CommonPreconditions {
-    ComposerIsAvailable
+    ActiveAndStagingDirsAreDifferent
     ActiveDirExists
     ActiveDirIsWritable
-    ActiveAndStagingDirsAreDifferent
+    ComposerIsAvailable
 }
 
 class StagingDirIsReady {
@@ -53,6 +56,12 @@ class StagingDirIsReady {
     StagingDirIsWritable
 }
 
-class CodebaseContainsNoSymlinks
+class NoUnsupportedLinksExist {
+    NoAbsoluteSymlinksExist
+    NoHardLinksExist
+    NoLinksExistOnWindows
+    NoSymlinksPointOutsideTheCodebase
+    NoSymlinksPointToADirectory
+}
 
 @enduml

@@ -4,15 +4,15 @@ namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CodebaseContainsNoSymlinksInterface;
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 
 final class BeginnerPreconditions extends AbstractPreconditionsTree implements BeginnerPreconditionsInterface
 {
     public function __construct(
-        CodebaseContainsNoSymlinksInterface $codebaseContainsNoSymlinks,
         CommonPreconditionsInterface $commonPreconditions,
-        StagingDirDoesNotExistInterface $stagingDirDoesNotExist
+        NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
+        StagingDirDoesNotExistInterface $stagingDirDoesNotExist,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
         $children = func_get_args();
@@ -32,11 +32,11 @@ final class BeginnerPreconditions extends AbstractPreconditionsTree implements B
 
     protected function getFulfilledStatusMessage(): string
     {
-        return 'The preconditions for beginning the staging process are fulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for beginning the staging process are fulfilled.';
     }
 
     protected function getUnfulfilledStatusMessage(): string
     {
-        return 'The preconditions for beginning the staging process are unfulfilled.'; // @codeCoverageIgnore
+        return 'The preconditions for beginning the staging process are unfulfilled.';
     }
 }

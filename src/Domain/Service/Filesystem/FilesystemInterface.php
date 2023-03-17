@@ -37,6 +37,77 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
+     * Determines whether the given path is a directory.
+     *
+     * Unlike PHP's built-in is_dir() function, this method distinguishes
+     * between directories and LINKS to directories. In other words, if the path
+     * is a link, even if the target is a directory, this method will return false.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the path exists and is a directory.
+     */
+    public function isDir(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a regular file.
+     *
+     * Unlike PHP's built-in is_file() function, this method distinguishes
+     * between regular files and LINKS to files. In other words, if the path is
+     * a link, even if the target is a regular file, this method will return false.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the path exists and is a regular file.
+     */
+    public function isFile(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a hard link.
+     *
+     * Symbolic links (symlinks) are distinct from hard links and do not count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a hard link (not a symlink)
+     *   false otherwise.
+     */
+    public function isHardLink(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a link.
+     *
+     * Symbolic links (symlinks) and hard links both count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a link, false otherwise.
+     */
+    public function isLink(PathInterface $path): bool;
+
+    /**
+     * Determines whether the given path is a symbolic link.
+     *
+     * Hard links are distinct from symbolic links (symlinks) and do not count.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   A path to test.
+     *
+     * @return bool
+     *   Returns true if the filename exists and is a symlink (not a hard link),
+     *   false otherwise.
+     */
+    public function isSymlink(PathInterface $path): bool;
+
+    /**
      * Determines whether the given path is writable.
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
@@ -56,6 +127,26 @@ interface FilesystemInterface
     public function mkdir(PathInterface $path): void;
 
     /**
+     * Returns the target of a symbolic link.
+     *
+     * Hard links are not included and will throw an exception. Consider using
+     * ::isSymlink() first.
+     *
+     * Note: PHP does not distinguish between absolute and relative links on
+     * Windows, so the returned path object there will be based on a canonicalized,
+     * absolute raw path string. In other words, ALL link paths on Windows will
+     * behave like absolute links, whether they really are or not.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     *   The link path.
+     *
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     *   If the the path is not a symbolic link (symlink) or cannot be read. Hard
+     *   links are distinct from symlinks and will still throw an exception.
+     */
+    public function readLink(PathInterface $path): PathInterface;
+
+    /**
      * Removes the given path.
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
@@ -72,6 +163,6 @@ interface FilesystemInterface
     public function remove(
         PathInterface $path,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void;
 }

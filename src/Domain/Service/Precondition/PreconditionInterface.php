@@ -34,14 +34,14 @@ interface PreconditionInterface
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): string;
 
     /** Determines whether the precondition is fulfilled. */
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): bool;
 
     /**
@@ -53,6 +53,6 @@ interface PreconditionInterface
     public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null
+        ?PathListInterface $exclusions = null,
     ): void;
 }

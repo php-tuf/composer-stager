@@ -4,6 +4,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
 final class UnixLikePath extends AbstractPath
 {
+    public function isAbsolute(): bool
+    {
+        return str_starts_with($this->path, DIRECTORY_SEPARATOR);
+    }
+
     protected function doResolve(string $basePath): string
     {
         $absolute = $this->makeAbsolute($basePath);
@@ -13,19 +18,12 @@ final class UnixLikePath extends AbstractPath
 
     private function makeAbsolute(string $basePath): string
     {
-        $path = $this->path;
-
         // If the path is already absolute, return it as-is.
-        if ($this->isAbsolute($path)) {
-            return $path;
+        if ($this->isAbsolute()) {
+            return $this->path;
         }
 
         // Otherwise, prefix the base path.
-        return $basePath . DIRECTORY_SEPARATOR . $path;
-    }
-
-    private function isAbsolute(string $path): bool
-    {
-        return strpos($path, DIRECTORY_SEPARATOR) === 0;
+        return $basePath . DIRECTORY_SEPARATOR . $this->path;
     }
 }

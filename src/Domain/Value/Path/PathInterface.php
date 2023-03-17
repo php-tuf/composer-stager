@@ -11,6 +11,12 @@ namespace PhpTuf\ComposerStager\Domain\Value\Path;
  */
 interface PathInterface
 {
+    /** Determines whether the original path string as given is absolute, without resolving it. */
+    public function isAbsolute(): bool;
+
+    /** Gets the unresolved path string, exactly as given. */
+    public function raw(): string;
+
     /**
      * Gets the fully resolved, absolute path string without trailing slash.
      *
