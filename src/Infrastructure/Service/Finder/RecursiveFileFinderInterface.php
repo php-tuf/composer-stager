@@ -5,7 +5,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** Recursively finds all files "underneath" or "inside" a directory. */
+/**
+ * Recursively finds all files "underneath" or "inside" a directory.
+ *
+ * @api
+ */
 interface RecursiveFileFinderInterface
 {
     /**

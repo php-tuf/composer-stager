@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class Stager implements StagerInterface
 {
     public function __construct(

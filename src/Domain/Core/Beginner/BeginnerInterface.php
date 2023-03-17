@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** Begins the staging process by copying the active directory to the staging directory. */
+/**
+ * Begins the staging process by copying the active directory to the staging directory.
+ *
+ * @api
+ */
 interface BeginnerInterface
 {
     /**

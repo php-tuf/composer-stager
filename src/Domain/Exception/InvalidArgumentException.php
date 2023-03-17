@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use InvalidArgumentException as PHPInvalidArgumentException;
 
-/** This exception is thrown when an argument doesn't satisfy validation rules. */
+/**
+ * This exception is thrown when an argument doesn't satisfy validation rules.
+ *
+ * @api
+ */
 class InvalidArgumentException extends PHPInvalidArgumentException implements ExceptionInterface
 {
 }

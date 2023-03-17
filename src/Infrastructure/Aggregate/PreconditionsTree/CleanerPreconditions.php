@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPrecondition
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class CleanerPreconditions extends AbstractPreconditionsTree implements CleanerPreconditionsInterface
 {
     public function __construct(

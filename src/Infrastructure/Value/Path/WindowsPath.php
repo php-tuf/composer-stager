@@ -5,9 +5,9 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 /**
  * Handles a Windows filesystem path string.
  *
- * Don't instantiate this class directory--use the path factory.
- *
  * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ *
+ * @internal Don't instantiate this class directly. Use the path factory above.
  */
 final class WindowsPath extends AbstractPath
 {

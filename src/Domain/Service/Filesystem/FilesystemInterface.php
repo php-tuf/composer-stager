@@ -6,7 +6,11 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/** Provides basic utilities for interacting with the file system. */
+/**
+ * Provides basic utilities for interacting with the file system.
+ *
+ * @api
+ */
 interface FilesystemInterface
 {
     /**

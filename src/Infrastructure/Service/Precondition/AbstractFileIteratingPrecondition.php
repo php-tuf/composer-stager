@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
+/** @api */
 abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
 {
     protected string $defaultUnfulfilledStatusMessage;

@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class ExecutableFinder implements ExecutableFinderInterface
 {
     public function __construct(private readonly SymfonyExecutableFinder $symfonyExecutableFinder)

@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class NoSymlinksPointToADirectory extends AbstractFileIteratingPrecondition implements
     NoSymlinksPointToADirectoryInterface
 {

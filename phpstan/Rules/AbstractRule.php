@@ -64,7 +64,7 @@ abstract class AbstractRule implements Rule
 
     protected function isInNamespace(string $name, string $namespace): bool
     {
-        return str_starts_with($name, $namespace);
+        return str_starts_with("{$name}\\", $namespace);
     }
 
     protected function getNamespace(string $name): string

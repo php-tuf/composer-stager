@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInte
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class StagingDirDoesNotExist extends AbstractPrecondition implements StagingDirDoesNotExistInterface
 {
     public function __construct(private readonly FilesystemInterface $filesystem)

@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
+/** @api */
 final class PathFactory implements PathFactoryInterface
 {
     public static function create(string $path, ?PathInterface $cwd = null): PathInterface

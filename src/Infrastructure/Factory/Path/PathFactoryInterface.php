@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Factory\Path;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/** Creates path value objects. */
+/**
+ * Creates path value objects.
+ *
+ * @api
+ */
 interface PathFactoryInterface
 {
     /**

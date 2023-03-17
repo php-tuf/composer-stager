@@ -5,7 +5,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/** phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong */
+/**
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ *
+ * phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
+ */
 final class NoAbsoluteSymlinksExist extends AbstractFileIteratingPrecondition implements NoAbsoluteSymlinksExistInterface
 {
     public function getName(): string

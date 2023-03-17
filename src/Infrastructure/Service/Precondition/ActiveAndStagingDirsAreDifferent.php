@@ -6,7 +6,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDif
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong */
+/**
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ *
+ * phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
+ */
 final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implements ActiveAndStagingDirsAreDifferentInterface
 {
     public function getName(): string
