@@ -123,7 +123,10 @@ final class Filesystem implements FilesystemInterface
         $target = readlink($path->resolve());
         assert(is_string($target));
 
-        return $this->pathFactory::create($target);
+        // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
+        $cwd = $this->pathFactory::create('..', $path);
+
+        return $this->pathFactory::create($target, $cwd);
     }
 
     public function remove(

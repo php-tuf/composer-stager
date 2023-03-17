@@ -214,6 +214,9 @@ final class FilesystemFunctionalTest extends TestCase
         link($given, $hardLinkPath->resolve());
         $sut = $this->createSut();
 
+        // Change directory to make sure the result isn't affected by the CWD at runtime.
+        chdir(__DIR__);
+
         $symlinkTarget = $sut->readLink($symlinkPath);
 
         self::assertEquals($expectedRaw, $symlinkTarget->raw(), 'Got the correct raw target value.');
