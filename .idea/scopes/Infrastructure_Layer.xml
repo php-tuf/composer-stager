@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Infrastructure Layer" pattern="file[composer-stager]:src/Infrastructure//*" />
+</component>
