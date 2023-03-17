@@ -95,7 +95,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new IOException($e->getMessage(), $e->getCode(), $e);
+            throw new IOException($e->getMessage(), 0, $e);
         }
     }
 

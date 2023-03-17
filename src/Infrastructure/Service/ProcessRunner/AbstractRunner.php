@@ -51,7 +51,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
             $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 
