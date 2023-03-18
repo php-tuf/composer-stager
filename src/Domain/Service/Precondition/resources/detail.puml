@@ -1,9 +1,10 @@
 @startuml
 
-' This is the PlantUML (https://plantuml.com/) source used to generate
-' the UML detail view diagram of the precondition system (detail.png). Said
-' diagram can be regenerated from this source with the PhpStorm plugin at
-' https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
+' This is the PlantUML (https://plantuml.com/) source used to generate the UML
+' detail view diagram of the precondition system (detail.png). Said diagram can
+' be regenerated from this source at https://plantuml-editor.kkeisuke.com/ or with
+' the PhpStorm plugin at https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
+' Optimize it with ImageOptim: https://imageoptim.com/.
 
 !include settings.puml
 
