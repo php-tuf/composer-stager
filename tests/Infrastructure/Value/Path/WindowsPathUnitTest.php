@@ -19,8 +19,8 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::normalizeAbsoluteFromCurrentDrive
  * @covers ::normalizeAbsoluteFromSpecificDrive
  * @covers ::raw
- * @covers ::resolve
- * @covers ::resolveRelativeTo
+ * @covers ::resolved
+ * @covers ::resolvedRelativeTo
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
  */
 final class WindowsPathUnitTest extends TestCase
@@ -51,14 +51,14 @@ final class WindowsPathUnitTest extends TestCase
 
         self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
         self::assertEquals($given, $sut->raw(), 'Correctly returned raw path.');
-        self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
-        self::assertEquals($resolvedRelativeTo, $sut->resolveRelativeTo($relativeBase), 'Correctly resolved path relative to another given path.');
+        self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');
+        self::assertEquals($resolvedRelativeTo, $sut->resolvedRelativeTo($relativeBase), 'Correctly resolved path relative to another given path.');
         self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
 
         // Make sure object is truly immutable.
         chdir(__DIR__);
-        self::assertEquals($resolved, $sut->resolve(), 'Retained correct value after changing working directory.');
+        self::assertEquals($resolved, $sut->resolved(), 'Retained correct value after changing working directory.');
         self::assertEquals($sut, $equalInstance, 'Path value still considered equal to another instance with the same input after changing working directory.');
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
     }
@@ -245,7 +245,7 @@ final class WindowsPathUnitTest extends TestCase
 
         $sut = new WindowsPath($path, $cwd);
 
-        self::assertEquals($resolved, $sut->resolve(), 'Correctly resolved path.');
+        self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');
     }
 
     public function providerCwdArgument(): array

@@ -40,7 +40,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     ): bool {
         try {
             $exclusions ??= new PathList([]);
-            $exclusions->add([$stagingDir->resolve()]);
+            $exclusions->add([$stagingDir->resolved()]);
 
             if ($this->exitEarly($activeDir, $stagingDir, $exclusions)) {
                 return true;
@@ -61,8 +61,8 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
                         $this->defaultUnfulfilledStatusMessage = sprintf(
                             $this->defaultUnfulfilledStatusMessage,
                             $name,
-                            $directoryRoot->resolve(),
-                            $file->resolve(),
+                            $directoryRoot->resolved(),
+                            $file->resolved(),
                         );
 
                         return false;

@@ -42,9 +42,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
     private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
     {
-        if ($source->resolve() === $destination->resolve()) {
+        if ($source->resolved() === $destination->resolved()) {
             throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()),
+                sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved()),
             );
         }
     }
@@ -55,7 +55,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         if (!$this->filesystem->exists($source)) {
             throw new LogicException(sprintf(
                 'The source directory does not exist at "%s"',
-                $source->resolve(),
+                $source->resolved(),
             ));
         }
     }
@@ -83,8 +83,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         $destinationFiles = $this->fileFinder->find($destination, $exclusions);
 
-        $sourceResolved = $source->resolve();
-        $destinationResolved = $destination->resolve();
+        $sourceResolved = $source->resolved();
+        $destinationResolved = $destination->resolved();
 
         foreach ($destinationFiles as $destinationFilePathname) {
             $relativePathname = self::getRelativePath($destinationResolved, $destinationFilePathname);
@@ -105,7 +105,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
     private function destinationIsEmpty(PathInterface $destination): bool
     {
-        return scandir($destination->resolve()) === ['.', '..'];
+        return scandir($destination->resolved()) === ['.', '..'];
     }
 
     /**
@@ -120,8 +120,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     ): void {
         $sourceFiles = $this->fileFinder->find($source, $exclusions);
 
-        $sourceResolved = $source->resolve();
-        $destinationResolved = $destination->resolve();
+        $sourceResolved = $source->resolved();
+        $destinationResolved = $destination->resolved();
 
         foreach ($sourceFiles as $sourceFilePathname) {
             // Once support for Symfony 4 is dropped, see if any of this logic can be

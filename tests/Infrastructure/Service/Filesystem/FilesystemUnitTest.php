@@ -53,7 +53,7 @@ final class FilesystemUnitTest extends TestCase
         $source = new TestPath($source);
         $destination = new TestPath($destination);
         $this->symfonyFilesystem
-            ->copy($source->resolve(), $destination->resolve(), true)
+            ->copy($source->resolved(), $destination->resolved(), true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -92,7 +92,7 @@ final class FilesystemUnitTest extends TestCase
     public function testCopySourceDirectoryNotFound(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $this->activeDir->resolve()));
+        $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $this->activeDir->resolved()));
 
         /** @noinspection PhpParamsInspection */
         $this->symfonyFilesystem
@@ -110,7 +110,7 @@ final class FilesystemUnitTest extends TestCase
         $destination = $source;
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination files cannot be the same at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source and destination files cannot be the same at "%s"', $source->resolved()));
 
         $sut = $this->createSut();
 

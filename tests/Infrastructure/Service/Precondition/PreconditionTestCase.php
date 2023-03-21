@@ -23,11 +23,11 @@ abstract class PreconditionTestCase extends TestCase
     {
         $this->activeDir = $this->prophesize(PathInterface::class);
         $this->activeDir
-            ->resolve()
+            ->resolved()
             ->willReturn(self::ACTIVE_DIR);
         $this->stagingDir = $this->prophesize(PathInterface::class);
         $this->stagingDir
-            ->resolve()
+            ->resolved()
             ->willReturn(self::STAGING_DIR);
         $this->exclusions = new TestPathList();
     }

@@ -100,11 +100,11 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $dirPath = PathFactory::create($dirPath);
         $link = PathFactory::create($link, $dirPath);
         $target = PathFactory::create('target.txt', $dirPath);
-        $parentDir = dirname($link->resolve());
+        $parentDir = dirname($link->resolved());
         @mkdir($parentDir, 0777, true);
-        touch($target->resolve());
+        touch($target->resolved());
         // Point at the resolved target, i.e., its absolute path.
-        symlink($target->resolve(), $link->resolve());
+        symlink($target->resolved(), $link->resolved());
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
@@ -114,8 +114,8 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $pattern = sprintf(
             'The %s directory at "%s" contains absolute links, which is not supported. The first one is "%s".',
             $dirName,
-            $dirPath->resolve(),
-            $link->resolve(),
+            $dirPath->resolved(),
+            $link->resolved(),
         );
         self::assertSame($pattern, $statusMessage, 'Returned correct status message.');
     }
@@ -135,12 +135,12 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $dirPath = PathFactory::create($dirPath);
         $link = PathFactory::create($link, $dirPath);
         $target = PathFactory::create('target.txt', $dirPath);
-        $parentDir = dirname($link->resolve());
+        $parentDir = dirname($link->resolved());
         @mkdir($parentDir, 0777, true);
-        touch($target->resolve());
+        touch($target->resolved());
         chdir($parentDir);
         // Point at the raw target, i.e., its relative path.
-        symlink($target->raw(), $link->resolve());
+        symlink($target->raw(), $link->resolved());
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
@@ -205,8 +205,8 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     public function testWithHardLink(): void
     {
         $dirPath = PathFactory::create(self::ACTIVE_DIR);
-        $link = PathFactory::create('link.txt', $dirPath)->resolve();
-        $target = PathFactory::create('target.txt', $dirPath)->resolve();
+        $link = PathFactory::create('link.txt', $dirPath)->resolved();
+        $target = PathFactory::create('target.txt', $dirPath)->resolved();
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
         touch($target);
@@ -228,7 +228,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList($exclusions);
-        $dirPath = $this->activeDir->resolve();
+        $dirPath = $this->activeDir->resolved();
         self::createFile($dirPath, $targetFile);
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();

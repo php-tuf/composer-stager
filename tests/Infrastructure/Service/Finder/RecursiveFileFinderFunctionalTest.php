@@ -52,7 +52,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
     public function testFind(array $files, ?PathListInterface $exclusions, array $expected): void
     {
         $directory = PathFactory::create(self::ACTIVE_DIR);
-        self::createFiles($directory->resolve(), $files);
+        self::createFiles($directory->resolved(), $files);
         $sut = $this->createSut();
 
         $actual = $sut->find($directory, $exclusions);
@@ -171,7 +171,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                 ],
             );
 
-            return PathFactory::create($path)->resolve();
+            return PathFactory::create($path)->resolved();
         }, $paths);
 
         sort($paths);
