@@ -2,6 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
+/**
+ * Handles a Unix-like filesystem path string.
+ *
+ * For all practical purposes, that means anything but Windows.
+ *
+ * @see https://en.wikipedia.org/wiki/Unix-like
+ */
 final class UnixLikePath extends AbstractPath
 {
     public function isAbsolute(): bool
