@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Methods;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 
@@ -48,16 +47,13 @@ final class ForbiddenConcreteTypeHintRule extends AbstractRule
                         continue;
                     }
 
-                    // The type hint is a concrete class that implements interfaces it could use.
-                    $format = <<<'EOF'
-Constructor parameter $%s cannot type hint to concrete class %s. Use an interface it implements instead
-EOF;
-                    $message = sprintf(
-                        $format,
+                    // The type hint is a concrete class that implements interfaces that could be used instead.
+                    $errors[] = $this->buildErrorMessage(sprintf(
+                        'Constructor parameter $%s cannot type hint to concrete class %s. '
+                        . 'Use an interface it implements instead',
                         $parameter->getName(),
                         $class->getName(),
-                    );
-                    $errors[] = RuleErrorBuilder::message($message)->build();
+                    ));
                 }
             }
         }

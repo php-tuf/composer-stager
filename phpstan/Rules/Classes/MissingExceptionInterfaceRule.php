@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Classes;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
@@ -31,9 +30,12 @@ final class MissingExceptionInterfaceRule extends AbstractRule
         }
 
         if (!$class->is(ExceptionInterface::class)) {
-            $message = sprintf('Throwable class must implement %s', ExceptionInterface::class);
-
-            return [RuleErrorBuilder::message($message)->build()];
+            return [
+                $this->buildErrorMessage(sprintf(
+                    'Throwable class must implement %s',
+                    ExceptionInterface::class,
+                )),
+            ];
         }
 
         return [];

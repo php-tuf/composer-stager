@@ -9,6 +9,8 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleError;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 /** Provides a base class for PHPStan rules. */
@@ -18,6 +20,11 @@ abstract class AbstractRule implements Rule
 
     public function __construct(protected readonly ReflectionProvider $reflectionProvider)
     {
+    }
+
+    protected function buildErrorMessage(string $message): RuleError
+    {
+        return RuleErrorBuilder::message($message)->build();
     }
 
     protected function getClassReflection(Node $node): ?ClassReflection

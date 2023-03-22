@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Requires non-optional constructor parameters to be alphabetized. */
@@ -38,12 +37,13 @@ final class SortedRequiredConstructorParametersRule extends AbstractRule
             $current = $parameter->getName();
 
             if (strcmp($current, $previous) < 0) {
-                $format = <<<'EOF'
-Non-required constructor parameters should be sorted alphabetically by variable name. The first wrong one is "$%s"
-EOF;
-                $message = sprintf($format, $current);
-
-                return [RuleErrorBuilder::message($message)->build()];
+                return [
+                    $this->buildErrorMessage(sprintf(
+                        'Optional constructor parameters should be sorted alphabetically by variable name. '
+                        . 'The first wrong one is "$%s"',
+                        $current,
+                    )),
+                ];
             }
 
             $previous = $current;

@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Ensures that coverage annotations have no trailing parentheses. */
@@ -53,8 +52,11 @@ final class CoverageAnnotationHasNoParenthesesRule extends AbstractRule
                     continue;
                 }
 
-                $message = sprintf('%s function name %s must not end with parentheses.', $tag, $value);
-                $errors[] = RuleErrorBuilder::message($message)->build();
+                $errors[] = $this->buildErrorMessage(sprintf(
+                    '%s function name %s must not end with parentheses.',
+                    $tag,
+                    $value,
+                ));
             }
         }
 

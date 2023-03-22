@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Classes;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
 
@@ -39,6 +38,6 @@ final class MissingInterfaceRule extends AbstractRule
 
         $message = 'Non-factory class must implement an interface';
 
-        return [RuleErrorBuilder::message($message)->build()];
+        return [$this->buildErrorMessage($message)];
     }
 }

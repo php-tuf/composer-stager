@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
@@ -55,13 +54,13 @@ final class PreconditionDiagramsInSyncRule extends AbstractRule
             return [];
         }
 
-        $message = sprintf(
-            'Precondition system classes have changed. Make sure the appropriate changes '
-            . 'have been made to the diagrams in src/Domain/Service/Precondition/resources '
-            . 'and update phpstan.neon.dist:parameters.preconditionSystemHash to %s',
-            $hash,
-        );
-
-        return [RuleErrorBuilder::message($message)->build()];
+        return [
+            $this->buildErrorMessage(sprintf(
+                'Precondition system classes have changed. Make sure the appropriate changes '
+                . 'have been made to the diagrams in src/Domain/Service/Precondition/resources '
+                . 'and update phpstan.neon.dist:parameters.preconditionSystemHash to %s',
+                $hash,
+            )),
+        ];
     }
 }

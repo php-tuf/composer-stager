@@ -8,11 +8,10 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
-use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleErrorBuilder;
+use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Provides a base class for alphabetized annotation rules. */
-abstract class AbstractSortedAnnotationsRule implements Rule
+abstract class AbstractSortedAnnotationsRule extends AbstractRule
 {
     final public function getNodeType(): string
     {
@@ -50,13 +49,13 @@ abstract class AbstractSortedAnnotationsRule implements Rule
             $current = trim($lineParts[1]);
 
             if (strcasecmp($current, $previous) < 0) {
-                $message = sprintf(
-                    '%s annotations should be sorted alphabetically. The first wrong one is %s.',
-                    $this->targetTag(),
-                    $current,
-                );
-
-                return [RuleErrorBuilder::message($message)->build()];
+                return [
+                    $this->buildErrorMessage(sprintf(
+                        '%s annotations should be sorted alphabetically. The first wrong one is %s.',
+                        $this->targetTag(),
+                        $current,
+                    )),
+                ];
             }
 
             $previous = $current;

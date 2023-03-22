@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Requires "@property" data types to put ObjectProphecy last. */
@@ -59,11 +58,10 @@ final class PropertyDataTypePutsObjectProphecyLastRule extends AbstractRule
                         continue;
                     }
 
-                    $message = sprintf(
+                    $errors[] = $this->buildErrorMessage(sprintf(
                         '"ObjectProphecy" should be last in the list of @property data types in %s.',
                         $linePart . ' ' . end($lineParts),
-                    );
-                    $errors[] = RuleErrorBuilder::message($message)->build();
+                    ));
                 }
             }
         }

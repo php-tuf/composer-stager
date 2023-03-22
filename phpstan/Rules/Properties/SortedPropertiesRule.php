@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionProperty;
-use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
@@ -57,12 +56,11 @@ final class SortedPropertiesRule extends AbstractRule
                     continue;
                 }
 
-                $message = sprintf(
+                $errors[$visibility] = $this->buildErrorMessage(sprintf(
                     '%s properties should be sorted alphabetically by variable. The first wrong one is "$%s".',
                     ucfirst($visibility),
                     $current[$visibility],
-                );
-                $errors[$visibility] = RuleErrorBuilder::message($message)->build();
+                ));
             }
 
             $previous[$visibility] = $current[$visibility];

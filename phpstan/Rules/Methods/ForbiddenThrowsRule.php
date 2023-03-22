@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Methods;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
-use PHPStan\Rules\RuleErrorBuilder;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Forbids throwing third party exceptions from public methods. */
@@ -39,10 +38,11 @@ final class ForbiddenThrowsRule extends AbstractRule
                 continue;
             }
 
-            // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-            $format = 'Built-in or third party exception "\%s" cannot be thrown from public methods. Catch it and throw the appropriate ComposerStager exception instead';
-            $message = sprintf($format, $exception);
-            $errors[] = RuleErrorBuilder::message($message)->build();
+            $errors[] = $this->buildErrorMessage(sprintf(
+                'Built-in or third party exception "\%s" cannot be thrown from public methods. '
+                . 'Catch it and throw the appropriate ComposerStager exception instead',
+                $exception,
+            ));
         }
 
         return $errors;
