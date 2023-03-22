@@ -46,9 +46,14 @@ CleanerPreconditions --o StagingDirIsReady
 
 class CommonPreconditions {
     ActiveAndStagingDirsAreDifferent
-    ActiveDirExists
-    ActiveDirIsWritable
+    ActiveDirIsReady
     ComposerIsAvailable
+}
+CommonPreconditions -o ActiveDirIsReady
+
+class ActiveDirIsReady {
+    StagingDirExists
+    StagingDirIsWritable
 }
 
 class StagingDirIsReady {
