@@ -2,6 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
+/**
+ * Handles a Windows filesystem path string.
+ *
+ * Don't instantiate this class directory--use the path factory.
+ *
+ * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ */
 final class WindowsPath extends AbstractPath
 {
     public function isAbsolute(): bool
