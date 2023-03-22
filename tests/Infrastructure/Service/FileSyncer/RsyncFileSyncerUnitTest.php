@@ -104,10 +104,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             'Siblings: simple exclusions given' => [
                 'source' => 'source/two',
                 'destination' => 'destination/two',
-                'exclusions' => new PathList([
-                    'three.txt',
-                    'four.txt',
-                ]),
+                'exclusions' => new PathList('three.txt', 'four.txt'),
                 'command' => [
                     '--archive',
                     '--delete-after',
@@ -122,7 +119,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             'Siblings: duplicate exclusions given' => [
                 'source' => 'source/three',
                 'destination' => 'destination/three',
-                'exclusions' => new PathList([
+                'exclusions' => new PathList(...[
                     'four/five',
                     'six/seven',
                     'six/seven',

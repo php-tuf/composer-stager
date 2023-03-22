@@ -37,8 +37,6 @@ interface FileSyncerInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
-     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the destination directory cannot be created.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException

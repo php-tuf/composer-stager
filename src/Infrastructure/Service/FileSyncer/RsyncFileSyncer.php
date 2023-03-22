@@ -42,7 +42,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         set_time_limit((int) $timeout);
 
-        $exclusions ??= new PathList([]);
+        $exclusions ??= new PathList();
         $exclusions = $exclusions->getAll();
 
         if ($sourceResolved === $destinationResolved) {

@@ -146,7 +146,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
 
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
-        $exclusions = new PathList($exclusions);
+        $exclusions = new PathList(...$exclusions);
         $dirPath = $this->activeDir->resolved();
         self::createFile($dirPath, $targetFile);
         self::createSymlinks($dirPath, $links);

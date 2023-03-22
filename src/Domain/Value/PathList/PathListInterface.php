@@ -17,14 +17,10 @@ interface PathListInterface
     public function getAll(): array;
 
     /**
-     * Adds an array of path strings to the list.
+     * Adds a list of raw path strings.
      *
      * Path strings may be absolute or relative, e.g., "/var/www/example" or
      * "example". Nothing needs to actually exist at them.
-     *
-     * @param array<string> $paths
-     *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      */
-    public function add(array $paths): void;
+    public function add(string ...$paths): void;
 }

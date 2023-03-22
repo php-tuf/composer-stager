@@ -11,7 +11,7 @@ final class TestPathList implements PathListInterface
         return [];
     }
 
-    public function add(array $paths): void
+    public function add(...$paths): void
     {
         // Unimplemented.
     }

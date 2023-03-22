@@ -70,7 +70,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
             ],
             'No files, no exclusions' => [
                 'files' => [],
-                'exclusions' => new PathList([]),
+                'exclusions' => new PathList(),
                 'expected' => [],
             ],
             'Multiple files, null exclusions' => [
@@ -90,7 +90,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                     'two.txt',
                     'three.txt',
                 ],
-                'exclusions' => new PathList([]),
+                'exclusions' => new PathList(),
                 'expected' => $this->normalizePaths([
                     'one.txt',
                     'three.txt',
@@ -99,7 +99,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
             ],
             'One file excluded by name' => [
                 'files' => ['excluded.txt'],
-                'exclusions' => new PathList(['excluded.txt']),
+                'exclusions' => new PathList('excluded.txt'),
                 'expected' => $this->normalizePaths([]),
             ],
             'Multiple files, partially excluded by name' => [
@@ -107,7 +107,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                     'included.txt',
                     'excluded.txt',
                 ],
-                'exclusions' => new PathList(['excluded.txt']),
+                'exclusions' => new PathList('excluded.txt'),
                 'expected' => $this->normalizePaths(['included.txt']),
             ],
             'Complex scenario' => [
@@ -130,7 +130,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                     '.hidden_EXCLUDED_dir/two.txt',
                     '.hidden_EXCLUDED_dir/three.txt',
                 ],
-                'exclusions' => new PathList([
+                'exclusions' => new PathList(
                     // Exact pathnames.
                     'EXCLUDED_file_in_dir_root.txt',
                     'arbitrary_subdir/EXCLUDED_file.txt',
@@ -147,7 +147,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
                     'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
                     // Non-existent.
                     'file_that_NEVER_EXISTS_anywhere.txt',
-                ]),
+                ),
                 'expected' => $this->normalizePaths([
                     'file_in_dir_root.txt',
                     'arbitrary_subdir/file.txt',

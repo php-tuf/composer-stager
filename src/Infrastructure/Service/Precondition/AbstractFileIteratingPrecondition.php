@@ -40,8 +40,8 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
         ?PathListInterface $exclusions = null,
     ): bool {
         try {
-            $exclusions ??= new PathList([]);
-            $exclusions->add([$stagingDir->resolved()]);
+            $exclusions ??= new PathList();
+            $exclusions->add($stagingDir->resolved());
 
             if ($this->exitEarly($activeDir, $stagingDir, $exclusions)) {
                 return true;
@@ -95,7 +95,6 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     /**
      * @return array<string>
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      */
     protected function findFiles(PathInterface $path, PathListInterface $exclusions): array

@@ -126,7 +126,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Non-existent.
             'file_that_NEVER_EXISTS_anywhere.txt',
         ];
-        $exclusions = new PathList($exclusions);
+        $exclusions = new PathList(...$exclusions);
 
         // Confirm that the beginner fails with unsupported symlinks present in the codebase.
         $preconditionMet = true;
