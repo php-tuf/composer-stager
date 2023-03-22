@@ -208,10 +208,10 @@ final class FilesystemFunctionalTest extends TestCase
         $symlinkPath = PathFactory::create('symlink.txt', $baseDir);
         $hardLinkPath = PathFactory::create('hard_link.txt', $baseDir);
         $targetPath = PathFactory::create($given, $baseDir);
-        chdir($baseDir->resolve());
-        touch($targetPath->resolve());
-        symlink($given, $symlinkPath->resolve());
-        link($given, $hardLinkPath->resolve());
+        chdir($baseDir->resolved());
+        touch($targetPath->resolved());
+        symlink($given, $symlinkPath->resolved());
+        link($given, $hardLinkPath->resolved());
         $sut = $this->createSut();
 
         // Change directory to make sure the result isn't affected by the CWD at runtime.
@@ -220,10 +220,10 @@ final class FilesystemFunctionalTest extends TestCase
         $symlinkTarget = $sut->readLink($symlinkPath);
 
         self::assertEquals($expectedRaw, $symlinkTarget->raw(), 'Got the correct raw target value.');
-        self::assertEquals($expectedResolved, $symlinkTarget->resolve(), 'Got the correct resolved target value.');
+        self::assertEquals($expectedResolved, $symlinkTarget->resolved(), 'Got the correct resolved target value.');
 
         $this->expectException(IOException::class);
-        $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolve());
+        $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolved());
         $this->expectExceptionMessage($message);
         $sut->readLink($hardLinkPath);
     }
@@ -233,7 +233,7 @@ final class FilesystemFunctionalTest extends TestCase
         $absolute = static function ($path): string {
             $baseDir = PathFactory::create(self::SOURCE_DIR);
 
-            return PathFactory::create($path, $baseDir)->resolve();
+            return PathFactory::create($path, $baseDir)->resolved();
         };
 
         // Note: relative links cannot be distinguished from absolute links on Windows,
@@ -260,7 +260,7 @@ final class FilesystemFunctionalTest extends TestCase
         $file = PathFactory::create(self::SOURCE_DIR . '/file.txt');
 
         $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $file->resolve()));
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $file->resolved()));
 
         $sut = $this->createSut();
 
@@ -274,7 +274,7 @@ final class FilesystemFunctionalTest extends TestCase
         $path = PathFactory::create($path);
 
         $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolve()));
+        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolved()));
 
         $sut = $this->createSut();
 

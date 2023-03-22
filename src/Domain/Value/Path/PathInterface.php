@@ -24,7 +24,7 @@ interface PathInterface
      * by `getcwd()` at runtime, e.g., "/var/www/example" given a path of
      * "example" and a working directory of "/var/www".
      */
-    public function resolve(): string;
+    public function resolved(): string;
 
     /**
      * Gets the fully resolved, absolute path string without trailing slash, relative to another given path.
@@ -36,5 +36,5 @@ interface PathInterface
      * "/var/one/two/three" relative to "/var/four/five/six" would return
      * "/var/one/two/three".
      */
-    public function resolveRelativeTo(PathInterface $path): string;
+    public function resolvedRelativeTo(PathInterface $path): string;
 }

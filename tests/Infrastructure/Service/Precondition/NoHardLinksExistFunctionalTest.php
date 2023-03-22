@@ -53,8 +53,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     /** @covers ::isSupportedFile */
     public function testFulfilledWithSymlink(): void
     {
-        $target = PathFactory::create('target.txt', $this->activeDir)->resolve();
-        $link = PathFactory::create('link.txt', $this->activeDir)->resolve();
+        $target = PathFactory::create('target.txt', $this->activeDir)->resolved();
+        $link = PathFactory::create('link.txt', $this->activeDir)->resolved();
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -72,14 +72,14 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
      */
     public function testUnfulfilled(string $directory, string $dirName): void
     {
-        $target = PathFactory::create($directory . '/target.txt')->resolve();
-        $link = PathFactory::create($directory . '/link.txt')->resolve();
+        $target = PathFactory::create($directory . '/target.txt')->resolved();
+        $link = PathFactory::create($directory . '/link.txt')->resolved();
 
         $this->expectException(PreconditionException::class);
         $this->expectExceptionMessage(sprintf(
             'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".',
             $dirName,
-            PathFactory::create($directory)->resolve(),
+            PathFactory::create($directory)->resolved(),
             $link,
         ));
 
@@ -137,7 +137,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList($exclusions);
-        $dirPath = $this->activeDir->resolve();
+        $dirPath = $this->activeDir->resolved();
         self::createFile($dirPath, $targetFile);
         self::createHardlinks($dirPath, $links);
         $sut = $this->createSut();

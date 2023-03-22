@@ -200,7 +200,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     public function testSyncSourceDirectoryNotFound(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolved()));
 
         $this->filesystem
             ->exists(Argument::any())
@@ -216,7 +216,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $destination = $source;
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved()));
 
         $sut = $this->createSut();
 

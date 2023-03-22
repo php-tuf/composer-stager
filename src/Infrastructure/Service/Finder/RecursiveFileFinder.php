@@ -23,11 +23,11 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
     {
         $exclusions ??= new PathList([]);
 
-        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolve());
+        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolved());
 
         // Resolve the exclusions relative to the search directory.
         $exclusions = array_map(fn ($path): string => $this->pathFactory::create($path)
-            ->resolveRelativeTo($directory), $exclusions->getAll());
+            ->resolvedRelativeTo($directory), $exclusions->getAll());
 
         // Apply exclusions. On the surface, it may look like individual descendants
         // of an excluded directory, i.e., files "underneath" or "inside" it, won't

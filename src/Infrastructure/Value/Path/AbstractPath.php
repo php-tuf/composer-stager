@@ -27,7 +27,7 @@ abstract class AbstractPath implements PathInterface
         // object should be immune to environmental details like the current
         // working directory. Cache the CWD at time of creation.
         $this->cwd = $cwd instanceof PathInterface
-            ? $cwd->resolve()
+            ? $cwd->resolved()
             : $this->getcwd();
     }
 
@@ -36,14 +36,14 @@ abstract class AbstractPath implements PathInterface
         return $this->path;
     }
 
-    public function resolve(): string
+    public function resolved(): string
     {
         return $this->doResolve($this->cwd);
     }
 
-    public function resolveRelativeTo(PathInterface $path): string
+    public function resolvedRelativeTo(PathInterface $path): string
     {
-        $basePath = $path->resolve();
+        $basePath = $path->resolved();
 
         return $this->doResolve($basePath);
     }

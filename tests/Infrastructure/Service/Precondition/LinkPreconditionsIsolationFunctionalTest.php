@@ -47,7 +47,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
         $this->stagingDir = PathFactory::create(self::STAGING_DIR);
 
-        chdir($this->activeDir->resolve());
+        chdir($this->activeDir->resolved());
     }
 
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
@@ -104,8 +104,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     public function testNoAbsoluteSymlinksExist(): void
     {
         $activeDir = $this->activeDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolve();
-        $target = PathFactory::create('target.txt', $activeDir)->resolve();
+        $source = PathFactory::create('source.txt', $activeDir)->resolved();
+        $target = PathFactory::create('target.txt', $activeDir)->resolved();
         touch($target);
         symlink($target, $source);
 
@@ -121,7 +121,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     public function testNoSymlinksPointOutsideTheCodebase(): void
     {
         $activeDir = $this->activeDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolve();
+        $source = PathFactory::create('source.txt', $activeDir)->resolved();
         $target = PathFactory::create('../target.txt', $activeDir)->raw();
         touch($target);
         symlink($target, $source);
@@ -132,7 +132,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     public function testNoSymlinksPointToADirectory(): void
     {
         $activeDir = $this->activeDir;
-        $source = PathFactory::create('link', $activeDir)->resolve();
+        $source = PathFactory::create('link', $activeDir)->resolved();
         $target = PathFactory::create('directory', $activeDir)->raw();
         mkdir($target);
         symlink($target, $source);
@@ -143,8 +143,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     public function testNoHardLinksExistExist(): void
     {
         $activeDir = $this->activeDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolve();
-        $target = PathFactory::create('target.txt', $activeDir)->resolve();
+        $source = PathFactory::create('source.txt', $activeDir)->resolved();
+        $target = PathFactory::create('target.txt', $activeDir)->resolved();
         touch($target);
         link($target, $source);
 

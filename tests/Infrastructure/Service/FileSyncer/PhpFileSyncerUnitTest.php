@@ -54,7 +54,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function testSyncSourceNotFound(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolved()));
 
         $this->filesystem
             ->exists($this->source)
@@ -71,7 +71,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $destination = $source;
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolve()));
+        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved()));
 
         $sut = $this->createSut();
 

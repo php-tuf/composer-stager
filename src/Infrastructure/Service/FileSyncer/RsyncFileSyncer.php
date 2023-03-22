@@ -36,8 +36,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
-        $sourceResolved = $source->resolve();
-        $destinationResolved = $destination->resolve();
+        $sourceResolved = $source->resolved();
+        $destinationResolved = $destination->resolved();
 
         set_time_limit((int) $timeout);
 

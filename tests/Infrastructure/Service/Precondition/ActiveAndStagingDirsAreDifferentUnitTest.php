@@ -28,11 +28,11 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
     public function testFulfilled(): void
     {
         $this->activeDir
-            ->resolve()
+            ->resolved()
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/one/different');
         $this->stagingDir
-            ->resolve()
+            ->resolved()
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/two/different');
 
@@ -42,11 +42,11 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
     public function testUnfulfilled(): void
     {
         $this->activeDir
-            ->resolve()
+            ->resolved()
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/same');
         $this->stagingDir
-            ->resolve()
+            ->resolved()
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn('/same');
 

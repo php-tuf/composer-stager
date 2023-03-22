@@ -28,8 +28,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $this->filesystem->mkdir(self::TEST_WORKING_DIR);
         chdir(self::TEST_WORKING_DIR);
 
-        $this->filesystem->mkdir($this->source->resolve());
-        $this->filesystem->mkdir($this->destination->resolve());
+        $this->filesystem->mkdir($this->source->resolved());
+        $this->filesystem->mkdir($this->destination->resolved());
     }
 
     protected function tearDown(): void
@@ -83,15 +83,15 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $link = PathFactory::create('link', $this->source);
         $target = PathFactory::create('directory', $this->source);
-        $this->filesystem->mkdir($target->resolve());
-        $file = PathFactory::create('directory/file.txt', $this->source)->resolve();
+        $this->filesystem->mkdir($target->resolved());
+        $file = PathFactory::create('directory/file.txt', $this->source)->resolved();
         $this->filesystem->touch($file);
-        symlink($target->resolve(), $link->resolve());
+        symlink($target->resolved(), $link->resolved());
         $sut = $this->createSut();
 
         $sut->sync($this->source, $this->destination);
 
-        self::assertDirectoryListing($this->destination->resolve(), [
+        self::assertDirectoryListing($this->destination->resolved(), [
             'link',
             'directory/file.txt',
         ], '', 'Correctly synced files, including a symlink to a directory.');

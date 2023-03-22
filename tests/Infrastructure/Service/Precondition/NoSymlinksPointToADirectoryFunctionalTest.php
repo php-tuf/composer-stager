@@ -62,9 +62,9 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testFulfilledWithValidLink(): void
     {
-        $link = PathFactory::create('link.txt', $this->activeDir)->resolve();
+        $link = PathFactory::create('link.txt', $this->activeDir)->resolved();
         self::ensureParentDirectory($link);
-        $target = PathFactory::create('target.txt', $this->activeDir)->resolve();
+        $target = PathFactory::create('target.txt', $this->activeDir)->resolved();
         self::ensureParentDirectory($target);
         touch($target);
         symlink($target, $link);
@@ -84,14 +84,14 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
-        $target = PathFactory::create($targetDir . '/target_directory')->resolve();
-        $link = PathFactory::create($linkDir . '/directory_link')->resolve();
+        $target = PathFactory::create($targetDir . '/target_directory')->resolved();
+        $link = PathFactory::create($linkDir . '/directory_link')->resolved();
 
         $this->expectException(PreconditionException::class);
         $this->expectExceptionMessage(sprintf(
             'The %s directory at "%s" contains symlinks that point to a directory, which is not supported. The first one is "%s".',
             $linkDirName,
-            PathFactory::create($linkDir)->resolve(),
+            PathFactory::create($linkDir)->resolved(),
             $link,
         ));
 
@@ -132,10 +132,10 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetDir = './target_directory';
-        mkdir(PathFactory::create($targetDir, $this->activeDir)->resolve());
+        mkdir(PathFactory::create($targetDir, $this->activeDir)->resolved());
         $links = array_fill_keys($links, $targetDir);
         $exclusions = new PathList($exclusions);
-        $dirPath = $this->activeDir->resolve();
+        $dirPath = $this->activeDir->resolved();
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 

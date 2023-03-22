@@ -84,7 +84,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $baseDir, string $filename): void
     {
-        $filename = PathFactory::create("{$baseDir}/{$filename}")->resolve();
+        $filename = PathFactory::create("{$baseDir}/{$filename}")->resolved();
         static::ensureParentDirectory($filename);
 
         $touchResult = touch($filename);
@@ -103,7 +103,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createDirectory(string $baseDir, string $dirname): void
     {
-        $dirname = PathFactory::create("{$baseDir}/{$dirname}")->resolve();
+        $dirname = PathFactory::create("{$baseDir}/{$dirname}")->resolved();
         static::ensureParentDirectory($dirname);
 
         $touchResult = mkdir($dirname);
@@ -127,7 +127,7 @@ abstract class TestCase extends PHPUnitTestCase
 
         self::prepareForLink($link, $target);
 
-        symlink($target->resolve(), $link->resolve());
+        symlink($target->resolved(), $link->resolved());
     }
 
     protected static function createHardlinks(string $baseDir, array $symlinks): void
@@ -144,17 +144,17 @@ abstract class TestCase extends PHPUnitTestCase
 
         self::prepareForLink($link, $target);
 
-        link($target->resolve(), $link->resolve());
+        link($target->resolved(), $link->resolved());
     }
 
     private static function prepareForLink(PathInterface $link, PathInterface $target): void
     {
-        static::ensureParentDirectory($link->resolve());
+        static::ensureParentDirectory($link->resolved());
 
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
-        assert(file_exists($target->resolve()), 'Symlink target exists.');
+        assert(file_exists($target->resolved()), 'Symlink target exists.');
     }
 
     protected static function ensureParentDirectory(string $filename): void

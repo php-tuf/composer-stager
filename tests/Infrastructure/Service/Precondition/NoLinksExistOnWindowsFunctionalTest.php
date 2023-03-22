@@ -76,19 +76,19 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         }
 
         $baseDir = PathFactory::create(self::ACTIVE_DIR);
-        $link = PathFactory::create('link.txt', $baseDir)->resolve();
-        $target = PathFactory::create('target.txt', $baseDir)->resolve();
+        $link = PathFactory::create('link.txt', $baseDir)->resolved();
+        $target = PathFactory::create('target.txt', $baseDir)->resolved();
 
         $this->expectException(PreconditionException::class);
         $this->expectExceptionMessage(sprintf(
             'The active directory at "%s" contains links, which is not supported on Windows. The first one is "%s".',
-            $baseDir->resolve(),
+            $baseDir->resolved(),
             $link,
         ));
 
         touch($target);
-        self::createSymlinks($baseDir->resolve(), $symlinks);
-        self::createHardlinks($baseDir->resolve(), $hardLinks);
+        self::createSymlinks($baseDir->resolved(), $symlinks);
+        self::createHardlinks($baseDir->resolved(), $hardLinks);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
@@ -147,7 +147,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList($exclusions);
-        $dirPath = $this->activeDir->resolve();
+        $dirPath = $this->activeDir->resolved();
         self::createFile($dirPath, $targetFile);
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();

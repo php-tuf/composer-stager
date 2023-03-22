@@ -44,7 +44,7 @@ EOF;
     {
         $target = $this->filesystem->readLink($link);
 
-        return !$this->isDescendant($target->resolve(), $path->resolve());
+        return !$this->isDescendant($target->resolved(), $path->resolved());
     }
 
     private function isDescendant(string $descendant, string $ancestor): bool

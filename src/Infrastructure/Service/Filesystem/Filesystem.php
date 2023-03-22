@@ -36,8 +36,8 @@ final class Filesystem implements FilesystemInterface
 
     public function copy(PathInterface $source, PathInterface $destination): void
     {
-        $sourceResolved = $source->resolve();
-        $destinationResolved = $destination->resolve();
+        $sourceResolved = $source->resolved();
+        $destinationResolved = $destination->resolved();
 
         if ($sourceResolved === $destinationResolved) {
             throw new LogicException(sprintf(
@@ -97,12 +97,12 @@ final class Filesystem implements FilesystemInterface
 
     public function isWritable(PathInterface $path): bool
     {
-        return is_writable($path->resolve()); // @codeCoverageIgnore
+        return is_writable($path->resolved()); // @codeCoverageIgnore
     }
 
     public function mkdir(PathInterface $path): void
     {
-        $pathResolved = $path->resolve();
+        $pathResolved = $path->resolved();
 
         try {
             $this->symfonyFilesystem->mkdir($pathResolved);
@@ -117,10 +117,10 @@ final class Filesystem implements FilesystemInterface
     public function readLink(PathInterface $path): PathInterface
     {
         if (!$this->isSymlink($path)) {
-            throw new IOException(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolve()));
+            throw new IOException(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolved()));
         }
 
-        $target = readlink($path->resolve());
+        $target = readlink($path->resolved());
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
@@ -139,7 +139,7 @@ final class Filesystem implements FilesystemInterface
             // timeout, so we have to enforce it ourselves.
             set_time_limit((int) $timeout);
 
-            $this->symfonyFilesystem->remove($path->resolve());
+            $this->symfonyFilesystem->remove($path->resolved());
         } catch (SymfonyExceptionInterface $e) {
             throw new IOException($e->getMessage(), 0, $e);
         }
@@ -155,7 +155,7 @@ final class Filesystem implements FilesystemInterface
         // and `is_link()`, etc., not to mention being the only way to detect hard links at all.
         // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
         // which may or may not throw an exception depending on error_reporting configuration.
-        $lstat = @lstat($path->resolve());
+        $lstat = @lstat($path->resolved());
 
         if ($lstat === false) {
             return self::PATH_DOES_NOT_EXIST;
