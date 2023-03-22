@@ -22,7 +22,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
     {
-        $exclusions ??= new PathList([]);
+        $exclusions ??= new PathList();
 
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolved());
 

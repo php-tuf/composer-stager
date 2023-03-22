@@ -134,7 +134,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $targetDir = './target_directory';
         mkdir(PathFactory::create($targetDir, $this->activeDir)->resolved());
         $links = array_fill_keys($links, $targetDir);
-        $exclusions = new PathList($exclusions);
+        $exclusions = new PathList(...$exclusions);
         $dirPath = $this->activeDir->resolved();
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();

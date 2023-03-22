@@ -136,7 +136,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $exclusions[] = $targetFile;
 
         $links = array_fill_keys($links, $targetFile);
-        $exclusions = new PathList($exclusions);
+        $exclusions = new PathList(...$exclusions);
         $dirPath = $this->activeDir->resolved();
         self::createFile($dirPath, $targetFile);
         self::createHardlinks($dirPath, $links);

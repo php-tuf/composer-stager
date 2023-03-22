@@ -47,10 +47,10 @@ class Updater
     {
         $activeDir = PathFactory::create('/var/www/public');
         $stagingDir = PathFactory::create('/var/www/staging');
-        $exclusions = new PathList([
+        $exclusions = new PathList(
             'cache',
             'uploads',
-        ]);
+        );
 
         // Copy the codebase to the staging directory.
         $this->beginner->begin($activeDir, $stagingDir, $exclusions);

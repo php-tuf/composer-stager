@@ -30,8 +30,6 @@ interface CommitterInterface
      *   An optional process timeout (maximum runtime) in seconds. Set to null
      *   to disable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
-     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the preconditions are unfulfilled.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException

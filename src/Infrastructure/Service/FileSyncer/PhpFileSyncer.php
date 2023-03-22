@@ -31,7 +31,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     ): void {
         set_time_limit((int) $timeout);
 
-        $exclusions ??= new PathList([]);
+        $exclusions ??= new PathList();
 
         $this->assertSourceAndDestinationAreDifferent($source, $destination);
         $this->assertSourceExists($source);
@@ -68,10 +68,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $this->filesystem->mkdir($destination);
     }
 
-    /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     */
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
     private function deleteExtraneousFilesFromDestination(
         PathInterface $destination,
         PathInterface $source,
@@ -110,7 +107,6 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
      */

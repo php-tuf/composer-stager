@@ -30,8 +30,6 @@ interface RecursiveFileFinderInterface
      *   - /var/www/one.txt
      *   - /var/www/two/three.txt
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
-     *   If $exclusions includes invalid paths.
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
      *   If the directory cannot be found or is not actually a directory.
      */
