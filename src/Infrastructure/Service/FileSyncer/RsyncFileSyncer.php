@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class RsyncFileSyncer implements RsyncFileSyncerInterface
 {
     public function __construct(

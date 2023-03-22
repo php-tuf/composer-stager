@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
 
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 
-/** Contains a set of preconditions for a domain operation. */
+/**
+ * Contains a set of preconditions for a domain operation.
+ *
+ * @api
+ */
 interface PreconditionsTreeInterface extends PreconditionInterface
 {
     /**

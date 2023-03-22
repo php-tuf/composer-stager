@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use LogicException as PHPLogicException;
 
-/** This exception represents an error in the program logic and should lead to a fix in your code. */
+/**
+ * This exception represents an error in the program logic and should lead to a fix in your code.
+ *
+ * @api
+ */
 class LogicException extends PHPLogicException implements ExceptionInterface
 {
 }

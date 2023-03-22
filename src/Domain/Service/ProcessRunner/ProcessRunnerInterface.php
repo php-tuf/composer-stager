@@ -2,7 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\ProcessRunner;
 
-/** Runs shell processes. */
+/**
+ * Runs shell processes.
+ *
+ * @api
+ */
 interface ProcessRunnerInterface
 {
     /** The default process timeout. */

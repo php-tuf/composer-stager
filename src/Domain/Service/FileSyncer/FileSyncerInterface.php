@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** Recursively syncs files from one directory to another. */
+/**
+ * Recursively syncs files from one directory to another.
+ *
+ * @api
+ */
 interface FileSyncerInterface
 {
     /**

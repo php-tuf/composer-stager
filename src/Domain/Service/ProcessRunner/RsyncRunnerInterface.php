@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Domain\Service\ProcessRunner;
 
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 
-/** Runs rsync commands. */
+/**
+ * Runs rsync commands.
+ *
+ * @api
+ */
 interface RsyncRunnerInterface extends ProcessRunnerInterface
 {
     /**

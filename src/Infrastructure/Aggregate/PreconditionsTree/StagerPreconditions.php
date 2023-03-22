@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class StagerPreconditions extends AbstractPreconditionsTree implements StagerPreconditionsInterface
 {
     public function __construct(

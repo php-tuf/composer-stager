@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** Makes the staged changes live by syncing the active directory with the staging directory. */
+/**
+ * Makes the staged changes live by syncing the active directory with the staging directory.
+ *
+ * @api
+ */
 interface CommitterInterface
 {
     /**

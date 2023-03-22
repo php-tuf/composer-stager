@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Host;
 
 use PhpTuf\ComposerStager\Domain\Service\Host\HostInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class Host implements HostInterface
 {
     public function isWindows(): bool

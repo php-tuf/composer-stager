@@ -7,10 +7,10 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
  *
  * For all practical purposes, that means anything but Windows.
  *
- * Don't instantiate this class directory--use the path factory.
- *
  * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @see https://en.wikipedia.org/wiki/Unix-like
+ *
+ * @internal Don't instantiate this class directly. Use the path factory above.
  */
 final class UnixLikePath extends AbstractPath
 {

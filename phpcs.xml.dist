@@ -98,6 +98,7 @@
             <element value="@return"/>
             <element value="@throws"/>
             <element value="@see"/>
+            <element value="@api,@internal,"/>
             <element value="@todo"/>
             <element value="@noinspection,@SuppressWarnings"/>
         </property>

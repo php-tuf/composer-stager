@@ -8,6 +8,8 @@ namespace PhpTuf\ComposerStager\Domain\Value\Path;
  * The path string may be absolute or relative to the current working directory
  * as returned by `getcwd()` at runtime, e.g., "/var/www/example" or "example".
  * Nothing needs to actually exist at the path.
+ *
+ * @api
  */
 interface PathInterface
 {

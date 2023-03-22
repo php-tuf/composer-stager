@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use Exception;
 
-/** This exception represents a device error, such as a failed filesystem operation. */
+/**
+ * This exception represents a device error, such as a failed filesystem operation.
+ *
+ * @api
+ */
 class IOException extends Exception implements ExceptionInterface
 {
 }

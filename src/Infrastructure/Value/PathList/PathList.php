@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\PathList;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
+/** @api This class may be instantiated directly gotten from the service container via its interface. */
 final class PathList implements PathListInterface
 {
     /** @var array<string> */

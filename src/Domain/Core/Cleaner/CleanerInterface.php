@@ -6,7 +6,11 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/** Removes the staging directory. */
+/**
+ * Removes the staging directory.
+ *
+ * @api
+ */
 interface CleanerInterface
 {
     /**

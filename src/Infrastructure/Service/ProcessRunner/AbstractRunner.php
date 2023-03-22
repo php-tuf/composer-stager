@@ -12,6 +12,8 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
 /**
  * Provides a base for process runners for consistent process creation and
  * exception-handling.
+ *
+ * @api
  */
 abstract class AbstractRunner implements ProcessRunnerInterface
 {

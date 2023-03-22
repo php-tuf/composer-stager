@@ -14,6 +14,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileN
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class Filesystem implements FilesystemInterface
 {
     private const PATH_DOES_NOT_EXIST = 'PATH_DOES_NOT_EXIST';

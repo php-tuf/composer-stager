@@ -10,6 +10,8 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
  * This interface exists solely to facilitate autowiring dependencies through type hinting.
  *
  * @see https://symfony.com/doc/current/service_container/autowiring.html
+ *
+ * @api
  */
 interface RsyncFileSyncerInterface extends FileSyncerInterface
 {

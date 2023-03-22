@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditions
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
 
+/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class CommitterPreconditions extends AbstractPreconditionsTree implements CommitterPreconditionsInterface
 {
     public function __construct(
