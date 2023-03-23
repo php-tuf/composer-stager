@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  *
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  */
 final class PathFactoryUnitTest extends TestCase
