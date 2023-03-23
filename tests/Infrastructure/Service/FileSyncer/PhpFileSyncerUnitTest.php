@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
@@ -114,7 +115,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function providerGetRelativePath(): array
     {
         // UNIX-like OS paths.
-        if (!self::isWindows()) {
+        if (!Host::isWindows()) {
             return [
                 'Match: single directory depth' => [
                     'ancestor' => 'one',

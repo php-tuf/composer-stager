@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
@@ -32,7 +33,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (!self::isWindows()) {
+        if (!Host::isWindows()) {
             return;
         }
 

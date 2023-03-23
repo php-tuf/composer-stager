@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -247,7 +248,7 @@ final class FilesystemFunctionalTest extends TestCase
             ],
             'Relative link' => [
                 'given' => 'target.txt',
-                'expectedRaw' => self::isWindows() ? $absolute('target.txt') : 'target.txt',
+                'expectedRaw' => Host::isWindows() ? $absolute('target.txt') : 'target.txt',
                 'expectedResolved' => $absolute('target.txt'),
             ],
         ];
