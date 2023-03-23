@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\ActiveDirIsReadyInterface;
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */

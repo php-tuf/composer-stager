@@ -1,19 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\PreconditionTestCase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled

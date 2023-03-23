@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
-
-use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
  * Contains a set of preconditions for a domain operation.

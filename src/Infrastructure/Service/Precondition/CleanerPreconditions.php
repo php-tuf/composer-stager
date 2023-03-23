@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class CleanerPreconditions extends AbstractPreconditionsTree implements CleanerPreconditionsInterface

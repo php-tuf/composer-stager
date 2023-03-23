@@ -25,7 +25,7 @@ parameters:
             path: src/Infrastructure/Value/PathList/PathList.php
         -
             message: '#Parameter \#1 ...\$children of method .*AbstractPreconditionsTree::__construct\(\) expects .*PreconditionInterface, mixed given.#'
-            path: src/Infrastructure/Aggregate/PreconditionsTree
+            path: src/Infrastructure/Service/Precondition
 
         # Test code.
         -

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
- * Asserts that the staging directory is ready for use.
+ * Asserts the preconditions for the cleaner.
  *
  * This interface exists solely to facilitate autowiring dependencies through type hinting.
  *
@@ -11,6 +11,6 @@ namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
  *
  * @api
  */
-interface StagingDirIsReadyInterface extends PreconditionsTreeInterface
+interface CleanerPreconditionsInterface extends PreconditionsTreeInterface
 {
 }
