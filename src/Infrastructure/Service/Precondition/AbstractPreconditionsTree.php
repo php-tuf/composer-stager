@@ -4,12 +4,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionsTreeInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 /** @api */
-abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
+abstract class AbstractPreconditionsTree implements PreconditionInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> */
     private array $children;
@@ -60,23 +59,27 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
     ): void {
-        foreach ($this->children as $child) {
-            $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+        foreach ($this->getLeaves() as $leaf) {
+            $leaf->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
         }
     }
 
+    /** This function is non-final in case subclasses want to implement a different strategy. */
     public function getLeaves(): array
     {
         $leaves = [];
 
         foreach ($this->children as $child) {
-            if ($child instanceof PreconditionsTreeInterface) {
-                $leaves[] = $child->getLeaves();
+            $grandChildren = $child->getLeaves();
+
+            // If there are no grandchildren, the child is a leaf.
+            if ($grandChildren === []) {
+                $leaves[] = [$child];
 
                 continue;
             }
 
-            $leaves[] = [$child];
+            $leaves[] = $child->getLeaves();
         }
 
         return array_merge(...$leaves);

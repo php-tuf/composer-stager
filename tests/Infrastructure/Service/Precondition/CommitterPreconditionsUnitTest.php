@@ -30,8 +30,17 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
+        $this->commonPreconditions
+            ->getLeaves()
+            ->willReturn([$this->commonPreconditions]);
         $this->noUnsupportedLinksExist = $this->prophesize(NoUnsupportedLinksExistInterface::class);
+        $this->noUnsupportedLinksExist
+            ->getLeaves()
+            ->willReturn([$this->noUnsupportedLinksExist]);
         $this->stagingDirIsReady = $this->prophesize(StagingDirIsReadyInterface::class);
+        $this->stagingDirIsReady
+            ->getLeaves()
+            ->willReturn([$this->stagingDirIsReady]);
 
         parent::setUp();
     }

@@ -30,8 +30,17 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
+        $this->commonPreconditions
+            ->getLeaves()
+            ->willReturn([$this->commonPreconditions]);
         $this->noUnsupportedLinksExist = $this->prophesize(NoUnsupportedLinksExistInterface::class);
+        $this->noUnsupportedLinksExist
+            ->getLeaves()
+            ->willReturn([$this->noUnsupportedLinksExist]);
         $this->stagingDirDoesNotExist = $this->prophesize(StagingDirDoesNotExistInterface::class);
+        $this->stagingDirDoesNotExist
+            ->getLeaves()
+            ->willReturn([$this->stagingDirDoesNotExist]);
 
         parent::setUp();
     }

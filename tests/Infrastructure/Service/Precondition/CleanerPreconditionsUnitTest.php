@@ -29,7 +29,13 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
+        $this->commonPreconditions
+            ->getLeaves()
+            ->willReturn([$this->commonPreconditions]);
         $this->stagingDirIsReady = $this->prophesize(StagingDirIsReadyInterface::class);
+        $this->stagingDirIsReady
+            ->getLeaves()
+            ->willReturn([$this->stagingDirIsReady]);
 
         parent::setUp();
     }

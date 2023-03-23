@@ -29,6 +29,12 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
     {
         $this->stagingDirExists = $this->prophesize(StagingDirExistsInterface::class);
         $this->stagingDirIsWritable = $this->prophesize(StagingDirIsWritableInterface::class);
+        $this->stagingDirExists
+            ->getLeaves()
+            ->willReturn([$this->stagingDirExists]);
+        $this->stagingDirIsWritable
+            ->getLeaves()
+            ->willReturn([$this->stagingDirIsWritable]);
 
         parent::setUp();
     }

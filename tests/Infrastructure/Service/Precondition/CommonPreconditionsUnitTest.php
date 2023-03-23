@@ -30,8 +30,17 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->activeAndStagingDirsAreDifferent = $this->prophesize(ActiveAndStagingDirsAreDifferentInterface::class);
+        $this->activeAndStagingDirsAreDifferent
+            ->getLeaves()
+            ->willReturn([$this->activeAndStagingDirsAreDifferent]);
         $this->activeDirIsReady = $this->prophesize(ActiveDirIsReadyInterface::class);
+        $this->activeDirIsReady
+            ->getLeaves()
+            ->willReturn([$this->activeDirIsReady]);
         $this->composerIsAvailable = $this->prophesize(ComposerIsAvailableInterface::class);
+        $this->composerIsAvailable
+            ->getLeaves()
+            ->willReturn([$this->composerIsAvailable]);
 
         parent::setUp();
     }
@@ -68,7 +77,7 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
-        $this->composerIsAvailable
+        $this->activeAndStagingDirsAreDifferent
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);

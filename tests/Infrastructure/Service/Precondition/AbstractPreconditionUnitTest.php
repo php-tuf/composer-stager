@@ -77,6 +77,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
     /**
      * @covers ::getDescription
+     * @covers ::getLeaves
      * @covers ::getName
      * @covers ::getStatusMessage
      *
@@ -110,6 +111,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         self::assertEquals($sut->getDescription(), $description);
         self::assertEquals($sut->isFulfilled($activeDir, $stagingDir, $exclusions), $isFulfilled);
         self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir, $exclusions), $expectedStatusMessage);
+        self::assertEquals($sut->getLeaves(), [$sut]);
     }
 
     public function providerBasicFunctionality(): array

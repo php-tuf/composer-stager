@@ -29,6 +29,12 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);
         $this->stagingDirIsReady = $this->prophesize(StagingDirIsReadyInterface::class);
+        $this->commonPreconditions
+            ->getLeaves()
+            ->willReturn([$this->commonPreconditions]);
+        $this->stagingDirIsReady
+            ->getLeaves()
+            ->willReturn([$this->stagingDirIsReady]);
 
         parent::setUp();
     }

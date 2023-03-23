@@ -38,6 +38,21 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $this->noLinksExistOnWindows = $this->prophesize(NoLinksExistOnWindowsInterface::class);
         $this->noSymlinksPointOutsideTheCodebase = $this->prophesize(NoSymlinksPointOutsideTheCodebaseInterface::class);
         $this->noSymlinksPointToADirectory = $this->prophesize(NoSymlinksPointToADirectoryInterface::class);
+        $this->noAbsoluteSymlinksExist
+            ->getLeaves()
+            ->willReturn([$this->noAbsoluteSymlinksExist]);
+        $this->noHardLinksExist
+            ->getLeaves()
+            ->willReturn([$this->noHardLinksExist]);
+        $this->noLinksExistOnWindows
+            ->getLeaves()
+            ->willReturn([$this->noLinksExistOnWindows]);
+        $this->noSymlinksPointOutsideTheCodebase
+            ->getLeaves()
+            ->willReturn([$this->noSymlinksPointOutsideTheCodebase]);
+        $this->noSymlinksPointToADirectory
+            ->getLeaves()
+            ->willReturn([$this->noSymlinksPointToADirectory]);
 
         parent::setUp();
     }

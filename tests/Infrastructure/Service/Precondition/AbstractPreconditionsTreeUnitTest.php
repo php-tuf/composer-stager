@@ -63,6 +63,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
     /**
      * @covers ::getDescription
+     * @covers ::getLeaves
      * @covers ::getName
      * @covers ::getStatusMessage
      *
@@ -87,6 +88,8 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         // itself and preventing it from actually being exercised.
         /** @var \PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
         $child = $this->prophesize(PreconditionInterface::class);
+        $child->getLeaves()
+            ->willReturn([$child]);
 
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions)

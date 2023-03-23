@@ -28,7 +28,13 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
     protected function setUp(): void
     {
         $this->activeDirExists = $this->prophesize(ActiveDirExistsInterface::class);
+        $this->activeDirExists
+            ->getLeaves()
+            ->willReturn([$this->activeDirExists]);
         $this->activeDirIsWritable = $this->prophesize(ActiveDirIsWritableInterface::class);
+        $this->activeDirIsWritable
+            ->getLeaves()
+            ->willReturn([$this->activeDirIsWritable]);
 
         parent::setUp();
     }
