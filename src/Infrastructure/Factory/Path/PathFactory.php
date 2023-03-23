@@ -3,15 +3,20 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Factory\Path;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
-/** @api */
+/**
+ * @api
+ *
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 final class PathFactory implements PathFactoryInterface
 {
     public static function create(string $path, ?PathInterface $cwd = null): PathInterface
     {
-        if (DIRECTORY_SEPARATOR === '\\') {
+        if (Host::isWindows()) {
             return new WindowsPath($path, $cwd); // @codeCoverageIgnore
         }
 
