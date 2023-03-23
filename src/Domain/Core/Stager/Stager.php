@@ -65,7 +65,7 @@ final class Stager implements StagerInterface
         PathInterface $stagingDir,
         array $composerCommand,
         ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout,
+        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
         $command = array_merge(
             ['--working-dir=' . $stagingDir->resolved()],
