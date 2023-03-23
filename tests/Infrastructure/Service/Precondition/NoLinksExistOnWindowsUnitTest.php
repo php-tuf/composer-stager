@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Host\HostInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Host\TestHost;
 use Prophecy\Argument;
 
 /**
@@ -23,7 +24,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Service\Host\HostInterface|\Prophecy\Prophecy\ObjectProphecy $host
+ * @property \PhpTuf\ComposerStager\Domain\Service\Host\HostInterface $host
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
@@ -33,10 +34,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 {
     protected function setUp(): void
     {
-        $this->host = $this->prophesize(HostInterface::class);
-        $this->host
-            ->isWindows()
-            ->willReturn(true);
+        $this->host = $this->createWindowsHost();
 
         parent::setUp();
     }
@@ -50,10 +48,31 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
     {
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
-        $host = $this->host->reveal();
         $pathFactory = $this->pathFactory->reveal();
 
-        return new NoLinksExistOnWindows($fileFinder, $filesystem, $host, $pathFactory);
+        return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory);
+    }
+
+    protected function createWindowsHost(): HostInterface
+    {
+        return new class() extends TestHost
+        {
+            public static function isWindows(): bool
+            {
+                return true;
+            }
+        };
+    }
+
+    protected function createNonWindowsHost(): HostInterface
+    {
+        return new class() extends TestHost
+        {
+            public static function isWindows(): bool
+            {
+                return false;
+            }
+        };
     }
 
     public function testFulfilled(): void
@@ -65,10 +84,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
     {
         $activeDir = $this->activeDir->reveal();
         $stagingDir = $this->stagingDir->reveal();
-        $this->host
-            ->isWindows()
-            ->shouldBeCalled()
-            ->willReturn(false);
+        $this->host = $this->createNonWindowsHost();
         $this->filesystem
             ->exists(Argument::cetera())
             ->shouldNotBeCalled();
