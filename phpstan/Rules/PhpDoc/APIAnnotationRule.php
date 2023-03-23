@@ -21,6 +21,13 @@ final class APIAnnotationRule extends AbstractRule
     private const INTERFACE = 'Interface';
     private const TEST_CLASS = 'Test class';
 
+    private const PUBLIC_API = [
+        self::INTERFACE,
+        self::ABSTRACT_CLASS,
+        self::FACTORY,
+        self::EXCEPTION,
+    ];
+
     public function getNodeType(): string
     {
         return ClassLike::class;
@@ -47,15 +54,8 @@ final class APIAnnotationRule extends AbstractRule
         }
 
         // Define the public API surface.
-        $publicAPI = [
-            self::INTERFACE,
-            self::ABSTRACT_CLASS,
-            self::FACTORY,
-            self::EXCEPTION,
-        ];
-
         // Require classes in the public API to be annotated with @api.
-        if (in_array($type, $publicAPI, true)) {
+        if (in_array($type, self::PUBLIC_API, true)) {
             return $this->getAnnotationErrors($node, $type, '@api', '@internal');
         }
 
