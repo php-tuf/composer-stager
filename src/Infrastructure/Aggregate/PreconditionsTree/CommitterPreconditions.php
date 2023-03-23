@@ -15,10 +15,7 @@ final class CommitterPreconditions extends AbstractPreconditionsTree implements 
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
         StagingDirIsReadyInterface $stagingDirIsReady,
     ) {
-        /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
-        $children = func_get_args();
-
-        parent::__construct(...$children);
+        parent::__construct(...func_get_args());
     }
 
     public function getName(): string
