@@ -60,7 +60,7 @@ class Updater
             'require',
             'example/package',
             '--update-with-all-dependencies',
-        ], $stagingDir);
+        ], $activeDir, $stagingDir);
 
         // Sync the changes back to the active directory.
         $this->committer->commit($stagingDir, $activeDir, $exclusions);

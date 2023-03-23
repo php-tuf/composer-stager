@@ -145,7 +145,7 @@ interface FilesystemInterface
      *   The link path.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     *   If the the path is not a symbolic link (symlink) or cannot be read. Hard
+     *   If the path is not a symbolic link (symlink) or cannot be read. Hard
      *   links are distinct from symlinks and will still throw an exception.
      */
     public function readLink(PathInterface $path): PathInterface;
