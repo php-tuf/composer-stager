@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
@@ -69,7 +70,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
         // This test is host-sensitive and can only be run on Windows.
-        if (!self::isWindows()) {
+        if (!Host::isWindows()) {
             $this->expectNotToPerformAssertions();
 
             return;
@@ -138,7 +139,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         // This test is host-sensitive and can only be run on Windows.
-        if (!self::isWindows()) {
+        if (!Host::isWindows()) {
             $this->expectNotToPerformAssertions();
 
             return;

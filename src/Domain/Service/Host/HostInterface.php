@@ -10,5 +10,5 @@ namespace PhpTuf\ComposerStager\Domain\Service\Host;
 interface HostInterface
 {
     /** Determines whether the operating system is Windows. */
-    public function isWindows(): bool;
+    public static function isWindows(): bool;
 }

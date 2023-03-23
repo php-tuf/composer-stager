@@ -38,7 +38,7 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
         ?PathListInterface $exclusions,
     ): bool {
         // This is a Windows-specific precondition. No need to run it anywhere else.
-        return !$this->host->isWindows();
+        return !$this->host::isWindows();
     }
 
     protected function getFulfilledStatusMessage(): string

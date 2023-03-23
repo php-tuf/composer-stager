@@ -402,11 +402,6 @@ abstract class TestCase extends PHPUnitTestCase
         return $process->getOutput();
     }
 
-    protected static function isWindows(): bool
-    {
-        return DIRECTORY_SEPARATOR !== '/';
-    }
-
     protected static function isRsyncAvailable(): bool
     {
         $finder = new SymfonyExecutableFinder();

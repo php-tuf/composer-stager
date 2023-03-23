@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
@@ -41,7 +42,7 @@ final class PathFactoryUnitTest extends TestCase
 
     public function providerBasicFunctionality(): array
     {
-        if (self::isWindows()) {
+        if (Host::isWindows()) {
             return [
                 [
                     'string' => 'test.txt',

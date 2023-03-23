@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\Host\HostInterface;
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class Host implements HostInterface
 {
-    public function isWindows(): bool
+    public static function isWindows(): bool
     {
         return PHP_OS_FAMILY === 'Windows';
     }
