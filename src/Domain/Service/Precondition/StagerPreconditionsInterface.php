@@ -11,6 +11,6 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  *
  * @api
  */
-interface StagerPreconditionsInterface extends PreconditionsTreeInterface
+interface StagerPreconditionsInterface extends PreconditionInterface
 {
 }

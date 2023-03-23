@@ -18,6 +18,6 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  *
  * @api
  */
-interface NoUnsupportedLinksExistInterface extends PreconditionsTreeInterface
+interface NoUnsupportedLinksExistInterface extends PreconditionInterface
 {
 }

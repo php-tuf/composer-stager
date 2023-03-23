@@ -11,6 +11,6 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  *
  * @api
  */
-interface ActiveDirIsReadyInterface extends PreconditionsTreeInterface
+interface ActiveDirIsReadyInterface extends PreconditionInterface
 {
 }
