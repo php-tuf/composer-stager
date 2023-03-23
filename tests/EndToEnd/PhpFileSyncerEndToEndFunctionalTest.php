@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\ActiveDirIsReady
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\BeginnerPreconditions
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CleanerPreconditions
  * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\CommitterPreconditions

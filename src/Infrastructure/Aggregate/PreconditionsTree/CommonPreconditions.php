@@ -2,10 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
 
+use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
@@ -13,8 +12,7 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
 {
     public function __construct(
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
-        ActiveDirExistsInterface $activeDirExists,
-        ActiveDirIsWritableInterface $activeDirIsWritable,
+        ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
     ) {
         /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> $children */
