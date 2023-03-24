@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use JsonException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
@@ -37,6 +38,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): bool {
         try {

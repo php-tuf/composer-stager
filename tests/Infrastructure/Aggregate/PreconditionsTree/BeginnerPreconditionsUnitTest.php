@@ -52,13 +52,13 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noUnsupportedLinksExist
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirDoesNotExist
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The preconditions for beginning the staging process are fulfilled.');
@@ -70,7 +70,7 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

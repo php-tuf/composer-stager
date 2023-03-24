@@ -40,9 +40,9 @@ abstract class PreconditionTestCase extends TestCase
         $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
-        $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions);
-        $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions);
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions, $this->exclusions);
+        $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions, $this->exclusions);
+        $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions, $this->exclusions);
 
         self::assertTrue($isFulfilled);
         self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
@@ -56,14 +56,14 @@ abstract class PreconditionTestCase extends TestCase
         $stagingDir = $this->stagingDir->reveal();
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions);
-        $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions);
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, $this->exclusions, $this->exclusions);
+        $actualStatusMessage = $sut->getStatusMessage($activeDir, $stagingDir, $this->exclusions, $this->exclusions);
 
         self::assertFalse($isFulfilled, 'Precondition failed as expected.');
         self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
 
         // This is called last so as not to throw the exception until all other
         // assertions have been made.
-        $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions);
+        $sut->assertIsFulfilled($activeDir, $stagingDir, $this->exclusions, $this->exclusions);
     }
 }

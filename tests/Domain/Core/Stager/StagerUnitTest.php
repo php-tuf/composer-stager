@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Domain\Translation\PassthroughTranslation;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
@@ -38,6 +39,7 @@ final class StagerUnitTest extends TestCase
         $this->stagingDir = new TestPath(self::STAGING_DIR);
         $this->composerRunner = $this->prophesize(ComposerRunnerInterface::class);
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
+        $this->translation = new PassthroughTranslation();
     }
 
     protected function createSut(): Stager
@@ -45,14 +47,14 @@ final class StagerUnitTest extends TestCase
         $composerRunner = $this->composerRunner->reveal();
         $preconditions = $this->preconditions->reveal();
 
-        return new Stager($composerRunner, $preconditions);
+        return new Stager($composerRunner, $preconditions, $this->translation);
     }
 
     /** @covers ::stage */
     public function testStageWithMinimumParams(): void
     {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation)
             ->shouldBeCalledOnce();
         $expectedCommand = [
             '--working-dir=' . self::STAGING_DIR,
@@ -74,7 +76,7 @@ final class StagerUnitTest extends TestCase
         ?int $timeout,
     ): void {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation)
             ->shouldBeCalledOnce();
         $this->composerRunner
             ->run($expectedCommand, $callback, $timeout)
@@ -156,7 +158,7 @@ final class StagerUnitTest extends TestCase
         $this->expectException(PreconditionException::class);
 
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();

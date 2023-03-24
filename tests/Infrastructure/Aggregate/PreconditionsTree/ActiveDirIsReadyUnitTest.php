@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\ActiveDirIsReady;
+use PhpTuf\ComposerStager\Tests\Domain\Translation\PassthroughTranslation;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\PreconditionTestCase;
 
 /**
@@ -30,6 +31,7 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
     {
         $this->activeDirExists = $this->prophesize(ActiveDirExistsInterface::class);
         $this->activeDirIsWritable = $this->prophesize(ActiveDirIsWritableInterface::class);
+        $this->translation = new PassthroughTranslation();
 
         parent::setUp();
     }
@@ -48,10 +50,10 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->activeDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $this->translation, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsWritable
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $this->translation, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The active directory is ready to use.');
@@ -63,7 +65,7 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->activeDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $this->translation, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
@@ -26,6 +27,7 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): bool {
         return $activeDir->resolved() !== $stagingDir->resolved();

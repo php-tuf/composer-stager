@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Domain\Translation\PassthroughTranslation;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
@@ -33,6 +34,7 @@ final class CleanerUnitTest extends TestCase
         $this->stagingDir = new TestPath(self::STAGING_DIR);
         $this->preconditions = $this->prophesize(CleanerPreconditionsInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->translation = new PassthroughTranslation();
     }
 
     protected function createSut(): Cleaner
@@ -40,14 +42,14 @@ final class CleanerUnitTest extends TestCase
         $filesystem = $this->filesystem->reveal();
         $preconditions = $this->preconditions->reveal();
 
-        return new Cleaner($filesystem, $preconditions);
+        return new Cleaner($filesystem, $preconditions, $this->translation);
     }
 
     /** @covers ::clean */
     public function testCleanWithMinimumParams(): void
     {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation, null)
             ->shouldBeCalledOnce();
         $this->filesystem
             ->remove($this->stagingDir, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
@@ -69,7 +71,7 @@ final class CleanerUnitTest extends TestCase
     ): void {
         $path = new TestPath($path);
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $path)
+            ->assertIsFulfilled($this->activeDir, $path, $this->translation)
             ->shouldBeCalledOnce();
         $this->filesystem
             ->remove($path, $callback, $timeout)
@@ -101,7 +103,7 @@ final class CleanerUnitTest extends TestCase
         $this->expectException(PreconditionException::class);
 
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();

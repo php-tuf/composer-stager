@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Domain\Translation\PassthroughTranslation;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -37,6 +38,7 @@ final class BeginnerUnitTest extends TestCase
         $this->stagingDir = new TestPath(self::STAGING_DIR);
         $this->preconditions = $this->prophesize(BeginnerPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
+        $this->translation = new PassthroughTranslation();
     }
 
     protected function createSut(): Beginner
@@ -44,14 +46,14 @@ final class BeginnerUnitTest extends TestCase
         $fileSyncer = $this->fileSyncer->reveal();
         $preconditions = $this->preconditions->reveal();
 
-        return new Beginner($fileSyncer, $preconditions);
+        return new Beginner($fileSyncer, $preconditions, $this->translation);
     }
 
     /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation, null)
             ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($this->activeDir, $this->stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
@@ -76,7 +78,7 @@ final class BeginnerUnitTest extends TestCase
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $this->translation, $exclusions)
             ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
@@ -112,7 +114,7 @@ final class BeginnerUnitTest extends TestCase
         $this->expectException(PreconditionException::class);
 
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->translation, Argument::cetera())
             ->shouldBeCalledOnce()
             ->willThrow(PreconditionException::class);
         $sut = $this->createSut();

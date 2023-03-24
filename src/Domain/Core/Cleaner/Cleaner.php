@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
@@ -16,6 +17,7 @@ final class Cleaner implements CleanerInterface
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly CleanerPreconditionsInterface $preconditions,
+        private readonly TranslationInterface $translation,
     ) {
     }
 
@@ -25,7 +27,7 @@ final class Cleaner implements CleanerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
-        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
+        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $this->translation);
 
         try {
             $this->filesystem->remove($stagingDir, $callback, $timeout);

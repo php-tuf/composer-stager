@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
 use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\PreconditionsTreeInterface;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
@@ -34,20 +35,22 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): string {
-        return $this->isFulfilled($activeDir, $stagingDir, $exclusions)
-            ? $this->getFulfilledStatusMessage()
-            : $this->getUnfulfilledStatusMessage();
+        return $this->isFulfilled($activeDir, $stagingDir, $translation, $exclusions)
+            ? $translation->translate($this->getFulfilledStatusMessage())
+            : $translation->translate($this->getUnfulfilledStatusMessage());
     }
 
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): bool {
         try {
-            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+            $this->assertIsFulfilled($activeDir, $stagingDir, $translation, $exclusions);
         } catch (PreconditionException) {
             return false;
         }
@@ -58,10 +61,11 @@ abstract class AbstractPreconditionsTree implements PreconditionsTreeInterface
     public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): void {
         foreach ($this->children as $child) {
-            $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+            $child->assertIsFulfilled($activeDir, $stagingDir, $translation, $exclusions);
         }
     }
 

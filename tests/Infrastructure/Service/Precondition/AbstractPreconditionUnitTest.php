@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
@@ -68,6 +69,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
             public function isFulfilled(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
+                TranslationInterface $translation,
                 ?PathListInterface $exclusions = null,
             ): bool {
                 return $this->spy->report(func_get_args());
@@ -108,8 +110,8 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir, $exclusions), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir, $exclusions), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir, $exclusions, $exclusions), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir, $exclusions, $exclusions), $expectedStatusMessage);
     }
 
     public function providerBasicFunctionality(): array
@@ -155,7 +157,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         $sut = $this->createSut();
 
         $sut->assertIsFulfilled($activeDir, $stagingDir);
-        $sut->assertIsFulfilled($activeDir, $stagingDir, new TestPathList());
+        $sut->assertIsFulfilled($activeDir, $stagingDir, new TestPathList(), new TestPathList());
     }
 
     /** @covers ::assertIsFulfilled */
@@ -171,6 +173,6 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->assertIsFulfilled($activeDir, $stagingDir, new TestPathList());
+        $sut->assertIsFulfilled($activeDir, $stagingDir, new TestPathList(), new TestPathList());
     }
 }

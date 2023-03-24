@@ -52,13 +52,13 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->composerIsAvailable
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsReady
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The common preconditions are fulfilled.');
@@ -70,7 +70,7 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->composerIsAvailable
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

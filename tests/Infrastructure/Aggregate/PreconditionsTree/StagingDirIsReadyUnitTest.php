@@ -48,10 +48,10 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->stagingDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsWritable
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The staging directory is ready to use.');
@@ -63,7 +63,7 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->stagingDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

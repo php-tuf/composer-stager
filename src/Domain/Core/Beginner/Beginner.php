@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
@@ -17,6 +18,7 @@ final class Beginner implements BeginnerInterface
     public function __construct(
         private readonly FileSyncerInterface $fileSyncer,
         private readonly BeginnerPreconditionsInterface $preconditions,
+        private readonly TranslationInterface $translation,
     ) {
     }
 
@@ -27,7 +29,7 @@ final class Beginner implements BeginnerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
-        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $this->translation, $exclusions);
 
         try {
             $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);

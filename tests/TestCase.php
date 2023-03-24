@@ -2,8 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests;
 
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Tests\Domain\Translation\PassthroughTranslation;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
@@ -11,6 +13,7 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -29,11 +32,16 @@ abstract class TestCase extends PHPUnitTestCase
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
 
+    protected TranslationInterface $translation;
+
     public function getContainer(): ContainerBuilder
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
         $loader->load(self::PROJECT_ROOT . '/config/services.yml');
+        $container->addDefinitions([
+            TranslationInterface::class => new Definition(PassthroughTranslation::class),
+        ]);
 
         return $container;
     }

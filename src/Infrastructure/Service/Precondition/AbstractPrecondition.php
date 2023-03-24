@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
@@ -13,10 +14,11 @@ abstract class AbstractPrecondition implements PreconditionInterface
     final public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): void {
-        if (!$this->isFulfilled($activeDir, $stagingDir, $exclusions)) {
-            throw new PreconditionException($this, $this->getUnfulfilledStatusMessage());
+        if (!$this->isFulfilled($activeDir, $stagingDir, $translation, $exclusions)) {
+            throw new PreconditionException($this, $translation->translate($this->getUnfulfilledStatusMessage()));
         }
     }
 
@@ -29,9 +31,10 @@ abstract class AbstractPrecondition implements PreconditionInterface
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): string {
-        return $this->isFulfilled($activeDir, $stagingDir, $exclusions)
+        return $this->isFulfilled($activeDir, $stagingDir, $translation, $exclusions)
             ? $this->getFulfilledStatusMessage()
             : $this->getUnfulfilledStatusMessage();
     }

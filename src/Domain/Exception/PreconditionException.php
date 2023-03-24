@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use RuntimeException;
+use Stringable;
 use Throwable;
 
 /**
@@ -17,11 +18,11 @@ class PreconditionException extends RuntimeException implements ExceptionInterfa
 {
     public function __construct(
         private readonly PreconditionInterface $precondition,
-        string $message = '',
+        string|Stringable $message = '',
         int $code = 0,
         ?Throwable $previous = null,
     ) {
-        parent::__construct($message, $code, $previous);
+        parent::__construct((string) $message, $code, $previous);
     }
 
     public function getPrecondition(): PreconditionInterface

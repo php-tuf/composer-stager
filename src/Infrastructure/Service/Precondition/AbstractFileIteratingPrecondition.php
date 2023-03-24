@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
@@ -37,6 +38,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): bool {
         try {

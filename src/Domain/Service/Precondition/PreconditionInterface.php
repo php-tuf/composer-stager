@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
@@ -38,18 +39,22 @@ interface PreconditionInterface
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): string;
 
-    /** Determines whether the precondition is fulfilled. */
+    /** Determines whether the precondition is fulfilled. * * @param \PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface $translation*/
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): bool;
 
     /**
      * Asserts that the precondition is fulfilled.
+     *
+     * @param \PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface $translation *
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
      *   If the precondition is unfulfilled.
@@ -57,6 +62,7 @@ interface PreconditionInterface
     public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
+        TranslationInterface $translation,
         ?PathListInterface $exclusions = null,
     ): void;
 }

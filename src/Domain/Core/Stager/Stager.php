@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslationInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
@@ -17,6 +18,7 @@ final class Stager implements StagerInterface
     public function __construct(
         private readonly ComposerRunnerInterface $composerRunner,
         private readonly StagerPreconditionsInterface $preconditions,
+        private readonly TranslationInterface $translation,
     ) {
     }
 
@@ -27,7 +29,7 @@ final class Stager implements StagerInterface
         ?ProcessOutputCallbackInterface $callback = null,
         ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
     ): void {
-        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
+        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $this->translation);
 
         $this->validateCommand($composerCommand);
 
