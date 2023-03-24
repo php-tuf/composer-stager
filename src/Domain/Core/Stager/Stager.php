@@ -46,7 +46,7 @@ final class Stager implements StagerInterface
         }
 
         if (reset($composerCommand) === 'composer') {
-            throw new InvalidArgumentException('The Composer command should not begin with "composer"--it is implied');
+            throw new InvalidArgumentException('The Composer command cannot begin with "composer"--it is implied');
         }
 
         if (array_key_exists('--working-dir', $composerCommand) || array_key_exists('-d', $composerCommand)) {
