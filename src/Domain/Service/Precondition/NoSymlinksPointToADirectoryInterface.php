@@ -6,7 +6,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  * Asserts that there are no symlinks that point to directories.
  *
  * Symlinks targeting directories are supported by RsyncFileSyncer but not yet by
- * PhpFileSyncer. Therefore they are forbidden when the latter is in use. Once they
+ * PhpFileSyncer. Therefore, they are forbidden when the latter is in use. Once they
  * are supported by both file syncers, this precondition will be removed completely.
  *
  * This includes both the active and staging directories. Hard links are ignored.
