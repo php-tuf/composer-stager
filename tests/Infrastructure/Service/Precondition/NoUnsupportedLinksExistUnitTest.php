@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInterface;
@@ -8,11 +8,10 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\NoUnsupportedLinksExist;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\PreconditionTestCase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinksExist;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\NoUnsupportedLinksExist
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinksExist
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
@@ -20,7 +19,7 @@ use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\Precondition
  * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteSymlinksExist
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
@@ -39,6 +38,21 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $this->noLinksExistOnWindows = $this->prophesize(NoLinksExistOnWindowsInterface::class);
         $this->noSymlinksPointOutsideTheCodebase = $this->prophesize(NoSymlinksPointOutsideTheCodebaseInterface::class);
         $this->noSymlinksPointToADirectory = $this->prophesize(NoSymlinksPointToADirectoryInterface::class);
+        $this->noAbsoluteSymlinksExist
+            ->getLeaves()
+            ->willReturn([$this->noAbsoluteSymlinksExist]);
+        $this->noHardLinksExist
+            ->getLeaves()
+            ->willReturn([$this->noHardLinksExist]);
+        $this->noLinksExistOnWindows
+            ->getLeaves()
+            ->willReturn([$this->noLinksExistOnWindows]);
+        $this->noSymlinksPointOutsideTheCodebase
+            ->getLeaves()
+            ->willReturn([$this->noSymlinksPointOutsideTheCodebase]);
+        $this->noSymlinksPointToADirectory
+            ->getLeaves()
+            ->willReturn([$this->noSymlinksPointToADirectory]);
 
         parent::setUp();
     }

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */

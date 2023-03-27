@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
- * Asserts the preconditions for the beginner.
+ * Asserts the preconditions common to all domain operations.
  *
  * This interface exists solely to facilitate autowiring dependencies through type hinting.
  *
@@ -11,6 +11,6 @@ namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
  *
  * @api
  */
-interface BeginnerPreconditionsInterface extends PreconditionsTreeInterface
+interface CommonPreconditionsInterface extends PreconditionInterface
 {
 }

@@ -20,13 +20,7 @@ abstract class AbstractPrecondition implements PreconditionInterface
         }
     }
 
-    /** Gets a status message for when the precondition is fulfilled. */
-    abstract protected function getFulfilledStatusMessage(): string;
-
-    /** Gets a status message for when the precondition is unfulfilled. */
-    abstract protected function getUnfulfilledStatusMessage(): string;
-
-    public function getStatusMessage(
+    final public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
@@ -35,4 +29,15 @@ abstract class AbstractPrecondition implements PreconditionInterface
             ? $this->getFulfilledStatusMessage()
             : $this->getUnfulfilledStatusMessage();
     }
+
+    final public function getLeaves(): array
+    {
+        return [$this];
+    }
+
+    /** Gets a status message for when the precondition is fulfilled. */
+    abstract protected function getFulfilledStatusMessage(): string;
+
+    /** Gets a status message for when the precondition is unfulfilled. */
+    abstract protected function getUnfulfilledStatusMessage(): string;
 }

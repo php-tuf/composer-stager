@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
 {

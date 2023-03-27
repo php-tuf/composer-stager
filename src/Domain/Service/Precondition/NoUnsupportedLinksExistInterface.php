@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
  * Asserts that there are no unsupported links in the codebase.
@@ -18,6 +18,6 @@ namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
  *
  * @api
  */
-interface NoUnsupportedLinksExistInterface extends PreconditionsTreeInterface
+interface NoUnsupportedLinksExistInterface extends PreconditionInterface
 {
 }

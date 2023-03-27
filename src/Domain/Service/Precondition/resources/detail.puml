@@ -25,16 +25,18 @@ namespace Precondition {
         +getStatusMessage($activeDir, $stagingDir) : string
         +isFulfilled($activeDir, $stagingDir) : bool
         +assertIsFulfilled($activeDir, $stagingDir) : void
+        +getLeaves() : PreconditionInterface[]
     }
 
     abstract class AbstractPrecondition implements PreconditionInterface {
         +final getStatusMessage($activeDir, $stagingDir) : string
         +final assertIsFulfilled($activeDir, $stagingDir) : void
+        +final getLeaves() : PreconditionInterface[self]
         {abstract} #getFulfilledStatusMessage() : string
         {abstract} #getUnfulfilledStatusMessage() : string
     }
 
-    class ConcretePrecondition {
+    class ConcretePrecondition extends AbstractPrecondition {
         +getName() : string
         +getDescription() : string
         +isFulfilled($activeDir, $stagingDir) : bool
@@ -42,28 +44,18 @@ namespace Precondition {
         #getUnfulfilledStatusMessage() : string
     }
 
-    ConcretePrecondition " *  " -up-|> AbstractPrecondition
-
-}
-
-namespace PreconditionsTree {
-
-    interface PreconditionsTreeInterface {
-        +getLeaves() : PreconditionInterface[]
-    }
-
-    abstract AbstractPreconditionsTree {
+    abstract AbstractPreconditionsTree implements PreconditionInterface {
         -PreconditionInterface[] $children
         +__construct(...$children)
         +final getStatusMessage($activeDir, $stagingDir) : string
         +final isFulfilled($activeDir, $stagingDir) : bool
         +final assertIsFulfilled($activeDir, $stagingDir) : void
-        +final getLeaves() : PreconditionInterface[]
+        +getLeaves() : PreconditionInterface[]
         {abstract} #getFulfilledStatusMessage() : string
         {abstract} #getUnfulfilledStatusMessage() : string
     }
 
-    class ConcretePreconditionsTree {
+    class ConcretePreconditionsTree extends AbstractPreconditionsTree {
         +__construct(...$children)
         +getName() : string
         +getDescription() : string
@@ -71,13 +63,9 @@ namespace PreconditionsTree {
         #getUnfulfilledStatusMessage() : string
     }
 
-    ConcretePreconditionsTree " *  " -up-|> AbstractPreconditionsTree
-
 }
 
 Exception.PreconditionException -down-o "1  " Precondition.PreconditionInterface
-PreconditionsTree.AbstractPreconditionsTree .up.|> PreconditionsTree.PreconditionsTreeInterface
-PreconditionsTree.PreconditionsTreeInterface -left-o "1..*" Precondition.PreconditionInterface
-PreconditionsTree.PreconditionsTreeInterface -left-|> Precondition.PreconditionInterface
+Precondition.PreconditionInterface -up-o "0..*" Precondition.PreconditionInterface : children
 
 @enduml

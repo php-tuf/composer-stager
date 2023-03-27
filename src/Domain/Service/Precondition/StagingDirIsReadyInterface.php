@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 /**
  * Asserts that the staging directory is ready for use.
@@ -11,6 +11,6 @@ namespace PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree;
  *
  * @api
  */
-interface StagingDirIsReadyInterface extends PreconditionsTreeInterface
+interface StagingDirIsReadyInterface extends PreconditionInterface
 {
 }

@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Aggregate\PreconditionsTree;
+namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\PreconditionTestCase;
+use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsReady;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\StagingDirIsReady
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsReady
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
@@ -17,7 +16,7 @@ use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\Precondition
  * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Aggregate\PreconditionsTree\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
@@ -30,6 +29,12 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
     {
         $this->stagingDirExists = $this->prophesize(StagingDirExistsInterface::class);
         $this->stagingDirIsWritable = $this->prophesize(StagingDirIsWritableInterface::class);
+        $this->stagingDirExists
+            ->getLeaves()
+            ->willReturn([$this->stagingDirExists]);
+        $this->stagingDirIsWritable
+            ->getLeaves()
+            ->willReturn([$this->stagingDirIsWritable]);
 
         parent::setUp();
     }

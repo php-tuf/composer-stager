@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner;
 
-use PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -20,8 +20,8 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner::__construct
  *
- * @property \PhpTuf\ComposerStager\Domain\Aggregate\PreconditionsTree\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $stagingDir
  */
