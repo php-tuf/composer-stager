@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Core\Committer;
+namespace PhpTuf\ComposerStager\Tests\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
+use PhpTuf\ComposerStager\Domain\Core\Committer;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -20,9 +20,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Committer
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Committer\Committer::__construct
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Committer::__construct
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions

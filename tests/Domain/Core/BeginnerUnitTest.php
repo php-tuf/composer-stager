@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Core\Beginner;
+namespace PhpTuf\ComposerStager\Tests\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
+use PhpTuf\ComposerStager\Domain\Core\Beginner;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -20,9 +20,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner::__construct
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner::__construct
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions

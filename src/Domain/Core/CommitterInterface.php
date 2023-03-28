@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Core\Committer;
+namespace PhpTuf\ComposerStager\Domain\Core;
 
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -35,7 +35,7 @@ interface CommitterInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      *
-     * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
+     * @see \PhpTuf\ComposerStager\Domain\Core\BeginnerInterface::begin
      */
     public function commit(
         PathInterface $stagingDir,

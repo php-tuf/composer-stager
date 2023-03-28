@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Core\Beginner;
+namespace PhpTuf\ComposerStager\Domain\Core;
 
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -46,7 +46,7 @@ interface BeginnerInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      *
-     * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
+     * @see \PhpTuf\ComposerStager\Domain\Core\CommitterInterface::commit
      */
     public function begin(
         PathInterface $activeDir,
