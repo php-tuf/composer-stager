@@ -46,7 +46,7 @@ interface BeginnerInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      *
-     * @see \PhpTuf\ComposerStager\Domain\Core\Committer\CommitterInterface::commit
+     * @see \PhpTuf\ComposerStager\Domain\Core\CommitterInterface::commit
      */
     public function begin(
         PathInterface $activeDir,

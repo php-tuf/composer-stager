@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner
- * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
+ * @uses \PhpTuf\ComposerStager\Domain\Core\Committer
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
