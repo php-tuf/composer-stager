@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
-use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
+use PhpTuf\ComposerStager\Domain\Core\Beginner;
 use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
@@ -18,7 +18,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * infrastructure layers. The test cases themselves are supplied by this class.
  * Subclasses specify the file syncer to use via ::fileSyncerClass().
  *
- * @property \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner $beginner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Beginner $beginner
  * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner $cleaner
  * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer $committer
  * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager $stager

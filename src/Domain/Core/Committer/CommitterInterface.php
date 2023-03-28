@@ -35,7 +35,7 @@ interface CommitterInterface
      * @throws \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *   If the operation fails.
      *
-     * @see \PhpTuf\ComposerStager\Domain\Core\Beginner\BeginnerInterface::begin
+     * @see \PhpTuf\ComposerStager\Domain\Core\BeginnerInterface::begin
      */
     public function commit(
         PathInterface $stagingDir,

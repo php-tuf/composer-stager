@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
- * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner
+ * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Committer\Committer
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
