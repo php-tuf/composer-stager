@@ -70,15 +70,6 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         $leaves = [];
 
         foreach ($this->children as $child) {
-            $grandChildren = $child->getLeaves();
-
-            // If there are no grandchildren, the child is a leaf.
-            if ($grandChildren === []) {
-                $leaves[] = [$child];
-
-                continue;
-            }
-
             $leaves[] = $child->getLeaves();
         }
 
