@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\Host;
+namespace PhpTuf\ComposerStager\Infrastructure\Service\Host;
 
 /**
  * Provides basic utilities for interacting with the host.

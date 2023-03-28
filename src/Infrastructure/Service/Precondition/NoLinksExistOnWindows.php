@@ -3,12 +3,12 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Service\Host\HostInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface;
 
 /** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
 final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition implements NoLinksExistOnWindowsInterface
