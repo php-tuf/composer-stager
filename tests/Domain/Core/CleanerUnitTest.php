@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Core\Cleaner;
+namespace PhpTuf\ComposerStager\Tests\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
+use PhpTuf\ComposerStager\Domain\Core\Cleaner;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
@@ -16,9 +16,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Cleaner
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner::__construct
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Cleaner::__construct
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions

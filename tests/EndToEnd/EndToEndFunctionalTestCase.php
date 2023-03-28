@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
 use PhpTuf\ComposerStager\Domain\Core\Beginner;
-use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
+use PhpTuf\ComposerStager\Domain\Core\Cleaner;
 use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
 use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * Subclasses specify the file syncer to use via ::fileSyncerClass().
  *
  * @property \PhpTuf\ComposerStager\Domain\Core\Beginner $beginner
- * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner $cleaner
+ * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner $cleaner
  * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer $committer
  * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager $stager
  */
