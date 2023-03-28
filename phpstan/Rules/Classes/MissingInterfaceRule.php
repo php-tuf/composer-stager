@@ -24,10 +24,7 @@ final class MissingInterfaceRule extends AbstractRule
             return [];
         }
 
-        if ($class->isInterface() ||
-            $class->isAbstract() ||
-            $class->is(Throwable::class)
-        ) {
+        if ($class->isInterface() || $class->isAbstract() || $class->is(Throwable::class)) {
             return [];
         }
 
