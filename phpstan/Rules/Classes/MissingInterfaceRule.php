@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
 
-/** Requires non-factory classes to implement an interface. */
+/** Requires concrete classes to implement an interface. */
 final class MissingInterfaceRule extends AbstractRule
 {
     public function getNodeType(): string
@@ -24,8 +24,7 @@ final class MissingInterfaceRule extends AbstractRule
             return [];
         }
 
-        if ($this->isFactoryClass($class) ||
-            $class->isInterface() ||
+        if ($class->isInterface() ||
             $class->isAbstract() ||
             $class->is(Throwable::class)
         ) {
@@ -36,7 +35,7 @@ final class MissingInterfaceRule extends AbstractRule
             return [];
         }
 
-        $message = 'Non-factory class must implement an interface';
+        $message = 'Concrete class must implement an interface';
 
         return [$this->buildErrorMessage($message)];
     }
