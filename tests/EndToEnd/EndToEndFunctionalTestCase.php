@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 use PhpTuf\ComposerStager\Domain\Core\Beginner;
 use PhpTuf\ComposerStager\Domain\Core\Cleaner;
 use PhpTuf\ComposerStager\Domain\Core\Committer;
-use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
+use PhpTuf\ComposerStager\Domain\Core\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
@@ -21,7 +21,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Core\Beginner $beginner
  * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner $cleaner
  * @property \PhpTuf\ComposerStager\Domain\Core\Committer $committer
- * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager $stager
+ * @property \PhpTuf\ComposerStager\Domain\Core\Stager $stager
  */
 abstract class EndToEndFunctionalTestCase extends TestCase
 {

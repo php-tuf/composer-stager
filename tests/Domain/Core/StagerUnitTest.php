@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Core\Stager;
+namespace PhpTuf\ComposerStager\Tests\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
+use PhpTuf\ComposerStager\Domain\Core\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -19,9 +19,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Stager\Stager
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Stager
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
