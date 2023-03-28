@@ -1,6 +1,5 @@
 !/var/*/.gitkeep
 /.idea/dictionaries/*
-/.idea/php.xml
 /.idea/workspace.xml
 /grumphp.yml
 /phpcs.xml
