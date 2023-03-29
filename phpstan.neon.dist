@@ -65,8 +65,9 @@ parameters:
     preconditionSystemHash: e242a8a8bbe02357e191b6ea927a26eb
 
 rules:
-    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\WrongExceptionNamespaceRule # Requires exceptions to be in the correct namespace.
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.

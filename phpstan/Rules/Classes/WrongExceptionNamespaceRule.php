@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
 
-/** Requires exceptions to implement ExceptionInterface. */
-final class MissingExceptionInterfaceRule extends AbstractRule
+/** Requires exceptions to be in the correct namespace. */
+final class WrongExceptionNamespaceRule extends AbstractRule
 {
     public function getNodeType(): string
     {
@@ -29,15 +29,12 @@ final class MissingExceptionInterfaceRule extends AbstractRule
             return[];
         }
 
-        if (!$class->is(ExceptionInterface::class)) {
-            return [
-                $this->buildErrorMessage(sprintf(
-                    'Exception must implement %s',
-                    ExceptionInterface::class,
-                )),
-            ];
-        }
+        $reflection = $class->getNativeReflection();
+        $namespace = $reflection->getNamespaceName();
 
+        if (!$this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\Domain\\Exception\\')) {
+            return [$this->buildErrorMessage('Exception must be in the PhpTuf\\ComposerStager\\Domain\\Exception namespace')];
+        }
         return [];
     }
 }
