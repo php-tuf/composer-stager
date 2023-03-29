@@ -62,7 +62,7 @@ parameters:
         - LICENSE
         - README.md
         - src
-    preconditionSystemHash: e242a8a8bbe02357e191b6ea927a26eb
+    preconditionSystemHash: 6193c4b59e766fd3ad4e7400776db20d
 
 rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
@@ -85,14 +85,13 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
-    # @todo Temporarily disable due to regression. Stopped working in 25edda57963f65c298d899c05ea9ed1efee06eb6.
-    # -
-    #     # Ensures that precondition system diagrams stay current.
-    #     class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
-    #     arguments:
-    #         preconditionSystemHash: %preconditionSystemHash%
-    #     tags:
-    #         - phpstan.rules.rule
+    -
+        # Ensures that precondition system diagrams stay current.
+        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
+        arguments:
+            preconditionSystemHash: %preconditionSystemHash%
+        tags:
+            - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
         class: PhpTuf\ComposerStager\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
