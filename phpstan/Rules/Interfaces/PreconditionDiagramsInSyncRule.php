@@ -95,10 +95,10 @@ final class PreconditionDiagramsInSyncRule extends AbstractRule
      * the needed list of Composer Stager symbols, but for some reason they only include
      * its PHPStan rules. This approach gets everything Composer knows about.
      */
-    public function getClassMap(): array
+    private function getClassMap(): array
     {
-        /** @var \Composer\Autoload\ClassLoader $autoloader */
         $autoloader = require dirname(__DIR__, 3) . '/vendor/autoload.php';
+        assert($autoloader instanceof ClassLoader);
 
         return $autoloader->getClassMap();
     }

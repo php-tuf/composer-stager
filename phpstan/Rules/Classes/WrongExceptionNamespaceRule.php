@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Classes;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
 
@@ -33,8 +32,13 @@ final class WrongExceptionNamespaceRule extends AbstractRule
         $namespace = $reflection->getNamespaceName();
 
         if (!$this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\Domain\\Exception\\')) {
-            return [$this->buildErrorMessage('Exception must be in the PhpTuf\\ComposerStager\\Domain\\Exception namespace')];
+            return [
+                $this->buildErrorMessage(
+                    'Exception must be in the PhpTuf\\ComposerStager\\Domain\\Exception namespace',
+                ),
+            ];
         }
+
         return [];
     }
 }
