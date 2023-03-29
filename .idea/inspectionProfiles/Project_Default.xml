@@ -68,6 +68,9 @@
       </option>
       <option name="migratedIntoUserSpace" value="true" />
     </inspection_tool>
+    <inspection_tool class="PhpUnhandledExceptionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
+      <scope name="Production Code" level="WEAK WARNING" enabled="true" />
+    </inspection_tool>
     <inspection_tool class="PhpVoidFunctionResultUsedInspection" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Production Code" level="WARNING" enabled="true" />
     </inspection_tool>
