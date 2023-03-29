@@ -25,7 +25,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
         // Cache and throw exception if not found.
         if ($path === null) {
             throw new LogicException(
-                sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH.', $name),
+                sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH', $name),
             );
         }
 

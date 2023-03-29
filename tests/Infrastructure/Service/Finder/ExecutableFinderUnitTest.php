@@ -103,7 +103,7 @@ final class ExecutableFinderUnitTest extends TestCase
     public function testFindNotFoundCaching(): void
     {
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('The "composer" executable cannot be found. Make sure it\'s installed and in the $PATH.');
+        $this->expectExceptionMessage('The "composer" executable cannot be found. Make sure it\'s installed and in the $PATH');
 
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
