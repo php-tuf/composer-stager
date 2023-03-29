@@ -38,9 +38,6 @@ parameters:
             message: '#.*caught .* must be rethrown.*#'
             path: tests
         -
-            message: '#Dynamic call to static method.*#'
-            path: tests
-        -
             message: '#Method .* no (value )?type specified.*#'
             path: tests
         -
