@@ -11,6 +11,8 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
  * @see \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerFactoryInterface
  * @see \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface
  *
+ * @package ProcessRunner
+ *
  * @internal Don't instantiate this class directly. Get it from the service container via its interface.
  */
 final class RsyncRunner extends AbstractRunner implements RsyncRunnerInterface

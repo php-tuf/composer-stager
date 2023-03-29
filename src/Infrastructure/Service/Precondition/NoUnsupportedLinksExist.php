@@ -9,7 +9,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheC
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoUnsupportedLinksExistInterface;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Precondition
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
     public function __construct(

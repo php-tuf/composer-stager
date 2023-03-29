@@ -12,7 +12,11 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package FileSyncer
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class PhpFileSyncer implements PhpFileSyncerInterface
 {
     public function __construct(

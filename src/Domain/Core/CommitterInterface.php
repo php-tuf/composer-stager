@@ -10,6 +10,8 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 /**
  * Makes the staged changes live by syncing the active directory with the staging directory.
  *
+ * @package Core
+ *
  * @api
  */
 interface CommitterInterface

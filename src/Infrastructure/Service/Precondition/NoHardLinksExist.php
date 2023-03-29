@@ -5,7 +5,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Precondition
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class NoHardLinksExist extends AbstractFileIteratingPrecondition implements NoHardLinksExistInterface
 {
     public function getName(): string

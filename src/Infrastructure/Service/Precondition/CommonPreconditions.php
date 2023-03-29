@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Precondition
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class CommonPreconditions extends AbstractPreconditionsTree implements CommonPreconditionsInterface
 {
     public function __construct(

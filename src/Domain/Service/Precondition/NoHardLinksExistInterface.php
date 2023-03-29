@@ -20,6 +20,8 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  *
  * @see https://symfony.com/doc/current/service_container/autowiring.html
  *
+ * @package Precondition
+ *
  * @api
  */
 interface NoHardLinksExistInterface extends PreconditionInterface

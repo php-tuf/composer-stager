@@ -8,6 +8,8 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
 /**
+ * @package Path
+ *
  * @api
  *
  * @SuppressWarnings(PHPMD.StaticAccess)

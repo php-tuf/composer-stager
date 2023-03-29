@@ -7,6 +7,8 @@ use Symfony\Component\Process\Process;
 /**
  * Creates Symfony Process objects.
  *
+ * @package Process
+ *
  * @api
  */
 interface ProcessFactoryInterface

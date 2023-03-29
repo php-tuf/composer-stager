@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 /**
  * Runs rsync commands.
  *
+ * @package ProcessRunner
+ *
  * @api
  */
 interface RsyncRunnerInterface extends ProcessRunnerInterface

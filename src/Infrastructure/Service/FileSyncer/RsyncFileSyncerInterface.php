@@ -11,6 +11,8 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
  *
  * @see https://symfony.com/doc/current/service_container/autowiring.html
  *
+ * @package FileSyncer
+ *
  * @api
  */
 interface RsyncFileSyncerInterface extends FileSyncerInterface

@@ -22,6 +22,8 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
  * @see https://github.com/php-tuf/composer-stager/issues/99
  * @see https://symfony.com/doc/current/service_container/autowiring.html
  *
+ * @package Precondition
+ *
  * @api
  */
 interface NoSymlinksPointToADirectoryInterface extends PreconditionInterface

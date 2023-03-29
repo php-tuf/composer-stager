@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterfa
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Precondition
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class BeginnerPreconditions extends AbstractPreconditionsTree implements BeginnerPreconditionsInterface
 {
     public function __construct(

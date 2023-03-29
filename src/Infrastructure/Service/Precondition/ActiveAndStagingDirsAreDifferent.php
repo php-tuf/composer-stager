@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
 /**
+ * @package Precondition
+ *
  * @internal Don't instantiate this class directly. Get it from the service container via its interface.
  *
  * phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong

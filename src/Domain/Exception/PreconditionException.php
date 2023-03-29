@@ -11,6 +11,8 @@ use Throwable;
  *
  * @see :/src/Domain/Service/Precondition/README.md
  *
+ * @package Exception
+ *
  * @api
  */
 class PreconditionException extends RuntimeException implements ExceptionInterface

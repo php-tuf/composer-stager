@@ -9,6 +9,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 /**
  * Removes the staging directory.
  *
+ * @package Core
+ *
  * @api
  */
 interface CleanerInterface

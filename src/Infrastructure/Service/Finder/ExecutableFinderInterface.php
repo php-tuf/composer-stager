@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 /**
  * Finds executables.
  *
+ * @package Finder
+ *
  * @api
  */
 interface ExecutableFinderInterface

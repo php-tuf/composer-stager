@@ -6,7 +6,11 @@ use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use Symfony\Component\Process\Exception\ExceptionInterface;
 use Symfony\Component\Process\Process;
 
-/** @api */
+/**
+ * @package Process
+ *
+ * @api
+ */
 final class ProcessFactory implements ProcessFactoryInterface
 {
     public function create(array $command): Process

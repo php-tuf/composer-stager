@@ -6,7 +6,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Precondition
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class ActiveDirIsReady extends AbstractPreconditionsTree implements ActiveDirIsReadyInterface
 {
     public function __construct(

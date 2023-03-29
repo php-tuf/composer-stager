@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Domain\Service\ProcessRunner;
 /**
  * Runs shell processes.
  *
+ * @package ProcessRunner
+ *
  * @api
  */
 interface ProcessRunnerInterface

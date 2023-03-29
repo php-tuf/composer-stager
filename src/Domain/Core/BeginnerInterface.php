@@ -10,6 +10,8 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 /**
  * Begins the staging process by copying the active directory to the staging directory.
  *
+ * @package Core
+ *
  * @api
  */
 interface BeginnerInterface

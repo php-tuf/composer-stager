@@ -13,7 +13,11 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use UnexpectedValueException;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Finder
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class RecursiveFileFinder implements RecursiveFileFinderInterface
 {
     public function __construct(private readonly PathFactoryInterface $pathFactory)

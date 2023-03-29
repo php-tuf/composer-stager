@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\PathList;
 
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** @api This class may be instantiated directly or gotten from the service container via its interface. */
+/**
+ * @package PathList
+ *
+ * @api This class may be instantiated directly or gotten from the service container via its interface.
+ */
 final class PathList implements PathListInterface
 {
     /** @var array<string> */

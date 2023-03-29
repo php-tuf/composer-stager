@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 /**
  * Creates path value objects.
  *
+ * @package Path
+ *
  * @api
  */
 interface PathFactoryInterface

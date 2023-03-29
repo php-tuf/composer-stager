@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 /**
  * Creates file syncer objects.
  *
+ * @package FileSyncer
+ *
  * @api
  */
 interface FileSyncerFactoryInterface

@@ -13,7 +13,11 @@ use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-/** @internal Don't instantiate this class directly. Get it from the service container via its interface. */
+/**
+ * @package Precondition
+ *
+ * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ */
 final class ComposerIsAvailable extends AbstractPrecondition implements ComposerIsAvailableInterface
 {
     private string $unfulfilledStatusMessage = '';

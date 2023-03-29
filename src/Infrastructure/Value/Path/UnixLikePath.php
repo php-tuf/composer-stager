@@ -10,6 +10,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
  * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @see https://en.wikipedia.org/wiki/Unix-like
  *
+ * @package Path
+ *
  * @internal Don't instantiate this class directly. Use the path factory above.
  */
 final class UnixLikePath extends AbstractPath

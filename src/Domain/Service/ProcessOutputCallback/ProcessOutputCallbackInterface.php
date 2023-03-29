@@ -12,6 +12,8 @@ use Symfony\Component\Process\Process;
  *
  * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
  *
+ * @package ProcessOutputCallback
+ *
  * @api
  *
  * @noinspection PhpUnused

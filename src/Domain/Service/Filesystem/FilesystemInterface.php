@@ -9,6 +9,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 /**
  * Provides basic utilities for interacting with the file system.
  *
+ * @package Filesystem
+ *
  * @api
  */
 interface FilesystemInterface

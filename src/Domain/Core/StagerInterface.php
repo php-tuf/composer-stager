@@ -9,6 +9,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 /**
  * Executes a Composer command in the staging directory.
  *
+ * @package Core
+ *
  * @api
  */
 interface StagerInterface

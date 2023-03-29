@@ -4,7 +4,11 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
-/** @api */
+/**
+ * @package Path
+ *
+ * @api
+ */
 abstract class AbstractPath implements PathInterface
 {
     protected string $cwd;

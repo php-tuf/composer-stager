@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterfa
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use Symfony\Component\Process\ExecutableFinder;
 
-/** @api */
+/**
+ * @package FileSyncer
+ *
+ * @api
+ */
 final class FileSyncerFactory implements FileSyncerFactoryInterface
 {
     public function __construct(

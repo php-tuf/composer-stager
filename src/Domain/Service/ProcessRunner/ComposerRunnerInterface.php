@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 /**
  * Runs Composer commands.
  *
+ * @package ProcessRunner
+ *
  * @api
  */
 interface ComposerRunnerInterface extends ProcessRunnerInterface

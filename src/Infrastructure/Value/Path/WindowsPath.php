@@ -7,6 +7,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
  *
  * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  *
+ * @package Path
+ *
  * @internal Don't instantiate this class directly. Use the path factory above.
  */
 final class WindowsPath extends AbstractPath

@@ -8,6 +8,8 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 /**
  * Defines a precondition for a domain operation and how to verify it.
  *
+ * @package Precondition
+ *
  * @api
  */
 interface PreconditionInterface

@@ -10,6 +10,8 @@ use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 /**
  * Recursively syncs files from one directory to another.
  *
+ * @package FileSyncer
+ *
  * @api
  */
 interface FileSyncerInterface

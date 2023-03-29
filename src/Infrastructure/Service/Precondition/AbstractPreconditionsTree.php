@@ -7,7 +7,11 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
 
-/** @api */
+/**
+ * @package Precondition
+ *
+ * @api
+ */
 abstract class AbstractPreconditionsTree implements PreconditionInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> */

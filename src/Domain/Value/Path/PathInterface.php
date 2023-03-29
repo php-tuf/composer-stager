@@ -9,6 +9,8 @@ namespace PhpTuf\ComposerStager\Domain\Value\Path;
  * as returned by `getcwd()` at runtime, e.g., "/var/www/example" or "example".
  * Nothing needs to actually exist at the path.
  *
+ * @package Path
+ *
  * @api
  */
 interface PathInterface

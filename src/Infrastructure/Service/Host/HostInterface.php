@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Host;
 /**
  * Provides basic utilities for interacting with the host.
  *
+ * @package Host
+ *
  * @api
  */
 interface HostInterface
