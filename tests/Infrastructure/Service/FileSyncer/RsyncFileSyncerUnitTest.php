@@ -30,18 +30,11 @@ use Prophecy\Argument;
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
+ *
+ * @group no_windows
  */
 final class RsyncFileSyncerUnitTest extends TestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        if (self::isRsyncAvailable()) {
-            return;
-        }
-
-        self::markTestSkipped('Rsync is not available for testing.');
-    }
-
     public function setUp(): void
     {
         $this->source = new TestPath(self::ACTIVE_DIR);

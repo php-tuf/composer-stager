@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -234,16 +233,14 @@ final class WindowsPathUnitTest extends TestCase
         ];
     }
 
-    /** @dataProvider providerCwdArgument */
+    /**
+     * @dataProvider providerCwdArgument
+     *
+     * @group windows_only
+     *   This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
+     */
     public function testOptionalCwdArgument(string $path, ?PathInterface $cwd, string $resolved): void
     {
-        // This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
-        if (!Host::isWindows()) {
-            $this->expectNotToPerformAssertions();
-
-            return;
-        }
-
         $sut = new WindowsPath($path, $cwd);
 
         self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');

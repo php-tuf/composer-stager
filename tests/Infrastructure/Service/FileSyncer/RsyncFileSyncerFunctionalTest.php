@@ -21,18 +21,11 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
  *
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
+ *
+ * @group no_windows
  */
 final class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        if (self::isRsyncAvailable()) {
-            return;
-        }
-
-        self::markTestSkipped('Rsync is not available for testing.');
-    }
-
     protected function fileSyncerClass(): string
     {
         return RsyncFileSyncer::class;

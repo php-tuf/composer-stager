@@ -54,7 +54,7 @@ jobs:
         steps:
             -   name: "Debugging info"
                 run: "rsync --version | head -1"
-                if: ${{ matrix.os != 'windows-latest' }}
+                if: ${{ runner.os != 'Windows' }}
 
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
@@ -69,5 +69,10 @@ jobs:
                 with:
                     dependency-versions: "${{ matrix.dependencies }}"
 
-            -   name: "Run tests"
-                run: "composer phpunit"
+            -   name: "Run non-Windows tests"
+                run: "composer phpunit -- --exclude-group=windows_only"
+                if: ${{ runner.os != 'Windows' }}
+
+            -   name: "Run Windows tests"
+                run: "composer phpunit -- --exclude-group=no_windows"
+                if: ${{ runner.os == 'Windows' }}

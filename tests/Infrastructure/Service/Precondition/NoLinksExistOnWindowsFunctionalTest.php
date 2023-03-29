@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
@@ -66,16 +65,11 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      * @covers ::isSupportedFile
      *
      * @dataProvider providerUnfulfilled
+     *
+     * @group windows_only
      */
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
-        // This test is host-sensitive and can only be run on Windows.
-        if (!Host::isWindows()) {
-            $this->expectNotToPerformAssertions();
-
-            return;
-        }
-
         $baseDir = PathFactory::create(self::ACTIVE_DIR);
         $link = PathFactory::create('link.txt', $baseDir)->resolved();
         $target = PathFactory::create('target.txt', $baseDir)->resolved();
@@ -135,16 +129,11 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      * @covers ::isFulfilled
      *
      * @dataProvider providerExclusions
+     *
+     * @group windows_only
      */
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
-        // This test is host-sensitive and can only be run on Windows.
-        if (!Host::isWindows()) {
-            $this->expectNotToPerformAssertions();
-
-            return;
-        }
-
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);

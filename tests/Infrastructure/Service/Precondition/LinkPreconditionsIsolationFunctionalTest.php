@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
@@ -20,6 +19,8 @@ use Throwable;
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+ *
+ * @group no_windows
  */
 final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 {
@@ -30,15 +31,6 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoSymlinksPointOutsideTheCodebase::class,
         NoSymlinksPointToADirectory::class,
     ];
-
-    public static function setUpBeforeClass(): void
-    {
-        if (!Host::isWindows()) {
-            return;
-        }
-
-        self::markTestSkipped('This test covers non-Windows functionality.');
-    }
 
     protected function setUp(): void
     {

@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -19,18 +18,11 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::resolved
  * @covers ::resolvedRelativeTo
  * @covers \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath::getcwd
+ *
+ * @group no_windows
  */
 final class UnixLikePathUnitTest extends TestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        if (!Host::isWindows()) {
-            return;
-        }
-
-        self::markTestSkipped('This test covers non-Windows functionality.');
-    }
-
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,

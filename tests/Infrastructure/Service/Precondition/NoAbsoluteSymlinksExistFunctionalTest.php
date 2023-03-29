@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
 
@@ -27,18 +26,11 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+ *
+ * @group no_windows
  */
 final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        if (!Host::isWindows()) {
-            return;
-        }
-
-        self::markTestSkipped('This test covers non-Windows functionality.');
-    }
-
     protected function createSut(): NoAbsoluteSymlinksExist
     {
         $container = $this->getContainer();
