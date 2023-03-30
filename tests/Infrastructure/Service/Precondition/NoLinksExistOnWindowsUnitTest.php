@@ -24,8 +24,6 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface $host
@@ -82,8 +80,6 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 
     public function testExitEarlyOnNonWindows(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $this->host = $this->createNonWindowsHost();
         $this->filesystem
             ->exists(Argument::cetera())
@@ -94,10 +90,10 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
 
         self::assertTrue($isFulfilled);
 
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
     }
 }

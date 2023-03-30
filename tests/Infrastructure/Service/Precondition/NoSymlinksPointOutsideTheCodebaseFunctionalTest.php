@@ -164,7 +164,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testWithHardLink(): void
     {
-        $dirPath = PathFactory::create(self::ACTIVE_DIR);
+        $dirPath = self::activeDirPath();
         $link = PathFactory::create('link.txt', $dirPath)->resolved();
         $target = PathFactory::create('target.txt', $dirPath)->resolved();
         $parentDir = dirname($link);
@@ -186,7 +186,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testWithAbsoluteLink(): void
     {
-        $dirPath = PathFactory::create(self::ACTIVE_DIR);
+        $dirPath = self::activeDirPath();
         $link = PathFactory::create('link.txt', $dirPath)->resolved();
         $target = PathFactory::create('target.txt', $dirPath)->resolved();
         $parentDir = dirname($link);

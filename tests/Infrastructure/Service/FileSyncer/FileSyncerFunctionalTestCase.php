@@ -4,14 +4,14 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
- * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
- * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
- * @property \Symfony\Component\Filesystem\Filesystem $filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
+ *
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
  */
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
@@ -20,16 +20,11 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = new TestPath(self::SOURCE_DIR);
-        $this->destination = new TestPath(self::DESTINATION_DIR);
+        $this->source = PathFactory::create(self::SOURCE_DIR);
+        $this->destination = PathFactory::create(self::DESTINATION_DIR);
 
-        $this->filesystem = new SymfonyFilesystem();
-
-        $this->filesystem->mkdir(self::TEST_WORKING_DIR);
-        chdir(self::TEST_WORKING_DIR);
-
-        $this->filesystem->mkdir($this->source->resolved());
-        $this->filesystem->mkdir($this->destination->resolved());
+        mkdir($this->source->resolved(), 0777, true);
+        mkdir($this->destination->resolved(), 0777, true);
     }
 
     protected function tearDown(): void
@@ -83,9 +78,9 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $link = PathFactory::create('link', $this->source);
         $target = PathFactory::create('directory', $this->source);
-        $this->filesystem->mkdir($target->resolved());
+        mkdir($target->resolved(), 0777, true);
         $file = PathFactory::create('directory/file.txt', $this->source)->resolved();
-        $this->filesystem->touch($file);
+        touch($file);
         symlink($target->resolved(), $link->resolved());
         $sut = $this->createSut();
 

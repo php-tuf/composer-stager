@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists;
 
 /**
@@ -19,15 +18,11 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class StagingDirExistsUnitTest extends PreconditionTestCase
 {
     protected function setUp(): void
     {
-        $this->activeDir = $this->prophesize(PathInterface::class);
-        $this->stagingDir = $this->prophesize(PathInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
 
         parent::setUp();
@@ -42,9 +37,8 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir)
+            ->exists($this->stagingDir)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
@@ -53,9 +47,8 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
-            ->exists($stagingDir)
+            ->exists($this->stagingDir)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(false);
 

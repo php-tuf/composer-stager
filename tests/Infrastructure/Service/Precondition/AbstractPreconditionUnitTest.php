@@ -15,8 +15,6 @@ use Prophecy\Argument;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Tests\TestSpyInterface|\Prophecy\Prophecy\ObjectProphecy $spy
  */
 final class AbstractPreconditionUnitTest extends PreconditionTestCase
@@ -92,12 +90,9 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         $unfulfilledStatusMessage,
         $expectedStatusMessage,
     ): void {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->spy
-            ->report([$activeDir, $stagingDir, $exclusions])
+            ->report([$this->activeDir, $this->stagingDir, $exclusions])
             ->shouldBeCalledTimes(2)
             ->willReturn($isFulfilled);
 
@@ -109,8 +104,8 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir, $exclusions), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir, $exclusions), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($this->activeDir, $this->stagingDir, $exclusions), $expectedStatusMessage);
         self::assertEquals($sut->getLeaves(), [$sut]);
     }
 
@@ -141,23 +136,21 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     /** @covers ::assertIsFulfilled */
     public function testFulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $this->spy
             ->report(Argument::cetera())
             ->willReturn(true);
         $this->spy
-            ->report([$activeDir, $stagingDir, null])
+            ->report([$this->activeDir, $this->stagingDir, null])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $this->spy
-            ->report([$activeDir, $stagingDir, new TestPathList()])
+            ->report([$this->activeDir, $this->stagingDir, new TestPathList()])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
-        $sut->assertIsFulfilled($activeDir, $stagingDir, new TestPathList());
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
     }
 
     /** @covers ::assertIsFulfilled */
@@ -165,14 +158,12 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     {
         $this->expectException(PreconditionException::class);
 
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $this->spy
-            ->report([$activeDir, $stagingDir, new TestPathList()])
+            ->report([$this->activeDir, $this->stagingDir, new TestPathList()])
             ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->assertIsFulfilled($activeDir, $stagingDir, new TestPathList());
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
     }
 }

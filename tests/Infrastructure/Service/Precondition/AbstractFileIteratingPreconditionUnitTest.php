@@ -23,8 +23,6 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
@@ -100,8 +98,6 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
     /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition::exitEarly */
     public function testExitEarly(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $this->filesystem
             ->exists(Argument::cetera())
             ->shouldNotBeCalled();
@@ -111,10 +107,10 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         $sut = $this->createSut();
         $sut->exitEarly = true;
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
+        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
 
         self::assertTrue($isFulfilled);
 
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
     }
 }

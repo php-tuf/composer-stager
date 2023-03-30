@@ -22,8 +22,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommonPrecondition
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsReady
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface|\Prophecy\Prophecy\ObjectProphecy $composerIsAvailable
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class CommonPreconditionsUnitTest extends PreconditionTestCase
 {
@@ -56,17 +54,15 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->composerIsAvailable
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsReady
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The common preconditions are fulfilled.');
@@ -74,11 +70,9 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

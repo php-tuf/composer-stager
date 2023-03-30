@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
@@ -14,9 +15,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDi
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase
 {
@@ -27,28 +25,16 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
 
     public function testFulfilled(): void
     {
-        $this->activeDir
-            ->resolved()
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
-            ->willReturn('/one/different');
-        $this->stagingDir
-            ->resolved()
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
-            ->willReturn('/two/different');
+        $this->activeDir = new TestPath('/one/different');
+        $this->stagingDir = new TestPath('/two/different');
 
         $this->doTestFulfilled('The active and staging directories are different.');
     }
 
     public function testUnfulfilled(): void
     {
-        $this->activeDir
-            ->resolved()
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
-            ->willReturn('/same');
-        $this->stagingDir
-            ->resolved()
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
-            ->willReturn('/same');
+        $this->activeDir = new TestPath('/same');
+        $this->stagingDir = new TestPath('/same');
 
         $this->doTestUnfulfilled('The active and staging directories are the same.');
     }

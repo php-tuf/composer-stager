@@ -24,8 +24,6 @@ use Symfony\Component\Process\Process;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  * @property \Symfony\Component\Process\Process|\Prophecy\Prophecy\ObjectProphecy $process

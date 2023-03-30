@@ -20,8 +20,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsReady;
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class StagingDirIsReadyUnitTest extends PreconditionTestCase
 {
@@ -49,14 +47,12 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->stagingDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsWritable
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The staging directory is ready to use.');
@@ -64,11 +60,9 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->stagingDirExists
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

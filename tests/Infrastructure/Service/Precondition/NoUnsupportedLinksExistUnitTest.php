@@ -26,8 +26,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinks
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface|\Prophecy\Prophecy\ObjectProphecy $noLinksExistOnWindows
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointOutsideTheCodebase
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointToADirectory
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 {
@@ -76,23 +74,21 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->noAbsoluteSymlinksExist
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noHardLinksExist
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noLinksExistOnWindows
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointOutsideTheCodebase
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointToADirectory
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('There are no unsupported links in the codebase.');
@@ -100,11 +96,9 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
         $exclusions = $this->exclusions;
         $this->noAbsoluteSymlinksExist
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

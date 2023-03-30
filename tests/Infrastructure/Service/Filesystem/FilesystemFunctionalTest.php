@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
@@ -23,15 +24,27 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class FilesystemFunctionalTest extends TestCase
 {
-    private const SOURCE_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'source';
-    private const DESTINATION_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'destination';
+    protected static function sourceDir(): PathInterface
+    {
+        return PathFactory::create(self::TEST_ENV . '/source');
+    }
+
+    protected static function destinationDir(): PathInterface
+    {
+        return PathFactory::create(self::TEST_ENV . '/destination');
+    }
 
     protected function setUp(): void
     {
-        $filesystem = new SymfonyFilesystem();
+        // Create source directory.
+        mkdir(self::sourceDir()->resolved(), 0777, true);
+        assert(file_exists(self::sourceDir()->resolved()));
+        assert(is_dir(self::sourceDir()->resolved()));
 
-        $filesystem->mkdir(self::SOURCE_DIR);
-        $filesystem->mkdir(self::DESTINATION_DIR);
+        // Create destination directory.
+        mkdir(self::destinationDir()->resolved(), 0777, true);
+        assert(file_exists(self::destinationDir()->resolved()));
+        assert(is_dir(self::destinationDir()->resolved()));
     }
 
     protected function tearDown(): void
@@ -54,17 +67,16 @@ final class FilesystemFunctionalTest extends TestCase
     public function testCopy(): void
     {
         $filename = 'file.txt';
-        self::createFile(self::SOURCE_DIR, $filename);
+        $source = PathFactory::create($filename, self::sourceDir());
+        $destination = PathFactory::create($filename, self::destinationDir());
+        touch($source->resolved());
 
         $filesystem = $this->createSut();
-
-        $source = PathFactory::create(self::SOURCE_DIR . DIRECTORY_SEPARATOR . $filename);
-        $destination = PathFactory::create(self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $filename);
 
         // Copy an individual file.
         $filesystem->copy($source, $destination);
 
-        self::assertDirectoryListing(self::DESTINATION_DIR, [$filename]);
+        self::assertDirectoryListing(self::destinationDir()->resolved(), [$filename]);
     }
 
     /**
@@ -91,11 +103,11 @@ final class FilesystemFunctionalTest extends TestCase
         bool $isHardLink,
         bool $isSymlink,
     ): void {
-        self::createFiles(self::SOURCE_DIR, $files);
-        self::createDirectories(self::SOURCE_DIR, $directories);
-        self::createSymlinks(self::SOURCE_DIR, $symlinks);
-        self::createHardlinks(self::SOURCE_DIR, $hardLinks);
-        $subject = PathFactory::create(self::SOURCE_DIR . '/' . $subject);
+        self::createFiles(self::sourceDir()->resolved(), $files);
+        self::createDirectories(self::sourceDir()->resolved(), $directories);
+        self::createSymlinks(self::sourceDir()->resolved(), $symlinks);
+        self::createHardlinks(self::sourceDir()->resolved(), $hardLinks);
+        $subject = PathFactory::create($subject, self::sourceDir());
         $sut = $this->createSut();
 
         $actualExists = $sut->exists($subject);
@@ -206,7 +218,7 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testReadlink(string $given, string $expectedRaw, string $expectedResolved): void
     {
-        $baseDir = PathFactory::create(self::SOURCE_DIR);
+        $baseDir = self::sourceDir();
         $symlinkPath = PathFactory::create('symlink.txt', $baseDir);
         $hardLinkPath = PathFactory::create('hard_link.txt', $baseDir);
         $targetPath = PathFactory::create($given, $baseDir);
@@ -233,7 +245,7 @@ final class FilesystemFunctionalTest extends TestCase
     public function providerReadlink(): array
     {
         $absolute = static function ($path): string {
-            $baseDir = PathFactory::create(self::SOURCE_DIR);
+            $baseDir = self::sourceDir();
 
             return PathFactory::create($path, $baseDir)->resolved();
         };
@@ -258,8 +270,9 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::readLink */
     public function testReadlinkOnNonLink(): void
     {
-        self::createFile(self::SOURCE_DIR, 'file.txt');
-        $file = PathFactory::create(self::SOURCE_DIR . '/file.txt');
+        $file = PathFactory::create('file.txt', self::sourceDir());
+        touch($file->resolved());
+        assert(file_exists($file->resolved()));
 
         $this->expectException(IOException::class);
         $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $file->resolved()));
@@ -272,8 +285,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::readLink */
     public function testReadlinkOnNonExistentFile(): void
     {
-        $path = self::SOURCE_DIR . DIRECTORY_SEPARATOR . 'non-existent_file.txt';
-        $path = PathFactory::create($path);
+        $path = PathFactory::create('non-existent_file.txt', self::sourceDir());
 
         $this->expectException(IOException::class);
         $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolved()));
@@ -295,28 +307,29 @@ final class FilesystemFunctionalTest extends TestCase
     public function testSymfonyCopyDirectory(): void
     {
         $this->expectException(SymfonyIOException::class);
+        $this->expectExceptionMessageMatches(sprintf(
+            '#"%s"#',
+            preg_quote(self::sourceDir()->resolved(), '/'),
+        ));
 
-        $dirname = 'directory';
-        $files = [
-            $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file1',
-            $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file2',
-            $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file3',
-        ];
-        self::createFiles(self::SOURCE_DIR, $files);
-        $symfonyFilesystem = new SymfonyFilesystem();
+        $filename = 'arbitrary_file.txt';
+        $sourceFile = PathFactory::create($filename, self::sourceDir());
+        $destinationFile = PathFactory::create($filename, self::destinationDir());
+        touch($sourceFile->resolved());
+        assert(file_exists($sourceFile->resolved()));
 
-        self::assertDirectoryListing(self::SOURCE_DIR, $files);
+        $sut = new SymfonyFilesystem();
 
         // Single file copy: this should work.
-        $symfonyFilesystem->copy(
-            self::SOURCE_DIR . DIRECTORY_SEPARATOR . $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file1',
-            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $dirname . DIRECTORY_SEPARATOR . 'arbitrary_file1',
+        $sut->copy(
+            $sourceFile->resolved(),
+            $destinationFile->resolved(),
         );
 
         // Directory copy: this should fail.
-        $symfonyFilesystem->copy(
-            self::SOURCE_DIR . DIRECTORY_SEPARATOR . $dirname,
-            self::DESTINATION_DIR . DIRECTORY_SEPARATOR . $dirname,
+        $sut->copy(
+            self::sourceDir()->resolved(),
+            self::destinationDir()->resolved(),
         );
     }
 }

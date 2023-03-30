@@ -18,8 +18,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class ActiveDirExistsUnitTest extends PreconditionTestCase
 {
@@ -39,9 +37,8 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
         $this->filesystem
-            ->exists($activeDir)
+            ->exists($this->activeDir)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
@@ -50,9 +47,8 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDir = $this->activeDir->reveal();
         $this->filesystem
-            ->exists($activeDir)
+            ->exists($this->activeDir)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(false);
 

@@ -26,7 +26,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
-        self::createTestEnvironment(self::ACTIVE_DIR);
+        self::createTestEnvironment();
     }
 
     protected function tearDown(): void
@@ -52,7 +52,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
      */
     public function testFind(array $files, ?PathListInterface $exclusions, array $expected): void
     {
-        $directory = PathFactory::create(self::ACTIVE_DIR);
+        $directory = self::activeDirPath();
         self::createFiles($directory->resolved(), $files);
         $sut = $this->createSut();
 

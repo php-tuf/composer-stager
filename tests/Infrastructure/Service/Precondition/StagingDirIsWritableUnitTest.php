@@ -18,8 +18,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritab
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  */
 final class StagingDirIsWritableUnitTest extends PreconditionTestCase
 {
@@ -40,7 +38,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
     public function testFulfilled(): void
     {
         $this->filesystem
-            ->isWritable($this->stagingDir->reveal())
+            ->isWritable($this->stagingDir)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
@@ -50,7 +48,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
     public function testUnfulfilled(): void
     {
         $this->filesystem
-            ->isWritable($this->stagingDir->reveal())
+            ->isWritable($this->stagingDir)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(false);
 

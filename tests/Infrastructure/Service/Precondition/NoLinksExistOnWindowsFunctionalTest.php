@@ -70,7 +70,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      */
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
-        $baseDir = PathFactory::create(self::ACTIVE_DIR);
+        $baseDir = self::activeDirPath();
         $link = PathFactory::create('link.txt', $baseDir)->resolved();
         $target = PathFactory::create('target.txt', $baseDir)->resolved();
 

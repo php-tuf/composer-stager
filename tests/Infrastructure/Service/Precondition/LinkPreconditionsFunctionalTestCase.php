@@ -14,11 +14,11 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        self::createTestEnvironment(self::ACTIVE_DIR);
+        self::createTestEnvironment();
         mkdir(self::STAGING_DIR, 0777, true);
 
-        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
+        $this->activeDir = self::activeDirPath();
+        $this->stagingDir = self::stagingDirPath();
     }
 
     protected function tearDown(): void
@@ -69,7 +69,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }

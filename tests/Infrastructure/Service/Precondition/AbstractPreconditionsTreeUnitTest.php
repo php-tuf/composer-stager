@@ -21,8 +21,6 @@ use PhpTuf\ComposerStager\Tests\TestSpyInterface;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDir
  * @property \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface $exclusions
  */
 final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
@@ -80,9 +78,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $expectedStatusMessage,
         $exclusions,
     ): void {
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
-
         // Pass a mock child into the SUT so the behavior of ::assertIsFulfilled
         // can be controlled indirectly, without overriding the method on the SUT
         // itself and preventing it from actually being exercised.
@@ -92,11 +87,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
             ->willReturn([$child]);
 
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
-        $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+        $child->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
             ->shouldBeCalledTimes(2);
 
         if (!$isFulfilled) {
-            $child->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            $child->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
                 ->willThrow(PreconditionException::class);
         }
 
@@ -112,8 +107,8 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($activeDir, $stagingDir, $exclusions), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($activeDir, $stagingDir, $exclusions), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($this->activeDir, $this->stagingDir, $exclusions), $expectedStatusMessage);
     }
 
     public function providerBasicFunctionality(): array
@@ -147,9 +142,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
         $this->expectException(PreconditionException::class);
         $this->expectExceptionMessage($message);
-
-        $activeDir = $this->activeDir->reveal();
-        $stagingDir = $this->stagingDir->reveal();
 
         $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
             /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestSpyInterface $spy */
@@ -250,11 +242,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         );
         // phpcs:enable
 
-        self::assertFalse($sut->isFulfilled($activeDir, $stagingDir));
+        self::assertFalse($sut->isFulfilled($this->activeDir, $this->stagingDir));
         self::assertSame($leaves, $sut->getLeaves());
 
         // This is called last so as not to throw the exception until all other
         // assertions have been made.
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
     }
 }

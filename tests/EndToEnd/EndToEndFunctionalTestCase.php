@@ -45,7 +45,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $this->cleaner = $container->get(Cleaner::class);
 
         // Create the test environment.
-        self::createTestEnvironment(self::ACTIVE_DIR);
+        self::createTestEnvironment();
     }
 
     public static function tearDownAfterClass(): void
@@ -311,16 +311,16 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'stagingDir' => 'staging-dir/../staging-dir/../staging-dir',
             ],
             'Siblings: absolute paths' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/staging-dir',
+                'activeDir' => self::activeDirPath()->resolved(),
+                'stagingDir' => self::stagingDirPath()->resolved(),
             ],
             'Siblings: one absolute path, one relative' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
+                'activeDir' => self::activeDirPath()->resolved(),
                 'stagingDir' => 'staging-dir',
             ],
             'Siblings: one relative path, one absolute' => [
                 'activeDir' => 'active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/staging-dir',
+                'stagingDir' => self::stagingDirPath()->resolved(),
             ],
             'Siblings: active as CWD with trailing slash' => [
                 'activeDir' => './',

@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
@@ -17,9 +18,6 @@ use Throwable;
  * Tests the interaction of unsupported links preconditions.
  *
  * @coversNothing
- *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
  */
 final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 {
@@ -31,15 +29,14 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoSymlinksPointToADirectory::class,
     ];
 
+    private static function path(string $path): PathInterface
+    {
+        return PathFactory::create($path, self::activeDirPath());
+    }
+
     protected function setUp(): void
     {
-        self::createTestEnvironment(self::ACTIVE_DIR);
-        mkdir(self::STAGING_DIR, 0777, true);
-
-        $this->activeDir = PathFactory::create(self::ACTIVE_DIR);
-        $this->stagingDir = PathFactory::create(self::STAGING_DIR);
-
-        chdir($this->activeDir->resolved());
+        self::createTestEnvironment();
     }
 
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
@@ -86,19 +83,19 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
     public function testAllPassWithoutLinks(): void
     {
-        $activeDir = $this->activeDir;
-        $stagingDir = $this->stagingDir;
         $sut = $this->createTestPreconditionsTree();
 
-        self::assertTrue($sut->isFulfilled($activeDir, $stagingDir), 'All preconditions passed together without any links present.');
+        self::assertTrue(
+            $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath()),
+            'All preconditions passed together without any links present.',
+        );
     }
 
     /** @group no_windows */
     public function testNoAbsoluteSymlinksExist(): void
     {
-        $activeDir = $this->activeDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolved();
-        $target = PathFactory::create('target.txt', $activeDir)->resolved();
+        $source = self::path('source.txt')->resolved();
+        $target = self::path('target.txt')->resolved();
         touch($target);
         symlink($target, $source);
 
@@ -108,10 +105,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group windows_only */
     public function testNoLinksExistOnWindows(): void
     {
-        $activeDir = $this->activeDir;
-        $stagingDir = $this->stagingDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolved();
-        $target = PathFactory::create('target.txt', $activeDir)->resolved();
+        $source = self::path('source.txt')->resolved();
+        $target = self::path('target.txt')->resolved();
         touch($target);
         symlink($target, $source);
 
@@ -120,20 +115,19 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows $sut */
         $sut = $container->get(NoLinksExistOnWindows::class);
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
 
         self::assertFalse($isFulfilled, 'Rejected link on Windows.');
 
         $this->expectException(PreconditionException::class);
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
     }
 
     /** @group no_windows */
     public function testNoSymlinksPointOutsideTheCodebase(): void
     {
-        $activeDir = $this->activeDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolved();
-        $target = PathFactory::create('../target.txt', $activeDir)->raw();
+        $source = self::path('source.txt')->resolved();
+        $target = self::path('../target.txt')->raw();
         touch($target);
         symlink($target, $source);
 
@@ -143,9 +137,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoSymlinksPointToADirectory(): void
     {
-        $activeDir = $this->activeDir;
-        $source = PathFactory::create('link', $activeDir)->resolved();
-        $target = PathFactory::create('directory', $activeDir)->raw();
+        $source = self::path('link')->resolved();
+        $target = self::path('directory')->raw();
         mkdir($target);
         symlink($target, $source);
 
@@ -155,9 +148,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoHardLinksExistExist(): void
     {
-        $activeDir = $this->activeDir;
-        $source = PathFactory::create('source.txt', $activeDir)->resolved();
-        $target = PathFactory::create('target.txt', $activeDir)->resolved();
+        $source = self::path('source.txt')->resolved();
+        $target = self::path('target.txt')->resolved();
         touch($target);
         link($target, $source);
 
@@ -167,12 +159,10 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     private function assertPreconditionIsIsolated(string $sut, array $conflictingPreconditions = []): void
     {
-        $activeDir = $this->activeDir;
-        $stagingDir = $this->stagingDir;
         $excludePreconditions = array_merge($conflictingPreconditions, [$sut]);
         $sut = $this->createTestPreconditionsTree($excludePreconditions);
 
-        $sut->assertIsFulfilled($activeDir, $stagingDir);
+        $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
 
         $this->expectNotToPerformAssertions();
     }

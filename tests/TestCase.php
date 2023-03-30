@@ -27,6 +27,21 @@ abstract class TestCase extends PHPUnitTestCase
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
 
+    protected static function testWorkingDirPath(): PathInterface
+    {
+        return PathFactory::create(self::TEST_WORKING_DIR);
+    }
+
+    protected static function activeDirPath(): PathInterface
+    {
+        return PathFactory::create(self::ACTIVE_DIR, self::testWorkingDirPath());
+    }
+
+    protected static function stagingDirPath(): PathInterface
+    {
+        return PathFactory::create(self::STAGING_DIR, self::testWorkingDirPath());
+    }
+
     public function getContainer(): ContainerBuilder
     {
         $container = new ContainerBuilder();
@@ -36,19 +51,17 @@ abstract class TestCase extends PHPUnitTestCase
         return $container;
     }
 
-    protected static function createTestEnvironment(string $activeDir): void
+    protected static function createTestEnvironment(string $activeDir = self::ACTIVE_DIR): void
     {
         self::removeTestEnvironment();
 
-        $filesystem = new Filesystem();
-
         // Create the test environment.
-        $filesystem->mkdir(self::TEST_WORKING_DIR);
+        mkdir(self::TEST_WORKING_DIR, 0777, true);
         chdir(self::TEST_WORKING_DIR);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
-        $filesystem->mkdir($activeDir);
+        mkdir($activeDir, 0777, true);
     }
 
     protected static function removeTestEnvironment(): void
