@@ -1,4 +1,4 @@
----
+# https://github.com/phpro/grumphp#configuration
 grumphp:
     ascii:
         failed: ~
@@ -36,7 +36,9 @@ grumphp:
                 - phpmd
         phpstan:
             use_grumphp_paths: false
-        phpunit: ~
+        phpunit:
+            exclude_group:
+                - windows_only
         psalm: ~
         xmllint:
             ignore_patterns:
