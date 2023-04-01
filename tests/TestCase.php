@@ -14,8 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
-use Symfony\Component\Process\Process;
 
 abstract class TestCase extends PHPUnitTestCase
 {
@@ -346,66 +344,5 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
-    }
-
-    protected static function assertFileChanged($dir, $path, $message = ''): void
-    {
-        self::assertStringEqualsFile(
-            self::ensureTrailingSlash($dir) . $path,
-            self::CHANGED_CONTENT,
-            $message,
-        );
-    }
-
-    protected static function assertFileNotChanged($dir, $path, $message = ''): void
-    {
-        self::assertStringEqualsFile(
-            self::ensureTrailingSlash($dir) . $path,
-            self::ORIGINAL_CONTENT,
-            $message,
-        );
-    }
-
-    protected static function assertStagingDirectoryDoesNotExist(): void
-    {
-        self::assertFileDoesNotExist(self::STAGING_DIR, 'Staging directory does not exist.');
-    }
-
-    protected static function assertActiveAndStagingDirectoriesSame(): void
-    {
-        self::assertSame(
-            '',
-            self::getActiveAndStagingDirectoriesDiff(),
-            'Active and staging directories are the same.',
-        );
-    }
-
-    protected static function assertActiveAndStagingDirectoriesNotSame(): void
-    {
-        self::assertNotSame(
-            '',
-            self::getActiveAndStagingDirectoriesDiff(),
-            'Active and staging directories are not the same.',
-        );
-    }
-
-    protected static function getActiveAndStagingDirectoriesDiff(): string
-    {
-        $process = new Process([
-            'diff',
-            '--recursive',
-            self::ACTIVE_DIR,
-            self::STAGING_DIR,
-        ]);
-        $process->run();
-
-        return $process->getOutput();
-    }
-
-    protected static function isRsyncAvailable(): bool
-    {
-        $finder = new SymfonyExecutableFinder();
-
-        return $finder->find('rsync') !== null;
     }
 }

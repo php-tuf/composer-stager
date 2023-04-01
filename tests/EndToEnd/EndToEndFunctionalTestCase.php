@@ -384,4 +384,22 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     {
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
+
+    private static function assertFileChanged($dir, $path, $message = ''): void
+    {
+        self::assertStringEqualsFile(
+            self::ensureTrailingSlash($dir) . $path,
+            self::CHANGED_CONTENT,
+            $message,
+        );
+    }
+
+    private static function assertFileNotChanged($dir, $path, $message = ''): void
+    {
+        self::assertStringEqualsFile(
+            self::ensureTrailingSlash($dir) . $path,
+            self::ORIGINAL_CONTENT,
+            $message,
+        );
+    }
 }
