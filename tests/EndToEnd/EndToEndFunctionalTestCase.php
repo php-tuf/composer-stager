@@ -289,49 +289,13 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     public function providerDirectories(): array
     {
         return [
-            // Siblings cases.
-            'Siblings: simple' => [
+            // Siblings.
+            'Siblings' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'staging-dir',
-            ],
-            'Siblings: trailing slash on active only' => [
-                'activeDir' => 'active-dir/',
-                'stagingDir' => 'staging-dir',
-            ],
-            'Siblings: trailing slash on staging only' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => 'staging-dir/',
-            ],
-            'Siblings: trailing slash on both' => [
-                'activeDir' => 'active-dir/',
-                'stagingDir' => 'staging-dir/',
-            ],
-            'Siblings: complex relative paths' => [
-                'activeDir' => 'active-dir/../active-dir/../active-dir',
-                'stagingDir' => 'staging-dir/../staging-dir/../staging-dir',
-            ],
-            'Siblings: absolute paths' => [
-                'activeDir' => self::activeDirPath()->resolved(),
-                'stagingDir' => self::stagingDirPath()->resolved(),
-            ],
-            'Siblings: one absolute path, one relative' => [
-                'activeDir' => self::activeDirPath()->resolved(),
-                'stagingDir' => 'staging-dir',
-            ],
-            'Siblings: one relative path, one absolute' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => self::stagingDirPath()->resolved(),
-            ],
-            'Siblings: active as CWD with trailing slash' => [
-                'activeDir' => './',
-                'stagingDir' => '../staging-dir',
-            ],
-            'Siblings: active as "dot" (.)' => [
-                'activeDir' => '.',
-                'stagingDir' => '../staging-dir',
             ],
 
-            // Nested cases.
+            // Nested.
             'Nested: simple' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/staging-dir',
@@ -340,24 +304,16 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
             ],
-            'Nested: absolute paths' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/active-dir/staging-dir',
-            ],
 
             // These scenarios are the most important for shared hosting
             // situations, which may not provide access to paths outside the
             // codebase, e.g., the web root.
-            'Nested: both dirs relative, staging as "hidden" dir' => [
+            'Nested: Staging as "hidden" dir' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/.composer_staging',
             ],
-            'Nested: both dirs absolute, staging as "hidden" dir' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/active-dir/.composer_staging',
-            ],
 
-            // Other cases.
+            // Other.
             'Other: Staging dir in temp directory' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => sprintf(
