@@ -73,13 +73,11 @@ jobs:
                 run: "composer test"
                 if: ${{ runner.os == 'Linux' }}
 
-            # For some reason, PHPUnit ceased to generate code coverage data on macOS once Windows-only tests were
-            # excluded. (GrumPHP fails with "Invalid input file provided".) This isn't a big deal since it still
-            # works on the Ubuntu job. Run without it for now.
+            # There's no reason to generate coverage data on multiple OS-es--the result should be the same.
             -   name: "Run core tests without coverage (macOS)"
-                run: "./vendor/bin/phpunit --exclude-group=windows_only"
+                run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only"
                 if: ${{ runner.os == 'macOS' }}
 
             -   name: "Run Windows tests"
-                run: "./vendor/bin/phpunit --exclude-group=no_windows"
+                run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
                 if: ${{ runner.os == 'Windows' }}
