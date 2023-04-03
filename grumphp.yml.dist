@@ -6,6 +6,7 @@ grumphp:
     fixer:
         fix_by_default: true
     hide_circumvention_tip: true
+    process_timeout: 120
 
     tasks:
         clover_coverage:

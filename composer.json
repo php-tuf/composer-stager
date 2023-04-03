@@ -81,18 +81,17 @@
         "c": "rm -r var/*/* &> /dev/null || true",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",
         "deptrac": "deptrac --cache-file=var/deptrac/cache.json --config-file=deptrac.yml",
-        "functional": "phpunit --testsuite=Functional",
+        "functional": "phpunit --testsuite=Functional --exclude-group=windows_only",
         "lint": "parallel-lint --no-progress bin/composer-stage src tests",
         "phpcbf": "phpcbf",
         "phpcs": "phpcs -s",
         "phpmd": "phpmd src text phpmd",
         "phpstan": "phpstan analyse",
-        "phpunit": "phpunit",
         "psalm": "psalm.phar",
         "psalter": "psalm.phar --alter --issues=all",
         "static": "grumphp run --testsuite=static",
         "test": "grumphp run --testsuite=test",
-        "unit": "phpunit --testsuite=Unit"
+        "unit": "phpunit --testsuite=Unit --exclude-group=windows_only"
     },
     "scripts-descriptions": {
         "all": "Runs all automated tests and static analysis tools.",
@@ -105,7 +104,6 @@
         "phpcs": "Checks code for standards compliance.",
         "phpmd": "Looks for potential problems within the source code.",
         "phpstan": "Analyzes code to find bugs.",
-        "phpunit": "Runs PHPUnit tests.",
         "psalm": "Automatically fixes Psalm errors where possible.",
         "psalter": "Automatically fixes Psalm errors where possible.",
         "static": "Runs all static analysis tools.",

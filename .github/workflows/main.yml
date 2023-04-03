@@ -69,10 +69,17 @@ jobs:
                 with:
                     dependency-versions: "${{ matrix.dependencies }}"
 
-            -   name: "Run non-Windows tests"
-                run: "composer phpunit -- --exclude-group=windows_only"
-                if: ${{ runner.os != 'Windows' }}
+            -   name: "Run core tests with coverage (Ubuntu)"
+                run: "composer test"
+                if: ${{ runner.os == 'Ubuntu' }}
+
+            # For some reason, PHPUnit ceased to generate code coverage data on macOS once Windows-only tests were
+            # excluded. (GrumPHP fails with "Invalid input file provided".) This isn't a big deal since it still
+            # works on the Ubuntu job. Run without it for now.
+            -   name: "Run core tests without coverage (macOS)"
+                run: "./vendor/bin/phpunit --exclude-group=windows_only"
+                if: ${{ runner.os == 'macOS' }}
 
             -   name: "Run Windows tests"
-                run: "composer phpunit -- --exclude-group=no_windows"
+                run: "./vendor/bin/phpunit --exclude-group=no_windows"
                 if: ${{ runner.os == 'Windows' }}
