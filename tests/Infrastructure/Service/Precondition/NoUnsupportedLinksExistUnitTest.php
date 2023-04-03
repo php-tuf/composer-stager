@@ -74,21 +74,20 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $exclusions = $this->exclusions;
         $this->noAbsoluteSymlinksExist
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noHardLinksExist
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noLinksExistOnWindows
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointOutsideTheCodebase
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointToADirectory
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('There are no unsupported links in the codebase.');
@@ -96,9 +95,8 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $exclusions = $this->exclusions;
         $this->noAbsoluteSymlinksExist
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

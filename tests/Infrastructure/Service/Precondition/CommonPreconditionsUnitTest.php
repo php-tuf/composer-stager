@@ -54,15 +54,14 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $exclusions = $this->exclusions;
         $this->composerIsAvailable
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsReady
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The common preconditions are fulfilled.');
@@ -70,9 +69,8 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $exclusions = $this->exclusions;
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 

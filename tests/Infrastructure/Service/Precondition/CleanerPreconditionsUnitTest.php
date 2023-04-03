@@ -48,12 +48,11 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
-        $exclusions = $this->exclusions;
         $this->commonPreconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsReady
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The preconditions for removing the staging directory are fulfilled.');
@@ -61,9 +60,8 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $exclusions = $this->exclusions;
         $this->commonPreconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow(PreconditionException::class);
 
