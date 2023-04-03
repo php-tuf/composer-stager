@@ -4,7 +4,7 @@ grumphp:
         failed: ~
         succeeded: ~
     fixer:
-        enabled: false
+        fix_by_default: true
     hide_circumvention_tip: true
 
     tasks:
