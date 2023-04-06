@@ -1,3 +1,4 @@
+
 # Composer Stager
 
 [![Latest stable version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
@@ -31,16 +32,11 @@ It is invoked via its PHP API. Given a configured service container ([see below]
 class Updater
 {
     public function __construct(
-        BeginnerInterface $beginner,
-        StagerInterface $stager,
-        CommitterInterface $committer,
-        CleanerInterface $cleaner
-    )
-    {
-        $this->beginner = $beginner;
-        $this->stager = $stager;
-        $this->committer = $committer;
-        $this->cleaner = $cleaner;
+        private readonly BeginnerInterface $beginner,
+        private readonly StagerInterface $stager,
+        private readonly CommitterInterface $committer,
+        private readonly CleanerInterface $cleaner
+    ) {
     }
 
     public function update(): void
@@ -76,7 +72,6 @@ class Updater
 Composer Stager uses the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) pattern, and its services are best accessed via a container that supports autowiring, e.g., [Symfony's](https://symfony.com/doc/current/service_container.html). A basic implementation could look something like this:
 
 ```yaml
----
 services:
 
     _defaults:
