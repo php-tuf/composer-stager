@@ -27,6 +27,7 @@ final class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
         return PhpFileSyncer::class;
     }
 
+    /** @coversNothing */
     public function testSyncWithDirectorySymlinks(): void
     {
         // @todo PHPFileSyncer does not yet support symlinks to directories.
