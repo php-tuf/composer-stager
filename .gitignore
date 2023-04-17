@@ -1,5 +1,5 @@
-!/var/*/.gitkeep
 /.idea/dictionaries/*
+!/.idea/dictionaries/project.xml
 /.idea/workspace.xml
 /grumphp.yml
 /phpcs.xml
@@ -7,3 +7,4 @@
 /psalm.xml
 /var/*/*
 /vendor/
+!/**/.gitkeep
