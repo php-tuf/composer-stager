@@ -93,6 +93,7 @@
             <element value="@covers,@coversNothing"/>
             <element value="@uses"/>
             <element value="@dataProvider"/>
+            <element value="@property"/>
             <element value="@var"/>
             <element value="@param"/>
             <element value="@return"/>

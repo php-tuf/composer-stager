@@ -22,6 +22,8 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner $cleaner
  * @property \PhpTuf\ComposerStager\Domain\Core\Committer $committer
  * @property \PhpTuf\ComposerStager\Domain\Core\Stager $stager
+ *
+ * @group slow
  */
 abstract class EndToEndFunctionalTestCase extends TestCase
 {
@@ -59,7 +61,11 @@ abstract class EndToEndFunctionalTestCase extends TestCase
      */
     abstract protected function fileSyncerClass(): string;
 
-    /** @dataProvider providerDirectories */
+    /**
+     * @dataProvider providerDirectories
+     *
+     * @group slow
+     */
     public function testSync(string $activeDir, string $stagingDir): void
     {
         $activeDirPath = PathFactory::create($activeDir);

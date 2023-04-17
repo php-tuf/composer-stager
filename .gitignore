@@ -5,6 +5,8 @@
 /phpcs.xml
 /phpunit.xml
 /psalm.xml
+/tests/Exploratory/*
+!/tests/Exploratory/ExploratoryTestTemplate.php
 /var/*/*
 /vendor/
 !/**/.gitkeep
