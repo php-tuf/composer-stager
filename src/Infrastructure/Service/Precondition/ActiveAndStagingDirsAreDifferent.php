@@ -17,12 +17,12 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
 {
     public function getName(): string
     {
-        return 'Active and staging directories are different'; // @codeCoverageIgnore
+        return 'Active and staging directories are different';
     }
 
     public function getDescription(): string
     {
-        return 'The active and staging directories cannot be the same.'; // @codeCoverageIgnore
+        return 'The active and staging directories cannot be the same.';
     }
 
     public function isFulfilled(

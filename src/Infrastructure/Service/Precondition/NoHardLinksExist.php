@@ -14,12 +14,12 @@ final class NoHardLinksExist extends AbstractFileIteratingPrecondition implement
 {
     public function getName(): string
     {
-        return 'No hard links exist'; // @codeCoverageIgnore
+        return 'No hard links exist';
     }
 
     public function getDescription(): string
     {
-        return 'The codebase cannot contain hard links.'; // @codeCoverageIgnore
+        return 'The codebase cannot contain hard links.';
     }
 
     protected function getFulfilledStatusMessage(): string

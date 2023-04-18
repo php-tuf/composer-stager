@@ -16,12 +16,12 @@ final class NoAbsoluteSymlinksExist extends AbstractFileIteratingPrecondition im
 {
     public function getName(): string
     {
-        return 'No absolute links exist'; // @codeCoverageIgnore
+        return 'No absolute links exist';
     }
 
     public function getDescription(): string
     {
-        return 'The codebase cannot contain absolute links.'; // @codeCoverageIgnore
+        return 'The codebase cannot contain absolute links.';
     }
 
     protected function getFulfilledStatusMessage(): string

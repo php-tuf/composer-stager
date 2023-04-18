@@ -24,12 +24,12 @@ final class BeginnerPreconditions extends AbstractPreconditionsTree implements B
 
     public function getName(): string
     {
-        return 'Beginner preconditions'; // @codeCoverageIgnore
+        return 'Beginner preconditions';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for beginning the staging process.'; // @codeCoverageIgnore
+        return 'The preconditions for beginning the staging process.';
     }
 
     protected function getFulfilledStatusMessage(): string

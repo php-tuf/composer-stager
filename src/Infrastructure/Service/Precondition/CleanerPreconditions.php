@@ -22,12 +22,12 @@ final class CleanerPreconditions extends AbstractPreconditionsTree implements Cl
 
     public function getName(): string
     {
-        return 'Cleaner preconditions'; // @codeCoverageIgnore
+        return 'Cleaner preconditions';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for removing the staging directory.'; // @codeCoverageIgnore
+        return 'The preconditions for removing the staging directory.';
     }
 
     protected function getFulfilledStatusMessage(): string

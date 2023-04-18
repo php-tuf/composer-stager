@@ -59,7 +59,7 @@ parameters:
         - LICENSE
         - README.md
         - src
-    preconditionSystemHash: 6193c4b59e766fd3ad4e7400776db20d
+    preconditionSystemHash: fc3d799bb94847fab2899111af72f22c
 
 rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.

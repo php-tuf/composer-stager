@@ -20,12 +20,12 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
 
     public function getName(): string
     {
-        return 'Staging directory is writable'; // @codeCoverageIgnore
+        return 'Staging directory is writable';
     }
 
     public function getDescription(): string
     {
-        return 'The staging directory must be writable before any operations can be performed.'; // @codeCoverageIgnore
+        return 'The staging directory must be writable before any operations can be performed.';
     }
 
     public function isFulfilled(

@@ -20,12 +20,12 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
 
     public function getName(): string
     {
-        return 'Staging directory exists'; // @codeCoverageIgnore
+        return 'Staging directory exists';
     }
 
     public function getDescription(): string
     {
-        return 'The staging directory must exist before any operations can be performed.'; // @codeCoverageIgnore
+        return 'The staging directory must exist before any operations can be performed.';
     }
 
     public function isFulfilled(

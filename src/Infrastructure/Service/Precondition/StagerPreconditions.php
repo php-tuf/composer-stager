@@ -22,12 +22,12 @@ final class StagerPreconditions extends AbstractPreconditionsTree implements Sta
 
     public function getName(): string
     {
-        return 'Stager preconditions'; // @codeCoverageIgnore
+        return 'Stager preconditions';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for staging Composer commands.'; // @codeCoverageIgnore
+        return 'The preconditions for staging Composer commands.';
     }
 
     protected function getFulfilledStatusMessage(): string

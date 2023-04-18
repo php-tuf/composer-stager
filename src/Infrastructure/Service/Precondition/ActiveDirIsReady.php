@@ -22,12 +22,12 @@ final class ActiveDirIsReady extends AbstractPreconditionsTree implements Active
 
     public function getName(): string
     {
-        return 'Active directory is ready'; // @codeCoverageIgnore
+        return 'Active directory is ready';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for using the active directory.'; // @codeCoverageIgnore
+        return 'The preconditions for using the active directory.';
     }
 
     protected function getFulfilledStatusMessage(): string

@@ -20,12 +20,12 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
 
     public function getName(): string
     {
-        return 'Active directory is writable'; // @codeCoverageIgnore
+        return 'Active directory is writable';
     }
 
     public function getDescription(): string
     {
-        return 'The active directory must be writable before any operations can be performed.'; // @codeCoverageIgnore
+        return 'The active directory must be writable before any operations can be performed.';
     }
 
     public function isFulfilled(

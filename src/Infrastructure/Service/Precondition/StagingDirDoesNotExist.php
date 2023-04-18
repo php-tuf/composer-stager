@@ -20,12 +20,12 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
 
     public function getName(): string
     {
-        return 'Staging directory does not exist'; // @codeCoverageIgnore
+        return 'Staging directory does not exist';
     }
 
     public function getDescription(): string
     {
-        return 'The staging directory must not already exist before beginning the staging process.'; // @codeCoverageIgnore
+        return 'The staging directory must not already exist before beginning the staging process.';
     }
 
     public function isFulfilled(

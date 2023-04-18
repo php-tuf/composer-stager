@@ -28,12 +28,12 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
 
     public function getName(): string
     {
-        return 'No links exist on Windows'; // @codeCoverageIgnore
+        return 'No links exist on Windows';
     }
 
     public function getDescription(): string
     {
-        return 'The codebase cannot contain links if on Windows.'; // @codeCoverageIgnore
+        return 'The codebase cannot contain links if on Windows.';
     }
 
     protected function exitEarly(

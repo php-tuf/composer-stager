@@ -30,12 +30,12 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
 
     public function getName(): string
     {
-        return 'No symlinks point to a directory'; // @codeCoverageIgnore
+        return 'No symlinks point to a directory';
     }
 
     public function getDescription(): string
     {
-        return 'The codebase cannot contain symlinks that point to a directory.'; // @codeCoverageIgnore
+        return 'The codebase cannot contain symlinks that point to a directory.';
     }
 
     protected function getFulfilledStatusMessage(): string

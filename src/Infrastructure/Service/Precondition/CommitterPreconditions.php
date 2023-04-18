@@ -24,12 +24,12 @@ final class CommitterPreconditions extends AbstractPreconditionsTree implements 
 
     public function getName(): string
     {
-        return 'Committer preconditions'; // @codeCoverageIgnore
+        return 'Committer preconditions';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for making staged changes live.'; // @codeCoverageIgnore
+        return 'The preconditions for making staged changes live.';
     }
 
     protected function getFulfilledStatusMessage(): string

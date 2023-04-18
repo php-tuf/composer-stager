@@ -28,6 +28,20 @@ abstract class PreconditionTestCase extends TestCase
 
     abstract protected function createSut(): PreconditionInterface;
 
+    /**
+     * @covers ::getDescription
+     * @covers ::getLeaves
+     * @covers ::getName
+     */
+    public function testGetters(): void
+    {
+        $sut = $this->createSut();
+
+        self::assertIsString($sut->getName());
+        self::assertIsString($sut->getDescription());
+        self::assertIsArray($sut->getLeaves());
+    }
+
     protected function doTestFulfilled(string $expectedStatusMessage): void
     {
         $sut = $this->createSut();

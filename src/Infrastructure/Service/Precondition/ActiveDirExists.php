@@ -20,12 +20,12 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
 
     public function getName(): string
     {
-        return 'Active directory exists'; // @codeCoverageIgnore
+        return 'Active directory exists';
     }
 
     public function getDescription(): string
     {
-        return 'There must be an active directory present before any operations can be performed.'; // @codeCoverageIgnore
+        return 'There must be an active directory present before any operations can be performed.';
     }
 
     public function isFulfilled(

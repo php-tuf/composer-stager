@@ -30,12 +30,12 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
 
     public function getName(): string
     {
-        return 'Composer'; // @codeCoverageIgnore
+        return 'Composer';
     }
 
     public function getDescription(): string
     {
-        return 'Composer must be available in order to stage commands.'; // @codeCoverageIgnore
+        return 'Composer must be available in order to stage commands.';
     }
 
     public function isFulfilled(

@@ -24,12 +24,12 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
 
     public function getName(): string
     {
-        return 'Common preconditions'; // @codeCoverageIgnore
+        return 'Common preconditions';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions common to all operations.'; // @codeCoverageIgnore
+        return 'The preconditions common to all operations.';
     }
 
     protected function getFulfilledStatusMessage(): string

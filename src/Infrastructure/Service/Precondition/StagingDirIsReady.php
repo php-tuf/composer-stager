@@ -22,12 +22,12 @@ final class StagingDirIsReady extends AbstractPreconditionsTree implements Stagi
 
     public function getName(): string
     {
-        return 'Staging directory is ready'; // @codeCoverageIgnore
+        return 'Staging directory is ready';
     }
 
     public function getDescription(): string
     {
-        return 'The preconditions for using the staging directory.'; // @codeCoverageIgnore
+        return 'The preconditions for using the staging directory.';
     }
 
     protected function getFulfilledStatusMessage(): string

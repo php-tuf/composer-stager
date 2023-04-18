@@ -28,12 +28,12 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
 
     public function getName(): string
     {
-        return 'Unsupported links preconditions'; // @codeCoverageIgnore
+        return 'Unsupported links preconditions';
     }
 
     public function getDescription(): string
     {
-        return 'Preconditions concerning unsupported links.'; // @codeCoverageIgnore
+        return 'Preconditions concerning unsupported links.';
     }
 
     protected function getFulfilledStatusMessage(): string
