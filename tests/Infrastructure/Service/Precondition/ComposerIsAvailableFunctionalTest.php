@@ -11,8 +11,6 @@ use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 
-// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
-
 /**
  * @coversNothing
  *

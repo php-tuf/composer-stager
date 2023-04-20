@@ -239,6 +239,7 @@
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
     <!-- Exclusions for test classes. -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>tests</exclude-pattern></rule>
