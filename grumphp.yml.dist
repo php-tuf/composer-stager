@@ -4,7 +4,7 @@ grumphp:
         failed: ~
         succeeded: ~
     fixer:
-        fix_by_default: true
+        enabled: false
     hide_circumvention_tip: true
     process_timeout: 120
 
