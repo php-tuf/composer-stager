@@ -6,7 +6,7 @@ use JsonException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;

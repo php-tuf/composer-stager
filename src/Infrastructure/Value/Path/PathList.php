@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Value\PathList;
+namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
 
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
- * @package PathList
+ * @package Path
  *
  * @api This class may be instantiated directly or gotten from the service container via its interface.
  */

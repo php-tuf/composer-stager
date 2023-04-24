@@ -5,10 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\TestPathList;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 
 /**
@@ -21,7 +21,7 @@ use PhpTuf\ComposerStager\Tests\TestSpyInterface;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface $exclusions
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface $exclusions
  */
 final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 {

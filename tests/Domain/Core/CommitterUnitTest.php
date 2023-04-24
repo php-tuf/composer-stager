@@ -12,10 +12,10 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\PathList\TestPathList;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 

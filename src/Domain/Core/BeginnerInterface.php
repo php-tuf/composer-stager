@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Domain\Core;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.
@@ -23,7 +23,7 @@ interface BeginnerInterface
      *   The active directory.
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
      *   The staging directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the active directory. Careful use of
      *   exclusions can reduce execution time and disk usage. Two kinds of files
      *   and directories are good candidates for exclusion:

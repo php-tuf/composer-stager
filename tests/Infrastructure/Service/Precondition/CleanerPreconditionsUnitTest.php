@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CleanerPreconditio
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
- * @property \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface $exclusions
+ * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface $exclusions
  */
 final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 {

@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder;
 
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
@@ -16,9 +16,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder $fileFinder
  */

@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
  * @package FileSyncer

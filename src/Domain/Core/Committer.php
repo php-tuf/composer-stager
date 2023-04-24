@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditionsInte
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
  * @package Core
