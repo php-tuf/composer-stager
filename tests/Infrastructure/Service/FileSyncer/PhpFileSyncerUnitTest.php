@@ -19,7 +19,7 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory

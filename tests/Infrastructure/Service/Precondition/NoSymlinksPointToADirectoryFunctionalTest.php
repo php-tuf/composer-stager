@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory
@@ -28,9 +28,9 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir

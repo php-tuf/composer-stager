@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
  * Defines a precondition for a domain operation and how to verify it.

@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
  * Recursively finds all files "underneath" or "inside" a directory.
@@ -21,7 +21,7 @@ interface RecursiveFileFinderInterface
      *
      * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $directory
      *   The directory to search.
-     * @param \PhpTuf\ComposerStager\Domain\Value\PathList\PathListInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the active directory.
      *
      * @return array<string>

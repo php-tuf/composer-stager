@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist
@@ -21,9 +21,9 @@ use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList
  *
  * @group no_windows
  */
