@@ -36,7 +36,7 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
 
         $fix = $phpcsFile->addFixableError(
             sprintf(
-                '@property variable name must begin with a dollar sign, i.e., "$%s".',
+                '"@property" variable name must begin with a dollar sign, i.e., "$%s".',
                 $varName,
             ),
             $stackPtr,
@@ -48,6 +48,11 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
             return;
         }
 
+        $this->fix($phpcsFile, $tag, $contentParts, $varName);
+    }
+
+    private function fix(File $phpcsFile, DocCommentTag $tag, array $contentParts, string $varName): void
+    {
         // Create the fixed token.
         $contentParts[] = '$' . $varName;
         $fixedToken = implode(' ', $contentParts);

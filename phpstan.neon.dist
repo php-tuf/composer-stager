@@ -46,9 +46,6 @@ parameters:
         -
             message: '#Property .* does not accept .*.#'
             path: tests
-        -
-            message: '#.* properties should be sorted .* "\$prophecy.*".#'
-            path: tests
 
     # Custom parameters.
     gitattributesExportInclude:
@@ -76,7 +73,6 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
 
 services:
     -
