@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 /**
  * @package Path
  *
- * @api This class may be instantiated directly or gotten from the service container via its interface.
+ * @api
  */
 final class PathList implements PathListInterface
 {
