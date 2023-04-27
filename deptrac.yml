@@ -1,15 +1,19 @@
+# https://qossmic.github.io/deptrac/#configuration
 parameters:
   paths:
     - ./src
   layers:
+    # src/Domain is the Domain layer.
     - name: Domain
       collectors:
         - type: directory
           regex: Domain.*
+    # src/Infrastructure is the Infrastructure layer.
     - name: Infrastructure
       collectors:
         - type: directory
           regex: Infrastructure.*
   ruleset:
+    # The Infrastructure layer can depend on the Domain. The Domain cannot depend on anything outside itself.
     Infrastructure:
       - Domain
