@@ -79,7 +79,10 @@
     },
     "scripts": {
         "all": "grumphp run",
-        "c": "rm -r var/*/* &> /dev/null || true",
+        "c": [
+            "@composer dump-autoload",
+            "rm -r var/*/* &> /dev/null || true"
+        ],
         "cbf": "phpcbf",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",
         "cs": "@phpcs",
