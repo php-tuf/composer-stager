@@ -92,7 +92,10 @@
         "phpcbf": "phpcbf",
         "phpcs": "phpcs -s",
         "phpmd": "phpmd src text phpmd",
-        "phpstan": "phpstan analyse",
+        "phpstan": [
+            "@composer dump-autoload",
+            "phpstan analyse"
+        ],
         "psalm": "psalm.phar",
         "stan": "@phpstan",
         "static": "grumphp run --testsuite=static",
