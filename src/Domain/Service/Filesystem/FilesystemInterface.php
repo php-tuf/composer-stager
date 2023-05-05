@@ -58,6 +58,17 @@ interface FilesystemInterface
     public function isDir(PathInterface $path): bool;
 
     /**
+     * Determines whether the given directory is empty.
+     *
+     * @return bool
+     *   Returns true if the directory is empty, false otherwise.
+     *
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     *   If the directory does not exist or is not actually a directory.
+     */
+    public function isDirEmpty(PathInterface $path): bool;
+
+    /**
      * Determines whether the given path is a regular file.
      *
      * Unlike PHP's built-in is_file() function, this method distinguishes
