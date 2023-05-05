@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" activateToolWindowBeforeRun="false">
+  <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
     <TestRunner options="--exclude-group=windows_only" />
     <method v="2" />
   </configuration>
