@@ -77,6 +77,22 @@ final class Filesystem implements FilesystemInterface
         return $this->getFileType($path) === self::PATH_IS_DIRECTORY;
     }
 
+    /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
+    public function isDirEmpty(PathInterface $path): bool
+    {
+        $scandir = @scandir($path->resolved());
+
+        if ($scandir === false) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            throw new IOException(sprintf(
+                'The path does not exist or is not a directory at "%s"',
+                $path->resolved(),
+            ));
+        }
+
+        return $scandir === ['.', '..'];
+    }
+
     public function isFile(PathInterface $path): bool
     {
         return $this->getFileType($path) === self::PATH_IS_REGULAR_FILE;

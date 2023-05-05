@@ -79,6 +79,59 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertDirectoryListing(self::destinationDir()->resolved(), [$filename]);
     }
 
+    /** @covers ::isDirEmpty */
+    public function testIsDirEmptyTrue(): void
+    {
+        $directory = PathFactory::create(self::TEST_ENV . '/empty');
+        mkdir($directory->resolved());
+        $sut = $this->createSut();
+
+        self::assertTrue($sut->isDirEmpty($directory), 'Correctly detected empty directory.');
+    }
+
+    /** @covers ::isDirEmpty */
+    public function testIsDirEmptyFalse(): void
+    {
+        $directory = PathFactory::create(__DIR__);
+        $sut = $this->createSut();
+
+        self::assertFalse($sut->isDirEmpty($directory), 'Correctly detected non-empty directory.');
+    }
+
+    /** @covers ::isDirEmpty */
+    public function testIsDirEmptyErrorIsNotADirectory(): void
+    {
+        $path = PathFactory::create(self::TEST_ENV);
+        $file = PathFactory::create('file.txt', $path);
+        touch($file->resolved());
+
+        $this->expectException(IOException::class);
+        $this->expectExceptionMessage(sprintf(
+            'The path does not exist or is not a directory at "%s"',
+            $file->resolved(),
+        ));
+
+        $sut = $this->createSut();
+
+        $sut->isDirEmpty($file);
+    }
+
+    /** @covers ::isDirEmpty */
+    public function testIsDirEmptyError(): void
+    {
+        $path = PathFactory::create('non-existent');
+
+        $this->expectException(IOException::class);
+        $this->expectExceptionMessage(sprintf(
+            'The path does not exist or is not a directory at "%s"',
+            $path->resolved(),
+        ));
+
+        $sut = $this->createSut();
+
+        $sut->isDirEmpty($path);
+    }
+
     /**
      * @covers ::exists
      * @covers ::getFileType
