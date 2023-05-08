@@ -52,7 +52,6 @@ namespace Precondition {
         +final assertIsFulfilled($activeDir, $stagingDir) : void
         +getLeaves() : PreconditionInterface[]
         {abstract} #getFulfilledStatusMessage() : string
-        {abstract} #getUnfulfilledStatusMessage() : string
     }
 
     class ConcretePreconditionsTree extends AbstractPreconditionsTree {
@@ -60,7 +59,6 @@ namespace Precondition {
         +getName() : string
         +getDescription() : string
         #getFulfilledStatusMessage() : string
-        #getUnfulfilledStatusMessage() : string
     }
 
 }

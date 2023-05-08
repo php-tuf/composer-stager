@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinks
  * @covers ::getDefaultUnfulfilledStatusMessage
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
- * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException

@@ -16,9 +16,10 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinks
  * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
- * @covers ::getUnfulfilledStatusMessage
+ * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteSymlinksExist
@@ -95,11 +96,13 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
+        $unfulfilledChild = new TestPrecondition();
+        $previous = new PreconditionException($unfulfilledChild);
         $this->noAbsoluteSymlinksExist
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
-            ->willThrow(PreconditionException::class);
+            ->willThrow($previous);
 
-        $this->doTestUnfulfilled('There are unsupported links in the codebase.');
+        $this->doTestUnfulfilled($previous->getMessage());
     }
 }

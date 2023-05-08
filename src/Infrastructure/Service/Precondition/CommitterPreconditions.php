@@ -36,9 +36,4 @@ final class CommitterPreconditions extends AbstractPreconditionsTree implements 
     {
         return 'The preconditions for making staged changes live are fulfilled.';
     }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The preconditions for making staged changes live are unfulfilled.';
-    }
 }

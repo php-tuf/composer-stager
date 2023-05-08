@@ -35,7 +35,8 @@ interface PreconditionInterface
      * This reflects the actual status of the precondition at runtime and may
      * include details for resolving an unfulfilled precondition, e.g., "The
      * example dependency is ready," or if unfulfilled, "The example dependency
-     * cannot be found. Make sure it's installed."
+     * cannot be found. Make sure it's installed." If the precondition has
+     * unfulfilled leaves, the status message from the first one will be returned.
      */
     public function getStatusMessage(
         PathInterface $activeDir,

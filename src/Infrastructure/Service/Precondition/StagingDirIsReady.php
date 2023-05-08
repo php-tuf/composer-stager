@@ -34,9 +34,4 @@ final class StagingDirIsReady extends AbstractPreconditionsTree implements Stagi
     {
         return 'The staging directory is ready to use.';
     }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The staging directory is not ready to use.';
-    }
 }

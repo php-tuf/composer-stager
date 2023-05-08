@@ -36,9 +36,4 @@ final class BeginnerPreconditions extends AbstractPreconditionsTree implements B
     {
         return 'The preconditions for beginning the staging process are fulfilled.';
     }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The preconditions for beginning the staging process are unfulfilled.';
-    }
 }
