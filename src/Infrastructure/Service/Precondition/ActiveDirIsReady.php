@@ -34,9 +34,4 @@ final class ActiveDirIsReady extends AbstractPreconditionsTree implements Active
     {
         return 'The active directory is ready to use.';
     }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The active directory is not ready to use.';
-    }
 }

@@ -40,9 +40,4 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
     {
         return 'There are no unsupported links in the codebase.';
     }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'There are unsupported links in the codebase.';
-    }
 }

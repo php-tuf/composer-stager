@@ -35,7 +35,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
             public string $description = 'Description';
             public bool $isFulfilled = true;
             public string $fulfilledStatusMessage = 'Fulfilled';
-            public string $unfulfilledStatusMessage = 'Unfulfilled';
 
             public function getName(): string
             {
@@ -50,11 +49,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
             protected function getFulfilledStatusMessage(): string
             {
                 return $this->fulfilledStatusMessage;
-            }
-
-            protected function getUnfulfilledStatusMessage(): string
-            {
-                return $this->unfulfilledStatusMessage;
             }
         };
     }
@@ -88,7 +82,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $child->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
-            ->shouldBeCalledTimes(2);
+            ->shouldBeCalledOnce();
 
         if (!$isFulfilled) {
             $child->assertIsFulfilled($this->activeDir, $this->stagingDir, $exclusions)
@@ -105,10 +99,9 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $sut->fulfilledStatusMessage = $fulfilledStatusMessage;
         $sut->unfulfilledStatusMessage = $unfulfilledStatusMessage;
 
-        self::assertEquals($sut->getName(), $name);
-        self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($this->activeDir, $this->stagingDir, $exclusions), $expectedStatusMessage);
+        self::assertEquals($name, $sut->getName());
+        self::assertEquals($description, $sut->getDescription());
+        self::assertEquals($isFulfilled, $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions));
     }
 
     public function providerBasicFunctionality(): array

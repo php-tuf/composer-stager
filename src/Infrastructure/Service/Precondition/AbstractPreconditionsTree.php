@@ -20,9 +20,6 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
     /** Gets a status message for when the precondition is fulfilled. */
     abstract protected function getFulfilledStatusMessage(): string;
 
-    /** Gets a status message for when the precondition is unfulfilled. */
-    abstract protected function getUnfulfilledStatusMessage(): string;
-
     /**
      * The order in which children are evaluated is unspecified and should not be depended upon. There is no
      * guarantee that the order they are supplied in will have, or continue to have, any determinate effect.
@@ -39,9 +36,13 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
     ): string {
-        return $this->isFulfilled($activeDir, $stagingDir, $exclusions)
-            ? $this->getFulfilledStatusMessage()
-            : $this->getUnfulfilledStatusMessage();
+        try {
+            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+        } catch (PreconditionException $e) {
+            return $e->getMessage();
+        }
+
+        return $this->getFulfilledStatusMessage();
     }
 
     public function isFulfilled(
