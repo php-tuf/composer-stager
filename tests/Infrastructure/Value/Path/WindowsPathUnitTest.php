@@ -42,7 +42,7 @@ final class WindowsPathUnitTest extends TestCase
         $relativeBase = new WindowsPath($relativeBase);
 
         // Dynamically override CWD.
-        $setCwd = function ($cwd) {
+        $setCwd = function ($cwd): void {
             /** @phpstan-ignore-next-line */
             $this->cwd = $cwd;
         };

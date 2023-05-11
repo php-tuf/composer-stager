@@ -126,7 +126,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     }
 
     /** @dataProvider providerInvalidOutput */
-    public function testInvalidOutput($output): void
+    public function testInvalidOutput(string $output): void
     {
         $this->process
             ->getOutput()

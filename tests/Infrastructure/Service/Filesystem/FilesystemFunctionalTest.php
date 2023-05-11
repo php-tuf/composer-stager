@@ -24,12 +24,12 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class FilesystemFunctionalTest extends TestCase
 {
-    protected static function sourceDir(): PathInterface
+    private static function sourceDir(): PathInterface
     {
         return PathFactory::create(self::TEST_ENV . '/source');
     }
 
-    protected static function destinationDir(): PathInterface
+    private static function destinationDir(): PathInterface
     {
         return PathFactory::create(self::TEST_ENV . '/destination');
     }
@@ -52,7 +52,7 @@ final class FilesystemFunctionalTest extends TestCase
         self::removeTestEnvironment();
     }
 
-    protected function createSut(): Filesystem
+    private function createSut(): Filesystem
     {
         $container = $this->getContainer();
         $container->compile();

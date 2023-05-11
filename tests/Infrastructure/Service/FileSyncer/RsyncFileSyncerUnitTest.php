@@ -48,7 +48,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
     }
 
-    protected function createSut(): RsyncFileSyncer
+    private function createSut(): RsyncFileSyncer
     {
         $filesystem = $this->filesystem->reveal();
         $rsync = $this->rsync->reveal();

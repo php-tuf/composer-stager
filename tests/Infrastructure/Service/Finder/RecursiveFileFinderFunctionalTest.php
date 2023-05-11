@@ -34,7 +34,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
         self::removeTestEnvironment();
     }
 
-    protected function createSut(): RecursiveFileFinder
+    private function createSut(): RecursiveFileFinder
     {
         $container = $this->getContainer();
         $container->compile();
@@ -162,7 +162,7 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
 
     private function normalizePaths($paths): array
     {
-        $paths = array_map(static function ($path) {
+        $paths = array_map(static function ($path): string {
             $path = implode(
                 DIRECTORY_SEPARATOR,
                 [

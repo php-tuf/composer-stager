@@ -35,7 +35,7 @@ final class CleanerUnitTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
 
-    protected function createSut(): Cleaner
+    private function createSut(): Cleaner
     {
         $filesystem = $this->filesystem->reveal();
         $preconditions = $this->preconditions->reveal();

@@ -40,7 +40,7 @@ final class StagerUnitTest extends TestCase
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
     }
 
-    protected function createSut(): Stager
+    private function createSut(): Stager
     {
         $composerRunner = $this->composerRunner->reveal();
         $preconditions = $this->preconditions->reveal();

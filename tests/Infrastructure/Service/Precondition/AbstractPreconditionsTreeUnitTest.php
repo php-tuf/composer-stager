@@ -64,13 +64,13 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
      * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
     public function testBasicFunctionality(
-        $name,
-        $description,
-        $isFulfilled,
-        $fulfilledStatusMessage,
-        $unfulfilledStatusMessage,
-        $expectedStatusMessage,
-        $exclusions,
+        string $name,
+        string $description,
+        bool $isFulfilled,
+        string $fulfilledStatusMessage,
+        string $unfulfilledStatusMessage,
+        string $expectedStatusMessage,
+        ?TestPathList $exclusions,
     ): void {
         // Pass a mock child into the SUT so the behavior of ::assertIsFulfilled
         // can be controlled indirectly, without overriding the method on the SUT

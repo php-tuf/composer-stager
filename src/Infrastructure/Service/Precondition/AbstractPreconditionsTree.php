@@ -15,7 +15,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 abstract class AbstractPreconditionsTree implements PreconditionInterface
 {
     /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> */
-    private array $children;
+    private readonly array $children;
 
     /** Gets a status message for when the precondition is fulfilled. */
     abstract protected function getFulfilledStatusMessage(): string;

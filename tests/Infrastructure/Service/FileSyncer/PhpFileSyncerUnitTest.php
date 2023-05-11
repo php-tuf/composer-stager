@@ -43,7 +43,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
     }
 
-    protected function createSut(): PhpFileSyncer
+    private function createSut(): PhpFileSyncer
     {
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();

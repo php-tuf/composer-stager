@@ -51,7 +51,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory);
     }
 
-    protected function createWindowsHost(): HostInterface
+    private function createWindowsHost(): HostInterface
     {
         return new class() extends TestHost
         {
@@ -62,7 +62,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         };
     }
 
-    protected function createNonWindowsHost(): HostInterface
+    private function createNonWindowsHost(): HostInterface
     {
         return new class() extends TestHost
         {

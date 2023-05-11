@@ -82,13 +82,13 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
      * @dataProvider providerBasicFunctionality
      */
     public function testBasicFunctionality(
-        $name,
-        $description,
-        $exclusions,
-        $isFulfilled,
-        $fulfilledStatusMessage,
-        $unfulfilledStatusMessage,
-        $expectedStatusMessage,
+        string $name,
+        string $description,
+        ?PathListInterface $exclusions,
+        bool $isFulfilled,
+        string $fulfilledStatusMessage,
+        string $unfulfilledStatusMessage,
+        string $expectedStatusMessage,
     ): void {
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->spy

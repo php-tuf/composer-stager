@@ -39,7 +39,7 @@ final class CommitterUnitTest extends TestCase
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
 
-    protected function createSut(): Committer
+    private function createSut(): Committer
     {
         $preconditions = $this->preconditions->reveal();
         $fileSyncer = $this->fileSyncer->reveal();

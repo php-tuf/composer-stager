@@ -20,9 +20,4 @@ final class TestPreconditionsTree extends AbstractPreconditionsTree
     {
         return 'TestPreconditionsTree is unfulfilled.';
     }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'TestPreconditionsTree is fulfilled.';
-    }
 }

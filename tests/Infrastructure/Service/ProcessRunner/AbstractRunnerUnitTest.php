@@ -40,7 +40,7 @@ final class AbstractRunnerUnitTest extends TestCase
             ->willReturn($this->process);
     }
 
-    protected function createSut($executableName = null): AbstractRunner
+    private function createSut($executableName = null): AbstractRunner
     {
         $executableName ??= self::COMMAND_NAME;
         $executableFinder = $this->executableFinder->reveal();
@@ -56,7 +56,7 @@ final class AbstractRunnerUnitTest extends TestCase
         {
             public function __construct(
                 ExecutableFinderInterface $executableFinder,
-                private string $executableName,
+                private readonly string $executableName,
                 ProcessFactoryInterface $processFactory,
             ) {
                 parent::__construct($executableFinder, $processFactory);

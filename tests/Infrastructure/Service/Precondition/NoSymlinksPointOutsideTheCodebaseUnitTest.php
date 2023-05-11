@@ -68,13 +68,4 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
             [new IOException('The directory cannot be found or is not actually a directory.')],
         ];
     }
-
-    protected function assertFulfilledStatusMessage(
-        bool $isFulfilled,
-        string $statusMessage,
-        string $assertionMessage,
-    ): void {
-        self::assertTrue($isFulfilled, $assertionMessage);
-        self::assertSame('There are no symlinks that point outside the codebase.', $statusMessage, 'Got correct status message');
-    }
 }

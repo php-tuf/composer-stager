@@ -35,7 +35,7 @@ final class FilesystemUnitTest extends TestCase
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
-    protected function createSut(): Filesystem
+    private function createSut(): Filesystem
     {
         $pathFactory = $this->pathFactory->reveal();
         $symfonyFilesystem = $this->symfonyFilesystem->reveal();

@@ -40,7 +40,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     }
 
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
-    protected function createTestPreconditionsTree(array $excludePreconditions = []): TestPreconditionsTree
+    private function createTestPreconditionsTree(array $excludePreconditions = []): TestPreconditionsTree
     {
         $container = $this->getContainer();
         $container->compile();

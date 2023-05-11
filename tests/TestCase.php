@@ -180,14 +180,14 @@ abstract class TestCase extends PHPUnitTestCase
         assert($mkdirResult, "Created directory {$dirname}.");
     }
 
-    protected static function changeFile($dir, $filename): void
+    protected static function changeFile(string $dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($pathname, self::CHANGED_CONTENT);
         assert($result !== false, "Changed file {$pathname}.");
     }
 
-    protected static function deleteFile($dir, $filename): void
+    protected static function deleteFile(string $dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
@@ -230,7 +230,7 @@ abstract class TestCase extends PHPUnitTestCase
         $actual = self::getFlatDirectoryListing($dir);
 
         // Remove ignored paths.
-        $actual = array_map(static function ($path) use ($dir, $ignoreDir) {
+        $actual = array_map(static function ($path) use ($dir, $ignoreDir): bool|string {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
             $matchPath = self::ensureTrailingSlash($dir) . $path;

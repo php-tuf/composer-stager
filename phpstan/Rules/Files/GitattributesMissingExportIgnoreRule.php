@@ -76,7 +76,7 @@ final class GitattributesMissingExportIgnoreRule extends AbstractRule
     private function isExcluded(string $filename): bool
     {
         $gitattributes = file(self::PROJECT_ROOT . '/.gitattributes');
-        $gitattributes = array_map(static function ($value) {
+        $gitattributes = array_map(static function ($value): string {
             $value = ltrim($value, DIRECTORY_SEPARATOR);
             preg_match('/^(.*)\s*export-ignore$/', $value, $matches);
 

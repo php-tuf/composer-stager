@@ -6,7 +6,7 @@ use PHP_CodeSniffer\Files\File;
 
 final class DocCommentTag
 {
-    private array $tokens;
+    private readonly array $tokens;
 
     public function __construct(private readonly File $phpcsFile, private readonly int $stackPtr)
     {

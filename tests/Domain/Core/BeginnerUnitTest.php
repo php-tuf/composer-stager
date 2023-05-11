@@ -39,7 +39,7 @@ final class BeginnerUnitTest extends TestCase
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
 
-    protected function createSut(): Beginner
+    private function createSut(): Beginner
     {
         $fileSyncer = $this->fileSyncer->reveal();
         $preconditions = $this->preconditions->reveal();

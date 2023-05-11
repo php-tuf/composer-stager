@@ -38,7 +38,7 @@ final class UnixLikePathUnitTest extends TestCase
         $relativeBase = new UnixLikePath($relativeBase);
 
         // Dynamically override CWD.
-        $setCwd = function ($cwd) {
+        $setCwd = function ($cwd): void {
             /** @phpstan-ignore-next-line */
             $this->cwd = $cwd;
         };
