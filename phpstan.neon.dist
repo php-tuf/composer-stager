@@ -50,8 +50,8 @@ parameters:
     # Custom parameters.
     gitattributesExportInclude:
         - composer.json
+        - docs
         - LICENSE
-        - README.md
         - src
     preconditionSystemHash: ebe7af9e9937c89de4fa7b59fe6b159a
 

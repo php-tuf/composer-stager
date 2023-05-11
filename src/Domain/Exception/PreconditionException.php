@@ -9,8 +9,6 @@ use Throwable;
 /**
  * This exception is thrown when a domain operation has an unfulfilled precondition.
  *
- * @see :/src/Domain/Service/Precondition/README.md
- *
  * @package Exception
  *
  * @api
