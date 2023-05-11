@@ -43,7 +43,7 @@ jobs:
                 run: "composer static"
 
     tests:
-        name: "Test: ${{ matrix.os }}, ${{ matrix.dependencies }} (${{ matrix.php }})"
+        name: "${{ matrix.os }} / ${{ matrix.dependencies }} / ${{ matrix.php }}"
         runs-on: "${{ matrix.os }}"
         strategy:
             fail-fast: false
