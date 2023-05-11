@@ -81,9 +81,12 @@
     <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature"/>
     <rule ref="SlevomatCodingStandard.Classes.TraitUseDeclaration"/>
-    <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing"><properties>
-        <property name="linesCountBeforeFirstUseWhenFirstInClass" value="0"/>
-    </properties></rule>
+    <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing">
+        <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing.IncorrectLinesCountAfterLastUse"/>
+        <properties>
+            <property name="linesCountBeforeFirstUseWhenFirstInClass" value="0"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.UselessLateStaticBinding"/>
 
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
