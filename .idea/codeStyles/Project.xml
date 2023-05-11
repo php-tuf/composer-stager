@@ -6,7 +6,17 @@
       <option name="COMMA_AFTER_LAST_ARRAY_ELEMENT" value="true" />
       <option name="PHPDOC_BLANK_LINE_BEFORE_TAGS" value="true" />
       <option name="PHPDOC_BLANK_LINES_AROUND_PARAMETERS" value="true" />
-      <option name="SORT_PHPDOC_ELEMENTS" value="false" />
+      <option name="THROWS_WEIGHT" value="5" />
+      <option name="PARAM_WEIGHT" value="3" />
+      <option name="RETURN_WEIGHT" value="4" />
+      <option name="INTERNAL_WEIGHT" value="9" />
+      <option name="USES_WEIGHT" value="0" />
+      <option name="API_WEIGHT" value="8" />
+      <option name="PACKAGE_WEIGHT" value="7" />
+      <option name="PROPERTY_WEIGHT" value="1" />
+      <option name="SEE_WEIGHT" value="6" />
+      <option name="TODO_WEIGHT" value="10" />
+      <option name="VAR_WEIGHT" value="2" />
       <option name="LOWER_CASE_BOOLEAN_CONST" value="true" />
       <option name="LOWER_CASE_NULL_CONST" value="true" />
       <option name="ELSE_IF_STYLE" value="COMBINE" />
@@ -22,12 +32,12 @@
     </yaml>
     <codeStyleSettings language="PHP">
       <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
+      <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
       <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="0" />
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
       <option name="BLANK_LINES_BEFORE_PACKAGE" value="0" />
       <option name="BLANK_LINES_AFTER_PACKAGE" value="1" />
-      <option name="BLANK_LINES_AROUND_FIELD" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
       <option name="SPACE_AFTER_TYPE_CAST" value="true" />
       <option name="CALL_PARAMETERS_WRAP" value="1" />
