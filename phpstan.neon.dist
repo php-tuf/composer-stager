@@ -44,8 +44,8 @@ parameters:
             message: '#Parameter .* of (static )?method .* expects .* given.#'
             path: tests
         -
-            message: '#Property .* does not accept .*.#'
-            path: tests
+            message: '#.* will always evaluate to true.#'
+            path: tests/EndToEnd/EndToEndFunctionalTestCase.php
 
     # Custom parameters.
     gitattributesExportInclude:
