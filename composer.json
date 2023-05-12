@@ -38,6 +38,7 @@
         "phpunit/phpunit": "^9.6",
         "psalm/phar": "^5.7",
         "qossmic/deptrac-shim": "^1.0",
+        "rector/rector": "^0.16.0",
         "slevomat/coding-standard": "^8.8",
         "squizlabs/php_codesniffer": "^3.7",
         "symfony/config": "^6.2",
@@ -100,6 +101,7 @@
             "phpstan analyse"
         ],
         "psalm": "psalm.phar",
+        "rector": "rector",
         "stan": "@phpstan",
         "static": "grumphp run --testsuite=static",
         "tests": "grumphp run --testsuite=test",
@@ -122,6 +124,7 @@
         "phpmd": "[md] Looks for potential problems within the source code",
         "phpstan": "[stan] Analyzes code to find bugs",
         "psalm": "Automatically fixes Psalm errors where possible",
+        "rector": "Instantly upgrade and automatically refactors PHP code",
         "stan": "[phpstan] Analyzes code to find bugs",
         "static": "Runs all static analysis tools",
         "tests": "[test] Runs automated tests",

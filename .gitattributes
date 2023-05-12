@@ -14,5 +14,6 @@
 /phpstan.neon.dist   export-ignore
 /phpunit.xml.dist    export-ignore
 /psalm.xml.dist      export-ignore
+/rector.php          export-ignore
 /tests               export-ignore
 /var                 export-ignore

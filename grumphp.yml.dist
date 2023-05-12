@@ -41,6 +41,7 @@ grumphp:
             exclude_group:
                 - windows_only
         psalm: ~
+        rector: ~
         xmllint:
             ignore_patterns:
                 - .idea
@@ -67,6 +68,7 @@ grumphp:
                 - phpmd
                 - psalm
                 - phpstan
+                - rector
                 - xmllint
                 - yamllint
         test:
