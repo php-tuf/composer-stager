@@ -225,7 +225,7 @@ abstract class TestCase extends PHPUnitTestCase
         string $ignoreDir = '',
         string $message = '',
     ): void {
-        $expected = array_map([self::class, 'fixSeparators'], $expected);
+        $expected = array_map(self::fixSeparators(...), $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
 

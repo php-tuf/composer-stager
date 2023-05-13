@@ -195,13 +195,14 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         // Sanity check to ensure that the expected changes were made.
         $deletion = array_search('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $expectedStagingDirListing, true);
         unset($expectedStagingDirListing[$deletion]);
-        self::assertDirectoryListing($stagingDirPath->resolved(), array_merge($expectedStagingDirListing, [
+        self::assertDirectoryListing($stagingDirPath->resolved(), [
+            ...$expectedStagingDirListing,
             // Additions.
             'CREATE_in_staging_dir.txt',
             'EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt',
             'another_subdir/CREATE_in_staging_dir.txt',
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
-        ]), '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
+        ], '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
 
         $previousStagingDirContents = self::getDirectoryContents($stagingDir);
 

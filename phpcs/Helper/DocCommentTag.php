@@ -15,14 +15,14 @@ final class DocCommentTag
 
     public function getName(): string
     {
-        return trim($this->tokens[$this->stackPtr]['content']);
+        return trim((string) $this->tokens[$this->stackPtr]['content']);
     }
 
     public function getContent(): string
     {
         $commentStringPtr = $this->getStringPtr();
 
-        return trim($this->tokens[$commentStringPtr]['content']);
+        return trim((string) $this->tokens[$commentStringPtr]['content']);
     }
 
     public function getStringPtr(): int

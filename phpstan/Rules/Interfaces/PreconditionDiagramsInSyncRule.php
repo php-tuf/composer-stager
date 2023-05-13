@@ -73,7 +73,7 @@ final class PreconditionDiagramsInSyncRule extends AbstractRule
 
         foreach ($this->getClassMap() as $name => $filename) {
             // Limit to Composer Stager production code.
-            if (!str_contains($filename, '/../../src/')) {
+            if (!str_contains((string) $filename, '/../../src/')) {
                 continue;
             }
 
