@@ -20,7 +20,7 @@ on:
 jobs:
     quality_check:
         name: "Quality Check"
-        runs-on: macos-latest
+        runs-on: ubuntu-latest
         strategy:
             fail-fast: false
         steps:
