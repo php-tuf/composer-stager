@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditionsInterface;
@@ -10,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use Throwable;
 
 /**
  * @package Core
@@ -35,7 +35,7 @@ final class Committer implements CommitterInterface
 
         try {
             $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
-        } catch (ExceptionInterface $e) {
+        } catch (Throwable $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }

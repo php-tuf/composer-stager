@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
@@ -12,6 +11,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
+use Throwable;
 
 /**
  * @package FileSyncer
@@ -99,7 +99,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         try {
             $this->rsync->run($command, $callback);
-        } catch (ExceptionInterface $e) {
+        } catch (Throwable $e) {
             throw new IOException($e->getMessage(), 0, $e);
         }
     }

@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Factory\Process;
 
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use Symfony\Component\Process\Exception\ExceptionInterface;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 /**
  * @package Process
@@ -17,7 +17,7 @@ final class ProcessFactory implements ProcessFactoryInterface
     {
         try {
             return new Process($command);
-        } catch (ExceptionInterface $e) { // @codeCoverageIgnore
+        } catch (Throwable $e) { // @codeCoverageIgnore
             throw new LogicException($e->getMessage(), 0, $e); // @codeCoverageIgnore
         }
     }
