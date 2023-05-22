@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
@@ -59,13 +57,5 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         $pathFactory = $this->pathFactory->reveal();
 
         return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory);
-    }
-
-    public function providerExceptions(): array
-    {
-        return [
-            [new InvalidArgumentException('Exclusions include invalid paths.')],
-            [new IOException('The directory cannot be found or is not actually a directory.')],
-        ];
     }
 }
