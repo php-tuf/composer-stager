@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core;
 
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
@@ -9,7 +10,6 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use Throwable;
 
 /**
  * @package Core
@@ -78,7 +78,7 @@ final class Stager implements StagerInterface
 
         try {
             $this->composerRunner->run($command, $callback, $timeout);
-        } catch (Throwable $e) {
+        } catch (ExceptionInterface $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
