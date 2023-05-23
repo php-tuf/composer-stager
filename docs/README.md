@@ -1,4 +1,3 @@
-
 # Composer Stager
 
 [![Latest stable version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
