@@ -24,6 +24,9 @@ parameters:
             message: '#Concrete class .* be marked "@.*"#'
             path: src/Infrastructure/Value/Path/PathList.php
         -
+            message: '#Method .* should not be public because it''s not on any interface its class implements.#'
+            path: src/Infrastructure/Service/ProcessRunner/AbstractRunner.php
+        -
             message: '#Parameter \#1 ...\$children of method .*AbstractPreconditionsTree::__construct\(\) expects .*PreconditionInterface, mixed given.#'
             path: src/Infrastructure/Service/Precondition
 
@@ -36,6 +39,9 @@ parameters:
             path: tests
         -
             message: '#Method .* no (value )?type specified.*#'
+            path: tests
+        -
+            message: '#Method .* should not be public because it''s not on any interface its class implements.#'
             path: tests
         -
             message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
@@ -63,6 +69,7 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\NoNonInterfacePublicMethodsRule # Forbids public methods that are not on an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\APIAnnotationRule # Enforces "@api" and "@internal" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
