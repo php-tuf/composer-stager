@@ -45,6 +45,9 @@ parameters:
         -
             message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
             path: src/Domain/Exception/PreconditionException.php
+        -
+            message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
+            path: src/Infrastructure/Service/ProcessRunner/AbstractRunner.php
 
         # Test code.
         -
@@ -67,6 +70,9 @@ parameters:
             path: tests
         -
             message: '#Method .* no (value )?type specified.*#'
+            path: tests
+        -
+            message: '#Method .* should not be public because it doesn''t implement a method on an interface.#'
             path: tests
         -
             message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
@@ -97,6 +103,7 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\NoNonInterfacePublicMethodsRule # Forbids public methods that are not on an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\APIAnnotationRule # Enforces "@api" and "@internal" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
