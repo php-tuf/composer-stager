@@ -63,7 +63,6 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
-    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\APIAnnotationRule # Enforces "@api" and "@internal" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
