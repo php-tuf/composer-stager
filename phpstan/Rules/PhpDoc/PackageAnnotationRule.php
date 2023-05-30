@@ -20,7 +20,7 @@ final class PackageAnnotationRule extends AbstractRule
     public function processNode(Node $node, Scope $scope): array
     {
         // Only check classes and interfaces.
-        if (!$node instanceof Class_ && !$node instanceof Interface_) {
+        if (!$node instanceof Class_ && !$node instanceof Interface_ && !$node instanceof Node\Stmt\Trait_) {
             return [];
         }
 

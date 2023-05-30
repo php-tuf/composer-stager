@@ -11,9 +11,9 @@ parameters:
     level: max
     tmpDir: var/phpstan
     paths:
+        - .gitattributes
         - src
         - tests
-        - .gitattributes
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         # Production code.

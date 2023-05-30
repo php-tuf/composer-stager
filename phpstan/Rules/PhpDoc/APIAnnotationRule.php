@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
@@ -15,16 +16,18 @@ use Throwable;
 final class APIAnnotationRule extends AbstractRule
 {
     private const ABSTRACT_CLASS = 'Abstract class';
+    private const CONCRETE_CLASS = 'Concrete class';
     private const EXCEPTION = 'Exception';
     private const FACTORY = 'Factory';
-    private const CONCRETE_CLASS = 'Concrete class';
     private const INTERFACE = 'Interface';
     private const TEST_CLASS = 'Test class';
+    private const TRAIT = 'Trait';
 
     private const PUBLIC_API = [
         self::INTERFACE,
-        self::ABSTRACT_CLASS,
+        self::TRAIT,
         self::FACTORY,
+        self::ABSTRACT_CLASS,
         self::EXCEPTION,
     ];
 
@@ -36,7 +39,7 @@ final class APIAnnotationRule extends AbstractRule
     public function processNode(Node $node, Scope $scope): array
     {
         // Only check classes and interfaces.
-        if (!$node instanceof Class_ && !$node instanceof Interface_) {
+        if (!$node instanceof Class_ && !$node instanceof Interface_ && !$node instanceof Trait_) {
             return [];
         }
 
@@ -64,7 +67,7 @@ final class APIAnnotationRule extends AbstractRule
     }
 
     private function getAnnotationErrors(
-        Class_|Interface_ $node,
+        ClassLike $node,
         string $type,
         string $requiredTag,
         string $forbiddenTag,
@@ -109,6 +112,10 @@ final class APIAnnotationRule extends AbstractRule
             return self::ABSTRACT_CLASS;
         }
 
+        if ($reflection->isTrait()) {
+            return self::TRAIT;
+        }
+
         if ($class->is(Throwable::class)) {
             return self::EXCEPTION;
         }
@@ -120,7 +127,7 @@ final class APIAnnotationRule extends AbstractRule
         return self::CONCRETE_CLASS;
     }
 
-    private function hasAnnotation(Class_|Interface_ $node, string $tag): bool
+    private function hasAnnotation(ClassLike $node, string $tag): bool
     {
         $docComment = $node->getDocComment();
 
