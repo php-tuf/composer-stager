@@ -166,10 +166,7 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    /**
-     * @noinspection PhpUsageOfSilenceOperatorInspection
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
+    /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
     private function getFileType(PathInterface $path): string
     {
         // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
