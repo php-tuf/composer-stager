@@ -1,3 +1,4 @@
+
 # Composer Stager
 
 [![Latest stable version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
@@ -83,7 +84,7 @@ services:
         public: true
         exclude:
             - '../vendor/php-tuf/composer-stager/src/Domain/Exception'
-            - '../vendor/php-tuf/composer-stager/src/Infrastructure/Value'
+            - '../vendor/php-tuf/composer-stager/src/*/Value'
 
     PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory:
         arguments:
