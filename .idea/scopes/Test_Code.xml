@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Test Code" pattern="file[composer-stager]:tests//*||file[composer-stager]:phpstan//*" />
+  <scope name="Test Code" pattern="file[composer-stager]:tests//*" />
 </component>
