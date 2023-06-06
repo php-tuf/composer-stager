@@ -60,6 +60,10 @@ jobs:
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
+                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+
+            -   name: "PHP info"
+                run: "php -i"
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout

@@ -15,14 +15,21 @@ parameters:
         - src
         - tests
     treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
         # Production code.
+        -
+            message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
+            paths:
+                - src/Infrastructure/Value/Translation/TranslationParameters.php
         -
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
         -
-            message: '#Concrete class .* be marked "@.*"#'
-            path: src/Infrastructure/Value/Path/PathList.php
+            message: '#(Concrete class|Interface) .* be marked "@.*"#'
+            paths:
+                - src/Infrastructure/Value/Path/PathList.php
+                - src/Infrastructure/Value/Translation/TranslationParameters.php
         -
             message: '#Parameter \#1 ...\$children of method .*AbstractPreconditionsTree::__construct\(\) expects .*PreconditionInterface, mixed given.#'
             path: src/Infrastructure/Service/Precondition
@@ -55,6 +62,7 @@ parameters:
         - src
     preconditionSystemHash: d51701ad50af707f469c981c3702bdd0
 
+# https://phpstan.org/developing-extensions/extension-types
 rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.

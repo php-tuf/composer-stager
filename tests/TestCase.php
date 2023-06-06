@@ -9,11 +9,13 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use Stringable;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Throwable;
 
 abstract class TestCase extends PHPUnitTestCase
 {
@@ -258,6 +260,86 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         self::assertEquals($expected, $actual, $message);
+    }
+
+    /**
+     * Asserts that a callback throws a specific exception.
+     *
+     * @param callable $callback
+     *   The callback that exercises the SUT.
+     * @param string $expectedExceptionClass
+     *   The expected exception class name, e.g., \Exception::class.
+     * @param string|\Stringable|null $expectedExceptionMessage
+     *   The expected message that the exception should return,
+     *   both raw and translatable, or null to ignore the message.
+     * @param string|null $expectedPreviousExceptionClass
+     *   An optional expected "$previous" exception class.
+     */
+    protected static function assertTranslatableException(
+        callable $callback,
+        string $expectedExceptionClass,
+        string|Stringable|null $expectedExceptionMessage = null,
+        ?string $expectedPreviousExceptionClass = null,
+    ): void {
+        try {
+            $callback();
+        } catch (Throwable $actualException) {
+            $actualExceptionMessage = $actualException->getMessage();
+
+            if ($actualException::class !== $expectedExceptionClass) {
+                self::fail(sprintf(
+                    'Failed to throw correct exception.'
+                    . PHP_EOL . 'Expected:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . ' - Message: %s'
+                    . PHP_EOL . 'Got:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . ' - Message: %s',
+                    $expectedExceptionClass,
+                    $expectedExceptionMessage,
+                    $actualException::class,
+                    $actualExceptionMessage,
+                ));
+            }
+
+            self::assertTrue(true, 'Threw correct exception.');
+
+            if (is_string($expectedExceptionMessage)) {
+                self::assertEquals($expectedExceptionMessage, $actualExceptionMessage, 'Set correct exception message.');
+            }
+
+            if ($expectedPreviousExceptionClass === null) {
+                return;
+            }
+
+            $actualPreviousException = $actualException->getPrevious();
+            $actualPreviousExceptionClass = $actualPreviousException instanceof Throwable
+                ? $actualPreviousException::class
+                : 'none';
+            $actualPreviousExceptionMessage = $actualPreviousException instanceof Throwable
+                ? $actualPreviousException->getMessage()
+                : 'n/a';
+
+            if ($expectedPreviousExceptionClass !== $actualPreviousExceptionClass) {
+                self::fail(sprintf(
+                    'Failed re-throw previous exception.'
+                    . PHP_EOL . 'Expected:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . 'Got:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . ' - Message: %s',
+                    $expectedPreviousExceptionClass,
+                    $actualPreviousExceptionClass,
+                    $actualPreviousExceptionMessage,
+                ));
+            }
+
+            self::assertTrue(true, 'Correctly re-threw previous exception.');
+
+            return;
+        }
+
+        self::fail(sprintf('Failed to throw any exception. Expected %s.', $expectedExceptionClass));
     }
 
     protected static function getDirectoryContents(string $dir): array
