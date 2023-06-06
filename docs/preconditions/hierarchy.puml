@@ -6,7 +6,7 @@
 ' the PhpStorm plugin at https://plugins.jetbrains.com/plugin/7017-plantuml-integration.
 ' Optimize it with ImageOptim: https://imageoptim.com/.
 
-!include settings.puml
+!include ../resources/settings.puml
 
 hide circle
 
