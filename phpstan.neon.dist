@@ -34,6 +34,7 @@ parameters:
             paths:
                 - src/Infrastructure/Service/Translation/SymfonyTranslatorProxyInterface.php
                 - src/Infrastructure/Value/Path/PathList.php
+                - src/Infrastructure/Value/Translation/TranslatableMessage.php
                 - src/Infrastructure/Value/Translation/TranslationParameters.php
         -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
@@ -48,6 +49,12 @@ parameters:
         # Test code.
         -
             message: '#Access to an undefined property.*#'
+            path: tests
+        -
+            message: '#Call to an undefined method .*ObjectProphecy.*::.*\(\).#'
+            path: tests
+        -
+            message: '#Cannot call method .*\(\) on .*MethodProphecy\|.*.#'
             path: tests
         -
             message: '#.*caught .* must be rethrown.*#'
