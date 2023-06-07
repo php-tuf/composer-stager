@@ -19,6 +19,9 @@ parameters:
     ignoreErrors:
         # Production code.
         -
+            message: '#Built-in or third party exception "\\InvalidArgumentException" cannot be thrown from public methods.*#'
+            path: src/Infrastructure/Service/Translation/SymfonyTranslatorProxy.php
+        -
             message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
             paths:
                 - src/Infrastructure/Value/Translation/TranslationParameters.php
@@ -28,8 +31,12 @@ parameters:
         -
             message: '#(Concrete class|Interface) .* be marked "@.*"#'
             paths:
+                - src/Infrastructure/Service/Translation/SymfonyTranslatorProxyInterface.php
                 - src/Infrastructure/Value/Path/PathList.php
                 - src/Infrastructure/Value/Translation/TranslationParameters.php
+        -
+            message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
+            path: src/Infrastructure/Service/Translation/SymfonyTranslatorProxy.php
         -
             message: '#Parameter \#1 ...\$children of method .*AbstractPreconditionsTree::__construct\(\) expects .*PreconditionInterface, mixed given.#'
             path: src/Infrastructure/Service/Precondition
