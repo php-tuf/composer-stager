@@ -24,6 +24,7 @@ parameters:
         -
             message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
             paths:
+                - src/Infrastructure/Service/Translation/Translator.php
                 - src/Infrastructure/Value/Translation/TranslationParameters.php
         -
             message: '#Cannot access offset .(application|name). on mixed.#'
@@ -34,6 +35,9 @@ parameters:
                 - src/Infrastructure/Service/Translation/SymfonyTranslatorProxyInterface.php
                 - src/Infrastructure/Value/Path/PathList.php
                 - src/Infrastructure/Value/Translation/TranslationParameters.php
+        -
+            message: '#In method ".*", caught "Throwable" must be rethrown.*#'
+            path: src/Infrastructure/Service/Translation/Translator.php
         -
             message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
             path: src/Infrastructure/Service/Translation/SymfonyTranslatorProxy.php
