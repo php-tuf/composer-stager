@@ -79,7 +79,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         PathListInterface $exclusions,
     ): void {
         // There's no reason to look for deletions if the destination is already empty.
-        if ($this->destinationIsEmpty($destination)) {
+        if ($this->filesystem->isDirEmpty($destination)) {
             return;
         }
 
@@ -103,11 +103,6 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             // If it doesn't exist in the source, delete it from the destination.
             $this->filesystem->remove($destinationFilePath);
         }
-    }
-
-    private function destinationIsEmpty(PathInterface $destination): bool
-    {
-        return scandir($destination->resolved()) === ['.', '..'];
     }
 
     /**
