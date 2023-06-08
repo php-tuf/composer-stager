@@ -4,11 +4,16 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation;
 
 use AssertionError;
 use PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use stdClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters */
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ */
 final class TranslationParametersUnitTest extends TestCase
 {
     /**

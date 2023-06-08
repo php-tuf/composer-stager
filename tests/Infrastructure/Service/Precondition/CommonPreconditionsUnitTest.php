@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommonPreconditions;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommonPreconditions
@@ -49,8 +49,14 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $activeAndStagingDirsAreDifferent = $this->activeAndStagingDirsAreDifferent->reveal();
         $activeDirIsReady = $this->activeDirIsReady->reveal();
         $composerIsAvailable = $this->composerIsAvailable->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new CommonPreconditions($activeAndStagingDirsAreDifferent, $activeDirIsReady, $composerIsAvailable);
+        return new CommonPreconditions(
+            $activeAndStagingDirsAreDifferent,
+            $activeDirIsReady,
+            $composerIsAvailable,
+            $translatableFactory,
+        );
     }
 
     public function testFulfilled(): void
@@ -70,11 +76,9 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $previous = self::createTestPreconditionException(__METHOD__);
         $this->activeAndStagingDirsAreDifferent
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled($previous->getMessage());

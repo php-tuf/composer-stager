@@ -4,9 +4,13 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use JsonException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
@@ -20,75 +24,88 @@ use Symfony\Component\Process\Process;
  */
 final class ComposerIsAvailable extends AbstractPrecondition implements ComposerIsAvailableInterface
 {
-    private string $unfulfilledStatusMessage = '';
+    private string $executablePath;
 
     public function __construct(
         private readonly ExecutableFinderInterface $executableFinder,
         private readonly ProcessFactoryInterface $processFactory,
+        TranslatableFactoryInterface $translatableFactory,
+        TranslatorInterface $translator,
     ) {
+        parent::__construct($translatableFactory, $translator);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Composer';
+        return $this->t('Composer');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'Composer must be available in order to stage commands.';
+        return $this->t('Composer must be available in order to stage commands.');
     }
 
-    public function isFulfilled(
+    public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): bool {
-        try {
-            $executablePath = $this->executableFinder->find('composer');
-        } catch (LogicException) {
-            $this->unfulfilledStatusMessage = 'Composer cannot be found.';
+    ): void {
+        $this->assertExecutableExists();
+        $this->assertIsActuallyComposer();
+    }
 
-            return false;
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('Composer is available.');
+    }
+
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    private function assertExecutableExists(): void
+    {
+        try {
+            $this->executablePath = $this->executableFinder->find('composer');
+        } catch (LogicException $e) {
+            throw new PreconditionException($this, $this->t('Cannot find Composer.'), 0, $e);
         }
+    }
 
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    private function assertIsActuallyComposer(): void
+    {
+        $process = $this->getProcess();
+
+        if (!$this->isValidExecutable($process)) {
+            throw new PreconditionException($this, $this->t(
+                'The Composer executable at %name is invalid.',
+                $this->p(['%name' => $this->executablePath]),
+            ));
+        }
+    }
+
+    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    private function getProcess(): Process
+    {
         try {
-            $process = $this->processFactory->create([
-                $executablePath,
+            return $this->processFactory->create([
+                $this->executablePath,
                 'list',
                 '--format=json',
             ]);
         } catch (LogicException $e) {
-            $this->unfulfilledStatusMessage = sprintf(
-                'Cannot check for Composer due to a host configuration problem: %s',
-                $e->getMessage(),
+            throw new PreconditionException(
+                $this,
+                $this->t(
+                    'Cannot check for Composer due to a host configuration problem: %problem',
+                    $this->p(['%problem' => $e->getMessage()]),
+                ),
+                0,
+                $e,
             );
-
-            return false;
         }
-
-        $isValid = $this->isValidExecutable($process, $executablePath);
-
-        if (!$isValid) {
-            return false;
-        }
-
-        return true;
     }
 
-    protected function getFulfilledStatusMessage(): string
+    private function isValidExecutable(Process $process): bool
     {
-        return 'Composer is available.';
-    }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return $this->unfulfilledStatusMessage;
-    }
-
-    private function isValidExecutable(Process $process, string $executablePath): bool
-    {
-        $this->unfulfilledStatusMessage = sprintf('The Composer executable at %s is invalid.', $executablePath);
-
         try {
             $process->mustRun();
             $output = $process->getOutput();

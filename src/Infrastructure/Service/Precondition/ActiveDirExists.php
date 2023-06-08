@@ -2,10 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -14,35 +18,36 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  */
 final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExistsInterface
 {
-    public function __construct(private readonly FilesystemInterface $filesystem)
-    {
+    public function __construct(
+        private readonly FilesystemInterface $filesystem,
+        TranslatableFactoryInterface $translatableFactory,
+        TranslatorInterface $translator,
+    ) {
+        parent::__construct($translatableFactory, $translator);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Active directory exists';
+        return $this->t('Active directory exists');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'There must be an active directory present before any operations can be performed.';
+        return $this->t('There must be an active directory present before any operations can be performed.');
     }
 
-    public function isFulfilled(
+    public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): bool {
-        return $this->filesystem->exists($activeDir);
+    ): void {
+        if (!$this->filesystem->exists($activeDir)) {
+            throw new PreconditionException($this, $this->t('The active directory does not exist.'));
+        }
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The active directory exists.';
-    }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The active directory does not exist.';
+        return $this->t('The active directory exists.');
     }
 }

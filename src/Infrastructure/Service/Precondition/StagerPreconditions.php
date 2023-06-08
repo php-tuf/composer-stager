@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -16,22 +18,23 @@ final class StagerPreconditions extends AbstractPreconditionsTree implements Sta
     public function __construct(
         CommonPreconditionsInterface $commonPreconditions,
         StagingDirIsReadyInterface $stagingDirIsReady,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct(...func_get_args());
+        parent::__construct($translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Stager preconditions';
+        return $this->t('Stager preconditions');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The preconditions for staging Composer commands.';
+        return $this->t('The preconditions for staging Composer commands.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The preconditions for staging Composer commands are fulfilled.';
+        return $this->t('The preconditions for staging Composer commands are fulfilled.');
     }
 }

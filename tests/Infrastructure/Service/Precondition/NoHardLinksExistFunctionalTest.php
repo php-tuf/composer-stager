@@ -11,19 +11,23 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
  *
  * @covers ::__construct
- * @covers ::getDefaultUnfulfilledStatusMessage
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
@@ -41,7 +45,10 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         return $sut;
     }
 
-    /** @covers ::isSupportedFile */
+    /**
+     * @covers ::assertIsFulfilled
+     * @covers ::assertIsSupportedFile
+     */
     public function testFulfilledWithNoLinks(): void
     {
         $sut = $this->createSut();
@@ -51,7 +58,10 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }
 
-    /** @covers ::isSupportedFile */
+    /**
+     * @covers ::assertIsFulfilled
+     * @covers ::assertIsSupportedFile
+     */
     public function testFulfilledWithSymlink(): void
     {
         $target = PathFactory::create('target.txt', $this->activeDir)->resolved();
@@ -66,8 +76,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     }
 
     /**
-     * @covers ::getUnfulfilledStatusMessage
-     * @covers ::isSupportedFile
+     * @covers ::assertIsFulfilled
+     * @covers ::assertIsSupportedFile
      *
      * @dataProvider providerUnfulfilled
      */
@@ -75,24 +85,19 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         $target = PathFactory::create($directory . '/target.txt')->resolved();
         $link = PathFactory::create($directory . '/link.txt')->resolved();
-
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".',
-            $dirName,
-            PathFactory::create($directory)->resolved(),
-            $link,
-        ));
-
         touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-
-        self::assertFalse($isFulfilled, 'Rejected hard link.');
-
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $message = sprintf(
+            'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".',
+            $dirName,
+            PathFactory::create($directory)->resolved(),
+            $link,
+        );
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 
     public function providerUnfulfilled(): array
@@ -110,7 +115,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     }
 
     /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::assertIsFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
@@ -123,8 +128,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      *
      * @dataProvider providerExclusions
      */

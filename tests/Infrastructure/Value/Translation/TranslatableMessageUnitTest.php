@@ -19,6 +19,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage

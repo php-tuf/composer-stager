@@ -16,6 +16,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -23,6 +24,9 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Committer
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Committer::__construct
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
@@ -109,15 +113,17 @@ final class CommitterUnitTest extends TestCase
     /** @covers ::commit */
     public function testCommitPreconditionsUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
-            ->shouldBeCalledOnce()
-            ->willThrow(PreconditionException::class);
+            ->shouldBeCalled()
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->commit($this->stagingDir, $this->activeDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->commit($this->stagingDir, $this->activeDir);
+        }, PreconditionException::class, $message);
     }
 
     /**
@@ -127,27 +133,25 @@ final class CommitterUnitTest extends TestCase
      */
     public function testExceptions(ExceptionInterface $exception, string $message): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage($message);
-
         $this->fileSyncer
             ->sync($this->stagingDir, $this->activeDir, Argument::cetera())
-            ->shouldBeCalledOnce()
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->commit($this->stagingDir, $this->activeDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->commit($this->stagingDir, $this->activeDir);
+        }, RuntimeException::class, $message, $exception::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             [
-                'exception' => new InvalidArgumentException('one'),
+                'exception' => new InvalidArgumentException(new TestTranslatableMessage('one')),
                 'message' => 'one',
             ],
             [
-                'exception' => new IOException('two'),
+                'exception' => new IOException(new TestTranslatableMessage('two')),
                 'message' => 'two',
             ],
         ];

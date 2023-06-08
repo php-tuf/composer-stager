@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsReady;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsReady
@@ -13,10 +13,10 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsReady;
  * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
@@ -42,8 +42,9 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
     {
         $stagingDirExists = $this->activeDirExists->reveal();
         $stagingDirIsWritable = $this->activeDirIsWritable->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new ActiveDirIsReady($stagingDirExists, $stagingDirIsWritable);
+        return new ActiveDirIsReady($stagingDirExists, $stagingDirIsWritable, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -60,11 +61,9 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $previous = self::createTestPreconditionException(__METHOD__);
         $this->activeDirExists
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled($previous->getMessage());

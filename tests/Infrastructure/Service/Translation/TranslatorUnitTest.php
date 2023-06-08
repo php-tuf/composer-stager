@@ -5,10 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation;
 use AssertionError;
 use Error;
 use LogicException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Value\Translation\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
@@ -20,27 +22,31 @@ use Throwable;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  */
 final class TranslatorUnitTest extends TestCase
 {
     private SymfonyTranslatorProxyInterface|ObjectProphecy $symfonyTranslatorProxy;
+    private TranslatableFactoryInterface|ObjectProphecy $translatableFactory;
 
     public function setUp(): void
     {
         $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
+        $this->translatableFactory = new TestTranslatableFactory();
     }
 
     private function createSut(): Translator
     {
         assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxyInterface);
+        assert($this->translatableFactory instanceof TranslatableFactoryInterface);
 
         return new Translator($this->symfonyTranslatorProxy);
     }
 
     /**
-     * @covers ::__construct
      * @covers ::getLocale
      * @covers ::trans
      *
@@ -99,7 +105,6 @@ final class TranslatorUnitTest extends TestCase
     }
 
     /**
-     * @covers ::__construct
      * @covers ::trans
      *
      * @dataProvider providerTranslatorException

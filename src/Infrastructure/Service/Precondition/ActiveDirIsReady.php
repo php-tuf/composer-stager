@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsWritableInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -16,22 +18,23 @@ final class ActiveDirIsReady extends AbstractPreconditionsTree implements Active
     public function __construct(
         ActiveDirExistsInterface $activeDirExists,
         ActiveDirIsWritableInterface $activeDirIsWritable,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct(...func_get_args());
+        parent::__construct($translatableFactory, $activeDirExists, $activeDirIsWritable);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Active directory is ready';
+        return $this->t('Active directory is ready');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The preconditions for using the active directory.';
+        return $this->t('The preconditions for using the active directory.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The active directory is ready to use.';
+        return $this->t('The active directory is ready to use.');
     }
 }

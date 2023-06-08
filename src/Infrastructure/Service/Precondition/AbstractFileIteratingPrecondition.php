@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
@@ -18,37 +20,44 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  */
 abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
 {
-    protected string $defaultUnfulfilledStatusMessage;
-
-    final protected function getUnfulfilledStatusMessage(): string
-    {
-        return $this->defaultUnfulfilledStatusMessage;
-    }
-
-    abstract protected function getDefaultUnfulfilledStatusMessage(): string;
-
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
-    abstract protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool;
+    /**
+     * @param string $codebaseName
+     *   The name of the codebase in question, i.e., "active" or "staging".
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $codebaseRoot
+     *   The codebase root directory.
+     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $file
+     *   The file in question.
+     *
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+     */
+    abstract protected function assertIsSupportedFile(
+        string $codebaseName,
+        PathInterface $codebaseRoot,
+        PathInterface $file,
+    ): void;
 
     public function __construct(
         protected readonly RecursiveFileFinderInterface $fileFinder,
         protected readonly FilesystemInterface $filesystem,
         protected readonly PathFactoryInterface $pathFactory,
+        TranslatableFactoryInterface $translatableFactory,
+        protected TranslatorInterface $translator,
     ) {
-        $this->defaultUnfulfilledStatusMessage = $this->getDefaultUnfulfilledStatusMessage();
+        parent::__construct($translatableFactory, $translator);
     }
 
-    public function isFulfilled(
+    public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): bool {
+    ): void {
         try {
             $exclusions ??= new PathList();
             $exclusions->add($stagingDir->resolved());
 
             if ($this->exitEarly($activeDir, $stagingDir, $exclusions)) {
-                return true;
+                return;
             }
 
             $directories = [
@@ -56,35 +65,17 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
                 'staging' => $stagingDir,
             ];
 
-            foreach ($directories as $name => $directoryRoot) {
-                $files = $this->findFiles($directoryRoot, $exclusions);
+            foreach ($directories as $directoryName => $directoryRootDir) {
+                $files = $this->findFiles($directoryRootDir, $exclusions);
 
                 foreach ($files as $file) {
                     $file = $this->pathFactory::create($file);
-
-                    if (!$this->isSupportedFile($file, $directoryRoot)) {
-                        $this->defaultUnfulfilledStatusMessage = sprintf(
-                            $this->defaultUnfulfilledStatusMessage,
-                            $name,
-                            $directoryRoot->resolved(),
-                            $file->resolved(),
-                        );
-
-                        return false;
-                    }
+                    $this->assertIsSupportedFile($directoryName, $directoryRootDir, $file);
                 }
             }
-        } catch (InvalidArgumentException|IOException $e) {
-            // If something goes wrong, don't throw an exception--just consider the precondition
-            // unfulfilled and pass details along to the user via the status message.
-            // @todo Find a way to bubble this exception up as the $previous
-            //   argument to PreconditionException in ::assertIsFulfilled().
-            $this->defaultUnfulfilledStatusMessage = $e->getMessage();
-
-            return false;
+        } catch (ExceptionInterface $e) {
+            throw new PreconditionException($this, $e->getTranslatableMessage(), 0, $e);
         }
-
-        return true;
     }
 
     /** Determines whether to exit the "is fulfilled" test early, before expensive scanning for links. */

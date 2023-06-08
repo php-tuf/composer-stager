@@ -8,7 +8,10 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
@@ -48,6 +51,9 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /**
      * @covers ::sync
      *
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+     *
      * @dataProvider providerSyncTimeout
      */
     public function testSyncTimeout(?int $givenTimeout, int $expectedTimeout): void
@@ -73,7 +79,12 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         ];
     }
 
-    /** @covers ::sync */
+    /**
+     * @covers ::sync
+     *
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+     */
     public function testSyncWithDirectorySymlinks(): void
     {
         $link = PathFactory::create('link', $this->source);

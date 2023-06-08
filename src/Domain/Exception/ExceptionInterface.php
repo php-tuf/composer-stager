@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Exception;
 
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use Throwable;
 
 /**
@@ -13,4 +14,10 @@ use Throwable;
  */
 interface ExceptionInterface extends Throwable
 {
+    /**
+     * Gets the translatable form of the message with original metadata intact.
+     *
+     * @see \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+     */
+    public function getTranslatableMessage(): TranslatableInterface;
 }

@@ -2,10 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -14,35 +18,39 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  */
 final class StagingDirIsWritable extends AbstractPrecondition implements StagingDirIsWritableInterface
 {
-    public function __construct(private readonly FilesystemInterface $filesystem)
-    {
+    public function __construct(
+        private readonly FilesystemInterface $filesystem,
+        TranslatableFactoryInterface $translatableFactory,
+        protected TranslatorInterface $translator,
+    ) {
+        parent::__construct($translatableFactory, $translator);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Staging directory is writable';
+        return $this->t('Staging directory is writable');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The staging directory must be writable before any operations can be performed.';
+        return $this->t('The staging directory must be writable before any operations can be performed.');
     }
 
-    public function isFulfilled(
+    public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): bool {
-        return $this->filesystem->isWritable($stagingDir);
+    ): void {
+        if (!$this->filesystem->isWritable($stagingDir)) {
+            throw new PreconditionException(
+                $this,
+                $this->t('The staging directory is not writable.'),
+            );
+        }
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The staging directory is writable.';
-    }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The staging directory is not writable.';
+        return $this->t('The staging directory is writable.');
     }
 }

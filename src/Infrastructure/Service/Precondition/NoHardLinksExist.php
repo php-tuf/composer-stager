@@ -2,8 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -12,28 +14,39 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
  */
 final class NoHardLinksExist extends AbstractFileIteratingPrecondition implements NoHardLinksExistInterface
 {
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'No hard links exist';
+        return $this->t('No hard links exist');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The codebase cannot contain hard links.';
+        return $this->t('The codebase cannot contain hard links.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'There are no hard links in the codebase.';
+        return $this->t('There are no hard links in the codebase.');
     }
 
-    protected function getDefaultUnfulfilledStatusMessage(): string
-    {
-        return 'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".';
-    }
-
-    protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
-    {
-        return !$this->filesystem->isHardLink($file);
+    protected function assertIsSupportedFile(
+        string $codebaseName,
+        PathInterface $codebaseRoot,
+        PathInterface $file,
+    ): void {
+        if ($this->filesystem->isHardLink($file)) {
+            throw new PreconditionException(
+                $this,
+                $this->t(
+                    'The %codebase_name directory at "%codebase_root" contains '
+                    . 'hard links, which is not supported. The first one is "%file".',
+                    $this->p([
+                        '%codebase_name' => $codebaseName,
+                        '%codebase_root' => $codebaseRoot->resolved(),
+                        '%file' => $file->resolved(),
+                    ]),
+                ),
+            );
+        }
     }
 }

@@ -2,8 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests;
 
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition\TestPrecondition;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
@@ -124,6 +130,11 @@ abstract class TestCase extends PHPUnitTestCase
 
         assert($touchResult, "Created directory {$dirname}.");
         assert($realpathResult !== false, "Got absolute path of {$dirname}.");
+    }
+
+    public static function createTestPreconditionException(string $message = ''): PreconditionException
+    {
+        return new PreconditionException(new TestPrecondition(), new TestTranslatableMessage($message));
     }
 
     protected static function createSymlinks(string $baseDir, array $symlinks): void
@@ -284,7 +295,9 @@ abstract class TestCase extends PHPUnitTestCase
         try {
             $callback();
         } catch (Throwable $actualException) {
-            $actualExceptionMessage = $actualException->getMessage();
+            $actualExceptionMessage = $actualException instanceof ExceptionInterface
+                ? $actualException->getTranslatableMessage()->trans(new TestTranslator())
+                : $actualException->getMessage();
 
             if ($actualException::class !== $expectedExceptionClass) {
                 self::fail(sprintf(
@@ -340,6 +353,15 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         self::fail(sprintf('Failed to throw any exception. Expected %s.', $expectedExceptionClass));
+    }
+
+    /** Asserts that a given translatable message matches expectations. */
+    public static function assertTranslatableMessage(
+        string $expected,
+        TranslatableInterface $translatable,
+        string $message = '',
+    ): void {
+        self::assertSame($expected, $translatable->trans(new TestTranslator()), $message);
     }
 
     protected static function getDirectoryContents(string $dir): array

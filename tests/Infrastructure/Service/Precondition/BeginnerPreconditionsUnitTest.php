@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\BeginnerPreconditions;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\BeginnerPreconditions
@@ -49,8 +49,9 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
         $commonPreconditions = $this->commonPreconditions->reveal();
         $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new BeginnerPreconditions($commonPreconditions, $noUnsupportedLinksExist, $stagingDirDoesNotExist);
+        return new BeginnerPreconditions($commonPreconditions, $noUnsupportedLinksExist, $stagingDirDoesNotExist, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -70,11 +71,9 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $previous = self::createTestPreconditionException(__METHOD__);
         $this->commonPreconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled($previous->getMessage());

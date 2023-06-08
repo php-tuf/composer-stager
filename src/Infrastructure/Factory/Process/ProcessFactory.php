@@ -3,6 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Factory\Process;
 
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -13,12 +15,19 @@ use Symfony\Component\Process\Process;
  */
 final class ProcessFactory implements ProcessFactoryInterface
 {
+    use TranslatableAwareTrait;
+
+    public function __construct(TranslatableFactoryInterface $translatableFactory)
+    {
+        $this->setTranslatableFactory($translatableFactory);
+    }
+
     public function create(array $command): Process
     {
         try {
             return new Process($command);
         } catch (SymfonyExceptionInterface $e) { // @codeCoverageIgnore
-            throw new LogicException($e->getMessage(), 0, $e); // @codeCoverageIgnore
+            throw new LogicException($this->t($e->getMessage()), 0, $e); // @codeCoverageIgnore
         }
     }
 }

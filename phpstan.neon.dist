@@ -43,8 +43,8 @@ parameters:
             message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
             path: src/Infrastructure/Service/Translation/SymfonyTranslatorProxy.php
         -
-            message: '#Parameter \#1 ...\$children of method .*AbstractPreconditionsTree::__construct\(\) expects .*PreconditionInterface, mixed given.#'
-            path: src/Infrastructure/Service/Precondition
+            message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
+            path: src/Domain/Exception/PreconditionException.php
 
         # Test code.
         -
@@ -78,7 +78,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: d51701ad50af707f469c981c3702bdd0
+    preconditionSystemHash: ba7286da3d395b8d52348e2299f369f2
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

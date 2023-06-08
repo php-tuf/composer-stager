@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -15,31 +17,31 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  */
 final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implements ActiveAndStagingDirsAreDifferentInterface
 {
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Active and staging directories are different';
+        return $this->t('Active and staging directories are different');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The active and staging directories cannot be the same.';
+        return $this->t('The active and staging directories cannot be the same.');
     }
 
-    public function isFulfilled(
+    public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): bool {
-        return $activeDir->resolved() !== $stagingDir->resolved();
+    ): void {
+        if ($activeDir->resolved() === $stagingDir->resolved()) {
+            throw new PreconditionException(
+                $this,
+                $this->t('The active and staging directories are the same.'),
+            );
+        }
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The active and staging directories are different.';
-    }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The active and staging directories are the same.';
+        return $this->t('The active and staging directories are different.');
     }
 }

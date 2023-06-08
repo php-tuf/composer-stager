@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Domain\Exception;
 
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use RuntimeException;
 use Throwable;
 
@@ -15,13 +16,21 @@ use Throwable;
  */
 class PreconditionException extends RuntimeException implements ExceptionInterface
 {
+    use TranslatableExceptionTrait {
+        TranslatableExceptionTrait::__construct as __traitConstruct;
+    }
+
+    /**
+     * @noinspection MagicMethodsValidityInspection
+     * @noinspection PhpMissingParentConstructorInspection
+     */
     public function __construct(
         private readonly PreconditionInterface $precondition,
-        string $message = '',
+        TranslatableInterface $translatableMessage,
         int $code = 0,
         ?Throwable $previous = null,
     ) {
-        parent::__construct($message, $code, $previous);
+        $this->__traitConstruct($translatableMessage, $code, $previous);
     }
 
     public function getPrecondition(): PreconditionInterface

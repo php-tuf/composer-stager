@@ -3,24 +3,33 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
  *
+ * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
- * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ *
+ * @property \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
  */
 final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase
 {
     protected function createSut(): ActiveAndStagingDirsAreDifferent
     {
-        return new ActiveAndStagingDirsAreDifferent();
+        $translatableFactory = new TestTranslatableFactory();
+        $translator = new TestTranslator();
+
+        return new ActiveAndStagingDirsAreDifferent($translatableFactory, $translator);
     }
 
     public function testFulfilled(): void

@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
 
+use AssertionError;
 use Closure;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
@@ -10,20 +11,26 @@ use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
+ * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory $translatableFactory
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
  */
@@ -36,10 +43,13 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->fileFinder = $this->prophesize(RecursiveFileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->mkdir(Argument::any());
-        $this->filesystem
             ->exists(Argument::any())
             ->willReturn(true);
+        $this->filesystem
+            ->isDirEmpty(Argument::any())
+            ->willReturn(false);
+        $this->filesystem
+            ->mkdir(Argument::any());
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
     }
 
@@ -48,48 +58,62 @@ final class PhpFileSyncerUnitTest extends TestCase
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new PhpFileSyncer($fileFinder, $filesystem, $pathFactory);
+        return new PhpFileSyncer($fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function testSyncSourceNotFound(): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolved()));
-
         $this->filesystem
             ->exists($this->source)
             ->willReturn(false);
-
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination);
+        $message = sprintf('The source directory does not exist at "%s"', $this->source->resolved());
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->sync($this->source, $this->destination);
+        }, LogicException::class, $message);
     }
 
     public function testSyncDirectoriesTheSame(): void
     {
-        $source = new TestPath('same');
-        $destination = $source;
-
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved()));
-
+        $same = new TestPath('same');
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $message = sprintf('The source and destination directories cannot be the same at "%s"', $same->resolved());
+        self::assertTranslatableException(static function () use ($sut, $same) {
+            $sut->sync($same, $same);
+        }, LogicException::class, $message);
     }
 
+    /** @covers ::ensureDestinationExists */
     public function testSyncDestinationCouldNotBeCreated(): void
     {
-        $this->expectException(IOException::class);
-
+        $message = new TestTranslatableMessage(__METHOD__);
+        $previous = new IOException($message);
         $this->filesystem
             ->mkdir($this->destination)
-            ->willThrow(IOException::class);
-
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->sync($this->source, $this->destination);
+        }, $previous::class, $message);
+    }
+
+    public function testSyncCouldNotFindDestination(): void
+    {
+        $message = new TestTranslatableMessage(__METHOD__);
+        $previous = new IOException($message);
+        $this->fileFinder
+            ->find($this->destination, Argument::any())
+            ->willThrow($previous);
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->sync($this->source, $this->destination);
+        }, $previous::class, $message);
     }
 
     /**
@@ -203,5 +227,27 @@ final class PhpFileSyncerUnitTest extends TestCase
                 'expected' => '',
             ],
         ];
+    }
+
+    /**
+     * @covers ::assertSourceAndDestinationAreDifferent
+     * @covers ::assertSourceExists
+     */
+    public function testTransMissingTranslatableFactory(): void
+    {
+        self::assertTranslatableException(function () {
+            $same = new TestPath('same');
+            $source = $same;
+            $destination = $same;
+            $sut = $this->createSut();
+
+            $reflection = new ReflectionClass($sut);
+            $sut = $reflection->newInstanceWithoutConstructor();
+            $translatableFactory = $reflection->getProperty('translatableFactory');
+            $translatableFactory->setValue($sut, null);
+
+            $sut->sync($source, $destination);
+        }, AssertionError::class, 'The "p()" method requires a translatable factory. '
+            . 'Provide one by calling "setTranslatableFactory()" in the constructor.');
     }
 }

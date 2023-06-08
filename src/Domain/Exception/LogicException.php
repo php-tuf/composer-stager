@@ -13,4 +13,5 @@ use LogicException as PHPLogicException;
  */
 class LogicException extends PHPLogicException implements ExceptionInterface
 {
+    use TranslatableExceptionTrait;
 }

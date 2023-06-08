@@ -3,9 +3,12 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -14,11 +17,14 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  */
 abstract class AbstractPreconditionsTree implements PreconditionInterface
 {
+    // This isn't used directly in this class--it's for children.
+    use TranslatableAwareTrait;
+
     /** @var array<\PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface> */
     private readonly array $children;
 
     /** Gets a status message for when the precondition is fulfilled. */
-    abstract protected function getFulfilledStatusMessage(): string;
+    abstract protected function getFulfilledStatusMessage(): TranslatableInterface;
 
     /**
      * The order in which children are evaluated is unspecified and should not be depended upon. There is no
@@ -26,8 +32,9 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
      *
      * @see https://github.com/php-tuf/composer-stager/issues/75
      */
-    public function __construct(PreconditionInterface ...$children)
+    public function __construct(TranslatableFactoryInterface $translatableFactory, PreconditionInterface ...$children)
     {
+        $this->setTranslatableFactory($translatableFactory);
         $this->children = $children;
     }
 
@@ -35,11 +42,11 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): string {
+    ): TranslatableInterface {
         try {
             $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
         } catch (PreconditionException $e) {
-            return $e->getMessage();
+            return $e->getTranslatableMessage();
         }
 
         return $this->getFulfilledStatusMessage();

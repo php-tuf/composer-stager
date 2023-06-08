@@ -3,10 +3,17 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 use Prophecy\Argument;
 
@@ -14,6 +21,8 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
  *
  * @property \PhpTuf\ComposerStager\Tests\TestSpyInterface|\Prophecy\Prophecy\ObjectProphecy $spy
  */
@@ -29,57 +38,66 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     protected function createSut(): AbstractPrecondition
     {
         $spy = $this->spy->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class ($spy) extends AbstractPrecondition
+        return new class ($spy, $translatableFactory) extends AbstractPrecondition
         {
+            use TranslatableAwareTrait;
+
             public string $theName = 'Name';
             public string $theDescription = 'Description';
             public string $theFulfilledStatusMessage = 'Fulfilled';
             public string $theUnfulfilledStatusMessage = 'Unfulfilled';
 
-            public function __construct(protected TestSpyInterface $spy)
-            {
+            public function __construct(
+                protected TestSpyInterface $spy,
+                TranslatableFactoryInterface $translatableFactory,
+            ) {
+                parent::__construct(new TestTranslatableFactory(), new TestTranslator());
+
+                $this->setTranslatableFactory($translatableFactory);
             }
 
-            public function getName(): string
+            public function getName(): TranslatableInterface
             {
-                return $this->theName;
+                return new TestTranslatableMessage($this->theName);
             }
 
-            public function getDescription(): string
+            public function getDescription(): TranslatableInterface
             {
-                return $this->theDescription;
+                return new TestTranslatableMessage($this->theDescription);
             }
 
-            protected function getFulfilledStatusMessage(): string
+            protected function getFulfilledStatusMessage(): TranslatableInterface
             {
-                return $this->theFulfilledStatusMessage;
+                return new TestTranslatableMessage($this->theFulfilledStatusMessage);
             }
 
-            protected function getUnfulfilledStatusMessage(): string
-            {
-                return $this->theUnfulfilledStatusMessage;
-            }
-
-            public function isFulfilled(
+            public function assertIsFulfilled(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
                 ?PathListInterface $exclusions = null,
-            ): bool {
-                return $this->spy->report(func_get_args());
+            ): void {
+                if (!$this->spy->report(func_get_args())) {
+                    throw TestCase::createTestPreconditionException($this->theUnfulfilledStatusMessage);
+                }
             }
         };
     }
 
     /**
+     * @covers ::__construct
      * @covers ::getDescription
      * @covers ::getLeaves
      * @covers ::getName
      * @covers ::getStatusMessage
+     * @covers ::isFulfilled
      *
      * @dataProvider providerBasicFunctionality
+     *
+     * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
     public function testBasicFunctionality(
         string $name,
@@ -133,14 +151,17 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         ];
     }
 
-    /** @covers ::assertIsFulfilled */
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     */
     public function testFulfilled(): void
     {
         $this->spy
             ->report(Argument::cetera())
             ->willReturn(true);
         $this->spy
-            ->report([$this->activeDir, $this->stagingDir, null])
+            ->report([$this->activeDir, $this->stagingDir])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $this->spy
@@ -153,17 +174,23 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
     }
 
-    /** @covers ::assertIsFulfilled */
+    /**
+     * @covers ::__construct
+     * @covers ::assertIsFulfilled
+     */
     public function testUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
+        $message = __METHOD__;
         $this->spy
             ->report([$this->activeDir, $this->stagingDir, new TestPathList()])
-            ->shouldBeCalledOnce()
             ->willReturn(false);
         $sut = $this->createSut();
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $sut->theUnfulfilledStatusMessage = $message;
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
+
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
+        }, PreconditionException::class, $message);
     }
 }

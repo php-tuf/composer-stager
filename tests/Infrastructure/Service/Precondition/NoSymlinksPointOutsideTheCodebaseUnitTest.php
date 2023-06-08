@@ -8,6 +8,8 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -17,11 +19,12 @@ use Prophecy\Argument;
  * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
- * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
@@ -55,7 +58,9 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
+        $translator = new TestTranslator();
 
-        return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory);
+        return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory, $translatableFactory, $translator);
     }
 }

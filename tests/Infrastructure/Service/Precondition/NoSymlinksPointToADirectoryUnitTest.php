@@ -10,6 +10,8 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterfa
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -20,11 +22,12 @@ use Prophecy\Argument;
  * @covers ::exitEarly
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
- * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
@@ -61,8 +64,10 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $fileSyncer = $this->fileSyncer->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
+        $translator = new TestTranslator();
 
-        return new NoSymlinksPointToADirectory($fileFinder, $fileSyncer, $filesystem, $pathFactory);
+        return new NoSymlinksPointToADirectory($fileFinder, $fileSyncer, $filesystem, $pathFactory, $translatableFactory, $translator);
     }
 
     public function testExitEarlyWithRsyncFileSyncer(): void

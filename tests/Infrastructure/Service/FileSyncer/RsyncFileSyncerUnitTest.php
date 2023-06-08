@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
 
+use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
@@ -12,7 +13,9 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -24,7 +27,10 @@ use Prophecy\Argument;
  * @covers ::isDescendant
  * @covers ::sync
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
@@ -52,8 +58,9 @@ final class RsyncFileSyncerUnitTest extends TestCase
     {
         $filesystem = $this->filesystem->reveal();
         $rsync = $this->rsync->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new RsyncFileSyncer($filesystem, $rsync);
+        return new RsyncFileSyncer($filesystem, $rsync, $translatableFactory);
     }
 
     /** @dataProvider providerSync */
@@ -160,28 +167,34 @@ final class RsyncFileSyncerUnitTest extends TestCase
         ];
     }
 
-    /** @dataProvider providerSyncFailure */
-    public function testSyncFailure(string $caught, string $thrown): void
+    /**
+     * @covers ::sync
+     *
+     * @dataProvider providerSyncFailure
+     */
+    public function testSyncFailure(ExceptionInterface $caught, string $thrown): void
     {
-        $this->expectException($thrown);
-
         $this->rsync
             ->run(Argument::cetera())
             ->willThrow($caught);
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->sync($this->source, $this->destination);
+        }, $thrown, $caught->getMessage(), $caught::class);
     }
 
     public function providerSyncFailure(): array
     {
+        $message = new TestTranslatableMessage(__METHOD__);
+
         return [
             [
-                'caught' => LogicException::class,
+                'caught' => new LogicException($message),
                 'thrown' => IOException::class,
             ],
             [
-                'caught' => RuntimeException::class,
+                'caught' => new RuntimeException($message),
                 'thrown' => IOException::class,
             ],
         ];
@@ -189,39 +202,40 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function testSyncSourceDirectoryNotFound(): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source directory does not exist at "%s"', $this->source->resolved()));
-
         $this->filesystem
             ->exists(Argument::any())
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination);
+        $message = sprintf('The source directory does not exist at "%s"', $this->source->resolved());
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->sync($this->source, $this->destination);
+        }, LogicException::class, $message);
     }
 
     public function testSyncDirectoriesTheSame(): void
     {
         $source = new TestPath('same');
         $destination = $source;
-
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved()));
-
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination);
+        $message = sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved());
+        self::assertTranslatableException(static function () use ($sut, $source, $destination) {
+            $sut->sync($source, $destination);
+        }, LogicException::class, $message);
     }
 
     public function testSyncCreateDestinationDirectoryFailed(): void
     {
-        $this->expectException(IOException::class);
-
+        $message = new TestTranslatableMessage(__METHOD__);
+        $previous = new IOException($message);
         $this->filesystem
             ->mkdir($this->destination)
-            ->willThrow(IOException::class);
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->sync($this->source, $this->destination);
+        }, IOException::class, $message);
     }
 }

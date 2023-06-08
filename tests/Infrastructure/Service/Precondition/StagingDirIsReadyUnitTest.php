@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsReady;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsReady
@@ -42,8 +43,9 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
     {
         $stagingDirExists = $this->stagingDirExists->reveal();
         $stagingDirIsWritable = $this->stagingDirIsWritable->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new StagingDirIsReady($stagingDirExists, $stagingDirIsWritable);
+        return new StagingDirIsReady($stagingDirExists, $stagingDirIsWritable, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -60,13 +62,16 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $message = 'The staging directory is not ready to use.';
+        $previous = self::createTestPreconditionException($message);
         $this->stagingDirExists
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
+        $sut = $this->createSut();
 
-        $this->doTestUnfulfilled($previous->getMessage());
+        self::assertTranslatableMessage($message, $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions));
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        }, PreconditionException::class, $message);
     }
 }

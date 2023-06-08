@@ -14,7 +14,9 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -22,6 +24,8 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Stager
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Stager
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
@@ -44,8 +48,9 @@ final class StagerUnitTest extends TestCase
     {
         $composerRunner = $this->composerRunner->reveal();
         $preconditions = $this->preconditions->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new Stager($composerRunner, $preconditions);
+        return new Stager($composerRunner, $preconditions, $translatableFactory);
     }
 
     /** @covers ::stage */
@@ -110,36 +115,33 @@ final class StagerUnitTest extends TestCase
 
     public function testEmptyCommand(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/empty/');
-
         $sut = $this->createSut();
 
-        $sut->stage([], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->stage([], $this->activeDir, $this->stagingDir);
+        }, InvalidArgumentException::class, 'The Composer command cannot be empty');
     }
 
     public function testCommandContainsComposer(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/cannot begin/');
-
         $sut = $this->createSut();
 
-        $sut->stage([
-            'composer',
-            self::INERT_COMMAND,
-        ], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->stage([
+                'composer',
+                self::INERT_COMMAND,
+            ], $this->activeDir, $this->stagingDir);
+        }, InvalidArgumentException::class, 'The Composer command cannot begin with "composer"--it is implied');
     }
 
     /** @dataProvider providerCommandContainsWorkingDirOption */
     public function testCommandContainsWorkingDirOption(array $command): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/--working-dir/');
-
         $sut = $this->createSut();
 
-        $sut->stage($command, $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut, $command) {
+            $sut->stage($command, $this->activeDir, $this->stagingDir);
+        }, InvalidArgumentException::class, 'Cannot stage a Composer command containing the "--working-dir" (or "-d") option');
     }
 
     public function providerCommandContainsWorkingDirOption(): array
@@ -153,41 +155,41 @@ final class StagerUnitTest extends TestCase
     /** @covers ::stage */
     public function testStagePreconditionsUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
-            ->shouldBeCalledOnce()
-            ->willThrow(PreconditionException::class);
+            ->shouldBeCalled()
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 
     /** @dataProvider providerExceptions */
     public function testExceptions(ExceptionInterface $exception, string $message): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage($message);
-
         $this->composerRunner
             ->run(Argument::cetera())
             ->willThrow($exception);
-
         $sut = $this->createSut();
 
-        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        }, RuntimeException::class, $message, $exception::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             [
-                'exception' => new IOException('one'),
+                'exception' => new IOException(new TestTranslatableMessage('one')),
                 'message' => 'one',
             ],
             [
-                'exception' => new LogicException('two'),
+                'exception' => new LogicException(new TestTranslatableMessage('two')),
                 'message' => 'two',
             ],
         ];

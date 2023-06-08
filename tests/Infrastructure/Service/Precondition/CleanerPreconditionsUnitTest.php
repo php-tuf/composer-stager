@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CleanerPreconditions;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CleanerPreconditions
@@ -43,8 +43,9 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new CleanerPreconditions($commonPreconditions, $stagingDirIsReady);
+        return new CleanerPreconditions($commonPreconditions, $stagingDirIsReady, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -61,11 +62,9 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $previous = self::createTestPreconditionException(__METHOD__);
         $this->commonPreconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled($previous->getMessage());

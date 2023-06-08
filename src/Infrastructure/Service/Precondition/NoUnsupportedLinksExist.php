@@ -2,12 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoAbsoluteSymlinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoUnsupportedLinksExistInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -22,22 +24,30 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
         NoLinksExistOnWindowsInterface $noLinksExistOnWindows,
         NoSymlinksPointOutsideTheCodebaseInterface $noSymlinksPointOutsideTheCodebase,
         NoSymlinksPointToADirectoryInterface $noSymlinksPointToADirectory,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct(...func_get_args());
+        parent::__construct(
+            $translatableFactory,
+            $noAbsoluteSymlinksExist,
+            $noHardLinksExist,
+            $noLinksExistOnWindows,
+            $noSymlinksPointOutsideTheCodebase,
+            $noSymlinksPointToADirectory,
+        );
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Unsupported links preconditions';
+        return $this->t('Unsupported links preconditions');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'Preconditions concerning unsupported links.';
+        return $this->t('Preconditions concerning unsupported links.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'There are no unsupported links in the codebase.';
+        return $this->t('There are no unsupported links in the codebase.');
     }
 }

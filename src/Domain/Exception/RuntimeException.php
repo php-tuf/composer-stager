@@ -13,4 +13,5 @@ use RuntimeException as PHPRuntimeException;
  */
 class RuntimeException extends PHPRuntimeException implements ExceptionInterface
 {
+    use TranslatableExceptionTrait;
 }

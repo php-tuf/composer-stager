@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -58,44 +59,34 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
     public function testComposerNotFound(): void
     {
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage(ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE);
-
         $this->executableFinderClass = ComposerNotFoundExecutableFinder::class;
-
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-
-        self::assertFalse($isFulfilled, 'Correctly handled inability to find Composer.');
-
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message, LogicException::class);
     }
 
     public function testInvalidComposerFound(): void
     {
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage(InvalidComposerFoundExecutableFinder::getExceptionMessage());
-
         $this->executableFinderClass = InvalidComposerFoundExecutableFinder::class;
-
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-
-        self::assertFalse($isFulfilled, 'Correctly handled invalid Composer executable.');
-
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 }
 
 final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterface
 {
-    public const EXCEPTION_MESSAGE = 'Composer cannot be found.';
+    public const EXCEPTION_MESSAGE = 'Cannot find Composer.';
 
     public function find(string $name): string
     {
-        throw new LogicException(self::EXCEPTION_MESSAGE);
+        throw new LogicException(new TestTranslatableMessage(self::EXCEPTION_MESSAGE));
     }
 }
 

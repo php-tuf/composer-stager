@@ -3,6 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -19,11 +21,15 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  */
 final class PhpFileSyncer implements PhpFileSyncerInterface
 {
+    use TranslatableAwareTrait;
+
     public function __construct(
         private readonly RecursiveFileFinderInterface $fileFinder,
         private readonly FilesystemInterface $filesystem,
         private readonly PathFactoryInterface $pathFactory,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
+        $this->setTranslatableFactory($translatableFactory);
     }
 
     public function sync(
@@ -49,7 +55,10 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     {
         if ($source->resolved() === $destination->resolved()) {
             throw new LogicException(
-                sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved()),
+                $this->t(
+                    'The source and destination directories cannot be the same at "%path"',
+                    $this->p(['%path' => $source->resolved()]),
+                ),
             );
         }
     }
@@ -58,9 +67,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     private function assertSourceExists(PathInterface $source): void
     {
         if (!$this->filesystem->exists($source)) {
-            throw new LogicException(sprintf(
-                'The source directory does not exist at "%s"',
-                $source->resolved(),
+            throw new LogicException($this->t(
+                'The source directory does not exist at "%path"',
+                $this->p(['%path' => $source->resolved()]),
             ));
         }
     }

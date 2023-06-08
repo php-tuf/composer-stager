@@ -4,7 +4,9 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Host\TestHost;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -13,14 +15,14 @@ use Prophecy\Argument;
  * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::exitEarly
- * @covers ::getDefaultUnfulfilledStatusMessage
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
- * @covers ::getUnfulfilledStatusMessage
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
@@ -47,8 +49,10 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
+        $translator = new TestTranslator();
 
-        return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory);
+        return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory, $translatableFactory, $translator);
     }
 
     private function createWindowsHost(): HostInterface

@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagerPreconditions;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagerPreconditions
@@ -42,8 +43,9 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
     {
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new StagerPreconditions($commonPreconditions, $stagingDirIsReady);
+        return new StagerPreconditions($commonPreconditions, $stagingDirIsReady, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -60,13 +62,16 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
+        $sut = $this->createSut();
 
-        $this->doTestUnfulfilled($previous->getMessage());
+        self::assertTranslatableMessage($message, $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions));
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        }, PreconditionException::class);
     }
 }

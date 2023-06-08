@@ -6,6 +6,8 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 
 final class TestPrecondition implements PreconditionInterface
 {
@@ -17,22 +19,22 @@ final class TestPrecondition implements PreconditionInterface
     ) {
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return $this->name;
+        return new TestTranslatableMessage($this->name);
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return $this->description;
+        return new TestTranslatableMessage($this->description);
     }
 
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): string {
-        return $this->statusMessage;
+    ): TranslatableInterface {
+        return new TestTranslatableMessage($this->statusMessage);
     }
 
     public function isFulfilled(
@@ -52,7 +54,7 @@ final class TestPrecondition implements PreconditionInterface
             return;
         }
 
-        throw new PreconditionException($this);
+        throw new PreconditionException($this, new TestTranslatableMessage());
     }
 
     public function getLeaves(): array

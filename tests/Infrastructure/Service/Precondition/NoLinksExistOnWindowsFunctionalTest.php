@@ -14,16 +14,21 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
@@ -44,7 +49,6 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     /**
      * @covers ::exitEarly
      * @covers ::findFiles
-     * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isFulfilled
      */
     public function testFulfilledWithNoLinks(): void
@@ -57,12 +61,10 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::exitEarly
      * @covers ::findFiles
-     * @covers ::getDefaultUnfulfilledStatusMessage
-     * @covers ::getUnfulfilledStatusMessage
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      *
      * @dataProvider providerUnfulfilled
      *
@@ -73,24 +75,22 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $baseDir = self::activeDirPath();
         $link = PathFactory::create('link.txt', $baseDir)->resolved();
         $target = PathFactory::create('target.txt', $baseDir)->resolved();
-
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The active directory at "%s" contains links, which is not supported on Windows. The first one is "%s".',
-            $baseDir->resolved(),
-            $link,
-        ));
-
         touch($target);
         self::createSymlinks($baseDir->resolved(), $symlinks);
         self::createHardlinks($baseDir->resolved(), $hardLinks);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-
         self::assertFalse($isFulfilled, 'Rejected link on Windows.');
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $message = sprintf(
+            'The active directory at "%s" contains links, which is not supported on Windows. The first one is "%s".',
+            $baseDir->resolved(),
+            $link,
+        );
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 
     public function providerUnfulfilled(): array
@@ -110,7 +110,6 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     /**
      * @covers ::exitEarly
      * @covers ::findFiles
-     * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
@@ -125,7 +124,6 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
 
     /**
      * @covers ::exitEarly
-     * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isFulfilled
      *
      * @dataProvider providerExclusions

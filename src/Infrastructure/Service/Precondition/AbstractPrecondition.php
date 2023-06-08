@@ -3,9 +3,13 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -14,24 +18,20 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  */
 abstract class AbstractPrecondition implements PreconditionInterface
 {
-    final public function assertIsFulfilled(
-        PathInterface $activeDir,
-        PathInterface $stagingDir,
-        ?PathListInterface $exclusions = null,
-    ): void {
-        if (!$this->isFulfilled($activeDir, $stagingDir, $exclusions)) {
-            throw new PreconditionException($this, $this->getUnfulfilledStatusMessage());
-        }
-    }
+    use TranslatableAwareTrait;
 
     final public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): string {
-        return $this->isFulfilled($activeDir, $stagingDir, $exclusions)
-            ? $this->getFulfilledStatusMessage()
-            : $this->getUnfulfilledStatusMessage();
+    ): TranslatableInterface {
+        try {
+            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+        } catch (PreconditionException $e) {
+            return $e->getTranslatableMessage();
+        }
+
+        return $this->getFulfilledStatusMessage();
     }
 
     final public function getLeaves(): array
@@ -39,9 +39,27 @@ abstract class AbstractPrecondition implements PreconditionInterface
         return [$this];
     }
 
-    /** Gets a status message for when the precondition is fulfilled. */
-    abstract protected function getFulfilledStatusMessage(): string;
+    final public function isFulfilled(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+        ?PathListInterface $exclusions = null,
+    ): bool {
+        try {
+            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+        } catch (PreconditionException) {
+            return false;
+        }
 
-    /** Gets a status message for when the precondition is unfulfilled. */
-    abstract protected function getUnfulfilledStatusMessage(): string;
+        return true;
+    }
+
+    /** Gets a status message for when the precondition is fulfilled. */
+    abstract protected function getFulfilledStatusMessage(): TranslatableInterface;
+
+    public function __construct(
+        TranslatableFactoryInterface $translatableFactory,
+        protected TranslatorInterface $translator,
+    ) {
+        $this->setTranslatableFactory($translatableFactory);
+    }
 }
