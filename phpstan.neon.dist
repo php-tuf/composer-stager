@@ -54,7 +54,13 @@ parameters:
             message: '#Call to an undefined method .*ObjectProphecy.*::.*\(\).#'
             path: tests
         -
+            message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
+            path: tests
+        -
             message: '#Cannot call method .*\(\) on .*MethodProphecy\|.*.#'
+            path: tests
+        -
+            message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
             path: tests
         -
             message: '#.*caught .* must be rethrown.*#'
@@ -82,6 +88,8 @@ parameters:
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoCallingTranslatableFactoryDirectlyRule # Forbids calling TranslatableFactory::create() directly.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoInstantiatingTranslatableDirectlyRule # Forbids instantiating translatables directly.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
@@ -98,6 +106,8 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslatablePhpDocRule # Ensures that the DocBlocks for TranslatableMessage creation methods stay in sync.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslationParametersPhpDocRule # Ensures that the DocBlocks for TranslationParameters creation methods stay in sync.
 
 services:
     -

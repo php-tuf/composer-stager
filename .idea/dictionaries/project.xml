@@ -12,6 +12,7 @@
       <w>depfile</w>
       <w>deptrac</w>
       <w>dirname</w>
+      <w>docblocks</w>
       <w>ergebnis</w>
       <w>getcwd</w>
       <w>gitattributes</w>
@@ -52,6 +53,7 @@
       <w>sysexits</w>
       <w>testsuites</w>
       <w>thecodingmachine</w>
+      <w>translatables</w>
       <w>unusedcode</w>
       <w>xargs</w>
       <w>xmllint</w>
