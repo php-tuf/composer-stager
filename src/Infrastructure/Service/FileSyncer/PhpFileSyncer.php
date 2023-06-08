@@ -56,7 +56,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         if ($source->resolved() === $destination->resolved()) {
             throw new LogicException(
                 $this->t(
-                    'The source and destination directories cannot be the same at "%path"',
+                    'The source and destination directories cannot be the same at %path',
                     $this->p(['%path' => $source->resolved()]),
                 ),
             );
@@ -68,7 +68,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     {
         if (!$this->filesystem->exists($source)) {
             throw new LogicException($this->t(
-                'The source directory does not exist at "%path"',
+                'The source directory does not exist at %path',
                 $this->p(['%path' => $source->resolved()]),
             ));
         }

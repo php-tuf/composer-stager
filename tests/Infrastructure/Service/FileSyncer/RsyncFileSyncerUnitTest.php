@@ -207,7 +207,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $message = sprintf('The source directory does not exist at "%s"', $this->source->resolved());
+        $message = sprintf('The source directory does not exist at %s', $this->source->resolved());
         self::assertTranslatableException(function () use ($sut) {
             $sut->sync($this->source, $this->destination);
         }, LogicException::class, $message);
@@ -219,7 +219,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $destination = $source;
         $sut = $this->createSut();
 
-        $message = sprintf('The source and destination directories cannot be the same at "%s"', $source->resolved());
+        $message = sprintf('The source and destination directories cannot be the same at %s', $source->resolved());
         self::assertTranslatableException(static function () use ($sut, $source, $destination) {
             $sut->sync($source, $destination);
         }, LogicException::class, $message);

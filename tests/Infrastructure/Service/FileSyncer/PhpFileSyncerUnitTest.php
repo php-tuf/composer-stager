@@ -70,7 +70,7 @@ final class PhpFileSyncerUnitTest extends TestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $message = sprintf('The source directory does not exist at "%s"', $this->source->resolved());
+        $message = sprintf('The source directory does not exist at %s', $this->source->resolved());
         self::assertTranslatableException(function () use ($sut) {
             $sut->sync($this->source, $this->destination);
         }, LogicException::class, $message);
@@ -81,7 +81,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $same = new TestPath('same');
         $sut = $this->createSut();
 
-        $message = sprintf('The source and destination directories cannot be the same at "%s"', $same->resolved());
+        $message = sprintf('The source and destination directories cannot be the same at %s', $same->resolved());
         self::assertTranslatableException(static function () use ($sut, $same) {
             $sut->sync($same, $same);
         }, LogicException::class, $message);

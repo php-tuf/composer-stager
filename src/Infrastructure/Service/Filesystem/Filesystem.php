@@ -52,7 +52,7 @@ final class Filesystem implements FilesystemInterface
 
         if ($sourceResolved === $destinationResolved) {
             throw new LogicException($this->t(
-                'The source and destination files cannot be the same at "%path"',
+                'The source and destination files cannot be the same at %path',
                 $this->p(['%path' => $sourceResolved]),
             ));
         }
@@ -61,7 +61,7 @@ final class Filesystem implements FilesystemInterface
             $this->symfonyFilesystem->copy($sourceResolved, $destinationResolved, true);
         } catch (SymfonyFileNotFoundException $e) {
             throw new LogicException($this->t(
-                'The source file does not exist or is not a file at "%path"',
+                'The source file does not exist or is not a file at %path',
                 $this->p(['%path' => $sourceResolved]),
             ), 0, $e);
         } catch (SymfonyIOException $e) {
@@ -93,7 +93,7 @@ final class Filesystem implements FilesystemInterface
         if ($scandir === false) {
             /** @noinspection PhpUnhandledExceptionInspection */
             throw new IOException($this->t(
-                'The path does not exist or is not a directory at "%path"',
+                'The path does not exist or is not a directory at %path',
                 $this->p(['%path' => $path->resolved()]),
             ));
         }
@@ -137,7 +137,7 @@ final class Filesystem implements FilesystemInterface
             $this->symfonyFilesystem->mkdir($pathResolved);
         } catch (SymfonyIOException $e) {
             throw new IOException($this->t(
-                'Failed to create directory at "%path"',
+                'Failed to create directory at %path',
                 $this->p(['%path' => $pathResolved]),
             ), 0, $e);
         }
@@ -147,7 +147,7 @@ final class Filesystem implements FilesystemInterface
     {
         if (!$this->isSymlink($path)) {
             throw new IOException($this->t(
-                'The path does not exist or is not a symlink at "%path"',
+                'The path does not exist or is not a symlink at %path',
                 $this->p(['%path' => $path->resolved()]),
             ));
         }

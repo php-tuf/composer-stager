@@ -110,7 +110,7 @@ final class FilesystemFunctionalTest extends TestCase
         $file = PathFactory::create('file.txt', $path);
         touch($file->resolved());
         $message = sprintf(
-            'The path does not exist or is not a directory at "%s"',
+            'The path does not exist or is not a directory at %s',
             $file->resolved(),
         );
         $sut = $this->createSut();
@@ -125,7 +125,7 @@ final class FilesystemFunctionalTest extends TestCase
     {
         $path = PathFactory::create('non-existent');
         $message = sprintf(
-            'The path does not exist or is not a directory at "%s"',
+            'The path does not exist or is not a directory at %s',
             $path->resolved(),
         );
         $sut = $this->createSut();
@@ -292,7 +292,7 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertEquals($expectedRaw, $symlinkTarget->raw(), 'Got the correct raw target value.');
         self::assertEquals($expectedResolved, $symlinkTarget->resolved(), 'Got the correct resolved target value.');
 
-        $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolved());
+        $message = sprintf('The path does not exist or is not a symlink at %s', $hardLinkPath->resolved());
         self::assertTranslatableException(static function () use ($sut, $hardLinkPath) {
             $sut->readLink($hardLinkPath);
         }, IOException::class, $message);
@@ -331,7 +331,7 @@ final class FilesystemFunctionalTest extends TestCase
         assert(file_exists($file->resolved()));
         $sut = $this->createSut();
 
-        $message = sprintf('The path does not exist or is not a symlink at "%s"', $file->resolved());
+        $message = sprintf('The path does not exist or is not a symlink at %s', $file->resolved());
         self::assertTranslatableException(static function () use ($sut, $file) {
             $sut->readLink($file);
         }, IOException::class, $message);
@@ -343,7 +343,7 @@ final class FilesystemFunctionalTest extends TestCase
         $path = PathFactory::create('non-existent_file.txt', self::sourceDir());
         $sut = $this->createSut();
 
-        $message = sprintf('The path does not exist or is not a symlink at "%s"', $path->resolved());
+        $message = sprintf('The path does not exist or is not a symlink at %s', $path->resolved());
         self::assertTranslatableException(static function () use ($sut, $path) {
             $sut->readLink($path);
         }, IOException::class, $message);

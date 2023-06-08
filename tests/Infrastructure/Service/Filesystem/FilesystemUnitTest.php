@@ -106,7 +106,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        $message = sprintf('The source file does not exist or is not a file at "%s"', $this->activeDir->resolved());
+        $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->resolved());
         self::assertTranslatableException(function () use ($sut) {
             $sut->copy($this->activeDir, $this->stagingDir);
         }, LogicException::class, $message, $previous);
@@ -119,7 +119,7 @@ final class FilesystemUnitTest extends TestCase
         $destination = $source;
         $sut = $this->createSut();
 
-        $message = sprintf('The source and destination files cannot be the same at "%s"', $source->resolved());
+        $message = sprintf('The source and destination files cannot be the same at %s', $source->resolved());
         self::assertTranslatableException(static function () use ($sut, $source, $destination) {
             $sut->copy($source, $destination);
         }, LogicException::class, $message);
@@ -152,7 +152,7 @@ final class FilesystemUnitTest extends TestCase
     /** @covers ::mkdir */
     public function testMkdirFailure(): void
     {
-        $message = 'Failed to create directory at "staging-dir"';
+        $message = 'Failed to create directory at staging-dir';
         $previous = new SymfonyIOException($message);
         $this->symfonyFilesystem
             ->mkdir(Argument::any())

@@ -58,14 +58,14 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         if ($sourceResolved === $destinationResolved) {
             throw new LogicException($this->t(
-                'The source and destination directories cannot be the same at "%path"',
+                'The source and destination directories cannot be the same at %path',
                 $this->p(['%path' => $sourceResolved]),
             ));
         }
 
         if (!$this->filesystem->exists($source)) {
             throw new LogicException($this->t(
-                'The source directory does not exist at "%path"',
+                'The source directory does not exist at %path',
                 $this->p(['%path' => $sourceResolved]),
             ));
         }
