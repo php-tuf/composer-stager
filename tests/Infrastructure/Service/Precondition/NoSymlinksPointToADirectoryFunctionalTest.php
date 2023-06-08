@@ -95,7 +95,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $sut = $this->createSut();
 
         $message = sprintf(
-            'The %s directory at "%s" contains symlinks that point to a directory, which is not supported. The first one is "%s".',
+            'The %s directory at %s contains symlinks that point to a directory, which is not supported. The first one is %s.',
             $linkDirName,
             PathFactory::create($linkDir)->resolved(),
             $link,

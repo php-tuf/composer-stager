@@ -90,7 +90,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $sut = $this->createSut();
 
         $message = sprintf(
-            'The %s directory at "%s" contains hard links, which is not supported. The first one is "%s".',
+            'The %s directory at %s contains hard links, which is not supported. The first one is %s.',
             $dirName,
             PathFactory::create($directory)->resolved(),
             $link,

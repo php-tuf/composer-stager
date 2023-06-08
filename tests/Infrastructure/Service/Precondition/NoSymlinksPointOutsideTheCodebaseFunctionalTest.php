@@ -116,7 +116,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $sut = $this->createSut();
 
         $message = sprintf(
-            'The %s directory at "%s" contains links that point outside the codebase, which is not supported. The first one is "%s".',
+            'The %s directory at %s contains links that point outside the codebase, which is not supported. The first one is %s.',
             $linkDirName,
             PathFactory::create($linkDir)->resolved(),
             $link,

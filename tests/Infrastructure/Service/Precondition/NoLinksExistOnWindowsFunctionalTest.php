@@ -84,7 +84,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         self::assertFalse($isFulfilled, 'Rejected link on Windows.');
 
         $message = sprintf(
-            'The active directory at "%s" contains links, which is not supported on Windows. The first one is "%s".',
+            'The active directory at %s contains links, which is not supported on Windows. The first one is %s.',
             $baseDir->resolved(),
             $link,
         );

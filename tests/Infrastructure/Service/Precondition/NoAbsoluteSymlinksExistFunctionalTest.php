@@ -111,7 +111,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
         self::assertFalse($isFulfilled, 'Found absolute links.');
         $pattern = sprintf(
-            'The %s directory at "%s" contains absolute links, which is not supported. The first one is "%s".',
+            'The %s directory at %s contains absolute links, which is not supported. The first one is %s.',
             $dirName,
             $dirPath->resolved(),
             $link->resolved(),

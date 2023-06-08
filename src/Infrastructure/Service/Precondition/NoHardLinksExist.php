@@ -38,8 +38,8 @@ final class NoHardLinksExist extends AbstractFileIteratingPrecondition implement
             throw new PreconditionException(
                 $this,
                 $this->t(
-                    'The %codebase_name directory at "%codebase_root" contains '
-                    . 'hard links, which is not supported. The first one is "%file".',
+                    'The %codebase_name directory at %codebase_root contains '
+                    . 'hard links, which is not supported. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
                         '%codebase_root' => $codebaseRoot->resolved(),

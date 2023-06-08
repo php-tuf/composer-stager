@@ -91,7 +91,7 @@ final class ExecutableFinderUnitTest extends TestCase
             ->willReturn(null);
         $sut = $this->createSut();
 
-        $message = sprintf('The "%s" executable cannot be found. Make sure it\'s installed and in the $PATH', $name);
+        $message = sprintf('The %s executable cannot be found. Make sure it\'s installed and in the $PATH', $name);
         self::assertTranslatableException(static function () use ($sut, $name) {
             $sut->find($name);
         }, LogicException::class, $message);
@@ -116,7 +116,7 @@ final class ExecutableFinderUnitTest extends TestCase
             ->willReturn(null);
         $sut = $this->createSut();
 
-        $message = 'The "composer" executable cannot be found. Make sure it\'s installed and in the $PATH';
+        $message = 'The composer executable cannot be found. Make sure it\'s installed and in the $PATH';
         self::assertTranslatableException(static function () use ($sut) {
             $sut->find('composer');
         }, LogicException::class, $message);
