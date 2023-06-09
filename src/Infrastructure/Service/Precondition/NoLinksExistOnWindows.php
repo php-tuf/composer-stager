@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface;
 
 /**
@@ -22,7 +22,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface;
 final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition implements NoLinksExistOnWindowsInterface
 {
     public function __construct(
-        RecursiveFileFinderInterface $fileFinder,
+        FileFinderInterface $fileFinder,
         FilesystemInterface $filesystem,
         private readonly HostInterface $host,
         PathFactoryInterface $pathFactory,

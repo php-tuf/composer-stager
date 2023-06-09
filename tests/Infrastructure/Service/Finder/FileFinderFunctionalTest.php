@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
  *
  * @covers ::__construct
  *
@@ -22,9 +22,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder $fileFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder $fileFinder
  */
-final class RecursiveFileFinderFunctionalTest extends TestCase
+final class FileFinderFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -36,13 +36,13 @@ final class RecursiveFileFinderFunctionalTest extends TestCase
         self::removeTestEnvironment();
     }
 
-    private function createSut(): RecursiveFileFinder
+    private function createSut(): FileFinder
     {
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder $fileFinder */
-        $fileFinder = $container->get(RecursiveFileFinder::class);
+        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder $fileFinder */
+        $fileFinder = $container->get(FileFinder::class);
 
         return $fileFinder;
     }
