@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
@@ -19,6 +20,10 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $activeDir
@@ -39,8 +44,9 @@ final class FilesystemUnitTest extends TestCase
     {
         $pathFactory = $this->pathFactory->reveal();
         $symfonyFilesystem = $this->symfonyFilesystem->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
-        return new Filesystem($pathFactory, $symfonyFilesystem);
+        return new Filesystem($pathFactory, $symfonyFilesystem, $translatableFactory);
     }
 
     /**
@@ -77,30 +83,33 @@ final class FilesystemUnitTest extends TestCase
     /** @covers ::copy */
     public function testCopyFailure(): void
     {
-        $this->expectException(IOException::class);
-
-        /** @noinspection PhpParamsInspection */
+        $message = 'Failed to copy active-dir to staging-dir';
+        $previous = new SymfonyIOException($message);
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
-            ->willThrow(SymfonyIOException::class);
+            ->shouldBeCalled()
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->copy($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->copy($this->activeDir, $this->stagingDir);
+        }, IOException::class, $message, $previous::class);
     }
 
     /** @covers ::copy */
     public function testCopySourceDirectoryNotFound(): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source file does not exist or is not a file at "%s"', $this->activeDir->resolved()));
-
-        /** @noinspection PhpParamsInspection */
+        $previous = SymfonyFileNotFoundException::class;
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
-            ->willThrow(SymfonyFileNotFoundException::class);
+            ->shouldBeCalled()
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->copy($this->activeDir, $this->stagingDir);
+        $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->resolved());
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->copy($this->activeDir, $this->stagingDir);
+        }, LogicException::class, $message, $previous);
     }
 
     /** @covers ::copy */
@@ -108,13 +117,12 @@ final class FilesystemUnitTest extends TestCase
     {
         $source = new TestPath('same');
         $destination = $source;
-
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage(sprintf('The source and destination files cannot be the same at "%s"', $source->resolved()));
-
         $sut = $this->createSut();
 
-        $sut->copy($source, $destination);
+        $message = sprintf('The source and destination files cannot be the same at %s', $source->resolved());
+        self::assertTranslatableException(static function () use ($sut, $source, $destination) {
+            $sut->copy($source, $destination);
+        }, LogicException::class, $message);
     }
 
     /**
@@ -144,14 +152,16 @@ final class FilesystemUnitTest extends TestCase
     /** @covers ::mkdir */
     public function testMkdirFailure(): void
     {
-        $this->expectException(IOException::class);
-
+        $message = 'Failed to create directory at staging-dir';
+        $previous = new SymfonyIOException($message);
         $this->symfonyFilesystem
             ->mkdir(Argument::any())
-            ->willThrow(SymfonyIOException::class);
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->mkdir($this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->mkdir($this->stagingDir);
+        }, IOException::class, $message, $previous::class);
     }
 
     /**
@@ -197,13 +207,15 @@ final class FilesystemUnitTest extends TestCase
     /** @covers ::remove */
     public function testRemoveException(): void
     {
-        $this->expectException(IOException::class);
-
+        $message = 'Failed to remove directory.';
+        $previous = new SymfonyIOException($message);
         $this->symfonyFilesystem
             ->remove(Argument::any())
-            ->willThrow(SymfonyIOException::class);
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->remove($this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->remove($this->stagingDir);
+        }, IOException::class, $message, $previous::class);
     }
 }

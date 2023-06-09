@@ -2,8 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -13,35 +15,44 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPrecondition implements
     NoSymlinksPointOutsideTheCodebaseInterface
 {
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'No symlinks point outside the codebase';
+        return $this->t('No symlinks point outside the codebase');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The codebase cannot contain symlinks that point outside the codebase.';
+        return $this->t('The codebase cannot contain symlinks that point outside the codebase.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'There are no symlinks that point outside the codebase.';
+        return $this->t('There are no symlinks that point outside the codebase.');
     }
 
-    protected function getDefaultUnfulfilledStatusMessage(): string
-    {
-        return <<<'EOF'
-The %s directory at "%s" contains links that point outside the codebase, which is not supported. The first one is "%s".
-EOF;
-    }
-
-    protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
-    {
+    protected function assertIsSupportedFile(
+        string $codebaseName,
+        PathInterface $codebaseRoot,
+        PathInterface $file,
+    ): void {
         if (!$this->filesystem->isSymlink($file)) {
-            return true;
+            return;
         }
 
-        return !$this->linkPointsOutsidePath($file, $codebaseRootDir);
+        if ($this->linkPointsOutsidePath($file, $codebaseRoot)) {
+            throw new PreconditionException(
+                $this,
+                $this->t(
+                    'The %codebase_name directory at %codebase_root contains links that point outside the codebase, '
+                    . 'which is not supported. The first one is %file.',
+                    $this->p([
+                        '%codebase_name' => $codebaseName,
+                        '%codebase_root' => $codebaseRoot->resolved(),
+                        '%file' => $file->resolved(),
+                    ]),
+                ),
+            );
+        }
     }
 
     /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */

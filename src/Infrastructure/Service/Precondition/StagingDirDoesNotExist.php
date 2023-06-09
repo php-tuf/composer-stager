@@ -2,10 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirDoesNotExistInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -14,35 +18,39 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  */
 final class StagingDirDoesNotExist extends AbstractPrecondition implements StagingDirDoesNotExistInterface
 {
-    public function __construct(private readonly FilesystemInterface $filesystem)
-    {
+    public function __construct(
+        private readonly FilesystemInterface $filesystem,
+        TranslatableFactoryInterface $translatableFactory,
+        protected TranslatorInterface $translator,
+    ) {
+        parent::__construct($translatableFactory, $translator);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Staging directory does not exist';
+        return $this->t('Staging directory does not exist');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The staging directory must not already exist before beginning the staging process.';
+        return $this->t('The staging directory must not already exist before beginning the staging process.');
     }
 
-    public function isFulfilled(
+    public function assertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): bool {
-        return !$this->filesystem->exists($stagingDir);
+    ): void {
+        if ($this->filesystem->exists($stagingDir)) {
+            throw new PreconditionException(
+                $this,
+                $this->t('The staging directory already exists.'),
+            );
+        }
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The staging directory does not already exist.';
-    }
-
-    protected function getUnfulfilledStatusMessage(): string
-    {
-        return 'The staging directory already exists.';
+        return $this->t('The staging directory does not already exist.');
     }
 }

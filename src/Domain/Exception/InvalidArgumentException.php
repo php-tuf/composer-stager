@@ -13,4 +13,5 @@ use InvalidArgumentException as PHPInvalidArgumentException;
  */
 class InvalidArgumentException extends PHPInvalidArgumentException implements ExceptionInterface
 {
+    use TranslatableExceptionTrait;
 }

@@ -2,22 +2,42 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
 {
-    public function getName(): string
-    {
-        return 'Test preconditions tree';
+    protected function t(
+        string $message,
+        ?TranslationParametersInterface $parameters = null,
+        ?string $domain = null,
+    ): TranslatableInterface {
+        return new TestTranslatableMessage($message);
     }
 
-    public function getDescription(): string
+    public function getName(): TranslatableInterface
     {
-        return 'A generic preconditions tree for automated tests.';
+        return $this->t('Test preconditions tree');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    public function __construct(PreconditionInterface ...$children)
     {
-        return 'TestPreconditionsTree is unfulfilled.';
+        $translatableFactory = new TestTranslatableFactory();
+
+        parent::__construct($translatableFactory, ...$children);
+    }
+
+    public function getDescription(): TranslatableInterface
+    {
+        return $this->t('A generic preconditions tree for automated tests.');
+    }
+
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('TestPreconditionsTree is unfulfilled.');
     }
 }

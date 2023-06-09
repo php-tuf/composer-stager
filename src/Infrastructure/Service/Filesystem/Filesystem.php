@@ -4,6 +4,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Filesystem;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -21,6 +23,8 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class Filesystem implements FilesystemInterface
 {
+    use TranslatableAwareTrait;
+
     private const PATH_DOES_NOT_EXIST = 'PATH_DOES_NOT_EXIST';
 
     private const PATH_IS_DIRECTORY = 'PATH_IS_DIRECTORY';
@@ -36,7 +40,9 @@ final class Filesystem implements FilesystemInterface
     public function __construct(
         private readonly PathFactoryInterface $pathFactory,
         private readonly SymfonyFilesystem $symfonyFilesystem,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
+        $this->setTranslatableFactory($translatableFactory);
     }
 
     public function copy(PathInterface $source, PathInterface $destination): void
@@ -45,24 +51,26 @@ final class Filesystem implements FilesystemInterface
         $destinationResolved = $destination->resolved();
 
         if ($sourceResolved === $destinationResolved) {
-            throw new LogicException(sprintf(
-                'The source and destination files cannot be the same at "%s"',
-                $sourceResolved,
+            throw new LogicException($this->t(
+                'The source and destination files cannot be the same at %path',
+                $this->p(['%path' => $sourceResolved]),
             ));
         }
 
         try {
             $this->symfonyFilesystem->copy($sourceResolved, $destinationResolved, true);
         } catch (SymfonyFileNotFoundException $e) {
-            throw new LogicException(sprintf(
-                'The source file does not exist or is not a file at "%s"',
-                $sourceResolved,
+            throw new LogicException($this->t(
+                'The source file does not exist or is not a file at %path',
+                $this->p(['%path' => $sourceResolved]),
             ), 0, $e);
         } catch (SymfonyIOException $e) {
-            throw new IOException(sprintf(
-                'Failed to copy "%s" to "%s"',
-                $sourceResolved,
-                $destinationResolved,
+            throw new IOException($this->t(
+                'Failed to copy %source to %destination',
+                $this->p([
+                    '%source' => $sourceResolved,
+                    '%destination' => $destinationResolved,
+                ]),
             ), 0, $e);
         }
     }
@@ -84,9 +92,9 @@ final class Filesystem implements FilesystemInterface
 
         if ($scandir === false) {
             /** @noinspection PhpUnhandledExceptionInspection */
-            throw new IOException(sprintf(
-                'The path does not exist or is not a directory at "%s"',
-                $path->resolved(),
+            throw new IOException($this->t(
+                'The path does not exist or is not a directory at %path',
+                $this->p(['%path' => $path->resolved()]),
             ));
         }
 
@@ -128,9 +136,9 @@ final class Filesystem implements FilesystemInterface
         try {
             $this->symfonyFilesystem->mkdir($pathResolved);
         } catch (SymfonyIOException $e) {
-            throw new IOException(sprintf(
-                'Failed to create directory at "%s"',
-                $pathResolved,
+            throw new IOException($this->t(
+                'Failed to create directory at %path',
+                $this->p(['%path' => $pathResolved]),
             ), 0, $e);
         }
     }
@@ -138,7 +146,10 @@ final class Filesystem implements FilesystemInterface
     public function readLink(PathInterface $path): PathInterface
     {
         if (!$this->isSymlink($path)) {
-            throw new IOException(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolved()));
+            throw new IOException($this->t(
+                'The path does not exist or is not a symlink at %path',
+                $this->p(['%path' => $path->resolved()]),
+            ));
         }
 
         $target = readlink($path->resolved());
@@ -162,7 +173,7 @@ final class Filesystem implements FilesystemInterface
 
             $this->symfonyFilesystem->remove($path->resolved());
         } catch (SymfonyExceptionInterface $e) {
-            throw new IOException($e->getMessage(), 0, $e);
+            throw new IOException($this->t($e->getMessage()), 0, $e);
         }
     }
 

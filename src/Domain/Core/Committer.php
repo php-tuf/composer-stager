@@ -36,7 +36,7 @@ final class Committer implements CommitterInterface
         try {
             $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);
         } catch (ExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
+            throw new RuntimeException($e->getTranslatableMessage(), 0, $e);
         }
     }
 }

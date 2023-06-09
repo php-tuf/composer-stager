@@ -62,7 +62,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     }
 
     /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::assertIsFulfilled
      * @covers ::isFulfilled
      */
     public function testFulfilledWithNoLinks(): void

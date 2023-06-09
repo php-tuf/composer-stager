@@ -9,10 +9,15 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use Prophecy\Argument;
+use Throwable;
 
 /**
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
@@ -51,34 +56,34 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
+        $translator = new TestTranslator();
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        $sut = new class ($fileFinder, $filesystem, $pathFactory) extends AbstractFileIteratingPrecondition
+        $sut = new class ($fileFinder, $filesystem, $pathFactory, $translatableFactory, $translator) extends AbstractFileIteratingPrecondition
         {
-            protected function getDefaultUnfulfilledStatusMessage(): string
-            {
-                return '';
+            // phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
+            protected function assertIsSupportedFile(
+                string $codebaseName,
+                PathInterface $codebaseRoot,
+                PathInterface $file,
+            ): void {
             }
 
-            protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
+            protected function getFulfilledStatusMessage(): TranslatableInterface
             {
-                return true;
+                return new TestTranslatableMessage();
             }
 
-            protected function getFulfilledStatusMessage(): string
+            public function getName(): TranslatableInterface
             {
-                return '';
+                return new TestTranslatableMessage();
             }
 
-            public function getName(): string
+            public function getDescription(): TranslatableInterface
             {
-                return '';
-            }
-
-            public function getDescription(): string
-            {
-                return '';
+                return new TestTranslatableMessage();
             }
 
             protected function exitEarly(
@@ -97,12 +102,11 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
     }
 
-    /** @covers ::getUnfulfilledStatusMessage */
+    /** @covers ::assertIsFulfilled */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $this->filesystem
             ->exists($this->activeDir)
-            ->shouldBeCalled()
             ->willReturn(false);
         $sut = $this->createSut();
 
@@ -112,12 +116,11 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /** @covers ::getUnfulfilledStatusMessage */
+    /** @covers ::assertIsFulfilled */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $this->filesystem
             ->exists($this->stagingDir)
-            ->shouldBeCalled()
             ->willReturn(false);
         $sut = $this->createSut();
 
@@ -127,7 +130,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /** @covers ::getUnfulfilledStatusMessage */
+    /** @covers ::assertIsFulfilled */
     public function testNoFilesFound(): void
     {
         $this->fileFinder
@@ -142,38 +145,44 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     }
 
     /**
-     * @covers ::getUnfulfilledStatusMessage
+     * @covers ::assertIsFulfilled
      *
      * @dataProvider providerFileFinderExceptions
      */
-    public function testFileFinderExceptions(ExceptionInterface $exception): void
+    public function testFileFinderExceptions(ExceptionInterface $previous): void
     {
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage($exception->getMessage());
-
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
-            ->willThrow($exception);
+            ->willThrow($previous);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
 
         self::assertFalse($isFulfilled);
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        try {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        } catch (Throwable $e) {
+            self::assertInstanceOf(PreconditionException::class, $e);
+            self::assertSame($e->getMessage(), $previous->getMessage());
+            self::assertInstanceOf($previous::class, $e->getPrevious());
+        }
     }
 
     public function providerFileFinderExceptions(): array
     {
         return [
-            [new InvalidArgumentException('Exclusions include invalid paths.')],
-            [new IOException('The directory cannot be found or is not actually a directory.')],
+            [new InvalidArgumentException(new TestTranslatableMessage('Exclusions include invalid paths.'))],
+            [new IOException(new TestTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
         ];
     }
 
-    public function assertFulfilled(bool $isFulfilled, string $statusMessage, string $assertionMessage): void
-    {
+    public function assertFulfilled(
+        bool $isFulfilled,
+        TranslatableInterface $statusMessage,
+        string $assertionMessage,
+    ): void {
         self::assertTrue($isFulfilled, $assertionMessage);
-        self::assertSame($this->fulfilledStatusMessage(), $statusMessage, 'Got correct status message');
+        self::assertEquals($this->fulfilledStatusMessage(), $statusMessage, 'Got correct status message');
     }
 }

@@ -36,7 +36,7 @@ final class Beginner implements BeginnerInterface
         try {
             $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
         } catch (ExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
+            throw new RuntimeException($e->getTranslatableMessage(), 0, $e);
         }
     }
 }

@@ -6,9 +6,13 @@ use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
@@ -19,6 +23,7 @@ use Prophecy\Argument;
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  *
@@ -53,36 +58,36 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
+        $translator = new TestTranslator();
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        return new class ($fileFinder, $filesystem, $pathFactory) extends AbstractFileIteratingPrecondition
+        return new class ($fileFinder, $filesystem, $pathFactory, $translatableFactory, $translator) extends AbstractFileIteratingPrecondition
         {
             public bool $exitEarly = false;
 
-            protected function getDefaultUnfulfilledStatusMessage(): string
-            {
-                return '';
+            // phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
+            protected function assertIsSupportedFile(
+                string $codebaseName,
+                PathInterface $codebaseRoot,
+                PathInterface $file,
+            ): void {
             }
 
-            protected function isSupportedFile(PathInterface $file, PathInterface $codebaseRootDir): bool
+            protected function getFulfilledStatusMessage(): TranslatableInterface
             {
-                return true;
+                return new TestTranslatableMessage();
             }
 
-            protected function getFulfilledStatusMessage(): string
+            public function getName(): TranslatableInterface
             {
-                return '';
+                return new TestTranslatableMessage();
             }
 
-            public function getName(): string
+            public function getDescription(): TranslatableInterface
             {
-                return '';
-            }
-
-            public function getDescription(): string
-            {
-                return '';
+                return new TestTranslatableMessage();
             }
 
             protected function exitEarly(
@@ -95,7 +100,10 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         };
     }
 
-    /** @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition::exitEarly */
+    /**
+     * @covers ::assertIsFulfilled
+     * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition::exitEarly
+     */
     public function testExitEarly(): void
     {
         $this->filesystem
@@ -105,6 +113,7 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
             ->find(Argument::cetera())
             ->shouldNotBeCalled();
         $sut = $this->createSut();
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $sut->exitEarly = true;
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);

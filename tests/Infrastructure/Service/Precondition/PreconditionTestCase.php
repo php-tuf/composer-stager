@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -29,16 +30,19 @@ abstract class PreconditionTestCase extends TestCase
     abstract protected function createSut(): PreconditionInterface;
 
     /**
+     * @covers ::__construct
      * @covers ::getDescription
      * @covers ::getLeaves
      * @covers ::getName
+     *
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
      */
     public function testGetters(): void
     {
         $sut = $this->createSut();
 
-        self::assertIsString($sut->getName());
-        self::assertIsString($sut->getDescription());
+        self::assertInstanceOf(TranslatableInterface::class, $sut->getName());
+        self::assertInstanceOf(TranslatableInterface::class, $sut->getDescription());
         self::assertIsArray($sut->getLeaves());
     }
 
@@ -51,23 +55,16 @@ abstract class PreconditionTestCase extends TestCase
         $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
 
         self::assertTrue($isFulfilled);
-        self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
+        self::assertTranslatableMessage($expectedStatusMessage, $actualStatusMessage, 'Got correct status message.');
     }
 
-    protected function doTestUnfulfilled(string $expectedStatusMessage): void
+    protected function doTestUnfulfilled(string $expectedStatusMessage, ?string $previousException = null): void
     {
-        $this->expectException(PreconditionException::class);
-
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
-        $actualStatusMessage = $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions);
-
-        self::assertFalse($isFulfilled, 'Precondition failed as expected.');
-        self::assertSame($expectedStatusMessage, $actualStatusMessage, 'Get correct status message.');
-
-        // This is called last so as not to throw the exception until all other
-        // assertions have been made.
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        self::assertTranslatableMessage($expectedStatusMessage, $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions));
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        }, PreconditionException::class, $expectedStatusMessage, $previousException);
     }
 }

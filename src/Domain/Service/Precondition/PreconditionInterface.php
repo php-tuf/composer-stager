@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Domain\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * Defines a precondition for a domain operation and how to verify it.
@@ -19,7 +20,7 @@ interface PreconditionInterface
      *
      * E.g., "Example dependency".
      */
-    public function getName(): string;
+    public function getName(): TranslatableInterface;
 
     /**
      * Gets a short description.
@@ -27,7 +28,7 @@ interface PreconditionInterface
      * This should probably be kept to one or two sentences, e.g., "The example
      * dependency is required in order to perform some relevant action."
      */
-    public function getDescription(): string;
+    public function getDescription(): TranslatableInterface;
 
     /**
      * Gets a short status message.
@@ -42,7 +43,7 @@ interface PreconditionInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
-    ): string;
+    ): TranslatableInterface;
 
     /** Determines whether the precondition is fulfilled. */
     public function isFulfilled(

@@ -115,12 +115,9 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows $sut */
         $sut = $container->get(NoLinksExistOnWindows::class);
 
-        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
-
-        self::assertFalse($isFulfilled, 'Rejected link on Windows.');
-
-        $this->expectException(PreconditionException::class);
-        $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
+        self::assertTranslatableException(static function () use ($sut) {
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
+        }, PreconditionException::class);
     }
 
     /** @group no_windows */

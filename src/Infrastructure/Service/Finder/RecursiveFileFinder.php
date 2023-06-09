@@ -4,6 +4,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 
 use FilesystemIterator;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
@@ -20,8 +22,13 @@ use UnexpectedValueException;
  */
 final class RecursiveFileFinder implements RecursiveFileFinderInterface
 {
-    public function __construct(private readonly PathFactoryInterface $pathFactory)
-    {
+    use TranslatableAwareTrait;
+
+    public function __construct(
+        private readonly PathFactoryInterface $pathFactory,
+        TranslatableFactoryInterface $translatableFactory,
+    ) {
+        $this->setTranslatableFactory($translatableFactory);
     }
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
@@ -75,7 +82,7 @@ final class RecursiveFileFinder implements RecursiveFileFinderInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (UnexpectedValueException $e) {
-            throw new IOException($e->getMessage(), 0, $e);
+            throw new IOException($this->t($e->getMessage()), 0, $e);
         }
     }
 }

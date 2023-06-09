@@ -3,6 +3,8 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
 
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
@@ -19,13 +21,17 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  */
 abstract class AbstractRunner implements ProcessRunnerInterface
 {
+    use TranslatableAwareTrait;
+
     /** Returns the executable name, e.g., "composer" or "rsync". */
     abstract protected function executableName(): string;
 
     public function __construct(
         private readonly ExecutableFinderInterface $executableFinder,
         private readonly ProcessFactoryInterface $processFactory,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
+        $this->setTranslatableFactory($translatableFactory);
     }
 
     /**
@@ -55,7 +61,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
             $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
-            throw new RuntimeException($e->getMessage(), 0, $e);
+            throw new RuntimeException($this->t($e->getMessage()), 0, $e);
         }
     }
 

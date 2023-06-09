@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -19,6 +20,9 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Cleaner
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Cleaner::__construct
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
@@ -98,27 +102,30 @@ final class CleanerUnitTest extends TestCase
     /** @covers ::clean */
     public function testCleanPreconditionsUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
-            ->shouldBeCalledOnce()
-            ->willThrow(PreconditionException::class);
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->clean($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->clean($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 
     /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
-        $this->expectException(RuntimeException::class);
+        $message = new TestTranslatableMessage(__METHOD__);
+        $previous = new IOException($message);
         $this->filesystem
-            ->remove($this->stagingDir, Argument::cetera())
-            ->shouldBeCalledOnce()
-            ->willThrow(IOException::class);
+            ->remove(Argument::cetera())
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->clean($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->clean($this->activeDir, $this->stagingDir);
+        }, RuntimeException::class, $message, $previous::class);
     }
 }

@@ -15,15 +15,20 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
@@ -42,10 +47,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     }
 
     /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::assertIsSupportedFile
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      *
      * @dataProvider providerFulfilledWithValidLink
@@ -96,10 +100,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     }
 
     /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::assertIsSupportedFile
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      *
      * @dataProvider providerUnfulfilled
@@ -108,24 +111,19 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     {
         $target = PathFactory::create($targetDir . '/target.txt')->resolved();
         $link = PathFactory::create($linkDir . '/link.txt')->resolved();
-
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The %s directory at "%s" contains links that point outside the codebase, which is not supported. The first one is "%s".',
-            $linkDirName,
-            PathFactory::create($linkDir)->resolved(),
-            $link,
-        ));
-
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-
-        self::assertFalse($isFulfilled, 'Rejected link pointing outside the codebase.');
-
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $message = sprintf(
+            'The %s directory at %s contains links that point outside the codebase, which is not supported. The first one is %s.',
+            $linkDirName,
+            PathFactory::create($linkDir)->resolved(),
+            $link,
+        );
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 
     public function providerUnfulfilled(): array
@@ -145,7 +143,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     }
 
     /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
      * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
@@ -159,8 +156,8 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      */
     public function testWithHardLink(): void
     {
@@ -179,9 +176,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      */
     public function testWithAbsoluteLink(): void
@@ -202,10 +199,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     }
 
     /**
-     * @covers ::getDefaultUnfulfilledStatusMessage
+     * @covers ::assertIsSupportedFile
      * @covers ::isDescendant
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      * @covers ::linkPointsOutsidePath
      *
      * @dataProvider providerExclusions

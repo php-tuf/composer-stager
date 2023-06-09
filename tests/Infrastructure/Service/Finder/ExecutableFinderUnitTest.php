@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
@@ -14,6 +15,10 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  *
  * @covers ::__construct
  * @covers ::find
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $symfonyExecutableFinder
  */
@@ -30,8 +35,9 @@ final class ExecutableFinderUnitTest extends TestCase
     private function createSut(): ExecutableFinderInterface
     {
         $executableFinder = $this->symfonyExecutableFinder->reveal();
+        $translatorFactory = new TestTranslatableFactory();
 
-        return new ExecutableFinder($executableFinder);
+        return new ExecutableFinder($executableFinder, $translatorFactory);
     }
 
     /** @dataProvider providerFind */
@@ -75,8 +81,6 @@ final class ExecutableFinderUnitTest extends TestCase
     /** @dataProvider providerFindNotFound */
     public function testFindNotFound(string $name): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessageMatches("/{$name}.*found/");
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
             ->shouldBeCalledOnce()
@@ -85,10 +89,12 @@ final class ExecutableFinderUnitTest extends TestCase
             ->find($name)
             ->shouldBeCalledOnce()
             ->willReturn(null);
-
         $sut = $this->createSut();
 
-        $sut->find($name);
+        $message = sprintf('The %s executable cannot be found. Make sure it\'s installed and in the $PATH', $name);
+        self::assertTranslatableException(static function () use ($sut, $name) {
+            $sut->find($name);
+        }, LogicException::class, $message);
     }
 
     public function providerFindNotFound(): array
@@ -102,9 +108,6 @@ final class ExecutableFinderUnitTest extends TestCase
     /** Make sure ::find caches result when Composer is not found. */
     public function testFindNotFoundCaching(): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('The "composer" executable cannot be found. Make sure it\'s installed and in the $PATH');
-
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
             ->willReturn(null);
@@ -113,6 +116,9 @@ final class ExecutableFinderUnitTest extends TestCase
             ->willReturn(null);
         $sut = $this->createSut();
 
-        $sut->find('composer');
+        $message = 'The composer executable cannot be found. Make sure it\'s installed and in the $PATH';
+        self::assertTranslatableException(static function () use ($sut) {
+            $sut->find('composer');
+        }, LogicException::class, $message);
     }
 }

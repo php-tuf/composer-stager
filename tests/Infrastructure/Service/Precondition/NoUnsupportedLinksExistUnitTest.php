@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInter
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinksExist;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinksExist
@@ -63,6 +64,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $noLinksExistOnWindows = $this->noLinksExistOnWindows->reveal();
         $noSymlinksPointOutsideTheCodebase = $this->noSymlinksPointOutsideTheCodebase->reveal();
         $noSymlinksPointToADirectory = $this->noSymlinksPointToADirectory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
         return new NoUnsupportedLinksExist(
             $noAbsoluteSymlinksExist,
@@ -70,6 +72,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
             $noLinksExistOnWindows,
             $noSymlinksPointOutsideTheCodebase,
             $noSymlinksPointToADirectory,
+            $translatableFactory,
         );
     }
 
@@ -96,13 +99,16 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $unfulfilledChild = new TestPrecondition();
-        $previous = new PreconditionException($unfulfilledChild);
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->noAbsoluteSymlinksExist
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willThrow($previous);
+        $sut = $this->createSut();
 
-        $this->doTestUnfulfilled($previous->getMessage());
+        self::assertTranslatableMessage($message, $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions));
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        }, PreconditionException::class);
     }
 }

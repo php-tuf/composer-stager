@@ -2,10 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommitterPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -18,22 +20,23 @@ final class CommitterPreconditions extends AbstractPreconditionsTree implements 
         CommonPreconditionsInterface $commonPreconditions,
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
         StagingDirIsReadyInterface $stagingDirIsReady,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct(...func_get_args());
+        parent::__construct($translatableFactory, $commonPreconditions, $noUnsupportedLinksExist, $stagingDirIsReady);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Committer preconditions';
+        return $this->t('Committer preconditions');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The preconditions for making staged changes live.';
+        return $this->t('The preconditions for making staged changes live.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The preconditions for making staged changes live are fulfilled.';
+        return $this->t('The preconditions for making staged changes live are fulfilled.');
     }
 }

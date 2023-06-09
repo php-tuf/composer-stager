@@ -4,11 +4,16 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 
 /**
@@ -27,28 +32,30 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 {
     protected function createSut(...$children): AbstractPreconditionsTree
     {
+        $translatableFactory = new TestTranslatableFactory();
+
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class (...$children) extends AbstractPreconditionsTree
+        return new class ($translatableFactory, ...$children) extends AbstractPreconditionsTree
         {
             public string $name = 'Name';
             public string $description = 'Description';
             public bool $isFulfilled = true;
             public string $fulfilledStatusMessage = 'Fulfilled';
 
-            public function getName(): string
+            public function getName(): TranslatableInterface
             {
-                return $this->name;
+                return new TestTranslatableMessage($this->name);
             }
 
-            public function getDescription(): string
+            public function getDescription(): TranslatableInterface
             {
-                return $this->description;
+                return new TestTranslatableMessage($this->description);
             }
 
-            protected function getFulfilledStatusMessage(): string
+            protected function getFulfilledStatusMessage(): TranslatableInterface
             {
-                return $this->fulfilledStatusMessage;
+                return new TestTranslatableMessage($this->fulfilledStatusMessage);
             }
         };
     }
@@ -131,56 +138,52 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
     /** @covers ::getLeaves */
     public function testIsFulfilledBubbling(): void
     {
-        $message = 'Lorem ipsum';
-
-        $this->expectException(PreconditionException::class);
-        $this->expectExceptionMessage($message);
+        $message = new TestTranslatableMessage(__METHOD__);
 
         $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
             /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestSpyInterface $spy */
             $spy = $this->prophesize(TestSpyInterface::class);
-            $spy->report()
+            $spy->report('assertIsFulfilled')
                 // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
                 ->shouldBeCalledTimes(2);
             $spy = $spy->reveal();
 
-            return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
+            return new Class($isFulfilled, $message, $spy, new TestTranslator()) extends AbstractPrecondition
             {
                 public function __construct(
                     private readonly bool $isFulfilled,
-                    private readonly string $message,
+                    private readonly TranslatableInterface $message,
                     private readonly TestSpyInterface $spy,
+                    protected TranslatorInterface $translator,
                 ) {
+                    parent::__construct(new TestTranslatableFactory(), $translator);
                 }
 
-                protected function getFulfilledStatusMessage(): string
+                protected function getFulfilledStatusMessage(): TranslatableInterface
                 {
-                    return '';
+                    return new TestTranslatableMessage();
                 }
 
-                protected function getUnfulfilledStatusMessage(): string
+                public function getName(): TranslatableInterface
                 {
-                    return $this->message;
+                    return new TestTranslatableMessage();
                 }
 
-                public function getName(): string
+                public function getDescription(): TranslatableInterface
                 {
-                    return '';
+                    return new TestTranslatableMessage();
                 }
 
-                public function getDescription(): string
-                {
-                    return '';
-                }
-
-                public function isFulfilled(
+                public function assertIsFulfilled(
                     PathInterface $activeDir,
                     PathInterface $stagingDir,
                     ?PathListInterface $exclusions = null,
-                ): bool {
-                    $this->spy->report();
+                ): void {
+                    $this->spy->report('assertIsFulfilled');
 
-                    return $this->isFulfilled;
+                    if (!$this->isFulfilled) {
+                        throw new PreconditionException($this, $this->message);
+                    }
                 }
             };
         };
@@ -235,11 +238,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         );
         // phpcs:enable
 
-        self::assertFalse($sut->isFulfilled($this->activeDir, $this->stagingDir));
+        self::assertFalse($sut->isFulfilled($this->activeDir, $this->stagingDir), 'Unfulfilled leaf status bubbled up properly.');
         self::assertSame($leaves, $sut->getLeaves());
 
-        // This is called last so as not to throw the exception until all other
-        // assertions have been made.
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 }

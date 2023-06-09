@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\StagingDirIsWritableInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -16,22 +18,23 @@ final class StagingDirIsReady extends AbstractPreconditionsTree implements Stagi
     public function __construct(
         StagingDirExistsInterface $stagingDirExists,
         StagingDirIsWritableInterface $stagingDirIsWritable,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct(...func_get_args());
+        parent::__construct($translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Staging directory is ready';
+        return $this->t('Staging directory is ready');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The preconditions for using the staging directory.';
+        return $this->t('The preconditions for using the staging directory.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The staging directory is ready to use.';
+        return $this->t('The staging directory is ready to use.');
     }
 }

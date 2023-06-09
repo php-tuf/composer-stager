@@ -13,4 +13,5 @@ use Exception;
  */
 class IOException extends Exception implements ExceptionInterface
 {
+    use TranslatableExceptionTrait;
 }

@@ -12,18 +12,24 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  *
  * @covers ::__construct
  * @covers ::findFiles
- * @covers ::getDefaultUnfulfilledStatusMessage
- * @covers ::isSupportedFile
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\SymfonyTranslatorProxy
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  *
  * @group no_windows
  */
@@ -41,6 +47,8 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     }
 
     /**
+     * @covers ::assertIsFulfilled
+     * @covers ::assertIsSupportedFile
      * @covers ::isFulfilled
      *
      * @dataProvider providerDoesNotContainLinks
@@ -78,8 +86,8 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::findFiles
-     * @covers ::getUnfulfilledStatusMessage
      * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
@@ -103,17 +111,17 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
         self::assertFalse($isFulfilled, 'Found absolute links.');
         $pattern = sprintf(
-            'The %s directory at "%s" contains absolute links, which is not supported. The first one is "%s".',
+            'The %s directory at %s contains absolute links, which is not supported. The first one is %s.',
             $dirName,
             $dirPath->resolved(),
             $link->resolved(),
         );
-        self::assertSame($pattern, $statusMessage, 'Returned correct status message.');
+        self::assertTranslatableMessage($pattern, $statusMessage, 'Returned correct status message.');
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::findFiles
-     * @covers ::getUnfulfilledStatusMessage
      * @covers ::isFulfilled
      *
      * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
@@ -189,8 +197,8 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::isFulfilled
-     * @covers ::isSupportedFile
      */
     public function testWithHardLink(): void
     {
@@ -208,6 +216,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     }
 
     /**
+     * @covers ::assertIsSupportedFile
      * @covers ::isFulfilled
      *
      * @dataProvider providerExclusions

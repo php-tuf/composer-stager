@@ -16,6 +16,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 
@@ -23,6 +24,8 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner
  *
  * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner::__construct
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
@@ -109,15 +112,16 @@ final class BeginnerUnitTest extends TestCase
     /** @covers ::begin */
     public function testBeginPreconditionsUnfulfilled(): void
     {
-        $this->expectException(PreconditionException::class);
-
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
-            ->shouldBeCalledOnce()
-            ->willThrow(PreconditionException::class);
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->begin($this->activeDir, $this->stagingDir);
+        }, PreconditionException::class, $message);
     }
 
     /**
@@ -125,30 +129,30 @@ final class BeginnerUnitTest extends TestCase
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions(ExceptionInterface $exception, string $message): void
+    public function testExceptions(ExceptionInterface $exception): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage($message);
-
-        /** @noinspection PhpParamsInspection */
         $this->fileSyncer
             ->sync(Argument::cetera())
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(function () use ($sut) {
+            $sut->begin($this->activeDir, $this->stagingDir);
+        }, RuntimeException::class, $exception->getMessage(), $exception::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             [
-                'exception' => new InvalidArgumentException('one'),
-                'message' => 'one',
+                'exception' => new InvalidArgumentException(
+                    new TestTranslatableMessage('one'),
+                ),
             ],
             [
-                'exception' => new IOException('two'),
-                'message' => 'two',
+                'exception' => new IOException(
+                    new TestTranslatableMessage('two'),
+                ),
             ],
         ];
     }

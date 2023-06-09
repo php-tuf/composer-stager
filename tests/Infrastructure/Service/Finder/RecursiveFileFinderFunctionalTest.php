@@ -13,8 +13,10 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  *
  * @covers ::__construct
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath

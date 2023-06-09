@@ -15,21 +15,52 @@ parameters:
         - src
         - tests
     treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
         # Production code.
+        -
+            message: '#Built-in or third party exception "\\InvalidArgumentException" cannot be thrown from public methods.*#'
+            path: src/Infrastructure/Service/Translation/SymfonyTranslatorProxy.php
+        -
+            message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
+            paths:
+                - src/Infrastructure/Service/Translation/Translator.php
+                - src/Infrastructure/Value/Translation/TranslationParameters.php
         -
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
         -
-            message: '#Concrete class .* be marked "@.*"#'
-            path: src/Infrastructure/Value/Path/PathList.php
+            message: '#(Concrete class|Interface) .* be marked "@.*"#'
+            paths:
+                - src/Infrastructure/Service/Translation/SymfonyTranslatorProxyInterface.php
+                - src/Infrastructure/Value/Path/PathList.php
+                - src/Infrastructure/Value/Translation/TranslatableMessage.php
+                - src/Infrastructure/Value/Translation/TranslationParameters.php
         -
-            message: '#Parameter \#1 ...\$children of method .*AbstractPreconditionsTree::__construct\(\) expects .*PreconditionInterface, mixed given.#'
-            path: src/Infrastructure/Service/Precondition
+            message: '#In method ".*", caught "Throwable" must be rethrown.*#'
+            path: src/Infrastructure/Service/Translation/Translator.php
+        -
+            message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
+            path: src/Infrastructure/Service/Translation/SymfonyTranslatorProxy.php
+        -
+            message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
+            path: src/Domain/Exception/PreconditionException.php
 
         # Test code.
         -
             message: '#Access to an undefined property.*#'
+            path: tests
+        -
+            message: '#Call to an undefined method .*ObjectProphecy.*::.*\(\).#'
+            path: tests
+        -
+            message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
+            path: tests
+        -
+            message: '#Cannot call method .*\(\) on .*MethodProphecy\|.*.#'
+            path: tests
+        -
+            message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
             path: tests
         -
             message: '#.*caught .* must be rethrown.*#'
@@ -53,9 +84,12 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: d51701ad50af707f469c981c3702bdd0
+    preconditionSystemHash: 83b365193518485f9d936ec93c8f4792
 
+# https://phpstan.org/developing-extensions/extension-types
 rules:
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoCallingTranslatableFactoryDirectlyRule # Forbids calling TranslatableFactory::create() directly.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoInstantiatingTranslatableDirectlyRule # Forbids instantiating translatables directly.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
@@ -72,6 +106,8 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslatablePhpDocRule # Ensures that the DocBlocks for TranslatableMessage creation methods stay in sync.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslationParametersPhpDocRule # Ensures that the DocBlocks for TranslationParameters creation methods stay in sync.
 
 services:
     -

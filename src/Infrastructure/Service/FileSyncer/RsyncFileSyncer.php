@@ -5,6 +5,8 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -20,10 +22,14 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  */
 final class RsyncFileSyncer implements RsyncFileSyncerInterface
 {
+    use TranslatableAwareTrait;
+
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly RsyncRunnerInterface $rsync,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
+        $this->setTranslatableFactory($translatableFactory);
     }
 
     /**
@@ -51,16 +57,16 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         $exclusions = $exclusions->getAll();
 
         if ($sourceResolved === $destinationResolved) {
-            throw new LogicException(sprintf(
-                'The source and destination directories cannot be the same at "%s"',
-                $sourceResolved,
+            throw new LogicException($this->t(
+                'The source and destination directories cannot be the same at %path',
+                $this->p(['%path' => $sourceResolved]),
             ));
         }
 
         if (!$this->filesystem->exists($source)) {
-            throw new LogicException(sprintf(
-                'The source directory does not exist at "%s"',
-                $sourceResolved,
+            throw new LogicException($this->t(
+                'The source directory does not exist at %path',
+                $this->p(['%path' => $sourceResolved]),
             ));
         }
 
@@ -101,7 +107,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         try {
             $this->rsync->run($command, $callback);
         } catch (ExceptionInterface $e) {
-            throw new IOException($e->getMessage(), 0, $e);
+            throw new IOException($e->getTranslatableMessage(), 0, $e);
         }
     }
 

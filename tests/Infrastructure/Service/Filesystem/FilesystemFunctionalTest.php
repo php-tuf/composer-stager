@@ -14,12 +14,17 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  * @uses \Symfony\Component\Filesystem\Filesystem
  */
 final class FilesystemFunctionalTest extends TestCase
@@ -104,32 +109,30 @@ final class FilesystemFunctionalTest extends TestCase
         $path = PathFactory::create(self::TEST_ENV);
         $file = PathFactory::create('file.txt', $path);
         touch($file->resolved());
-
-        $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The path does not exist or is not a directory at "%s"',
+        $message = sprintf(
+            'The path does not exist or is not a directory at %s',
             $file->resolved(),
-        ));
-
+        );
         $sut = $this->createSut();
 
-        $sut->isDirEmpty($file);
+        self::assertTranslatableException(static function () use ($sut, $file) {
+            $sut->isDirEmpty($file);
+        }, IOException::class, $message);
     }
 
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyError(): void
     {
         $path = PathFactory::create('non-existent');
-
-        $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The path does not exist or is not a directory at "%s"',
+        $message = sprintf(
+            'The path does not exist or is not a directory at %s',
             $path->resolved(),
-        ));
-
+        );
         $sut = $this->createSut();
 
-        $sut->isDirEmpty($path);
+        self::assertTranslatableException(static function () use ($sut, $path) {
+            $sut->isDirEmpty($path);
+        }, IOException::class, $message);
     }
 
     /**
@@ -289,10 +292,10 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertEquals($expectedRaw, $symlinkTarget->raw(), 'Got the correct raw target value.');
         self::assertEquals($expectedResolved, $symlinkTarget->resolved(), 'Got the correct resolved target value.');
 
-        $this->expectException(IOException::class);
-        $message = sprintf('The path does not exist or is not a symlink at "%s"', $hardLinkPath->resolved());
-        $this->expectExceptionMessage($message);
-        $sut->readLink($hardLinkPath);
+        $message = sprintf('The path does not exist or is not a symlink at %s', $hardLinkPath->resolved());
+        self::assertTranslatableException(static function () use ($sut, $hardLinkPath) {
+            $sut->readLink($hardLinkPath);
+        }, IOException::class, $message);
     }
 
     public function providerReadlink(): array
@@ -326,26 +329,24 @@ final class FilesystemFunctionalTest extends TestCase
         $file = PathFactory::create('file.txt', self::sourceDir());
         touch($file->resolved());
         assert(file_exists($file->resolved()));
-
-        $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $file->resolved()));
-
         $sut = $this->createSut();
 
-        $sut->readLink($file);
+        $message = sprintf('The path does not exist or is not a symlink at %s', $file->resolved());
+        self::assertTranslatableException(static function () use ($sut, $file) {
+            $sut->readLink($file);
+        }, IOException::class, $message);
     }
 
     /** @covers ::readLink */
     public function testReadlinkOnNonExistentFile(): void
     {
         $path = PathFactory::create('non-existent_file.txt', self::sourceDir());
-
-        $this->expectException(IOException::class);
-        $this->expectExceptionMessage(sprintf('The path does not exist or is not a symlink at "%s"', $path->resolved()));
-
         $sut = $this->createSut();
 
-        $sut->readLink($path);
+        $message = sprintf('The path does not exist or is not a symlink at %s', $path->resolved());
+        self::assertTranslatableException(static function () use ($sut, $path) {
+            $sut->readLink($path);
+        }, IOException::class, $message);
     }
 
     /**

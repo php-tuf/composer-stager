@@ -4,11 +4,14 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
@@ -18,6 +21,9 @@ use Symfony\Component\Process\Process;
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  *
  * @covers ::__construct
+ *
+ * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
@@ -49,17 +55,19 @@ final class AbstractRunnerUnitTest extends TestCase
             ->create(Argument::cetera())
             ->willReturn($process);
         $processFactory = $this->processFactory->reveal();
+        $translatableFactory = new TestTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class ($executableFinder, $executableName, $processFactory) extends AbstractRunner
+        return new class ($executableFinder, $executableName, $processFactory, $translatableFactory) extends AbstractRunner
         {
             public function __construct(
                 ExecutableFinderInterface $executableFinder,
                 private readonly string $executableName,
                 ProcessFactoryInterface $processFactory,
+                TranslatableFactoryInterface $translatableFactory,
             ) {
-                parent::__construct($executableFinder, $processFactory);
+                parent::__construct($executableFinder, $processFactory, $translatableFactory);
             }
 
             protected function executableName(): string
@@ -138,17 +146,16 @@ final class AbstractRunnerUnitTest extends TestCase
      */
     public function testRunFailedException(): void
     {
-        $this->expectException(RuntimeException::class);
-
-        $exception = $this->prophesize(SymfonyProcessFailedException::class);
-        $exception = $exception->reveal();
+        $previous = $this->prophesize(SymfonyProcessFailedException::class)->reveal();
         $this->process
             ->mustRun(Argument::cetera())
-            ->willThrow($exception);
+            ->willThrow($previous);
 
         $sut = $this->createSut();
 
-        $sut->run([self::COMMAND_NAME]);
+        self::assertTranslatableException(static function () use ($sut) {
+            $sut->run([self::COMMAND_NAME]);
+        }, RuntimeException::class, null, $previous::class);
     }
 
     /**
@@ -157,16 +164,14 @@ final class AbstractRunnerUnitTest extends TestCase
      */
     public function testRunFindExecutableException(): void
     {
-        $this->expectException(IOException::class);
-
-        $exception = $this->prophesize(IOException::class);
-        $exception = $exception->reveal();
+        $previous = new IOException(new TestTranslatableMessage());
         $this->executableFinder
             ->find(Argument::any())
-            ->willThrow($exception);
-
+            ->willThrow($previous);
         $sut = $this->createSut();
 
-        $sut->run([self::COMMAND_NAME]);
+        self::assertTranslatableException(static function () use ($sut) {
+            $sut->run([self::COMMAND_NAME]);
+        }, $previous::class);
     }
 }

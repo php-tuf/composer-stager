@@ -2,10 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
+use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -18,22 +20,28 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
+        TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct(...func_get_args());
+        parent::__construct(
+            $translatableFactory,
+            $activeAndStagingDirsAreDifferent,
+            $activeDirIsReady,
+            $composerIsAvailable,
+        );
     }
 
-    public function getName(): string
+    public function getName(): TranslatableInterface
     {
-        return 'Common preconditions';
+        return $this->t('Common preconditions');
     }
 
-    public function getDescription(): string
+    public function getDescription(): TranslatableInterface
     {
-        return 'The preconditions common to all operations.';
+        return $this->t('The preconditions common to all operations.');
     }
 
-    protected function getFulfilledStatusMessage(): string
+    protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return 'The common preconditions are fulfilled.';
+        return $this->t('The common preconditions are fulfilled.');
     }
 }
