@@ -22,7 +22,7 @@ trait TranslatableAwareTrait
      * @param string $message
      *   A message containing optional placeholders corresponding to parameters (next). Example:
      *   ```php
-     *   $message = 'Email %name at <a href="mailto:%email">%email</a>.';
+     *   $message = 'Hello, %first_name %last_name.';
      *   ```
      * @param \PhpTuf\ComposerStager\Domain\Value\Translation\TranslationParametersInterface|null $parameters
      *   Parameters for the message.
@@ -54,8 +54,8 @@ trait TranslatableAwareTrait
      *   Values must be strings. Example:
      *   ```php
      *   $parameters = [
-     *     '%name' => 'John',
-     *     '%email' => 'john@example.com',
+     *     '%first_name' => 'John',
+     *     '%last_name' => 'Doe',
      *   ];
      *   ```
      */

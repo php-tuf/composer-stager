@@ -24,7 +24,7 @@ final class TranslatableMessage implements TranslatableInterface
      * @param string $message
      *   A message containing optional placeholders corresponding to parameters (next). Example:
      *   ```php
-     *   $message = 'Email %name at <a href="mailto:%email">%email</a>.';
+     *   $message = 'Hello, %first_name %last_name.';
      *   ```
      * @param \PhpTuf\ComposerStager\Domain\Value\Translation\TranslationParametersInterface|null $parameters
      *   Parameters for the message.
