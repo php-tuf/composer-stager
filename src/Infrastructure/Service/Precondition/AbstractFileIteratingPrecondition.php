@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
@@ -38,7 +38,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     ): void;
 
     public function __construct(
-        protected readonly RecursiveFileFinderInterface $fileFinder,
+        protected readonly FileFinderInterface $fileFinder,
         protected readonly FilesystemInterface $filesystem,
         protected readonly PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,

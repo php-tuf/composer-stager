@@ -20,7 +20,7 @@ use UnexpectedValueException;
  *
  * @internal Don't instantiate this class directly. Get it from the service container via its interface.
  */
-final class RecursiveFileFinder implements RecursiveFileFinderInterface
+final class FileFinder implements FileFinderInterface
 {
     use TranslatableAwareTrait;
 

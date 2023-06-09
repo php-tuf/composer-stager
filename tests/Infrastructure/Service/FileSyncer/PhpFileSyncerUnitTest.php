@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
@@ -29,7 +29,7 @@ use ReflectionClass;
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
- * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory $translatableFactory
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
@@ -40,7 +40,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     {
         $this->source = new TestPath(self::ACTIVE_DIR);
         $this->destination = new TestPath(self::STAGING_DIR);
-        $this->fileFinder = $this->prophesize(RecursiveFileFinderInterface::class);
+        $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())

@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
@@ -24,7 +24,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     use TranslatableAwareTrait;
 
     public function __construct(
-        private readonly RecursiveFileFinderInterface $fileFinder,
+        private readonly FileFinderInterface $fileFinder,
         private readonly FilesystemInterface $filesystem,
         private readonly PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,

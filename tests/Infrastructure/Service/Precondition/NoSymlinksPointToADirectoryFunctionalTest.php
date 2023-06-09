@@ -23,7 +23,7 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinder
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition

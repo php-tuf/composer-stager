@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
  *
  * @api
  */
-interface RecursiveFileFinderInterface
+interface FileFinderInterface
 {
     /**
      * Recursively finds all files "underneath" or "inside" a given directory.

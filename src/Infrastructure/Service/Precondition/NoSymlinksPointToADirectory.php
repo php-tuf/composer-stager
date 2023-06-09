@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\RecursiveFileFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 
 /**
  * @package Precondition
@@ -24,7 +24,7 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
     NoSymlinksPointToADirectoryInterface
 {
     public function __construct(
-        RecursiveFileFinderInterface $fileFinder,
+        FileFinderInterface $fileFinder,
         private readonly FileSyncerInterface $fileSyncer,
         FilesystemInterface $filesystem,
         PathFactoryInterface $pathFactory,
