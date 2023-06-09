@@ -16,6 +16,9 @@
     <file>src</file>
     <file>tests</file>
 
+    <!-- Custom sniffs -->
+    <rule ref="phpcs/phpcs.xml"/>
+
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
         <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
@@ -240,9 +243,6 @@
     <rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
-
-    <!-- Custom sniffs -->
-    <rule ref="phpcs/phpcs.xml"/>
 
     <!-- Exclusions for test classes. -->
     <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses"><exclude-pattern>tests</exclude-pattern></rule>
