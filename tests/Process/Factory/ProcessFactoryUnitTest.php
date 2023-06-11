@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process;
+namespace PhpTuf\ComposerStager\Tests\Process\Factory;
 
-use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory;
+use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory
  *
  * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
  */

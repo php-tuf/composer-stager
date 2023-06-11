@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterfa
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\ProcessFailedException;

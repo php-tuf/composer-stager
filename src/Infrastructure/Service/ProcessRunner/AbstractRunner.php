@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 
