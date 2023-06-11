@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
+use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
  * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
 final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
 {

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem;
+namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -17,9 +17,9 @@ use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem::__construct
+ * @covers \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait

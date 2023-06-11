@@ -1,25 +1,25 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Filesystem;
+namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
@@ -62,7 +62,7 @@ final class FilesystemFunctionalTest extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem $filesystem */
+        /** @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem $filesystem */
         $filesystem = $container->get(Filesystem::class);
 
         return $filesystem;
