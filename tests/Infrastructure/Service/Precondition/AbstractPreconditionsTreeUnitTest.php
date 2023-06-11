@@ -4,17 +4,17 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree

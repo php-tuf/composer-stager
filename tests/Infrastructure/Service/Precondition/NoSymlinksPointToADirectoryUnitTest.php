@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncerInterfa
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -25,7 +25,7 @@ use Prophecy\Argument;
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList

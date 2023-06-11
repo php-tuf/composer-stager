@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveAndStagingDirsAreDif
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommonPreconditions;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommonPreconditions

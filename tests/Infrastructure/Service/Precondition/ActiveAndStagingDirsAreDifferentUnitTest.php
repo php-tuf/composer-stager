@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
@@ -17,10 +17,10 @@ use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  *
- * @property \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
+ * @property \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
  */
 final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase
 {

@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage;
+use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use ReflectionClass;
 
@@ -19,7 +19,7 @@ final class ExceptionUnitTest extends TestCase
      * @covers \PhpTuf\ComposerStager\Domain\Exception\LogicException
      * @covers \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
      *
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
+     * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
      *
      * @dataProvider providerBasicFunctionality
      */

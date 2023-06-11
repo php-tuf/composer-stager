@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Translation\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable

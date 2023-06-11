@@ -3,13 +3,13 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Service\Translation\TranslatorInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
 
 /**
  * @package Precondition

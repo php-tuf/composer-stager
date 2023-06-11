@@ -6,9 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory;
-use PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage;
+use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory;
+use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /**

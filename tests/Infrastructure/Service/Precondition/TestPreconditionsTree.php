@@ -3,11 +3,11 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
-use PhpTuf\ComposerStager\Domain\Value\Translation\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Translation\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
 {

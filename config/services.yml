@@ -10,6 +10,7 @@ services:
         public: true
         exclude:
             - '../src/Domain/Exception'
+            - '../src/*/*/Value'
             - '../src/*/Value'
 
     PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:

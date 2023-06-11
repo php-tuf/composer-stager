@@ -16,15 +16,15 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Translation\Translator
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Translation\TranslationParameters
  * @uses \Symfony\Component\Filesystem\Filesystem
  */
 final class FilesystemFunctionalTest extends TestCase

@@ -3,14 +3,14 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Process;
 
 use PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Translation\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Symfony\Component\Process\Process;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
  *
- * @uses \PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
  */
 final class ProcessFactoryUnitTest extends TestCase
 {
