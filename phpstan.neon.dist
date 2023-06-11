@@ -33,7 +33,7 @@ parameters:
             message: '#(Concrete class|Interface) .* be marked "@.*"#'
             paths:
                 - src/Infrastructure/Translation/Service/SymfonyTranslatorProxyInterface.php
-                - src/Infrastructure/Value/Path/PathList.php
+                - src/Infrastructure/Path/Value/PathList.php
                 - src/Infrastructure/Translation/Value/TranslatableMessage.php
                 - src/Infrastructure/Translation/Value/TranslationParameters.php
         -

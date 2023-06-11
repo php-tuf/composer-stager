@@ -7,11 +7,11 @@ use Closure;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -24,14 +24,14 @@ use ReflectionClass;
  * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
  *
  * @property \PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
+ * @property \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
- * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $destination
- * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $source
+ * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
+ * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
  * @property \PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory $translatableFactory
  */
 final class PhpFileSyncerUnitTest extends TestCase

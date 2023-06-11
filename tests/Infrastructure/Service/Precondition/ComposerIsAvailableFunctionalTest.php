@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Symfony\Component\DependencyInjection\Definition;
@@ -15,8 +15,8 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * @coversNothing
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
  * @property string $executableFinderClass
  */
 final class ComposerIsAvailableFunctionalTest extends TestCase

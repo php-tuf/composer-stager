@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Value\Path;
+namespace PhpTuf\ComposerStager\Domain\Path\Value;
 
 /**
  * Handles a list of path strings.

@@ -5,14 +5,14 @@ namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPathList;
+use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
+use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface $exclusions
- * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface $exclusions
+ * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
+ * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
 abstract class PreconditionTestCase extends TestCase
 {

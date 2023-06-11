@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
@@ -14,13 +14,13 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder $fileFinder
  */

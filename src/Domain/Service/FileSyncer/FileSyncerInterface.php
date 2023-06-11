@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\FileSyncer;
 
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
  * Recursively syncs files from one directory to another.
@@ -24,11 +24,11 @@ interface FileSyncerInterface
      * Excluded paths will be completely ignored and neither copied to nor deleted
      * from the destination. If the destination does not exist, it will be created.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $source
      *   The directory to sync files from.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $destination
      *   The directory to sync files to.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the source directory. The destination
      *   directory is automatically excluded in order to prevent infinite
      *   recursion if it is a descendant of the source directory, i.e., if it is

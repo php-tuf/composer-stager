@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path;
+namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 
 final class TestPathList implements PathListInterface
 {

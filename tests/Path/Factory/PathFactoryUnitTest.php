@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Factory\Path;
+namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path\TestPath;
+use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  *
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
  */
 final class PathFactoryUnitTest extends TestCase
 {

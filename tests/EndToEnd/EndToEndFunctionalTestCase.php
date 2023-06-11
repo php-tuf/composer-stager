@@ -8,9 +8,9 @@ use PhpTuf\ComposerStager\Domain\Core\Committer;
 use PhpTuf\ComposerStager\Domain\Core\Stager;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**

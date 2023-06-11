@@ -4,14 +4,14 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\Filesystem\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
  * @package Precondition
@@ -23,9 +23,9 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     /**
      * @param string $codebaseName
      *   The name of the codebase in question, i.e., "active" or "staging".
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $codebaseRoot
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $codebaseRoot
      *   The codebase root directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $file
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $file
      *   The file in question.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException

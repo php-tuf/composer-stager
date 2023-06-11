@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\Filesystem;
 
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
  * Provides basic utilities for interacting with the file system.
@@ -21,9 +21,9 @@ interface FilesystemInterface
      * If the file already exists at the destination it will be overwritten.
      * Copying directories is not supported.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $source
      *   The file to copy.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $destination
      *   The file to copy to. If it does not exist it will be created.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
@@ -37,7 +37,7 @@ interface FilesystemInterface
     /**
      * Determines whether the given path exists.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      */
     public function exists(PathInterface $path): bool;
@@ -49,7 +49,7 @@ interface FilesystemInterface
      * between directories and LINKS to directories. In other words, if the path
      * is a link, even if the target is a directory, this method will return false.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
@@ -75,7 +75,7 @@ interface FilesystemInterface
      * between regular files and LINKS to files. In other words, if the path is
      * a link, even if the target is a regular file, this method will return false.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
@@ -88,7 +88,7 @@ interface FilesystemInterface
      *
      * Symbolic links (symlinks) are distinct from hard links and do not count.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
@@ -102,7 +102,7 @@ interface FilesystemInterface
      *
      * Symbolic links (symlinks) and hard links both count.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
@@ -115,7 +115,7 @@ interface FilesystemInterface
      *
      * Hard links are distinct from symbolic links (symlinks) and do not count.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
@@ -127,7 +127,7 @@ interface FilesystemInterface
     /**
      * Determines whether the given path is writable.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to test.
      */
     public function isWritable(PathInterface $path): bool;
@@ -135,7 +135,7 @@ interface FilesystemInterface
     /**
      * Recursively creates a directory at the given path.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   The directory to create.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
@@ -154,7 +154,7 @@ interface FilesystemInterface
      * absolute raw path string. In other words, ALL link paths on Windows will
      * behave like absolute links, whether they really are or not.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   The link path.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
@@ -166,7 +166,7 @@ interface FilesystemInterface
     /**
      * Removes the given path.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $path
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to remove.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.

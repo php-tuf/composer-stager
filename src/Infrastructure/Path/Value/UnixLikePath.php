@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
+namespace PhpTuf\ComposerStager\Infrastructure\Path\Value;
 
 /**
  * Handles a Unix-like filesystem path string.
  *
  * For all practical purposes, that means anything but Windows.
  *
- * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @see \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @see https://en.wikipedia.org/wiki/Unix-like
  *
  * @package Path

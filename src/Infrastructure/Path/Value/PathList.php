@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
+namespace PhpTuf\ComposerStager\Infrastructure\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 
 /**
  * @package Path

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Value\Path;
+namespace PhpTuf\ComposerStager\Infrastructure\Path\Value;
 
 /**
  * Handles a Windows filesystem path string.
  *
- * @see \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @see \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  *
  * @package Path
  *

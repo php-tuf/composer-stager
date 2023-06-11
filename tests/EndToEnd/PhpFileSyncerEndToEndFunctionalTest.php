@@ -14,8 +14,12 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Core\Committer
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Process\ProcessFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
@@ -49,10 +53,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  */
 final class PhpFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {

@@ -3,18 +3,18 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
 
 use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $destination
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $source
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $destination
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $source
  */
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {

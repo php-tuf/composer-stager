@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
@@ -13,7 +13,11 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  * @covers ::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Filesystem\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
@@ -24,13 +28,9 @@ use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath
  *
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
+ * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
  */
 final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

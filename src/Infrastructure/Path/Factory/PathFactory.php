@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Factory\Path;
+namespace PhpTuf\ComposerStager\Infrastructure\Path\Factory;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\UnixLikePath;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\WindowsPath;
 
 /**
  * @package Path

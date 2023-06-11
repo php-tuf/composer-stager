@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core;
 
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
 
 /**
  * Makes the staged changes live by syncing the active directory with the staging directory.
@@ -19,11 +19,11 @@ interface CommitterInterface
     /**
      * Commits staged changes to the active directory.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
      *   The staging directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
      *   The active directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the staging directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback

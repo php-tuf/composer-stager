@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core;
 
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
 
 /**
  * Removes the staging directory.
@@ -18,9 +18,9 @@ interface CleanerInterface
     /**
      * Removes the staging directory.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
      *   The active directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
      *   The staging directory.
      * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.

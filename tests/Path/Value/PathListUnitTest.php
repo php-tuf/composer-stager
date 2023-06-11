@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Value\Path;
+namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList::__construct
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList::__construct
  */
 final class PathListUnitTest extends TestCase
 {

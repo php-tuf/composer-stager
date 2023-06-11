@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
 
 use FilesystemIterator;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Value\Path\PathList;
+use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
