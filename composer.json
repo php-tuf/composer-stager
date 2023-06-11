@@ -95,7 +95,7 @@
         "fast": "phpunit --exclude-group=slow,windows_only",
         "fix": "@phpcbf",
         "functional": "phpunit --testsuite=functional --exclude-group=windows_only",
-        "lint": "parallel-lint --no-progress bin/composer-stage src tests",
+        "lint": "parallel-lint --no-progress src tests",
         "md": "@phpmd",
         "phpcbf": "phpcbf",
         "phpcs": "phpcs -s",
