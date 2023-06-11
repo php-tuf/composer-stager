@@ -106,19 +106,21 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\NoNonInterfacePublicMethodsRule # Forbids public methods that are not on an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\APIAnnotationRule # Enforces "@api" and "@internal" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
+    # @todo Re-enable this after refactoring.
+    # - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslatablePhpDocRule # Ensures that the DocBlocks for TranslatableMessage creation methods stay in sync.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslationParametersPhpDocRule # Ensures that the DocBlocks for TranslationParameters creation methods stay in sync.
 
 services:
-    -
-        # Ensures that precondition system diagrams stay current.
-        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
-        arguments:
-            preconditionSystemHash: %preconditionSystemHash%
-        tags:
-            - phpstan.rules.rule
+    # @todo Re-enable this after refactoring.
+    # -
+    #     # Ensures that precondition system diagrams stay current.
+    #     class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
+    #     arguments:
+    #         preconditionSystemHash: %preconditionSystemHash%
+    #     tags:
+    #         - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
         class: PhpTuf\ComposerStager\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
