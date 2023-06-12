@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Service\Finder;
+namespace PhpTuf\ComposerStager\Infrastructure\Finder\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;

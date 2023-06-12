@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
  *
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
@@ -16,7 +17,6 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  *

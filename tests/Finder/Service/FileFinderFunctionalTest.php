@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder;
+namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
  *
  * @covers ::__construct
  *
@@ -22,7 +22,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder $fileFinder
+ * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder $fileFinder
  */
 final class FileFinderFunctionalTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class FileFinderFunctionalTest extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder $fileFinder */
+        /** @var \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder $fileFinder */
         $fileFinder = $container->get(FileFinder::class);
 
         return $fileFinder;

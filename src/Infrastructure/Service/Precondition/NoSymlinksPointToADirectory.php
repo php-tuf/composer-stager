@@ -12,8 +12,8 @@ use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterfac
 use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncerInterface;
+use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 
 /**
  * @package Precondition

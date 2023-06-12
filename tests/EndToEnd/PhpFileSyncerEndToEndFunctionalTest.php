@@ -15,6 +15,8 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Domain\Core\Stager
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
@@ -22,8 +24,6 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree

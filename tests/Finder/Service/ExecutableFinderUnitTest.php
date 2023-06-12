@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Finder;
+namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder;
+use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\Finder\ExecutableFinder
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder
  *
  * @covers ::__construct
  * @covers ::find

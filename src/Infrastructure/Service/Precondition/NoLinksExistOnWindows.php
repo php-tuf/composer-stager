@@ -10,9 +10,9 @@ use PhpTuf\ComposerStager\Domain\Service\Precondition\NoLinksExistOnWindowsInter
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Host\Service\HostInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 
 /**
  * @package Precondition
