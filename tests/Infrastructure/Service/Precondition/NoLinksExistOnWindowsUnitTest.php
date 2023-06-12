@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\Precondition;
 
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface;
+use PhpTuf\ComposerStager\Infrastructure\Host\Service\HostInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Tests\Infrastructure\Service\Host\TestHost;
+use PhpTuf\ComposerStager\Tests\Host\Service\TestHost;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use Prophecy\Argument;
@@ -26,9 +26,9 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Infrastructure\Host\Service\HostInterface $host
  * @property \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
- * @property \PhpTuf\ComposerStager\Infrastructure\Service\Host\HostInterface $host
  */
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {

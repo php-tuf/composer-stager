@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWind
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
@@ -21,7 +22,6 @@ use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWind
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory

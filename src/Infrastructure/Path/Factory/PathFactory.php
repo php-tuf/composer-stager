@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Path\Factory;
 
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath;
-use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 
 /**
  * @package Path

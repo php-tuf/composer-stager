@@ -7,8 +7,8 @@ use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage

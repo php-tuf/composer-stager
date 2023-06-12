@@ -14,12 +14,12 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Host\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinder $fileFinder
