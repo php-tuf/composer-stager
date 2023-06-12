@@ -22,8 +22,8 @@ final class AlphabeticallySortedTagsSniff implements Sniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        foreach (self::TAGS as $tag) {
-            $this->processTag($phpcsFile, $stackPtr, $tag);
+        foreach (self::TAGS as $tagName) {
+            $this->processTag($phpcsFile, $stackPtr, $tagName);
         }
     }
 
@@ -32,7 +32,7 @@ final class AlphabeticallySortedTagsSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         $docBlock = $tokens[$stackPtr];
-        //$originalCoversTagsPtrs = [];
+        $originalCoversTagValuePtrs = [];
         $originalCoversTagValues = [];
         $previousCoversTagContent = '';
         $fix = false;
@@ -51,7 +51,7 @@ final class AlphabeticallySortedTagsSniff implements Sniff
             $tagValuePtr = $phpcsFile->findNext(T_DOC_COMMENT_STRING, $tagPtr);
             $tagValue = $tokens[$tagValuePtr]['content'];
 
-            //$originalCoversTagPtrs[] = $tagValuePtr;
+            $originalCoversTagValuePtrs[] = $tagValuePtr;
             $originalCoversTagValues[] = $tagValue;
 
             // If the current tag should be before the previous one.
@@ -60,15 +60,13 @@ final class AlphabeticallySortedTagsSniff implements Sniff
 
                 // Only report the first error found.
                 if ($errorsFound === 1) {
-                    // @todo Why does this always come back as false?
-                    //$fix = $phpcsFile->addFixableError(sprintf(
-                    $phpcsFile->addError(sprintf(
+                    $fix = $phpcsFile->addFixableError(sprintf(
                         '%s annotations should be sorted alphabetically. The first wrong one is %s.',
                         $tagName,
                         $tagValue,
                     ), $tagPtr, sprintf(
                         'IncorrectlyOrdered%sTags',
-                        ucfirst(trim($tagName, '@')),
+                        ucfirst(ltrim($tagName, '@')),
                     ));
                 }
             }
@@ -84,8 +82,25 @@ final class AlphabeticallySortedTagsSniff implements Sniff
             return;
         }
 
+        $this->fix($originalCoversTagValues, $originalCoversTagValuePtrs, $phpcsFile);
+    }
+
+    private function fix(array $originalCoversTagValues, array $originalCoversTagValuePtrs, File $phpcsFile): void
+    {
         // Sort the tags.
-        $sortedCoversTagsContents = $originalCoversTagValues;
-        arsort($sortedCoversTagsContents);
+        $sortedCoversTagValues = $originalCoversTagValues;
+        asort($sortedCoversTagValues);
+
+        // Associate the original positions with their new values.
+        $newCoversTagValues = array_combine($originalCoversTagValuePtrs, $sortedCoversTagValues);
+
+        $phpcsFile->fixer->beginChangeset();
+
+        // Replace the original tokens with their newly-sorted values.
+        foreach ($newCoversTagValues as $originalPtr => $newValue) {
+            $phpcsFile->fixer->replaceToken($originalPtr, $newValue);
+        }
+
+        $phpcsFile->fixer->endChangeset();
     }
 }
