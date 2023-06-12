@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -28,7 +28,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */

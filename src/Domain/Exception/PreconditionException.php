@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Exception;
 
-use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
 use RuntimeException;
 use Throwable;

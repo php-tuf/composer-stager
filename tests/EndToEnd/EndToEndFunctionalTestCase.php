@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**

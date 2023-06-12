@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
@@ -27,7 +27,7 @@ use Prophecy\Argument;
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir

@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\PreconditionInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 

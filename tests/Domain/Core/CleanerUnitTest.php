@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\CleanerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
@@ -25,7 +25,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Service\Precondition\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */

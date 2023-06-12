@@ -23,30 +23,30 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ActiveAndStagingDirsAreDifferent
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ActiveDirExists
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ActiveDirIsReady
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ActiveDirIsWritable
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\BeginnerPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\CleanerPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\CommitterPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\CommonPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ComposerIsAvailable
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoHardLinksExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoLinksExistOnWindows
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointOutsideTheCodebase
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToADirectory
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoUnsupportedLinksExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagerPreconditions
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirDoesNotExist
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirExists
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsReady
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractFileIteratingPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\AbstractPreconditionsTree
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveAndStagingDirsAreDifferent
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirExists
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsReady
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ActiveDirIsWritable
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\BeginnerPreconditions
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CleanerPreconditions
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommitterPreconditions
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\CommonPreconditions
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\ComposerIsAvailable
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoHardLinksExist
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoLinksExistOnWindows
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointOutsideTheCodebase
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoSymlinksPointToADirectory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoUnsupportedLinksExist
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagerPreconditions
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirDoesNotExist
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirExists
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsReady
- * @uses \PhpTuf\ComposerStager\Infrastructure\Service\Precondition\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy

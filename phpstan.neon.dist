@@ -28,7 +28,7 @@ parameters:
                 - src/Infrastructure/Translation/Value/TranslationParameters.php
         -
             message: '#Cannot access offset .(application|name). on mixed.#'
-            path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
+            path: src/Infrastructure/Precondition/Service/ComposerIsAvailable.php
         -
             message: '#(Concrete class|Interface) .* be marked "@.*"#'
             paths:
