@@ -108,11 +108,6 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedCoversAnnotationsRule # Requires "@covers" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedPropertyAnnotationsRule # Requires "@property" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslatablePhpDocRule # Ensures that the DocBlocks for TranslatableMessage creation methods stay in sync.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslationParametersPhpDocRule # Ensures that the DocBlocks for TranslationParameters creation methods stay in sync.
 
