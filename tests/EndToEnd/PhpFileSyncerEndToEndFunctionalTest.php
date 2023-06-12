@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
  *
  * @uses \PhpTuf\ComposerStager\Domain\Core\Beginner
  * @uses \PhpTuf\ComposerStager\Domain\Core\Cleaner

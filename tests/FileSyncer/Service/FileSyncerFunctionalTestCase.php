@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
-use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -40,7 +40,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface $sut */
+        /** @var \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface $sut */
         $sut = $container->get($this->fileSyncerClass());
 
         return $sut;

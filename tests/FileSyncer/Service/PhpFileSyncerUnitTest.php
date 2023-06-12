@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use AssertionError;
 use Closure;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Service\Finder\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Service\Host\Host;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -19,9 +19,9 @@ use Prophecy\Argument;
 use ReflectionClass;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer
+ * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList

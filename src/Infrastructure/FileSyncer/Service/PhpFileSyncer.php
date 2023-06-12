@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;

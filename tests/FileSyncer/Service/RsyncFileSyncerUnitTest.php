@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\FileSyncer;
+namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\Domain\Service\ProcessOutputCallback\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer
  *
  * @covers ::__construct
  * @covers ::getRelativePath

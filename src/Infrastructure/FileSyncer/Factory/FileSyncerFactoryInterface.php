@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer;
+namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory;
 
-use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
+use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
 
 /**
  * Creates file syncer objects.
