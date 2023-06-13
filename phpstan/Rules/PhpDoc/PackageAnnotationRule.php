@@ -63,7 +63,7 @@ final class PackageAnnotationRule extends AbstractRule
         }
 
         $namespaceParts = explode('\\', $namespace);
-        $expectedPackage = end($namespaceParts);
+        $expectedPackage = $namespaceParts[3];
 
         if ($package !== $expectedPackage) {
             $message =sprintf('Docblock must contain "@package %s"', $expectedPackage);

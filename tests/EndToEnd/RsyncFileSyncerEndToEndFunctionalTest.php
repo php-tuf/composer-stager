@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
-use PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
 
 /**
  * @coversNothing

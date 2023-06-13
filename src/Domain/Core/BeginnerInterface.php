@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Domain\Core;
 
-use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.
@@ -19,11 +19,11 @@ interface BeginnerInterface
     /**
      * Begins the staging process.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $activeDir
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
      *   The active directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathInterface $stagingDir
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
      *   The staging directory.
-     * @param \PhpTuf\ComposerStager\Domain\Value\Path\PathListInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the active directory. Careful use of
      *   exclusions can reduce execution time and disk usage. Two kinds of files
      *   and directories are good candidates for exclusion:
@@ -37,7 +37,7 @@ interface BeginnerInterface
      *
      *   With rare exception, you should use the same exclusions when beginning
      *   as when committing.
-     * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null

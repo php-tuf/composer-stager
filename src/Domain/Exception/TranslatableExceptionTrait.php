@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Exception;
 
-use PhpTuf\ComposerStager\Domain\Value\Translation\TranslatableInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
 use Throwable;
 
 /**

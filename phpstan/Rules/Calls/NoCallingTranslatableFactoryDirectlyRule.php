@@ -7,8 +7,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
-use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Translation\TranslatableFactory;
+use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory;
 
 /**
  * Forbids calling TranslatableFactory::create() directly.

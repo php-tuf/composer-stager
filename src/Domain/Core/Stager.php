@@ -5,13 +5,13 @@ namespace PhpTuf\ComposerStager\Domain\Core;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Domain\Factory\Translation\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Service\Precondition\StagerPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
+use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ComposerProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 
 /**
  * @package Core
@@ -23,7 +23,7 @@ final class Stager implements StagerInterface
     use TranslatableAwareTrait;
 
     public function __construct(
-        private readonly ComposerRunnerInterface $composerRunner,
+        private readonly ComposerProcessRunnerInterface $composerRunner,
         private readonly StagerPreconditionsInterface $preconditions,
         TranslatableFactoryInterface $translatableFactory,
     ) {

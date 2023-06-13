@@ -10,12 +10,13 @@ services:
         public: true
         exclude:
             - '../src/Domain/Exception'
+            - '../src/*/*/Value'
             - '../src/*/Value'
 
-    PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory', 'create' ]
+    PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface:
+        factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory', 'create' ]
 
-    PhpTuf\ComposerStager\Infrastructure\Factory\FileSyncer\FileSyncerFactory: ~
+    PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory: ~
 
     Symfony\Component\Filesystem\Filesystem: ~
 
