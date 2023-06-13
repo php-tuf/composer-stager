@@ -11,13 +11,12 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
-    <file>phpcs</file>
-    <file>phpstan</file>
     <file>src</file>
     <file>tests</file>
+    <file>tools</file>
 
     <!-- Custom sniffs -->
-    <rule ref="phpcs/phpcs.xml"/>
+    <rule ref="tools/phpcs/phpcs.xml"/>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>

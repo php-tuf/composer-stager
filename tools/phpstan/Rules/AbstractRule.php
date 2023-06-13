@@ -16,7 +16,7 @@ use PHPStan\ShouldNotHappenException;
 /** Provides a base class for PHPStan rules. */
 abstract class AbstractRule implements Rule
 {
-    protected const PROJECT_ROOT = __DIR__ . '/../../';
+    protected const PROJECT_ROOT = __DIR__ . '/../../../';
 
     public function __construct(protected readonly ReflectionProvider $reflectionProvider)
     {

@@ -97,7 +97,7 @@ final class PreconditionDiagramsInSyncRule extends AbstractRule
      */
     private function getClassMap(): array
     {
-        $autoloader = require dirname(__DIR__, 3) . '/vendor/autoload.php';
+        $autoloader = require dirname(__DIR__, 3) . '/../vendor/autoload.php';
         assert($autoloader instanceof ClassLoader);
 
         return $autoloader->getClassMap();
