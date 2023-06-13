@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\ProcessRunner\Service;
+namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterfac
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -29,7 +28,7 @@ use Symfony\Component\Process\Process;
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \Symfony\Component\Process\Process|\Prophecy\Prophecy\ObjectProphecy $process
  */
-final class AbstractRunnerUnitTest extends TestCase
+final class AbstractProcessRunnerUnitTest extends TestCase
 {
     private const COMMAND_NAME = 'test';
 
