@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Core;
+namespace PhpTuf\ComposerStager\Tests\Core;
 
 use PhpTuf\ComposerStager\Domain\Core\Cleaner;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;

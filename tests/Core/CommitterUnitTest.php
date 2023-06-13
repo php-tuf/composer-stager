@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Domain\Core;
+namespace PhpTuf\ComposerStager\Tests\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Beginner;
+use PhpTuf\ComposerStager\Domain\Core\Committer;
 use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\BeginnerPreconditionsInterface;
+use PhpTuf\ComposerStager\Domain\Precondition\Service\CommitterPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -21,57 +21,58 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner
+ * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Committer
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner::__construct
+ * @covers \PhpTuf\ComposerStager\Domain\Core\Committer::__construct
  *
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
  *
  * @property \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\CommitterPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
-final class BeginnerUnitTest extends TestCase
+final class CommitterUnitTest extends TestCase
 {
     protected function setUp(): void
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);
         $this->stagingDir = new TestPath(self::STAGING_DIR);
-        $this->preconditions = $this->prophesize(BeginnerPreconditionsInterface::class);
+        $this->preconditions = $this->prophesize(CommitterPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
 
-    private function createSut(): Beginner
+    private function createSut(): Committer
     {
-        $fileSyncer = $this->fileSyncer->reveal();
         $preconditions = $this->preconditions->reveal();
+        $fileSyncer = $this->fileSyncer->reveal();
 
-        return new Beginner($fileSyncer, $preconditions);
+        return new Committer($fileSyncer, $preconditions);
     }
 
-    /** @covers ::begin */
-    public function testBeginWithMinimumParams(): void
+    /** @covers ::commit */
+    public function testCommitWithMinimumParams(): void
     {
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($this->activeDir, $this->stagingDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->sync($this->stagingDir, $this->activeDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
+        $sut->commit($this->stagingDir, $this->activeDir);
     }
 
     /**
-     * @covers ::begin
+     * @covers ::commit
      *
-     * @dataProvider providerBeginWithOptionalParams
+     * @dataProvider providerCommitWithOptionalParams
      */
-    public function testBeginWithOptionalParams(
-        string $activeDir,
+    public function testCommitWithOptionalParams(
         string $stagingDir,
+        string $activeDir,
         ?PathListInterface $exclusions,
         ?ProcessOutputCallbackInterface $callback,
         ?int $timeout,
@@ -82,77 +83,76 @@ final class BeginnerUnitTest extends TestCase
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
+            ->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir, $exclusions, $callback, $timeout);
+        $sut->commit($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 
-    public function providerBeginWithOptionalParams(): array
+    public function providerCommitWithOptionalParams(): array
     {
         return [
             [
-                'activeDir' => 'one/two',
-                'stagingDir' => 'three/four',
-                'givenExclusions' => null,
+                'stagingDir' => '/one/two',
+                'activeDir' => '/three/four',
+                'exclusions' => null,
                 'callback' => null,
                 'timeout' => null,
             ],
             [
-                'activeDir' => 'five/six',
-                'stagingDir' => 'seven/eight',
-                'givenExclusions' => new TestPathList(),
+                'stagingDir' => 'five/six',
+                'activeDir' => 'seven/eight',
+                'exclusions' => new TestPathList(),
                 'callback' => new TestProcessOutputCallback(),
-                'timeout' => 100,
+                'timeout' => 10,
             ],
         ];
     }
 
-    /** @covers ::begin */
-    public function testBeginPreconditionsUnfulfilled(): void
+    /** @covers ::commit */
+    public function testCommitPreconditionsUnfulfilled(): void
     {
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->shouldBeCalled()
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(function () use ($sut) {
-            $sut->begin($this->activeDir, $this->stagingDir);
+            $sut->commit($this->stagingDir, $this->activeDir);
         }, PreconditionException::class, $message);
     }
 
     /**
-     * @covers ::begin
+     * @covers ::commit
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions(ExceptionInterface $exception): void
+    public function testExceptions(ExceptionInterface $exception, string $message): void
     {
         $this->fileSyncer
-            ->sync(Argument::cetera())
+            ->sync($this->stagingDir, $this->activeDir, Argument::cetera())
             ->willThrow($exception);
         $sut = $this->createSut();
 
         self::assertTranslatableException(function () use ($sut) {
-            $sut->begin($this->activeDir, $this->stagingDir);
-        }, RuntimeException::class, $exception->getMessage(), $exception::class);
+            $sut->commit($this->stagingDir, $this->activeDir);
+        }, RuntimeException::class, $message, $exception::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             [
-                'exception' => new InvalidArgumentException(
-                    new TestTranslatableMessage('one'),
-                ),
+                'exception' => new InvalidArgumentException(new TestTranslatableMessage('one')),
+                'message' => 'one',
             ],
             [
-                'exception' => new IOException(
-                    new TestTranslatableMessage('two'),
-                ),
+                'exception' => new IOException(new TestTranslatableMessage('two')),
+                'message' => 'two',
             ],
         ];
     }
