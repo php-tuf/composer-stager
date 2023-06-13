@@ -10,9 +10,9 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatableExceptionTraitUnitTest extends TestCase
 {

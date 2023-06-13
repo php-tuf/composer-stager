@@ -20,34 +20,34 @@ parameters:
         # Production code.
         -
             message: '#Built-in or third party exception "\\InvalidArgumentException" cannot be thrown from public methods.*#'
-            path: src/Infrastructure/Translation/Service/SymfonyTranslatorProxy.php
+            path: src/Internal/Translation/Service/SymfonyTranslatorProxy.php
         -
             message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
             paths:
-                - src/Infrastructure/Translation/Service/Translator.php
-                - src/Infrastructure/Translation/Value/TranslationParameters.php
+                - src/Internal/Translation/Service/Translator.php
+                - src/Internal/Translation/Value/TranslationParameters.php
         -
             message: '#Cannot access offset .(application|name). on mixed.#'
-            path: src/Infrastructure/Precondition/Service/ComposerIsAvailable.php
+            path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
             message: '#(Concrete class|Interface) .* be marked "@.*"#'
             paths:
-                - src/Infrastructure/Translation/Service/SymfonyTranslatorProxyInterface.php
-                - src/Infrastructure/Path/Value/PathList.php
-                - src/Infrastructure/Translation/Value/TranslatableMessage.php
-                - src/Infrastructure/Translation/Value/TranslationParameters.php
+                - src/Internal/Translation/Service/SymfonyTranslatorProxyInterface.php
+                - src/Internal/Path/Value/PathList.php
+                - src/Internal/Translation/Value/TranslatableMessage.php
+                - src/Internal/Translation/Value/TranslationParameters.php
         -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
-            path: src/Infrastructure/Translation/Service/Translator.php
+            path: src/Internal/Translation/Service/Translator.php
         -
             message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
-            path: src/Infrastructure/Translation/Service/SymfonyTranslatorProxy.php
+            path: src/Internal/Translation/Service/SymfonyTranslatorProxy.php
         -
             message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
             path: src/API/Exception/PreconditionException.php
         -
             message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
-            path: src/Infrastructure/Process/Service/AbstractProcessRunner.php
+            path: src/Internal/Process/Service/AbstractProcessRunner.php
 
         # Test code.
         -
@@ -90,7 +90,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: 82e3344cafa9b3270f420eede985f60a
+    preconditionSystemHash: e8f5e27dd02ed9cdfb0c3f5b50420862
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

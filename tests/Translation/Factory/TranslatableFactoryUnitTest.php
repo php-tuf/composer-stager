@@ -2,17 +2,17 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Factory;
 
-use PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters;
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
+use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
+use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatableFactoryUnitTest extends TestCase
 {

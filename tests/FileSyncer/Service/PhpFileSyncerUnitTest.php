@@ -7,10 +7,10 @@ use Closure;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
+use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
+use PhpTuf\ComposerStager\Internal\Host\Service\Host;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -19,17 +19,17 @@ use Prophecy\Argument;
 use ReflectionClass;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
+ * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
- * @property \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
+ * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
+ * @property \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
  * @property \PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory $translatableFactory

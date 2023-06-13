@@ -4,9 +4,9 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ComposerIsAvailable;
+use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
+use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -48,7 +48,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $container->compile();
 
         // Get services.
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ComposerIsAvailable $sut */
+        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable $sut */
         $sut = $container->get(ComposerIsAvailable::class);
 
         return $sut;

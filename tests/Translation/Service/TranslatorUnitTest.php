@@ -7,9 +7,9 @@ use Error;
 use LogicException;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxyInterface;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator;
+use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
+use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
@@ -18,14 +18,14 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
+ * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatorUnitTest extends TestCase
 {

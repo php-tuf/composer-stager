@@ -3,18 +3,18 @@
 namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath;
+use PhpTuf\ComposerStager\Internal\Host\Service\Host;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath;
+use PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
  */
 final class PathFactoryUnitTest extends TestCase
 {

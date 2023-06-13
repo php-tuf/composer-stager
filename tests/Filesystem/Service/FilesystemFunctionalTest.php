@@ -4,27 +4,27 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem;
-use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
+use PhpTuf\ComposerStager\Internal\Host\Service\Host;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
- * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
+ * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  * @uses \Symfony\Component\Filesystem\Filesystem
  */
 final class FilesystemFunctionalTest extends TestCase
@@ -62,7 +62,7 @@ final class FilesystemFunctionalTest extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem $filesystem */
+        /** @var \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem $filesystem */
         $filesystem = $container->get(Filesystem::class);
 
         return $filesystem;

@@ -6,25 +6,25 @@ use Error;
 use LogicException;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage;
+use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
+use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
+use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
  *
- * @covers \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
+ * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatableMessageUnitTest extends TestCase
 {

@@ -3,11 +3,11 @@
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath;
+use PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
  *
  * @covers ::__construct
  * @covers ::doResolve
@@ -21,7 +21,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::raw
  * @covers ::resolved
  * @covers ::resolvedRelativeTo
- * @covers \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath::getcwd
+ * @covers \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath::getcwd
  */
 final class WindowsPathUnitTest extends TestCase
 {

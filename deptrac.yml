@@ -11,16 +11,16 @@ deptrac:
                 -   type: directory
                     value: '%currentWorkingDirectory%/src/API/.*'
         -
-            name: Infrastructure
+            name: Internal
             collectors:
                 -   type: directory
-                    value: '%currentWorkingDirectory%/src/Infrastructure/.*'
+                    value: '%currentWorkingDirectory%/src/Internal/.*'
 
     ruleset:
 
         # The API cannot depend on anything outside itself.
         API: ~
 
-        # The Infrastructure layer can depend on the API.
-        Infrastructure:
+        # The Internal layer can depend on the API.
+        Internal:
             - API

@@ -5,11 +5,11 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsReady;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsReady
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
@@ -18,7 +18,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
  *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable

@@ -6,9 +6,9 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner;
+use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -17,15 +17,15 @@ use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcess
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
  *
  * @covers ::__construct
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
+ * @property \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
+ * @property \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \Symfony\Component\Process\Process|\Prophecy\Prophecy\ObjectProphecy $process
  */
 final class AbstractProcessRunnerUnitTest extends TestCase

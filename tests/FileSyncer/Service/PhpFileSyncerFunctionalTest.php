@@ -2,21 +2,21 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
- * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
+ * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
+ * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
+ * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source

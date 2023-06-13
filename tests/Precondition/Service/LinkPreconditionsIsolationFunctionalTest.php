@@ -4,13 +4,13 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoHardLinksExist;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Throwable;
 
@@ -112,7 +112,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
         $container = $this->getContainer();
         $container->compile();
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoLinksExistOnWindows $sut */
+        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
         $sut = $container->get(NoLinksExistOnWindows::class);
 
         self::assertTranslatableException(static function () use ($sut) {

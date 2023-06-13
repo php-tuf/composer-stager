@@ -8,14 +8,14 @@ use PhpTuf\ComposerStager\API\Core\Committer;
 use PhpTuf\ComposerStager\API\Core\Stager;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
  * Provides a base for end-to-end functional tests, including the API and
- * infrastructure layers. The test cases themselves are supplied by this class.
+ * internal layers. The test cases themselves are supplied by this class.
  * Subclasses specify the file syncer to use via ::fileSyncerClass().
  *
  * @property \PhpTuf\ComposerStager\API\Core\Beginner $beginner
@@ -57,7 +57,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
     /**
      * Specifies the file syncer implementation to use, e.g.,
-     * \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer::class.
+     * \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::class.
      */
     abstract protected function fileSyncerClass(): string;
 
