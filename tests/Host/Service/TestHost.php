@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Host\Service;
 
-use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
-use PhpTuf\ComposerStager\Infrastructure\Host\Service\HostInterface;
+use PhpTuf\ComposerStager\Internal\Host\Service\Host;
+use PhpTuf\ComposerStager\Internal\Host\Service\HostInterface;
 
 /**
  * This is for "mocking" static methods, since Prophecy can't. Extend it and override methods as needed.

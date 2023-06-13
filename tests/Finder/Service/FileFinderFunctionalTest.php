@@ -2,27 +2,27 @@
 
 namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
  *
  * @covers ::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder $fileFinder
+ * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder
  */
 final class FileFinderFunctionalTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class FileFinderFunctionalTest extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder $fileFinder */
+        /** @var \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder */
         $fileFinder = $container->get(FileFinder::class);
 
         return $fileFinder;

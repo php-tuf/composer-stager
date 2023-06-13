@@ -9,13 +9,13 @@ services:
         resource: '../src/*'
         public: true
         exclude:
-            - '../src/Domain/Exception'
+            - '../src/API/Exception'
             - '../src/*/*/Value'
 
-    PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory', 'create' ]
+    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
+        factory: [ '@PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory', 'create' ]
 
-    PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory: ~
+    PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory: ~
 
     Symfony\Component\Filesystem\Filesystem: ~
 

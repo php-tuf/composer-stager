@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Factory;
 
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 final class TestTranslatableFactory implements TranslatableFactoryInterface

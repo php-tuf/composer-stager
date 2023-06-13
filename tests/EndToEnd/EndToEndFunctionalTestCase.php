@@ -2,26 +2,26 @@
 
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
-use PhpTuf\ComposerStager\Domain\Core\Beginner;
-use PhpTuf\ComposerStager\Domain\Core\Cleaner;
-use PhpTuf\ComposerStager\Domain\Core\Committer;
-use PhpTuf\ComposerStager\Domain\Core\Stager;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\API\Core\Beginner;
+use PhpTuf\ComposerStager\API\Core\Cleaner;
+use PhpTuf\ComposerStager\API\Core\Committer;
+use PhpTuf\ComposerStager\API\Core\Stager;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * Provides a base for end-to-end functional tests, including the domain and
- * infrastructure layers. The test cases themselves are supplied by this class.
+ * Provides a base for end-to-end functional tests, including the API and
+ * internal layers. The test cases themselves are supplied by this class.
  * Subclasses specify the file syncer to use via ::fileSyncerClass().
  *
- * @property \PhpTuf\ComposerStager\Domain\Core\Beginner $beginner
- * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner $cleaner
- * @property \PhpTuf\ComposerStager\Domain\Core\Committer $committer
- * @property \PhpTuf\ComposerStager\Domain\Core\Stager $stager
+ * @property \PhpTuf\ComposerStager\API\Core\Beginner $beginner
+ * @property \PhpTuf\ComposerStager\API\Core\Cleaner $cleaner
+ * @property \PhpTuf\ComposerStager\API\Core\Committer $committer
+ * @property \PhpTuf\ComposerStager\API\Core\Stager $stager
  *
  * @group slow
  */
@@ -57,7 +57,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
     /**
      * Specifies the file syncer implementation to use, e.g.,
-     * \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer::class.
+     * \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::class.
      */
     abstract protected function fileSyncerClass(): string;
 

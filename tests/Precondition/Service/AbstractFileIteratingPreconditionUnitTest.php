@@ -2,34 +2,34 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  *
  * @covers ::__construct
  * @covers ::findFiles
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
- * @property \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
+ * @property \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
+ * @property \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  */
 final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreconditionUnitTestCase
 {
@@ -102,7 +102,7 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
 
     /**
      * @covers ::assertIsFulfilled
-     * @covers \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition::exitEarly
+     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::exitEarly
      */
     public function testExitEarly(): void
     {

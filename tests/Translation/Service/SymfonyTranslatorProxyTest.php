@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
-use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy;
+use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy */
 final class SymfonyTranslatorProxyTest extends TestCase
 {
     /**

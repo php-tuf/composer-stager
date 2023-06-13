@@ -2,19 +2,19 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
  *
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $destination
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $source
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $destination
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $source
  */
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
@@ -40,7 +40,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $container = $this->getContainer();
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface $sut */
+        /** @var \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface $sut */
         $sut = $container->get($this->fileSyncerClass());
 
         return $sut;
@@ -51,8 +51,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /**
      * @covers ::sync
      *
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
+     * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+     * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
      *
      * @dataProvider providerSyncTimeout
      */
@@ -82,8 +82,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /**
      * @covers ::sync
      *
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
+     * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+     * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
      */
     public function testSyncWithDirectorySymlinks(): void
     {

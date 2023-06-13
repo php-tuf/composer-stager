@@ -3,16 +3,16 @@
 namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
-use PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait;
+use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatableExceptionTraitUnitTest extends TestCase
 {

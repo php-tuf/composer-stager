@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
  *
  * @covers ::__construct
  * @covers ::doResolve
@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::raw
  * @covers ::resolved
  * @covers ::resolvedRelativeTo
- * @covers \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath::getcwd
+ * @covers \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath::getcwd
  *
  * @group no_windows
  */

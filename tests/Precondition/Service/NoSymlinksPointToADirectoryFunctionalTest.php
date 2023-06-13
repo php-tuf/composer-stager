@@ -2,43 +2,43 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
-use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToADirectory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory
  *
  * @covers ::__construct
  * @covers ::exitEarly
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer
- * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
- * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
- * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory
+ * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
+ * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
+ * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
+ * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
+ * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
+ * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
@@ -55,7 +55,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         // Compile the container.
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToADirectory $sut */
+        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory $sut */
         $sut = $container->get(NoSymlinksPointToADirectory::class);
 
         return $sut;

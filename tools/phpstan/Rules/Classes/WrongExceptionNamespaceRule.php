@@ -31,10 +31,10 @@ final class WrongExceptionNamespaceRule extends AbstractRule
         $reflection = $class->getNativeReflection();
         $namespace = $reflection->getNamespaceName();
 
-        if (!$this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\Domain\\Exception\\')) {
+        if (!$this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\API\\Exception\\')) {
             return [
                 $this->buildErrorMessage(
-                    'Exception must be in the PhpTuf\\ComposerStager\\Domain\\Exception namespace',
+                    'Exception must be in the PhpTuf\\ComposerStager\\API\\Exception namespace',
                 ),
             ];
         }

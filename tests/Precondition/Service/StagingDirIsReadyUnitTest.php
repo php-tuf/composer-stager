@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirExistsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsWritableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsReady;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsReady
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
@@ -17,11 +17,11 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
  */
 final class StagingDirIsReadyUnitTest extends PreconditionTestCase
 {

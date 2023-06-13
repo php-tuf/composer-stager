@@ -2,25 +2,25 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveDirExistsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveDirIsWritableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ActiveDirIsReady;
+use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ActiveDirIsReady
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsWritable
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsWritable
  */
 final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 {

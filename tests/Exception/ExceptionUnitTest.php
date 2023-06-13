@@ -3,23 +3,23 @@
 namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
-use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage;
+use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use ReflectionClass;
 
 final class ExceptionUnitTest extends TestCase
 {
     /**
-     * @covers \PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException
-     * @covers \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @covers \PhpTuf\ComposerStager\Domain\Exception\LogicException
-     * @covers \PhpTuf\ComposerStager\Domain\Exception\RuntimeException
+     * @covers \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
+     * @covers \PhpTuf\ComposerStager\API\Exception\IOException
+     * @covers \PhpTuf\ComposerStager\API\Exception\LogicException
+     * @covers \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *
-     * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
+     * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
      *
      * @dataProvider providerBasicFunctionality
      */
@@ -30,7 +30,7 @@ final class ExceptionUnitTest extends TestCase
         $code = 42;
         $previous = new Exception('Message');
 
-        /** @var \PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface $sut */
+        /** @var \PhpTuf\ComposerStager\API\Exception\ExceptionInterface $sut */
         $sut = new $exception($translatableMessage, $code, $previous);
 
         self::assertSame($message, $sut->getMessage(), 'Got untranslated message.');

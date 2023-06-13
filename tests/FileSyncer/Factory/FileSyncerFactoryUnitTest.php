@@ -2,20 +2,20 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Factory;
 
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncerInterface;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncerInterface;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory
  *
  * @covers ::__construct
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer
- * @property \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
+ * @property \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $phpFileSyncer
+ * @property \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $rsyncFileSyncer
  * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  */
 final class FileSyncerFactoryUnitTest extends TestCase

@@ -5,18 +5,22 @@ deptrac:
         - ./src
 
     layers:
-        # src/Domain is the Domain layer.
-        -   name: Domain
+        -
+            name: API
             collectors:
                 -   type: directory
-                    regex: Domain.*
-        # src/Infrastructure is the Infrastructure layer.
-        -   name: Infrastructure
+                    value: '%currentWorkingDirectory%/src/API/.*'
+        -
+            name: Internal
             collectors:
                 -   type: directory
-                    regex: Infrastructure.*
+                    value: '%currentWorkingDirectory%/src/Internal/.*'
 
     ruleset:
-        # The Infrastructure layer can depend on the Domain. The Domain cannot depend on anything outside itself.
-        Infrastructure:
-            - Domain
+
+        # The API cannot depend on anything outside itself.
+        API: ~
+
+        # The Internal layer can depend on the API.
+        Internal:
+            - API

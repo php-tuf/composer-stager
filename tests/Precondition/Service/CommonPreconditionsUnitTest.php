@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveDirIsReadyInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ComposerIsAvailableInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\CommonPreconditions;
+use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\CommonPreconditions
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
  *
  * @covers ::__construct
  * @covers ::assertIsFulfilled
@@ -17,12 +17,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsReady
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\ComposerIsAvailableInterface|\Prophecy\Prophecy\ObjectProphecy $composerIsAvailable
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsReady
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface|\Prophecy\Prophecy\ObjectProphecy $composerIsAvailable
  */
 final class CommonPreconditionsUnitTest extends PreconditionTestCase
 {

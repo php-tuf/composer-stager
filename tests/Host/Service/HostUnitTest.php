@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Host\Service;
 
-use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
+use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Host\Service\Host */
 final class HostUnitTest extends TestCase
 {
     /** @covers ::isWindows */

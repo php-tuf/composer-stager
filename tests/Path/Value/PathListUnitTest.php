@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\PathList
  *
- * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList::__construct
+ * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList::__construct
  */
 final class PathListUnitTest extends TestCase
 {

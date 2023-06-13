@@ -3,14 +3,14 @@
 namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 final class PreconditionExceptionUnitTest extends TestCase
 {
-    /** @covers \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    /** @covers \PhpTuf\ComposerStager\API\Exception\PreconditionException */
     public function testBasicFunctionality(): void
     {
         $message = 'Message';

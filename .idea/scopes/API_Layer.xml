@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="API Layer" pattern="file[composer-stager]:src/API//*" />
+</component>

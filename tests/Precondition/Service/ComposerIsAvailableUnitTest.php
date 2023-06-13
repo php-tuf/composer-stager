@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
-use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ComposerIsAvailable;
-use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
+use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -16,7 +16,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\ComposerIsAvailable
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable
  *
  * @covers ::__construct
  * @covers ::assertExecutableExists
@@ -28,14 +28,14 @@ use Symfony\Component\Process\Process;
  * @covers ::isFulfilled
  * @covers ::isValidExecutable
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
- * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
- * @property \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
+ * @property \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
+ * @property \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
  * @property \Symfony\Component\Process\Process|\Prophecy\Prophecy\ObjectProphecy $process
  */
 final class ComposerIsAvailableUnitTest extends PreconditionTestCase
