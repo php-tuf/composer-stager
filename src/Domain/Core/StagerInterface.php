@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Domain\Core;
 
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 
 /**
  * Executes a Composer command in the staging directory.
@@ -31,7 +31,7 @@ interface StagerInterface
      *   The active directory.
      * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
      *   The staging directory.
-     * @param \PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null

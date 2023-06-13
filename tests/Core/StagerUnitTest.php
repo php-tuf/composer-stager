@@ -10,11 +10,11 @@ use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ComposerRunnerInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ComposerProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -28,7 +28,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
+ * @property \PhpTuf\ComposerStager\Domain\Process\Service\ComposerProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
@@ -40,7 +40,7 @@ final class StagerUnitTest extends TestCase
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);
         $this->stagingDir = new TestPath(self::STAGING_DIR);
-        $this->composerRunner = $this->prophesize(ComposerRunnerInterface::class);
+        $this->composerRunner = $this->prophesize(ComposerProcessRunnerInterface::class);
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
     }
 

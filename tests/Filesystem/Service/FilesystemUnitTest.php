@@ -4,11 +4,11 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;

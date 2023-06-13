@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Domain\Filesystem\Service;
 
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 
 /**
  * Provides basic utilities for interacting with the file system.
@@ -168,7 +168,7 @@ interface FilesystemInterface
      *
      * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $path
      *   A path to remove.
-     * @param \PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null

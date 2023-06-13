@@ -47,7 +47,7 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsReady
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\StagingDirIsWritable
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator

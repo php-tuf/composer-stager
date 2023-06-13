@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\ProcessRunner\Service;
+namespace PhpTuf\ComposerStager\Domain\Process\Service;
 
 /**
  * Runs shell processes.
  *
- * @package ProcessRunner
+ * @package Process
  *
  * @api
  */

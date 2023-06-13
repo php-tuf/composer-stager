@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\Precondition\Service\CommitterPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 
 /**
  * @package Core

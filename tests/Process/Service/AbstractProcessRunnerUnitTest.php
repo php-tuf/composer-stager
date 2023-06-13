@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Tests\ProcessRunner\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner;
-use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -18,7 +18,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcess
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner
  *
  * @covers ::__construct
  *
@@ -46,7 +46,7 @@ final class AbstractRunnerUnitTest extends TestCase
             ->willReturn($this->process);
     }
 
-    private function createSut($executableName = null): AbstractRunner
+    private function createSut($executableName = null): AbstractProcessRunner
     {
         $executableName ??= self::COMMAND_NAME;
         $executableFinder = $this->executableFinder->reveal();
@@ -59,7 +59,7 @@ final class AbstractRunnerUnitTest extends TestCase
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class ($executableFinder, $executableName, $processFactory, $translatableFactory) extends AbstractRunner
+        return new class ($executableFinder, $executableName, $processFactory, $translatableFactory) extends AbstractProcessRunner
         {
             public function __construct(
                 ExecutableFinderInterface $executableFinder,

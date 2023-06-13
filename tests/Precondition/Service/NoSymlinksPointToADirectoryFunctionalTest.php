@@ -30,7 +30,7 @@ use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToA
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator

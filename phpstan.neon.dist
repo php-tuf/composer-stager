@@ -47,7 +47,7 @@ parameters:
             path: src/Domain/Exception/PreconditionException.php
         -
             message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
-            path: src/Infrastructure/ProcessRunner/Service/AbstractRunner.php
+            path: src/Infrastructure/Process/Service/AbstractProcessRunner.php
 
         # Test code.
         -

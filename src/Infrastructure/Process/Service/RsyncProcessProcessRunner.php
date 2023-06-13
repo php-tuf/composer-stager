@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service;
+namespace PhpTuf\ComposerStager\Infrastructure\Process\Service;
 
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface;
 
 /**
  * Before using this class outside the infrastructure layer, consider a
@@ -11,11 +11,11 @@ use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface;
  * @see \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface
  * @see \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactoryInterface
  *
- * @package ProcessRunner
+ * @package Process
  *
  * @internal Don't instantiate this class directly. Get it from the service container via its interface.
  */
-final class RsyncRunner extends AbstractRunner implements RsyncRunnerInterface
+final class RsyncProcessProcessRunner extends AbstractProcessRunner implements RsyncProcessRunnerInterface
 {
     protected function executableName(): string
     {

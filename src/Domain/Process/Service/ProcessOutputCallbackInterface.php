@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service;
+namespace PhpTuf\ComposerStager\Domain\Process\Service;
 
 use Symfony\Component\Process\Process;
 
@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process;
  *
  * @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
  *
- * @package ProcessOutputCallback
+ * @package Process
  *
  * @api
  *

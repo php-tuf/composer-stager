@@ -8,12 +8,12 @@ use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -33,7 +33,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
+ * @property \PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
  *
@@ -51,7 +51,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willReturn(true);
         $this->filesystem
             ->mkdir(Argument::any());
-        $this->rsync = $this->prophesize(RsyncRunnerInterface::class);
+        $this->rsync = $this->prophesize(RsyncProcessRunnerInterface::class);
     }
 
     private function createSut(): RsyncFileSyncer

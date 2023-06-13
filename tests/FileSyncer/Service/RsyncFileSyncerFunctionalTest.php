@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactory
- * @uses \PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner
+ * @uses \PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  *
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination

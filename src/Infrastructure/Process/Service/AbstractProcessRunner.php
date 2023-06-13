@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service;
+namespace PhpTuf\ComposerStager\Infrastructure\Process\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
@@ -15,11 +15,11 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  * Provides a base for process runners for consistent process creation and
  * exception-handling.
  *
- * @package ProcessRunner
+ * @package Process
  *
  * @api
  */
-abstract class AbstractRunner implements ProcessRunnerInterface
+abstract class AbstractProcessRunner implements ProcessRunnerInterface
 {
     use TranslatableAwareTrait;
 
@@ -39,7 +39,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
      *   The command to run and its arguments as separate string values, e.g.,
      *   ['require', 'example/package'] or ['source', 'destination']. The return
      *   value of ::executableName() will be automatically prepended.
-     * @param \PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException

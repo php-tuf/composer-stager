@@ -8,9 +8,9 @@ use PhpTuf\ComposerStager\Domain\Exception\LogicException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
@@ -26,7 +26,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
     public function __construct(
         private readonly FilesystemInterface $filesystem,
-        private readonly RsyncRunnerInterface $rsync,
+        private readonly RsyncProcessRunnerInterface $rsync,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         $this->setTranslatableFactory($translatableFactory);

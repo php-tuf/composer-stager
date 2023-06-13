@@ -7,9 +7,9 @@ use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ComposerRunnerInterface;
-use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ComposerProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 
@@ -23,7 +23,7 @@ final class Stager implements StagerInterface
     use TranslatableAwareTrait;
 
     public function __construct(
-        private readonly ComposerRunnerInterface $composerRunner,
+        private readonly ComposerProcessRunnerInterface $composerRunner,
         private readonly StagerPreconditionsInterface $preconditions,
         TranslatableFactoryInterface $translatableFactory,
     ) {
