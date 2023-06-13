@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Domain\Service\ProcessRunner;
 
-use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
 
 /**
  * Runs rsync commands.
@@ -26,7 +26,7 @@ interface RsyncRunnerInterface extends ProcessRunnerInterface
      *       'path/to/destination',
      *   ];
      *   ```
-     * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null

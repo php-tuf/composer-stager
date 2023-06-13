@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
 
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
@@ -39,7 +39,7 @@ abstract class AbstractRunner implements ProcessRunnerInterface
      *   The command to run and its arguments as separate string values, e.g.,
      *   ['require', 'example/package'] or ['source', 'destination']. The return
      *   value of ::executableName() will be automatically prepended.
-     * @param \PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
      * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException

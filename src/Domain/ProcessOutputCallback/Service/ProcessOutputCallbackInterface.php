@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\ProcessOutputCallback;
+namespace PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service;
 
 use Symfony\Component\Process\Process;
 
