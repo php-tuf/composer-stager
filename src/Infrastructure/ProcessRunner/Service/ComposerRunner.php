@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
+namespace PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service;
 
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ComposerRunnerInterface;
 
 /**
  * @package ProcessRunner

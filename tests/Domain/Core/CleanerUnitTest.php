@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Precondition\Service\CleanerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;

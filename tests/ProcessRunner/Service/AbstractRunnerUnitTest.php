@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Infrastructure\Service\ProcessRunner;
+namespace PhpTuf\ComposerStager\Tests\ProcessRunner\Service;
 
 use PhpTuf\ComposerStager\Domain\Exception\IOException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCall
 use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
-use PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner;
+use PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner;
 use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -18,7 +18,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcess
 use Symfony\Component\Process\Process;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner\AbstractRunner
+ * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service\AbstractRunner
  *
  * @covers ::__construct
  *

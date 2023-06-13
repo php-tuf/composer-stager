@@ -1,29 +1,29 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Domain\Service\ProcessRunner;
+namespace PhpTuf\ComposerStager\Domain\ProcessRunner\Service;
 
 use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
 
 /**
- * Runs rsync commands.
+ * Runs Composer commands.
  *
  * @package ProcessRunner
  *
  * @api
  */
-interface RsyncRunnerInterface extends ProcessRunnerInterface
+interface ComposerRunnerInterface extends ProcessRunnerInterface
 {
     /**
-     * Runs a given rsync command.
+     * Runs a given Composer command.
      *
      * @param array<string> $command
      *   The command to run and its arguments as separate string values. Example:
      *   ```php
      *   $command = [
-     *       // "rsync" is implied.
-     *       '--recursive',
-     *       'path/to/source',
-     *       'path/to/destination',
+     *       // "composer" is implied.
+     *       'require',
+     *       'example/package:"^1 || ^2"',
+     *       '--with-all-dependencies',
      *   ];
      *   ```
      * @param \PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface|null $callback

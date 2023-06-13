@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Domain\Core;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
 
 /**
  * Begins the staging process by copying the active directory to the staging directory.

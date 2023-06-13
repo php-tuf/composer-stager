@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Infrastructure\Service\ProcessRunner;
+namespace PhpTuf\ComposerStager\Infrastructure\ProcessRunner\Service;
 
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface;
 
 /**
  * Before using this class outside the infrastructure layer, consider a

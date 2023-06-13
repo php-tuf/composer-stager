@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -33,7 +33,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
+ * @property \PhpTuf\ComposerStager\Domain\ProcessRunner\Service\RsyncRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
  *

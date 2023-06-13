@@ -11,8 +11,8 @@ use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\Domain\ProcessOutputCallback\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ComposerRunnerInterface;
+use PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\ProcessOutputCallback\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -28,7 +28,7 @@ use Prophecy\Argument;
  * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\Domain\Service\ProcessRunner\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
+ * @property \PhpTuf\ComposerStager\Domain\ProcessRunner\Service\ComposerRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
