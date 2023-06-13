@@ -83,7 +83,7 @@ services:
         resource: '../vendor/php-tuf/composer-stager/src/*'
         public: true
         exclude:
-            - '../vendor/php-tuf/composer-stager/src/*/Value'
+            - '../vendor/php-tuf/composer-stager/src/*/*/Value'
             - '../vendor/php-tuf/composer-stager/src/Domain/Exception'
             - '../vendor/php-tuf/composer-stager/src/Domain/Translation/FakeTranslator.php'
 

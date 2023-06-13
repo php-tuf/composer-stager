@@ -11,7 +11,6 @@ services:
         exclude:
             - '../src/Domain/Exception'
             - '../src/*/*/Value'
-            - '../src/*/Value'
 
     PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface:
         factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory', 'create' ]
