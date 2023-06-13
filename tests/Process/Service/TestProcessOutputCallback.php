@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 
 final class TestProcessOutputCallback implements ProcessOutputCallbackInterface
 {

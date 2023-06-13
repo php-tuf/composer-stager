@@ -2,15 +2,15 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface $exclusions
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathListInterface $exclusions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */

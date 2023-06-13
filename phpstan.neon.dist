@@ -44,7 +44,7 @@ parameters:
             path: src/Infrastructure/Translation/Service/SymfonyTranslatorProxy.php
         -
             message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
-            path: src/Domain/Exception/PreconditionException.php
+            path: src/API/Exception/PreconditionException.php
         -
             message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
             path: src/Infrastructure/Process/Service/AbstractProcessRunner.php
@@ -90,7 +90,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: f55a35488145476e01e247600cd1789f
+    preconditionSystemHash: 82e3344cafa9b3270f420eede985f60a
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

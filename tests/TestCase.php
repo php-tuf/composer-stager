@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests;
 
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;

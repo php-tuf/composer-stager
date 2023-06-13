@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\UnixLikePath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 

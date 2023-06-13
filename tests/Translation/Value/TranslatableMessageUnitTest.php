@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
 use Error;
 use LogicException;
-use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage;
@@ -19,8 +19,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage

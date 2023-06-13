@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -21,8 +21,8 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory

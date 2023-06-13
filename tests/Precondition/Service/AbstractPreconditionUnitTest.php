@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -20,8 +20,8 @@ use Prophecy\Argument;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  *
  * @property \PhpTuf\ComposerStager\Tests\TestSpyInterface|\Prophecy\Prophecy\ObjectProphecy $spy

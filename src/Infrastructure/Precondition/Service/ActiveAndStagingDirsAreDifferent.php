@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
  * @package Precondition

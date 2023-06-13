@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist;
@@ -13,8 +13,8 @@ use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinks
  * @covers ::__construct
  * @covers ::findFiles
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host

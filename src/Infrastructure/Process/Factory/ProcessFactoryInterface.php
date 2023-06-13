@@ -27,7 +27,7 @@ interface ProcessFactoryInterface
      *   ];
      *   ```
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
      *
      * @see \Symfony\Component\Process\Process::__construct

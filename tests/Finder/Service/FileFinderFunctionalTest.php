@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  *
  * @covers ::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\AbstractPath

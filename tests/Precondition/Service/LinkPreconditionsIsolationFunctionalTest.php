@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoAbsoluteSymlinksExist;

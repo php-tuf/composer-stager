@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Factory\TranslatableFactory;
 
 /**

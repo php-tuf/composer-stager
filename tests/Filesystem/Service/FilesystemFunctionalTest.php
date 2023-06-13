@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Infrastructure\Host\Service\Host;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
@@ -14,7 +14,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory

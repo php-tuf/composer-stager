@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
@@ -23,10 +23,10 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
  * @covers ::assertIsFulfilled
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface $exclusions
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathListInterface $exclusions
  */
 final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 {
@@ -82,7 +82,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         // Pass a mock child into the SUT so the behavior of ::assertIsFulfilled
         // can be controlled indirectly, without overriding the method on the SUT
         // itself and preventing it from actually being exercised.
-        /** @var \PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
+        /** @var \PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
         $child = $this->prophesize(PreconditionInterface::class);
         $child->getLeaves()
             ->willReturn([$child]);

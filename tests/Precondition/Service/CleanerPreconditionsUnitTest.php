@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\CommonPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\CleanerPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
@@ -16,12 +16,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface $exclusions
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathListInterface $exclusions
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
  */
 final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 {

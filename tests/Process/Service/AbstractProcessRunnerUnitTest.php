@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Service\AbstractProcessRunner;
@@ -21,8 +21,8 @@ use Symfony\Component\Process\Process;
  *
  * @covers ::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  *
  * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  * @property \PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory

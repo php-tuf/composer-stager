@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
@@ -23,13 +23,13 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     /**
      * @param string $codebaseName
      *   The name of the codebase in question, i.e., "active" or "staging".
-     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $codebaseRoot
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $codebaseRoot
      *   The codebase root directory.
-     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $file
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $file
      *   The file in question.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException
      */
     abstract protected function assertIsSupportedFile(
         string $codebaseName,
@@ -90,7 +90,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     /**
      * @return array<string>
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      */
     protected function findFiles(PathInterface $path, PathListInterface $exclusions): array
     {

@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Translation\Service;
 
-use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters;
 use Throwable;
 

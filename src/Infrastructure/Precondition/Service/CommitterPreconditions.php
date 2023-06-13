@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\CommitterPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\CommonPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoUnsupportedLinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsReadyInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
  * @package Precondition

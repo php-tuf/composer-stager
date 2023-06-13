@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Translation\Value;
 
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
 /**
  * Handles an array of translation parameters.

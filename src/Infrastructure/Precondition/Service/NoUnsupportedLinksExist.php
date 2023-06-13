@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoAbsoluteSymlinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoHardLinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoLinksExistOnWindowsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointToADirectoryInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoUnsupportedLinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
  * @package Precondition

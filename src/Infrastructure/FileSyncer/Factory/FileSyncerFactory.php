@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory;
 
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncerInterface;
 use Symfony\Component\Process\ExecutableFinder;

@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\CommonPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoUnsupportedLinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirDoesNotExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\BeginnerPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
@@ -17,12 +17,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\NoUnsupportedLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noUnsupportedLinksExist
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirDoesNotExistInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirDoesNotExist
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noUnsupportedLinksExist
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirDoesNotExist
  */
 final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 {

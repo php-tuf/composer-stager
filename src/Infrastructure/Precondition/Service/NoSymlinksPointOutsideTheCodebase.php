@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
  * @package Precondition
@@ -55,7 +55,7 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
     private function linkPointsOutsidePath(PathInterface $link, PathInterface $path): bool
     {
         $target = $this->filesystem->readLink($link);

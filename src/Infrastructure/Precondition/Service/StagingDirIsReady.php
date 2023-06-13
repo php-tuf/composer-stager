@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirExistsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsReadyInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\StagingDirIsWritableInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
  * @package Precondition

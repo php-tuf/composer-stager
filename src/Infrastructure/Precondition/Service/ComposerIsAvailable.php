@@ -3,14 +3,14 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Precondition\Service;
 
 use JsonException;
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\ComposerIsAvailableInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Process\Factory\ProcessFactoryInterface;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
@@ -59,7 +59,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         return $this->t('Composer is available.');
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
     private function assertExecutableExists(): void
     {
         try {
@@ -69,7 +69,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
     private function assertIsActuallyComposer(): void
     {
         $process = $this->getProcess();
@@ -82,7 +82,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\PreconditionException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
     private function getProcess(): Process
     {
         try {

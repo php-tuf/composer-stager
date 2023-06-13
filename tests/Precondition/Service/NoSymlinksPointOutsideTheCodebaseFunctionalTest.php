@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointOut
  * @covers ::__construct
  * @covers ::exitEarly
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinder
  * @uses \PhpTuf\ComposerStager\Infrastructure\Host\Service\Host
@@ -30,8 +30,8 @@ use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointOut
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

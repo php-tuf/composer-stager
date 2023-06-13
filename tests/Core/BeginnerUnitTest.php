@@ -2,17 +2,17 @@
 
 namespace PhpTuf\ComposerStager\Tests\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Beginner;
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\InvalidArgumentException;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\BeginnerPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Core\Beginner;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
@@ -21,14 +21,14 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Beginner
+ * @coversDefaultClass \PhpTuf\ComposerStager\API\Core\Beginner
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Beginner::__construct
+ * @covers \PhpTuf\ComposerStager\API\Core\Beginner::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  *
- * @property \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */

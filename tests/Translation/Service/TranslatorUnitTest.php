@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 use AssertionError;
 use Error;
 use LogicException;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator;
@@ -22,8 +22,8 @@ use Throwable;
  *
  * @covers \PhpTuf\ComposerStager\Infrastructure\Translation\Service\SymfonyTranslatorProxy
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  */

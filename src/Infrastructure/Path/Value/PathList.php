@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 
 /**
  * @package Path

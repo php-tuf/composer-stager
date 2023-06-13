@@ -84,14 +84,14 @@ services:
         public: true
         exclude:
             - '../vendor/php-tuf/composer-stager/src/*/*/Value'
-            - '../vendor/php-tuf/composer-stager/src/Domain/Exception'
-            - '../vendor/php-tuf/composer-stager/src/Domain/Translation/FakeTranslator.php'
+            - '../vendor/php-tuf/composer-stager/src/API/Exception'
+            - '../vendor/php-tuf/composer-stager/src/API/Translation/FakeTranslator.php'
 
     PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory:
         arguments:
             $phpFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer'
             $rsyncFileSyncer: '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer'
-    PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface:
+    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
         factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory', 'create' ]
 
     Symfony\Component\Filesystem\Filesystem: ~

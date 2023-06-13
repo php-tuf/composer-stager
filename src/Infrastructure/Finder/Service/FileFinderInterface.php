@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Finder\Service;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 
 /**
  * Recursively finds all files "underneath" or "inside" a directory.
@@ -19,9 +19,9 @@ interface FileFinderInterface
      *
      * Returns files only--no directories.
      *
-     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $directory
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $directory
      *   The directory to search.
-     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface|null $exclusions
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the active directory.
      *
      * @return array<string>
@@ -32,7 +32,7 @@ interface FileFinderInterface
      *   - /var/www/one.txt
      *   - /var/www/two/three.txt
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the directory cannot be found or is not actually a directory.
      */
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array;

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 
 /**
  * @package Path
@@ -20,7 +20,7 @@ abstract class AbstractPath implements PathInterface
      *   The path string may be absolute or relative to the current working
      *   directory as returned by `getcwd()` at runtime, e.g., "/var/www/example"
      *   or "example". Nothing needs to actually exist at the path.
-     * @param \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface|null $cwd
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $cwd
      *   Optionally override the working directory used as the base for relative
      *   paths. Nothing needs to actually exist at the path. Therefore, it is
      *   simply assumed to represent a directory, as opposed to a file--even if

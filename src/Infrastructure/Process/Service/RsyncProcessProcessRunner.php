@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process\Service;
 
-use PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 
 /**
  * Before using this class outside the infrastructure layer, consider a
  * higher-level abstraction, e.g.:
  *
- * @see \PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface
+ * @see \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface
  * @see \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactoryInterface
  *
  * @package Process

@@ -14,13 +14,13 @@ use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  * @property \PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  */

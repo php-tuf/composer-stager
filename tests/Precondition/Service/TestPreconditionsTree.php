@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;

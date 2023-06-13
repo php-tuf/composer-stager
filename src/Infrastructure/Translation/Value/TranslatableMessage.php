@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Translation\Value;
 
-use PhpTuf\ComposerStager\Domain\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
 /**
  * Handles a translatable message.
  *
- * @see \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface
+ * @see \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface
  * @see https://symfony.com/doc/current/translation.html
  *
  * @package Translation
@@ -26,7 +26,7 @@ final class TranslatableMessage implements TranslatableInterface
      *   ```php
      *   $message = 'Hello, %first_name %last_name.';
      *   ```
-     * @param \PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface|null $parameters
+     * @param \PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface|null $parameters
      *   Parameters for the message.
      * @param string|null $domain
      *   An arbitrary domain for grouping translations, e.g., "app", "admin",

@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\Process\Factory;
 
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Process\Process;
 

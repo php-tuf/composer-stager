@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {

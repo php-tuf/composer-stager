@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory;
 
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 
 /**
  * Creates file syncer objects.

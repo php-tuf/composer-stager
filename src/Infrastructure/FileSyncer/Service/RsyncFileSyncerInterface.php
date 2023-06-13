@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service;
 
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 
 /**
  * Provides an rsync-based file syncer.

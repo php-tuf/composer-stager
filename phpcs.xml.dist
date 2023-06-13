@@ -77,7 +77,7 @@
     <rule ref="SlevomatCodingStandard.Classes.PropertyDeclaration"/>
     <rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireAbstractOrFinal">
-        <exclude-pattern>src/Domain/Exception</exclude-pattern>
+        <exclude-pattern>src/API/Exception</exclude-pattern>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature"/>

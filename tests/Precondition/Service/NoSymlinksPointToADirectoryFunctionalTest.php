@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
@@ -15,7 +15,7 @@ use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToA
  * @covers ::__construct
  * @covers ::exitEarly
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer
@@ -37,8 +37,8 @@ use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoSymlinksPointToA
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslatableMessage
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\Domain\Path\Value\PathInterface $stagingDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
+ * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

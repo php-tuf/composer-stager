@@ -20,7 +20,7 @@ interface ExecutableFinderInterface
      * @return string
      *   The path to the given executable.
      *
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the executable cannot be found.
      */
     public function find(string $name): string;

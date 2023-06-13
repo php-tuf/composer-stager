@@ -9,10 +9,10 @@ services:
         resource: '../src/*'
         public: true
         exclude:
-            - '../src/Domain/Exception'
+            - '../src/API/Exception'
             - '../src/*/*/Value'
 
-    PhpTuf\ComposerStager\Domain\FileSyncer\Service\FileSyncerInterface:
+    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
         factory: [ '@PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory', 'create' ]
 
     PhpTuf\ComposerStager\Infrastructure\FileSyncer\Factory\FileSyncerFactory: ~

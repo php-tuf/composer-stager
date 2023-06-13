@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
-use PhpTuf\ComposerStager\Domain\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
 final class TestTranslationParameters implements TranslationParametersInterface
 {

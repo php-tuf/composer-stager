@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
@@ -50,7 +50,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $this->copySourceFilesToDestination($source, $destination, $exclusions);
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
     private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
     {
         if ($source->resolved() === $destination->resolved()) {
@@ -63,7 +63,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
     private function assertSourceExists(PathInterface $source): void
     {
         if (!$this->filesystem->exists($source)) {
@@ -74,14 +74,14 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
     private function ensureDestinationExists(PathInterface $destination): void
     {
         // Create the destination directory if it doesn't already exist.
         $this->filesystem->mkdir($destination);
     }
 
-    /** @throws \PhpTuf\ComposerStager\Domain\Exception\IOException */
+    /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
     private function deleteExtraneousFilesFromDestination(
         PathInterface $destination,
         PathInterface $source,
@@ -115,8 +115,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      */
     private function copySourceFilesToDestination(
         PathInterface $source,

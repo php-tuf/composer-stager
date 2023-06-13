@@ -3,11 +3,11 @@
 namespace PhpTuf\ComposerStager\Infrastructure\Finder\Service;
 
 use FilesystemIterator;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use RecursiveCallbackFilterIterator;
@@ -66,7 +66,7 @@ final class FileFinder implements FileFinderInterface
     }
 
     /**
-     * @throws \PhpTuf\ComposerStager\Domain\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the directory cannot be found or is not actually a directory.
      *
      * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator

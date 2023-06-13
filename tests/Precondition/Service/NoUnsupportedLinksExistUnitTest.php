@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoAbsoluteSymlinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoHardLinksExistInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoLinksExistOnWindowsInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointToADirectoryInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Infrastructure\Precondition\Service\NoUnsupportedLinksExist;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
@@ -20,14 +20,14 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Infrastructure\Precondition\Service\AbstractPreconditionsTree
  *
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\NoAbsoluteSymlinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteSymlinksExist
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\NoLinksExistOnWindowsInterface|\Prophecy\Prophecy\ObjectProphecy $noLinksExistOnWindows
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointOutsideTheCodebase
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\NoSymlinksPointToADirectoryInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointToADirectory
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteSymlinksExist
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface|\Prophecy\Prophecy\ObjectProphecy $noLinksExistOnWindows
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointOutsideTheCodebase
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointToADirectory
  */
 final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 {

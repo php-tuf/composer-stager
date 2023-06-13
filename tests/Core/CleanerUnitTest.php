@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Core;
 
-use PhpTuf\ComposerStager\Domain\Core\Cleaner;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Precondition\Service\CleanerPreconditionsInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Core\Cleaner;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -17,15 +17,15 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Domain\Core\Cleaner
+ * @coversDefaultClass \PhpTuf\ComposerStager\API\Core\Cleaner
  *
- * @covers \PhpTuf\ComposerStager\Domain\Core\Cleaner::__construct
+ * @covers \PhpTuf\ComposerStager\API\Core\Cleaner::__construct
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Precondition\Service\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
+ * @property \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */

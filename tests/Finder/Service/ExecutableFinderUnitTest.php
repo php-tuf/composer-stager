@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Infrastructure\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -16,8 +16,8 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::__construct
  * @covers ::find
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
  * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $symfonyExecutableFinder

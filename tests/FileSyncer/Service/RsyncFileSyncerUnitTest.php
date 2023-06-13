@@ -2,14 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
-use PhpTuf\ComposerStager\Domain\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\Domain\Exception\IOException;
-use PhpTuf\ComposerStager\Domain\Exception\LogicException;
-use PhpTuf\ComposerStager\Domain\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Infrastructure\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -27,13 +27,13 @@ use Prophecy\Argument;
  * @covers ::isDescendant
  * @covers ::sync
  *
- * @uses \PhpTuf\ComposerStager\Domain\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Domain\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Infrastructure\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Infrastructure\Translation\Value\TranslationParameters
  *
- * @property \PhpTuf\ComposerStager\Domain\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Domain\Process\Service\RsyncProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
+ * @property \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
  *

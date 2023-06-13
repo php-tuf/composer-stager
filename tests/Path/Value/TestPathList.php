@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Domain\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 
 final class TestPathList implements PathListInterface
 {
