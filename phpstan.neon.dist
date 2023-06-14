@@ -30,13 +30,6 @@ parameters:
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
-            message: '#(Concrete class|Interface) .* be marked "@.*"#'
-            paths:
-                - src/Internal/Translation/Service/SymfonyTranslatorProxyInterface.php
-                - src/Internal/Path/Value/PathList.php
-                - src/Internal/Translation/Value/TranslatableMessage.php
-                - src/Internal/Translation/Value/TranslationParameters.php
-        -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             path: src/Internal/Translation/Service/Translator.php
         -
@@ -104,7 +97,6 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\NoNonInterfacePublicMethodsRule # Forbids public methods that are not on an interface.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\APIAnnotationRule # Enforces "@api" and "@internal" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
