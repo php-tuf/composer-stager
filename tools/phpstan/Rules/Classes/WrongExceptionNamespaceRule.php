@@ -33,9 +33,7 @@ final class WrongExceptionNamespaceRule extends AbstractRule
 
         if (!$this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\API\\Exception\\')) {
             return [
-                $this->buildErrorMessage(
-                    'Exception must be in the PhpTuf\\ComposerStager\\API\\Exception namespace',
-                ),
+                $this->buildErrorMessage('Exception must be in the PhpTuf\\ComposerStager\\API\\Exception namespace'),
             ];
         }
 
