@@ -8,6 +8,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 /** Finds select DocBlock tags that are out of alphabetical order. */
 final class AlphabeticallySortedTagsSniff implements Sniff
 {
+    private const CODE_INCORRECTLY_ORDERED_TAGS = 'IncorrectlyOrdered%sTags';
+
     private const TAGS = [
         '@covers',
         '@property',
@@ -66,7 +68,7 @@ final class AlphabeticallySortedTagsSniff implements Sniff
                         $tagName,
                         $tagValue,
                     ), $tagPtr, sprintf(
-                        'IncorrectlyOrdered%sTags',
+                        self::CODE_INCORRECTLY_ORDERED_TAGS,
                         ucfirst(ltrim($tagName, '@')),
                     ));
                 }
