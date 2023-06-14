@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PhpTuf\ComposerStager\Helper\DocCommentTag;
 
+/** Finds "@property" tags that don't have a dollar sign on the variable name. */
 final class PropertyVarNameHasDollarSignSniff implements Sniff
 {
     private const CODE_MISSING_DOLLAR_SIGN = 'MissingDollarSign';
