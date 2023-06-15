@@ -1,22 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Core;
+namespace PhpTuf\ComposerStager\Internal\Core;
 
+use PhpTuf\ComposerStager\API\Core\StagerInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface;
 
 /**
  * @package Core
  *
- * @api This class is subject to our backward compatibility promise and may be safely depended upon.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class Stager implements StagerInterface
 {

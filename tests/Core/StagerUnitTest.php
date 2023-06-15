@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Core;
 
-use PhpTuf\ComposerStager\API\Core\Stager;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
@@ -10,9 +9,10 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Internal\Core\Stager;
+use PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -21,14 +21,14 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\API\Core\Stager
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Stager
  *
- * @covers \PhpTuf\ComposerStager\API\Core\Stager
+ * @covers \PhpTuf\ComposerStager\Internal\Core\Stager
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
+ * @property \PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */

@@ -1,27 +1,30 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Process\Service;
+namespace PhpTuf\ComposerStager\Internal\Process\Service;
+
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 
 /**
- * Runs Composer commands.
+ * Runs rsync commands.
  *
  * @package Process
  *
- * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
+ * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
  */
-interface ComposerProcessRunnerInterface extends ProcessRunnerInterface
+interface RsyncProcessRunnerInterface extends ProcessRunnerInterface
 {
     /**
-     * Runs a given Composer command.
+     * Runs a given rsync command.
      *
      * @param array<string> $command
      *   The command to run and its arguments as separate string values. Example:
      *   ```php
      *   $command = [
-     *       // "composer" is implied.
-     *       'require',
-     *       'example/package:"^1 || ^2"',
-     *       '--with-all-dependencies',
+     *       // "rsync" is implied.
+     *       '--recursive',
+     *       'path/to/source',
+     *       'path/to/destination',
      *   ];
      *   ```
      * @param \PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface|null $callback

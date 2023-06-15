@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
-use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
-
 /**
  * @package Process
  *

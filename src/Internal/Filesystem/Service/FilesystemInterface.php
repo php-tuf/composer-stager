@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Filesystem\Service;
+namespace PhpTuf\ComposerStager\Internal\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
  *
  * @package Filesystem
  *
- * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
+ * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
  */
 interface FilesystemInterface
 {

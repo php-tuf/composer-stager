@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
-
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+namespace PhpTuf\ComposerStager\API\FileSyncer\Service;
 
 /**
  * Provides an rsync-based file syncer.
@@ -13,7 +11,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
  *
  * @package FileSyncer
  *
- * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface RsyncFileSyncerInterface extends FileSyncerInterface
 {

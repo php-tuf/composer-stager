@@ -5,15 +5,16 @@ namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
-use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Process\Service\RsyncProcessRunnerInterface;
 
 /**
  * @package FileSyncer

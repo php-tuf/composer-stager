@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
  *
- * @property \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
+ * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  */
 final class StagingDirIsWritableUnitTest extends PreconditionTestCase
 {

@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Core;
 
-use PhpTuf\ComposerStager\API\Core\Committer;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
@@ -13,6 +12,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
@@ -21,9 +21,9 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\API\Core\Committer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Committer
  *
- * @covers \PhpTuf\ComposerStager\API\Core\Committer::__construct
+ * @covers \PhpTuf\ComposerStager\Internal\Core\Committer::__construct
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait

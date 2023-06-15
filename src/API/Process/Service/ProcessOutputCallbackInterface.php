@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\API\Process\Service;
 
-use Symfony\Component\Process\Process;
-
 /**
  * Receives streamed process output.
  *
@@ -21,10 +19,10 @@ use Symfony\Component\Process\Process;
 interface ProcessOutputCallbackInterface
 {
     /** Standard output (stdout). */
-    public const OUT = Process::OUT;
+    public const OUT = 'OUT';
 
     /** Standard error (stderr). */
-    public const ERR = Process::ERR;
+    public const ERR = 'ERR';
 
     /**
      * @param string $type
