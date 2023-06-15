@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 /**
  * @package Core
  *
- * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
 final class Cleaner implements CleanerInterface
 {

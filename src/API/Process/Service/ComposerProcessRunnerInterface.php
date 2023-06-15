@@ -7,7 +7,7 @@ namespace PhpTuf\ComposerStager\API\Process\Service;
  *
  * @package Process
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface ComposerProcessRunnerInterface extends ProcessRunnerInterface
 {

@@ -14,7 +14,7 @@ use Symfony\Component\Process\Process;
  *
  * @package Process
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  *
  * @noinspection PhpUnused
  */

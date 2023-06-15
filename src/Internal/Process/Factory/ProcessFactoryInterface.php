@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process;
  *
  * @package Process
  *
- * @api
+ * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
  */
 interface ProcessFactoryInterface
 {

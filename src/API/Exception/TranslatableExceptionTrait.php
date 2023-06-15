@@ -12,7 +12,7 @@ use Throwable;
  *
  * @package Exception
  *
- * @api
+ * @api This trait is subject to our backward compatibility promise and may be safely depended upon.
  */
 trait TranslatableExceptionTrait
 {

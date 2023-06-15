@@ -14,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorTrait;
  *
  * @package Translation
  *
- * @internal Don't depend on this class. It may be changed or removed without notice.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
 {

@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath;
 /**
  * @package Path
  *
- * @api
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  *
  * @SuppressWarnings(PHPMD.StaticAccess)
  */

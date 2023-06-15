@@ -9,7 +9,7 @@ use RuntimeException as PHPRuntimeException;
  *
  * @package Exception
  *
- * @api
+ * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
 class RuntimeException extends PHPRuntimeException implements ExceptionInterface
 {

@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
  *
  * @package Translation
  *
- * @api This class may be instantiated directly.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class TranslationParameters implements TranslationParametersInterface
 {

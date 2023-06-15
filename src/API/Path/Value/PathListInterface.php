@@ -7,7 +7,7 @@ namespace PhpTuf\ComposerStager\API\Path\Value;
  *
  * @package Path
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface PathListInterface
 {

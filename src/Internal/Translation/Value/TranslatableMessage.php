@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
  *
  * @package Translation
  *
- * @api This class may be instantiated directly or created using the path factory above.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class TranslatableMessage implements TranslatableInterface
 {

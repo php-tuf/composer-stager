@@ -10,7 +10,7 @@ use Symfony\Component\Process\ExecutableFinder;
 /**
  * @package FileSyncer
  *
- * @api
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class FileSyncerFactory implements FileSyncerFactoryInterface
 {

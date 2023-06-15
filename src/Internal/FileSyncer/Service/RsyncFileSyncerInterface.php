@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
  *
  * @package FileSyncer
  *
- * @api
+ * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
  */
 interface RsyncFileSyncerInterface extends FileSyncerInterface
 {

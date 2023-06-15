@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 /**
  * @package Precondition
  *
- * @api
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
 {

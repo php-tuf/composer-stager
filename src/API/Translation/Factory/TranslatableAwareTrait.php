@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
  *
  * @package Translation
  *
- * @api
+ * @api This trait is subject to our backward compatibility promise and may be safely depended upon.
  */
 trait TranslatableAwareTrait
 {

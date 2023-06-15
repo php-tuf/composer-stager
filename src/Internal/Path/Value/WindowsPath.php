@@ -9,7 +9,7 @@ namespace PhpTuf\ComposerStager\Internal\Path\Value;
  *
  * @package Path
  *
- * @internal Don't instantiate this class directly. Use the path factory above.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class WindowsPath extends AbstractPath
 {

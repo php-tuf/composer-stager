@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
  *
  * @package Filesystem
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface FilesystemInterface
 {

@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 /**
  * @package Precondition
  *
- * @api
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 abstract class AbstractPrecondition implements PreconditionInterface
 {
