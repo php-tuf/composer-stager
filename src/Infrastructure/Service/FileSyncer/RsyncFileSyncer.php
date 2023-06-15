@@ -79,7 +79,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         $exclusions = array_unique($exclusions);
 
         foreach ($exclusions as $exclusion) {
-            $command[] = '--exclude=' . $exclusion;
+            $command[] = '--exclude=/' . $exclusion;
         }
 
         // A trailing slash is added to the source directory so the CONTENTS
