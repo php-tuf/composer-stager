@@ -91,6 +91,9 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             '.hidden_EXCLUDED_dir/one.txt',
             '.hidden_EXCLUDED_dir/two.txt',
             '.hidden_EXCLUDED_dir/three.txt',
+            // Files included despite including excluded paths at the wrong depth.
+            'not/an/EXCLUDED_dir/file.txt',
+            'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
             // Files to be changed in the staging directory.
             'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
@@ -129,8 +132,10 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'EXCLUDED_file_in_active_dir_root.txt',
             // Overlapping.
             'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
-            // Non-existent.
+            // Non-existent (ignore).
             'file_that_NEVER_EXISTS_anywhere.txt',
+            // Absolute path (ignore).
+            PathFactory::create('absolute/path')->resolved(),
         ];
         $exclusions = new PathList(...$exclusions);
 
@@ -162,6 +167,8 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
             'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
+            'not/an/EXCLUDED_dir/file.txt',
+            'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
         ];
         self::assertDirectoryListing($stagingDirPath->resolved(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
 
@@ -257,6 +264,9 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Files deleted from either side are absent from the active directory.
             // - another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt
             // - DELETE_from_staging_dir_before_syncing_back_to_active_dir
+            // Files included despite including excluded paths at the wrong depth.
+            'not/an/EXCLUDED_dir/file.txt',
+            'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
         ], $stagingDirPath->resolved(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
 
         // Unchanged file contents.
