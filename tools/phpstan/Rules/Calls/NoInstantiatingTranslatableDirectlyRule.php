@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
@@ -41,7 +42,7 @@ final class NoInstantiatingTranslatableDirectlyRule extends AbstractRule
         }
 
         $class = $scope->getClassReflection();
-        assert($class !== null);
+        assert($class instanceof ClassReflection);
 
         // Exempt the translatable factory itself.
         if ($class->getName() === TranslatableFactory::class) {

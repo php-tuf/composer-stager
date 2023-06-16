@@ -2,11 +2,13 @@
 
 namespace PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Enforces "@package" class annotation rules. */
@@ -26,7 +28,7 @@ final class PackageAnnotationRule extends AbstractRule
 
         $class = $this->getClassReflection($node);
 
-        if ($class === null) {
+        if (!$class instanceof ClassReflection) {
             return [];
         }
 
@@ -40,7 +42,7 @@ final class PackageAnnotationRule extends AbstractRule
 
         $docComment = $node->getDocComment();
 
-        if ($docComment === null) {
+        if (!$docComment instanceof Doc) {
             return [];
         }
 

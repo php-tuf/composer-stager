@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassConst;
@@ -30,7 +31,7 @@ final class CoverageAnnotationHasNoParenthesesRule extends AbstractRule
 
         $docComment = $node->getDocComment();
 
-        if ($docComment === null) {
+        if (!$docComment instanceof Doc) {
             return [];
         }
 

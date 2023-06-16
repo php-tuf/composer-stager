@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -45,7 +46,7 @@ final class APIAnnotationRule extends AbstractRule
 
         $class = $this->getClassReflection($node);
 
-        if ($class === null) {
+        if (!$class instanceof ClassReflection) {
             return [];
         }
 
@@ -131,7 +132,7 @@ final class APIAnnotationRule extends AbstractRule
     {
         $docComment = $node->getDocComment();
 
-        if ($docComment === null) {
+        if (!$docComment instanceof Doc) {
             return false;
         }
 

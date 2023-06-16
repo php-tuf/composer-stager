@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Methods;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
+use PHPStan\Type\Type;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 
 /** Forbids throwing third party exceptions from public methods. */
@@ -25,7 +26,7 @@ final class ForbiddenThrowsRule extends AbstractRule
 
         $throwType = $method->getThrowType();
 
-        if ($throwType === null) {
+        if (!$throwType instanceof Type) {
             return[];
         }
 

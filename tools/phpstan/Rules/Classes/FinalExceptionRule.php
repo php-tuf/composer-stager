@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\Classes;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
 
@@ -20,7 +21,7 @@ final class FinalExceptionRule extends AbstractRule
     {
         $class = $this->getClassReflection($node);
 
-        if ($class === null) {
+        if (!$class instanceof ClassReflection) {
             return [];
         }
 

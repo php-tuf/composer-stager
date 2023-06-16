@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
@@ -35,7 +36,7 @@ final class PreconditionDiagramsInSyncRule extends AbstractRule
 
         $class = $this->getClassReflection($node);
 
-        if ($class === null) {
+        if (!$class instanceof ClassReflection) {
             return [];
         }
 

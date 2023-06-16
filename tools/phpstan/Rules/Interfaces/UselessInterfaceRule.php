@@ -22,7 +22,7 @@ final class UselessInterfaceRule extends AbstractRule
         $methods = $reflection->getMethods();
         $constants = $reflection->getReflectionConstants();
 
-        if (count($methods) > 0 || count($constants) > 0) {
+        if ($methods !== [] || $constants !== []) {
             return [];
         }
 

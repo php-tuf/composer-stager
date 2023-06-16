@@ -151,7 +151,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $ancestor .= DIRECTORY_SEPARATOR;
 
         if (str_starts_with($path, $ancestor)) {
-            $path = substr($path, strlen($ancestor));
+            return substr($path, strlen($ancestor));
         }
 
         return $path;

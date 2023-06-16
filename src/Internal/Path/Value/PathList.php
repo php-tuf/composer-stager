@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 final class PathList implements PathListInterface
 {
     /** @var array<string> */
-    private array $paths;
+    private array $paths = [];
 
     public function __construct(string ...$paths)
     {

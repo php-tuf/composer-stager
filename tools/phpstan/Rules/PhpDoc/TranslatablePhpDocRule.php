@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
@@ -48,7 +49,7 @@ final class TranslatablePhpDocRule extends AbstractRule
         $method = $node->getMethod($methodName);
 
         // Make sure the expected method exists.
-        if ($method === null) {
+        if (!$method instanceof ClassMethod) {
             return [
                 $this->buildErrorMessage(sprintf(
                     'Expected method "%s()" is missing. See %s::COVERED_METHODS',
