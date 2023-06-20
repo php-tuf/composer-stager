@@ -7,7 +7,7 @@ namespace PhpTuf\ComposerStager\Internal\Host\Service;
  *
  * @package Host
  *
- * @api
+ * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
  */
 interface HostInterface
 {

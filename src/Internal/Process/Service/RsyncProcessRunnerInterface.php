@@ -1,13 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Process\Service;
+namespace PhpTuf\ComposerStager\Internal\Process\Service;
+
+use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 
 /**
  * Runs rsync commands.
  *
  * @package Process
  *
- * @api
+ * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
  */
 interface RsyncProcessRunnerInterface extends ProcessRunnerInterface
 {

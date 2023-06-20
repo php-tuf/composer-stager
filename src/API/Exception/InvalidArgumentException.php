@@ -9,7 +9,7 @@ use InvalidArgumentException as PHPInvalidArgumentException;
  *
  * @package Exception
  *
- * @api
+ * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
 class InvalidArgumentException extends PHPInvalidArgumentException implements ExceptionInterface
 {

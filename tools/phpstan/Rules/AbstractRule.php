@@ -55,13 +55,6 @@ abstract class AbstractRule implements Rule
         return $this->isInNamespace($class->getName(), 'PhpTuf\ComposerStager\\');
     }
 
-    protected function isFactoryClass(ClassReflection $class): bool
-    {
-        $factory = 'Factory';
-
-        return str_ends_with($class->getName(), $factory);
-    }
-
     protected function isInNamespace(string $name, string $namespace): bool
     {
         return str_starts_with("{$name}\\", $namespace);

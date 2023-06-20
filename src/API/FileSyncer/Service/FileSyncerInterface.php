@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
  *
  * @package FileSyncer
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface FileSyncerInterface
 {

@@ -24,7 +24,7 @@ namespace PhpTuf\ComposerStager\API\Precondition\Service;
  *
  * @package Precondition
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface NoSymlinksPointToADirectoryInterface extends PreconditionInterface
 {

@@ -12,7 +12,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
  *
  * @package Core
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface BeginnerInterface
 {
@@ -48,7 +48,7 @@ interface BeginnerInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *   If the operation fails.
      *
-     * @see \PhpTuf\ComposerStager\API\Core\CommitterInterface::commit
+     * @see \PhpTuf\ComposerStager\Internal\Core\CommitterInterface::commit
      */
     public function begin(
         PathInterface $activeDir,

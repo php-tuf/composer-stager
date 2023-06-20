@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Core;
+namespace PhpTuf\ComposerStager\Internal\Core;
 
+use PhpTuf\ComposerStager\API\Core\CommitterInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
@@ -14,7 +15,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 /**
  * @package Core
  *
- * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class Committer implements CommitterInterface
 {

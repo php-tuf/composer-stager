@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Host\Service;
 /**
  * @package Host
  *
- * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class Host implements HostInterface
 {

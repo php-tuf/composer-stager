@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
  *
  * @package Precondition
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface PreconditionInterface
 {

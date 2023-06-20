@@ -9,7 +9,7 @@ use LogicException as PHPLogicException;
  *
  * @package Exception
  *
- * @api
+ * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
 class LogicException extends PHPLogicException implements ExceptionInterface
 {

@@ -3,13 +3,14 @@
 namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
-use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
@@ -17,7 +18,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 /**
  * @package FileSyncer
  *
- * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class PhpFileSyncer implements PhpFileSyncerInterface
 {

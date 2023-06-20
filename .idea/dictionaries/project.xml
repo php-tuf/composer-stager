@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>Ptrs</w>
       <w>autowire</w>
       <w>autowiring</w>
       <w>canonicalized</w>
@@ -34,7 +35,6 @@
       <w>phpstan</w>
       <w>polyline</w>
       <w>precondtion</w>
-      <w>ptrs</w>
       <w>puml</w>
       <w>qossmic</w>
       <w>rlptgo</w>

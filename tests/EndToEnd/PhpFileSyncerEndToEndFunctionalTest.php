@@ -9,11 +9,11 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
  *
  * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  *
- * @uses \PhpTuf\ComposerStager\API\Core\Beginner
- * @uses \PhpTuf\ComposerStager\API\Core\Cleaner
- * @uses \PhpTuf\ComposerStager\API\Core\Committer
- * @uses \PhpTuf\ComposerStager\API\Core\Stager
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\Internal\Core\Beginner
+ * @uses \PhpTuf\ComposerStager\Internal\Core\Cleaner
+ * @uses \PhpTuf\ComposerStager\Internal\Core\Committer
+ * @uses \PhpTuf\ComposerStager\Internal\Core\Stager
  * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
  * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder

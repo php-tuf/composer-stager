@@ -4,11 +4,11 @@ namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 /**
  * @package Precondition
  *
- * @api
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
 {

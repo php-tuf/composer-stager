@@ -17,7 +17,7 @@ use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionIn
  *
  * @package Process
  *
- * @api
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 abstract class AbstractProcessRunner implements ProcessRunnerInterface
 {

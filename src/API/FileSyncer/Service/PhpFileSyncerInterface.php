@@ -1,8 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
-
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+namespace PhpTuf\ComposerStager\API\FileSyncer\Service;
 
 /**
  * Provides a PHP-based file syncer.
@@ -13,7 +11,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
  *
  * @package FileSyncer
  *
- * @api
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface PhpFileSyncerInterface extends FileSyncerInterface
 {

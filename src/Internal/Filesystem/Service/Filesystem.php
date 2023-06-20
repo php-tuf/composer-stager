@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
-use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
@@ -19,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 /**
  * @package Filesystem
  *
- * @internal Don't instantiate this class directly. Get it from the service container via its interface.
+ * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
 final class Filesystem implements FilesystemInterface
 {

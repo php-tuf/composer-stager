@@ -12,7 +12,7 @@ use Throwable;
  *
  * @package Exception
  *
- * @api
+ * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
 class PreconditionException extends RuntimeException implements ExceptionInterface
 {
