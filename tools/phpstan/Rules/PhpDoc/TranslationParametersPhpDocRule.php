@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 use ReflectionMethod;
 
-/** Ensures that the DocBlocks for TranslationParameters creation methods stay in sync. */
+/** Ensures that the docblockss for TranslationParameters creation methods stay in sync. */
 final class TranslationParametersPhpDocRule extends AbstractRule
 {
     /** The class that covered methods must be in sync with. */

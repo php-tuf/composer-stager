@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
-/** Finds select DocBlock tags that are out of alphabetical order. */
+/** Finds select docblocks tags that are out of alphabetical order. */
 final class AlphabeticallySortedTagsSniff implements Sniff
 {
     private const CODE_INCORRECTLY_ORDERED_TAGS = 'IncorrectlyOrdered%sTags';
