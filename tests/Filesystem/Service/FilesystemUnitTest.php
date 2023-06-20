@@ -83,8 +83,9 @@ final class FilesystemUnitTest extends TestCase
     /** @covers ::copy */
     public function testCopyFailure(): void
     {
-        $message = 'Failed to copy active-dir to staging-dir';
-        $previous = new SymfonyIOException($message);
+        $previousMessage = 'Something went wrong';
+        $message = sprintf('Failed to copy active-dir to staging-dir: %s', $previousMessage);
+        $previous = new SymfonyIOException($previousMessage);
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->shouldBeCalled()
