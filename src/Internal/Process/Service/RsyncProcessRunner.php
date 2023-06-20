@@ -13,7 +13,7 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
  *
  * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
-final class RsyncProcessProcessRunner extends AbstractProcessRunner implements RsyncProcessRunnerInterface
+final class RsyncProcessRunner extends AbstractProcessRunner implements RsyncProcessRunnerInterface
 {
     protected function executableName(): string
     {

@@ -7,7 +7,7 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
  *
  * @internal Don't depend on this class. It may be changed or removed at any time without notice.
  */
-final class ComposerProcessProcessRunner extends AbstractProcessRunner implements ComposerProcessRunnerInterface
+final class ComposerProcessRunner extends AbstractProcessRunner implements ComposerProcessRunnerInterface
 {
     protected function executableName(): string
     {
