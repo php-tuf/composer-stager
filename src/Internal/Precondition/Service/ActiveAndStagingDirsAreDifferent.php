@@ -11,11 +11,10 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 /**
  * @package Precondition
  *
- * @internal Don't depend on this class. It may be changed or removed at any time without notice.
- *
- * phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
+ * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implements ActiveAndStagingDirsAreDifferentInterface
+final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implements
+    ActiveAndStagingDirsAreDifferentInterface
 {
     public function getName(): TranslatableInterface
     {

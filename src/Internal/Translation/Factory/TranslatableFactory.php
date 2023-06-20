@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
  *
  * @package Translation
  *
- * @internal Don't depend on this class. It may be changed or removed at any time without notice.
+ * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
 final class TranslatableFactory implements TranslatableFactoryInterface
 {

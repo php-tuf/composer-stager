@@ -7,7 +7,7 @@ namespace PhpTuf\ComposerStager\Internal\Finder\Service;
  *
  * @package Finder
  *
- * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
+ * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
  */
 interface ExecutableFinderInterface
 {

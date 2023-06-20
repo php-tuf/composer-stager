@@ -26,7 +26,7 @@ final class APITagsSniff implements Sniff
         ],
         'PhpTuf\\ComposerStager\\Internal\\' => [
             self::RULE_EXPECTED_TAG_NAME => '@internal',
-            self::RULE_EXPECTED_TAG_VALUE => "Don't depend on this %s. It may be changed or removed at any time without notice.",
+            self::RULE_EXPECTED_TAG_VALUE => "Don't depend directly on this %s. It may be changed or removed at any time without notice.",
             self::RULE_FORBIDDEN_TAG_NAME => '@api',
         ],
     ];

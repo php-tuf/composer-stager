@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Host\Service;
 /**
  * @package Host
  *
- * @internal Don't depend on this class. It may be changed or removed at any time without notice.
+ * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
 final class Host implements HostInterface
 {

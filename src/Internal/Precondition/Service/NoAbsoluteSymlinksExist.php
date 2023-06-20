@@ -10,11 +10,10 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 /**
  * @package Precondition
  *
- * @internal Don't depend on this class. It may be changed or removed at any time without notice.
- *
- * phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
+ * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class NoAbsoluteSymlinksExist extends AbstractFileIteratingPrecondition implements NoAbsoluteSymlinksExistInterface
+final class NoAbsoluteSymlinksExist extends AbstractFileIteratingPrecondition implements
+    NoAbsoluteSymlinksExistInterface
 {
     public function getName(): TranslatableInterface
     {

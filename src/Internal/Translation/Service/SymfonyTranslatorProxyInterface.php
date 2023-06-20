@@ -9,7 +9,7 @@ use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterf
  *
  * @package Translation
  *
- * @internal Don't depend on this interface. It may be changed or removed at any time without notice.
+ * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
  */
 interface SymfonyTranslatorProxyInterface extends SymfonyTranslatorInterface
 {
