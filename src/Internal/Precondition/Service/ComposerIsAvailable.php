@@ -95,8 +95,8 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
             throw new PreconditionException(
                 $this,
                 $this->t(
-                    'Cannot check for Composer due to a host configuration problem: %problem',
-                    $this->p(['%problem' => $e->getMessage()]),
+                    'Cannot check for Composer due to a host configuration problem: %details',
+                    $this->p(['%details' => $e->getMessage()]),
                 ),
                 0,
                 $e,

@@ -65,10 +65,11 @@ final class Filesystem implements FilesystemInterface
             ), 0, $e);
         } catch (SymfonyIOException $e) {
             throw new IOException($this->t(
-                'Failed to copy %source to %destination',
+                'Failed to copy %source to %destination: %details',
                 $this->p([
                     '%source' => $sourceResolved,
                     '%destination' => $destinationResolved,
+                    '%details' => $e->getMessage(),
                 ]),
             ), 0, $e);
         }
