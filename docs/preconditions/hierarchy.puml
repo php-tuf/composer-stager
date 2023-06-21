@@ -48,6 +48,7 @@ class CommonPreconditions {
     ActiveAndStagingDirsAreDifferent
     ActiveDirIsReady
     ComposerIsAvailable
+    HostSupportsRunningProcesses
 }
 CommonPreconditions -o ActiveDirIsReady
 

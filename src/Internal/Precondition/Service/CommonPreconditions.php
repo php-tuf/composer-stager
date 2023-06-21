@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDiffer
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
@@ -20,6 +21,7 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
+        HostSupportsRunningProcessesInterface $hostCanRunProcesses,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct(
@@ -27,6 +29,7 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
             $activeAndStagingDirsAreDifferent,
             $activeDirIsReady,
             $composerIsAvailable,
+            $hostCanRunProcesses,
         );
     }
 

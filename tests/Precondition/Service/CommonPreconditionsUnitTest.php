@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
@@ -23,6 +24,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsReady
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface|\Prophecy\Prophecy\ObjectProphecy $composerIsAvailable
+ * @property \PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface|\Prophecy\Prophecy\ObjectProphecy $hostSupportsRunningProcesses
  */
 final class CommonPreconditionsUnitTest extends PreconditionTestCase
 {
@@ -40,6 +42,10 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $this->composerIsAvailable
             ->getLeaves()
             ->willReturn([$this->composerIsAvailable]);
+        $this->hostSupportsRunningProcesses = $this->prophesize(HostSupportsRunningProcessesInterface::class);
+        $this->hostSupportsRunningProcesses
+            ->getLeaves()
+            ->willReturn([$this->hostSupportsRunningProcesses]);
 
         parent::setUp();
     }
@@ -49,12 +55,14 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $activeAndStagingDirsAreDifferent = $this->activeAndStagingDirsAreDifferent->reveal();
         $activeDirIsReady = $this->activeDirIsReady->reveal();
         $composerIsAvailable = $this->composerIsAvailable->reveal();
+        $hostSupportsRunningProcesses = $this->hostSupportsRunningProcesses->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
         return new CommonPreconditions(
             $activeAndStagingDirsAreDifferent,
             $activeDirIsReady,
             $composerIsAvailable,
+            $hostSupportsRunningProcesses,
             $translatableFactory,
         );
     }
@@ -68,6 +76,9 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeAndStagingDirsAreDifferent
+            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->hostSupportsRunningProcesses
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
