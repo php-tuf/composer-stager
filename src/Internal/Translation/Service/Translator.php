@@ -10,6 +10,9 @@ use Throwable;
 /**
  * @package Translation
  *
+ * This class HAPPENS to use a Symfony translator. However, there is no guarantee of
+ * functional equivalence. Refer to the interface and do not depend on undocumented behavior.
+ *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
 final class Translator implements TranslatorInterface

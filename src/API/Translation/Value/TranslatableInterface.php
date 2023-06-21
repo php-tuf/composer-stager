@@ -12,8 +12,6 @@ use Stringable;
  * there is no guarantee of functional equivalence. Do not depend on undocumented
  * behavior.
  *
- * @see https://symfony.com/doc/current/translation.html
- *
  * @package Translation
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
