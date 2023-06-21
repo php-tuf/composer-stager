@@ -47,7 +47,7 @@ parameters:
             message: '#Access to an undefined property.*#'
             path: tests
         -
-            message: '#Call to an undefined method .*ObjectProphecy.*::.*\(\).#'
+            message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
             path: tests
         -
             message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
@@ -83,7 +83,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: 89d281c6b6a413924cf671538f72e84b
+    preconditionSystemHash: 3b6325f3279d25982ec79c2ba847cd26
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

@@ -35,6 +35,7 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable
+ * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
