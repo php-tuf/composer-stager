@@ -31,18 +31,17 @@ final class Translator implements TranslatorInterface
 
             return $this->symfonyTranslatorProxy->trans($id, $parameters->getAll(), $domain, $locale);
         } catch (Throwable $e) {
+            $message = sprintf('Translation error: %s', $e->getMessage());
+
             // Re/throwing an exception here would create a nasty infinite recursion
             // problem that would end up exposing client code to low-level errors
             // with virtually every service call. Instead, use an assertion to surface
             // errors during development and return the untranslated error message
             // in case any escape to production.
-            assert(false, sprintf(
-                'Translation error: %s',
-                $e->getMessage(),
-            ));
+            assert(false, $message);
 
             /** @noinspection PhpUnreachableStatementInspection */
-            return $e->getMessage();
+            return $message;
         }
     }
 

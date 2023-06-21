@@ -120,15 +120,17 @@ final class TranslatorUnitTest extends TestCase
             ->reveal();
         $sut = $this->createSut();
 
+        $expectedMessage = sprintf('Translation error: %s', $exception->getMessage());
+
         // Disable assertions so production error-handling can be tested.
         assert_options(ASSERT_ACTIVE, 0);
-        self::assertSame($exception->getMessage(), $sut->trans($message), 'Returned exception message on failure.');
+        self::assertSame($expectedMessage, $sut->trans($message), 'Returned exception message on failure.');
 
         // Re-enable assertions so development error-handling can be tested.
         assert_options(ASSERT_ACTIVE, 1);
         self::assertTranslatableException(static function () use ($sut, $message) {
             $sut->trans($message);
-        }, AssertionError::class, sprintf('Translation error: %s', $exception->getMessage()));
+        }, AssertionError::class, $expectedMessage);
     }
 
     public function providerTranslatorException(): array
