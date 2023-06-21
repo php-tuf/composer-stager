@@ -18,31 +18,31 @@ class BeginnerPreconditions {
     NoUnsupportedLinksExist
     StagingDirDoesNotExist
 }
-BeginnerPreconditions --o CommonPreconditions
-BeginnerPreconditions --o NoUnsupportedLinksExist
+BeginnerPreconditions *-- CommonPreconditions
+BeginnerPreconditions *-- NoUnsupportedLinksExist
 
 class StagerPreconditions {
     CommonPreconditions
     StagingDirIsReady
 }
-StagerPreconditions --o CommonPreconditions
-StagerPreconditions --o StagingDirIsReady
+StagerPreconditions *-- CommonPreconditions
+StagerPreconditions *-- StagingDirIsReady
 
 class CommitterPreconditions {
     CommonPreconditions
     NoUnsupportedLinksExist
     StagingDirIsReady
 }
-CommitterPreconditions --o CommonPreconditions
-CommitterPreconditions --o NoUnsupportedLinksExist
-CommitterPreconditions --o StagingDirIsReady
+CommitterPreconditions *-- CommonPreconditions
+CommitterPreconditions *-- NoUnsupportedLinksExist
+CommitterPreconditions *-- StagingDirIsReady
 
 class CleanerPreconditions {
     CommonPreconditions
     StagingDirIsReady
 }
-CleanerPreconditions --o CommonPreconditions
-CleanerPreconditions --o StagingDirIsReady
+CleanerPreconditions *-- CommonPreconditions
+CleanerPreconditions *-- StagingDirIsReady
 
 class CommonPreconditions {
     ActiveAndStagingDirsAreDifferent
@@ -50,7 +50,7 @@ class CommonPreconditions {
     ComposerIsAvailable
     HostSupportsRunningProcesses
 }
-CommonPreconditions -o ActiveDirIsReady
+CommonPreconditions *- ActiveDirIsReady
 
 class ActiveDirIsReady {
     StagingDirExists
