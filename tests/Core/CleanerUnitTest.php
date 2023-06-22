@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 
 /**
@@ -111,13 +111,13 @@ final class CleanerUnitTest extends TestCase
 
         self::assertTranslatableException(function () use ($sut) {
             $sut->clean($this->activeDir, $this->stagingDir);
-        }, PreconditionException::class, $message);
+        }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
     /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
+        $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
             ->remove(Argument::cetera())

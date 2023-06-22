@@ -3,16 +3,16 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
-/** phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal */
-class TestTranslatableMessage implements TranslatableInterface
+final class TestTranslatableExceptionMessage extends TestTranslatableMessage
 {
+    /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct(
         private readonly string $message = '',
         private readonly ?TranslationParametersInterface $parameters = null,
-        private readonly ?string $domain = null,
+        private readonly ?string $domain = Domain::EXCEPTIONS,
     ) {
     }
 

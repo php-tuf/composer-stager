@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions
@@ -62,11 +63,12 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $previous = self::createTestPreconditionException(__METHOD__);
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled($previous->getMessage());
+        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));
     }
 }

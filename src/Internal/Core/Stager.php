@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface;
 
 /**
@@ -53,19 +54,27 @@ final class Stager implements StagerInterface
     private function validateCommand(array $composerCommand): void
     {
         if ($composerCommand === []) {
-            throw new InvalidArgumentException($this->t('The Composer command cannot be empty'));
+            throw new InvalidArgumentException($this->t(
+                'The Composer command cannot be empty',
+                null,
+                Domain::EXCEPTIONS,
+            ));
         }
 
         if (reset($composerCommand) === 'composer') {
-            throw new InvalidArgumentException(
-                $this->t('The Composer command cannot begin with "composer"--it is implied'),
-            );
+            throw new InvalidArgumentException($this->t(
+                'The Composer command cannot begin with "composer"--it is implied',
+                null,
+                Domain::EXCEPTIONS,
+            ));
         }
 
         if (array_key_exists('--working-dir', $composerCommand) || array_key_exists('-d', $composerCommand)) {
-            throw new InvalidArgumentException(
-                $this->t('Cannot stage a Composer command containing the "--working-dir" (or "-d") option'),
-            );
+            throw new InvalidArgumentException($this->t(
+                'Cannot stage a Composer command containing the "--working-dir" (or "-d") option',
+                null,
+                Domain::EXCEPTIONS,
+            ));
         }
     }
 

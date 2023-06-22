@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Process\Service\RsyncProcessRunnerInterface;
@@ -67,6 +68,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
             throw new LogicException($this->t(
                 'The source and destination directories cannot be the same at %path',
                 $this->p(['%path' => $sourceResolved]),
+                Domain::EXCEPTIONS,
             ));
         }
     }
@@ -78,6 +80,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
             throw new LogicException($this->t(
                 'The source directory does not exist at %path',
                 $this->p(['%path' => $source->resolved()]),
+                Domain::EXCEPTIONS,
             ));
         }
     }

@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use ReflectionClass;
 
@@ -90,7 +90,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     /** @covers ::ensureDestinationExists */
     public function testSyncDestinationCouldNotBeCreated(): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
+        $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
             ->mkdir($this->destination)
@@ -104,7 +104,7 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     public function testSyncCouldNotFindDestination(): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
+        $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->fileFinder
             ->find($this->destination, Argument::any())

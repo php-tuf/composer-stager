@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists
@@ -51,13 +52,14 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The active directory exists.');
     }
 
+    /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
+        $message = 'The active directory does not exist.';
         $this->filesystem
             ->exists($this->activeDir)
             ->willReturn(false);
 
-        $message = 'The active directory does not exist.';
-        $this->doTestUnfulfilled($message);
+        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));
     }
 }

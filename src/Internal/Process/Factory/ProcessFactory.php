@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -22,12 +23,22 @@ final class ProcessFactory implements ProcessFactoryInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
+    /**
+     * @codeCoverageIgnore It's impractical to test a failure creating a Symfony
+     *   process since it depends on a host configuration. It should be possible
+     *   to overcome this limitation through the introduction of a Symfony Process
+     *   proxy in the future.
+     */
     public function create(array $command): Process
     {
         try {
             return new Process($command);
-        } catch (SymfonyExceptionInterface $e) { // @codeCoverageIgnore
-            throw new LogicException($this->t($e->getMessage()), 0, $e); // @codeCoverageIgnore
+        } catch (SymfonyExceptionInterface $e) {
+            throw new LogicException($this->t(
+                'Failed to create process: %details',
+                $this->p(['%details' => $e->getMessage()]),
+                Domain::EXCEPTIONS,
+            ), 0, $e);
         }
     }
 }

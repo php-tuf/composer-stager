@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
@@ -61,7 +62,11 @@ abstract class AbstractProcessRunner implements ProcessRunnerInterface
             $process->setTimeout($timeout);
             $process->mustRun($callback);
         } catch (SymfonyExceptionInterface $e) {
-            throw new RuntimeException($this->t($e->getMessage()), 0, $e);
+            throw new RuntimeException($this->t(
+                'Failed to run process: %details',
+                $this->p(['%details' => $e->getMessage()]),
+                Domain::EXCEPTIONS,
+            ), 0, $e);
         }
     }
 

@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
@@ -65,7 +66,11 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         try {
             $this->executablePath = $this->executableFinder->find('composer');
         } catch (LogicException $e) {
-            throw new PreconditionException($this, $this->t('Cannot find Composer.'), 0, $e);
+            throw new PreconditionException($this, $this->t(
+                'Cannot find Composer.',
+                null,
+                Domain::EXCEPTIONS,
+            ), 0, $e);
         }
     }
 
@@ -78,6 +83,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
             throw new PreconditionException($this, $this->t(
                 'The Composer executable at %name is invalid.',
                 $this->p(['%name' => $this->executablePath]),
+                Domain::EXCEPTIONS,
             ));
         }
     }
@@ -95,6 +101,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
             throw new PreconditionException($this, $this->t(
                 'Cannot check for Composer due to a host configuration problem: %details',
                 $this->p(['%details' => $e->getMessage()]),
+                Domain::EXCEPTIONS,
             ), 0, $e);
         }
     }

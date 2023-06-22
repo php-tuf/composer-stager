@@ -9,7 +9,9 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
 use Prophecy\Argument;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -132,15 +134,15 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
      */
     public function testFailedToCreateProcess(): void
     {
-        $previousMessage = new TestTranslatableMessage(__METHOD__);
-        $previous = new LogicException($previousMessage);
+        $message = __METHOD__;
+        $previous = new LogicException(new TestTranslatableMessage($message));
         $this->processFactory
             ->create(Argument::type('array'))
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled(sprintf(
-            'Cannot check for Composer due to a host configuration problem: %s',
-            $previousMessage,
+        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage(
+            'Cannot check for Composer due to a host configuration problem: %details',
+            new TestTranslationParameters(['%details' => $message]),
         ), $previous::class);
     }
 

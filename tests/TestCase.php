@@ -5,7 +5,9 @@ namespace PhpTuf\ComposerStager\Tests;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
@@ -132,9 +134,19 @@ abstract class TestCase extends PHPUnitTestCase
         assert($realpathResult !== false, "Got absolute path of {$dirname}.");
     }
 
-    public static function createTestPreconditionException(string $message = ''): PreconditionException
-    {
-        return new PreconditionException(new TestPrecondition(), new TestTranslatableMessage($message));
+    public static function createTestPreconditionException(
+        string $message = '',
+        ?TranslationParametersInterface $parameters = null,
+        $domain = Domain::EXCEPTIONS,
+    ): PreconditionException {
+        return new PreconditionException(
+            new TestPrecondition(),
+            new TestTranslatableMessage(
+                $message,
+                $parameters,
+                $domain,
+            ),
+        );
     }
 
     protected static function createSymlinks(string $baseDir, array $symlinks): void
@@ -330,6 +342,11 @@ abstract class TestCase extends PHPUnitTestCase
                     $actualExceptionMessage,
                     'Set correct exception message.',
                 );
+            }
+
+            if ($actualException instanceof ExceptionInterface) {
+                $x = new TranslatableReflection($actualException->getTranslatableMessage());
+                self::assertSame(Domain::EXCEPTIONS, $x->getDomain(), 'Set correct domain.');
             }
 
             if ($expectedPreviousExceptionClass === null) {

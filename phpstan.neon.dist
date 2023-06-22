@@ -44,6 +44,9 @@ parameters:
 
         # Test code.
         -
+            message: '#.*::__construct\(\) does not call parent constructor from .*.#'
+            path: tests/Translation/Value/TestTranslatableExceptionMessage.php
+        -
             message: '#Access to an undefined property.*#'
             path: tests
         -
@@ -86,7 +89,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: 3b6325f3279d25982ec79c2ba847cd26
+    preconditionSystemHash: 11ab1e1901336e2ccff4c6514c9de237
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

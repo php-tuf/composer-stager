@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 /**
@@ -138,7 +139,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
     /** @covers ::getLeaves */
     public function testIsFulfilledBubbling(): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
+        $message = new TestTranslatableExceptionMessage(__METHOD__);
 
         $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
             /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestSpyInterface $spy */

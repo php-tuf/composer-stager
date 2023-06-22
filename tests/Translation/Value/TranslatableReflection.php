@@ -18,10 +18,25 @@ final class TranslatableReflection
     public function getProperties(): array
     {
         return [
-            'message' => $this->getPropertyValue('message'),
-            'parameters' => $this->getPropertyValue('parameters'),
-            'domain' => $this->getPropertyValue('domain'),
+            'message' => $this->getMessage(),
+            'parameters' => $this->getParameters(),
+            'domain' => $this->getDomain(),
         ];
+    }
+
+    public function getMessage(): mixed
+    {
+        return $this->getPropertyValue('message');
+    }
+
+    public function getParameters(): mixed
+    {
+        return $this->getPropertyValue('parameters');
+    }
+
+    public function getDomain(): mixed
+    {
+        return $this->getPropertyValue('domain');
     }
 
     private function getPropertyValue(string $name): mixed

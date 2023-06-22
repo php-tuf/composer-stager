@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
@@ -32,10 +33,11 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
         ?PathListInterface $exclusions = null,
     ): void {
         if ($activeDir->resolved() === $stagingDir->resolved()) {
-            throw new PreconditionException(
-                $this,
-                $this->t('The active and staging directories are the same.'),
-            );
+            throw new PreconditionException($this, $this->t(
+                'The active and staging directories are the same.',
+                null,
+                Domain::EXCEPTIONS,
+            ));
         }
     }
 

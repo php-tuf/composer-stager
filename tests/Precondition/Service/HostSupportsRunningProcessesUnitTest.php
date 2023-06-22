@@ -7,7 +7,9 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProce
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Process;
@@ -61,18 +63,23 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The host supports running independent PHP processes.');
     }
 
+    /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
-        $previousMessage = new TestTranslatableMessage(__METHOD__);
-        $previous = new LogicException($previousMessage);
+        $message = __METHOD__;
+        $previous = new LogicException(new TestTranslatableMessage($message));
         $this->processFactory
             ->create(Argument::type('array'))
             ->shouldBeCalled()
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled(sprintf(
-            'The host does not support running independent PHP processes: %s',
-            $previousMessage,
+        // @todo Now that ::doTestUnfulfilled() is taking a whole translatable message, it's no
+        //   longer testing the translated value of the message, just its parts--which is more
+        //   like testing assumptions than testing expectations. Add an argument to it to test
+        //   the translated string, too.
+        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage(
+            'The host does not support running independent PHP processes: %details',
+            new TestTranslationParameters(['%details' => $message]),
         ), $previous::class);
     }
 }

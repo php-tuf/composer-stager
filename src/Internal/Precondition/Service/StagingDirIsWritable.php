@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 
@@ -42,10 +43,11 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
         ?PathListInterface $exclusions = null,
     ): void {
         if (!$this->filesystem->isWritable($stagingDir)) {
-            throw new PreconditionException(
-                $this,
-                $this->t('The staging directory is not writable.'),
-            );
+            throw new PreconditionException($this, $this->t(
+                'The staging directory is not writable.',
+                null,
+                Domain::EXCEPTIONS,
+            ));
         }
     }
 

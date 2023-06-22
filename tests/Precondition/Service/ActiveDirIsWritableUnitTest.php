@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable
@@ -50,12 +51,14 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The active directory is writable.');
     }
 
+    /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
+        $message = new TestTranslatableExceptionMessage('The active directory is not writable.');
         $this->filesystem
             ->isWritable($this->activeDir)
             ->willReturn(false);
 
-        $this->doTestUnfulfilled('The active directory is not writable.');
+        $this->doTestUnfulfilled($message);
     }
 }

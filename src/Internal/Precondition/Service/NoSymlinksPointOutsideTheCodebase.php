@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
@@ -50,6 +51,7 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
                         '%codebase_root' => $codebaseRoot->resolved(),
                         '%file' => $file->resolved(),
                     ]),
+                    Domain::EXCEPTIONS,
                 ),
             );
         }
