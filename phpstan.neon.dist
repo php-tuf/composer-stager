@@ -59,6 +59,9 @@ parameters:
             message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
             path: tests
         -
+            message: '#Concrete class must implement an interface#'
+            path: tests
+        -
             message: '#.*caught .* must be rethrown.*#'
             path: tests
         -
