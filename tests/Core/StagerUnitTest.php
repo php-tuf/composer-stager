@@ -11,12 +11,14 @@ use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
@@ -113,35 +115,53 @@ final class StagerUnitTest extends TestCase
         ];
     }
 
-    public function testEmptyCommand(): void
+    /** @covers ::validateCommand */
+    public function testCommandIsEmpty(): void
     {
         $sut = $this->createSut();
 
+        $message = 'The Composer command cannot be empty';
+        $expectedExceptionMessage = new TestTranslatableExceptionMessage($message);
         self::assertTranslatableException(function () use ($sut) {
             $sut->stage([], $this->activeDir, $this->stagingDir);
-        }, InvalidArgumentException::class, 'The Composer command cannot be empty');
+        }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
+    /** @covers ::validateCommand */
     public function testCommandContainsComposer(): void
     {
         $sut = $this->createSut();
 
+        $expectedExceptionMessage = new TestTranslatableMessage(
+            'The Composer command cannot begin with "composer"--it is implied',
+            null,
+            Domain::EXCEPTIONS,
+        );
         self::assertTranslatableException(function () use ($sut) {
             $sut->stage([
                 'composer',
                 self::INERT_COMMAND,
             ], $this->activeDir, $this->stagingDir);
-        }, InvalidArgumentException::class, 'The Composer command cannot begin with "composer"--it is implied');
+        }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
-    /** @dataProvider providerCommandContainsWorkingDirOption */
+    /**
+     * @covers ::validateCommand
+     *
+     * @dataProvider providerCommandContainsWorkingDirOption
+     */
     public function testCommandContainsWorkingDirOption(array $command): void
     {
         $sut = $this->createSut();
 
+        $expectedExceptionMessage = new TestTranslatableMessage(
+            'Cannot stage a Composer command containing the "--working-dir" (or "-d") option',
+            null,
+            Domain::EXCEPTIONS,
+        );
         self::assertTranslatableException(function () use ($sut, $command) {
             $sut->stage($command, $this->activeDir, $this->stagingDir);
-        }, InvalidArgumentException::class, 'Cannot stage a Composer command containing the "--working-dir" (or "-d") option');
+        }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
     public function providerCommandContainsWorkingDirOption(): array
@@ -165,7 +185,7 @@ final class StagerUnitTest extends TestCase
 
         self::assertTranslatableException(function () use ($sut) {
             $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
-        }, PreconditionException::class, $message);
+        }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
     /** @dataProvider providerExceptions */
@@ -185,11 +205,11 @@ final class StagerUnitTest extends TestCase
     {
         return [
             [
-                'exception' => new IOException(new TestTranslatableMessage('one')),
+                'exception' => new IOException(new TestTranslatableExceptionMessage('one')),
                 'message' => 'one',
             ],
             [
-                'exception' => new LogicException(new TestTranslatableMessage('two')),
+                'exception' => new LogicException(new TestTranslatableExceptionMessage('two')),
                 'message' => 'two',
             ],
         ];

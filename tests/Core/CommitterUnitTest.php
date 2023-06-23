@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 
 /**
@@ -123,7 +123,7 @@ final class CommitterUnitTest extends TestCase
 
         self::assertTranslatableException(function () use ($sut) {
             $sut->commit($this->stagingDir, $this->activeDir);
-        }, PreconditionException::class, $message);
+        }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
     /**
@@ -147,11 +147,11 @@ final class CommitterUnitTest extends TestCase
     {
         return [
             [
-                'exception' => new InvalidArgumentException(new TestTranslatableMessage('one')),
+                'exception' => new InvalidArgumentException(new TestTranslatableExceptionMessage('one')),
                 'message' => 'one',
             ],
             [
-                'exception' => new IOException(new TestTranslatableMessage('two')),
+                'exception' => new IOException(new TestTranslatableExceptionMessage('two')),
                 'message' => 'two',
             ],
         ];

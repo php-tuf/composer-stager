@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 
 /**
@@ -195,7 +195,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function providerSyncFailure(): array
     {
-        $message = new TestTranslatableMessage(__METHOD__);
+        $message = new TestTranslatableExceptionMessage(__METHOD__);
 
         return [
             [
@@ -239,7 +239,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     /** @covers ::ensureDestinationDirectoryExists */
     public function testSyncCreateDestinationDirectoryFailed(): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
+        $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
             ->mkdir($this->destination)

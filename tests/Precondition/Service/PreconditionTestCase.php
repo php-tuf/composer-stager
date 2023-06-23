@@ -58,11 +58,12 @@ abstract class PreconditionTestCase extends TestCase
         self::assertTranslatableMessage($expectedStatusMessage, $actualStatusMessage, 'Got correct status message.');
     }
 
-    protected function doTestUnfulfilled(string $expectedStatusMessage, ?string $previousException = null): void
-    {
+    protected function doTestUnfulfilled(
+        TranslatableInterface $expectedStatusMessage,
+        ?string $previousException = null,
+    ): void {
         $sut = $this->createSut();
 
-        self::assertTranslatableMessage($expectedStatusMessage, $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions));
         self::assertTranslatableException(function () use ($sut) {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $expectedStatusMessage, $previousException);

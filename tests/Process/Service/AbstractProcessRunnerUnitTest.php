@@ -11,10 +11,11 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
@@ -23,6 +24,7 @@ use Symfony\Component\Process\Process;
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
  * @property \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
@@ -145,16 +147,28 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testRunFailedException(): void
     {
-        $previous = $this->prophesize(SymfonyProcessFailedException::class)->reveal();
+        // SymfonyProcessFailedException can't be initialized with a known message
+        // value, so dynamically get the message it will generate.
+        try {
+            $process = $this->prophesize(Process::class);
+            $process->isSuccessful()
+                ->willReturn(true);
+            $previous = new SymfonyProcessFailedException($process->reveal());
+        } catch (Throwable $e) {
+            $previous = $e;
+        }
+
+        // Now that we have a "previous" exception with known behavior,
+        // make the mock throw it.
         $this->process
             ->mustRun(Argument::cetera())
             ->willThrow($previous);
-
         $sut = $this->createSut();
 
+        $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut) {
             $sut->run([self::COMMAND_NAME]);
-        }, RuntimeException::class, null, $previous::class);
+        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
     }
 
     /**
@@ -163,7 +177,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testRunFindExecutableException(): void
     {
-        $previous = new IOException(new TestTranslatableMessage());
+        $previous = new IOException(new TestTranslatableExceptionMessage());
         $this->executableFinder
             ->find(Argument::any())
             ->willThrow($previous);

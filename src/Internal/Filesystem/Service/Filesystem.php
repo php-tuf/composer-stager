@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
@@ -53,6 +54,7 @@ final class Filesystem implements FilesystemInterface
             throw new LogicException($this->t(
                 'The source and destination files cannot be the same at %path',
                 $this->p(['%path' => $sourceResolved]),
+                Domain::EXCEPTIONS,
             ));
         }
 
@@ -62,6 +64,7 @@ final class Filesystem implements FilesystemInterface
             throw new LogicException($this->t(
                 'The source file does not exist or is not a file at %path',
                 $this->p(['%path' => $sourceResolved]),
+                Domain::EXCEPTIONS,
             ), 0, $e);
         } catch (SymfonyIOException $e) {
             throw new IOException($this->t(
@@ -71,6 +74,7 @@ final class Filesystem implements FilesystemInterface
                     '%destination' => $destinationResolved,
                     '%details' => $e->getMessage(),
                 ]),
+                Domain::EXCEPTIONS,
             ), 0, $e);
         }
     }
@@ -91,10 +95,13 @@ final class Filesystem implements FilesystemInterface
         $scandir = @scandir($path->resolved());
 
         if ($scandir === false) {
+            // @todo This doesn't seem to fail without the exceptions domain.
+
             /** @noinspection PhpUnhandledExceptionInspection */
             throw new IOException($this->t(
                 'The path does not exist or is not a directory at %path',
                 $this->p(['%path' => $path->resolved()]),
+                Domain::EXCEPTIONS,
             ));
         }
 
@@ -139,6 +146,7 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 'Failed to create directory at %path',
                 $this->p(['%path' => $pathResolved]),
+                Domain::EXCEPTIONS,
             ), 0, $e);
         }
     }
@@ -146,9 +154,11 @@ final class Filesystem implements FilesystemInterface
     public function readLink(PathInterface $path): PathInterface
     {
         if (!$this->isSymlink($path)) {
+            // @todo This doesn't seem to fail without the exceptions domain.
             throw new IOException($this->t(
                 'The path does not exist or is not a symlink at %path',
                 $this->p(['%path' => $path->resolved()]),
+                Domain::EXCEPTIONS,
             ));
         }
 
@@ -173,7 +183,11 @@ final class Filesystem implements FilesystemInterface
 
             $this->symfonyFilesystem->remove($path->resolved());
         } catch (SymfonyExceptionInterface $e) {
-            throw new IOException($this->t($e->getMessage()), 0, $e);
+            throw new IOException($this->t(
+                $e->getMessage(),
+                null,
+                Domain::EXCEPTIONS,
+            ), 0, $e);
         }
     }
 

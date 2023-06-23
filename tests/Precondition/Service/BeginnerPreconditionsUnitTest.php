@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterf
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions
@@ -71,11 +72,12 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $previous = self::createTestPreconditionException(__METHOD__);
+        $message = __METHOD__;
+        $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled($previous->getMessage());
+        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));
     }
 }

@@ -5,17 +5,19 @@ namespace PhpTuf\ComposerStager\Tests;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Domain;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TranslatableReflection;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use Stringable;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -132,9 +134,19 @@ abstract class TestCase extends PHPUnitTestCase
         assert($realpathResult !== false, "Got absolute path of {$dirname}.");
     }
 
-    public static function createTestPreconditionException(string $message = ''): PreconditionException
-    {
-        return new PreconditionException(new TestPrecondition(), new TestTranslatableMessage($message));
+    public static function createTestPreconditionException(
+        string $message = '',
+        ?TranslationParametersInterface $parameters = null,
+        $domain = Domain::EXCEPTIONS,
+    ): PreconditionException {
+        return new PreconditionException(
+            new TestPrecondition(),
+            new TestTranslatableMessage(
+                $message,
+                $parameters,
+                $domain,
+            ),
+        );
     }
 
     protected static function createSymlinks(string $baseDir, array $symlinks): void
@@ -280,7 +292,7 @@ abstract class TestCase extends PHPUnitTestCase
      *   The callback that exercises the SUT.
      * @param string $expectedExceptionClass
      *   The expected exception class name, e.g., \Exception::class.
-     * @param string|\Stringable|null $expectedExceptionMessage
+     * @param \PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface|string|null $expectedExceptionMessage
      *   The expected message that the exception should return,
      *   both raw and translatable, or null to ignore the message.
      * @param string|null $expectedPreviousExceptionClass
@@ -289,7 +301,7 @@ abstract class TestCase extends PHPUnitTestCase
     protected static function assertTranslatableException(
         callable $callback,
         string $expectedExceptionClass,
-        string|Stringable|null $expectedExceptionMessage = null,
+        TranslatableInterface|string|null $expectedExceptionMessage = null,
         ?string $expectedPreviousExceptionClass = null,
     ): void {
         try {
@@ -317,8 +329,24 @@ abstract class TestCase extends PHPUnitTestCase
 
             self::assertTrue(true, 'Threw correct exception.');
 
-            if (is_string($expectedExceptionMessage)) {
-                self::assertEquals($expectedExceptionMessage, $actualExceptionMessage, 'Set correct exception message.');
+            if ($expectedExceptionMessage instanceof TranslatableInterface) {
+                assert($actualException instanceof ExceptionInterface);
+                self::assertTranslatableEquals(
+                    $expectedExceptionMessage,
+                    $actualException->getTranslatableMessage(),
+                    'Set correct exception message.',
+                );
+            } elseif (is_string($expectedExceptionMessage)) {
+                self::assertEquals(
+                    $expectedExceptionMessage,
+                    $actualExceptionMessage,
+                    'Set correct exception message.',
+                );
+            }
+
+            if ($actualException instanceof ExceptionInterface) {
+                $x = new TranslatableReflection($actualException->getTranslatableMessage());
+                self::assertSame(Domain::EXCEPTIONS, $x->getDomain(), 'Set correct domain.');
             }
 
             if ($expectedPreviousExceptionClass === null) {
@@ -353,6 +381,17 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         self::fail(sprintf('Failed to throw any exception. Expected %s.', $expectedExceptionClass));
+    }
+
+    /** Asserts that two translatables are equivalent, i.e., have the same properties. */
+    protected static function assertTranslatableEquals(
+        TranslatableInterface $expected,
+        TranslatableInterface $actual,
+        string $message = '',
+    ): void {
+        $expected = new TranslatableReflection($expected);
+        $actual = new TranslatableReflection($actual);
+        self::assertSame($expected->getProperties(), $actual->getProperties(), $message);
     }
 
     /** Asserts that a given translatable message matches expectations. */

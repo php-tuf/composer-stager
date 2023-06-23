@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreD
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent
@@ -40,11 +41,13 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
         $this->doTestFulfilled('The active and staging directories are different.');
     }
 
+    /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
+        $message = new TestTranslatableExceptionMessage('The active and staging directories are the same.');
         $this->activeDir = new TestPath('/same');
         $this->stagingDir = new TestPath('/same');
 
-        $this->doTestUnfulfilled('The active and staging directories are the same.');
+        $this->doTestUnfulfilled($message);
     }
 }
