@@ -51,11 +51,17 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         $sourceResolved = $source->resolved();
         $destinationResolved = $destination->resolved();
 
+        $this->assertDirectoriesAreNotTheSame($source, $destination);
+        $this->assertSourceExists($source);
         set_time_limit((int) $timeout);
+        $this->runCommand($exclusions, $sourceResolved, $destinationResolved, $destination, $callback);
+    }
 
-        $exclusions ??= new PathList();
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $exclusions = $exclusions->getAll();
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
+    private function assertDirectoriesAreNotTheSame(PathInterface $source, PathInterface $destination): void
+    {
+        $sourceResolved = $source->resolved();
+        $destinationResolved = $destination->resolved();
 
         if ($sourceResolved === $destinationResolved) {
             throw new LogicException($this->t(
@@ -63,13 +69,56 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
                 $this->p(['%path' => $sourceResolved]),
             ));
         }
+    }
 
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
+    private function assertSourceExists(PathInterface $source): void
+    {
         if (!$this->filesystem->exists($source)) {
             throw new LogicException($this->t(
                 'The source directory does not exist at %path',
-                $this->p(['%path' => $sourceResolved]),
+                $this->p(['%path' => $source->resolved()]),
             ));
         }
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
+    private function runCommand(
+        ?PathListInterface $exclusions,
+        string $sourceResolved,
+        string $destinationResolved,
+        PathInterface $destination,
+        ?ProcessOutputCallbackInterface $callback,
+    ): void {
+        $this->ensureDestinationDirectoryExists($destination);
+        $command = $this->buildCommand($exclusions, $sourceResolved, $destinationResolved);
+
+        try {
+            $this->rsync->run($command, $callback);
+        } catch (ExceptionInterface $e) {
+            throw new IOException($e->getTranslatableMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Ensures that the destination directory exists. This has no effect if it already does.
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     */
+    private function ensureDestinationDirectoryExists(PathInterface $destination): void
+    {
+        $this->filesystem->mkdir($destination);
+    }
+
+    /** @return array<string> */
+    private function buildCommand(
+        ?PathListInterface $exclusions,
+        string $sourceResolved,
+        string $destinationResolved,
+    ): array {
+        $exclusions ??= new PathList();
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $exclusions = $exclusions->getAll();
 
         $command = [
             // Archive mode--the same as -rlptgoD (no -H), or --recursive,
@@ -101,15 +150,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         $command[] = $destinationResolved;
 
-        // Ensure the destination directory's existence. (This has no effect
-        // if it already exists.)
-        $this->filesystem->mkdir($destination);
-
-        try {
-            $this->rsync->run($command, $callback);
-        } catch (ExceptionInterface $e) {
-            throw new IOException($e->getTranslatableMessage(), 0, $e);
-        }
+        return $command;
     }
 
     private function isDescendant(string $descendant, string $ancestor): bool

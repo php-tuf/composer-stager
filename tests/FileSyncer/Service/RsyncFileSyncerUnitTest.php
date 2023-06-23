@@ -23,8 +23,13 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
  *
  * @covers ::__construct
+ * @covers ::assertDirectoriesAreNotTheSame
+ * @covers ::assertSourceExists
+ * @covers ::buildCommand
+ * @covers ::ensureDestinationDirectoryExists
  * @covers ::getRelativePath
  * @covers ::isDescendant
+ * @covers ::runCommand
  * @covers ::sync
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
@@ -63,7 +68,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
         return new RsyncFileSyncer($filesystem, $rsync, $translatableFactory);
     }
 
-    /** @dataProvider providerSync */
+    /**
+     * @covers ::sync
+     *
+     * @dataProvider providerSync
+     */
     public function testSync(
         string $source,
         string $destination,
@@ -168,7 +177,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     }
 
     /**
-     * @covers ::sync
+     * @covers ::runCommand
      *
      * @dataProvider providerSyncFailure
      */
@@ -200,6 +209,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         ];
     }
 
+    /** @covers ::assertSourceExists */
     public function testSyncSourceDirectoryNotFound(): void
     {
         $this->filesystem
@@ -213,6 +223,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         }, LogicException::class, $message);
     }
 
+    /** @covers ::assertDirectoriesAreNotTheSame */
     public function testSyncDirectoriesTheSame(): void
     {
         $source = new TestPath('same');
@@ -225,6 +236,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         }, LogicException::class, $message);
     }
 
+    /** @covers ::ensureDestinationDirectoryExists */
     public function testSyncCreateDestinationDirectoryFailed(): void
     {
         $message = new TestTranslatableMessage(__METHOD__);
