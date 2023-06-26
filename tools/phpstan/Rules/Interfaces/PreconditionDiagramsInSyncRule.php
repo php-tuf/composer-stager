@@ -60,9 +60,10 @@ final class PreconditionDiagramsInSyncRule extends AbstractRule
 
         return [
             $this->buildErrorMessage(sprintf(
-                'Precondition system classes have changed. Make sure the appropriate '
-                . 'changes have been made to the diagrams in docs/preconditions and update'
-                . 'and update phpstan.neon.dist:parameters.preconditionSystemHash to %s',
+                'Precondition system classes have changed. Make sure the  '
+                . 'appropriate changes have been made to the diagrams in docs/preconditions '
+                . "(don't forget to export and optimize the images) and update "
+                . 'phpstan.neon.dist:parameters.preconditionSystemHash to %s',
                 $hash,
             )),
         ];
