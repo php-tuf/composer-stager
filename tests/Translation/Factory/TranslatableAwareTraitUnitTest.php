@@ -84,30 +84,6 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         $sut->callT('Message');
     }
 
-    public function providerF(): array
-    {
-        return [
-            'Empty string' => [
-                'format' => '',
-                'values' => [],
-                'expected' => '',
-            ],
-            'Simple string' => [
-                'format' => 'A simple string.',
-                'values' => [],
-                'expected' => 'A simple string.',
-            ],
-            'String with sprintf values' => [
-                'format' => 'String: "%s". Decimal: %d.',
-                'values' => [
-                    'string',
-                    42,
-                ],
-                'expected' => 'String: "string". Decimal: 42.',
-            ],
-        ];
-    }
-
     /**
      * @covers ::p
      *
