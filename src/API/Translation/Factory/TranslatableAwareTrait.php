@@ -70,6 +70,7 @@ trait TranslatableAwareTrait
         return $this->translatableFactory->createTranslationParameters($parameters);
     }
 
+    /** Sets the translatable factory. */
     private function setTranslatableFactory(TranslatableFactoryInterface $translatableFactory): void
     {
         $this->translatableFactory = $translatableFactory;
