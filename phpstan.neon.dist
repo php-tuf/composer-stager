@@ -31,7 +31,9 @@ parameters:
             path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
             message: '#Concrete class must implement an interface#'
-            path: src/API/Translation/Value/Domain.php
+            paths:
+                - src/API/Translation/Value/Domain.php
+                - src/API/Translation/Value/Locale.php
         -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             path: src/Internal/Translation/Service/Translator.php

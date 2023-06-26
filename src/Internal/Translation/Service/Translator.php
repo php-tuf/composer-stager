@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Locale;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use Throwable;
@@ -17,8 +18,6 @@ use Throwable;
  */
 final class Translator implements TranslatorInterface
 {
-    private const DEFAULT_LOCALE = 'en_US';
-
     public function __construct(private readonly SymfonyTranslatorProxyInterface $symfonyTranslatorProxy)
     {
     }
@@ -50,6 +49,6 @@ final class Translator implements TranslatorInterface
 
     public function getLocale(): string
     {
-        return self::DEFAULT_LOCALE;
+        return Locale::DEFAULT;
     }
 }

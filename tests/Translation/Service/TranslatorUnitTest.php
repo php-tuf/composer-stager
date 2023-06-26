@@ -6,6 +6,7 @@ use AssertionError;
 use Error;
 use LogicException;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\Locale;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
@@ -64,7 +65,7 @@ final class TranslatorUnitTest extends TestCase
         $actualTranslation = $sut->trans($message, $parameters);
 
         self::assertEquals($expectedTranslation, $actualTranslation, 'Returned correct translation.');
-        self::assertEquals('en_US', $sut->getLocale(), 'Returned correct default locale.');
+        self::assertEquals(Locale::DEFAULT, $sut->getLocale(), 'Returned correct default locale.');
     }
 
     public function providerBasicFunctionality(): array

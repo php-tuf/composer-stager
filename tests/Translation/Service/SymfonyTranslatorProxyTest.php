@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
+use PhpTuf\ComposerStager\API\Translation\Value\Locale;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -17,7 +18,6 @@ final class SymfonyTranslatorProxyTest extends TestCase
      */
     public function testBasicFunctionality(array $arguments, string $expectedTranslation): void
     {
-        $defaultLocale = 'en_US';
         $arguments = array_values($arguments);
         $sut = new SymfonyTranslatorProxy();
 
@@ -25,7 +25,7 @@ final class SymfonyTranslatorProxyTest extends TestCase
         $actualLocale = $sut->getLocale();
 
         self::assertEquals($expectedTranslation, $actualTranslation, 'Returned correct translation.');
-        self::assertEquals($defaultLocale, $actualLocale, 'Got correct default locale.');
+        self::assertEquals(Locale::DEFAULT, $actualLocale, 'Got correct default locale.');
     }
 
     public function providerBasicFunctionality(): array
