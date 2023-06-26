@@ -43,6 +43,7 @@ final class APITagsSniff implements Sniff
     {
         return [
             T_CLASS,
+            T_ENUM,
             T_INTERFACE,
             T_TRAIT,
         ];

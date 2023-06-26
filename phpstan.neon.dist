@@ -30,6 +30,9 @@ parameters:
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
+            message: '#Concrete class must implement an interface#'
+            path: src/API/Translation/Value/Domain.php
+        -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             path: src/Internal/Translation/Service/Translator.php
         -
