@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Finder\Service;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\Domain;
+use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
@@ -35,7 +35,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
             throw new LogicException($this->t(
                 "The %name executable cannot be found. Make sure it's installed and in the \$PATH",
                 $this->p(['%name' => $name]),
-                Domain::EXCEPTIONS,
+                DomainInterface::EXCEPTIONS,
             ));
         }
 

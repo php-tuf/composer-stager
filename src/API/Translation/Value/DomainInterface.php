@@ -7,9 +7,9 @@ namespace PhpTuf\ComposerStager\API\Translation\Value;
  *
  * @package Translation
  *
- * @api This class is subject to our backward compatibility promise and may be safely depended upon.
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
-final class Domain
+interface DomainInterface
 {
     public const DEFAULT = 'messages';
     public const EXCEPTIONS = 'exceptions';

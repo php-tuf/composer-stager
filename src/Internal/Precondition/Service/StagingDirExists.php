@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\Domain;
+use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 
@@ -46,7 +46,7 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
             throw new PreconditionException($this, $this->t(
                 'The staging directory does not exist.',
                 null,
-                Domain::EXCEPTIONS,
+                DomainInterface::EXCEPTIONS,
             ));
         }
     }

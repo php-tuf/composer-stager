@@ -30,11 +30,6 @@ parameters:
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
-            message: '#Concrete class must implement an interface#'
-            paths:
-                - src/API/Translation/Value/Domain.php
-                - src/API/Translation/Value/Locale.php
-        -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             path: src/Internal/Translation/Service/Translator.php
         -
@@ -94,7 +89,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: 11ab1e1901336e2ccff4c6514c9de237
+    preconditionSystemHash: 5a648085e70095709ad4db48368e71a8
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

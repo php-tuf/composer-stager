@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\Domain;
+use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use RecursiveCallbackFilterIterator;
@@ -87,7 +87,7 @@ final class FileFinder implements FileFinderInterface
             throw new IOException($this->t(
                 'The directory cannot be found or is not a directory at %path.',
                 $this->p(['%path' => $directory]),
-                Domain::EXCEPTIONS,
+                DomainInterface::EXCEPTIONS,
             ), 0, $e);
         }
     }

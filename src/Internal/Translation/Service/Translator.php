@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\Locale;
+use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use Throwable;
@@ -49,6 +49,6 @@ final class Translator implements TranslatorInterface
 
     public function getLocale(): string
     {
-        return Locale::DEFAULT;
+        return LocaleInterface::DEFAULT;
     }
 }
