@@ -6,6 +6,7 @@ use Error;
 use LogicException;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
@@ -20,6 +21,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
@@ -60,7 +62,7 @@ final class TranslatableMessageUnitTest extends TestCase
         $sut->trans($this->translator->reveal(), $locale);
 
         /** Call again with a real translator to assert on actual results. */
-        $actualTranslation = $sut->trans(new Translator(new SymfonyTranslatorProxy()));
+        $actualTranslation = $sut->trans(new Translator(new DomainOptions(), new SymfonyTranslatorProxy()));
 
         self::assertSame($expectedTranslation, $actualTranslation, 'Returned correct translation.');
         self::assertSame($message, (string) $sut, 'Returned correct typecast string value.');

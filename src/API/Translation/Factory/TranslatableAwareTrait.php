@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\API\Translation\Factory;
 
+use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
@@ -14,7 +15,20 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
  */
 trait TranslatableAwareTrait
 {
+    /** @internal Use ::d(), ::t(), and ::p() instead. */
     private ?TranslatableFactoryInterface $translatableFactory = null;
+
+    /** Gets the domain options. */
+    protected function d(): DomainOptionsInterface
+    {
+        assert(
+            $this->translatableFactory instanceof TranslatableFactoryInterface,
+            'The "d()" method requires a translatable factory. '
+            . 'Provide one by calling "setTranslatableFactory()" in the constructor.',
+        );
+
+        return $this->translatableFactory->createDomainOptions();
+    }
 
     /**
      * Creates a translatable message.
@@ -25,8 +39,8 @@ trait TranslatableAwareTrait
      *   $message = 'Hello, %first_name %last_name.';
      *   ```
      * @param string|null $domain
-     *   An arbitrary domain for grouping translations, e.g., "app", "admin",
-     *   "store", or null to use the default.
+     *   An arbitrary domain for grouping translations or null to use the default. See
+     *   {@see \PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface}.
      */
     protected function t(
         string $message,

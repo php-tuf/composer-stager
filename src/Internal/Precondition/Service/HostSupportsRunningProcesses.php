@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 
@@ -50,7 +49,7 @@ final class HostSupportsRunningProcesses extends AbstractPrecondition implements
             throw new PreconditionException($this, $this->t(
                 'The host does not support running independent PHP processes: %details',
                 $this->p(['%details' => $e->getMessage()]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ), 0, $e);
         }
     }

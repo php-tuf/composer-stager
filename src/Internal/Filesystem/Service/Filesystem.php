@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
@@ -54,7 +53,7 @@ final class Filesystem implements FilesystemInterface
             throw new LogicException($this->t(
                 'The source and destination files cannot be the same at %path',
                 $this->p(['%path' => $sourceResolved]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ));
         }
 
@@ -64,7 +63,7 @@ final class Filesystem implements FilesystemInterface
             throw new LogicException($this->t(
                 'The source file does not exist or is not a file at %path',
                 $this->p(['%path' => $sourceResolved]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ), 0, $e);
         } catch (SymfonyIOException $e) {
             throw new IOException($this->t(
@@ -74,7 +73,7 @@ final class Filesystem implements FilesystemInterface
                     '%destination' => $destinationResolved,
                     '%details' => $e->getMessage(),
                 ]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ), 0, $e);
         }
     }
@@ -101,7 +100,7 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 'The path does not exist or is not a directory at %path',
                 $this->p(['%path' => $path->resolved()]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ));
         }
 
@@ -146,7 +145,7 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 'Failed to create directory at %path',
                 $this->p(['%path' => $pathResolved]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ), 0, $e);
         }
     }
@@ -158,7 +157,7 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 'The path does not exist or is not a symlink at %path',
                 $this->p(['%path' => $path->resolved()]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ));
         }
 
@@ -186,7 +185,7 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 $e->getMessage(),
                 null,
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ), 0, $e);
         }
     }

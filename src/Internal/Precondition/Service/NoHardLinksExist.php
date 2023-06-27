@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
@@ -46,7 +45,7 @@ final class NoHardLinksExist extends AbstractFileIteratingPrecondition implement
                         '%codebase_root' => $codebaseRoot->resolved(),
                         '%file' => $file->resolved(),
                     ]),
-                    DomainInterface::EXCEPTIONS,
+                    $this->d()->exceptions(),
                 ),
             );
         }

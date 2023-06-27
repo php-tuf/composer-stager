@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Tests\TestCase;
 
 final class TestTranslatableExceptionMessage extends TestTranslatableMessage
 {
@@ -12,7 +12,7 @@ final class TestTranslatableExceptionMessage extends TestTranslatableMessage
     public function __construct(
         private readonly string $message = '',
         private readonly ?TranslationParametersInterface $parameters = null,
-        private readonly ?string $domain = DomainInterface::EXCEPTIONS,
+        private readonly ?string $domain = TestCase::DOMAIN_EXCEPTIONS,
     ) {
     }
 
