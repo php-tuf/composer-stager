@@ -26,8 +26,6 @@ final class TranslatableMessage implements TranslatableInterface
      *   ```php
      *   $message = 'Hello, %first_name %last_name.';
      *   ```
-     * @param \PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface|null $parameters
-     *   Parameters for the message.
      * @param string|null $domain
      *   An arbitrary domain for grouping translations, e.g., "app", "admin",
      *   "store", or null to use the default.
