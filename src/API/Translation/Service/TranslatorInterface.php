@@ -34,8 +34,6 @@ interface TranslatorInterface
      *   See {@link https://symfony.com/doc/current/translation.html#configuration Configuration
      *   and Basic Translation in the Symfony Docs}. It may contain placeholders corresponding
      *   to the `$parameters` argument.
-     * @param \PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface|null $parameters
-     *   Parameters for the message.
      * @param string|null $domain
      *   An arbitrary domain for grouping translations, e.g., "app", "admin",
      *   "store", or null to use the default.

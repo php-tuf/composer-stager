@@ -20,7 +20,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage

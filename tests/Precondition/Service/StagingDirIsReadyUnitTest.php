@@ -45,7 +45,7 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         $stagingDirIsWritable = $this->stagingDirIsWritable->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new StagingDirIsReady($stagingDirExists, $stagingDirIsWritable, $translatableFactory);
+        return new StagingDirIsReady($translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }
 
     public function testFulfilled(): void

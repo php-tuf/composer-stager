@@ -16,9 +16,9 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class StagingDirIsReady extends AbstractPreconditionsTree implements StagingDirIsReadyInterface
 {
     public function __construct(
+        TranslatableFactoryInterface $translatableFactory,
         StagingDirExistsInterface $stagingDirExists,
         StagingDirIsWritableInterface $stagingDirIsWritable,
-        TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }

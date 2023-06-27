@@ -60,11 +60,11 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $translatableFactory = new TestTranslatableFactory();
 
         return new CommonPreconditions(
+            $translatableFactory,
             $activeAndStagingDirsAreDifferent,
             $activeDirIsReady,
             $composerIsAvailable,
             $hostSupportsRunningProcesses,
-            $translatableFactory,
         );
     }
 

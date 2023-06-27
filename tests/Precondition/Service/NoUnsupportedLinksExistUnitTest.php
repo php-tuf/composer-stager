@@ -67,12 +67,12 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $translatableFactory = new TestTranslatableFactory();
 
         return new NoUnsupportedLinksExist(
+            $translatableFactory,
             $noAbsoluteSymlinksExist,
             $noHardLinksExist,
             $noLinksExistOnWindows,
             $noSymlinksPointOutsideTheCodebase,
             $noSymlinksPointToADirectory,
-            $translatableFactory,
         );
     }
 

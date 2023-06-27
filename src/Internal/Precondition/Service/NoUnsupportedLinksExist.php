@@ -19,12 +19,12 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
     public function __construct(
+        TranslatableFactoryInterface $translatableFactory,
         NoAbsoluteSymlinksExistInterface $noAbsoluteSymlinksExist,
         NoHardLinksExistInterface $noHardLinksExist,
         NoLinksExistOnWindowsInterface $noLinksExistOnWindows,
         NoSymlinksPointOutsideTheCodebaseInterface $noSymlinksPointOutsideTheCodebase,
         NoSymlinksPointToADirectoryInterface $noSymlinksPointToADirectory,
-        TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct(
             $translatableFactory,

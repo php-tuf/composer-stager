@@ -45,7 +45,7 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new StagerPreconditions($commonPreconditions, $stagingDirIsReady, $translatableFactory);
+        return new StagerPreconditions($translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }
 
     public function testFulfilled(): void

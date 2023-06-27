@@ -16,9 +16,9 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class StagerPreconditions extends AbstractPreconditionsTree implements StagerPreconditionsInterface
 {
     public function __construct(
+        TranslatableFactoryInterface $translatableFactory,
         CommonPreconditionsInterface $commonPreconditions,
         StagingDirIsReadyInterface $stagingDirIsReady,
-        TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }

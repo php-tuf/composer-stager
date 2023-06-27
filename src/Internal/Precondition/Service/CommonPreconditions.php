@@ -18,11 +18,11 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class CommonPreconditions extends AbstractPreconditionsTree implements CommonPreconditionsInterface
 {
     public function __construct(
+        TranslatableFactoryInterface $translatableFactory,
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
         HostSupportsRunningProcessesInterface $hostCanRunProcesses,
-        TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct(
             $translatableFactory,
