@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="Test Code" pattern="file[composer-stager]:tests//*" />
-</component>
