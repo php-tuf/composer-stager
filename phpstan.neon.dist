@@ -2,6 +2,7 @@
 parametersSchema:
     gitattributesExportInclude: listOf(string())
     preconditionSystemHash: string()
+    translationSystemHash: string()
 
 parameters:
     exceptions:
@@ -16,6 +17,13 @@ parameters:
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
+    preconditionSystemHash: a0b37f5b33d2960495a6aded52e129e8
+    translationSystemHash: 4f7d20a7f2cf2bc8fa5fc761c8e29d44
+    gitattributesExportInclude:
+        - composer.json
+        - docs
+        - LICENSE
+        - src
     ignoreErrors:
         # Production code.
         -
@@ -83,14 +91,6 @@ parameters:
             message: '#Property .* does not accept .*.#'
             path: tests
 
-    # Custom parameters.
-    gitattributesExportInclude:
-        - composer.json
-        - docs
-        - LICENSE
-        - src
-    preconditionSystemHash: a0b37f5b33d2960495a6aded52e129e8
-
 # https://phpstan.org/developing-extensions/extension-types
 rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoCallingTranslatableFactoryDirectlyRule # Forbids calling TranslatableFactory::create() directly.
@@ -115,6 +115,13 @@ services:
         class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
         arguments:
             preconditionSystemHash: %preconditionSystemHash%
+        tags:
+            - phpstan.rules.rule
+    -
+        # Ensures that translation system diagrams stay current.
+        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\TranslationDiagramsInSyncRule
+        arguments:
+            preconditionSystemHash: %translationSystemHash%
         tags:
             - phpstan.rules.rule
     -
