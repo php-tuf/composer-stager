@@ -11,7 +11,6 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -65,9 +64,8 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new NoSymlinksPointToADirectory($fileFinder, $fileSyncer, $filesystem, $pathFactory, $translatableFactory, $translator);
+        return new NoSymlinksPointToADirectory($fileFinder, $fileSyncer, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function testExitEarlyWithRsyncFileSyncer(): void

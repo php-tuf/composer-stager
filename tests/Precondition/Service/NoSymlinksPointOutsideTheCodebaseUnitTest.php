@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -59,8 +58,7 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory, $translatableFactory, $translator);
+        return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 }

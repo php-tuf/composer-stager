@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
@@ -77,9 +76,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             ->willReturn($process);
         $processFactory = $this->processFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new ComposerIsAvailable($executableFinder, $processFactory, $translatableFactory, $translator);
+        return new ComposerIsAvailable($executableFinder, $processFactory, $translatableFactory);
     }
 
     /**

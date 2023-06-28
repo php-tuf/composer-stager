@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist
@@ -32,9 +31,8 @@ final class NoHardLinksExistUnitTest extends FileIteratingPreconditionUnitTestCa
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new NoHardLinksExist($fileFinder, $filesystem, $pathFactory, $translatableFactory, $translator);
+        return new NoHardLinksExist($fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     protected function fulfilledStatusMessage(): string

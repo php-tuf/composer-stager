@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
@@ -38,9 +37,8 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
     {
         $filesystem = $this->filesystem->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new ActiveDirExists($filesystem, $translatableFactory, $translator);
+        return new ActiveDirExists($filesystem, $translatableFactory);
     }
 
     public function testFulfilled(): void

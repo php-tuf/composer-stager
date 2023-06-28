@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
@@ -56,10 +55,8 @@ abstract class AbstractPrecondition implements PreconditionInterface
     /** Gets a status message for when the precondition is fulfilled. */
     abstract protected function getFulfilledStatusMessage(): TranslatableInterface;
 
-    public function __construct(
-        TranslatableFactoryInterface $translatableFactory,
-        protected TranslatorInterface $translator,
-    ) {
+    public function __construct(TranslatableFactoryInterface $translatableFactory)
+    {
         $this->setTranslatableFactory($translatableFactory);
     }
 }

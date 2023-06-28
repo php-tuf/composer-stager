@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
@@ -50,9 +49,8 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
         /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $processFactory */
         $processFactory = $this->processFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new HostSupportsRunningProcesses($processFactory, $translatableFactory, $translator);
+        return new HostSupportsRunningProcesses($processFactory, $translatableFactory);
     }
 
     public function testFulfilled(): void

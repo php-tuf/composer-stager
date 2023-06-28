@@ -6,14 +6,12 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
@@ -150,15 +148,14 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 ->shouldBeCalledTimes(2);
             $spy = $spy->reveal();
 
-            return new Class($isFulfilled, $message, $spy, new TestTranslator()) extends AbstractPrecondition
+            return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
             {
                 public function __construct(
                     private readonly bool $isFulfilled,
                     private readonly TranslatableInterface $message,
                     private readonly TestSpyInterface $spy,
-                    protected TranslatorInterface $translator,
                 ) {
-                    parent::__construct(new TestTranslatableFactory(), $translator);
+                    parent::__construct(new TestTranslatableFactory());
                 }
 
                 protected function getFulfilledStatusMessage(): TranslatableInterface

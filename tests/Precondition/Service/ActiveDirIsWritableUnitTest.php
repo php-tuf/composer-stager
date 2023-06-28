@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 /**
@@ -37,9 +36,8 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
     {
         $filesystem = $this->filesystem->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new ActiveDirIsWritable($filesystem, $translatableFactory, $translator);
+        return new ActiveDirIsWritable($filesystem, $translatableFactory);
     }
 
     public function testFulfilled(): void

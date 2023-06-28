@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
@@ -42,9 +41,8 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
         protected readonly FilesystemInterface $filesystem,
         protected readonly PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,
-        protected TranslatorInterface $translator,
     ) {
-        parent::__construct($translatableFactory, $translator);
+        parent::__construct($translatableFactory);
     }
 
     public function assertIsFulfilled(

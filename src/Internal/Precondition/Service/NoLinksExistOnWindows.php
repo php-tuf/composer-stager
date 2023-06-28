@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
@@ -27,9 +26,8 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
         private readonly HostInterface $host,
         PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,
-        TranslatorInterface $translator,
     ) {
-        parent::__construct($fileFinder, $filesystem, $pathFactory, $translatableFactory, $translator);
+        parent::__construct($fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function getName(): TranslatableInterface

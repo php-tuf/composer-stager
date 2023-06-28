@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\Internal\Host\Service\HostInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Tests\Host\Service\TestHost;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use Prophecy\Argument;
 
 /**
@@ -50,9 +49,8 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
-        $translator = new TestTranslator();
 
-        return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory, $translatableFactory, $translator);
+        return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory, $translatableFactory);
     }
 
     private function createWindowsHost(): HostInterface

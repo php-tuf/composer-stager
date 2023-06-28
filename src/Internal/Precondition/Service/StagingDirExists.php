@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 
@@ -21,9 +20,8 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         TranslatableFactoryInterface $translatableFactory,
-        protected TranslatorInterface $translator,
     ) {
-        parent::__construct($translatableFactory, $translator);
+        parent::__construct($translatableFactory);
     }
 
     public function getName(): TranslatableInterface

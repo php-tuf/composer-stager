@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 
@@ -55,7 +54,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
                 protected TestSpyInterface $spy,
                 TranslatableFactoryInterface $translatableFactory,
             ) {
-                parent::__construct(new TestTranslatableFactory(), new TestTranslator());
+                parent::__construct(new TestTranslatableFactory());
 
                 $this->setTranslatableFactory($translatableFactory);
             }
