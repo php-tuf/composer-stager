@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
-use Error;
-use LogicException;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;

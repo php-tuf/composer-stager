@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
@@ -84,8 +83,15 @@ final class TranslationDiagramsInSyncRule extends AbstractRule
             $namespace = $class->getName();
 
             // Limit to translation package.
-            $isProductionTranslationClass = $this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\API\\Translation\\');
-            $isInternalTranslationClass = $this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\Internal\\Translation\\');
+            $isProductionTranslationClass = $this->isInNamespace(
+                $namespace,
+                'PhpTuf\\ComposerStager\\API\\Translation\\',
+            );
+            $isInternalTranslationClass = $this->isInNamespace(
+                $namespace,
+                'PhpTuf\\ComposerStager\\Internal\\Translation\\',
+            );
+
             if (!$isProductionTranslationClass && !$isInternalTranslationClass) {
                 continue;
             }
