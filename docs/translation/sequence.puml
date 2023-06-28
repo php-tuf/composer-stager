@@ -15,7 +15,7 @@ TranslationParameters --> Provider
 Provider -> TranslatableFactory : \nrequest\ndomain\noptions
 TranslatableFactory -> "Domain\nOptions" as DomainOptions : create domain options
 DomainOptions --> Provider
-Provider -> TranslatableFactory : \nrequest\nmessage\n(send\nparameters)
+Provider -> TranslatableFactory : \nrequest\nmessage\n(send\nparameters\nand domain)
 TranslatableFactory -> "Translatable\nMessage" as TranslatableMessage : create message (send\nparameters and domain)
 TranslatableMessage --> Requester : return message
 Requester -> "Translator\n" as Translator : \n\nget translator
