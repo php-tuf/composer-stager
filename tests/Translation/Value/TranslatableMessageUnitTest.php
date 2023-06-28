@@ -104,16 +104,4 @@ final class TranslatableMessageUnitTest extends TestCase
             ],
         ];
     }
-
-    public function providerTranslatorException(): array
-    {
-        return [
-            [
-                new Error('An Error'),
-            ],
-            [
-                new LogicException('A LogicException'),
-            ],
-        ];
-    }
 }

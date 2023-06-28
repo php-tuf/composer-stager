@@ -7,11 +7,6 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
 /**
- * Handles a translatable message.
- *
- * @see \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface
- * @see https://symfony.com/doc/current/translation.html
- *
  * @package Translation
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
