@@ -28,10 +28,10 @@ interface TranslatorInterface
      * During development, with `assert()` evaluation enabled, an `AssertError`
      * will be thrown to help surface defects before they're released.
      *
-     * @param string $id
+     * @param string $message
      *   The message ID--either the message string itself in the language of the default
      *   locale, or a "keyword" corresponding to the string defined in configuration.
-     *   See {@link https://symfony.com/doc/current/translation.html#configuration Configuration
+     *   c.f. {@link https://symfony.com/doc/current/translation.html#configuration Configuration
      *   and Basic Translation in the Symfony Docs}. It may contain placeholders corresponding
      *   to the `$parameters` argument.
      * @param string|null $domain
@@ -41,7 +41,7 @@ interface TranslatorInterface
      *   The locale, e.g., "en_US" or "es_ES", or null to use the default.
      */
     public function trans(
-        string $id,
+        string $message,
         ?TranslationParametersInterface $parameters = null,
         ?string $domain = null,
         ?string $locale = null,

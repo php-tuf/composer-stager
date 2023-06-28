@@ -14,7 +14,7 @@ final class TestTranslator implements TranslatorInterface
     }
 
     public function trans(
-        string $id,
+        string $message,
         ?TranslationParametersInterface $parameters = null,
         ?string $domain = null,
         ?string $locale = null,
@@ -23,7 +23,7 @@ final class TestTranslator implements TranslatorInterface
             ? $parameters->getAll()
             : [];
 
-        return $this->symfonyTrans($id, $parameters, $domain, $locale);
+        return $this->symfonyTrans($message, $parameters, $domain, $locale);
     }
 
     public function getLocale(): string

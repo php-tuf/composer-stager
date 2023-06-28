@@ -31,12 +31,12 @@ final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
     }
 
     public function trans(
-        string $id,
+        string $message,
         array $parameters = [],
         ?string $domain = null,
         ?string $locale = LocaleInterface::DEFAULT,
     ): string {
-        return $this->symfonyTranslator->trans($id, $parameters, $domain, $locale);
+        return $this->symfonyTranslator->trans($message, $parameters, $domain, $locale);
     }
 
     public function getLocale(): string

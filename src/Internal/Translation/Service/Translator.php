@@ -27,7 +27,7 @@ final class Translator implements TranslatorInterface
     }
 
     public function trans(
-        string $id,
+        string $message,
         ?TranslationParametersInterface $parameters = null,
         ?string $domain = null,
         ?string $locale = null,
@@ -36,7 +36,7 @@ final class Translator implements TranslatorInterface
             $parameters ??= new TranslationParameters();
             $domain ??= $this->domainOptions->default();
 
-            return $this->symfonyTranslatorProxy->trans($id, $parameters->getAll(), $domain, $locale);
+            return $this->symfonyTranslatorProxy->trans($message, $parameters->getAll(), $domain, $locale);
         } catch (Throwable $e) {
             $message = sprintf('Translation error: %s', $e->getMessage());
 

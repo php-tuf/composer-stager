@@ -116,11 +116,11 @@ final class TranslatorUnitTest extends TestCase
      */
     public function testDomainHandling(string $defaultDomain, ?string $givenDomain, string $expectedDomain): void
     {
-        $id = __METHOD__;
+        $message = __METHOD__;
         $this->symfonyTranslatorProxy = $this->prophesize(SymfonyTranslatorProxyInterface::class);
         $this->symfonyTranslatorProxy
             ->trans(Argument::cetera())
-            ->willReturn($id);
+            ->willReturn($message);
         $this->symfonyTranslatorProxy
             ->trans(Argument::any(), Argument::any(), $expectedDomain, Argument::cetera())
             ->shouldBeCalledOnce();
@@ -129,7 +129,7 @@ final class TranslatorUnitTest extends TestCase
         $this->domainOptions = new TestDomainOptions($defaultDomain);
         $sut = $this->createSut();
 
-        $sut->trans($id, null, $givenDomain);
+        $sut->trans($message, null, $givenDomain);
     }
 
     public function providerDomainHandling(): array
