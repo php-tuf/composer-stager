@@ -6,11 +6,19 @@ The class design contains three main concepts: 1) A precondition defines one ato
 
 This diagram depicts the detailed interfaces and relationships. New concrete preconditions should inherit their corresponding abstract classes, which handle precondition-nonspecific features like recursion and exception-handling. 
 
+<br>
+
 <div align="center"><img src="detail.png" alt="Detail diagram" /></div>
+
+<br>
 
 Below is a depiction of the actual hierarchy of preconditions.
 
+<br>
+
 <div align="center"><img src="hierarchy.png" alt="Hierarchy diagram" /></div>
+
+<br>
 
 ## Symlinks
 
