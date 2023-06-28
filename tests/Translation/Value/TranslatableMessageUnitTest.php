@@ -16,8 +16,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
  *
- * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
@@ -63,7 +61,7 @@ final class TranslatableMessageUnitTest extends TestCase
         $actualTranslation = $sut->trans(new Translator(new DomainOptions(), new SymfonyTranslatorProxy()));
 
         self::assertSame($expectedTranslation, $actualTranslation, 'Returned correct translation.');
-        self::assertSame($message, (string) $sut, 'Returned correct typecast string value.');
+        self::assertSame($expectedTranslation, (string) $sut, 'Returned correct typecast string value.');
     }
 
     public function providerBasicFunctionality(): array

@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Translation\Value;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 
 /**
  * @package Translation
@@ -37,8 +38,10 @@ final class TranslatableMessage implements TranslatableInterface
         return $translator->trans($this->message, $this->parameters, $this->domain, $locale);
     }
 
+    /** Performs placeholder substitution without attempting actual translation. */
     public function __toString(): string
     {
-        return $this->message;
+        return Translator::create()
+            ->trans($this->message, $this->parameters);
     }
 }

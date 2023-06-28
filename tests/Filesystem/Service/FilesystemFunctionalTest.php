@@ -23,6 +23,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters

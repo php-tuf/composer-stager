@@ -26,6 +26,15 @@ final class Translator implements TranslatorInterface
     ) {
     }
 
+    /** Only use this as a last resort, when standard dependency injection is literally impossible. */
+    public static function create(): self
+    {
+        $domainOptions = new DomainOptions();
+        $symfonyTranslatorProxy = new SymfonyTranslatorProxy();
+
+        return new self($domainOptions, $symfonyTranslatorProxy);
+    }
+
     public function trans(
         string $message,
         ?TranslationParametersInterface $parameters = null,
