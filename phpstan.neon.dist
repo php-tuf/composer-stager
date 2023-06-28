@@ -18,7 +18,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     preconditionSystemHash: a0b37f5b33d2960495a6aded52e129e8
-    translationSystemHash: a7b89fa97c66307e1d16f34fa8f0a642
+    translationSystemHash: 457a45cfd3c67ebf0d7ff3c39b541c8d
     gitattributesExportInclude:
         - composer.json
         - docs
@@ -47,8 +47,10 @@ parameters:
             message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
             path: src/API/Exception/PreconditionException.php
         -
-            message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
-            path: src/Internal/Process/Service/AbstractProcessRunner.php
+            message: '#Method (run|create)\(\) should not be public because it doesn''t implement a method on an interface.#'
+            paths:
+                - src/Internal/Process/Service/AbstractProcessRunner.php
+                - src/Internal/Translation/Service/Translator.php
 
         # Test code.
         -

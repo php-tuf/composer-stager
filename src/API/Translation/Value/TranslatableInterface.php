@@ -12,6 +12,12 @@ use Stringable;
  * there is no guarantee of functional equivalence. Do not depend on undocumented
  * behavior.
  *
+ * The behavior when cast to string is technically unspecified--it's left to
+ * implementations--and should not be depended upon, as a rule. The default is
+ * to perform placeholder substitution without attempting actual translation.
+ *
+ * @see \PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface
+ *
  * @package Translation
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
@@ -20,7 +26,4 @@ interface TranslatableInterface extends Stringable
 {
     /** Translates the message. */
     public function trans(TranslatorInterface $translator, ?string $locale = null): string;
-
-    /** Returns the bare message as-given, untranslated, without placeholder substitution. */
-    public function __toString(): string;
 }

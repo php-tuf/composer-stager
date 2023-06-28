@@ -50,6 +50,7 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
  * @uses \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory
  * @uses \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
