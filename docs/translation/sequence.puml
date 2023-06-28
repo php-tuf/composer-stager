@@ -9,14 +9,14 @@
 !include ../resources/settings.puml
 
 "Requester\n" as Requester -> "Provider\n" as Provider : request\nmessage
-Provider -> "Translatable\nFactory" as TranslatableFactory : request\nparameters\n(send array)
+Provider -> "Translatable\nFactory" as TranslatableFactory : request\nparameters
 TranslatableFactory -> "Translation\nParameters" as TranslationParameters : create\nparameters
 TranslationParameters --> Provider
 Provider -> TranslatableFactory : \nrequest\ndomain\noptions
 TranslatableFactory -> "Domain\nOptions" as DomainOptions : create domain options
 DomainOptions --> Provider
-Provider -> TranslatableFactory : \nrequest\nmessage\n(send\nparameters\nand domain)
-TranslatableFactory -> "Translatable\nMessage" as TranslatableMessage : create message (send\nparameters and domain)
+Provider -> TranslatableFactory : \nrequest\nmessage
+TranslatableFactory -> "Translatable\nMessage" as TranslatableMessage : create message
 TranslatableMessage --> Requester : return message
 Requester -> "Translator\n" as Translator : \n\nget translator
 Translator --> Requester
