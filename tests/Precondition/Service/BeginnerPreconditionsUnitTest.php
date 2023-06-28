@@ -20,6 +20,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noUnsupportedLinksExist

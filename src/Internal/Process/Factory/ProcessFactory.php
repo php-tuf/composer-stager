@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Process\Process;
 
@@ -37,7 +36,7 @@ final class ProcessFactory implements ProcessFactoryInterface
             throw new LogicException($this->t(
                 'Failed to create process: %details',
                 $this->p(['%details' => $e->getMessage()]),
-                DomainInterface::EXCEPTIONS,
+                $this->d()->exceptions(),
             ), 0, $e);
         }
     }

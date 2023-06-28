@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\API\Translation\Factory;
 
+use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
@@ -14,6 +15,9 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
  */
 interface TranslatableFactoryInterface
 {
+    /** Creates a domain options object. */
+    public function createDomainOptions(): DomainOptionsInterface;
+
     /**
      * Creates a translatable message.
      *
@@ -23,8 +27,8 @@ interface TranslatableFactoryInterface
      *   $message = 'Hello, %first_name %last_name.';
      *   ```
      * @param string|null $domain
-     *   An arbitrary domain for grouping translations, e.g., "app", "admin",
-     *   "store", or null to use the default.
+     *   An arbitrary domain for grouping translations or null to use the default. See
+     *   {@see \PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface}.
      */
     public function createTranslatableMessage(
         string $message,

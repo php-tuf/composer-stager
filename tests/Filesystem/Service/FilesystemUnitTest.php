@@ -23,6 +23,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory

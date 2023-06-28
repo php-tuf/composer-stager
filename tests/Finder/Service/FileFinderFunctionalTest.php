@@ -20,6 +20,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
  * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder

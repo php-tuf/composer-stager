@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\DomainInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
@@ -36,6 +35,8 @@ abstract class TestCase extends PHPUnitTestCase
     protected const STAGING_DIR = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
+    public const DOMAIN_DEFAULT = 'messages';
+    public const DOMAIN_EXCEPTIONS = 'exceptions';
 
     protected static function testWorkingDirPath(): PathInterface
     {
@@ -137,7 +138,7 @@ abstract class TestCase extends PHPUnitTestCase
     public static function createTestPreconditionException(
         string $message = '',
         ?TranslationParametersInterface $parameters = null,
-        $domain = DomainInterface::EXCEPTIONS,
+        $domain = self::DOMAIN_EXCEPTIONS,
     ): PreconditionException {
         return new PreconditionException(
             new TestPrecondition(),
@@ -346,7 +347,7 @@ abstract class TestCase extends PHPUnitTestCase
 
             if ($actualException instanceof ExceptionInterface) {
                 $x = new TranslatableReflection($actualException->getTranslatableMessage());
-                self::assertSame(DomainInterface::EXCEPTIONS, $x->getDomain(), 'Set correct domain.');
+                self::assertSame(self::DOMAIN_EXCEPTIONS, $x->getDomain(), 'Set correct domain.');
             }
 
             if ($expectedPreviousExceptionClass === null) {

@@ -24,6 +24,7 @@ use Throwable;
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
  * @property \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder

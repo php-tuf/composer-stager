@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Translation\Service;
 
+use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
@@ -19,8 +20,10 @@ use Throwable;
  */
 final class Translator implements TranslatorInterface
 {
-    public function __construct(private readonly SymfonyTranslatorProxyInterface $symfonyTranslatorProxy)
-    {
+    public function __construct(
+        private readonly DomainOptionsInterface $domainOptions,
+        private readonly SymfonyTranslatorProxyInterface $symfonyTranslatorProxy,
+    ) {
     }
 
     public function trans(
@@ -31,6 +34,7 @@ final class Translator implements TranslatorInterface
     ): string {
         try {
             $parameters ??= new TranslationParameters();
+            $domain ??= $this->domainOptions->default();
 
             return $this->symfonyTranslatorProxy->trans($id, $parameters->getAll(), $domain, $locale);
         } catch (Throwable $e) {

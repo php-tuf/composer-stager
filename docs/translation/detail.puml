@@ -18,6 +18,7 @@ rectangle {
         -TranslatableFactory
         #t() : TranslatableMessage
         #p() : TranslationParameters
+        #d() : DomainOptions
     }
 
 }
@@ -25,8 +26,10 @@ rectangle {
 rectangle {
 
     interface TranslatableFactory {
+        -DomainOptions
         +createTranslatableMessage()
         +createTranslationParameters()
+        +createDomainOptions()
     }
 
     interface TranslatableMessage {
@@ -42,6 +45,9 @@ rectangle {
     interface Translator {
         +trans(): string
         +getLocale(): string
+    }
+
+    interface DomainOptions {
     }
 
 }
@@ -63,6 +69,8 @@ Provider *--> TranslatableFactory
 TranslatableFactory ..> Provider
 TranslatableFactory -down-> TranslationParameters
 TranslationParameters .up.> TranslatableFactory
+DomainOptions ..up.> TranslatableFactory
+TranslatableFactory *-down-> DomainOptions
 TranslatableFactory <.down. TranslatableMessage
 TranslatableMessage <-up- TranslatableFactory
 TranslationParameters <-right-* TranslatableMessage
@@ -74,6 +82,10 @@ TranslatableMessage .up.> Requester
 
 ' Exception-handling:
 Exception *-up-> TranslatableMessage
-Exception -[hidden]- TranslationParameters
+
+' Alignment:
+Exception -up[hidden]- DomainOptions
+Exception -up[hidden]- DomainOptions
+
 
 @enduml

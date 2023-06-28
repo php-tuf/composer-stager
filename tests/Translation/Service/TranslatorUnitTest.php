@@ -6,6 +6,7 @@ use AssertionError;
 use Error;
 use LogicException;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
@@ -25,16 +26,19 @@ use Throwable;
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
  * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatorUnitTest extends TestCase
 {
+    private DomainOptionsInterface $domainOptions;
     private SymfonyTranslatorProxyInterface|ObjectProphecy $symfonyTranslatorProxy;
     private TranslatableFactoryInterface|ObjectProphecy $translatableFactory;
 
     public function setUp(): void
     {
+        $this->domainOptions = new TestDomainOptions();
         $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
         $this->translatableFactory = new TestTranslatableFactory();
     }
@@ -44,7 +48,7 @@ final class TranslatorUnitTest extends TestCase
         assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxyInterface);
         assert($this->translatableFactory instanceof TranslatableFactoryInterface);
 
-        return new Translator($this->symfonyTranslatorProxy);
+        return new Translator($this->domainOptions, $this->symfonyTranslatorProxy);
     }
 
     /**
@@ -101,6 +105,50 @@ final class TranslatorUnitTest extends TestCase
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => 'A happy little string',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::trans
+     *
+     * @dataProvider providerDomainHandling
+     */
+    public function testDomainHandling(string $defaultDomain, ?string $givenDomain, string $expectedDomain): void
+    {
+        $id = __METHOD__;
+        $this->symfonyTranslatorProxy = $this->prophesize(SymfonyTranslatorProxyInterface::class);
+        $this->symfonyTranslatorProxy
+            ->trans(Argument::cetera())
+            ->willReturn($id);
+        $this->symfonyTranslatorProxy
+            ->trans(Argument::any(), Argument::any(), $expectedDomain, Argument::cetera())
+            ->shouldBeCalledOnce();
+        $this->symfonyTranslatorProxy = $this->symfonyTranslatorProxy
+            ->reveal();
+        $this->domainOptions = new TestDomainOptions($defaultDomain);
+        $sut = $this->createSut();
+
+        $sut->trans($id, null, $givenDomain);
+    }
+
+    public function providerDomainHandling(): array
+    {
+        return [
+            'Default' => [
+                'defaultDomain' => 'One',
+                'givenDomain' => null,
+                'expectedDomain' => 'One',
+            ],
+            'Overridden via DomainOptions' => [
+                'defaultDomain' => 'Two',
+                'givenDomain' => null,
+                'expectedDomain' => 'Two',
+            ],
+            'Overridden via ::trans() call' => [
+                'defaultDomain' => 'Three',
+                'givenDomain' => 'Overridden',
+                'expectedDomain' => 'Overridden',
             ],
         ];
     }

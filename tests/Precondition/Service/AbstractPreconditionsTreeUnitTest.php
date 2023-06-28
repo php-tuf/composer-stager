@@ -26,6 +26,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  *
  * @property \PhpTuf\ComposerStager\API\Path\Value\PathListInterface $exclusions
  */
