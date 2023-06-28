@@ -25,7 +25,7 @@ use Throwable;
  * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters

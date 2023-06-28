@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Factory;
 
-use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 final class TestTranslationParameters implements TranslationParametersInterface
 {

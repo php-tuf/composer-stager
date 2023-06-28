@@ -14,7 +14,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
  * @covers ::findFiles
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
  * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
@@ -25,6 +24,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator

@@ -10,11 +10,11 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Process\Service\RsyncProcessRunnerInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 /**
  * @package FileSyncer

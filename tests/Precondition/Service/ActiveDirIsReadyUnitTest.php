@@ -17,8 +17,8 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsWritable

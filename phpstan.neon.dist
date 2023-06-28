@@ -89,7 +89,7 @@ parameters:
         - docs
         - LICENSE
         - src
-    preconditionSystemHash: 0cbb508ff665d022c88fa527cc80b6e5
+    preconditionSystemHash: 9e11dbc9a81baccb358b512cc80c092e
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

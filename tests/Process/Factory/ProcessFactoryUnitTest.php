@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory
  *
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  */
 final class ProcessFactoryUnitTest extends TestCase
 {

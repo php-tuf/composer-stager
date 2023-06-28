@@ -18,7 +18,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
  *

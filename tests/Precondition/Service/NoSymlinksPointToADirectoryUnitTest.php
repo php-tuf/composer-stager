@@ -25,10 +25,10 @@ use Prophecy\Argument;
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  *
  * @property \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem

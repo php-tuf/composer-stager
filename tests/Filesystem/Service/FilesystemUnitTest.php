@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  * @covers \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem::__construct
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *

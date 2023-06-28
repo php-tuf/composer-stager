@@ -12,13 +12,13 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @covers ::__construct
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory
+ * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
