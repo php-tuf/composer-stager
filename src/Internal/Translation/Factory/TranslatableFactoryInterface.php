@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Translation\Factory;
+namespace PhpTuf\ComposerStager\Internal\Translation\Factory;
 
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
  *
  * @package Translation
  *
- * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
+ * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
  */
 interface TranslatableFactoryInterface
 {

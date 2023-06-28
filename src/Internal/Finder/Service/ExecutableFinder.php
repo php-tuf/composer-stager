@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Internal\Finder\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
-use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**

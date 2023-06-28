@@ -28,7 +28,7 @@ use Symfony\Component\Process\Process;
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *
- * @property \PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
+ * @property \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
  */
 final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 {

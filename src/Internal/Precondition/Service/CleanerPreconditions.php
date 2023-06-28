@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
-use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 
 /**
  * @package Precondition
