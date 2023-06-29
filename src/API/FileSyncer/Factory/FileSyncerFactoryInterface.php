@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\FileSyncer\Factory;
+namespace PhpTuf\ComposerStager\API\FileSyncer\Factory;
 
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 
@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
  *
  * @package FileSyncer
  *
- * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface FileSyncerFactoryInterface
 {

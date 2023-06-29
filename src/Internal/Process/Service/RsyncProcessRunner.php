@@ -6,8 +6,8 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
  * Before using this class outside the internal layer, consider a
  * higher-level abstraction, e.g.:
  *
+ * @see \PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface
  * @see \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface
- * @see \PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactoryInterface
  *
  * @package Process
  *

@@ -9,13 +9,18 @@ services:
         resource: '../src/*'
         public: true
         exclude:
-            - '../src/API/Exception'
             - '../src/*/*/Value'
+            - '../src/API/Exception'
 
+    # It is not strictly necessary to specify these details for Composer Stager
+    # itself, but they represent that way a client would configure its container.
+    # Therefore it is how Composer Stager should test itself. See ../docs/README.md.
+    PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory:
+        arguments:
+            $phpFileSyncer: '@PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface'
+            $rsyncFileSyncer: '@PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface'
     PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory', 'create' ]
-
-    PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory: ~
+        factory: [ '@PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface', 'create' ]
 
     Symfony\Component\Filesystem\Filesystem: ~
 
