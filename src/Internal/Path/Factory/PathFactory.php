@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Path\Factory;
 
+use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath;

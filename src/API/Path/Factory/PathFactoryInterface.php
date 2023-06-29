@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\Path\Factory;
+namespace PhpTuf\ComposerStager\API\Path\Factory;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 
@@ -9,7 +9,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
  *
  * @package Path
  *
- * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface PathFactoryInterface
 {

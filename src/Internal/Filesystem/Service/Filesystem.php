@@ -4,10 +4,10 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;

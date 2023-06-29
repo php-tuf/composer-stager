@@ -35,7 +35,7 @@ class Updater
         private readonly BeginnerInterface $beginner,
         private readonly StagerInterface $stager,
         private readonly CommitterInterface $committer,
-        private readonly CleanerInterface $cleaner
+        private readonly CleanerInterface $cleaner,
     ) {
     }
 
