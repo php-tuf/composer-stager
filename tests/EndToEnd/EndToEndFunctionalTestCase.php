@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Core\Beginner;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 

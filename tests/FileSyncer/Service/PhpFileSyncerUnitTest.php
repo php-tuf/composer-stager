@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  *

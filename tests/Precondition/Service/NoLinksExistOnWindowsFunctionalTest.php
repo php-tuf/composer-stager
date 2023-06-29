@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 
 /**
@@ -13,13 +13,13 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
  * @covers ::__construct
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
  * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
  * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
  * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition

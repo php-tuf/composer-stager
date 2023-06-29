@@ -4,9 +4,9 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 
 /**
@@ -16,6 +16,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirect
  * @covers ::exitEarly
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
+ * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory
  * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
@@ -25,7 +26,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirect
  * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
  * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
  * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition

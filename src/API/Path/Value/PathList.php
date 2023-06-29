@@ -1,13 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\Path\Value;
-
-use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+namespace PhpTuf\ComposerStager\API\Path\Value;
 
 /**
  * @package Path
  *
- * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
+ * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
 final class PathList implements PathListInterface
 {

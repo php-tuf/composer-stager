@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::isFulfilled
  *
  * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\PathList
+ * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
  * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
