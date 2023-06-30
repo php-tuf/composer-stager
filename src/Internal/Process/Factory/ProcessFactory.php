@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * @package Process
@@ -28,10 +28,10 @@ final class ProcessFactory implements ProcessFactoryInterface
      *   to overcome this limitation through the introduction of a Symfony Process
      *   proxy in the future.
      */
-    public function create(array $command): Process
+    public function create(array $command): SymfonyProcess
     {
         try {
-            return new Process($command);
+            return new SymfonyProcess($command);
         } catch (SymfonyExceptionInterface $e) {
             throw new LogicException($this->t(
                 'Failed to create process: %details',

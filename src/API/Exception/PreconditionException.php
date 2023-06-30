@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\API\Exception;
 
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use RuntimeException;
+use RuntimeException as PhpRuntimeException;
 use Throwable;
 
 /**
@@ -14,7 +14,7 @@ use Throwable;
  *
  * @api This class is subject to our backward compatibility promise and may be safely depended upon.
  */
-class PreconditionException extends RuntimeException implements ExceptionInterface
+class PreconditionException extends PhpRuntimeException implements ExceptionInterface
 {
     use TranslatableExceptionTrait {
         TranslatableExceptionTrait::__construct as __traitConstruct;

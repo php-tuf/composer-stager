@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * Creates Symfony Process objects.
@@ -32,5 +32,5 @@ interface ProcessFactoryInterface
      *
      * @see \Symfony\Component\Process\Process::__construct
      */
-    public function create(array $command): Process;
+    public function create(array $command): SymfonyProcess;
 }

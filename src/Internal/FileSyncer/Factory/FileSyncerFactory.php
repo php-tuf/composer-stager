@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
-use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
  * @package FileSyncer
@@ -16,7 +16,7 @@ use Symfony\Component\Process\ExecutableFinder;
 final class FileSyncerFactory implements FileSyncerFactoryInterface
 {
     public function __construct(
-        private readonly ExecutableFinder $executableFinder,
+        private readonly SymfonyExecutableFinder $executableFinder,
         private readonly PhpFileSyncerInterface $phpFileSyncer,
         private readonly RsyncFileSyncerInterface $rsyncFileSyncer,
     ) {

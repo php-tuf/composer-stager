@@ -13,7 +13,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterf
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use UnexpectedValueException;
+use UnexpectedValueException as PhpUnexpectedValueException;
 
 /**
  * @package Finder
@@ -81,7 +81,7 @@ final class FileFinder implements FileFinderInterface
                 $directory,
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
-        } catch (UnexpectedValueException $e) {
+        } catch (PhpUnexpectedValueException $e) {
             // @todo Find a way to add test coverage for this.
             throw new IOException($this->t(
                 'The directory cannot be found or is not a directory at %path.',

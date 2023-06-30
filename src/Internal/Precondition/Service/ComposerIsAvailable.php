@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
-use JsonException;
+use JsonException as PhpJsonException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
@@ -13,8 +13,8 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * @package Precondition
@@ -86,7 +86,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
-    private function getProcess(): Process
+    private function getProcess(): SymfonyProcess
     {
         try {
             return $this->processFactory->create([
@@ -103,18 +103,18 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         }
     }
 
-    private function isValidExecutable(Process $process): bool
+    private function isValidExecutable(SymfonyProcess $process): bool
     {
         try {
             $process->mustRun();
             $output = $process->getOutput();
-        } catch (SymfonyLogicException|ProcessFailedException) {
+        } catch (SymfonyLogicException|SymfonyProcessFailedException) {
             return false;
         }
 
         try {
             $data = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
+        } catch (PhpJsonException) {
             return false;
         }
 

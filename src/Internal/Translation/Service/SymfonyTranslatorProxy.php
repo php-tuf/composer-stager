@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Internal\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterface;
-use Symfony\Contracts\Translation\TranslatorTrait;
+use Symfony\Contracts\Translation\TranslatorTrait as SymfonyTranslatorTrait;
 
 /**
  * Provides a thin wrapper around Symfony's default translator implementation.
@@ -26,7 +26,7 @@ final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
         // Wrap the translator trait rather than using it directly
         // so as not to expose methods that aren't on the interface.
         $this->symfonyTranslator = new class() implements SymfonyTranslatorInterface {
-            use TranslatorTrait;
+            use SymfonyTranslatorTrait;
         };
     }
 
