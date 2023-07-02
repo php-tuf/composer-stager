@@ -7,13 +7,7 @@ use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- *
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait */
 final class TranslatableExceptionTraitUnitTest extends TestCase
 {
     /**

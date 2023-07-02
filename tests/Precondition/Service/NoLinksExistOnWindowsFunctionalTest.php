@@ -12,24 +12,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
  *
  * @covers ::__construct
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
- * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
- * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
- * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
- * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- *
  * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
@@ -111,9 +93,6 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      * @covers ::exitEarly
      * @covers ::findFiles
      * @covers ::isFulfilled
-     *
-     * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
-     * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
      *
      * @dataProvider providerFulfilledDirectoryDoesNotExist
      */

@@ -34,8 +34,6 @@ abstract class PreconditionTestCase extends TestCase
      * @covers ::getDescription
      * @covers ::getLeaves
      * @covers ::getName
-     *
-     * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
      */
     public function testGetters(): void
     {

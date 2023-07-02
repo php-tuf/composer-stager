@@ -21,11 +21,6 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  *
  * @covers \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem::__construct
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- *
  * @property \PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir

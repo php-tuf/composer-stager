@@ -19,12 +19,6 @@ final class ExceptionUnitTest extends TestCase
      * @covers \PhpTuf\ComposerStager\API\Exception\LogicException
      * @covers \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *
-     * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
-     * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
-     * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
-     * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
-     * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
-     *
      * @dataProvider providerBasicFunctionality
      */
     public function testBasicFunctionality(string $exception): void

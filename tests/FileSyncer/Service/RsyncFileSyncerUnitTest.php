@@ -32,12 +32,6 @@ use Prophecy\Argument;
  * @covers ::runCommand
  * @covers ::sync
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- *
  * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Internal\Process\Service\RsyncProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination

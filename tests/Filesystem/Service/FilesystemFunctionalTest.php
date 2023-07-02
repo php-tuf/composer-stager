@@ -11,24 +11,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
- *
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
- * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- * @uses \Symfony\Component\Filesystem\Filesystem
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem */
 final class FilesystemFunctionalTest extends TestCase
 {
     private static function sourceDir(): PathInterface

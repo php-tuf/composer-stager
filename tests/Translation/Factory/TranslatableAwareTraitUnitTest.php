@@ -14,14 +14,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- *
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait */
 final class TranslatableAwareTraitUnitTest extends TestCase
 {
     /** @covers ::d */

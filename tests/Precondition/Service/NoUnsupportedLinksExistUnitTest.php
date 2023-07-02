@@ -20,9 +20,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
- *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteSymlinksExist
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface|\Prophecy\Prophecy\ObjectProphecy $noLinksExistOnWindows

@@ -15,29 +15,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirect
  * @covers ::__construct
  * @covers ::exitEarly
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Path\Value\PathList
- * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory
- * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
- * @uses \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
- * @uses \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
- * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
- * @uses \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
- * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
- * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
- * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
- * @uses \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- *
  * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
  * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */

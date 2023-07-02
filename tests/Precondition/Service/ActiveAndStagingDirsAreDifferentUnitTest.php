@@ -16,11 +16,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- *
  * @property \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
  */
 final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase

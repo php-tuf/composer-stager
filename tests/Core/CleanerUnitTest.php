@@ -21,9 +21,6 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Cleaner::__construct
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir

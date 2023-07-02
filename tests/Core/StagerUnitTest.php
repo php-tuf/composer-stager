@@ -26,9 +26,6 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Stager
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface|\Prophecy\Prophecy\ObjectProphecy $domainOptions
  * @property \PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner

@@ -13,16 +13,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- *
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage */
 final class TranslatableMessageUnitTest extends TestCase
 {
     private TranslatorInterface|ObjectProphecy $translator;

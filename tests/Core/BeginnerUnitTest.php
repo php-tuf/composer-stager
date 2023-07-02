@@ -25,8 +25,6 @@ use Prophecy\Argument;
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Beginner::__construct
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- *
  * @property \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
  * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir

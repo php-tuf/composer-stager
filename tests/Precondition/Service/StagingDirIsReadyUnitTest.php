@@ -17,9 +17,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\PreconditionException
- * @uses \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
- *
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
  * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
  */

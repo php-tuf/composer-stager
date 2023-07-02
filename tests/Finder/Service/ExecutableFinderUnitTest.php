@@ -16,11 +16,6 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @covers ::__construct
  * @covers ::find
  *
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- *
  * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $symfonyExecutableFinder
  */
 final class ExecutableFinderUnitTest extends TestCase

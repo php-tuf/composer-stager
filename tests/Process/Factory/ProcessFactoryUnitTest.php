@@ -7,11 +7,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Symfony\Component\Process\Process;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory
- *
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory */
 final class ProcessFactoryUnitTest extends TestCase
 {
     /**

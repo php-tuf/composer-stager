@@ -10,13 +10,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestDomainOptions;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- *
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory */
 final class TranslatableFactoryUnitTest extends TestCase
 {
     /**

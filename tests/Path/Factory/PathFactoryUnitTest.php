@@ -10,12 +10,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory
- *
- * @uses \PhpTuf\ComposerStager\Internal\Host\Service\Host
- * @uses \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory */
 final class PathFactoryUnitTest extends TestCase
 {
     /**

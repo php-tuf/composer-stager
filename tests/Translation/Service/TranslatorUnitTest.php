@@ -24,12 +24,6 @@ use Throwable;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
  *
  * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
- *
- * @uses \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- * @uses \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters
  */
 final class TranslatorUnitTest extends TestCase
 {
