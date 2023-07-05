@@ -1,11 +1,12 @@
-!/var/*/.gitkeep
 /.idea/dictionaries/*
-/.idea/inspectionProfiles/*
-/.idea/php.xml
+!/.idea/dictionaries/project.xml
 /.idea/workspace.xml
 /grumphp.yml
 /phpcs.xml
 /phpunit.xml
 /psalm.xml
+/tests/Exploratory/*
+!/tests/Exploratory/ExploratoryTestTemplate.php
 /var/*/*
 /vendor/
+!/**/.gitkeep

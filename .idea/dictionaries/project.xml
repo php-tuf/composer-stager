@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>Ptrs</w>
       <w>autowire</w>
       <w>autowiring</w>
       <w>canonicalized</w>
@@ -12,9 +13,11 @@
       <w>depfile</w>
       <w>deptrac</w>
       <w>dirname</w>
+      <w>docblocks</w>
       <w>ergebnis</w>
       <w>getcwd</w>
       <w>gitattributes</w>
+      <w>grum</w>
       <w>grumphp</w>
       <w>jangregor</w>
       <w>kkeisuke</w>
@@ -38,17 +41,20 @@
       <w>roave</w>
       <w>ruleset</w>
       <w>rulesets</w>
+      <w>scandir</w>
       <w>securitychecker</w>
       <w>shivammathur</w>
       <w>slevomat</w>
       <w>squiz</w>
       <w>squizlabs</w>
       <w>stager</w>
+      <w>stringable</w>
       <w>strlen</w>
       <w>subdir</w>
       <w>sysexits</w>
       <w>testsuites</w>
       <w>thecodingmachine</w>
+      <w>translatables</w>
       <w>unusedcode</w>
       <w>xargs</w>
       <w>xmllint</w>

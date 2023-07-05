@@ -2,7 +2,6 @@
 
 <!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset -->
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         name="ComposerStager"
          xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
 >
 
@@ -12,9 +11,13 @@
     <arg name="cache" value="var/phpcs/cache.json"/>
     <arg name="parallel" value="10"/>
 
-    <file>phpstan</file>
     <file>src</file>
     <file>tests</file>
+    <file>tools</file>
+    <file>rector.php</file>
+
+    <!-- Custom sniffs -->
+    <rule ref="tools/phpcs/phpcs.xml"/>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
@@ -75,15 +78,18 @@
     <rule ref="SlevomatCodingStandard.Classes.PropertyDeclaration"/>
     <rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireAbstractOrFinal">
-        <exclude-pattern>src/Domain/Exception</exclude-pattern>
+        <exclude-pattern>src/API/Exception</exclude-pattern>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature"/>
     <rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature"/>
     <rule ref="SlevomatCodingStandard.Classes.TraitUseDeclaration"/>
-    <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing"><properties>
-        <property name="linesCountBeforeFirstUseWhenFirstInClass" value="0"/>
-    </properties></rule>
+    <rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing">
+        <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing.IncorrectLinesCountAfterLastUse"/>
+        <properties>
+            <property name="linesCountBeforeFirstUseWhenFirstInClass" value="0"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.UselessLateStaticBinding"/>
 
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
@@ -93,11 +99,14 @@
             <element value="@covers,@coversNothing"/>
             <element value="@uses"/>
             <element value="@dataProvider"/>
+            <element value="@property"/>
             <element value="@var"/>
             <element value="@param"/>
             <element value="@return"/>
             <element value="@throws"/>
             <element value="@see"/>
+            <element value="@package"/>
+            <element value="@api,@internal"/>
             <element value="@todo"/>
             <element value="@noinspection,@SuppressWarnings"/>
         </property>
@@ -146,7 +155,7 @@
     <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
         <!-- @todo It would be nice to reduce this. -->
-        <property name="maxLinesLength" value="40"/>
+        <property name="maxLinesLength" value="37"/>
     </properties></rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall"/>
     <rule ref="SlevomatCodingStandard.Functions.RequireSingleLineCall"/>
@@ -235,16 +244,27 @@
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
-    <!-- Exclusions for test classes. -->
+    <!-- Library regression: https://github.com/slevomat/coding-standard/issues/1593 -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment.UselessDocComment"><exclude-pattern>.</exclude-pattern></rule>>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"><exclude-pattern>.</exclude-pattern></rule>>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"><exclude-pattern>.</exclude-pattern></rule>>
+
+    <!-- Exclusions for test and tool classes. -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>rector.php</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern><exclude-pattern>tools/phpcs</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>rector.php</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>tools/phpcs</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint"><exclude-pattern>tools/phpcs</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>tests</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>tools/phpcs</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
 

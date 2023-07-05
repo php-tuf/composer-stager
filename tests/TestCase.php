@@ -2,8 +2,16 @@
 
 namespace PhpTuf\ComposerStager\Tests;
 
-use PhpTuf\ComposerStager\Domain\Value\Path\PathInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TranslatableReflection;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RecursiveDirectoryIterator;
@@ -14,8 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
-use Symfony\Component\Process\Process;
+use Throwable;
 
 abstract class TestCase extends PHPUnitTestCase
 {
@@ -28,6 +35,23 @@ abstract class TestCase extends PHPUnitTestCase
     protected const STAGING_DIR = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
+    public const DOMAIN_DEFAULT = 'messages';
+    public const DOMAIN_EXCEPTIONS = 'exceptions';
+
+    protected static function testWorkingDirPath(): PathInterface
+    {
+        return PathFactory::create(self::TEST_WORKING_DIR);
+    }
+
+    protected static function activeDirPath(): PathInterface
+    {
+        return PathFactory::create(self::ACTIVE_DIR, self::testWorkingDirPath());
+    }
+
+    protected static function stagingDirPath(): PathInterface
+    {
+        return PathFactory::create(self::STAGING_DIR, self::testWorkingDirPath());
+    }
 
     public function getContainer(): ContainerBuilder
     {
@@ -38,19 +62,17 @@ abstract class TestCase extends PHPUnitTestCase
         return $container;
     }
 
-    protected static function createTestEnvironment(string $activeDir): void
+    protected static function createTestEnvironment(string $activeDir = self::ACTIVE_DIR): void
     {
         self::removeTestEnvironment();
 
-        $filesystem = new Filesystem();
-
         // Create the test environment.
-        $filesystem->mkdir(self::TEST_WORKING_DIR);
+        mkdir(self::TEST_WORKING_DIR, 0777, true);
         chdir(self::TEST_WORKING_DIR);
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
-        $filesystem->mkdir($activeDir);
+        mkdir($activeDir, 0777, true);
     }
 
     protected static function removeTestEnvironment(): void
@@ -84,7 +106,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $baseDir, string $filename): void
     {
-        $filename = PathFactory::create("{$baseDir}/{$filename}")->resolve();
+        $filename = PathFactory::create("{$baseDir}/{$filename}")->resolved();
         static::ensureParentDirectory($filename);
 
         $touchResult = touch($filename);
@@ -103,7 +125,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createDirectory(string $baseDir, string $dirname): void
     {
-        $dirname = PathFactory::create("{$baseDir}/{$dirname}")->resolve();
+        $dirname = PathFactory::create("{$baseDir}/{$dirname}")->resolved();
         static::ensureParentDirectory($dirname);
 
         $touchResult = mkdir($dirname);
@@ -111,6 +133,21 @@ abstract class TestCase extends PHPUnitTestCase
 
         assert($touchResult, "Created directory {$dirname}.");
         assert($realpathResult !== false, "Got absolute path of {$dirname}.");
+    }
+
+    public static function createTestPreconditionException(
+        string $message = '',
+        ?TranslationParametersInterface $parameters = null,
+        $domain = self::DOMAIN_EXCEPTIONS,
+    ): PreconditionException {
+        return new PreconditionException(
+            new TestPrecondition(),
+            new TestTranslatableMessage(
+                $message,
+                $parameters,
+                $domain,
+            ),
+        );
     }
 
     protected static function createSymlinks(string $baseDir, array $symlinks): void
@@ -127,7 +164,7 @@ abstract class TestCase extends PHPUnitTestCase
 
         self::prepareForLink($link, $target);
 
-        symlink($target->resolve(), $link->resolve());
+        symlink($target->resolved(), $link->resolved());
     }
 
     protected static function createHardlinks(string $baseDir, array $symlinks): void
@@ -144,17 +181,17 @@ abstract class TestCase extends PHPUnitTestCase
 
         self::prepareForLink($link, $target);
 
-        link($target->resolve(), $link->resolve());
+        link($target->resolved(), $link->resolved());
     }
 
     private static function prepareForLink(PathInterface $link, PathInterface $target): void
     {
-        static::ensureParentDirectory($link->resolve());
+        static::ensureParentDirectory($link->resolved());
 
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
-        assert(file_exists($target->resolve()), 'Symlink target exists.');
+        assert(file_exists($target->resolved()), 'Symlink target exists.');
     }
 
     protected static function ensureParentDirectory(string $filename): void
@@ -169,14 +206,14 @@ abstract class TestCase extends PHPUnitTestCase
         assert($mkdirResult, "Created directory {$dirname}.");
     }
 
-    protected static function changeFile($dir, $filename): void
+    protected static function changeFile(string $dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($pathname, self::CHANGED_CONTENT);
         assert($result !== false, "Changed file {$pathname}.");
     }
 
-    protected static function deleteFile($dir, $filename): void
+    protected static function deleteFile(string $dir, $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
@@ -188,7 +225,7 @@ abstract class TestCase extends PHPUnitTestCase
         return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     }
 
-    /** phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
+    /** @phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
     protected static function fixSeparatorsMultiple(&...$paths): void
     {
         foreach ($paths as &$path) {
@@ -214,12 +251,12 @@ abstract class TestCase extends PHPUnitTestCase
         string $ignoreDir = '',
         string $message = '',
     ): void {
-        $expected = array_map([self::class, 'fixSeparators'], $expected);
+        $expected = array_map(self::fixSeparators(...), $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
 
         // Remove ignored paths.
-        $actual = array_map(static function ($path) use ($dir, $ignoreDir) {
+        $actual = array_map(static function ($path) use ($dir, $ignoreDir): bool|string {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
             $matchPath = self::ensureTrailingSlash($dir) . $path;
@@ -247,6 +284,124 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         self::assertEquals($expected, $actual, $message);
+    }
+
+    /**
+     * Asserts that a callback throws a specific exception.
+     *
+     * @param callable $callback
+     *   The callback that exercises the SUT.
+     * @param string $expectedExceptionClass
+     *   The expected exception class name, e.g., \Exception::class.
+     * @param \PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface|string|null $expectedExceptionMessage
+     *   The expected message that the exception should return,
+     *   both raw and translatable, or null to ignore the message.
+     * @param string|null $expectedPreviousExceptionClass
+     *   An optional expected "$previous" exception class.
+     */
+    protected static function assertTranslatableException(
+        callable $callback,
+        string $expectedExceptionClass,
+        TranslatableInterface|string|null $expectedExceptionMessage = null,
+        ?string $expectedPreviousExceptionClass = null,
+    ): void {
+        try {
+            $callback();
+        } catch (Throwable $actualException) {
+            $actualExceptionMessage = $actualException instanceof ExceptionInterface
+                ? $actualException->getTranslatableMessage()->trans(new TestTranslator())
+                : $actualException->getMessage();
+
+            if ($actualException::class !== $expectedExceptionClass) {
+                self::fail(sprintf(
+                    'Failed to throw correct exception.'
+                    . PHP_EOL . 'Expected:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . ' - Message: %s'
+                    . PHP_EOL . 'Got:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . ' - Message: %s',
+                    $expectedExceptionClass,
+                    $expectedExceptionMessage,
+                    $actualException::class,
+                    $actualExceptionMessage,
+                ));
+            }
+
+            self::assertTrue(true, 'Threw correct exception.');
+
+            if ($expectedExceptionMessage instanceof TranslatableInterface) {
+                assert($actualException instanceof ExceptionInterface);
+                self::assertTranslatableEquals(
+                    $expectedExceptionMessage,
+                    $actualException->getTranslatableMessage(),
+                    'Set correct exception message.',
+                );
+            } elseif (is_string($expectedExceptionMessage)) {
+                self::assertEquals(
+                    $expectedExceptionMessage,
+                    $actualExceptionMessage,
+                    'Set correct exception message.',
+                );
+            }
+
+            if ($actualException instanceof ExceptionInterface) {
+                $x = new TranslatableReflection($actualException->getTranslatableMessage());
+                self::assertSame(self::DOMAIN_EXCEPTIONS, $x->getDomain(), 'Set correct domain.');
+            }
+
+            if ($expectedPreviousExceptionClass === null) {
+                return;
+            }
+
+            $actualPreviousException = $actualException->getPrevious();
+            $actualPreviousExceptionClass = $actualPreviousException instanceof Throwable
+                ? $actualPreviousException::class
+                : 'none';
+            $actualPreviousExceptionMessage = $actualPreviousException instanceof Throwable
+                ? $actualPreviousException->getMessage()
+                : 'n/a';
+
+            if ($expectedPreviousExceptionClass !== $actualPreviousExceptionClass) {
+                self::fail(sprintf(
+                    'Failed re-throw previous exception.'
+                    . PHP_EOL . 'Expected:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . 'Got:'
+                    . PHP_EOL . ' - Class: %s'
+                    . PHP_EOL . ' - Message: %s',
+                    $expectedPreviousExceptionClass,
+                    $actualPreviousExceptionClass,
+                    $actualPreviousExceptionMessage,
+                ));
+            }
+
+            self::assertTrue(true, 'Correctly re-threw previous exception.');
+
+            return;
+        }
+
+        self::fail(sprintf('Failed to throw any exception. Expected %s.', $expectedExceptionClass));
+    }
+
+    /** Asserts that two translatables are equivalent, i.e., have the same properties. */
+    protected static function assertTranslatableEquals(
+        TranslatableInterface $expected,
+        TranslatableInterface $actual,
+        string $message = '',
+    ): void {
+        $expected = new TranslatableReflection($expected);
+        $actual = new TranslatableReflection($actual);
+        self::assertSame($expected->getProperties(), $actual->getProperties(), $message);
+    }
+
+    /** Asserts that a given translatable message matches expectations. */
+    public static function assertTranslatableMessage(
+        string $expected,
+        TranslatableInterface $translatable,
+        string $message = '',
+    ): void {
+        self::assertSame($expected, $translatable->trans(new TestTranslator()), $message);
     }
 
     protected static function getDirectoryContents(string $dir): array
@@ -346,71 +501,5 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
-    }
-
-    protected static function assertFileChanged($dir, $path, $message = ''): void
-    {
-        self::assertStringEqualsFile(
-            self::ensureTrailingSlash($dir) . $path,
-            self::CHANGED_CONTENT,
-            $message,
-        );
-    }
-
-    protected static function assertFileNotChanged($dir, $path, $message = ''): void
-    {
-        self::assertStringEqualsFile(
-            self::ensureTrailingSlash($dir) . $path,
-            self::ORIGINAL_CONTENT,
-            $message,
-        );
-    }
-
-    protected static function assertStagingDirectoryDoesNotExist(): void
-    {
-        self::assertFileDoesNotExist(self::STAGING_DIR, 'Staging directory does not exist.');
-    }
-
-    protected static function assertActiveAndStagingDirectoriesSame(): void
-    {
-        self::assertSame(
-            '',
-            self::getActiveAndStagingDirectoriesDiff(),
-            'Active and staging directories are the same.',
-        );
-    }
-
-    protected static function assertActiveAndStagingDirectoriesNotSame(): void
-    {
-        self::assertNotSame(
-            '',
-            self::getActiveAndStagingDirectoriesDiff(),
-            'Active and staging directories are not the same.',
-        );
-    }
-
-    protected static function getActiveAndStagingDirectoriesDiff(): string
-    {
-        $process = new Process([
-            'diff',
-            '--recursive',
-            self::ACTIVE_DIR,
-            self::STAGING_DIR,
-        ]);
-        $process->run();
-
-        return $process->getOutput();
-    }
-
-    protected static function isWindows(): bool
-    {
-        return DIRECTORY_SEPARATOR !== '/';
-    }
-
-    protected static function isRsyncAvailable(): bool
-    {
-        $finder = new SymfonyExecutableFinder();
-
-        return $finder->find('rsync') !== null;
     }
 }

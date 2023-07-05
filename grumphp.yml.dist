@@ -1,4 +1,4 @@
----
+# https://github.com/phpro/grumphp#configuration
 grumphp:
     ascii:
         failed: ~
@@ -6,6 +6,7 @@ grumphp:
     fixer:
         enabled: false
     hide_circumvention_tip: true
+    process_timeout: 300
 
     tasks:
         clover_coverage:
@@ -36,8 +37,11 @@ grumphp:
                 - phpmd
         phpstan:
             use_grumphp_paths: false
-        phpunit: ~
+        phpunit:
+            exclude_group:
+                - windows_only
         psalm: ~
+        rector: ~
         xmllint:
             ignore_patterns:
                 - .idea
@@ -64,6 +68,7 @@ grumphp:
                 - phpmd
                 - psalm
                 - phpstan
+                - rector
                 - xmllint
                 - yamllint
         test:

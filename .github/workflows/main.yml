@@ -20,7 +20,7 @@ on:
 jobs:
     quality_check:
         name: "Quality Check"
-        runs-on: macos-latest
+        runs-on: ubuntu-latest
         strategy:
             fail-fast: false
         steps:
@@ -43,7 +43,7 @@ jobs:
                 run: "composer static"
 
     tests:
-        name: "Test: ${{ matrix.os }}, ${{ matrix.dependencies }} (${{ matrix.php }})"
+        name: "${{ matrix.os }} / ${{ matrix.dependencies }} / ${{ matrix.php }}"
         runs-on: "${{ matrix.os }}"
         strategy:
             fail-fast: false
@@ -54,12 +54,16 @@ jobs:
         steps:
             -   name: "Debugging info"
                 run: "rsync --version | head -1"
-                if: ${{ matrix.os != 'windows-latest' }}
+                if: ${{ runner.os != 'Windows' }}
 
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
+                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+
+            -   name: "PHP info"
+                run: "php -i"
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
@@ -69,5 +73,15 @@ jobs:
                 with:
                     dependency-versions: "${{ matrix.dependencies }}"
 
-            -   name: "Run tests"
-                run: "composer phpunit"
+            -   name: "Run core tests with coverage (Linux)"
+                run: "composer test"
+                if: ${{ runner.os == 'Linux' }}
+
+            # There's no reason to generate coverage data on multiple OS-es--the result should be the same.
+            -   name: "Run core tests without coverage (macOS)"
+                run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only"
+                if: ${{ runner.os == 'macOS' }}
+
+            -   name: "Run Windows tests"
+                run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
+                if: ${{ runner.os == 'Windows' }}

@@ -2,26 +2,28 @@
 
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
-use PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner;
-use PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner;
-use PhpTuf\ComposerStager\Domain\Core\Committer\Committer;
-use PhpTuf\ComposerStager\Domain\Core\Stager\Stager;
-use PhpTuf\ComposerStager\Domain\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Domain\Service\FileSyncer\FileSyncerInterface;
-use PhpTuf\ComposerStager\Infrastructure\Factory\Path\PathFactory;
-use PhpTuf\ComposerStager\Infrastructure\Service\Precondition\NoAbsoluteSymlinksExist;
-use PhpTuf\ComposerStager\Infrastructure\Value\PathList\PathList;
+use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Core\Beginner;
+use PhpTuf\ComposerStager\Internal\Core\Cleaner;
+use PhpTuf\ComposerStager\Internal\Core\Committer;
+use PhpTuf\ComposerStager\Internal\Core\Stager;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
- * Provides a base for end-to-end functional tests, including the domain and
- * infrastructure layers. The test cases themselves are supplied by this class.
+ * Provides a base for end-to-end functional tests, including the API and
+ * internal layers. The test cases themselves are supplied by this class.
  * Subclasses specify the file syncer to use via ::fileSyncerClass().
  *
- * @property \PhpTuf\ComposerStager\Domain\Core\Beginner\Beginner $beginner
- * @property \PhpTuf\ComposerStager\Domain\Core\Cleaner\Cleaner $cleaner
- * @property \PhpTuf\ComposerStager\Domain\Core\Committer\Committer $committer
- * @property \PhpTuf\ComposerStager\Domain\Core\Stager\Stager $stager
+ * @property \PhpTuf\ComposerStager\Internal\Core\Beginner $beginner
+ * @property \PhpTuf\ComposerStager\Internal\Core\Cleaner $cleaner
+ * @property \PhpTuf\ComposerStager\Internal\Core\Committer $committer
+ * @property \PhpTuf\ComposerStager\Internal\Core\Stager $stager
+ *
+ * @group slow
  */
 abstract class EndToEndFunctionalTestCase extends TestCase
 {
@@ -45,7 +47,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $this->cleaner = $container->get(Cleaner::class);
 
         // Create the test environment.
-        self::createTestEnvironment(self::ACTIVE_DIR);
+        self::createTestEnvironment();
     }
 
     public static function tearDownAfterClass(): void
@@ -55,11 +57,15 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
     /**
      * Specifies the file syncer implementation to use, e.g.,
-     * \PhpTuf\ComposerStager\Infrastructure\Service\FileSyncer\PhpFileSyncer::class.
+     * \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::class.
      */
     abstract protected function fileSyncerClass(): string;
 
-    /** @dataProvider providerDirectories */
+    /**
+     * @dataProvider providerDirectories
+     *
+     * @group slow
+     */
     public function testSync(string $activeDir, string $stagingDir): void
     {
         $activeDirPath = PathFactory::create($activeDir);
@@ -98,7 +104,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ]);
 
         $arbitrarySymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
-        self::createSymlinks($activeDirPath->resolve(), [
+        self::createSymlinks($activeDirPath->resolved(), [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
         ]);
@@ -129,9 +135,9 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Non-existent (ignore).
             'file_that_NEVER_EXISTS_anywhere.txt',
             // Absolute path (ignore).
-            PathFactory::create('absolute/path')->resolve(),
+            PathFactory::create('absolute/path')->resolved(),
         ];
-        $exclusions = new PathList($exclusions);
+        $exclusions = new PathList(...$exclusions);
 
         // Confirm that the beginner fails with unsupported symlinks present in the codebase.
         $preconditionMet = true;
@@ -144,7 +150,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $preconditionMet = false;
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
-            assert(filetype($activeDirPath->resolve() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
+            assert(filetype($activeDirPath->resolved() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
         }
 
@@ -164,7 +170,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
         ];
-        self::assertDirectoryListing($stagingDirPath->resolve(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
+        self::assertDirectoryListing($stagingDirPath->resolved(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
 
         // Stage: Execute a Composer command (that doesn't make any HTTP requests).
         $newComposerName = 'new/name';
@@ -191,18 +197,19 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::createFile($stagingDir, 'another_subdir/CREATE_in_staging_dir.txt');
 
         // Create symlink.
-        self::createSymlink($stagingDirPath->resolve(), 'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt', $arbitrarySymlinkTarget);
+        self::createSymlink($stagingDirPath->resolved(), 'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt', $arbitrarySymlinkTarget);
 
         // Sanity check to ensure that the expected changes were made.
         $deletion = array_search('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $expectedStagingDirListing, true);
         unset($expectedStagingDirListing[$deletion]);
-        self::assertDirectoryListing($stagingDirPath->resolve(), array_merge($expectedStagingDirListing, [
+        self::assertDirectoryListing($stagingDirPath->resolved(), [
+            ...$expectedStagingDirListing,
             // Additions.
             'CREATE_in_staging_dir.txt',
             'EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt',
             'another_subdir/CREATE_in_staging_dir.txt',
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
-        ]), '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
+        ], '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
 
         $previousStagingDirContents = self::getDirectoryContents($stagingDir);
 
@@ -216,14 +223,14 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $preconditionMet = false;
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
-            assert(filetype($activeDirPath->resolve() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
+            assert(filetype($activeDirPath->resolved() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
         }
 
         // Commit: Sync files from the staging directory back to the directory.
         $this->committer->commit($stagingDirPath, $activeDirPath, $exclusions);
 
-        self::assertDirectoryListing($activeDirPath->resolve(), [
+        self::assertDirectoryListing($activeDirPath->resolved(), [
             'composer.json',
             // Unchanged files are left alone.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
@@ -260,7 +267,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Files included despite including excluded paths at the wrong depth.
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
-        ], $stagingDirPath->resolve(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
+        ], $stagingDirPath->resolved(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
 
         // Unchanged file contents.
         self::assertFileNotChanged($activeDir, 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt');
@@ -293,55 +300,19 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         // Clean: Remove the staging directory.
         $this->cleaner->clean($activeDirPath, $stagingDirPath);
 
-        self::assertFileDoesNotExist($stagingDirPath->resolve(), 'Staging directory was completely removed.');
+        self::assertFileDoesNotExist($stagingDirPath->resolved(), 'Staging directory was completely removed.');
     }
 
     public function providerDirectories(): array
     {
         return [
-            // Siblings cases.
-            'Siblings: simple' => [
+            // Siblings.
+            'Siblings' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'staging-dir',
-            ],
-            'Siblings: trailing slash on active only' => [
-                'activeDir' => 'active-dir/',
-                'stagingDir' => 'staging-dir',
-            ],
-            'Siblings: trailing slash on staging only' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => 'staging-dir/',
-            ],
-            'Siblings: trailing slash on both' => [
-                'activeDir' => 'active-dir/',
-                'stagingDir' => 'staging-dir/',
-            ],
-            'Siblings: complex relative paths' => [
-                'activeDir' => 'active-dir/../active-dir/../active-dir',
-                'stagingDir' => 'staging-dir/../staging-dir/../staging-dir',
-            ],
-            'Siblings: absolute paths' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/staging-dir',
-            ],
-            'Siblings: one absolute path, one relative' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => 'staging-dir',
-            ],
-            'Siblings: one relative path, one absolute' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/staging-dir',
-            ],
-            'Siblings: active as CWD with trailing slash' => [
-                'activeDir' => './',
-                'stagingDir' => '../staging-dir',
-            ],
-            'Siblings: active as "dot" (.)' => [
-                'activeDir' => '.',
-                'stagingDir' => '../staging-dir',
             ],
 
-            // Nested cases.
+            // Nested.
             'Nested: simple' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/staging-dir',
@@ -350,24 +321,16 @@ abstract class EndToEndFunctionalTestCase extends TestCase
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
             ],
-            'Nested: absolute paths' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/active-dir/staging-dir',
-            ],
 
             // These scenarios are the most important for shared hosting
             // situations, which may not provide access to paths outside the
             // codebase, e.g., the web root.
-            'Nested: both dirs relative, staging as "hidden" dir' => [
+            'Nested: Staging as "hidden" dir' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/.composer_staging',
             ],
-            'Nested: both dirs absolute, staging as "hidden" dir' => [
-                'activeDir' => self::TEST_WORKING_DIR . '/active-dir',
-                'stagingDir' => self::TEST_WORKING_DIR . '/active-dir/.composer_staging',
-            ],
 
-            // Other cases.
+            // Other.
             'Other: Staging dir in temp directory' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => sprintf(
@@ -379,7 +342,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ];
     }
 
-    private static function assertComposerJsonName($directory, $expected, $message = ''): void
+    private static function assertComposerJsonName($directory, $expected, string $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
         assert(is_string($json));
@@ -393,5 +356,23 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function putJson($filename, $json): void
     {
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
+    }
+
+    private static function assertFileChanged(string $dir, $path, string $message = ''): void
+    {
+        self::assertStringEqualsFile(
+            self::ensureTrailingSlash($dir) . $path,
+            self::CHANGED_CONTENT,
+            $message,
+        );
+    }
+
+    private static function assertFileNotChanged(string $dir, $path, string $message = ''): void
+    {
+        self::assertStringEqualsFile(
+            self::ensureTrailingSlash($dir) . $path,
+            self::ORIGINAL_CONTENT,
+            $message,
+        );
     }
 }

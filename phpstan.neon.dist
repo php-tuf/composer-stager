@@ -1,6 +1,8 @@
+# https://phpstan.org/config-reference
 parametersSchema:
     gitattributesExportInclude: listOf(string())
     preconditionSystemHash: string()
+    translationSystemHash: string()
 
 parameters:
     exceptions:
@@ -10,31 +12,79 @@ parameters:
     level: max
     tmpDir: var/phpstan
     paths:
+        - .gitattributes
         - src
         - tests
-        - .gitattributes
     treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
+    preconditionSystemHash: 861a8efc7cfc0621f968748a0508877d
+    translationSystemHash: fdd7419eecf6eeec39a6ed4e81534bde
+    gitattributesExportInclude:
+        - composer.json
+        - docs
+        - LICENSE
+        - src
+    excludePaths:
+        # @see https://github.com/phpstan/phpstan/issues/9577
+        - src/API/Exception/TranslatableExceptionTrait.php
     ignoreErrors:
         # Production code.
         -
+            message: '#Built-in or third party exception "\\InvalidArgumentException" cannot be thrown from public methods.*#'
+            path: src/Internal/Translation/Service/SymfonyTranslatorProxy.php
+        -
+            message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
+            paths:
+                - src/Internal/Translation/Service/Translator.php
+                - src/Internal/Translation/Value/TranslationParameters.php
+        -
             message: '#Cannot access offset .(application|name). on mixed.#'
-            path: src/Infrastructure/Service/Precondition/ComposerIsAvailable.php
+            path: src/Internal/Precondition/Service/ComposerIsAvailable.php
+        -
+            message: '#In method ".*", caught "Throwable" must be rethrown.*#'
+            path: src/Internal/Translation/Service/Translator.php
+        -
+            message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
+            path: src/Internal/Translation/Service/SymfonyTranslatorProxy.php
+        -
+            message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
+            path: src/API/Exception/PreconditionException.php
+        -
+            message: '#Method (run|create)\(\) should not be public because it doesn''t implement a method on an interface.#'
+            paths:
+                - src/Internal/Process/Service/AbstractProcessRunner.php
+                - src/Internal/Translation/Service/Translator.php
 
         # Test code.
+        -
+            message: '#.*::__construct\(\) does not call parent constructor from .*.#'
+            path: tests/Translation/Value/TestTranslatableExceptionMessage.php
         -
             message: '#Access to an undefined property.*#'
             path: tests
         -
-            message: '#Call to deprecated method.*#'
+            message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
+            path: tests
+        -
+            message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
+            path: tests
+        -
+            message: '#Cannot call method .*\(\) on .*MethodProphecy\|.*.#'
+            path: tests
+        -
+            message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
+            path: tests
+        -
+            message: '#Concrete class must implement an interface#'
             path: tests
         -
             message: '#.*caught .* must be rethrown.*#'
             path: tests
         -
-            message: '#Dynamic call to static method.*#'
+            message: '#Method .* no (value )?type specified.*#'
             path: tests
         -
-            message: '#Method .* no (value )?type specified.*#'
+            message: '#Method .* should not be public because it doesn''t implement a method on an interface.#'
             path: tests
         -
             message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
@@ -45,43 +95,40 @@ parameters:
         -
             message: '#Property .* does not accept .*.#'
             path: tests
-        -
-            message: '#.* properties should be sorted .* "\$prophecy.*".#'
-            path: tests
 
-    # Custom parameters.
-    gitattributesExportInclude:
-        - composer.json
-        - LICENSE
-        - README.md
-        - src
-    preconditionSystemHash: e242a8a8bbe02357e191b6ea927a26eb
-
+# https://phpstan.org/developing-extensions/extension-types
 rules:
-    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires throwable classes to implement ExceptionInterface.
-    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires non-factory classes to implement an interface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoCallingTranslatableFactoryDirectlyRule # Forbids calling TranslatableFactory::create() directly.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoInstantiatingTranslatableDirectlyRule # Forbids instantiating translatables directly.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Classes\WrongExceptionNamespaceRule # Requires exceptions to be in the correct namespace.
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.
-    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\SortedRequiredConstructorParametersRule # Requires non-optional constructor parameters to be alphabetized.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Methods\NoNonInterfacePublicMethodsRule # Forbids public methods that are not on an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\CoverageAnnotationHasNoParenthesesRule # Ensures that coverage annotations have no trailing parentheses.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PackageAnnotationRule # Enforces "@package" class annotation rules.
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\PropertyDataTypePutsObjectProphecyLastRule # Requires "@property" data types to put ObjectProphecy last.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedCoversAnnotationsRule # Requires "@covers" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedPropertyAnnotationsRule # Requires "@property" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedSeeAnnotationsRule # Requires "@see" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedThrowsAnnotationsRule # Requires "@throws" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\SortedUsesAnnotationsRule # Requires "@uses" annotations to be sorted alphabetically.
-    - PhpTuf\ComposerStager\PHPStan\Rules\Properties\SortedPropertiesRule # Requires class properties to be alphabetized within their visibility grouping.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslatablePhpDocRule # Ensures that the docblockss for TranslatableMessage creation methods stay in sync.
+    - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslationParametersPhpDocRule # Ensures that the docblockss for TranslationParameters creation methods stay in sync.
 
 services:
-    # @todo Temporarily disable due to regression. Stopped working in 25edda57963f65c298d899c05ea9ed1efee06eb6.
-    # -
-    #     # Ensures that precondition system diagrams stay current.
-    #     class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
-    #     arguments:
-    #         preconditionSystemHash: %preconditionSystemHash%
-    #     tags:
-    #         - phpstan.rules.rule
+    -
+        # Ensures that precondition system diagrams stay current.
+        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
+        arguments:
+            preconditionSystemHash: %preconditionSystemHash%
+        tags:
+            - phpstan.rules.rule
+    -
+        # Ensures that translation system diagrams stay current.
+        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\TranslationDiagramsInSyncRule
+        arguments:
+            preconditionSystemHash: %translationSystemHash%
+        tags:
+            - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
         class: PhpTuf\ComposerStager\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- https://phpunit.readthedocs.io/en/stable/configuration.html -->
+<!-- https://docs.phpunit.de/en/9.6/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
@@ -8,7 +8,6 @@
          cacheResultFile="var/phpunit/test-results"
          executionOrder="depends,defects"
          forceCoversAnnotation="true"
-         beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          failOnRisky="true"
@@ -16,10 +15,13 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="Unit">
+        <testsuite name="all">
+            <directory>tests</directory>
+        </testsuite>
+        <testsuite name="unit">
             <directory suffix="UnitTest.php">tests</directory>
         </testsuite>
-        <testsuite name="Functional">
+        <testsuite name="functional">
             <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
     </testsuites>
@@ -38,4 +40,10 @@
     <logging>
         <junit outputFile="var/phpunit/junit.xml"/>
     </logging>
+
+    <php>
+        <ini name="assert.active" value="1"/>
+        <ini name="assert.exception" value="1"/>
+        <ini name="zend.assertions" value="1"/>
+    </php>
 </phpunit>
