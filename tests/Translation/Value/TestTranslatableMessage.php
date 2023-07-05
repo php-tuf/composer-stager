@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 
-/** phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal */
+/** @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal */
 class TestTranslatableMessage implements TranslatableInterface
 {
     public function __construct(

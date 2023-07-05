@@ -11,7 +11,7 @@ use PHP_CodeSniffer\Util\Tokens;
  *
  * The fixer is crude and doesn't cover all major cases, so the results should be examined carefully.
  *
- * phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
+ * @phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
  */
 final class APITagsSniff implements Sniff
 {

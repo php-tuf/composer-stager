@@ -225,7 +225,7 @@ abstract class TestCase extends PHPUnitTestCase
         return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
     }
 
-    /** phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
+    /** @phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
     protected static function fixSeparatorsMultiple(&...$paths): void
     {
         foreach ($paths as &$path) {
