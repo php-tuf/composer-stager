@@ -131,7 +131,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces */
+    /** @phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces */
     public function providerGetRelativePath(): array
     {
         // UNIX-like OS paths.

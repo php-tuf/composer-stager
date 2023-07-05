@@ -190,7 +190,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
             $createLeaf(false),
         ];
 
-        // phpcs:disable SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma
+        // @phpcs:disable SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma
         //   Trailing commas on this array make it cross PhpStorm's complexity threshold:
         //   "Code fragment is too complex to parse and will be treated as plain text."
         $sut = $this->createSut(
@@ -231,7 +231,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 )
             )
         );
-        // phpcs:enable
+        // @phpcs:enable
 
         self::assertFalse($sut->isFulfilled($this->activeDir, $this->stagingDir), 'Unfulfilled leaf status bubbled up properly.');
         self::assertSame($leaves, $sut->getLeaves());

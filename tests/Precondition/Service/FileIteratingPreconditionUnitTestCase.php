@@ -61,7 +61,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         // this case, being abstract, can't be instantiated directly.
         $sut = new class ($fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
         {
-            // phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
+            // @phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
             protected function assertIsSupportedFile(
                 string $codebaseName,
                 PathInterface $codebaseRoot,

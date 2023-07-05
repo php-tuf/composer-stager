@@ -244,6 +244,11 @@
 
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
+    <!-- Library regression: https://github.com/slevomat/coding-standard/issues/1593 -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment.UselessDocComment"><exclude-pattern>.</exclude-pattern></rule>>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"><exclude-pattern>.</exclude-pattern></rule>>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"><exclude-pattern>.</exclude-pattern></rule>>
+
     <!-- Exclusions for test and tool classes. -->
     <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
