@@ -24,6 +24,9 @@ parameters:
         - docs
         - LICENSE
         - src
+    excludePaths:
+        # @see https://github.com/phpstan/phpstan/issues/9577
+        - src/API/Exception/TranslatableExceptionTrait.php
     ignoreErrors:
         # Production code.
         -
