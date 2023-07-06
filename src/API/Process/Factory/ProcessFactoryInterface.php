@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\Process\Factory;
+namespace PhpTuf\ComposerStager\API\Process\Factory;
 
 use Symfony\Component\Process\Process as SymfonyProcess;
 
@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process as SymfonyProcess;
  *
  * @package Process
  *
- * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface ProcessFactoryInterface
 {
