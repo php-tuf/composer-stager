@@ -46,9 +46,9 @@ abstract class AbstractPath implements PathInterface
         return $this->doResolve($this->cwd);
     }
 
-    public function resolvedRelativeTo(PathInterface $path): string
+    public function resolvedRelativeTo(PathInterface $basePath): string
     {
-        $basePath = $path->resolved();
+        $basePath = $basePath->resolved();
 
         return $this->doResolve($basePath);
     }

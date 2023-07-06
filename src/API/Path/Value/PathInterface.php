@@ -40,5 +40,5 @@ interface PathInterface
      * "/var/one/two/three" relative to "/var/four/five/six" would return
      * "/var/one/two/three".
      */
-    public function resolvedRelativeTo(PathInterface $path): string;
+    public function resolvedRelativeTo(PathInterface $basePath): string;
 }

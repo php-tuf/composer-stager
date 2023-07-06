@@ -25,7 +25,7 @@ final class TestPath implements PathInterface
         return $this->path;
     }
 
-    public function resolvedRelativeTo(PathInterface $path): string
+    public function resolvedRelativeTo(PathInterface $basePath): string
     {
         return $this->path;
     }
