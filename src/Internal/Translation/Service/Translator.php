@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Internal\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\LocaleOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use Throwable;
@@ -22,6 +22,7 @@ final class Translator implements TranslatorInterface
 {
     public function __construct(
         private readonly DomainOptionsInterface $domainOptions,
+        private readonly LocaleOptionsInterface $localeOptions,
         private readonly SymfonyTranslatorProxyInterface $symfonyTranslatorProxy,
     ) {
     }
@@ -30,9 +31,10 @@ final class Translator implements TranslatorInterface
     public static function create(): self
     {
         $domainOptions = new DomainOptions();
+        $localOptions = new LocaleOptions();
         $symfonyTranslatorProxy = new SymfonyTranslatorProxy();
 
-        return new self($domainOptions, $symfonyTranslatorProxy);
+        return new self($domainOptions, $localOptions, $symfonyTranslatorProxy);
     }
 
     public function trans(
@@ -44,6 +46,7 @@ final class Translator implements TranslatorInterface
         try {
             $parameters ??= new TranslationParameters();
             $domain ??= $this->domainOptions->default();
+            $locale ??= $this->localeOptions->default();
 
             return $this->symfonyTranslatorProxy->trans($message, $parameters->getAll(), $domain, $locale);
         } catch (Throwable $e) {
@@ -63,6 +66,6 @@ final class Translator implements TranslatorInterface
 
     public function getLocale(): string
     {
-        return LocaleInterface::DEFAULT;
+        return $this->localeOptions->default();
     }
 }
