@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use Symfony\Contracts\Translation\TranslatorTrait;
 
@@ -28,6 +27,6 @@ final class TestTranslator implements TranslatorInterface
 
     public function getLocale(): string
     {
-        return LocaleInterface::DEFAULT;
+        return TestLocaleOptions::DEFAULT;
     }
 }
