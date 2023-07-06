@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
+use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
+
 /**
  * Before using this class outside the internal layer, consider a
  * higher-level abstraction, e.g.:

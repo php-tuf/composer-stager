@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\Finder\Service;
+namespace PhpTuf\ComposerStager\API\Finder\Service;
 
 /**
  * Finds executables.
  *
  * @package Finder
  *
- * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
+ * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
 interface ExecutableFinderInterface
 {
