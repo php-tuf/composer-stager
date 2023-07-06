@@ -6,10 +6,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/**
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
- */
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void

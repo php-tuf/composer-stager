@@ -21,8 +21,6 @@ use Symfony\Component\Process\Process;
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
  */
 final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 {

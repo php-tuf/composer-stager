@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterfa
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions
@@ -17,13 +18,13 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noUnsupportedLinksExist
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirDoesNotExist
  */
 final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 {
+    private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
+    private NoUnsupportedLinksExistInterface|ObjectProphecy $noUnsupportedLinksExist;
+    private StagingDirDoesNotExistInterface|ObjectProphecy $stagingDirDoesNotExist;
+
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);

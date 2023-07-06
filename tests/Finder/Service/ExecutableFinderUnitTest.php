@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 /**
@@ -15,11 +16,11 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  *
  * @covers ::__construct
  * @covers ::find
- *
- * @property \Symfony\Component\Process\ExecutableFinder|\Prophecy\Prophecy\ObjectProphecy $symfonyExecutableFinder
  */
 final class ExecutableFinderUnitTest extends TestCase
 {
+    private SymfonyExecutableFinder|ObjectProphecy $symfonyExecutableFinder;
+
     protected function setUp(): void
     {
         $this->symfonyExecutableFinder = $this->prophesize(SymfonyExecutableFinder::class);

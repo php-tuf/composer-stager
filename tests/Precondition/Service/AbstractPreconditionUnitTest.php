@@ -15,14 +15,13 @@ use PhpTuf\ComposerStager\Tests\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition
- *
- * @property \PhpTuf\ComposerStager\Tests\TestSpyInterface|\Prophecy\Prophecy\ObjectProphecy $spy
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition */
 final class AbstractPreconditionUnitTest extends PreconditionTestCase
 {
+    private TestSpyInterface|ObjectProphecy $spy;
+    
     protected function setUp(): void
     {
         $this->spy = $this->prophesize(TestSpyInterface::class);

@@ -13,22 +13,23 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Process as SymfonyProcess;
 use Throwable;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
  *
  * @covers ::__construct
- *
- * @property \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface|\Prophecy\Prophecy\ObjectProphecy $executableFinder
- * @property \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $processFactory
- * @property \Symfony\Component\Process\Process|\Prophecy\Prophecy\ObjectProphecy $process
  */
 final class AbstractProcessRunnerUnitTest extends TestCase
 {
     private const COMMAND_NAME = 'test';
+
+    private ExecutableFinderInterface|ObjectProphecy $executableFinder;
+    private ProcessFactoryInterface|ObjectProphecy $processFactory;
+    private SymfonyProcess|ObjectProphecy $process;
 
     public function setUp(): void
     {
@@ -37,7 +38,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->find(Argument::any())
             ->willReturnArgument();
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
-        $this->process = $this->prophesize(Process::class);
+        $this->process = $this->prophesize(SymfonyProcess::class);
         $this->process
             ->setTimeout(Argument::any())
             ->willReturn($this->process);
@@ -146,7 +147,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         // SymfonyProcessFailedException can't be initialized with a known message
         // value, so dynamically get the message it will generate.
         try {
-            $process = $this->prophesize(Process::class);
+            $process = $this->prophesize(SymfonyProcess::class);
             $process->isSuccessful()
                 ->willReturn(true);
             $previous = new SymfonyProcessFailedException($process->reveal());

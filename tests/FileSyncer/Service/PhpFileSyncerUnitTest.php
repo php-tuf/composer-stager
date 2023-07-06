@@ -7,6 +7,7 @@ use Closure;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface;
@@ -16,22 +17,22 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  *
  * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
- *
- * @property \PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
- * @property \PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory $translatableFactory
  */
 final class PhpFileSyncerUnitTest extends TestCase
 {
+    private FileFinderInterface|ObjectProphecy $fileFinder;
+    private FilesystemInterface|ObjectProphecy $filesystem;
+    private PathFactoryInterface|ObjectProphecy $pathFactory;
+    private PathInterface $destination;
+    private PathInterface $source;
+
     public function setUp(): void
     {
         $this->source = new TestPath(self::ACTIVE_DIR);

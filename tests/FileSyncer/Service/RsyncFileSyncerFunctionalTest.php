@@ -7,9 +7,6 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
  *
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
- *
  * @group no_windows
  */
 final class RsyncFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase

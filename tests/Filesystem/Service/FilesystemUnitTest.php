@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -20,14 +21,12 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
  *
  * @covers \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem::__construct
- *
- * @property \PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
- * @property \Symfony\Component\Filesystem\Filesystem|\Prophecy\Prophecy\ObjectProphecy $symfonyFilesystem
  */
 final class FilesystemUnitTest extends TestCase
 {
+    private PathFactoryInterface|ObjectProphecy $pathFactory;
+    private SymfonyFilesystem|ObjectProphecy $symfonyFilesystem;
+
     protected function setUp(): void
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);

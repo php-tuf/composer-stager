@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagerPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagerPreconditions
@@ -16,12 +17,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $commonPreconditions
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsReady
  */
 final class StagerPreconditionsUnitTest extends PreconditionTestCase
 {
+    private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
+    private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;
+
     protected function setUp(): void
     {
         $this->commonPreconditions = $this->prophesize(CommonPreconditionsInterface::class);

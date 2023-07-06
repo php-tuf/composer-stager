@@ -25,6 +25,8 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 final class WindowsPathUnitTest extends TestCase
 {
+    public string $cwd;
+
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
@@ -43,7 +45,6 @@ final class WindowsPathUnitTest extends TestCase
 
         // Dynamically override CWD.
         $setCwd = function ($cwd): void {
-            /** @phpstan-ignore-next-line */
             $this->cwd = $cwd;
         };
         $setCwd->call($sut, $cwd);

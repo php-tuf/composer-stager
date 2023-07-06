@@ -12,15 +12,11 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Symfony\Component\DependencyInjection\Definition;
 
-/**
- * @coversNothing
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
- * @property string $executableFinderClass
- */
+/** @coversNothing */
 final class ComposerIsAvailableFunctionalTest extends TestCase
 {
+    private string $executableFinderClass;
+
     protected function setUp(): void
     {
         self::createTestEnvironment();
