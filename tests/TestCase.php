@@ -10,6 +10,8 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TranslatableReflection;
@@ -23,17 +25,17 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Throwable;
 
 abstract class TestCase extends PHPUnitTestCase
 {
     use ProphecyTrait;
 
-    protected const PROJECT_ROOT = __DIR__ . '/..';
-    protected const TEST_ENV = self::PROJECT_ROOT . '/var/phpunit/test-env';
-    protected const TEST_WORKING_DIR = self::TEST_ENV . '/working-dir';
-    protected const ACTIVE_DIR = 'active-dir';
-    protected const STAGING_DIR = 'staging-dir';
+    protected const TEST_ENV_ABSOLUTE = __DIR__ . '/../var/phpunit/test-env';
+    protected const TEST_WORKING_DIR_ABSOLUTE = self::TEST_ENV_ABSOLUTE . '/working-dir';
+    protected const ACTIVE_DIR_RELATIVE = 'active-dir';
+    protected const STAGING_DIR_RELATIVE = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
     public const DOMAIN_DEFAULT = 'messages';
@@ -45,51 +47,51 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function testWorkingDirPath(): PathInterface
     {
-        return PathFactory::create(self::TEST_WORKING_DIR);
+        return PathFactory::create(self::TEST_WORKING_DIR_ABSOLUTE);
     }
 
     protected static function activeDirPath(): PathInterface
     {
-        return PathFactory::create(self::ACTIVE_DIR, self::testWorkingDirPath());
+        return PathFactory::create(self::ACTIVE_DIR_RELATIVE, self::testWorkingDirPath());
     }
 
     protected static function stagingDirPath(): PathInterface
     {
-        return PathFactory::create(self::STAGING_DIR, self::testWorkingDirPath());
+        return PathFactory::create(self::STAGING_DIR_RELATIVE, self::testWorkingDirPath());
     }
 
     public function getContainer(): ContainerBuilder
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
-        $loader->load(self::PROJECT_ROOT . '/config/services.yml');
+        $config = SymfonyPath::makeAbsolute('config/services.yml', PathHelper::repositoryRootAbsolute());
+        $loader->load($config);
 
         return $container;
     }
 
-    protected static function createTestEnvironment(string $activeDir = self::ACTIVE_DIR): void
+    protected static function createTestEnvironment(string $activeDir = self::ACTIVE_DIR_RELATIVE): void
     {
         self::removeTestEnvironment();
 
-        // Create the test environment.
-        mkdir(self::TEST_WORKING_DIR, 0777, true);
-        chdir(self::TEST_WORKING_DIR);
-
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
-        mkdir($activeDir, 0777, true);
+        $workingDirAbsolute = PathHelper::testWorkingDirAbsolute();
+        $activeDirAbsolute = SymfonyPath::makeAbsolute($activeDir, $workingDirAbsolute);
+        FilesystemHelper::createDirectories([$workingDirAbsolute, $activeDirAbsolute]);
+        chdir($workingDirAbsolute);
     }
 
     protected static function removeTestEnvironment(): void
     {
         $filesystem = new Filesystem();
 
-        if (!$filesystem->exists(self::TEST_ENV)) {
+        if (!$filesystem->exists(self::TEST_ENV_ABSOLUTE)) {
             return;
         }
 
         try {
-            $filesystem->remove(self::TEST_ENV);
+            $filesystem->remove(self::TEST_ENV_ABSOLUTE);
         } catch (IOException) {
             // @todo Windows chokes on this every time, e.g.,
             //    | Failed to remove directory
@@ -119,25 +121,6 @@ abstract class TestCase extends PHPUnitTestCase
 
         assert($touchResult, "Created file {$filename}.");
         assert($realpathResult !== false, "Got absolute path of {$filename}.");
-    }
-
-    protected static function createDirectories(string $baseDir, array $dirnames): void
-    {
-        foreach ($dirnames as $dirname) {
-            self::createDirectory($baseDir, $dirname);
-        }
-    }
-
-    protected static function createDirectory(string $baseDir, string $dirname): void
-    {
-        $dirname = PathFactory::create("{$baseDir}/{$dirname}")->resolved();
-        static::ensureParentDirectory($dirname);
-
-        $touchResult = mkdir($dirname);
-        $realpathResult = realpath($dirname);
-
-        assert($touchResult, "Created directory {$dirname}.");
-        assert($realpathResult !== false, "Got absolute path of {$dirname}.");
     }
 
     public static function createTestPreconditionException(
@@ -202,13 +185,7 @@ abstract class TestCase extends PHPUnitTestCase
     protected static function ensureParentDirectory(string $filename): void
     {
         $dirname = dirname($filename);
-
-        if (file_exists($dirname)) {
-            return;
-        }
-
-        $mkdirResult = mkdir($dirname, 0777, true);
-        assert($mkdirResult, "Created directory {$dirname}.");
+        FilesystemHelper::createDirectories($dirname);
     }
 
     protected static function changeFile(string $dir, $filename): void

@@ -5,13 +5,14 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        mkdir(self::STAGING_DIR, 0777, true);
+        FilesystemHelper::createDirectories(self::STAGING_DIR_RELATIVE);
 
         $this->activeDir = self::activeDirPath();
         $this->stagingDir = self::stagingDirPath();
@@ -43,15 +44,15 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = self::TEST_WORKING_DIR . '/65eb69a274470dd84e9b5371f7e1e8c8';
+        $nonexistentDir = self::TEST_WORKING_DIR_ABSOLUTE . '/65eb69a274470dd84e9b5371f7e1e8c8';
 
         return [
             'Active directory' => [
                 'activeDir' => $nonexistentDir,
-                'stagingDir' => self::STAGING_DIR,
+                'stagingDir' => self::STAGING_DIR_RELATIVE,
             ],
             'Staging directory' => [
-                'activeDir' => self::ACTIVE_DIR,
+                'activeDir' => self::ACTIVE_DIR_RELATIVE,
                 'stagingDir' => $nonexistentDir,
             ],
         ];

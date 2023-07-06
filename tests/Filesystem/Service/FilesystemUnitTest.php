@@ -29,8 +29,8 @@ final class FilesystemUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }

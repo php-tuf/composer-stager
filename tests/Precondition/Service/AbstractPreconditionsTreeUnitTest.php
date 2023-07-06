@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
-use PhpTuf\ComposerStager\Tests\TestSpyInterface;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -138,7 +138,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
 
         $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
-            /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestSpyInterface $spy */
+            /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface $spy */
             $spy = $this->prophesize(TestSpyInterface::class);
             $spy->report('assertIsFulfilled')
                 // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().

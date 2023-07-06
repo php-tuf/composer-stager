@@ -37,7 +37,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testDoesNotContainLinks(array $files): void
     {
-        self::createFiles(self::ACTIVE_DIR, $files);
+        self::createFiles(self::ACTIVE_DIR_RELATIVE, $files);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());

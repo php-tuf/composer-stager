@@ -84,11 +84,11 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         return [
             'In active directory' => [
-                'directory' => self::ACTIVE_DIR,
+                'directory' => self::ACTIVE_DIR_RELATIVE,
                 'dirName' => 'active',
             ],
             'In staging directory' => [
-                'directory' => self::STAGING_DIR,
+                'directory' => self::STAGING_DIR_RELATIVE,
                 'dirName' => 'staging',
             ],
         ];

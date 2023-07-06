@@ -6,11 +6,12 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
-    private const SOURCE_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'source';
-    private const DESTINATION_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'destination';
+    private const SOURCE_DIR = self::TEST_ENV_ABSOLUTE . DIRECTORY_SEPARATOR . 'source';
+    private const DESTINATION_DIR = self::TEST_ENV_ABSOLUTE . DIRECTORY_SEPARATOR . 'destination';
 
     private PathInterface $destination;
     private PathInterface $source;
@@ -20,8 +21,10 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $this->source = PathFactory::create(self::SOURCE_DIR);
         $this->destination = PathFactory::create(self::DESTINATION_DIR);
 
-        mkdir($this->source->resolved(), 0777, true);
-        mkdir($this->destination->resolved(), 0777, true);
+        FilesystemHelper::createDirectories([
+            $this->source->resolved(),
+            $this->destination->resolved(),
+        ]);
     }
 
     protected function tearDown(): void
@@ -75,7 +78,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $link = PathFactory::create('link', $this->source);
         $target = PathFactory::create('directory', $this->source);
-        mkdir($target->resolved(), 0777, true);
+        FilesystemHelper::createDirectories($target->resolved());
         $file = PathFactory::create('directory/file.txt', $this->source)->resolved();
         touch($file);
         symlink($target->resolved(), $link->resolved());

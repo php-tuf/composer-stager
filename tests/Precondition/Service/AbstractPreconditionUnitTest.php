@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestSpyInterface;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;

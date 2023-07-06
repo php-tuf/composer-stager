@@ -29,8 +29,8 @@ final class CleanerUnitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->preconditions = $this->prophesize(CleanerPreconditionsInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }

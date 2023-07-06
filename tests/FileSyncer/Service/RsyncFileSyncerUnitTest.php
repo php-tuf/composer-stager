@@ -45,8 +45,8 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     public function setUp(): void
     {
-        $this->source = new TestPath(self::ACTIVE_DIR);
-        $this->destination = new TestPath(self::STAGING_DIR);
+        $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())

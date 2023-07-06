@@ -16,6 +16,7 @@ use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -36,8 +37,8 @@ final class StagerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->composerRunner = $this->prophesize(ComposerProcessRunnerInterface::class);
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
     }
@@ -58,7 +59,7 @@ final class StagerUnitTest extends TestCase
             ->assertIsFulfilled($this->activeDir, $this->stagingDir)
             ->shouldBeCalledOnce();
         $expectedCommand = [
-            '--working-dir=' . self::STAGING_DIR,
+            '--working-dir=' . self::STAGING_DIR_RELATIVE,
             self::INERT_COMMAND,
         ];
         $this->composerRunner
@@ -93,7 +94,7 @@ final class StagerUnitTest extends TestCase
             [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
-                    '--working-dir=' . self::STAGING_DIR,
+                    '--working-dir=' . PathHelper::stagingDirRelative(),
                     'update',
                 ],
                 'callback' => null,
@@ -102,7 +103,7 @@ final class StagerUnitTest extends TestCase
             [
                 'givenCommand' => [self::INERT_COMMAND],
                 'expectedCommand' => [
-                    '--working-dir=' . self::STAGING_DIR,
+                    '--working-dir=' . PathHelper::stagingDirRelative(),
                     self::INERT_COMMAND,
                 ],
                 'callback' => new TestProcessOutputCallback(),

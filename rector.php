@@ -126,6 +126,7 @@ use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Set\ValueObject\LevelSetList;
@@ -146,6 +147,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         MixedTypeRector::class,
+        NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/TestUtils/AssertTrait.php'],
     ]);
 
     // CodeQuality: https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#codequality

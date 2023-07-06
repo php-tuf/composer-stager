@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory
@@ -65,7 +66,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     {
         $target = PathFactory::create($targetDir . '/target_directory')->resolved();
         $link = PathFactory::create($linkDir . '/directory_link')->resolved();
-        mkdir($target);
+        FilesystemHelper::createDirectories($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -84,13 +85,13 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     {
         return [
             'In active directory' => [
-                'targetDir' => self::TEST_WORKING_DIR,
-                'linkDir' => self::ACTIVE_DIR,
+                'targetDir' => self::TEST_WORKING_DIR_ABSOLUTE,
+                'linkDir' => self::ACTIVE_DIR_RELATIVE,
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
-                'targetDir' => self::TEST_WORKING_DIR,
-                'linkDir' => self::STAGING_DIR,
+                'targetDir' => self::TEST_WORKING_DIR_ABSOLUTE,
+                'linkDir' => self::STAGING_DIR_RELATIVE,
                 'linkDirName' => 'staging',
             ],
         ];
@@ -105,7 +106,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetDir = './target_directory';
-        mkdir(PathFactory::create($targetDir, $this->activeDir)->resolved());
+        FilesystemHelper::createDirectories(PathFactory::create($targetDir, $this->activeDir)->resolved());
         $links = array_fill_keys($links, $targetDir);
         $exclusions = new PathList(...$exclusions);
         $dirPath = $this->activeDir->resolved();

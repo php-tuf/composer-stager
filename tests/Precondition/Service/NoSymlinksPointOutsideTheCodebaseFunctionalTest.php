@@ -110,13 +110,13 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     {
         return [
             'In active directory' => [
-                'targetDir' => self::TEST_WORKING_DIR,
-                'linkDir' => self::ACTIVE_DIR,
+                'targetDir' => self::TEST_WORKING_DIR_ABSOLUTE,
+                'linkDir' => self::ACTIVE_DIR_RELATIVE,
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
-                'targetDir' => self::TEST_WORKING_DIR,
-                'linkDir' => self::STAGING_DIR,
+                'targetDir' => self::TEST_WORKING_DIR_ABSOLUTE,
+                'linkDir' => self::STAGING_DIR_RELATIVE,
                 'linkDirName' => 'staging',
             ],
         ];

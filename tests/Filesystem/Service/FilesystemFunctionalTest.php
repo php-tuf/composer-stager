@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -16,25 +17,20 @@ final class FilesystemFunctionalTest extends TestCase
 {
     private static function sourceDir(): PathInterface
     {
-        return PathFactory::create(self::TEST_ENV . '/source');
+        return PathFactory::create(self::TEST_ENV_ABSOLUTE . '/source');
     }
 
     private static function destinationDir(): PathInterface
     {
-        return PathFactory::create(self::TEST_ENV . '/destination');
+        return PathFactory::create(self::TEST_ENV_ABSOLUTE . '/destination');
     }
 
     protected function setUp(): void
     {
-        // Create source directory.
-        mkdir(self::sourceDir()->resolved(), 0777, true);
-        assert(file_exists(self::sourceDir()->resolved()));
-        assert(is_dir(self::sourceDir()->resolved()));
-
-        // Create destination directory.
-        mkdir(self::destinationDir()->resolved(), 0777, true);
-        assert(file_exists(self::destinationDir()->resolved()));
-        assert(is_dir(self::destinationDir()->resolved()));
+        FilesystemHelper::createDirectories([
+            self::sourceDir()->resolved(),
+            self::destinationDir()->resolved(),
+        ]);
     }
 
     protected function tearDown(): void
@@ -72,8 +68,8 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyTrue(): void
     {
-        $directory = PathFactory::create(self::TEST_ENV . '/empty');
-        mkdir($directory->resolved());
+        $directory = PathFactory::create(self::TEST_ENV_ABSOLUTE . '/empty');
+        FilesystemHelper::createDirectories($directory->resolved());
         $sut = $this->createSut();
 
         self::assertTrue($sut->isDirEmpty($directory), 'Correctly detected empty directory.');
@@ -91,7 +87,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyErrorIsNotADirectory(): void
     {
-        $path = PathFactory::create(self::TEST_ENV);
+        $path = PathFactory::create(self::TEST_ENV_ABSOLUTE);
         $file = PathFactory::create('file.txt', $path);
         touch($file->resolved());
         $message = sprintf(
@@ -145,7 +141,7 @@ final class FilesystemFunctionalTest extends TestCase
         bool $isSymlink,
     ): void {
         self::createFiles(self::sourceDir()->resolved(), $files);
-        self::createDirectories(self::sourceDir()->resolved(), $directories);
+        FilesystemHelper::createDirectories($directories, self::sourceDir()->resolved());
         self::createSymlinks(self::sourceDir()->resolved(), $symlinks);
         self::createHardlinks(self::sourceDir()->resolved(), $hardLinks);
         $subject = PathFactory::create($subject, self::sourceDir());

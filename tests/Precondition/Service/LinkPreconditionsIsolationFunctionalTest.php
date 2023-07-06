@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use Throwable;
 
 /**
@@ -136,7 +137,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('link')->resolved();
         $target = self::path('directory')->raw();
-        mkdir($target);
+        FilesystemHelper::createDirectories($target);
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointToADirectory::class);
