@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -13,9 +12,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 final class HostSupportsRunningProcessesFunctionalTest extends TestCase
 {
-    private PathInterface $activeDir;
-    private PathInterface $stagingDir;
-
     protected function setUp(): void
     {
         $this->activeDir = self::activeDirPath();

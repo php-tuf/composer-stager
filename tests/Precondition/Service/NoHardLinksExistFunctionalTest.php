@@ -11,9 +11,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist
  *
  * @covers ::__construct
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

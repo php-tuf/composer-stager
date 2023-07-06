@@ -20,21 +20,19 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Stager
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Stager
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface|\Prophecy\Prophecy\ObjectProphecy $domainOptions
- * @property \PhpTuf\ComposerStager\Internal\Process\Service\ComposerProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $composerRunner
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
 final class StagerUnitTest extends TestCase
 {
     private const INERT_COMMAND = 'about';
+
+    private ComposerProcessRunnerInterface|ObjectProphecy $composerRunner;
+    private StagerPreconditionsInterface|ObjectProphecy $preconditions;
 
     protected function setUp(): void
     {

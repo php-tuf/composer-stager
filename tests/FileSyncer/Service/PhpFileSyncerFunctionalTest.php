@@ -4,12 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
- *
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer */
 final class PhpFileSyncerFunctionalTest extends FileSyncerFunctionalTestCase
 {
     protected function fileSyncerClass(): string

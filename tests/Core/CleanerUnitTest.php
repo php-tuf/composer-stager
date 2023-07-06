@@ -15,19 +15,18 @@ use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Cleaner
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Cleaner::__construct
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
 final class CleanerUnitTest extends TestCase
 {
+    private CleanerPreconditionsInterface|ObjectProphecy $preconditions;
+    private FilesystemInterface|ObjectProphecy $filesystem;
+
     public function setUp(): void
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);

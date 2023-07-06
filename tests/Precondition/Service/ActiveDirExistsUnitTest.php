@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists
@@ -15,12 +16,11 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $translatableFactory
  */
 final class ActiveDirExistsUnitTest extends PreconditionTestCase
 {
+    private FilesystemInterface|ObjectProphecy $filesystem;
+
     protected function setUp(): void
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);

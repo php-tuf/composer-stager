@@ -17,14 +17,11 @@ use Prophecy\Argument;
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
- * @property \PhpTuf\ComposerStager\Internal\Host\Service\HostInterface $host
  */
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    private HostInterface $host;
+
     protected function setUp(): void
     {
         $this->host = $this->createWindowsHost();

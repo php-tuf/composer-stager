@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPre
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
@@ -20,13 +21,13 @@ use Prophecy\Argument;
  * @covers ::__construct
  * @covers ::findFiles
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $pathFactory
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinderInterface|\Prophecy\Prophecy\ObjectProphecy $fileFinder
  */
 final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected FileFinderInterface|ObjectProphecy $fileFinder;
+    protected FilesystemInterface|ObjectProphecy $filesystem;
+    protected PathFactoryInterface|ObjectProphecy $pathFactory;
+
     protected function fulfilledStatusMessage(): string
     {
         return '';
