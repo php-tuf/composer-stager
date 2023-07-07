@@ -38,8 +38,8 @@ abstract class TestCase extends PHPUnitTestCase
     protected const STAGING_DIR_RELATIVE = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
-    public const DOMAIN_DEFAULT = 'messages';
-    public const DOMAIN_EXCEPTIONS = 'exceptions';
+    final public const DOMAIN_DEFAULT = 'messages';
+    final public const DOMAIN_EXCEPTIONS = 'exceptions';
 
     protected PathListInterface $exclusions;
     protected PathInterface $activeDir;
