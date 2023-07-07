@@ -33,6 +33,7 @@ final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
         };
     }
 
+    /** @noinspection PhpParameterNameChangedDuringInheritanceInspection */
     public function trans(
         string $message,
         array $parameters = [],
