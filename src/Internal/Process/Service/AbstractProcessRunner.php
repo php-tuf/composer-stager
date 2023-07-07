@@ -4,10 +4,10 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 
@@ -28,7 +28,7 @@ abstract class AbstractProcessRunner implements ProcessRunnerInterface
 
     public function __construct(
         private readonly ExecutableFinderInterface $executableFinder,
-        private readonly ProcessFactoryInterface $processFactory,
+        private readonly SymfonyProcessFactoryInterface $processFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         $this->setTranslatableFactory($translatableFactory);

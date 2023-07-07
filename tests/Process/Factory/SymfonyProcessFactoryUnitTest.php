@@ -2,13 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Tests\Process\Factory;
 
-use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Symfony\Component\Process\Process;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory */
-final class ProcessFactoryUnitTest extends TestCase
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory */
+final class SymfonyProcessFactoryUnitTest extends TestCase
 {
     /**
      * @covers ::__construct
@@ -19,7 +19,7 @@ final class ProcessFactoryUnitTest extends TestCase
     public function testFactory(array $command): void
     {
         $translatableFactory = new TestTranslatableFactory();
-        $sut = new ProcessFactory($translatableFactory);
+        $sut = new SymfonyProcessFactory($translatableFactory);
 
         $actual = $sut->create($command);
 

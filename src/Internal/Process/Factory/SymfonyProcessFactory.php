@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
@@ -14,7 +13,7 @@ use Symfony\Component\Process\Process as SymfonyProcess;
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class ProcessFactory implements ProcessFactoryInterface
+final class SymfonyProcessFactory implements SymfonyProcessFactoryInterface
 {
     use TranslatableAwareTrait;
 
@@ -25,9 +24,7 @@ final class ProcessFactory implements ProcessFactoryInterface
 
     /**
      * @codeCoverageIgnore It's impractical to test a failure creating a Symfony
-     *   process since it depends on a host configuration. It should be possible
-     *   to overcome this limitation through the introduction of a Symfony Process
-     *   proxy in the future.
+     *   process since it depends on a host configuration.
      */
     public function create(array $command): SymfonyProcess
     {

@@ -7,9 +7,9 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 
 /**
  * @package Precondition
@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class HostSupportsRunningProcesses extends AbstractPrecondition implements HostSupportsRunningProcessesInterface
 {
     public function __construct(
-        private readonly ProcessFactoryInterface $processFactory,
+        private readonly SymfonyProcessFactoryInterface $processFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($translatableFactory);

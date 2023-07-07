@@ -17,7 +17,7 @@ parameters:
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: c92ab75feb375dc301c7aa87e33cf259
+    preconditionSystemHash: d94f4d1a7bcf0974d6c326a3a20291d4
     translationSystemHash: 87157c46b62ac72ca7429de849730847
     gitattributesExportInclude:
         - composer.json

@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -24,11 +24,11 @@ use Symfony\Component\Process\Process;
  */
 final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 {
-    private ObjectProphecy|ProcessFactoryInterface $processFactory;
+    private ObjectProphecy|SymfonyProcessFactoryInterface $processFactory;
 
     protected function setUp(): void
     {
-        $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
+        $this->processFactory = $this->prophesize(SymfonyProcessFactoryInterface::class);
         $this->processFactory
             ->create(Argument::any())
             ->willReturn(new Process([]));
@@ -38,7 +38,7 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 
     protected function createSut(): HostSupportsRunningProcesses
     {
-        /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $processFactory */
+        /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory $processFactory */
         $processFactory = $this->processFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 

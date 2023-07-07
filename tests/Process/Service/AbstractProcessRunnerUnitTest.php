@@ -5,9 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -28,7 +28,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
     private const COMMAND_NAME = 'test';
 
     private ExecutableFinderInterface|ObjectProphecy $executableFinder;
-    private ProcessFactoryInterface|ObjectProphecy $processFactory;
+    private SymfonyProcessFactoryInterface|ObjectProphecy $processFactory;
     private SymfonyProcess|ObjectProphecy $process;
 
     public function setUp(): void
@@ -37,7 +37,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $this->executableFinder
             ->find(Argument::any())
             ->willReturnArgument();
-        $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
+        $this->processFactory = $this->prophesize(SymfonyProcessFactoryInterface::class);
         $this->process = $this->prophesize(SymfonyProcess::class);
         $this->process
             ->setTimeout(Argument::any())
@@ -62,7 +62,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             public function __construct(
                 ExecutableFinderInterface $executableFinder,
                 private readonly string $executableName,
-                ProcessFactoryInterface $processFactory,
+                SymfonyProcessFactoryInterface $processFactory,
                 TranslatableFactoryInterface $translatableFactory,
             ) {
                 parent::__construct($executableFinder, $processFactory, $translatableFactory);

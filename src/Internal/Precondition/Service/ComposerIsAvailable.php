@@ -9,9 +9,9 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -27,7 +27,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
 
     public function __construct(
         private readonly ExecutableFinderInterface $executableFinder,
-        private readonly ProcessFactoryInterface $processFactory,
+        private readonly SymfonyProcessFactoryInterface $processFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($translatableFactory);
