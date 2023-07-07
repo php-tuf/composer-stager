@@ -11,9 +11,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
  *
  * @covers ::__construct
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

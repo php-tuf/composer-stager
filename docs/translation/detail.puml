@@ -43,11 +43,16 @@ rectangle {
     }
 
     interface Translator {
+        -DomainOptions
+        -LocaleOptions
         +trans(): string
         +getLocale(): string
     }
 
     interface DomainOptions {
+    }
+
+    interface LocaleOptions {
     }
 
 }
@@ -78,6 +83,9 @@ TranslationParameters <-right-* TranslatableMessage
 ' Message translation:
 Requester *-down- Translator
 Translator -down-> TranslatableMessage
+Translator *-down- DomainOptions
+Translator *-down- LocaleOptions
+
 TranslatableMessage .up.> Requester
 
 ' Exception-handling:
@@ -86,6 +94,5 @@ Exception *-up-> TranslatableMessage
 ' Alignment:
 Exception -up[hidden]- DomainOptions
 Exception -up[hidden]- DomainOptions
-
 
 @enduml

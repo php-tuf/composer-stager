@@ -12,9 +12,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTh
  *
  * @covers ::__construct
  * @covers ::exitEarly
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

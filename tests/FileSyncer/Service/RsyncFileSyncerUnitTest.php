@@ -6,18 +6,20 @@ use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
-use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\Internal\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
@@ -32,15 +34,15 @@ use Prophecy\Argument;
  * @covers ::runCommand
  * @covers ::sync
  *
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Internal\Process\Service\RsyncProcessRunnerInterface|\Prophecy\Prophecy\ObjectProphecy $rsync
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $destination
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $source
- *
  * @group no_windows
  */
 final class RsyncFileSyncerUnitTest extends TestCase
 {
+    private FilesystemInterface|ObjectProphecy $filesystem;
+    private PathInterface $destination;
+    private PathInterface $source;
+    private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
+
     public function setUp(): void
     {
         $this->source = new TestPath(self::ACTIVE_DIR);

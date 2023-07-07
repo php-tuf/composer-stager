@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Internal\Translation\Service;
 
-use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
 use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorTrait as SymfonyTranslatorTrait;
 
@@ -19,6 +18,10 @@ use Symfony\Contracts\Translation\TranslatorTrait as SymfonyTranslatorTrait;
  */
 final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
 {
+    // The Symfony translator trait returns different values based on
+    // host details. Eliminate the variability by hard coding a value.
+    private const LOCALE = 'en_US';
+
     private readonly SymfonyTranslatorInterface $symfonyTranslator;
 
     public function __construct()
@@ -34,15 +37,13 @@ final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
         string $message,
         array $parameters = [],
         ?string $domain = null,
-        ?string $locale = LocaleInterface::DEFAULT,
+        ?string $locale = self::LOCALE,
     ): string {
         return $this->symfonyTranslator->trans($message, $parameters, $domain, $locale);
     }
 
     public function getLocale(): string
     {
-        // The Symfony translator trait returns different values based on
-        // host details. Eliminate the variability by hard coding a value.
-        return LocaleInterface::DEFAULT;
+        return self::LOCALE;
     }
 }

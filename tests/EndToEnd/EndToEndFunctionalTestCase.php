@@ -2,6 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
+use PhpTuf\ComposerStager\API\Core\BeginnerInterface;
+use PhpTuf\ComposerStager\API\Core\CleanerInterface;
+use PhpTuf\ComposerStager\API\Core\CommitterInterface;
+use PhpTuf\ComposerStager\API\Core\StagerInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathList;
@@ -18,15 +22,15 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * internal layers. The test cases themselves are supplied by this class.
  * Subclasses specify the file syncer to use via ::fileSyncerClass().
  *
- * @property \PhpTuf\ComposerStager\Internal\Core\Beginner $beginner
- * @property \PhpTuf\ComposerStager\Internal\Core\Cleaner $cleaner
- * @property \PhpTuf\ComposerStager\Internal\Core\Committer $committer
- * @property \PhpTuf\ComposerStager\Internal\Core\Stager $stager
- *
  * @group slow
  */
 abstract class EndToEndFunctionalTestCase extends TestCase
 {
+    private BeginnerInterface $beginner;
+    private CleanerInterface $cleaner;
+    private CommitterInterface $committer;
+    private StagerInterface $stager;
+
     protected function setUp(): void
     {
         $container = $this->getContainer();

@@ -5,29 +5,28 @@ namespace PhpTuf\ComposerStager\Tests\Core;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
-use PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Cleaner
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Cleaner::__construct
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\Internal\Filesystem\Service\FilesystemInterface|\Prophecy\Prophecy\ObjectProphecy $filesystem
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
 final class CleanerUnitTest extends TestCase
 {
+    private CleanerPreconditionsInterface|ObjectProphecy $preconditions;
+    private FilesystemInterface|ObjectProphecy $filesystem;
+
     public function setUp(): void
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);

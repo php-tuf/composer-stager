@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCode
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist
@@ -19,15 +20,15 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noAbsoluteSymlinksExist
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface|\Prophecy\Prophecy\ObjectProphecy $noHardLinksExist
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface|\Prophecy\Prophecy\ObjectProphecy $noLinksExistOnWindows
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointOutsideTheCodebase
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface|\Prophecy\Prophecy\ObjectProphecy $noSymlinksPointToADirectory
  */
 final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 {
+    private NoAbsoluteSymlinksExistInterface|ObjectProphecy $noAbsoluteSymlinksExist;
+    private NoHardLinksExistInterface|ObjectProphecy $noHardLinksExist;
+    private NoLinksExistOnWindowsInterface|ObjectProphecy $noLinksExistOnWindows;
+    private NoSymlinksPointOutsideTheCodebaseInterface|ObjectProphecy $noSymlinksPointOutsideTheCodebase;
+    private NoSymlinksPointToADirectoryInterface|ObjectProphecy $noSymlinksPointToADirectory;
+
     protected function setUp(): void
     {
         $this->noAbsoluteSymlinksExist = $this->prophesize(NoAbsoluteSymlinksExistInterface::class);

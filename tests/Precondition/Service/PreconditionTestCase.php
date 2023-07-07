@@ -9,11 +9,6 @@ use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/**
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathListInterface $exclusions
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
- */
 abstract class PreconditionTestCase extends TestCase
 {
     // Multiply expected calls to prophecies to account for multiple calls to ::isFulfilled()

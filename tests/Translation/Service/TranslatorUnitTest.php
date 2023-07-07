@@ -5,11 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 use AssertionError;
 use Error;
 use LogicException;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
-use PhpTuf\ComposerStager\API\Translation\Value\LocaleInterface;
+use PhpTuf\ComposerStager\API\Translation\Service\LocaleOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
+use PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
@@ -28,12 +29,14 @@ use Throwable;
 final class TranslatorUnitTest extends TestCase
 {
     private DomainOptionsInterface $domainOptions;
+    private LocaleOptionsInterface $localeOptions;
     private SymfonyTranslatorProxyInterface|ObjectProphecy $symfonyTranslatorProxy;
     private TranslatableFactoryInterface|ObjectProphecy $translatableFactory;
 
     public function setUp(): void
     {
         $this->domainOptions = new TestDomainOptions();
+        $this->localeOptions = new LocaleOptions();
         $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
         $this->translatableFactory = new TestTranslatableFactory();
     }
@@ -43,7 +46,7 @@ final class TranslatorUnitTest extends TestCase
         assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxyInterface);
         assert($this->translatableFactory instanceof TranslatableFactoryInterface);
 
-        return new Translator($this->domainOptions, $this->symfonyTranslatorProxy);
+        return new Translator($this->domainOptions, $this->localeOptions, $this->symfonyTranslatorProxy);
     }
 
     /**
@@ -65,7 +68,7 @@ final class TranslatorUnitTest extends TestCase
         $actualTranslation = $sut->trans($message, $parameters);
 
         self::assertEquals($expectedTranslation, $actualTranslation, 'Returned correct translation.');
-        self::assertEquals(LocaleInterface::DEFAULT, $sut->getLocale(), 'Returned correct default locale.');
+        self::assertEquals(TestLocaleOptions::DEFAULT, $sut->getLocale(), 'Returned correct default locale.');
     }
 
     public function providerBasicFunctionality(): array
@@ -149,12 +152,65 @@ final class TranslatorUnitTest extends TestCase
         ];
     }
 
+    /**
+     * @covers ::trans
+     *
+     * @dataProvider providerLocaleHandling
+     */
+    public function testLocaleHandling(
+        string $defaultLocale,
+        ?string $givenLocale,
+        string $expectedDelegatedLocale,
+        string $expectedGetLocale,
+    ): void {
+        $message = __METHOD__;
+        $this->symfonyTranslatorProxy = $this->prophesize(SymfonyTranslatorProxyInterface::class);
+        $this->symfonyTranslatorProxy
+            ->trans(Argument::cetera())
+            ->willReturn($message);
+        $this->symfonyTranslatorProxy
+            ->trans($message, Argument::any(), Argument::any(), $expectedDelegatedLocale)
+            ->shouldBeCalledOnce();
+        $this->symfonyTranslatorProxy = $this->symfonyTranslatorProxy
+            ->reveal();
+        $this->localeOptions = new TestLocaleOptions($defaultLocale);
+        $sut = $this->createSut();
+
+        $sut->trans($message, null, null, $givenLocale);
+
+        self::assertSame($expectedGetLocale, $sut->getLocale(), 'Returned correct locale.');
+    }
+
+    public function providerLocaleHandling(): array
+    {
+        return [
+            'Default' => [
+                'defaultLocale' => 'One',
+                'givenLocale' => null,
+                'expectedDelegatedLocale' => 'One',
+                'expectedGetLocale' => 'One',
+            ],
+            'Overridden via LocaleOptions' => [
+                'defaultLocale' => 'Two',
+                'givenLocale' => null,
+                'expectedDelegatedLocale' => 'Two',
+                'expectedGetLocale' => 'Two',
+            ],
+            'Overridden via ::trans() call' => [
+                'defaultLocale' => 'Three',
+                'givenLocale' => 'Overridden',
+                'expectedDelegatedLocale' => 'Overridden',
+                'expectedGetLocale' => 'Three',
+            ],
+        ];
+    }
+
     /** @covers ::create */
     public function testStaticFactory(): void
     {
         assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxy);
 
-        $expected = new Translator(new DomainOptions(), $this->symfonyTranslatorProxy);
+        $expected = new Translator(new DomainOptions(), new LocaleOptions(), $this->symfonyTranslatorProxy);
 
         $actual = Translator::create();
 

@@ -17,8 +17,8 @@ parameters:
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: 861a8efc7cfc0621f968748a0508877d
-    translationSystemHash: fdd7419eecf6eeec39a6ed4e81534bde
+    preconditionSystemHash: c92ab75feb375dc301c7aa87e33cf259
+    translationSystemHash: e2e7af2737d295c5ee4f66db4915f887
     gitattributesExportInclude:
         - composer.json
         - docs
@@ -69,7 +69,7 @@ parameters:
             message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
             path: tests
         -
-            message: '#Cannot call method .*\(\) on .*MethodProphecy\|.*.#'
+            message: '#Cannot call method .*\(\) on .*MethodProphecy.#'
             path: tests
         -
             message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
@@ -90,7 +90,7 @@ parameters:
             message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
             path: tests
         -
-            message: '#Parameter .* of (static )?method .* expects .* given.#'
+            message: '#Parameter .* of (static )?(class|method) .* expects .* given.#'
             path: tests
         -
             message: '#Property .* does not accept .*.#'

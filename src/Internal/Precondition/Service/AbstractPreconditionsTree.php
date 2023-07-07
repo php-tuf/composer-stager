@@ -6,9 +6,9 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
-use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 
 /**
  * @package Precondition
@@ -19,6 +19,9 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
 {
     // This isn't used directly in this class--it's for children.
     use TranslatableAwareTrait;
+
+    // @phpcs:ignore SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty
+    public string $unfulfilledStatusMessage;
 
     /** @var array<\PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface> */
     private readonly array $children;

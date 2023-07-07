@@ -19,19 +19,18 @@ use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Beginner
  *
  * @covers \PhpTuf\ComposerStager\Internal\Core\Beginner::__construct
- *
- * @property \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface|\Prophecy\Prophecy\ObjectProphecy $fileSyncer
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface|\Prophecy\Prophecy\ObjectProphecy $preconditions
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $activeDir
- * @property \PhpTuf\ComposerStager\Tests\Path\Value\TestPath $stagingDir
  */
 final class BeginnerUnitTest extends TestCase
 {
+    private BeginnerPreconditionsInterface|ObjectProphecy $preconditions;
+    private FileSyncerInterface|ObjectProphecy $fileSyncer;
+
     protected function setUp(): void
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR);

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Translation\Value;
+namespace PhpTuf\ComposerStager\API\Translation\Service;
 
 /**
  * Provides locale values for the translation system.
@@ -9,7 +9,8 @@ namespace PhpTuf\ComposerStager\API\Translation\Value;
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
-interface LocaleInterface
+interface LocaleOptionsInterface
 {
-    public const DEFAULT = 'en_US';
+    /** The default locale. */
+    public function default(): string;
 }

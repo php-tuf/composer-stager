@@ -14,9 +14,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirect
  *
  * @covers ::__construct
  * @covers ::exitEarly
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
  */
 final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

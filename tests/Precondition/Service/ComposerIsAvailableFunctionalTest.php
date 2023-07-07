@@ -4,23 +4,19 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
-use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Symfony\Component\DependencyInjection\Definition;
 
-/**
- * @coversNothing
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $activeDir
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $stagingDir
- * @property string $executableFinderClass
- */
+/** @coversNothing */
 final class ComposerIsAvailableFunctionalTest extends TestCase
 {
+    private string $executableFinderClass;
+
     protected function setUp(): void
     {
         self::createTestEnvironment();

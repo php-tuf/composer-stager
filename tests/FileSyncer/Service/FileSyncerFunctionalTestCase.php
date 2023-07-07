@@ -3,17 +3,17 @@
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/**
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $destination
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathInterface $source
- */
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
     private const SOURCE_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'source';
     private const DESTINATION_DIR = self::TEST_ENV . DIRECTORY_SEPARATOR . 'destination';
+
+    private PathInterface $destination;
+    private PathInterface $source;
 
     protected function setUp(): void
     {

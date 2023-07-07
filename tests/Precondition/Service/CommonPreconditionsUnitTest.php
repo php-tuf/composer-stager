@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesI
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
@@ -18,14 +19,14 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface|\Prophecy\Prophecy\ObjectProphecy $activeAndStagingDirsAreDifferent
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsReady
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface|\Prophecy\Prophecy\ObjectProphecy $composerIsAvailable
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface|\Prophecy\Prophecy\ObjectProphecy $hostSupportsRunningProcesses
  */
 final class CommonPreconditionsUnitTest extends PreconditionTestCase
 {
+    private ActiveAndStagingDirsAreDifferentInterface|ObjectProphecy $activeAndStagingDirsAreDifferent;
+    private ActiveDirIsReadyInterface|ObjectProphecy $activeDirIsReady;
+    private ComposerIsAvailableInterface|ObjectProphecy $composerIsAvailable;
+    private HostSupportsRunningProcessesInterface|ObjectProphecy $hostSupportsRunningProcesses;
+
     protected function setUp(): void
     {
         $this->activeAndStagingDirsAreDifferent = $this->prophesize(ActiveAndStagingDirsAreDifferentInterface::class);

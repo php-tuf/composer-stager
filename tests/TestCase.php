@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
@@ -37,6 +38,10 @@ abstract class TestCase extends PHPUnitTestCase
     protected const CHANGED_CONTENT = 'changed';
     public const DOMAIN_DEFAULT = 'messages';
     public const DOMAIN_EXCEPTIONS = 'exceptions';
+
+    protected PathListInterface $exclusions;
+    protected PathInterface $activeDir;
+    protected PathInterface $stagingDir;
 
     protected static function testWorkingDirPath(): PathInterface
     {

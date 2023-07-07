@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactoryInterface;
 
 /**
  * @package Precondition

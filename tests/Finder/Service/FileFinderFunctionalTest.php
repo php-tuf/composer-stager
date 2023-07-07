@@ -12,8 +12,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
  *
  * @covers ::__construct
- *
- * @property \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder
  */
 final class FileFinderFunctionalTest extends TestCase
 {

@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady
@@ -16,12 +17,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirExists
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $stagingDirIsWritable
  */
 final class StagingDirIsReadyUnitTest extends PreconditionTestCase
 {
+    private StagingDirExistsInterface|ObjectProphecy $stagingDirExists;
+    private StagingDirIsWritableInterface|ObjectProphecy $stagingDirIsWritable;
+
     protected function setUp(): void
     {
         $this->stagingDirExists = $this->prophesize(StagingDirExistsInterface::class);

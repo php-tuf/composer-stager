@@ -21,11 +21,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
  * @covers ::__construct
  * @covers ::assertIsFulfilled
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Path\Value\PathListInterface $exclusions
  */
 final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 {
+    // @phpcs:ignore SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty
+    public PathListInterface $exclusions;
+
     protected function createSut(...$children): AbstractPreconditionsTree
     {
         $translatableFactory = new TestTranslatableFactory();

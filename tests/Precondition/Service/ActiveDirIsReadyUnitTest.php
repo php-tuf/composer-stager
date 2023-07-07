@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady
@@ -15,12 +16,12 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
  * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
  * @covers ::isFulfilled
- *
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirExists
- * @property \PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface|\Prophecy\Prophecy\ObjectProphecy $activeDirIsWritable
  */
 final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 {
+    private ActiveDirExistsInterface|ObjectProphecy $activeDirExists;
+    private ActiveDirIsWritableInterface|ObjectProphecy $activeDirIsWritable;
+
     protected function setUp(): void
     {
         $this->activeDirExists = $this->prophesize(ActiveDirExistsInterface::class);
