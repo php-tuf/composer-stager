@@ -6,12 +6,6 @@ use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterf
 use Symfony\Contracts\Translation\TranslatorTrait as SymfonyTranslatorTrait;
 
 /**
- * Provides a thin wrapper around Symfony's default translator implementation.
- *
- * This is necessary because Symfony Translation Contracts doesn't provide an
- * injectable class--only a trait--and we don't want to depend on the full
- * Translation component to get one. Neither do we want to fork any part of it.
- *
  * @package Translation
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
