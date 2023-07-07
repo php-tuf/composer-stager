@@ -10,13 +10,12 @@ use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
 use Symfony\Component\Process\Process as SymfonyProcess;
-use Throwable;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
@@ -144,19 +143,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testRunFailedException(): void
     {
-        // SymfonyProcessFailedException can't be initialized with a known message
-        // value, so dynamically get the message it will generate.
-        try {
-            $process = $this->prophesize(SymfonyProcess::class);
-            $process->isSuccessful()
-                ->willReturn(true);
-            $previous = new SymfonyProcessFailedException($process->reveal());
-        } catch (Throwable $e) {
-            $previous = $e;
-        }
-
-        // Now that we have a "previous" exception with known behavior,
-        // make the mock throw it.
+        $previous = ProcessHelper::createSymfonyProcessFailedException();
         $this->process
             ->mustRun(Argument::cetera())
             ->willThrow($previous);

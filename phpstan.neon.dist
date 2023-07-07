@@ -63,6 +63,9 @@ parameters:
             message: '#Access to an undefined property.*#'
             path: tests
         -
+            message: '#Built-in or third party exception ".*" cannot be thrown from public methods.*#'
+            path: tests
+        -
             message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
             path: tests
         -
