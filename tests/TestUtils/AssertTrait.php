@@ -32,6 +32,8 @@ trait AssertTrait
         string $ignoreDir = '',
         string $message = '',
     ): void {
+        $expected = array_map(self::fixSeparators(...), $expected);
+
         $actual = self::getFlatDirectoryListing($dir);
 
         // Remove ignored paths.
@@ -45,7 +47,7 @@ trait AssertTrait
                 return false;
             }
 
-            return $path;
+            return self::fixSeparators($path);
         }, $actual);
 
         // Normalize arrays for comparison.
@@ -136,8 +138,8 @@ trait AssertTrait
             }
 
             if ($actualException instanceof ExceptionInterface) {
-                $x = new TranslatableReflection($actualException->getTranslatableMessage());
-                self::assertSame(TranslationHelper::EXCEPTIONS_DOMAIN, $x->getDomain(), 'Set correct domain.');
+                $reflection = new TranslatableReflection($actualException->getTranslatableMessage());
+                self::assertSame(TranslationHelper::EXCEPTIONS_DOMAIN, $reflection->getDomain(), 'Set correct domain.');
             }
 
             if ($expectedPreviousExceptionClass === null) {
