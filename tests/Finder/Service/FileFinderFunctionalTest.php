@@ -151,7 +151,7 @@ final class FileFinderFunctionalTest extends TestCase
         ];
     }
 
-    private function normalizePaths($paths): array
+    private function normalizePaths(array $paths): array
     {
         $paths = array_map(static function ($path): string {
             $path = implode(

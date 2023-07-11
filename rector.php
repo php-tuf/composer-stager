@@ -130,6 +130,7 @@ use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 
@@ -350,7 +351,7 @@ return static function (RectorConfig $rectorConfig): void {
     // TypeDeclaration: https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#typedeclaration
     //$rectorConfig->rule(AddArrowFunctionReturnTypeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addarrowfunctionreturntyperector
     $rectorConfig->rule(AddClosureReturnTypeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addclosurereturntyperector
-    //$rectorConfig->rule(AddMethodCallBasedStrictParamTypeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addmethodcallbasedstrictparamtyperector
+    $rectorConfig->rule(AddMethodCallBasedStrictParamTypeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addmethodcallbasedstrictparamtyperector
     //$rectorConfig->rule(AddParamTypeBasedOnPHPUnitDataProviderRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addparamtypebasedonphpunitdataproviderrector
     //$rectorConfig->rule(AddParamTypeDeclarationRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addparamtypedeclarationrector
     //$rectorConfig->rule(AddParamTypeFromPropertyTypeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addparamtypefrompropertytyperector
