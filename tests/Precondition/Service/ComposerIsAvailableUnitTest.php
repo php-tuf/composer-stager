@@ -112,7 +112,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             $message,
             $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $message, $previous);
     }
@@ -150,7 +150,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             $message,
             $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $message);
     }
@@ -169,7 +169,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             $message,
             $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $message);
     }
@@ -187,7 +187,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             $message,
             $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $message);
     }

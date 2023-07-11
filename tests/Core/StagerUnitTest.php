@@ -119,7 +119,7 @@ final class StagerUnitTest extends TestCase
         $expectedExceptionMessage = new TestTranslatableExceptionMessage($message);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->stage([], $this->activeDir, $this->stagingDir);
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
@@ -134,7 +134,7 @@ final class StagerUnitTest extends TestCase
             null,
             self::DOMAIN_EXCEPTIONS,
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->stage([
                 'composer',
                 self::INERT_COMMAND,
@@ -156,7 +156,7 @@ final class StagerUnitTest extends TestCase
             null,
             self::DOMAIN_EXCEPTIONS,
         );
-        self::assertTranslatableException(function () use ($sut, $command) {
+        self::assertTranslatableException(function () use ($sut, $command): void {
             $sut->stage($command, $this->activeDir, $this->stagingDir);
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
@@ -180,7 +180,7 @@ final class StagerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
@@ -193,7 +193,7 @@ final class StagerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
         }, RuntimeException::class, $message, $exception::class);
     }

@@ -101,7 +101,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
             PathFactory::create($linkDir)->resolved(),
             $link,
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message);
     }

@@ -116,7 +116,7 @@ final class BeginnerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->begin($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
@@ -133,7 +133,7 @@ final class BeginnerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->begin($this->activeDir, $this->stagingDir);
         }, RuntimeException::class, $exception->getMessage(), $exception::class);
     }

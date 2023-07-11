@@ -138,7 +138,7 @@ final class ProcessUnitTest extends TestCase
         $sut = $this->createSut([], []);
 
         $expectedExceptionMessage = sprintf('Failed to get process output: %s', $previous->getMessage());
-        self::assertTranslatableException(static function () use ($sut) {
+        self::assertTranslatableException(static function () use ($sut): void {
             $sut->getOutput();
         }, LogicException::class, $expectedExceptionMessage, $previous::class);
     }
@@ -153,7 +153,7 @@ final class ProcessUnitTest extends TestCase
         $sut = $this->createSut([], []);
 
         $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
-        self::assertTranslatableException(static function () use ($sut) {
+        self::assertTranslatableException(static function () use ($sut): void {
             $sut->mustRun();
         }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
     }
@@ -168,7 +168,7 @@ final class ProcessUnitTest extends TestCase
         $sut = $this->createSut([], []);
 
         $expectedExceptionMessage = sprintf('Failed to set process timeout: %s', $previous->getMessage());
-        self::assertTranslatableException(static function () use ($sut) {
+        self::assertTranslatableException(static function () use ($sut): void {
             $sut->setTimeout();
         }, InvalidArgumentException::class, $expectedExceptionMessage, $previous::class);
     }

@@ -87,7 +87,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->copy($this->activeDir, $this->stagingDir);
         }, IOException::class, $message, $previous::class);
     }
@@ -103,7 +103,7 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->resolved());
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->copy($this->activeDir, $this->stagingDir);
         }, LogicException::class, $message, $previous);
     }
@@ -116,7 +116,7 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination files cannot be the same at %s', $source->resolved());
-        self::assertTranslatableException(static function () use ($sut, $source, $destination) {
+        self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
             $sut->copy($source, $destination);
         }, LogicException::class, $message);
     }
@@ -155,7 +155,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->mkdir($this->stagingDir);
         }, IOException::class, $message, $previous::class);
     }
@@ -210,7 +210,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->remove($this->stagingDir);
         }, IOException::class, $message, $previous::class);
     }

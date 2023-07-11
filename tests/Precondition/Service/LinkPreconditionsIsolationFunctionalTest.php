@@ -116,7 +116,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
         $sut = $container->get(NoLinksExistOnWindows::class);
 
-        self::assertTranslatableException(static function () use ($sut) {
+        self::assertTranslatableException(static function () use ($sut): void {
             $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class);
     }

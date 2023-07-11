@@ -60,7 +60,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message, LogicException::class);
     }
@@ -71,7 +71,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message);
     }

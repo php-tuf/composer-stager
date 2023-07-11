@@ -117,7 +117,7 @@ final class CommitterUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->commit($this->stagingDir, $this->activeDir);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
@@ -134,7 +134,7 @@ final class CommitterUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->commit($this->stagingDir, $this->activeDir);
         }, RuntimeException::class, $message, $exception::class);
     }

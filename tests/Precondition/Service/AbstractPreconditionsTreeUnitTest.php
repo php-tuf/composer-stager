@@ -237,7 +237,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         self::assertFalse($sut->isFulfilled($this->activeDir, $this->stagingDir), 'Unfulfilled leaf status bubbled up properly.');
         self::assertSame($leaves, $sut->getLeaves());
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message);
     }

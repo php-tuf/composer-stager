@@ -147,7 +147,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(static function () use ($sut) {
+        self::assertTranslatableException(static function () use ($sut): void {
             $sut->run([self::COMMAND_NAME]);
         }, $previous::class);
     }

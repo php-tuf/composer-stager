@@ -96,7 +96,7 @@ final class FilesystemFunctionalTest extends TestCase
         );
         $sut = $this->createSut();
 
-        self::assertTranslatableException(static function () use ($sut, $file) {
+        self::assertTranslatableException(static function () use ($sut, $file): void {
             $sut->isDirEmpty($file);
         }, IOException::class, $message);
     }
@@ -111,7 +111,7 @@ final class FilesystemFunctionalTest extends TestCase
         );
         $sut = $this->createSut();
 
-        self::assertTranslatableException(static function () use ($sut, $path) {
+        self::assertTranslatableException(static function () use ($sut, $path): void {
             $sut->isDirEmpty($path);
         }, IOException::class, $message);
     }
@@ -274,7 +274,7 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertEquals($expectedResolved, $symlinkTarget->resolved(), 'Got the correct resolved target value.');
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $hardLinkPath->resolved());
-        self::assertTranslatableException(static function () use ($sut, $hardLinkPath) {
+        self::assertTranslatableException(static function () use ($sut, $hardLinkPath): void {
             $sut->readLink($hardLinkPath);
         }, IOException::class, $message);
     }
@@ -313,7 +313,7 @@ final class FilesystemFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $file->resolved());
-        self::assertTranslatableException(static function () use ($sut, $file) {
+        self::assertTranslatableException(static function () use ($sut, $file): void {
             $sut->readLink($file);
         }, IOException::class, $message);
     }
@@ -325,7 +325,7 @@ final class FilesystemFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $path->resolved());
-        self::assertTranslatableException(static function () use ($sut, $path) {
+        self::assertTranslatableException(static function () use ($sut, $path): void {
             $sut->readLink($path);
         }, IOException::class, $message);
     }

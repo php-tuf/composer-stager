@@ -75,7 +75,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
             PathFactory::create($directory)->resolved(),
             $link,
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message);
     }

@@ -182,8 +182,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $sut->theUnfulfilledStatusMessage = $message;
 
-
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
         }, PreconditionException::class, $message);
     }

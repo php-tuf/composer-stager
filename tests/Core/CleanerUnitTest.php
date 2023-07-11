@@ -105,7 +105,7 @@ final class CleanerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->clean($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
@@ -120,7 +120,7 @@ final class CleanerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->clean($this->activeDir, $this->stagingDir);
         }, RuntimeException::class, $message, $previous::class);
     }

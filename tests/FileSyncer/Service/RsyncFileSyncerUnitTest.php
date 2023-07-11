@@ -185,7 +185,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willThrow($caught);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, $thrown, $caught->getMessage(), $caught::class);
     }
@@ -215,7 +215,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source directory does not exist at %s', $this->source->resolved());
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, LogicException::class, $message);
     }
@@ -228,7 +228,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination directories cannot be the same at %s', $source->resolved());
-        self::assertTranslatableException(static function () use ($sut, $source, $destination) {
+        self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
             $sut->sync($source, $destination);
         }, LogicException::class, $message);
     }
@@ -243,7 +243,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, IOException::class, $message);
     }
