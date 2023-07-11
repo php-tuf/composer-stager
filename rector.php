@@ -146,7 +146,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        MixedTypeRector::class,
+        MixedTypeRector::class => [__DIR__],
         NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/TestUtils/AssertTrait.php'],
     ]);
 
