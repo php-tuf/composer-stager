@@ -57,7 +57,7 @@ abstract class PreconditionTestCase extends TestCase
     ): void {
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $expectedStatusMessage, $previousException);
     }

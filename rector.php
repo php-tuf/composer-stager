@@ -130,6 +130,7 @@ use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 
 /** @see https://getrector.com/documentation/ */
@@ -358,7 +359,7 @@ return static function (RectorConfig $rectorConfig): void {
     //$rectorConfig->rule(AddReturnTypeDeclarationBasedOnParentClassMethodRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addreturntypedeclarationbasedonparentclassmethodrector
     //$rectorConfig->rule(AddReturnTypeDeclarationFromYieldsRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addreturntypedeclarationfromyieldsrector
     //$rectorConfig->rule(AddReturnTypeDeclarationRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addreturntypedeclarationrector
-    //$rectorConfig->rule(AddVoidReturnTypeWhereNoReturnRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addvoidreturntypewherenoreturnrector
+    $rectorConfig->rule(AddVoidReturnTypeWhereNoReturnRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addvoidreturntypewherenoreturnrector
     //$rectorConfig->rule(ArrayShapeFromConstantArrayReturnRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#arrayshapefromconstantarrayreturnrector
     //$rectorConfig->rule(BinaryOpNullableToInstanceofRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#binaryopnullabletoinstanceofrector
     //$rectorConfig->rule(DeclareStrictTypesRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#declarestricttypesrector
