@@ -3,19 +3,17 @@
 namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
-use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
@@ -27,8 +25,8 @@ final class AbstractProcessRunnerUnitTest extends TestCase
     private const COMMAND_NAME = 'test';
 
     private ExecutableFinderInterface|ObjectProphecy $executableFinder;
-    private SymfonyProcessFactoryInterface|ObjectProphecy $processFactory;
-    private SymfonyProcess|ObjectProphecy $process;
+    private ProcessFactoryInterface|ObjectProphecy $processFactory;
+    private ProcessInterface|ObjectProphecy $process;
 
     public function setUp(): void
     {
@@ -36,8 +34,8 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $this->executableFinder
             ->find(Argument::any())
             ->willReturnArgument();
-        $this->processFactory = $this->prophesize(SymfonyProcessFactoryInterface::class);
-        $this->process = $this->prophesize(SymfonyProcess::class);
+        $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
+        $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
             ->setTimeout(Argument::any())
             ->willReturn($this->process);
@@ -61,7 +59,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             public function __construct(
                 ExecutableFinderInterface $executableFinder,
                 private readonly string $executableName,
-                SymfonyProcessFactoryInterface $processFactory,
+                ProcessFactoryInterface $processFactory,
                 TranslatableFactoryInterface $translatableFactory,
             ) {
                 parent::__construct($executableFinder, $processFactory, $translatableFactory);
@@ -135,24 +133,6 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 'timeout' => 200,
             ],
         ];
-    }
-
-    /**
-     * @covers ::findExecutable
-     * @covers ::run
-     */
-    public function testRunFailedException(): void
-    {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
-        $this->process
-            ->mustRun(Argument::cetera())
-            ->willThrow($previous);
-        $sut = $this->createSut();
-
-        $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
-        self::assertTranslatableException(static function () use ($sut) {
-            $sut->run([self::COMMAND_NAME]);
-        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
     }
 
     /**

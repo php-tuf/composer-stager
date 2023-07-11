@@ -3,18 +3,17 @@
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
 use JsonException as PhpJsonException;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
+use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
-use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
-use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
-use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * @package Precondition
@@ -27,7 +26,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
 
     public function __construct(
         private readonly ExecutableFinderInterface $executableFinder,
-        private readonly SymfonyProcessFactoryInterface $processFactory,
+        private readonly ProcessFactoryInterface $processFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($translatableFactory);
@@ -86,7 +85,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
-    private function getProcess(): SymfonyProcess
+    private function getProcess(): ProcessInterface
     {
         try {
             return $this->processFactory->create([
@@ -103,12 +102,12 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         }
     }
 
-    private function isValidExecutable(SymfonyProcess $process): bool
+    private function isValidExecutable(ProcessInterface $process): bool
     {
         try {
             $process->mustRun();
             $output = $process->getOutput();
-        } catch (SymfonyLogicException|SymfonyProcessFailedException) {
+        } catch (ExceptionInterface) {
             return false;
         }
 
