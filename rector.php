@@ -17,7 +17,6 @@ use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\Expression\TernaryFalseExpressionToIfRector;
 use Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector;
 use Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector;
-use Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector;
 use Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector;
 use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector;
@@ -136,7 +135,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-        __DIR__ . '/tools',
     ]);
 
     $rectorConfig->cacheClass(MemoryCacheStorage::class);
@@ -196,7 +194,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(SimplifyDeMorganBinaryRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifydemorganbinaryrector
     $rectorConfig->rule(SimplifyEmptyArrayCheckRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifyemptyarraycheckrector
     $rectorConfig->rule(SimplifyEmptyCheckOnEmptyArrayRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifyemptycheckonemptyarrayrector
-    $rectorConfig->rule(SimplifyForeachToArrayFilterRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifyforeachtoarrayfilterrector
     $rectorConfig->rule(SimplifyForeachToCoalescingRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifyforeachtocoalescingrector
     $rectorConfig->rule(SimplifyFuncGetArgsCountRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifyfuncgetargscountrector
     $rectorConfig->rule(SimplifyIfElseToTernaryRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifyifelsetoternaryrector
