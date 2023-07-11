@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -13,9 +14,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
-use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
-use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable
@@ -36,7 +34,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
 
     private ExecutableFinderInterface|ObjectProphecy $executableFinder;
     private ProcessFactoryInterface|ObjectProphecy $processFactory;
-    private SymfonyProcess|ObjectProphecy $process;
+    private ProcessInterface|ObjectProphecy $process;
 
     protected function setUp(): void
     {
@@ -45,7 +43,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             ->find('composer')
             ->willReturn(self::COMPOSER_PATH);
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
-        $this->process = $this->prophesize(SymfonyProcess::class);
+        $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
             ->mustRun()
             ->willReturn($this->process);
@@ -144,7 +142,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     {
         $this->process
             ->mustRun()
-            ->willThrow(SymfonyProcessFailedException::class);
+            ->willThrow(LogicException::class);
         $sut = $this->createSut();
 
         $message = $this->invalidComposerErrorMessage();
@@ -157,9 +155,10 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         }, PreconditionException::class, $message);
     }
 
+    /** @covers ::isValidExecutable */
     public function testFailedToGetOutput(): void
     {
-        $previous = SymfonyLogicException::class;
+        $previous = LogicException::class;
         $this->process
             ->getOutput()
             ->willThrow($previous);

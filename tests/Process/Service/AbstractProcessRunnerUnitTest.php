@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
-use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
@@ -14,9 +14,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
-use Symfony\Component\Process\Process as SymfonyProcess;
-use Throwable;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
@@ -29,7 +26,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
 
     private ExecutableFinderInterface|ObjectProphecy $executableFinder;
     private ProcessFactoryInterface|ObjectProphecy $processFactory;
-    private SymfonyProcess|ObjectProphecy $process;
+    private ProcessInterface|ObjectProphecy $process;
 
     public function setUp(): void
     {
@@ -38,7 +35,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->find(Argument::any())
             ->willReturnArgument();
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
-        $this->process = $this->prophesize(SymfonyProcess::class);
+        $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
             ->setTimeout(Argument::any())
             ->willReturn($this->process);
@@ -136,36 +133,6 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 'timeout' => 200,
             ],
         ];
-    }
-
-    /**
-     * @covers ::findExecutable
-     * @covers ::run
-     */
-    public function testRunFailedException(): void
-    {
-        // SymfonyProcessFailedException can't be initialized with a known message
-        // value, so dynamically get the message it will generate.
-        try {
-            $process = $this->prophesize(SymfonyProcess::class);
-            $process->isSuccessful()
-                ->willReturn(true);
-            $previous = new SymfonyProcessFailedException($process->reveal());
-        } catch (Throwable $e) {
-            $previous = $e;
-        }
-
-        // Now that we have a "previous" exception with known behavior,
-        // make the mock throw it.
-        $this->process
-            ->mustRun(Argument::cetera())
-            ->willThrow($previous);
-        $sut = $this->createSut();
-
-        $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
-        self::assertTranslatableException(static function () use ($sut) {
-            $sut->run([self::COMMAND_NAME]);
-        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
     }
 
     /**

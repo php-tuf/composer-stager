@@ -17,7 +17,7 @@ parameters:
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: c92ab75feb375dc301c7aa87e33cf259
+    preconditionSystemHash: f6bc746a5f337b75d5fb92dbd4a2c76b
     translationSystemHash: 87157c46b62ac72ca7429de849730847
     gitattributesExportInclude:
         - composer.json
@@ -61,6 +61,9 @@ parameters:
             path: tests/Translation/Value/TestTranslatableExceptionMessage.php
         -
             message: '#Access to an undefined property.*#'
+            path: tests
+        -
+            message: '#Built-in or third party exception ".*" cannot be thrown from public methods.*#'
             path: tests
         -
             message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'

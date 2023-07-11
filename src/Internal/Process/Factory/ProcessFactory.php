@@ -2,12 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
-use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
-use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
-use Symfony\Component\Process\Process as SymfonyProcess;
+use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 
 /**
  * @package Process
@@ -16,29 +14,14 @@ use Symfony\Component\Process\Process as SymfonyProcess;
  */
 final class ProcessFactory implements ProcessFactoryInterface
 {
-    use TranslatableAwareTrait;
-
-    public function __construct(TranslatableFactoryInterface $translatableFactory)
-    {
-        $this->setTranslatableFactory($translatableFactory);
+    public function __construct(
+        private readonly SymfonyProcessFactoryInterface $symfonyProcessFactory,
+        private readonly TranslatableFactoryInterface $translatableFactory,
+    ) {
     }
 
-    /**
-     * @codeCoverageIgnore It's impractical to test a failure creating a Symfony
-     *   process since it depends on a host configuration. It should be possible
-     *   to overcome this limitation through the introduction of a Symfony Process
-     *   proxy in the future.
-     */
-    public function create(array $command): SymfonyProcess
+    public function create(array $command = []): ProcessInterface
     {
-        try {
-            return new SymfonyProcess($command);
-        } catch (SymfonyExceptionInterface $e) {
-            throw new LogicException($this->t(
-                'Failed to create process: %details',
-                $this->p(['%details' => $e->getMessage()]),
-                $this->d()->exceptions(),
-            ), 0, $e);
-        }
+        return new Process($this->symfonyProcessFactory, $this->translatableFactory, $command);
     }
 }

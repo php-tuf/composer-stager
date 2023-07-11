@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\API\Process\Factory;
+namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
-use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
- * Creates process objects.
+ * Creates Symfony Process objects.
  *
  * @package Process
  *
- * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
+ * @internal Don't depend directly on this interface. It may be changed or removed at any time without notice.
  */
-interface ProcessFactoryInterface
+interface SymfonyProcessFactoryInterface
 {
     /**
-     * Creates a process object.
+     * Creates a symfony process object.
      *
      * @param array<string> $command
      *   The command to run and its arguments listed as separate entries. Example:
@@ -29,6 +29,8 @@ interface ProcessFactoryInterface
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
+     *
+     * @see \Symfony\Component\Process\Process::__construct
      */
-    public function create(array $command = []): ProcessInterface;
+    public function create(array $command): SymfonyProcess;
 }

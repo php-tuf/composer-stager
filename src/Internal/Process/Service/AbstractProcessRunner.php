@@ -2,14 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
-use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
-use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 
 /**
  * Provides a base for process runners for consistent process creation and
@@ -42,6 +40,8 @@ abstract class AbstractProcessRunner implements ProcessRunnerInterface
      * @param \PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      *
+     * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
+     *   If the given timeout is negative.
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the command process cannot be created due to host configuration.
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
@@ -56,17 +56,8 @@ abstract class AbstractProcessRunner implements ProcessRunnerInterface
     ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
-
-        try {
-            $process->setTimeout($timeout);
-            $process->mustRun($callback);
-        } catch (SymfonyExceptionInterface $e) {
-            throw new RuntimeException($this->t(
-                'Failed to run process: %details',
-                $this->p(['%details' => $e->getMessage()]),
-                $this->d()->exceptions(),
-            ), 0, $e);
-        }
+        $process->setTimeout($timeout);
+        $process->mustRun($callback);
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
