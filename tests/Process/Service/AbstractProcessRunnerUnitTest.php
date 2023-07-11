@@ -28,7 +28,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
     private ProcessFactoryInterface|ObjectProphecy $processFactory;
     private ProcessInterface|ObjectProphecy $process;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->executableFinder = $this->prophesize(ExecutableFinderInterface::class);
         $this->executableFinder

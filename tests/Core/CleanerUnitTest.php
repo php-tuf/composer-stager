@@ -27,7 +27,7 @@ final class CleanerUnitTest extends TestCase
     private CleanerPreconditionsInterface|ObjectProphecy $preconditions;
     private FilesystemInterface|ObjectProphecy $filesystem;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
         $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);

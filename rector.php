@@ -67,6 +67,7 @@ use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
 use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedClassConstantsRector;
 use Rector\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector;
+use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
@@ -230,7 +231,7 @@ return static function (RectorConfig $rectorConfig): void {
     //$rectorConfig->rule(DataProviderArrayItemsNewlinedRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#dataproviderarrayitemsnewlinedrector
     //$rectorConfig->rule(EncapsedStringsToSprintfRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#encapsedstringstosprintfrector
     $rectorConfig->rule(FuncGetArgsToVariadicParamRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#funcgetargstovariadicparamrector
-    //$rectorConfig->rule(MakeInheritedMethodVisibilitySameAsParentRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#makeinheritedmethodvisibilitysameasparentrector
+    $rectorConfig->rule(MakeInheritedMethodVisibilitySameAsParentRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#makeinheritedmethodvisibilitysameasparentrector
     //$rectorConfig->rule(NewlineBeforeNewAssignSetRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#newlinebeforenewassignsetrector
     $rectorConfig->rule(NullableCompareToNullRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#nullablecomparetonullrector
     $rectorConfig->rule(NullifyUnionNullableRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#nullifyunionnullablerector

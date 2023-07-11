@@ -33,7 +33,7 @@ final class TranslatorUnitTest extends TestCase
     private SymfonyTranslatorProxyInterface|ObjectProphecy $symfonyTranslatorProxy;
     private TranslatableFactoryInterface|ObjectProphecy $translatableFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->domainOptions = new TestDomainOptions();
         $this->localeOptions = new LocaleOptions();

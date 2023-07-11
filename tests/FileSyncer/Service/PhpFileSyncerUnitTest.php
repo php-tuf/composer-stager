@@ -33,7 +33,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     private PathInterface $destination;
     private PathInterface $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
         $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);

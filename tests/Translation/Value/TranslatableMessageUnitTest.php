@@ -19,7 +19,7 @@ final class TranslatableMessageUnitTest extends TestCase
 {
     private TranslatorInterface|ObjectProphecy $translator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->translator = $this->prophesize(TranslatorInterface::class);
     }

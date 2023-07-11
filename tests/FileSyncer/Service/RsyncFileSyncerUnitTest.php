@@ -43,7 +43,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
     private PathInterface $source;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
         $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
