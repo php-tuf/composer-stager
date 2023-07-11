@@ -270,7 +270,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(RemoveEmptyClassMethodRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removeemptyclassmethodrector
     //$rectorConfig->rule(RemoveJustPropertyFetchForAssignRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removejustpropertyfetchforassignrector
     //$rectorConfig->rule(RemoveJustPropertyFetchRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removejustpropertyfetchrector
-    //$rectorConfig->rule(RemoveJustVariableAssignRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removejustvariableassignrector
     $rectorConfig->rule(RemoveNonExistingVarAnnotationRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removenonexistingvarannotationrector
     //$rectorConfig->rule(RemoveNullPropertyInitializationRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removenullpropertyinitializationrector
     $rectorConfig->rule(RemoveParentCallWithoutParentRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removeparentcallwithoutparentrector
@@ -292,9 +291,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(SimplifyMirrorAssignRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#simplifymirrorassignrector
     $rectorConfig->rule(TernaryToBooleanOrFalseToBooleanAndRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#ternarytobooleanorfalsetobooleanandrector
     //$rectorConfig->rule(UnwrapFutureCompatibleIfPhpVersionRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#unwrapfuturecompatibleifphpversionrector
-
-    // DependencyInjection: https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#dependencyinjection
-    //$rectorConfig->rule(AddMethodParentCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#addmethodparentcallrector
 
     // EarlyReturn: https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#earlyreturn
     //$rectorConfig->rule(ChangeAndIfToEarlyReturnRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#changeandiftoearlyreturnrector
@@ -332,28 +328,20 @@ return static function (RectorConfig $rectorConfig): void {
     //$rectorConfig->rule(FuncCallToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#funccalltomethodcallrector
     //$rectorConfig->rule(FuncCallToNewRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#funccalltonewrector
     //$rectorConfig->rule(FuncCallToStaticCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#funccalltostaticcallrector
-    //$rectorConfig->rule(GetAndSetToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#getandsettomethodcallrector
     //$rectorConfig->rule(MergeInterfacesRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#mergeinterfacesrector
     //$rectorConfig->rule(MethodCallToFuncCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#methodcalltofunccallrector
-    //$rectorConfig->rule(MethodCallToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#methodcalltomethodcallrector
     //$rectorConfig->rule(MethodCallToPropertyFetchRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#methodcalltopropertyfetchrector
     //$rectorConfig->rule(MethodCallToStaticCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#methodcalltostaticcallrector
-    //$rectorConfig->rule(NewArgToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#newargtomethodcallrector
-    //$rectorConfig->rule(NewToConstructorInjectionRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#newtoconstructorinjectionrector
-    //$rectorConfig->rule(NewToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#newtomethodcallrector
     //$rectorConfig->rule(NewToStaticCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#newtostaticcallrector
     //$rectorConfig->rule(ParentClassToTraitsRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#parentclasstotraitsrector
     //$rectorConfig->rule(PropertyAssignToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#propertyassigntomethodcallrector
     //$rectorConfig->rule(PropertyFetchToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#propertyfetchtomethodcallrector
-    //$rectorConfig->rule(RemoveAllowDynamicPropertiesAttributeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#removeallowdynamicpropertiesattributerector
     //$rectorConfig->rule(ReplaceParentCallByPropertyCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#replaceparentcallbypropertycallrector
     //$rectorConfig->rule(ReturnTypeWillChangeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#returntypewillchangerector
     //$rectorConfig->rule(StaticCallToFuncCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#staticcalltofunccallrector
     //$rectorConfig->rule(StaticCallToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#staticcalltomethodcallrector
     //$rectorConfig->rule(StaticCallToNewRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#staticcalltonewrector
     //$rectorConfig->rule(StringToClassConstantRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#stringtoclassconstantrector
-    //$rectorConfig->rule(ToStringToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#tostringtomethodcallrector
-    //$rectorConfig->rule(UnsetAndIssetToMethodCallRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#unsetandissettomethodcallrector
     //$rectorConfig->rule(WrapReturnRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#wrapreturnrector
 
     // TypeDeclaration: https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#typedeclaration
@@ -373,7 +361,6 @@ return static function (RectorConfig $rectorConfig): void {
     //$rectorConfig->rule(BinaryOpNullableToInstanceofRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#binaryopnullabletoinstanceofrector
     //$rectorConfig->rule(DeclareStrictTypesRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#declarestricttypesrector
     //$rectorConfig->rule(EmptyOnNullableObjectToInstanceOfRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#emptyonnullableobjecttoinstanceofrector
-    //$rectorConfig->rule(FalseReturnClassMethodToNullableRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#falsereturnclassmethodtonullablerector
     //$rectorConfig->rule(FlipNegatedTernaryInstanceofRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#flipnegatedternaryinstanceofrector
     //$rectorConfig->rule(ParamAnnotationIncorrectNullableRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#paramannotationincorrectnullablerector
     //$rectorConfig->rule(ParamTypeByMethodCallTypeRector::class); // https://github.com/rectorphp/rector/blob/main/docs/rector_rules_overview.md#paramtypebymethodcalltyperector
