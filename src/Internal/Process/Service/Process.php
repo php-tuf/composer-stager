@@ -22,7 +22,7 @@ final class Process implements ProcessInterface
 {
     use TranslatableAwareTrait;
 
-    private ?SymfonyProcess $symfonyProcess = null;
+    private readonly SymfonyProcess $symfonyProcess;
 
     /**
      * @param array<string> $command
@@ -43,15 +43,16 @@ final class Process implements ProcessInterface
     public function __construct(
         private readonly SymfonyProcessFactoryInterface $symfonyProcessFactory,
         TranslatableFactoryInterface $translatableFactory,
-        private readonly array $command = [],
+        array $command = [],
     ) {
         $this->setTranslatableFactory($translatableFactory);
+        $this->symfonyProcess = $this->symfonyProcessFactory->create($command);
     }
 
     public function getOutput(): string
     {
         try {
-            return $this->getSymfonyProcess()->getOutput();
+            return $this->symfonyProcess->getOutput();
         } catch (Throwable $e) {
             throw new LogicException($this->t(
                 'Failed to get process output: %details',
@@ -64,7 +65,7 @@ final class Process implements ProcessInterface
     public function mustRun(?ProcessOutputCallbackInterface $callback = null): self
     {
         try {
-            $this->getSymfonyProcess()->mustRun($callback);
+            $this->symfonyProcess->mustRun($callback);
         } catch (Throwable $e) {
             throw new RuntimeException($this->t(
                 'Failed to run process: %details',
@@ -79,7 +80,7 @@ final class Process implements ProcessInterface
     public function setTimeout(?float $timeout = self::DEFAULT_TIMEOUT): self
     {
         try {
-            $this->getSymfonyProcess()->setTimeout($timeout);
+            $this->symfonyProcess->setTimeout($timeout);
         } catch (Throwable $e) {
             throw new InvalidArgumentException($this->t(
                 'Failed to set process timeout: %details',
@@ -89,20 +90,5 @@ final class Process implements ProcessInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Gets the contained Symfony process if there is one or creates one if there isn't.
-     *
-     * This approach is taken to avoid side effects in the constructor--i.e., calling
-     * the factory in it--which, of course, would complicate unit tests.
-     */
-    private function getSymfonyProcess(): SymfonyProcess
-    {
-        if (!$this->symfonyProcess instanceof SymfonyProcess) {
-            $this->symfonyProcess = $this->symfonyProcessFactory->create($this->command);
-        }
-
-        return $this->symfonyProcess;
     }
 }
