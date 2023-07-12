@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\API\Core;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 
 /**
  * Removes the staging directory.
@@ -37,6 +37,6 @@ interface CleanerInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

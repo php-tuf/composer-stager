@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\API\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 
 /**
  * Recursively syncs files from one directory to another.
@@ -49,6 +49,6 @@ interface FileSyncerInterface
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
@@ -17,7 +17,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-abstract class AbstractProcessRunner implements ProcessRunnerInterface
+abstract class AbstractProcessRunner
 {
     use TranslatableAwareTrait;
 
@@ -52,7 +52,7 @@ abstract class AbstractProcessRunner implements ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);

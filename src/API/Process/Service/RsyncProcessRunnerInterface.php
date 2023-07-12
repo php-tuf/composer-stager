@@ -9,7 +9,7 @@ namespace PhpTuf\ComposerStager\API\Process\Service;
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
-interface RsyncProcessRunnerInterface extends ProcessRunnerInterface
+interface RsyncProcessRunnerInterface
 {
     /**
      * Runs a given rsync command.
@@ -40,6 +40,6 @@ interface RsyncProcessRunnerInterface extends ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

@@ -9,7 +9,7 @@ namespace PhpTuf\ComposerStager\API\Process\Service;
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
-interface ComposerProcessRunnerInterface extends ProcessRunnerInterface
+interface ComposerProcessRunnerInterface
 {
     /**
      * Runs a given Composer command.
@@ -40,6 +40,6 @@ interface ComposerProcessRunnerInterface extends ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }
