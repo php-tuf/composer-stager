@@ -9,7 +9,7 @@ namespace PhpTuf\ComposerStager\API\Process\Service;
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
-interface RsyncProcessRunnerInterface extends ProcessRunnerInterface
+interface RsyncProcessRunnerInterface
 {
     /**
      * Runs a given rsync command.
