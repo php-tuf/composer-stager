@@ -65,7 +65,8 @@ final class Process implements ProcessInterface
     public function mustRun(?OutputCallbackInterface $callback = null): self
     {
         try {
-            $this->symfonyProcess->mustRun($callback);
+            $callbackAdapter = new OutputCallbackAdapter($callback);
+            $this->symfonyProcess->mustRun($callbackAdapter);
         } catch (Throwable $e) {
             throw new RuntimeException($this->t(
                 'Failed to run process: %details',

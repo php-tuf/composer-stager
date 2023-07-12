@@ -3,29 +3,36 @@
 namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Value\OutputTypeEnum;
 
 final class TestOutputCallback implements OutputCallbackInterface
 {
-    /** @var array{'out': array<string>, 'err': array<string>} */
+    private const OUT = 'OUT';
+    private const ERR = 'ERR';
+
+    /** @var array{'OUT': array<string>, 'ERR': array<string>} */
     private array $output = [
-        'out' => [],
-        'err' => [],
+        self::OUT => [],
+        self::ERR => [],
     ];
 
-    /** @phpcs:disable SlevomatCodingStandard.Functions */
-    public function __invoke(string $type, string $buffer): void
+    public function __invoke(OutputTypeEnum $type, string $buffer): void
     {
+        $stringType = $type === OutputTypeEnum::OUT
+            ? self::OUT
+            : self::ERR;
+
         // Avoid OS-sensitivity and simplify comparison by stripping line endings.
-        $this->output[$type][] = rtrim($buffer);
+        $this->output[$stringType][] = rtrim($buffer);
     }
 
     public function getErrorOutput(): array
     {
-        return $this->output['err'];
+        return $this->output[self::ERR];
     }
 
     public function getOutput(): array
     {
-        return $this->output['out'];
+        return $this->output[self::OUT];
     }
 }
