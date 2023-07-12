@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
@@ -52,7 +53,7 @@ abstract class AbstractProcessRunner implements ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);

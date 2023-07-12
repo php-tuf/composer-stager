@@ -7,8 +7,8 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
@@ -50,7 +50,7 @@ final class CleanerUnitTest extends TestCase
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove($this->stagingDir, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->remove($this->stagingDir, null, ProcessInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

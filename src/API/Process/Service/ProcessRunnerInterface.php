@@ -11,6 +11,4 @@ namespace PhpTuf\ComposerStager\API\Process\Service;
  */
 interface ProcessRunnerInterface
 {
-    /** The default process timeout. */
-    public const DEFAULT_TIMEOUT = 120;
 }

@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
 
 /**
  * @package Core
@@ -30,7 +30,7 @@ final class Committer implements CommitterInterface
         PathInterface $activeDir,
         ?PathListInterface $exclusions = null,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
 

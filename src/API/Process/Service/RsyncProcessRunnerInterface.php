@@ -40,6 +40,6 @@ interface RsyncProcessRunnerInterface extends ProcessRunnerInterface
     public function run(
         array $command,
         ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = self::DEFAULT_TIMEOUT,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }
