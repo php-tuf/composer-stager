@@ -24,7 +24,7 @@ interface RsyncProcessRunnerInterface
      *       'path/to/destination',
      *   ];
      *   ```
-     * @param \PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -39,7 +39,7 @@ interface RsyncProcessRunnerInterface
      */
     public function run(
         array $command,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\API\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 
 /**
  * Recursively syncs files from one directory to another.
@@ -33,7 +33,7 @@ interface FileSyncerInterface
      *   directory is automatically excluded in order to prevent infinite
      *   recursion if it is a descendant of the source directory, i.e., if it is
      *   "underneath" or "inside" it.
-     * @param \PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -48,7 +48,7 @@ interface FileSyncerInterface
         PathInterface $source,
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

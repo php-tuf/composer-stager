@@ -16,7 +16,7 @@ namespace PhpTuf\ComposerStager\API\Process\Service;
  *
  * @noinspection PhpUnused
  */
-interface ProcessOutputCallbackInterface
+interface OutputCallbackInterface
 {
     /** Standard output (stdout). */
     public const OUT = 'OUT';

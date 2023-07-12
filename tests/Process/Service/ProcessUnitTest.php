@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -68,7 +68,7 @@ final class ProcessUnitTest extends TestCase
         array $givenConstructorArguments,
         array $expectedCommand,
         array $givenMustRunArguments,
-        ?ProcessOutputCallbackInterface $expectedMustRunArguments,
+        ?OutputCallbackInterface $expectedMustRunArguments,
         array $givenSetTimeoutArguments,
         string $output,
     ): void {
@@ -120,8 +120,8 @@ final class ProcessUnitTest extends TestCase
             'Simple arguments' => [
                 'givenConstructorArguments' => [['simple', 'arguments']],
                 'expectedCommand' => ['simple', 'arguments'],
-                'givenMustRunArguments' => [new TestProcessOutputCallback()],
-                'expectedMustRunArguments' => new TestProcessOutputCallback(),
+                'givenMustRunArguments' => [new TestOutputCallback()],
+                'expectedMustRunArguments' => new TestOutputCallback(),
                 'givenSetTimeoutArguments' => [42],
                 'output' => 'Simple arguments output',
             ],

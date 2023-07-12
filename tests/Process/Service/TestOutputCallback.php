@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 
-final class TestProcessOutputCallback implements ProcessOutputCallbackInterface
+final class TestOutputCallback implements OutputCallbackInterface
 {
     /** @var array{'out': array<string>, 'err': array<string>} */
     private array $output = [

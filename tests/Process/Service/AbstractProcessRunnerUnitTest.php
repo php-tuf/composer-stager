@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -83,7 +83,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         string $executableName,
         array $givenCommand,
         array $expectedCommand,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
         ?int $timeout,
     ): void {
         $this->executableFinder
@@ -129,7 +129,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 'executableName' => 'five',
                 'givenCommand' => [],
                 'expectedCommand' => ['five'],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 200,
             ],
         ];

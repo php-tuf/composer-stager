@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\API\Core;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 
 /**
  * Makes the staged changes live by syncing the active directory with the staging directory.
@@ -26,7 +26,7 @@ interface CommitterInterface
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathListInterface|null $exclusions
      *   Paths to exclude, relative to the staging directory. With rare exception,
      *   you should use the same exclusions when committing as when beginning.
-     * @param \PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -43,7 +43,7 @@ interface CommitterInterface
         PathInterface $stagingDir,
         PathInterface $activeDir,
         ?PathListInterface $exclusions = null,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }
