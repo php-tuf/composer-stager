@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
@@ -62,10 +62,11 @@ final class Process implements ProcessInterface
         }
     }
 
-    public function mustRun(?ProcessOutputCallbackInterface $callback = null): self
+    public function mustRun(?OutputCallbackInterface $callback = null): self
     {
         try {
-            $this->symfonyProcess->mustRun($callback);
+            $callbackAdapter = new OutputCallbackAdapter($callback);
+            $this->symfonyProcess->mustRun($callbackAdapter);
         } catch (Throwable $e) {
             throw new RuntimeException($this->t(
                 'Failed to run process: %details',

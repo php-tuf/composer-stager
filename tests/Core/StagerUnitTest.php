@@ -10,11 +10,11 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -74,7 +74,7 @@ final class StagerUnitTest extends TestCase
     public function testStageWithOptionalParams(
         array $givenCommand,
         array $expectedCommand,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
         ?int $timeout,
     ): void {
         $this->preconditions
@@ -106,7 +106,7 @@ final class StagerUnitTest extends TestCase
                     '--working-dir=' . PathHelper::stagingDirRelative(),
                     self::INERT_COMMAND,
                 ],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];

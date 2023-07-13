@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagerPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
@@ -35,7 +35,7 @@ final class Stager implements StagerInterface
         array $composerCommand,
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
@@ -85,7 +85,7 @@ final class Stager implements StagerInterface
     private function runCommand(
         PathInterface $stagingDir,
         array $composerCommand,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $command = array_merge(

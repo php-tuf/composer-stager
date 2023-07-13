@@ -36,7 +36,7 @@ final class ProcessFunctionalTest extends TestCase
     {
         $buffer = __METHOD__;
         $sut = $this->createSut(['echo', $buffer]);
-        $outputCallback = new TestProcessOutputCallback();
+        $outputCallback = new TestOutputCallback();
 
         $sut->mustRun($outputCallback);
         $sut->mustRun($outputCallback);

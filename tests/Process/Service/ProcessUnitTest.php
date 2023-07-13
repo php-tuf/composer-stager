@@ -6,8 +6,9 @@ use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
@@ -68,12 +69,12 @@ final class ProcessUnitTest extends TestCase
         array $givenConstructorArguments,
         array $expectedCommand,
         array $givenMustRunArguments,
-        ?ProcessOutputCallbackInterface $expectedMustRunArguments,
+        ?OutputCallbackAdapterInterface $expectedMustRunArgument,
         array $givenSetTimeoutArguments,
         string $output,
     ): void {
         $this->symfonyProcess
-            ->mustRun($expectedMustRunArguments)
+            ->mustRun($expectedMustRunArgument)
             ->shouldBeCalledOnce()
             ->willReturn($this->symfonyProcess);
         $this->symfonyProcess
@@ -105,7 +106,7 @@ final class ProcessUnitTest extends TestCase
                 'givenConstructorArguments' => [],
                 'expectedCommand' => [],
                 'givenMustRunArguments' => [],
-                'expectedMustRunArguments' => null,
+                'expectedMustRunArgument' => new OutputCallbackAdapter(null),
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Minimum arguments output',
             ],
@@ -113,15 +114,15 @@ final class ProcessUnitTest extends TestCase
                 'givenConstructorArguments' => [['nullable', 'arguments']],
                 'expectedCommand' => ['nullable', 'arguments'],
                 'givenMustRunArguments' => [null],
-                'expectedMustRunArguments' => null,
+                'expectedMustRunArgument' => new OutputCallbackAdapter(null),
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Nullable arguments output',
             ],
             'Simple arguments' => [
                 'givenConstructorArguments' => [['simple', 'arguments']],
                 'expectedCommand' => ['simple', 'arguments'],
-                'givenMustRunArguments' => [new TestProcessOutputCallback()],
-                'expectedMustRunArguments' => new TestProcessOutputCallback(),
+                'givenMustRunArguments' => [new TestOutputCallback()],
+                'expectedMustRunArgument' => new OutputCallbackAdapter(new TestOutputCallback()),
                 'givenSetTimeoutArguments' => [42],
                 'output' => 'Simple arguments output',
             ],

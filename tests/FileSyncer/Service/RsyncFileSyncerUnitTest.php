@@ -10,11 +10,11 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -75,7 +75,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         string $destination,
         ?PathListInterface $exclusions,
         array $command,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
     ): void {
         $source = new TestPath($source);
         $destination = new TestPath($destination);
@@ -120,7 +120,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     'source/two/',
                     'destination/two',
                 ],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
             ],
             'Siblings: duplicate exclusions given' => [
                 'source' => 'source/three',

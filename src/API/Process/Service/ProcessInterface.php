@@ -20,7 +20,7 @@ interface ProcessInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *   If the process doesn't terminate successfully.
      */
-    public function mustRun(?ProcessOutputCallbackInterface $callback = null): self;
+    public function mustRun(?OutputCallbackInterface $callback = null): self;
 
     /**
      * Returns the current output of the process (STDOUT).

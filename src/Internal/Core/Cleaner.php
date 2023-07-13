@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 
 /**
  * @package Core
@@ -27,7 +27,7 @@ final class Cleaner implements CleanerInterface
     public function clean(
         PathInterface $activeDir,
         PathInterface $stagingDir,
-        ?ProcessOutputCallbackInterface $callback = null,
+        ?OutputCallbackInterface $callback = null,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);

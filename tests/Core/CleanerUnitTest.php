@@ -7,11 +7,11 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
@@ -62,11 +62,8 @@ final class CleanerUnitTest extends TestCase
      *
      * @dataProvider providerCleanWithOptionalParams
      */
-    public function testCleanWithOptionalParams(
-        string $path,
-        ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout,
-    ): void {
+    public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, ?int $timeout): void
+    {
         $path = new TestPath($path);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $path)
@@ -89,7 +86,7 @@ final class CleanerUnitTest extends TestCase
             ],
             [
                 'path' => 'three/four',
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];
