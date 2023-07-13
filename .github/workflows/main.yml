@@ -73,14 +73,14 @@ jobs:
                 with:
                     dependency-versions: "${{ matrix.dependencies }}"
 
-            -   name: "Run core tests with coverage (Linux)"
+            -   name: "Run core tests with coverage"
                 run: "composer test"
-                if: ${{ runner.os == 'Linux' }}
+                if: ${{ matrix.os == 'ubuntu-latest' && matrix.dependencies == 'highest' }}
 
-            # There's no reason to generate coverage data on multiple OS-es--the result should be the same.
-            -   name: "Run core tests without coverage (macOS)"
+            # There's no reason to generate coverage data on multiple jobs--the result should be the same.
+            -   name: "Run core tests without coverage"
                 run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only"
-                if: ${{ runner.os == 'macOS' }}
+                if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu-latest' && matrix.dependencies == 'highest' ) }}
 
             -   name: "Run Windows tests"
                 run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
