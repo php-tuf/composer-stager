@@ -48,9 +48,9 @@ abstract class AbstractPath implements PathInterface
 
     public function resolvedRelativeTo(PathInterface $basePath): string
     {
-        $basePath = $basePath->resolved();
+        $resolvedBasePath = $basePath->resolved();
 
-        return $this->doResolve($basePath);
+        return $this->doResolve($resolvedBasePath);
     }
 
     // Once support for Symfony 4 is dropped, some of this logic could possibly be
