@@ -2,7 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-final class TestStringable
+use Stringable;
+
+final class TestStringable implements Stringable
 {
     public function __construct(private readonly string $string)
     {

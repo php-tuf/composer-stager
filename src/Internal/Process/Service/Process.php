@@ -100,6 +100,7 @@ final class Process implements ProcessInterface
 
     public function setEnv(array $env): ProcessInterface
     {
+        $this->assertValidEnv($env);
         $this->symfonyProcess->setEnv($env);
 
         return $this;
@@ -118,5 +119,47 @@ final class Process implements ProcessInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param array<string|\Stringable> $env
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
+     */
+    private function assertValidEnv(array $env): void
+    {
+        foreach ($env as $name => $value) {
+            $this->assertValidEnvName($name);
+            $this->assertValidEnvValue($value);
+        }
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException */
+    private function assertValidEnvName(mixed $name): void
+    {
+        if (is_string($name) && $name !== '') {
+            return;
+        }
+
+        throw new InvalidArgumentException($this->t(
+            'Environment variable names must be non-zero-length strings. Got %name.',
+            $this->p(['%name' => var_export($name, true)]),
+            $this->d()->exceptions(),
+        ));
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException */
+    private function assertValidEnvValue(mixed $value): void
+    {
+        // Is string or stringable.
+        if (is_string($value) || (is_object($value) && method_exists($value, '__toString'))) {
+            return;
+        }
+
+        throw new InvalidArgumentException($this->t(
+            'Environment variable values must be strings, stringable, or false to unset. Got %name.',
+            $this->p(['%name' => (is_scalar($value) ? var_export($value, true) : get_debug_type($value))]),
+            $this->d()->exceptions(),
+        ));
     }
 }

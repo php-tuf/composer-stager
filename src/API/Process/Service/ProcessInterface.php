@@ -56,7 +56,7 @@ interface ProcessInterface
      * Sets an array of environment variables to set while running the process.
      *
      * @param array<string|\Stringable> $env
-     *   An array of environment variables keyed, by variable name with corresponding
+     *   An array of environment variables, keyed by variable name with corresponding
      *   string or stringable values. In addition to those explicitly specified,
      *   environment variables set on your system will be inherited. You can
      *   prevent this by setting to `false` variables you want to remove. Example:
@@ -67,6 +67,9 @@ interface ProcessInterface
      *         'REMOVE_ME' => false,
      *     );
      *   ```
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
+     *   If the given environment variables contain invalid variable names or values.
      *
      * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getEnv()
      */

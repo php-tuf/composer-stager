@@ -17,6 +17,7 @@ use PhpTuf\ComposerStager\Tests\TestUtils\TestStringable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use stdClass;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\RuntimeException as SymfonyRuntimeException;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -64,6 +65,8 @@ final class ProcessUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertValidEnvName
+     * @covers ::assertValidEnvValue
      * @covers ::getEnv
      * @covers ::getOutput
      * @covers ::mustRun
@@ -245,6 +248,96 @@ final class ProcessUnitTest extends TestCase
             [new SymfonyLogicException('SymfonyLogicException')],
             [new SymfonyRuntimeException()],
             [new Exception('Exception')],
+        ];
+    }
+
+    /**
+     * @covers ::assertValidEnv
+     * @covers ::assertValidEnvName
+     *
+     * @dataProvider providerSetEnvInvalidNames
+     */
+    public function testSetEnvInvalidNames(array $values, string $invalidName): void
+    {
+        $this->symfonyProcess
+            ->setEnv(Argument::cetera())
+            ->shouldNotBeCalled();
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(static function () use ($sut, $values): void {
+            $sut->setEnv($values);
+        }, InvalidArgumentException::class, sprintf(
+            'Environment variable names must be non-zero-length strings. Got %s.',
+            $invalidName,
+        ));
+    }
+
+    public function providerSetEnvInvalidNames(): array
+    {
+        return [
+            'Empty string' => [
+                'values' => ['' => 'ONE'],
+                'invalidName' => "''",
+            ],
+            'Integer' => [
+                'values' => [42 => '42'],
+                'invalidName' => '42',
+            ],
+            'Mixed with valid values' => [
+                'values' => [
+                    'ONE' => 'ONE',
+                    42 => '42',
+                    'THREE' => 'THREE',
+                ],
+                'invalidName' => '42',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::assertValidEnv
+     * @covers ::assertValidEnvValue
+     *
+     * @dataProvider providerSetEnvInvalidValues
+     */
+    public function testSetEnvInvalidValues(array $values, string $invalidValue): void
+    {
+        $this->symfonyProcess
+            ->setEnv(Argument::cetera())
+            ->shouldNotBeCalled();
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(static function () use ($sut, $values): void {
+            $sut->setEnv($values);
+        }, InvalidArgumentException::class, sprintf(
+            'Environment variable values must be strings, stringable, or false to unset. Got %s.',
+            $invalidValue,
+        ));
+    }
+
+    public function providerSetEnvInvalidValues(): array
+    {
+        return [
+            'Array' => [
+                'values' => ['ARRAY' => []],
+                'invalidValue' => 'array',
+            ],
+            'Integer' => [
+                'values' => ['INTEGER' => 42],
+                'invalidValue' => '42',
+            ],
+            'Object' => [
+                'values' => ['OBJECT' => new stdClass()],
+                'invalidValue' => 'stdClass',
+            ],
+            'Mixed with valid values' => [
+                'values' => [
+                    'ONE' => 'ONE',
+                    'TWO' => 42,
+                    'THREE' => 'THREE',
+                ],
+                'invalidValue' => '42',
+            ],
         ];
     }
 
