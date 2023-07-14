@@ -78,6 +78,21 @@ final class Process implements ProcessInterface
         return $this;
     }
 
+    public function run(?OutputCallbackInterface $callback = null): int
+    {
+        $callbackAdapter = new OutputCallbackAdapter($callback);
+
+        try {
+            return $this->symfonyProcess->run($callbackAdapter);
+        } catch (Throwable $e) {
+            throw new RuntimeException($this->t(
+                'Failed to run process: %details',
+                $this->p(['%details' => $e->getMessage()]),
+                $this->d()->exceptions(),
+            ), 0, $e);
+        }
+    }
+
     public function setTimeout(?float $timeout = self::DEFAULT_TIMEOUT): self
     {
         try {

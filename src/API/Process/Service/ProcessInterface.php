@@ -17,6 +17,8 @@ interface ProcessInterface
     /**
      * Runs the process.
      *
+     * This is identical to run() except that an exception is thrown if the process exits with a non-zero exit code.
+     *
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *   If the process doesn't terminate successfully.
      */
@@ -29,6 +31,17 @@ interface ProcessInterface
      *   If the process is not started.
      */
     public function getOutput(): string;
+
+    /**
+     * Runs the process.
+     *
+     * @return int
+     *   The exit status code: 0 for success or non-zero for any error condition.
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
+     *   If the process fails to run for any reason.
+     */
+    public function run(?OutputCallbackInterface $callback = null): int;
 
     /**
      * Sets the process timeout (max. runtime) in seconds.
