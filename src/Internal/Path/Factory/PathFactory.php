@@ -17,12 +17,12 @@ use PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath;
  */
 final class PathFactory implements PathFactoryInterface
 {
-    public static function create(string $path, ?PathInterface $cwd = null): PathInterface
+    public static function create(string $path, ?PathInterface $baseDir = null): PathInterface
     {
         if (Host::isWindows()) {
-            return new WindowsPath($path, $cwd); // @codeCoverageIgnore
+            return new WindowsPath($path, $baseDir); // @codeCoverageIgnore
         }
 
-        return new UnixLikePath($path, $cwd);
+        return new UnixLikePath($path, $baseDir);
     }
 }

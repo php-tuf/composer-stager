@@ -14,37 +14,36 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 final class PathFactoryUnitTest extends TestCase
 {
     /**
-     * It's difficult to meaningfully test this class because it is a static
-     * factory, but it has an external dependency on a PHP constant that cannot
-     * be mocked. The tests themselves must therefore be conditioned on the
-     * external environment, which is obviously "cheating".
-     *
      * @covers ::create
      *
      * @dataProvider providerBasicFunctionality
      */
     public function testBasicFunctionality(
         string $string,
-        PathInterface $cwd,
+        PathInterface $baseDir,
         PathInterface $expected,
-        PathInterface $expectedWithCwd,
+        PathInterface $expectedWithBaseDir,
     ): void {
         $actual = PathFactory::create($string);
-        $actualWithCwd = PathFactory::create($string, $cwd);
+        $actualWithBaseDir = PathFactory::create($string, $baseDir);
 
         self::assertEquals($expected, $actual, 'Returned correct path object.');
-        self::assertEquals($expectedWithCwd, $actualWithCwd, 'Returned correct path object given a $cwd argument.');
+        self::assertEquals($expectedWithBaseDir, $actualWithBaseDir, 'Returned correct path object given a $baseDir argument.');
     }
 
     public function providerBasicFunctionality(): array
     {
+        // It's difficult to meaningfully test this class because it's a static
+        // factory, but it has an external dependency on a PHP constant that cannot
+        // be mocked. The tests themselves must therefore be conditioned on the
+        // external environment (which is obviously "cheating").
         if (Host::isWindows()) {
             return [
                 [
                     'string' => 'test.txt',
-                    'cwd' => new TestPath(),
+                    'baseDir' => new TestPath(),
                     'expected' => new WindowsPath('test.txt'),
-                    'expectedWithCwd' => new WindowsPath('test.txt', new TestPath()),
+                    'expectedWithBaseDir' => new WindowsPath('test.txt', new TestPath()),
                 ],
             ];
         }
@@ -52,9 +51,9 @@ final class PathFactoryUnitTest extends TestCase
         return [
             [
                 'string' => 'test.txt',
-                'cwd' => new TestPath(),
+                'baseDir' => new TestPath(),
                 'expected' => new UnixLikePath('test.txt'),
-                'expectedWithCwd' => new UnixLikePath('test.txt', new TestPath()),
+                'expectedWithBaseDir' => new UnixLikePath('test.txt', new TestPath()),
             ],
         ];
     }

@@ -23,28 +23,28 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 final class UnixLikePathUnitTest extends TestCase
 {
-    public string $cwd;
+    public string $baseDir;
 
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
-        string $cwd,
+        string $baseDir,
         bool $isAbsolute,
         string $resolved,
         string $relativeBase,
         string $resolvedRelativeTo,
     ): void {
-        $sut = new UnixLikePath($given);
         $equalInstance = new UnixLikePath($given);
         $unequalInstance = new UnixLikePath(__DIR__);
         $relativeBase = new UnixLikePath($relativeBase);
+        $sut = new UnixLikePath($given);
 
-        // Dynamically override CWD.
-        $setCwd = function ($cwd): void {
-            $this->cwd = $cwd;
+        // Dynamically override baseDir.
+        $setBaseDir = function ($baseDir): void {
+            $this->baseDir = $baseDir;
         };
-        $setCwd->call($sut, $cwd);
-        $setCwd->call($equalInstance, $cwd);
+        $setBaseDir->call($sut, $baseDir);
+        $setBaseDir->call($equalInstance, $baseDir);
 
         self::assertEquals($resolved, $sut->resolved(), 'Got correct value via explicit method call.');
 
@@ -65,10 +65,10 @@ final class UnixLikePathUnitTest extends TestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            // Special CWD paths.
+            // Special base directory paths.
             'Path as empty string ()' => [
                 'given' => '',
-                'cwd' => '/var/one',
+                'baseDir' => '/var/one',
                 'isAbsolute' => false,
                 'resolved' => '/var/one',
                 'relativeBase' => '/tmp/two',
@@ -76,7 +76,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Path as dot (.)' => [
                 'given' => '.',
-                'cwd' => '/var/three',
+                'baseDir' => '/var/three',
                 'isAbsolute' => false,
                 'resolved' => '/var/three',
                 'relativeBase' => '/tmp/four',
@@ -84,7 +84,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Path as dot-slash (./)' => [
                 'given' => './',
-                'cwd' => '/var/five',
+                'baseDir' => '/var/five',
                 'isAbsolute' => false,
                 'resolved' => '/var/five',
                 'relativeBase' => '/tmp/six',
@@ -93,7 +93,7 @@ final class UnixLikePathUnitTest extends TestCase
             // Relative paths.
             'Relative path as simple string' => [
                 'given' => 'one',
-                'cwd' => '/var',
+                'baseDir' => '/var',
                 'isAbsolute' => false,
                 'resolved' => '/var/one',
                 'relativeBase' => '/tmp',
@@ -101,7 +101,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Relative path as space ( )' => [
                 'given' => ' ',
-                'cwd' => '/var/two',
+                'baseDir' => '/var/two',
                 'isAbsolute' => false,
                 'resolved' => '/var/two/ ',
                 'relativeBase' => '/tmp/three',
@@ -109,7 +109,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Relative path with depth' => [
                 'given' => 'one/two/three/four/five',
-                'cwd' => '/var',
+                'baseDir' => '/var',
                 'isAbsolute' => false,
                 'resolved' => '/var/one/two/three/four/five',
                 'relativeBase' => '/tmp',
@@ -117,7 +117,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Relative path with trailing slash' => [
                 'given' => 'one/two/',
-                'cwd' => '/var',
+                'baseDir' => '/var',
                 'isAbsolute' => false,
                 'resolved' => '/var/one/two',
                 'relativeBase' => '/tmp',
@@ -125,7 +125,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Relative path with repeating directory separators' => [
                 'given' => 'one//two////three',
-                'cwd' => '/var/four',
+                'baseDir' => '/var/four',
                 'isAbsolute' => false,
                 'resolved' => '/var/four/one/two/three',
                 'relativeBase' => '/tmp/five',
@@ -133,23 +133,23 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Relative path with double dots (..)' => [
                 'given' => '../one/../two/three/four/../../five/six/..',
-                'cwd' => '/var/seven/eight',
+                'baseDir' => '/var/seven/eight',
                 'isAbsolute' => false,
                 'resolved' => '/var/seven/two/five',
                 'relativeBase' => '/tmp/nine/ten',
                 'resolvedRelativeTo' => '/tmp/nine/two/five',
             ],
-            'Relative path with leading double dots (..) and root path CWD' => [
+            'Relative path with leading double dots (..) and root path base directory' => [
                 'given' => '../one/two',
-                'cwd' => '/',
+                'baseDir' => '/',
                 'isAbsolute' => false,
                 'resolved' => '/one/two',
                 'relativeBase' => '/three/..',
                 'resolvedRelativeTo' => '/one/two',
             ],
-            'Silly combination of relative path as double dots (..) with root path CWD' => [
+            'Silly combination of relative path as double dots (..) with root path base directory' => [
                 'given' => '..',
-                'cwd' => '/',
+                'baseDir' => '/',
                 'isAbsolute' => false,
                 'resolved' => '/',
                 'relativeBase' => '/',
@@ -157,7 +157,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Crazy relative path' => [
                 'given' => 'one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
-                'cwd' => '/seven/eight/nine/ten',
+                'baseDir' => '/seven/eight/nine/ten',
                 'isAbsolute' => false,
                 'resolved' => '/seven/eight/nine/ten/one/six',
                 'relativeBase' => '/eleven/twelve/thirteen/fourteen',
@@ -166,7 +166,7 @@ final class UnixLikePathUnitTest extends TestCase
             // Absolute paths.
             'Absolute path to the root' => [
                 'given' => '/',
-                'cwd' => '/',
+                'baseDir' => '/',
                 'isAbsolute' => true,
                 'resolved' => '/',
                 'relativeBase' => '/',
@@ -174,7 +174,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Absolute path as simple string' => [
                 'given' => '/one',
-                'cwd' => '/var',
+                'baseDir' => '/var',
                 'isAbsolute' => true,
                 'resolved' => '/one',
                 'relativeBase' => '/tmp',
@@ -182,7 +182,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Absolute path with depth' => [
                 'given' => '/one/two/three/four/five',
-                'cwd' => '/var/six/seven/eight/nine',
+                'baseDir' => '/var/six/seven/eight/nine',
                 'isAbsolute' => true,
                 'resolved' => '/one/two/three/four/five',
                 'relativeBase' => '/tmp/ten/eleven/twelve/thirteen',
@@ -190,7 +190,7 @@ final class UnixLikePathUnitTest extends TestCase
             ],
             'Crazy absolute path' => [
                 'given' => '/one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
-                'cwd' => '/var/seven/eight/nine',
+                'baseDir' => '/var/seven/eight/nine',
                 'isAbsolute' => true,
                 'resolved' => '/one/six',
                 'relativeBase' => '/tmp/ten/eleven/twelve',
@@ -199,25 +199,25 @@ final class UnixLikePathUnitTest extends TestCase
         ];
     }
 
-    /** @dataProvider providerCwdArgument */
-    public function testOptionalCwdArgument(string $path, ?PathInterface $cwd, string $resolved): void
+    /** @dataProvider providerBaseDirArgument */
+    public function testOptionalBaseDirArgument(string $path, ?PathInterface $baseDir, string $resolved): void
     {
-        $sut = new UnixLikePath($path, $cwd);
+        $sut = new UnixLikePath($path, $baseDir);
 
         self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');
     }
 
-    public function providerCwdArgument(): array
+    public function providerBaseDirArgument(): array
     {
         return [
-            'With $cwd argument.' => [
+            'With $baseDir argument.' => [
                 'path' => 'one',
-                'cwd' => new TestPath('/arg'),
+                'baseDir' => new TestPath('/arg'),
                 'resolved' => '/arg/one',
             ],
-            'With explicit null $cwd argument' => [
+            'With explicit null $baseDir argument' => [
                 'path' => 'one',
-                'cwd' => null,
+                'baseDir' => null,
                 'resolved' => sprintf('%s/one', getcwd()),
             ],
         ];

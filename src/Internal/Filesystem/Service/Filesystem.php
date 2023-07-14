@@ -166,9 +166,9 @@ final class Filesystem implements FilesystemInterface
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
-        $cwd = $this->pathFactory::create('..', $path);
+        $baseDir = $this->pathFactory::create('..', $path);
 
-        return $this->pathFactory::create($target, $cwd);
+        return $this->pathFactory::create($target, $baseDir);
     }
 
     public function remove(
