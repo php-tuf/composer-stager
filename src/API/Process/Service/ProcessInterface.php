@@ -15,6 +15,15 @@ interface ProcessInterface
     public const DEFAULT_TIMEOUT = 120;
 
     /**
+     * Gets the array of environment variables to be set while running the process.
+     *
+     * @return array<string|\Stringable>
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::setEnv()
+     */
+    public function getEnv(): array;
+
+    /**
      * Returns the current output of the process (STDOUT).
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
@@ -42,6 +51,26 @@ interface ProcessInterface
      *   If the process fails to run for any reason.
      */
     public function run(?OutputCallbackInterface $callback = null): int;
+
+    /**
+     * Sets an array of environment variables to set while running the process.
+     *
+     * @param array<string|\Stringable> $env
+     *   An array of environment variables keyed, by variable name with corresponding
+     *   string or stringable values. In addition to those explicitly specified,
+     *   environment variables set on your system will be inherited. You can
+     *   prevent this by setting to `false` variables you want to remove. Example:
+     *   ```php
+     *     $process->setEnv(
+     *         'STRING_VAR' => 'a string',
+     *         'STRINGABLE_VAR' => new StringableObject(),
+     *         'REMOVE_ME' => false,
+     *     );
+     *   ```
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getEnv()
+     */
+    public function setEnv(array $env): self;
 
     /**
      * Sets the process timeout (max. runtime) in seconds.

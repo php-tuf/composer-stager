@@ -49,6 +49,11 @@ final class Process implements ProcessInterface
         $this->symfonyProcess = $this->symfonyProcessFactory->create($command);
     }
 
+    public function getEnv(): array
+    {
+        return $this->symfonyProcess->getEnv();
+    }
+
     public function getOutput(): string
     {
         try {
@@ -91,6 +96,13 @@ final class Process implements ProcessInterface
                 $this->d()->exceptions(),
             ), 0, $e);
         }
+    }
+
+    public function setEnv(array $env): ProcessInterface
+    {
+        $this->symfonyProcess->setEnv($env);
+
+        return $this;
     }
 
     public function setTimeout(?float $timeout = self::DEFAULT_TIMEOUT): self

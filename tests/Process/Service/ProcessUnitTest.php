@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterfac
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestStringable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -63,9 +64,11 @@ final class ProcessUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::getEnv
      * @covers ::getOutput
      * @covers ::mustRun
      * @covers ::run
+     * @covers ::setEnv
      * @covers ::setTimeout
      *
      * @dataProvider providerBasicFunctionality
@@ -75,10 +78,19 @@ final class ProcessUnitTest extends TestCase
         array $expectedCommand,
         array $givenRunArguments,
         ?OutputCallbackAdapterInterface $expectedRunArgument,
+        array $envVars,
         array $givenSetTimeoutArguments,
         string $output,
     ): void {
         $expectedRunReturn = 0;
+        $this->symfonyProcess
+            ->getEnv()
+            ->shouldBeCalledOnce()
+            ->willReturn($envVars);
+        $this->symfonyProcess
+            ->getOutput()
+            ->shouldBeCalledOnce()
+            ->willReturn($output);
         $this->symfonyProcess
             ->mustRun($expectedRunArgument)
             ->shouldBeCalledOnce()
@@ -88,27 +100,31 @@ final class ProcessUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($expectedRunReturn);
         $this->symfonyProcess
-            ->setTimeout(...$givenSetTimeoutArguments)
+            ->setEnv($envVars)
             ->shouldBeCalledOnce()
             ->willReturn($this->symfonyProcess);
         $this->symfonyProcess
-            ->getOutput()
+            ->setTimeout(...$givenSetTimeoutArguments)
             ->shouldBeCalledOnce()
-            ->willReturn($output);
+            ->willReturn($this->symfonyProcess);
         $this->symfonyProcessFactory
             ->create($expectedCommand)
             ->shouldBeCalledOnce();
         $sut = $this->createSut($givenConstructorArguments, $expectedCommand);
 
+        $actualSetEnvReturn = $sut->setEnv($envVars);
+        $actualEnv = $sut->getEnv();
+        $actualOutput = $sut->getOutput();
         $actualMustRunReturn = $sut->mustRun(...$givenRunArguments);
         $actualRunReturn = $sut->run(...$givenRunArguments);
         $actualSetTimeoutReturn = $sut->setTimeout(...$givenSetTimeoutArguments);
-        $actualOutput = $sut->getOutput();
 
+        self::assertSame($actualEnv, $envVars, 'Returned correct output.');
+        self::assertSame($output, $actualOutput, 'Returned correct output.');
         self::assertSame($sut, $actualMustRunReturn, 'Returned "self" from ::mustRun().');
         self::assertSame($expectedRunReturn, $actualRunReturn, 'Returned correct status code from ::run().');
-        self::assertSame($sut, $actualSetTimeoutReturn, 'Returned "self" from ::timeout().');
-        self::assertSame($output, $actualOutput, 'Returned correct output.');
+        self::assertSame($sut, $actualSetEnvReturn, 'Returned "self" from ::setEnv().');
+        self::assertSame($sut, $actualSetTimeoutReturn, 'Returned "self" from ::setTimeout().');
     }
 
     public function providerBasicFunctionality(): array
@@ -119,6 +135,7 @@ final class ProcessUnitTest extends TestCase
                 'expectedCommand' => [],
                 'givenRunArguments' => [],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
+                'envVars' => [],
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Minimum arguments output',
             ],
@@ -127,6 +144,7 @@ final class ProcessUnitTest extends TestCase
                 'expectedCommand' => ['nullable', 'arguments'],
                 'givenRunArguments' => [null],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
+                'envVars' => [],
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Nullable arguments output',
             ],
@@ -135,6 +153,10 @@ final class ProcessUnitTest extends TestCase
                 'expectedCommand' => ['simple', 'arguments'],
                 'givenRunArguments' => [new TestOutputCallback()],
                 'expectedRunArgument' => new OutputCallbackAdapter(new TestOutputCallback()),
+                'envVars' => [
+                    'STRING' => 'example',
+                    'STRINGABLE' => new TestStringable('example'),
+                ],
                 'givenSetTimeoutArguments' => [42],
                 'output' => 'Simple arguments output',
             ],
