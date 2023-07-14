@@ -15,6 +15,14 @@ interface ProcessInterface
     public const DEFAULT_TIMEOUT = 120;
 
     /**
+     * Returns the current output of the process (STDOUT).
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     *   If the process is not started.
+     */
+    public function getOutput(): string;
+
+    /**
      * Runs the process.
      *
      * This is identical to run() except that an exception is thrown if the process exits with a non-zero exit code.
@@ -23,14 +31,6 @@ interface ProcessInterface
      *   If the process doesn't terminate successfully.
      */
     public function mustRun(?OutputCallbackInterface $callback = null): self;
-
-    /**
-     * Returns the current output of the process (STDOUT).
-     *
-     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *   If the process is not started.
-     */
-    public function getOutput(): string;
 
     /**
      * Runs the process.
