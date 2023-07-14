@@ -13,9 +13,11 @@ use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterfac
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestStringable;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use stdClass;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\RuntimeException as SymfonyRuntimeException;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -63,9 +65,13 @@ final class ProcessUnitTest extends TestCase
 
     /**
      * @covers ::__construct
+     * @covers ::assertValidEnvName
+     * @covers ::assertValidEnvValue
+     * @covers ::getEnv
      * @covers ::getOutput
      * @covers ::mustRun
      * @covers ::run
+     * @covers ::setEnv
      * @covers ::setTimeout
      *
      * @dataProvider providerBasicFunctionality
@@ -75,10 +81,19 @@ final class ProcessUnitTest extends TestCase
         array $expectedCommand,
         array $givenRunArguments,
         ?OutputCallbackAdapterInterface $expectedRunArgument,
+        array $envVars,
         array $givenSetTimeoutArguments,
         string $output,
     ): void {
         $expectedRunReturn = 0;
+        $this->symfonyProcess
+            ->getEnv()
+            ->shouldBeCalledOnce()
+            ->willReturn($envVars);
+        $this->symfonyProcess
+            ->getOutput()
+            ->shouldBeCalledOnce()
+            ->willReturn($output);
         $this->symfonyProcess
             ->mustRun($expectedRunArgument)
             ->shouldBeCalledOnce()
@@ -88,27 +103,31 @@ final class ProcessUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($expectedRunReturn);
         $this->symfonyProcess
-            ->setTimeout(...$givenSetTimeoutArguments)
+            ->setEnv($envVars)
             ->shouldBeCalledOnce()
             ->willReturn($this->symfonyProcess);
         $this->symfonyProcess
-            ->getOutput()
+            ->setTimeout(...$givenSetTimeoutArguments)
             ->shouldBeCalledOnce()
-            ->willReturn($output);
+            ->willReturn($this->symfonyProcess);
         $this->symfonyProcessFactory
             ->create($expectedCommand)
             ->shouldBeCalledOnce();
         $sut = $this->createSut($givenConstructorArguments, $expectedCommand);
 
+        $actualSetEnvReturn = $sut->setEnv($envVars);
+        $actualEnv = $sut->getEnv();
+        $actualOutput = $sut->getOutput();
         $actualMustRunReturn = $sut->mustRun(...$givenRunArguments);
         $actualRunReturn = $sut->run(...$givenRunArguments);
         $actualSetTimeoutReturn = $sut->setTimeout(...$givenSetTimeoutArguments);
-        $actualOutput = $sut->getOutput();
 
+        self::assertSame($actualEnv, $envVars, 'Returned correct output.');
+        self::assertSame($output, $actualOutput, 'Returned correct output.');
         self::assertSame($sut, $actualMustRunReturn, 'Returned "self" from ::mustRun().');
         self::assertSame($expectedRunReturn, $actualRunReturn, 'Returned correct status code from ::run().');
-        self::assertSame($sut, $actualSetTimeoutReturn, 'Returned "self" from ::timeout().');
-        self::assertSame($output, $actualOutput, 'Returned correct output.');
+        self::assertSame($sut, $actualSetEnvReturn, 'Returned "self" from ::setEnv().');
+        self::assertSame($sut, $actualSetTimeoutReturn, 'Returned "self" from ::setTimeout().');
     }
 
     public function providerBasicFunctionality(): array
@@ -119,6 +138,7 @@ final class ProcessUnitTest extends TestCase
                 'expectedCommand' => [],
                 'givenRunArguments' => [],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
+                'envVars' => [],
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Minimum arguments output',
             ],
@@ -127,6 +147,7 @@ final class ProcessUnitTest extends TestCase
                 'expectedCommand' => ['nullable', 'arguments'],
                 'givenRunArguments' => [null],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
+                'envVars' => [],
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Nullable arguments output',
             ],
@@ -135,6 +156,10 @@ final class ProcessUnitTest extends TestCase
                 'expectedCommand' => ['simple', 'arguments'],
                 'givenRunArguments' => [new TestOutputCallback()],
                 'expectedRunArgument' => new OutputCallbackAdapter(new TestOutputCallback()),
+                'envVars' => [
+                    'STRING' => 'example',
+                    'STRINGABLE' => new TestStringable('example'),
+                ],
                 'givenSetTimeoutArguments' => [42],
                 'output' => 'Simple arguments output',
             ],
@@ -223,6 +248,96 @@ final class ProcessUnitTest extends TestCase
             [new SymfonyLogicException('SymfonyLogicException')],
             [new SymfonyRuntimeException()],
             [new Exception('Exception')],
+        ];
+    }
+
+    /**
+     * @covers ::assertValidEnv
+     * @covers ::assertValidEnvName
+     *
+     * @dataProvider providerSetEnvInvalidNames
+     */
+    public function testSetEnvInvalidNames(array $values, string $invalidName): void
+    {
+        $this->symfonyProcess
+            ->setEnv(Argument::cetera())
+            ->shouldNotBeCalled();
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(static function () use ($sut, $values): void {
+            $sut->setEnv($values);
+        }, InvalidArgumentException::class, sprintf(
+            'Environment variable names must be non-zero-length strings. Got %s.',
+            $invalidName,
+        ));
+    }
+
+    public function providerSetEnvInvalidNames(): array
+    {
+        return [
+            'Empty string' => [
+                'values' => ['' => 'ONE'],
+                'invalidName' => "''",
+            ],
+            'Integer' => [
+                'values' => [42 => '42'],
+                'invalidName' => '42',
+            ],
+            'Mixed with valid values' => [
+                'values' => [
+                    'ONE' => 'ONE',
+                    42 => '42',
+                    'THREE' => 'THREE',
+                ],
+                'invalidName' => '42',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::assertValidEnv
+     * @covers ::assertValidEnvValue
+     *
+     * @dataProvider providerSetEnvInvalidValues
+     */
+    public function testSetEnvInvalidValues(array $values, string $invalidValue): void
+    {
+        $this->symfonyProcess
+            ->setEnv(Argument::cetera())
+            ->shouldNotBeCalled();
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(static function () use ($sut, $values): void {
+            $sut->setEnv($values);
+        }, InvalidArgumentException::class, sprintf(
+            'Environment variable values must be strings, stringable, or false to unset. Got %s.',
+            $invalidValue,
+        ));
+    }
+
+    public function providerSetEnvInvalidValues(): array
+    {
+        return [
+            'Array' => [
+                'values' => ['ARRAY' => []],
+                'invalidValue' => 'array',
+            ],
+            'Integer' => [
+                'values' => ['INTEGER' => 42],
+                'invalidValue' => '42',
+            ],
+            'Object' => [
+                'values' => ['OBJECT' => new stdClass()],
+                'invalidValue' => 'stdClass',
+            ],
+            'Mixed with valid values' => [
+                'values' => [
+                    'ONE' => 'ONE',
+                    'TWO' => 42,
+                    'THREE' => 'THREE',
+                ],
+                'invalidValue' => '42',
+            ],
         ];
     }
 
