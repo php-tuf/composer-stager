@@ -98,16 +98,16 @@ abstract class TestCase extends PHPUnitTestCase
         }
     }
 
-    protected static function createFiles(string $baseDir, array $filenames): void
+    protected static function createFiles(string $basePath, array $filenames): void
     {
         foreach ($filenames as $filename) {
-            self::createFile($baseDir, $filename);
+            self::createFile($basePath, $filename);
         }
     }
 
-    protected static function createFile(string $baseDir, string $filename): void
+    protected static function createFile(string $basePath, string $filename): void
     {
-        $filename = PathFactory::create("{$baseDir}/{$filename}")->resolved();
+        $filename = PathFactory::create("{$basePath}/{$filename}")->resolved();
         static::ensureParentDirectory($filename);
 
         $touchResult = touch($filename);
@@ -132,34 +132,34 @@ abstract class TestCase extends PHPUnitTestCase
         );
     }
 
-    protected static function createSymlinks(string $baseDir, array $symlinks): void
+    protected static function createSymlinks(string $basePath, array $symlinks): void
     {
         foreach ($symlinks as $link => $target) {
-            self::createSymlink($baseDir, $link, $target);
+            self::createSymlink($basePath, $link, $target);
         }
     }
 
-    protected static function createSymlink(string $baseDir, string $link, string $target): void
+    protected static function createSymlink(string $basePath, string $link, string $target): void
     {
-        $link = PathFactory::create("{$baseDir}/{$link}");
-        $target = PathFactory::create("{$baseDir}/{$target}");
+        $link = PathFactory::create("{$basePath}/{$link}");
+        $target = PathFactory::create("{$basePath}/{$target}");
 
         self::prepareForLink($link, $target);
 
         symlink($target->resolved(), $link->resolved());
     }
 
-    protected static function createHardlinks(string $baseDir, array $symlinks): void
+    protected static function createHardlinks(string $basePath, array $symlinks): void
     {
         foreach ($symlinks as $link => $target) {
-            self::createHardlink($baseDir, $link, $target);
+            self::createHardlink($basePath, $link, $target);
         }
     }
 
-    protected static function createHardlink(string $baseDir, string $link, string $target): void
+    protected static function createHardlink(string $basePath, string $link, string $target): void
     {
-        $link = PathFactory::create("{$baseDir}/{$link}");
-        $target = PathFactory::create("{$baseDir}/{$target}");
+        $link = PathFactory::create("{$basePath}/{$link}");
+        $target = PathFactory::create("{$basePath}/{$target}");
 
         self::prepareForLink($link, $target);
 

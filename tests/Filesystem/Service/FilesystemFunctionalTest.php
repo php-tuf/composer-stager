@@ -255,11 +255,11 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testReadlink(string $given, string $expectedRaw, string $expectedResolved): void
     {
-        $baseDir = self::sourceDir();
-        $symlinkPath = PathFactory::create('symlink.txt', $baseDir);
-        $hardLinkPath = PathFactory::create('hard_link.txt', $baseDir);
-        $targetPath = PathFactory::create($given, $baseDir);
-        chdir($baseDir->resolved());
+        $basePath = self::sourceDir();
+        $symlinkPath = PathFactory::create('symlink.txt', $basePath);
+        $hardLinkPath = PathFactory::create('hard_link.txt', $basePath);
+        $targetPath = PathFactory::create($given, $basePath);
+        chdir($basePath->resolved());
         touch($targetPath->resolved());
         symlink($given, $symlinkPath->resolved());
         link($given, $hardLinkPath->resolved());
@@ -282,9 +282,9 @@ final class FilesystemFunctionalTest extends TestCase
     public function providerReadlink(): array
     {
         $absolute = static function ($path): string {
-            $baseDir = self::sourceDir();
+            $basePath = self::sourceDir();
 
-            return PathFactory::create($path, $baseDir)->resolved();
+            return PathFactory::create($path, $basePath)->resolved();
         };
 
         // Note: relative links cannot be distinguished from absolute links on Windows,

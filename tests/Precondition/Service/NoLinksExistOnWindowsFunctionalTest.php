@@ -51,12 +51,12 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      */
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
-        $baseDir = self::activeDirPath();
-        $link = PathFactory::create('link.txt', $baseDir)->resolved();
-        $target = PathFactory::create('target.txt', $baseDir)->resolved();
+        $basePath = self::activeDirPath();
+        $link = PathFactory::create('link.txt', $basePath)->resolved();
+        $target = PathFactory::create('target.txt', $basePath)->resolved();
         touch($target);
-        self::createSymlinks($baseDir->resolved(), $symlinks);
-        self::createHardlinks($baseDir->resolved(), $hardLinks);
+        self::createSymlinks($basePath->resolved(), $symlinks);
+        self::createHardlinks($basePath->resolved(), $hardLinks);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
@@ -64,7 +64,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
 
         $message = sprintf(
             'The active directory at %s contains links, which is not supported on Windows. The first one is %s.',
-            $baseDir->resolved(),
+            $basePath->resolved(),
             $link,
         );
         self::assertTranslatableException(function () use ($sut): void {

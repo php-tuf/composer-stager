@@ -20,15 +20,15 @@ final class PathFactoryUnitTest extends TestCase
      */
     public function testBasicFunctionality(
         string $string,
-        PathInterface $baseDir,
+        PathInterface $basePath,
         PathInterface $expected,
         PathInterface $expectedWithBaseDir,
     ): void {
         $actual = PathFactory::create($string);
-        $actualWithBaseDir = PathFactory::create($string, $baseDir);
+        $actualWithBaseDir = PathFactory::create($string, $basePath);
 
         self::assertEquals($expected, $actual, 'Returned correct path object.');
-        self::assertEquals($expectedWithBaseDir, $actualWithBaseDir, 'Returned correct path object given a $baseDir argument.');
+        self::assertEquals($expectedWithBaseDir, $actualWithBaseDir, 'Returned correct path object given a $basePath argument.');
     }
 
     public function providerBasicFunctionality(): array

@@ -23,12 +23,12 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 final class UnixLikePathUnitTest extends TestCase
 {
-    public string $baseDir;
+    public string $basePath;
 
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
-        string $baseDir,
+        string $basePath,
         bool $isAbsolute,
         string $resolved,
         string $relativeBase,
@@ -40,11 +40,11 @@ final class UnixLikePathUnitTest extends TestCase
         $sut = new UnixLikePath($given);
 
         // Dynamically override baseDir.
-        $setBaseDir = function ($baseDir): void {
-            $this->baseDir = $baseDir;
+        $setBaseDir = function ($basePath): void {
+            $this->basePath = $basePath;
         };
-        $setBaseDir->call($sut, $baseDir);
-        $setBaseDir->call($equalInstance, $baseDir);
+        $setBaseDir->call($sut, $basePath);
+        $setBaseDir->call($equalInstance, $basePath);
 
         self::assertEquals($resolved, $sut->resolved(), 'Got correct value via explicit method call.');
 
@@ -65,7 +65,7 @@ final class UnixLikePathUnitTest extends TestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            // Special base directory paths.
+            // Special base paths.
             'Path as empty string ()' => [
                 'given' => '',
                 'baseDir' => '/var/one',
@@ -139,7 +139,7 @@ final class UnixLikePathUnitTest extends TestCase
                 'relativeBase' => '/tmp/nine/ten',
                 'resolvedRelativeTo' => '/tmp/nine/two/five',
             ],
-            'Relative path with leading double dots (..) and root path base directory' => [
+            'Relative path with leading double dots (..) and root base path' => [
                 'given' => '../one/two',
                 'baseDir' => '/',
                 'isAbsolute' => false,
@@ -147,7 +147,7 @@ final class UnixLikePathUnitTest extends TestCase
                 'relativeBase' => '/three/..',
                 'resolvedRelativeTo' => '/one/two',
             ],
-            'Silly combination of relative path as double dots (..) with root path base directory' => [
+            'Silly combination of relative path as double dots (..) with root base path' => [
                 'given' => '..',
                 'baseDir' => '/',
                 'isAbsolute' => false,
@@ -200,9 +200,9 @@ final class UnixLikePathUnitTest extends TestCase
     }
 
     /** @dataProvider providerBaseDirArgument */
-    public function testOptionalBaseDirArgument(string $path, ?PathInterface $baseDir, string $resolved): void
+    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $resolved): void
     {
-        $sut = new UnixLikePath($path, $baseDir);
+        $sut = new UnixLikePath($path, $basePath);
 
         self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');
     }
@@ -210,12 +210,12 @@ final class UnixLikePathUnitTest extends TestCase
     public function providerBaseDirArgument(): array
     {
         return [
-            'With $baseDir argument.' => [
+            'With $basePath argument.' => [
                 'path' => 'one',
                 'baseDir' => new TestPath('/arg'),
                 'resolved' => '/arg/one',
             ],
-            'With explicit null $baseDir argument' => [
+            'With explicit null $basePath argument' => [
                 'path' => 'one',
                 'baseDir' => null,
                 'resolved' => sprintf('%s/one', getcwd()),

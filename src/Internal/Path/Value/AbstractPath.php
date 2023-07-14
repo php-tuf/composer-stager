@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
  */
 abstract class AbstractPath implements PathInterface
 {
-    protected string $baseDir;
+    protected string $basePath;
 
     abstract protected function doResolve(string $basePath): string;
 
@@ -20,19 +20,19 @@ abstract class AbstractPath implements PathInterface
      *   The path string may be absolute or relative to the current working
      *   directory as returned by `getcwd()` at runtime, e.g., "/var/www/example"
      *   or "example". Nothing needs to actually exist at the path.
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $baseDir
-     *   Optionally override the base directory used for relative paths.
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $basePath
+     *   Optionally override the base path used for relative paths.
      *   Nothing needs to actually exist at the path. Therefore, it is simply
      *   assumed to represent a directory, as opposed to a file--even if
      *   it has an extension, which is no guarantee of type.
      */
-    public function __construct(protected readonly string $path, ?PathInterface $baseDir = null)
+    public function __construct(protected readonly string $path, ?PathInterface $basePath = null)
     {
         // Especially since it accepts relative paths, an immutable path value
         // object should be immune to environmental details like the current
         // working directory. Cache the CWD at time of creation.
-        $this->baseDir = $baseDir instanceof PathInterface
-            ? $baseDir->resolved()
+        $this->basePath = $basePath instanceof PathInterface
+            ? $basePath->resolved()
             : $this->getcwd();
     }
 
@@ -43,7 +43,7 @@ abstract class AbstractPath implements PathInterface
 
     public function resolved(): string
     {
-        return $this->doResolve($this->baseDir);
+        return $this->doResolve($this->basePath);
     }
 
     public function resolvedRelativeTo(PathInterface $basePath): string

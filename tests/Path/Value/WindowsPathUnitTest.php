@@ -25,30 +25,30 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 final class WindowsPathUnitTest extends TestCase
 {
-    public string $baseDir;
+    public string $basePath;
 
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
-        string $baseDir,
+        string $basePath,
         bool $isAbsolute,
         string $resolved,
         string $relativeBase,
         string $resolvedRelativeTo,
     ): void {
-        self::fixSeparatorsMultiple($given, $baseDir, $resolved, $relativeBase, $resolvedRelativeTo);
+        self::fixSeparatorsMultiple($given, $basePath, $resolved, $relativeBase, $resolvedRelativeTo);
 
         $sut = new WindowsPath($given);
         $equalInstance = new WindowsPath($given);
         $unequalInstance = new WindowsPath(__DIR__);
         $relativeBase = new WindowsPath($relativeBase);
 
-        // Dynamically override base directory.
-        $setBaseDir = function ($baseDir): void {
-            $this->baseDir = $baseDir;
+        // Dynamically override base path.
+        $setBaseDir = function ($basePath): void {
+            $this->basePath = $basePath;
         };
-        $setBaseDir->call($sut, $baseDir);
-        $setBaseDir->call($equalInstance, $baseDir);
+        $setBaseDir->call($sut, $basePath);
+        $setBaseDir->call($equalInstance, $basePath);
 
         self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
         self::assertEquals($given, $sut->raw(), 'Correctly returned raw path.');
@@ -67,7 +67,7 @@ final class WindowsPathUnitTest extends TestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            // Special base directory paths.
+            // Special base path paths.
             'Path as empty string ()' => [
                 'given' => '',
                 'baseDir' => 'C:\\Windows\\One',
@@ -133,7 +133,7 @@ final class WindowsPathUnitTest extends TestCase
                 'relativeBase' => 'D:\\Users\\Nine\\Ten',
                 'resolvedRelativeTo' => 'D:\\Users\\Nine\\Two\\Five',
             ],
-            'Relative path with leading double dots (..) and root path base directory' => [
+            'Relative path with leading double dots (..) and root path base path' => [
                 'given' => '..\\One\\Two',
                 'baseDir' => 'C:\\',
                 'isAbsolute' => false,
@@ -141,7 +141,7 @@ final class WindowsPathUnitTest extends TestCase
                 'relativeBase' => 'D:\\',
                 'resolvedRelativeTo' => 'D:\\One\\Two',
             ],
-            'Silly combination of relative path as double dots (..) with root path base directory' => [
+            'Silly combination of relative path as double dots (..) with root path base path' => [
                 'given' => '..',
                 'baseDir' => 'C:\\',
                 'isAbsolute' => false,
@@ -240,9 +240,9 @@ final class WindowsPathUnitTest extends TestCase
      * @group windows_only
      *   This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
      */
-    public function testOptionalBaseDirArgument(string $path, ?PathInterface $baseDir, string $resolved): void
+    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $resolved): void
     {
-        $sut = new WindowsPath($path, $baseDir);
+        $sut = new WindowsPath($path, $basePath);
 
         self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');
     }
@@ -250,12 +250,12 @@ final class WindowsPathUnitTest extends TestCase
     public function providerBaseDirArgument(): array
     {
         return [
-            'With $baseDir argument.' => [
+            'With $basePath argument.' => [
                 'path' => 'One',
                 'baseDir' => new TestPath('C:\\Arg'),
                 'resolved' => 'C:\\Arg\\One',
             ],
-            'With explicit null $baseDir argument' => [
+            'With explicit null $basePath argument' => [
                 'path' => 'One',
                 'baseDir' => null,
                 'resolved' => sprintf('%s\\One', getcwd()),
