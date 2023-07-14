@@ -17,33 +17,51 @@ final class ProcessFunctionalTest extends TestCase
         /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $factory */
         $factory = $container->get(ProcessFactory::class);
 
-        return $factory->create($command);
+        /** @var \PhpTuf\ComposerStager\Internal\Process\Service\Process $sut */
+        $sut = $factory->create($command);
+
+        return $sut;
     }
 
     public function testGetOutput(): void
     {
         $command = 'ls';
-        $expected = shell_exec($command);
+        $expectedOutput = shell_exec($command);
+        $expectedStatusCode = 0;
         $sut = $this->createSut([$command]);
 
-        $sut->mustRun();
-        $actual = $sut->getOutput();
+        $actualStatusCode = $sut->run();
+        $actualOutput = $sut->getOutput();
 
-        self::assertSame($expected, $actual, 'Returned correct final output via getter.');
+        self::assertSame($expectedStatusCode, $actualStatusCode, 'Returned correct final output via getter.');
+        self::assertSame($expectedOutput, $actualOutput, 'Returned correct final output via getter.');
     }
 
-    public function testOutputCallback(): void
+    public function testOutputCallbackStdout(): void
     {
         $buffer = __METHOD__;
         $sut = $this->createSut(['echo', $buffer]);
         $outputCallback = new TestOutputCallback();
 
-        $sut->mustRun($outputCallback);
-        $sut->mustRun($outputCallback);
+        $sut->run($outputCallback);
         $sut->mustRun($outputCallback);
 
-        $expected = array_fill(0, 3, $buffer);
+        $expected = array_fill(0, 2, $buffer);
         self::assertSame($expected, $outputCallback->getOutput(), 'Streamed correct output to callback.');
         self::assertSame([], $outputCallback->getErrorOutput(), 'Streamed correct error output to callback.');
+    }
+
+    public function testOutputCallbackStderr(): void
+    {
+        $invalidCommand = 'invalid_command';
+        $sut = $this->createSut([$invalidCommand]);
+        $outputCallback = new TestOutputCallback();
+
+        $sut->run($outputCallback);
+
+        self::assertSame([], $outputCallback->getOutput(), 'Streamed correct output to callback.');
+        // Asserting on error output is a little tricky across platforms. The safest meaningful
+        // test is probably to just search the error output for the invalid command name.
+        self::assertStringContainsString($invalidCommand, $outputCallback->getErrorOutput()[0], 'Streamed correct error output to callback.');
     }
 }
