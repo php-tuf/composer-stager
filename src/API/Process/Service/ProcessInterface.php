@@ -19,7 +19,7 @@ interface ProcessInterface
      *
      * @return array<string|\Stringable>
      *
-     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::setEnv()
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::setEnv
      */
     public function getEnv(): array;
 
@@ -38,6 +38,8 @@ interface ProcessInterface
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *   If the process doesn't terminate successfully.
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::run
      */
     public function mustRun(?OutputCallbackInterface $callback = null): self;
 
@@ -49,6 +51,8 @@ interface ProcessInterface
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
      *   If the process fails to run for any reason.
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::run
      */
     public function run(?OutputCallbackInterface $callback = null): int;
 
@@ -71,7 +75,7 @@ interface ProcessInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
      *   If the given environment variables contain invalid variable names or values.
      *
-     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getEnv()
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getEnv
      */
     public function setEnv(array $env): self;
 
