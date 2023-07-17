@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use ReflectionClass;
 
 final class ExceptionUnitTest extends TestCase
@@ -24,7 +25,7 @@ final class ExceptionUnitTest extends TestCase
     public function testBasicFunctionality(string $exception): void
     {
         $message = $exception;
-        $translatableMessage = new TranslatableMessage($message);
+        $translatableMessage = new TranslatableMessage($message, new TestTranslator());
         $code = 42;
         $previous = new Exception('Message');
 

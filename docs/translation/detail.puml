@@ -27,18 +27,21 @@ rectangle {
 
     interface TranslatableFactory {
         -DomainOptions
+        -Translator
         +createTranslatableMessage()
         +createTranslationParameters()
         +createDomainOptions()
     }
 
     interface TranslatableMessage {
+        -string $message
         -TranslationParameters
         +trans() : string
         +__toString()
     }
 
     interface TranslationParameters {
+        -array $parameters
         +getAll() : array
     }
 
@@ -50,6 +53,8 @@ rectangle {
     }
 
     interface DomainOptions {
+        +default(): string
+        +exceptions(): string
     }
 
     interface LocaleOptions {

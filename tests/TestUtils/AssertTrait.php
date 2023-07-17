@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TranslatableReflection;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -101,7 +100,7 @@ trait AssertTrait
             $callback();
         } catch (Throwable $actualException) {
             $actualExceptionMessage = $actualException instanceof ExceptionInterface
-                ? $actualException->getTranslatableMessage()->trans(new TestTranslator())
+                ? $actualException->getTranslatableMessage()->trans()
                 : $actualException->getMessage();
 
             if ($actualException::class !== $expectedExceptionClass) {
@@ -182,7 +181,7 @@ trait AssertTrait
         TranslatableInterface $translatable,
         string $message = '',
     ): void {
-        self::assertSame($expected, $translatable->trans(new TestTranslator()), $message);
+        self::assertSame($expected, $translatable->trans(), $message);
     }
 
     /**

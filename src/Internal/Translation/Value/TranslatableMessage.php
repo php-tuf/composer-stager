@@ -28,13 +28,18 @@ final class TranslatableMessage implements TranslatableInterface
      */
     public function __construct(
         private readonly string $message,
+        private readonly TranslatorInterface $translator,
         private readonly ?TranslationParametersInterface $parameters = null,
         private readonly ?string $domain = null,
     ) {
     }
 
-    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    public function trans(?TranslatorInterface $translator = null, ?string $locale = null): string
     {
+        if (!$translator instanceof TranslatorInterface) {
+            $translator = $this->translator;
+        }
+
         return $translator->trans($this->message, $this->parameters, $this->domain, $locale);
     }
 
