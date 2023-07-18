@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="PHPStan" type="ShConfigurationType" activateToolWindowBeforeRun="false">
-    <option name="SCRIPT_TEXT" value="composer phpstan" />
+  <configuration default="false" name="PHPCBF" type="ShConfigurationType" activateToolWindowBeforeRun="false">
+    <option name="SCRIPT_TEXT" value="composer phpcbf" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
