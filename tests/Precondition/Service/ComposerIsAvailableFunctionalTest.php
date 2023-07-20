@@ -35,7 +35,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
     private function createSut(): ComposerIsAvailable
     {
-        $container = $this->getContainer();
+        $container = $this->container();
 
         // Override the ExecutableFinder implementation.
         $executableFinder = new Definition($this->executableFinderClass);

@@ -40,7 +40,7 @@ final class FilesystemFunctionalTest extends TestCase
 
     private function createSut(): Filesystem
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem $filesystem */

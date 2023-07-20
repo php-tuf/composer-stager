@@ -54,7 +54,7 @@ abstract class TestCase extends PHPUnitTestCase
         return PathFactory::create(self::STAGING_DIR_RELATIVE, self::testWorkingDirPath());
     }
 
-    public function getContainer(): ContainerBuilder
+    public function container(): ContainerBuilder
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());

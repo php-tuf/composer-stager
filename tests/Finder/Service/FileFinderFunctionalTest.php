@@ -27,7 +27,7 @@ final class FileFinderFunctionalTest extends TestCase
 
     private function createSut(): FileFinder
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder */

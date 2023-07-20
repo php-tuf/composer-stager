@@ -16,7 +16,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
 {
     protected function createSut(): NoLinksExistOnWindows
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */

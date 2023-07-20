@@ -20,7 +20,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
 {
     protected function createSut(): NoSymlinksPointToADirectory
     {
-        $container = $this->getContainer();
+        $container = $this->container();
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);

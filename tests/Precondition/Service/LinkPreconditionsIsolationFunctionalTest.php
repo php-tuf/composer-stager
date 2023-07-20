@@ -43,7 +43,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
     private function createTestPreconditionsTree(array $excludePreconditions = []): TestPreconditionsTree
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         $allNoUnsupportedLinkPreconditions = [];
@@ -111,7 +111,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         touch($target);
         symlink($target, $source);
 
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
         $sut = $container->get(NoLinksExistOnWindows::class);

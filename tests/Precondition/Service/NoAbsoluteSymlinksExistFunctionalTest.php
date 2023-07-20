@@ -19,7 +19,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 {
     protected function createSut(): NoAbsoluteSymlinksExist
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist $sut */
