@@ -121,10 +121,6 @@ final class APIAnnotationRule extends AbstractRule
             return self::EXCEPTION;
         }
 
-        if ($this->isFactoryClass($class)) {
-            return self::FACTORY;
-        }
-
         return self::CONCRETE_CLASS;
     }
 
