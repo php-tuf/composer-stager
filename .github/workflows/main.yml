@@ -21,8 +21,6 @@ jobs:
     quality_check:
         name: "Quality Check"
         runs-on: ubuntu-latest
-        strategy:
-            fail-fast: false
         steps:
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
@@ -34,10 +32,6 @@ jobs:
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
-                with:
-                    # Disable Composer caching due to random failures it causes.
-                    # @see https://github.com/ramsey/composer-install/issues/79
-                    composer-options: "--no-cache"
 
             -   name: "Run all quality checks"
                 run: "composer static"
