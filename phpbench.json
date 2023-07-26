@@ -1,0 +1,56 @@
+{
+    "$schema": "./vendor/phpbench/phpbench/phpbench.schema.json",
+
+    "runner.bootstrap": "vendor/autoload.php",
+    "runner.path": "tools/phpbench",
+    "runner.iterations": 1,
+    "runner.file_pattern": "*Bench.php",
+
+    "report.generators": {
+        "all": {
+            "generator": "composite",
+            "reports": ["table", "preconditions-trees-chart", "preconditions-individuals-chart"]
+        },
+        "table": {
+            "generator": "expression",
+            "cols": ["benchmark", "subject", "set", "mem_peak", "mode", "rstdev"],
+            "break" : ["benchmark", "subject"]
+        },
+        "preconditions-trees-chart": {
+            "generator": "component",
+            "filter": "benchmark_name='PreconditionBench' and subject_name='benchTrees'",
+            "components": [
+                {
+                    "component": "bar_chart_aggregate",
+                    "title": "Preconditions Trees",
+                    "bar_partition": ["variant_name"],
+                    "y_expr": "mode(partition['result_time_avg'])",
+                    "y_axes_label": "yValue as time precision 1"
+                }
+            ]
+        },
+        "preconditions-individuals-chart": {
+            "generator": "component",
+            "filter": "benchmark_name='PreconditionBench' and subject_name='benchIndividuals'",
+            "components": [
+                {
+                    "component": "bar_chart_aggregate",
+                    "title": "Individual Preconditions",
+                    "bar_partition": ["variant_name"],
+                    "y_expr": "mode(partition['result_time_avg'])",
+                    "y_axes_label": "yValue as time precision 1"
+                }
+            ]
+        }
+    },
+
+    "report.outputs": {
+        "html": {
+            "renderer": "html",
+            "path": "var/phpbench/report.htm",
+            "title": "Composer Stager PHPBench Report"
+        }
+    },
+
+    "expression.strip_tailing_zeros": true
+}
