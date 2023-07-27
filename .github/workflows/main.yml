@@ -79,3 +79,25 @@ jobs:
             -   name: "Run Windows tests"
                 run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
                 if: ${{ runner.os == 'Windows' }}
+
+    performance:
+        name: "Performance"
+        runs-on: ubuntu-latest
+        steps:
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "8.1"
+
+            -   name: "Checkout code"
+                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
+                with:
+                    # Disable Composer caching due to random failures it causes.
+                    # @see https://github.com/ramsey/composer-install/issues/79
+                    composer-options: "--no-cache"
+
+            -   name: "Run performance tests"
+                run: "composer phpbench -- --progress=plain --iterations=5 --ansi"
