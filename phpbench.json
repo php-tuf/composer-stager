@@ -12,6 +12,7 @@
             "reports": [
                 "preconditions-trees-chart",
                 "preconditions-individuals-chart",
+                "fileSyncers-chart",
                 "default"
             ]
         },
@@ -37,6 +38,21 @@
                     "component": "bar_chart_aggregate",
                     "title": "Individual Preconditions",
                     "bar_partition": ["variant_name"],
+                    "y_expr": "mode(partition['result_time_avg'])",
+                    "y_axes_label": "yValue as time precision 1"
+                }
+            ]
+        },
+
+        "fileSyncers-chart": {
+            "generator": "component",
+            "filter": "subject_name='benchSync'",
+            "components": [
+                {
+                    "component": "bar_chart_aggregate",
+                    "title": "File Syncers",
+                    "x_partition": ["variant_params['operation']"],
+                    "bar_partition": ["variant_params['syncerClassName']"],
                     "y_expr": "mode(partition['result_time_avg'])",
                     "y_axes_label": "yValue as time precision 1"
                 }
