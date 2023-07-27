@@ -9,13 +9,13 @@
     "report.generators": {
         "all": {
             "generator": "composite",
-            "reports": ["table", "preconditions-trees-chart", "preconditions-individuals-chart"]
+            "reports": [
+                "preconditions-trees-chart",
+                "preconditions-individuals-chart",
+                "default"
+            ]
         },
-        "table": {
-            "generator": "expression",
-            "cols": ["benchmark", "subject", "set", "mem_peak", "mode", "rstdev"],
-            "break" : ["benchmark", "subject"]
-        },
+
         "preconditions-trees-chart": {
             "generator": "component",
             "filter": "benchmark_name='PreconditionBench' and subject_name='benchTrees'",
