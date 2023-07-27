@@ -93,7 +93,8 @@
         "c": [
             "@composer dump-autoload",
             "phpstan clear-result-cache",
-            "rm -r var/*/* &> /dev/null || true"
+            "rm -r var/*/* &> /dev/null || true",
+            "git checkout -- ."
         ],
         "cbf": "phpcbf",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",
