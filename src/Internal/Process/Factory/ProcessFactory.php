@@ -20,7 +20,7 @@ final class ProcessFactory implements ProcessFactoryInterface
     ) {
     }
 
-    public function create(array $command = []): ProcessInterface
+    public function create(array $command): ProcessInterface
     {
         return new Process($this->symfonyProcessFactory, $this->translatableFactory, $command);
     }

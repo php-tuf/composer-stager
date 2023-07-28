@@ -30,5 +30,5 @@ interface ProcessFactoryInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
      */
-    public function create(array $command = []): ProcessInterface;
+    public function create(array $command): ProcessInterface;
 }
