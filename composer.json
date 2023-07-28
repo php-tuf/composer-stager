@@ -94,7 +94,7 @@
             "@composer dump-autoload",
             "phpstan clear-result-cache",
             "rm -r var/*/* &> /dev/null || true",
-            "git checkout -- ."
+            "git checkout -- var"
         ],
         "cbf": "phpcbf",
         "coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",
