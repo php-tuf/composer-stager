@@ -84,7 +84,7 @@ final class TranslationParametersUnitTest extends TestCase
         // Re-enable assertions so development error-handling can be tested.
         assert_options(ASSERT_ACTIVE, 1);
 
-        self::assertTranslatableException(static function () use ($given) {
+        self::assertTranslatableException(static function () use ($given): void {
             new TranslationParameters($given);
         }, AssertionError::class, sprintf(
             'Placeholders must be in the form /^%%\w+$/, i.e., a leading percent sign (%%) followed '
@@ -175,7 +175,7 @@ final class TranslationParametersUnitTest extends TestCase
         // Re-enable assertions so development error-handling can be tested.
         assert_options(ASSERT_ACTIVE, 1);
 
-        self::assertTranslatableException(static function () use ($given) {
+        self::assertTranslatableException(static function () use ($given): void {
             new TranslationParameters($given);
         }, AssertionError::class, sprintf(
             'Placeholder values must be strings. Got %s.',

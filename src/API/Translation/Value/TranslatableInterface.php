@@ -25,5 +25,5 @@ use Stringable;
 interface TranslatableInterface extends Stringable
 {
     /** Translates the message. */
-    public function trans(TranslatorInterface $translator, ?string $locale = null): string;
+    public function trans(?TranslatorInterface $translator = null, ?string $locale = null): string;
 }

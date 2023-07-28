@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
@@ -45,8 +45,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         PathInterface $source,
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
-        ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
+        ?OutputCallbackInterface $callback = null,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $sourceResolved = $source->resolved();
         $destinationResolved = $destination->resolved();
@@ -90,7 +90,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         string $sourceResolved,
         string $destinationResolved,
         PathInterface $destination,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
     ): void {
         $this->ensureDestinationDirectoryExists($destination);
         $command = $this->buildCommand($exclusions, $sourceResolved, $destinationResolved);

@@ -15,6 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
  */
 final class APITagsSniff implements Sniff
 {
+    private const CODE_MISSING_DOCBLOCK = 'MissingDocblock';
     private const CODE_MISSING_TAG = 'Missing%sTag';
     private const CODE_UNEXPECTED_TAG = 'Unexpected%sTag';
 
@@ -69,6 +70,13 @@ final class APITagsSniff implements Sniff
         $forbiddenTagName = $rule[self::RULE_FORBIDDEN_TAG_NAME];
 
         $docblockTags = $this->getDocblockTags();
+
+        if ($docblockTags === []) {
+            $phpcsFile->addError('Missing docblock', $stackPtr, self::CODE_MISSING_DOCBLOCK);
+
+            return;
+        }
+
         $found = false;
 
         foreach ($docblockTags as $currentTagPtr => $tagEndPtr) {

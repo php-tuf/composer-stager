@@ -21,7 +21,7 @@ final class FileSyncerFactoryUnitTest extends TestCase
     private RsyncFileSyncerInterface|ObjectProphecy $rsyncFileSyncer;
     private SymfonyExecutableFinder|ObjectProphecy $executableFinder;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->executableFinder = $this->prophesize(SymfonyExecutableFinder::class);
         $this->executableFinder

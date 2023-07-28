@@ -13,7 +13,7 @@ services:
             - '../src/API/Exception'
 
     # It is not strictly necessary to specify these details for Composer Stager
-    # itself, but they represent that way a client would configure its container.
+    # itself, but they represent the way a client would configure its container.
     # Therefore it is how Composer Stager should test itself. See ../docs/README.md.
     PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory:
         arguments:

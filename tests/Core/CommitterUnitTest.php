@@ -10,12 +10,12 @@ use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
@@ -33,8 +33,8 @@ final class CommitterUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->preconditions = $this->prophesize(CommitterPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
@@ -54,7 +54,7 @@ final class CommitterUnitTest extends TestCase
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($this->stagingDir, $this->activeDir, null, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->sync($this->stagingDir, $this->activeDir, null, null, ProcessInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -70,7 +70,7 @@ final class CommitterUnitTest extends TestCase
         string $stagingDir,
         string $activeDir,
         ?PathListInterface $exclusions,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
         ?int $timeout,
     ): void {
         $activeDir = new TestPath($activeDir);
@@ -100,7 +100,7 @@ final class CommitterUnitTest extends TestCase
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
                 'exclusions' => new TestPathList(),
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];
@@ -117,7 +117,7 @@ final class CommitterUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->commit($this->stagingDir, $this->activeDir);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
@@ -134,7 +134,7 @@ final class CommitterUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->commit($this->stagingDir, $this->activeDir);
         }, RuntimeException::class, $message, $exception::class);
     }

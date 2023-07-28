@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\API\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 
 /**
  * Provides basic utilities for interacting with the file system.
@@ -168,7 +168,7 @@ interface FilesystemInterface
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   A path to remove.
-     * @param \PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface|null $callback
+     * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int|null $timeout
      *   An optional process timeout (maximum runtime) in seconds. Set to null
@@ -179,7 +179,7 @@ interface FilesystemInterface
      */
     public function remove(
         PathInterface $path,
-        ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
+        ?OutputCallbackInterface $callback = null,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

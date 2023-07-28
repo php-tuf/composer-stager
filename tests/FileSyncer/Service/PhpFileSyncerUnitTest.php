@@ -33,10 +33,10 @@ final class PhpFileSyncerUnitTest extends TestCase
     private PathInterface $destination;
     private PathInterface $source;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->source = new TestPath(self::ACTIVE_DIR);
-        $this->destination = new TestPath(self::STAGING_DIR);
+        $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
@@ -68,7 +68,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source directory does not exist at %s', $this->source->resolved());
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, LogicException::class, $message);
     }
@@ -79,7 +79,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination directories cannot be the same at %s', $same->resolved());
-        self::assertTranslatableException(static function () use ($sut, $same) {
+        self::assertTranslatableException(static function () use ($sut, $same): void {
             $sut->sync($same, $same);
         }, LogicException::class, $message);
     }
@@ -94,7 +94,7 @@ final class PhpFileSyncerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, $previous::class, $message);
     }
@@ -108,7 +108,7 @@ final class PhpFileSyncerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, $previous::class, $message);
     }
@@ -232,7 +232,7 @@ final class PhpFileSyncerUnitTest extends TestCase
      */
     public function testTransMissingTranslatableFactory(): void
     {
-        self::assertTranslatableException(function () {
+        self::assertTranslatableException(function (): void {
             $same = new TestPath('same');
             $source = $same;
             $destination = $same;

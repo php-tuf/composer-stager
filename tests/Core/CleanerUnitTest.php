@@ -7,11 +7,11 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
@@ -27,10 +27,10 @@ final class CleanerUnitTest extends TestCase
     private CleanerPreconditionsInterface|ObjectProphecy $preconditions;
     private FilesystemInterface|ObjectProphecy $filesystem;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->preconditions = $this->prophesize(CleanerPreconditionsInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
@@ -50,7 +50,7 @@ final class CleanerUnitTest extends TestCase
             ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove($this->stagingDir, null, ProcessRunnerInterface::DEFAULT_TIMEOUT)
+            ->remove($this->stagingDir, null, ProcessInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -62,11 +62,8 @@ final class CleanerUnitTest extends TestCase
      *
      * @dataProvider providerCleanWithOptionalParams
      */
-    public function testCleanWithOptionalParams(
-        string $path,
-        ?ProcessOutputCallbackInterface $callback,
-        ?int $timeout,
-    ): void {
+    public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, ?int $timeout): void
+    {
         $path = new TestPath($path);
         $this->preconditions
             ->assertIsFulfilled($this->activeDir, $path)
@@ -89,7 +86,7 @@ final class CleanerUnitTest extends TestCase
             ],
             [
                 'path' => 'three/four',
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
         ];
@@ -105,7 +102,7 @@ final class CleanerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->clean($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
@@ -120,7 +117,7 @@ final class CleanerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->clean($this->activeDir, $this->stagingDir);
         }, RuntimeException::class, $message, $previous::class);
     }

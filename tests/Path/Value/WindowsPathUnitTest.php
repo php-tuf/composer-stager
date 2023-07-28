@@ -25,30 +25,30 @@ use PhpTuf\ComposerStager\Tests\TestCase;
  */
 final class WindowsPathUnitTest extends TestCase
 {
-    public string $cwd;
+    public string $basePath;
 
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
-        string $cwd,
+        string $basePath,
         bool $isAbsolute,
         string $resolved,
         string $relativeBase,
         string $resolvedRelativeTo,
     ): void {
-        self::fixSeparatorsMultiple($given, $cwd, $resolved, $relativeBase, $resolvedRelativeTo);
+        self::fixSeparatorsMultiple($given, $basePath, $resolved, $relativeBase, $resolvedRelativeTo);
 
         $sut = new WindowsPath($given);
         $equalInstance = new WindowsPath($given);
         $unequalInstance = new WindowsPath(__DIR__);
         $relativeBase = new WindowsPath($relativeBase);
 
-        // Dynamically override CWD.
-        $setCwd = function ($cwd): void {
-            $this->cwd = $cwd;
+        // Dynamically override base path.
+        $setBaseDir = function ($basePath): void {
+            $this->basePath = $basePath;
         };
-        $setCwd->call($sut, $cwd);
-        $setCwd->call($equalInstance, $cwd);
+        $setBaseDir->call($sut, $basePath);
+        $setBaseDir->call($equalInstance, $basePath);
 
         self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
         self::assertEquals($given, $sut->raw(), 'Correctly returned raw path.');
@@ -67,10 +67,10 @@ final class WindowsPathUnitTest extends TestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            // Special CWD paths.
+            // Special base path paths.
             'Path as empty string ()' => [
                 'given' => '',
-                'cwd' => 'C:\\Windows\\One',
+                'baseDir' => 'C:\\Windows\\One',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\One',
                 'relativeBase' => 'D:\\Users\\Two',
@@ -78,7 +78,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Path as dot (.)' => [
                 'given' => '.',
-                'cwd' => 'C:\\Windows\\Three',
+                'baseDir' => 'C:\\Windows\\Three',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\Three',
                 'relativeBase' => 'D:\\Users\\Four',
@@ -87,7 +87,7 @@ final class WindowsPathUnitTest extends TestCase
             // Relative paths.
             'Relative path as simple string' => [
                 'given' => 'One',
-                'cwd' => 'C:\\Windows',
+                'baseDir' => 'C:\\Windows',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\One',
                 'relativeBase' => 'D:\\Users',
@@ -95,7 +95,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Relative path as space ( )' => [
                 'given' => ' ',
-                'cwd' => 'C:\\Windows\\Two',
+                'baseDir' => 'C:\\Windows\\Two',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\Two\\ ',
                 'relativeBase' => 'D:\\Users\\Three',
@@ -103,7 +103,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Relative path with nesting' => [
                 'given' => 'One\\Two\\Three\\Four\\Five',
-                'cwd' => 'C:\\Windows',
+                'baseDir' => 'C:\\Windows',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\One\\Two\\Three\\Four\\Five',
                 'relativeBase' => 'D:\\Users',
@@ -111,7 +111,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Relative path with trailing slash' => [
                 'given' => 'One\\Two\\',
-                'cwd' => 'C:\\Windows',
+                'baseDir' => 'C:\\Windows',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\One\\Two',
                 'relativeBase' => 'D:\\Users',
@@ -119,7 +119,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Relative path with repeating directory separators' => [
                 'given' => 'One\\\\Two\\\\\\\\Three',
-                'cwd' => 'C:\\Windows\\Four',
+                'baseDir' => 'C:\\Windows\\Four',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\Four\\One\\Two\\Three',
                 'relativeBase' => 'D:\\Users\\Five',
@@ -127,23 +127,23 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Relative path with double dots (..)' => [
                 'given' => '..\\One\\..\\Two\\Three\\Four\\..\\..\\Five\\Six\\..',
-                'cwd' => 'C:\\Windows\\Seven\\Eight',
+                'baseDir' => 'C:\\Windows\\Seven\\Eight',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Windows\\Seven\\Two\\Five',
                 'relativeBase' => 'D:\\Users\\Nine\\Ten',
                 'resolvedRelativeTo' => 'D:\\Users\\Nine\\Two\\Five',
             ],
-            'Relative path with leading double dots (..) and root path CWD' => [
+            'Relative path with leading double dots (..) and root path base path' => [
                 'given' => '..\\One\\Two',
-                'cwd' => 'C:\\',
+                'baseDir' => 'C:\\',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\One\\Two',
                 'relativeBase' => 'D:\\',
                 'resolvedRelativeTo' => 'D:\\One\\Two',
             ],
-            'Silly combination of relative path as double dots (..) with root path CWD' => [
+            'Silly combination of relative path as double dots (..) with root path base path' => [
                 'given' => '..',
-                'cwd' => 'C:\\',
+                'baseDir' => 'C:\\',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\',
                 'relativeBase' => 'D:\\',
@@ -151,7 +151,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Crazy relative path' => [
                 'given' => 'One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'cwd' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
                 'isAbsolute' => false,
                 'resolved' => 'C:\\Seven\\Eight\\Nine\\Ten\\One\\Six',
                 'relativeBase' => 'D:\\Eleven\\Twelve\\Thirteen\\Fourteen',
@@ -160,7 +160,7 @@ final class WindowsPathUnitTest extends TestCase
             // Absolute paths from the root of a specific drive.
             'Absolute path to the root of a specific drive' => [
                 'given' => 'D:\\',
-                'cwd' => 'C:\\',
+                'baseDir' => 'C:\\',
                 'isAbsolute' => true,
                 'resolved' => 'D:\\',
                 'relativeBase' => 'D:\\',
@@ -168,7 +168,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Absolute path from the root of a specific drive as simple string' => [
                 'given' => 'D:\\One',
-                'cwd' => 'C:\\Windows',
+                'baseDir' => 'C:\\Windows',
                 'isAbsolute' => true,
                 'resolved' => 'D:\\One',
                 'relativeBase' => 'D:\\Users',
@@ -176,7 +176,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Absolute path from the root of a specific drive with nesting' => [
                 'given' => 'D:\\One\\Two\\Three\\Four\\Five',
-                'cwd' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
+                'baseDir' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
                 'isAbsolute' => true,
                 'resolved' => 'D:\\One\\Two\\Three\\Four\\Five',
                 'relativeBase' => 'D:\\Users',
@@ -184,7 +184,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Crazy absolute path from the root of a specific drive' => [
                 'given' => 'D:\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'cwd' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
                 'isAbsolute' => true,
                 'resolved' => 'D:\\One\\Six',
                 'relativeBase' => 'D:\\Eleven\\Twelve\\Fourteen',
@@ -193,7 +193,7 @@ final class WindowsPathUnitTest extends TestCase
             // Absolute paths from the root of the current drive.
             'Absolute path to the root of the current drive' => [
                 'given' => '\\',
-                'cwd' => 'C:\\',
+                'baseDir' => 'C:\\',
                 'isAbsolute' => true,
                 'resolved' => 'C:\\',
                 'relativeBase' => 'C:\\',
@@ -201,7 +201,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Absolute path from the root of the current drive as a simple string' => [
                 'given' => '\\One',
-                'cwd' => 'C:\\Windows',
+                'baseDir' => 'C:\\Windows',
                 'isAbsolute' => true,
                 'resolved' => 'C:\\One',
                 'relativeBase' => 'D:\\Users',
@@ -209,7 +209,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Absolute path from the root of the current drive with nesting' => [
                 'given' => '\\One\\Two\\Three\\Four\\Five',
-                'cwd' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
+                'baseDir' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
                 'isAbsolute' => true,
                 'resolved' => 'C:\\One\\Two\\Three\\Four\\Five',
                 'relativeBase' => 'D:\\Users',
@@ -217,7 +217,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Crazy absolute path from the root of the current drive' => [
                 'given' => '\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'cwd' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
                 'isAbsolute' => true,
                 'resolved' => 'C:\\One\\Six',
                 'relativeBase' => 'D:\\Users',
@@ -225,7 +225,7 @@ final class WindowsPathUnitTest extends TestCase
             ],
             'Crazy absolute path from the root of a specified drive' => [
                 'given' => '\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'cwd' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
                 'isAbsolute' => true,
                 'resolved' => 'C:\\One\\Six',
                 'relativeBase' => 'D:\\Users',
@@ -235,29 +235,29 @@ final class WindowsPathUnitTest extends TestCase
     }
 
     /**
-     * @dataProvider providerCwdArgument
+     * @dataProvider providerBaseDirArgument
      *
      * @group windows_only
      *   This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
      */
-    public function testOptionalCwdArgument(string $path, ?PathInterface $cwd, string $resolved): void
+    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $resolved): void
     {
-        $sut = new WindowsPath($path, $cwd);
+        $sut = new WindowsPath($path, $basePath);
 
         self::assertEquals($resolved, $sut->resolved(), 'Correctly resolved path.');
     }
 
-    public function providerCwdArgument(): array
+    public function providerBaseDirArgument(): array
     {
         return [
-            'With $cwd argument.' => [
+            'With $basePath argument.' => [
                 'path' => 'One',
-                'cwd' => new TestPath('C:\\Arg'),
+                'baseDir' => new TestPath('C:\\Arg'),
                 'resolved' => 'C:\\Arg\\One',
             ],
-            'With explicit null $cwd argument' => [
+            'With explicit null $basePath argument' => [
                 'path' => 'One',
-                'cwd' => null,
+                'baseDir' => null,
                 'resolved' => sprintf('%s\\One', getcwd()),
             ],
         ];

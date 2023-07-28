@@ -33,7 +33,7 @@ final class TranslatorUnitTest extends TestCase
     private SymfonyTranslatorProxyInterface|ObjectProphecy $symfonyTranslatorProxy;
     private TranslatableFactoryInterface|ObjectProphecy $translatableFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->domainOptions = new TestDomainOptions();
         $this->localeOptions = new LocaleOptions();
@@ -241,7 +241,7 @@ final class TranslatorUnitTest extends TestCase
 
         // Re-enable assertions so development error-handling can be tested.
         assert_options(ASSERT_ACTIVE, 1);
-        self::assertTranslatableException(static function () use ($sut, $message) {
+        self::assertTranslatableException(static function () use ($sut, $message): void {
             $sut->trans($message);
         }, AssertionError::class, $expectedMessage);
     }

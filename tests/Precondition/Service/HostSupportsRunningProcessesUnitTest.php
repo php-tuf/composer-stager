@@ -24,7 +24,7 @@ use Symfony\Component\Process\Process;
  */
 final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 {
-    private ObjectProphecy|ProcessFactoryInterface $processFactory;
+    private ProcessFactoryInterface|ObjectProphecy $processFactory;
 
     protected function setUp(): void
     {
@@ -38,7 +38,6 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 
     protected function createSut(): HostSupportsRunningProcesses
     {
-        /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $processFactory */
         $processFactory = $this->processFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 

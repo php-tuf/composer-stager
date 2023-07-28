@@ -33,7 +33,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $container = $this->getContainer();
+        $container = $this->container();
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);

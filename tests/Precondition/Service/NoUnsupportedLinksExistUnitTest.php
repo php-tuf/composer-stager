@@ -105,7 +105,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $sut = $this->createSut();
 
         self::assertTranslatableMessage($message, $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions));
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class);
     }

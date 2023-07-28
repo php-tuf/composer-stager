@@ -5,10 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
@@ -29,8 +29,8 @@ final class FilesystemUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
@@ -87,7 +87,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->copy($this->activeDir, $this->stagingDir);
         }, IOException::class, $message, $previous::class);
     }
@@ -103,7 +103,7 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->resolved());
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->copy($this->activeDir, $this->stagingDir);
         }, LogicException::class, $message, $previous);
     }
@@ -116,7 +116,7 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination files cannot be the same at %s', $source->resolved());
-        self::assertTranslatableException(static function () use ($sut, $source, $destination) {
+        self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
             $sut->copy($source, $destination);
         }, LogicException::class, $message);
     }
@@ -155,7 +155,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->mkdir($this->stagingDir);
         }, IOException::class, $message, $previous::class);
     }
@@ -167,7 +167,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testRemove(
         string $path,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
         ?int $givenTimeout,
         int $expectedTimeout,
     ): void {
@@ -193,7 +193,7 @@ final class FilesystemUnitTest extends TestCase
             ],
             [
                 'path' => 'three/four',
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
                 'givenTimeout' => 10,
                 'expectedTimeout' => 10,
             ],
@@ -210,7 +210,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->remove($this->stagingDir);
         }, IOException::class, $message, $previous::class);
     }

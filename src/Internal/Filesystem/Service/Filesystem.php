@@ -7,8 +7,8 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
@@ -166,15 +166,15 @@ final class Filesystem implements FilesystemInterface
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
-        $cwd = $this->pathFactory::create('..', $path);
+        $basePath = $this->pathFactory::create('..', $path);
 
-        return $this->pathFactory::create($target, $cwd);
+        return $this->pathFactory::create($target, $basePath);
     }
 
     public function remove(
         PathInterface $path,
-        ?ProcessOutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessRunnerInterface::DEFAULT_TIMEOUT,
+        ?OutputCallbackInterface $callback = null,
+        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         try {
             // Symfony Filesystem doesn't have a builtin mechanism for setting a

@@ -17,8 +17,8 @@ abstract class PreconditionTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->exclusions = new TestPathList();
     }
 
@@ -57,7 +57,7 @@ abstract class PreconditionTestCase extends TestCase
     ): void {
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
         }, PreconditionException::class, $expectedStatusMessage, $previousException);
     }

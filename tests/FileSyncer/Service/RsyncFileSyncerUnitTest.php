@@ -10,11 +10,11 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessOutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestProcessOutputCallback;
+use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -43,10 +43,10 @@ final class RsyncFileSyncerUnitTest extends TestCase
     private PathInterface $source;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->source = new TestPath(self::ACTIVE_DIR);
-        $this->destination = new TestPath(self::STAGING_DIR);
+        $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())
@@ -75,7 +75,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         string $destination,
         ?PathListInterface $exclusions,
         array $command,
-        ?ProcessOutputCallbackInterface $callback,
+        ?OutputCallbackInterface $callback,
     ): void {
         $source = new TestPath($source);
         $destination = new TestPath($destination);
@@ -120,7 +120,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     'source/two/',
                     'destination/two',
                 ],
-                'callback' => new TestProcessOutputCallback(),
+                'callback' => new TestOutputCallback(),
             ],
             'Siblings: duplicate exclusions given' => [
                 'source' => 'source/three',
@@ -185,7 +185,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willThrow($caught);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, $thrown, $caught->getMessage(), $caught::class);
     }
@@ -215,7 +215,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source directory does not exist at %s', $this->source->resolved());
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, LogicException::class, $message);
     }
@@ -228,7 +228,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination directories cannot be the same at %s', $source->resolved());
-        self::assertTranslatableException(static function () use ($sut, $source, $destination) {
+        self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
             $sut->sync($source, $destination);
         }, LogicException::class, $message);
     }
@@ -243,7 +243,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
         }, IOException::class, $message);
     }

@@ -16,7 +16,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 {
     protected function createSut(): NoHardLinksExist
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist $sut */
@@ -75,7 +75,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
             PathFactory::create($directory)->resolved(),
             $link,
         );
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message);
     }
@@ -84,11 +84,11 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         return [
             'In active directory' => [
-                'directory' => self::ACTIVE_DIR,
+                'directory' => self::ACTIVE_DIR_RELATIVE,
                 'dirName' => 'active',
             ],
             'In staging directory' => [
-                'directory' => self::STAGING_DIR,
+                'directory' => self::STAGING_DIR_RELATIVE,
                 'dirName' => 'staging',
             ],
         ];

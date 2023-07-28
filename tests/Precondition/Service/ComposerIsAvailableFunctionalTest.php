@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -20,10 +21,10 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        mkdir(self::STAGING_DIR, 0777, true);
+        FilesystemHelper::createDirectories(self::STAGING_DIR_RELATIVE);
 
-        $this->activeDir = new TestPath(self::ACTIVE_DIR);
-        $this->stagingDir = new TestPath(self::STAGING_DIR);
+        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->executableFinderClass = ExecutableFinder::class;
     }
 
@@ -34,7 +35,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
     private function createSut(): ComposerIsAvailable
     {
-        $container = $this->getContainer();
+        $container = $this->container();
 
         // Override the ExecutableFinder implementation.
         $executableFinder = new Definition($this->executableFinderClass);
@@ -59,7 +60,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message, LogicException::class);
     }
@@ -70,7 +71,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
-        self::assertTranslatableException(function () use ($sut) {
+        self::assertTranslatableException(function () use ($sut): void {
             $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
         }, PreconditionException::class, $message);
     }

@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\API\Process\Factory;
 
-use Symfony\Component\Process\Process as SymfonyProcess;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 
 /**
- * Creates Symfony Process objects.
+ * Creates process objects.
  *
  * @package Process
  *
@@ -29,8 +29,6 @@ interface ProcessFactoryInterface
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
-     *
-     * @see \Symfony\Component\Process\Process::__construct
      */
-    public function create(array $command): SymfonyProcess;
+    public function create(array $command): ProcessInterface;
 }

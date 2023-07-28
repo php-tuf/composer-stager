@@ -27,7 +27,7 @@ final class FileFinderFunctionalTest extends TestCase
 
     private function createSut(): FileFinder
     {
-        $container = $this->getContainer();
+        $container = $this->container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder */
@@ -151,14 +151,14 @@ final class FileFinderFunctionalTest extends TestCase
         ];
     }
 
-    private function normalizePaths($paths): array
+    private function normalizePaths(array $paths): array
     {
         $paths = array_map(static function ($path): string {
             $path = implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    self::TEST_WORKING_DIR,
-                    self::ACTIVE_DIR,
+                    self::TEST_WORKING_DIR_ABSOLUTE,
+                    self::ACTIVE_DIR_RELATIVE,
                     $path,
                 ],
             );
