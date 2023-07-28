@@ -87,6 +87,7 @@ final class Process implements ProcessInterface
     {
         try {
             $callbackAdapter = new OutputCallbackAdapter($callback);
+
             return $this->symfonyProcess->run($callbackAdapter);
         } catch (Throwable $e) {
             throw new RuntimeException($this->t(
