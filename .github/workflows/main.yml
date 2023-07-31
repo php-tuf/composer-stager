@@ -18,8 +18,8 @@ on:
         -   cron: "0 0 * * 1"
 
 jobs:
-    quality_check:
-        name: "Quality Check"
+    static_analysis:
+        name: "Static Analysis: ubuntu-latest"
         runs-on: ubuntu-latest
         steps:
             -   name: "Set up PHP"
@@ -33,11 +33,11 @@ jobs:
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
 
-            -   name: "Run all quality checks"
+            -   name: "Run all static analysis tools"
                 run: "composer static"
 
     tests:
-        name: "${{ matrix.os }} / ${{ matrix.dependencies }} / ${{ matrix.php }}"
+        name: "Test: ${{ matrix.os }} / deps-${{ matrix.dependencies }}"
         runs-on: "${{ matrix.os }}"
         strategy:
             fail-fast: false
@@ -81,13 +81,14 @@ jobs:
                 if: ${{ runner.os == 'Windows' }}
 
     performance:
-        name: "Performance"
+        name: "Performance: ubuntu-latest"
         runs-on: ubuntu-latest
         steps:
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "8.1"
+                    coverage: none
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout

@@ -5,9 +5,7 @@ namespace PhpTuf\ComposerStager\PHPBench\Benchmark;
 use Generator;
 use PhpBench\Attributes\BeforeClassMethods;
 use PhpBench\Attributes\ParamProviders;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
@@ -25,7 +23,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirDoesNotExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
-use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 
 #[BeforeClassMethods(['setUpBeforeClass'])]
 final class PreconditionBench extends BenchCase
@@ -64,15 +61,6 @@ final class PreconditionBench extends BenchCase
         yield 'StagingDirDoesNotExist' => [StagingDirDoesNotExist::class];
         yield 'StagingDirExists' => [StagingDirExists::class];
         yield 'StagingDirIsWritable' => [StagingDirIsWritable::class];
-    }
-
-    protected function customizeContainer(SymfonyContainerBuilder $container): void
-    {
-        // Force file syncer service to use PHPFileSyncer because
-        // NoSymlinksPointToADirectory exits early without once.
-        $phpFileSyncer = $container->getDefinition(PhpFileSyncer::class);
-        $phpFileSyncer->setClass(PhpFileSyncer::class);
-        $container->setDefinition(FileSyncerInterface::class, $phpFileSyncer);
     }
 
     private function doBench(array $params): void

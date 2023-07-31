@@ -13,7 +13,7 @@
                 "preconditions-trees-chart",
                 "preconditions-individuals-chart",
                 "fileSyncers-chart",
-                "default"
+                "detail"
             ]
         },
 
@@ -57,6 +57,11 @@
                     "y_axes_label": "yValue as time precision 1"
                 }
             ]
+        },
+
+        "detail": {
+            "generator": "expression",
+            "break": ["benchmark", "subject"]
         }
     },
 

@@ -99,6 +99,8 @@ final class FixtureHelper
         $process = new SymfonyProcess([
             'composer',
             'install',
+            '--ignore-platform-reqs',
+            '--no-interaction',
         ], $codebaseDirAbsolute);
         $process->mustRun();
     }
