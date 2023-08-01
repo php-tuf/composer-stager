@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
+use PhpTuf\ComposerStager\PHPBench\TestUtils\ProcessHelper;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
@@ -36,7 +37,7 @@ final class FileSyncerBench extends BenchCase
         $destinationAbsolute = self::getDestinationAbsolute($syncerClassName);
         $destinationPath = PathFactory::create($destinationAbsolute);
 
-        $sut->sync($sourcePath, $destinationPath);
+        $sut->sync($sourcePath, $destinationPath, null, null, ProcessHelper::PROCESS_TIMEOUT);
     }
 
     public function providerSyncers(): Generator
@@ -62,6 +63,7 @@ final class FileSyncerBench extends BenchCase
             'operation' => 'begin',
             'sourcePath' => FixtureHelper::drupal9CodebasePath(),
         ];
+
         yield 'commit' => [
             'operation' => 'commit',
             'sourcePath' => FixtureHelper::drupal10CodebasePath(),

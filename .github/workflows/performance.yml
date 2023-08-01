@@ -22,8 +22,6 @@ jobs:
                 with:
                     php-version: "8.1"
                     coverage: none
-                    # Windows and macOS take a lot of time to set up. Allow more execution time.
-                    ini-values: max_execution_time=600
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout

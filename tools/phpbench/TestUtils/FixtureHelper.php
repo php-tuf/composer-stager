@@ -102,6 +102,7 @@ final class FixtureHelper
             '--ignore-platform-reqs',
             '--no-interaction',
         ], $codebaseDirAbsolute);
+        $process->setTimeout(ProcessHelper::PROCESS_TIMEOUT);
         $process->mustRun();
     }
 }
