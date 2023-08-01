@@ -26,6 +26,7 @@ jobs:
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "8.1"
+                    coverage: none
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
@@ -50,7 +51,15 @@ jobs:
                 run: "rsync --version | head -1"
                 if: ${{ runner.os != 'Windows' }}
 
-            -   name: "Set up PHP"
+            -   name: "Set up PHP w/ Coverage"
+                if: ${{ matrix.os == 'ubuntu-latest' && matrix.dependencies == 'highest' }}
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "${{ matrix.php }}"
+                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+
+            -   name: "Set up PHP w/o Coverage"
+                if: ${{ !( matrix.os == 'ubuntu-latest' && matrix.dependencies == 'highest' ) }}
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
