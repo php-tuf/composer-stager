@@ -13,7 +13,8 @@
                 "preconditions-trees-chart",
                 "preconditions-individuals-chart",
                 "fileSyncers-chart",
-                "detail"
+                "detail",
+                "default"
             ]
         },
 
