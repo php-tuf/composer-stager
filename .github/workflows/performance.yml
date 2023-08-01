@@ -1,5 +1,5 @@
 ---
-name: Security
+name: Performance
 
 on:
     schedule:
@@ -8,14 +8,22 @@ on:
         -   cron: "0 0 * * *"
 
 jobs:
-    composer_audit:
-        name: "Composer Audit"
-        runs-on: macos-latest
+    performance:
+        name: "Bench: ${{ matrix.os }}"
+        runs-on: "${{ matrix.os }}"
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ ubuntu-latest, macos-latest, windows-latest ]
+                php: [ "8.1" ]
         steps:
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "8.1"
+                    coverage: none
+                    # Windows and macOS take a lot of time to set up. Allow more execution time.
+                    ini-values: max_execution_time=600
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
@@ -23,5 +31,5 @@ jobs:
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
 
-            -   name: "Check for security vulnerability advisories for installed packages"
-                run: "composer audit"
+            -   name: "Run performance tests"
+                run: "composer phpbench -- --progress=plain --iterations=5 --ansi"
