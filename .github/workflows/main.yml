@@ -95,10 +95,6 @@ jobs:
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
-                with:
-                    # Disable Composer caching due to random failures it causes.
-                    # @see https://github.com/ramsey/composer-install/issues/79
-                    composer-options: "--no-cache"
 
             -   name: "Run performance tests"
                 run: "composer phpbench -- --progress=plain --iterations=5 --ansi"
