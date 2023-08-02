@@ -7,20 +7,23 @@ use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
+/** @phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps */
 final class FixtureHelper
 {
     private const REPOSITORY_ROOT = '../../..';
     private const TEST_ENV = 'var/phpbench';
     private const FIXTURES_DIR = 'fixtures';
     private const WORKING_DIR = 'working-dir';
-    private const DRUPAL_9_DIR = 'drupal-9.5';
-    private const DRUPAL_10_DIR = 'drupal-10.0';
+    private const DRUPAL_9_5_DIR = 'drupal-9.5';
+    private const DRUPAL_10_0_DIR = 'drupal-10.0';
+    private const DRUPAL_10_1_DIR = 'drupal-10.1';
     private const AUTOLOAD_PHP = 'vendor/autoload.php';
 
     public static function ensureFixtures(): void
     {
-        self::ensureCodebase(self::drupal9CodebaseAbsolute());
-        self::ensureCodebase(self::drupal10CodebaseAbsolute());
+        self::ensureCodebase(self::drupal_9_5_CodebaseAbsolute());
+        self::ensureCodebase(self::drupal_10_0_CodebaseAbsolute());
+        self::ensureCodebase(self::drupal_10_1_CodebaseAbsolute());
     }
 
     public static function repositoryRootAbsolute(): string
@@ -28,24 +31,24 @@ final class FixtureHelper
         return SymfonyPath::makeAbsolute(self::REPOSITORY_ROOT, __DIR__);
     }
 
-    public static function drupal9CodebasePath(): PathInterface
+    public static function drupal_9_5_CodebasePath(): PathInterface
     {
-        return PathFactory::create(self::drupal9CodebaseAbsolute());
+        return PathFactory::create(self::drupal_9_5_CodebaseAbsolute());
+    }
+
+    public static function drupal_10_0_CodebasePath(): PathInterface
+    {
+        return PathFactory::create(self::drupal_10_0_CodebaseAbsolute());
+    }
+
+    public static function drupal_10_1_CodebasePath(): PathInterface
+    {
+        return PathFactory::create(self::drupal_10_1_CodebaseAbsolute());
     }
 
     public static function workingDirAbsolute(): string
     {
         return SymfonyPath::makeAbsolute(self::WORKING_DIR, self::testEnvAbsolute());
-    }
-
-    public static function drupal10CodebasePath(): PathInterface
-    {
-        return PathFactory::create(self::drupal10CodebaseAbsolute());
-    }
-
-    public static function workingDirPath(): PathInterface
-    {
-        return PathFactory::create(self::workingDirAbsolute());
     }
 
     private static function testEnvAbsolute(): string
@@ -61,18 +64,26 @@ final class FixtureHelper
         );
     }
 
-    private static function drupal9CodebaseAbsolute(): string
+    private static function drupal_9_5_CodebaseAbsolute(): string
     {
         return SymfonyPath::makeAbsolute(
-            self::DRUPAL_9_DIR,
+            self::DRUPAL_9_5_DIR,
             self::fixturesDirAbsolute(),
         );
     }
 
-    private static function drupal10CodebaseAbsolute(): string
+    private static function drupal_10_0_CodebaseAbsolute(): string
     {
         return SymfonyPath::makeAbsolute(
-            self::DRUPAL_10_DIR,
+            self::DRUPAL_10_0_DIR,
+            self::fixturesDirAbsolute(),
+        );
+    }
+
+    private static function drupal_10_1_CodebaseAbsolute(): string
+    {
+        return SymfonyPath::makeAbsolute(
+            self::DRUPAL_10_1_DIR,
             self::fixturesDirAbsolute(),
         );
     }

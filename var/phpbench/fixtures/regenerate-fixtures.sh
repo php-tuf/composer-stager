@@ -21,7 +21,7 @@ regenerate_fixture () {
     # Start with the recommended project template.
     composer create-project \
         --ignore-platform-reqs \
-        drupal/recommended-project:^"$VERSION" \
+        drupal/recommended-project:"$VERSION" \
         "$DIR"
 
     # Install the top ~125 most-installed Drupal modules.
@@ -167,3 +167,4 @@ regenerate_fixture () {
 
 regenerate_fixture "9.5"
 regenerate_fixture "10.0"
+regenerate_fixture "10.1"

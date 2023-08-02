@@ -21,6 +21,10 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 #[AfterClassMethods(['tearDownAfterClass'])]
 final class FileSyncerBench extends BenchCase
 {
+    private const BEGIN = 'begin';
+    private const MAJOR_UPDATE = 'major update';
+    private const MINOR_UPDATE = 'minor update';
+
     #[ParamProviders(['providerSyncers', 'providerOperation'])]
     #[AfterMethods(['tearDownAfterBenchSync'])]
     public function benchSync(array $params): void
@@ -60,13 +64,18 @@ final class FileSyncerBench extends BenchCase
     public function providerOperation(): Generator
     {
         yield 'begin' => [
-            'operation' => 'begin',
-            'sourcePath' => FixtureHelper::drupal9CodebasePath(),
+            'operation' => self::BEGIN,
+            'sourcePath' => FixtureHelper::drupal_9_5_CodebasePath(),
         ];
 
-        yield 'commit' => [
-            'operation' => 'commit',
-            'sourcePath' => FixtureHelper::drupal10CodebasePath(),
+        yield 'major_update' => [
+            'operation' => self::MAJOR_UPDATE,
+            'sourcePath' => FixtureHelper::drupal_10_0_CodebasePath(),
+        ];
+
+        yield 'minor_update' => [
+            'operation' => self::MINOR_UPDATE,
+            'sourcePath' => FixtureHelper::drupal_10_1_CodebasePath(),
         ];
     }
 
@@ -77,9 +86,9 @@ final class FileSyncerBench extends BenchCase
             $params['syncerClassName'],
         ];
 
-        // Only clean up after the "commit" operations, because it
-        // needs the directory from the earlier "begin" operation.
-        if ($operation !== 'commit') {
+        // Only clean up after the minor update (final) operation,
+        // because it needs the directory from the earlier ones.
+        if ($operation !== self::MINOR_UPDATE) {
             return;
         }
 
