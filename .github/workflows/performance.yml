@@ -3,9 +3,9 @@ name: Performance
 
 on:
     schedule:
-        # Every day at 00:00:00 UTC.
+        # Every Wednesday at 00:00:00 UTC.
         # @see https://crontab.cronhub.io/
-        -   cron: "0 0 * * *"
+        -   cron: "0 0 * * 3"
 
 jobs:
     performance:
