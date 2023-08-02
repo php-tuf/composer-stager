@@ -68,8 +68,8 @@ final class PreconditionBench extends BenchCase
         $sut = $this->container->get(reset($params));
         assert($sut instanceof PreconditionInterface);
 
-        $activeDir = FixtureHelper::drupal_9_5_CodebasePath();
-        $stagingDir = FixtureHelper::drupal_10_0_CodebasePath();
+        $activeDir = FixtureHelper::drupalOriginalCodebasePath();
+        $stagingDir = FixtureHelper::drupalMajorUpdateCodebasePath();
 
         $sut->isFulfilled($activeDir, $stagingDir);
     }

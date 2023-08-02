@@ -165,6 +165,7 @@ regenerate_fixture () {
         drupal/tablefield
 }
 
-regenerate_fixture "9.5"
-regenerate_fixture "10.0"
-regenerate_fixture "10.1"
+regenerate_fixture "09.5.0"
+regenerate_fixture "10.0.0"
+regenerate_fixture "10.1.0"
+regenerate_fixture "10.1.1"

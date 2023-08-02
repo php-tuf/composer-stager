@@ -20,6 +20,7 @@ abstract class BenchCase
     public static function setUpBeforeClass(): void
     {
         FixtureHelper::ensureFixtures();
+        FixtureHelper::removeWorkingDir();
     }
 
     /** Provides a hook for customizing the container before compilation. */

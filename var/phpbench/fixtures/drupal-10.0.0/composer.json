@@ -87,7 +87,7 @@
         "drupal/leaflet": "10.0.19",
         "drupal/link_attributes": "2.1.0",
         "drupal/mailchimp": "2.2.2",
-        "drupal/matomo": "1.21.0",
+        "drupal/matomo": "1.22.0",
         "drupal/maxlength": "2.1.2",
         "drupal/media_library_form_element": "2.0.6",
         "drupal/memcache": "2.5.0",

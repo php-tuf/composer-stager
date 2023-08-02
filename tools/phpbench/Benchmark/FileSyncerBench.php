@@ -24,6 +24,7 @@ final class FileSyncerBench extends BenchCase
     private const BEGIN = 'begin';
     private const MAJOR_UPDATE = 'major update';
     private const MINOR_UPDATE = 'minor update';
+    private const POINT_UPDATE = 'point update';
 
     #[ParamProviders(['providerSyncers', 'providerOperation'])]
     #[AfterMethods(['tearDownAfterBenchSync'])]
@@ -65,17 +66,22 @@ final class FileSyncerBench extends BenchCase
     {
         yield 'begin' => [
             'operation' => self::BEGIN,
-            'sourcePath' => FixtureHelper::drupal_9_5_CodebasePath(),
+            'sourcePath' => FixtureHelper::drupalOriginalCodebasePath(),
         ];
 
         yield 'major_update' => [
             'operation' => self::MAJOR_UPDATE,
-            'sourcePath' => FixtureHelper::drupal_10_0_CodebasePath(),
+            'sourcePath' => FixtureHelper::drupalMajorUpdateCodebasePath(),
         ];
 
         yield 'minor_update' => [
             'operation' => self::MINOR_UPDATE,
-            'sourcePath' => FixtureHelper::drupal_10_1_CodebasePath(),
+            'sourcePath' => FixtureHelper::drupalMinorUpdateCodebasePath(),
+        ];
+
+        yield 'point_update' => [
+            'operation' => self::POINT_UPDATE,
+            'sourcePath' => FixtureHelper::drupalPointUpdateCodebasePath(),
         ];
     }
 
