@@ -14,8 +14,8 @@ final class FixtureHelper
     private const TEST_ENV = 'var/phpbench';
     private const FIXTURES_DIR = 'fixtures';
     private const WORKING_DIR = 'working-dir';
-    private const DRUPAL_ORIGINAL_DIR = 'drupal-09.5.0';
-    private const DRUPAL_MAJOR_UPDATE_DIR = 'drupal-10.0.0';
+    private const DRUPAL_ORIGINAL_DIR = 'drupal-09.5.8';
+    private const DRUPAL_MAJOR_UPDATE_DIR = 'drupal-10.0.8';
     private const DRUPAL_MINOR_UPDATE_DIR = 'drupal-10.1.0';
     private const DRUPAL_POINT_UPDATE_DIR = 'drupal-10.1.1';
     private const AUTOLOAD_PHP = 'vendor/autoload.php';
