@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Sniffs\Namespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PhpTuf\ComposerStager\Helper\NamespaceHelper;
 
 /** Finds "use" aliases that end with "Alias". */
 final class AliasEndsWithAliasSniff implements Sniff
@@ -60,7 +61,7 @@ final class AliasEndsWithAliasSniff implements Sniff
 
     private function getNamespace(File $phpcsFile, int $scopePtr): string
     {
-        $endOfNamespaceDeclaration = $this->getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
+        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
 
         return $this->getDeclarationNameWithNamespace(
             $phpcsFile->getTokens(),
@@ -77,19 +78,11 @@ final class AliasEndsWithAliasSniff implements Sniff
 
     private function aliasIsFound(File $phpcsFile, int $stackPtr): bool
     {
-        $endOfNamespaceDeclaration = $this->getEndOfNamespaceDeclaration($phpcsFile, $stackPtr);
+        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $stackPtr);
         $lastStringPtr = $phpcsFile->findPrevious(T_STRING, $endOfNamespaceDeclaration);
         $asKeywordPtr = $phpcsFile->findPrevious(T_AS, $lastStringPtr, $stackPtr);
 
         return $asKeywordPtr !== false;
-    }
-
-    private function getEndOfNamespaceDeclaration(File $phpcsFile, int $scopePtr): int|false
-    {
-        return $phpcsFile->findNext(
-            [T_SEMICOLON, T_OPEN_CURLY_BRACKET],
-            $scopePtr,
-        );
     }
 
     private function getDeclarationNameWithNamespace(array $tokens, $stackPtr): string

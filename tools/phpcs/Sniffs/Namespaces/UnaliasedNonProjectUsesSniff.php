@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Sniffs\Namespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use PhpTuf\ComposerStager\Helper\NamespaceHelper;
 
 /** Finds unaliased "use" statements for non-project code, e.g., vendor libraries and PHP itself. */
 final class UnaliasedNonProjectUsesSniff implements Sniff
@@ -33,7 +34,7 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
             return;
         }
 
-        $namespace = $this->getNamespace($phpcsFile, $stackPtr);
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr, $this);
 
         // Not a scope-level namespace, e.g., a class or interface.
         // (It's probably an anonymous function declaration.)
@@ -73,16 +74,6 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
         return str_starts_with((string) $phpcsFile->getFilename(), $srcDir);
     }
 
-    private function getNamespace(File $phpcsFile, int $scopePtr): string
-    {
-        $endOfNamespaceDeclaration = $this->getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
-
-        return $this->getDeclarationNameWithNamespace(
-            $phpcsFile->getTokens(),
-            $endOfNamespaceDeclaration - 1,
-        );
-    }
-
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
     {
         $scopePtr = $phpcsFile->findNext(Tokens::$ooScopeTokens, $stackPtr);
@@ -102,42 +93,10 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
 
     private function aliasIsFound(File $phpcsFile, int $stackPtr): bool
     {
-        $endOfNamespaceDeclaration = $this->getEndOfNamespaceDeclaration($phpcsFile, $stackPtr);
+        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $stackPtr);
         $lastStringPtr = $phpcsFile->findPrevious(T_STRING, $endOfNamespaceDeclaration);
         $asKeywordPtr = $phpcsFile->findPrevious(T_AS, $lastStringPtr, $stackPtr);
 
         return $asKeywordPtr !== false;
-    }
-
-    private function getEndOfNamespaceDeclaration(File $phpcsFile, int $scopePtr): int|false
-    {
-        return $phpcsFile->findNext(
-            [T_SEMICOLON, T_OPEN_CURLY_BRACKET],
-            $scopePtr,
-        );
-    }
-
-    private function getDeclarationNameWithNamespace(array $tokens, $stackPtr): string
-    {
-        $nameParts = [];
-        $currentPointer = $stackPtr;
-
-        while ($tokens[$currentPointer]['code'] === T_NS_SEPARATOR
-            || $tokens[$currentPointer]['code'] === T_STRING
-            || isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])
-        ) {
-            if (isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])) {
-                --$currentPointer;
-
-                continue;
-            }
-
-            $nameParts[] = $tokens[$currentPointer]['content'];
-            --$currentPointer;
-        }
-
-        $nameParts = array_reverse($nameParts);
-
-        return implode('', $nameParts);
     }
 }
