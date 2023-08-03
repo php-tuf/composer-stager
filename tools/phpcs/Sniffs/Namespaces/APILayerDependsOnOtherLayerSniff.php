@@ -91,7 +91,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
 
     private function isExcluded(string $namespace): bool
     {
-        return in_array($namespace, PHPHelper::ALL_BUILTIN_CLASSES, true);
+        return in_array($namespace, PHPHelper::UNAMBIGUOUS_BUILTIN_CLASSES, true);
     }
 
     private function namespaceIsInAPILayer(File $phpcsFile, int $stackPtr): bool

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
-use JsonException as PhpJsonException;
+use JsonException;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
@@ -113,7 +113,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
 
         try {
             $data = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
-        } catch (PhpJsonException) {
+        } catch (JsonException) {
             return false;
         }
 
