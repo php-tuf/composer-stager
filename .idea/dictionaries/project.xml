@@ -2,6 +2,9 @@
   <dictionary name="project">
     <words>
       <w>Ptrs</w>
+      <w>Shmop</w>
+      <w>Spoofchecker</w>
+      <w>Transliterator</w>
       <w>autowire</w>
       <w>autowiring</w>
       <w>canonicalized</w>
@@ -15,6 +18,7 @@
       <w>dirname</w>
       <w>docblocks</w>
       <w>ergebnis</w>
+      <w>finfo</w>
       <w>getcwd</w>
       <w>gitattributes</w>
       <w>grum</w>
