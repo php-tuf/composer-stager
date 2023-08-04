@@ -63,6 +63,7 @@ jobs:
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
+                    coverage: none
                     ini-values: assert.active=1, assert.exception=1, zend.assertions=1
 
             -   name: "PHP info"
