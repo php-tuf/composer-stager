@@ -4,7 +4,6 @@
 /.idea               export-ignore
 /composer.lock       export-ignore
 /config              export-ignore
-/deptrac.yml         export-ignore
 /grumphp.yml.dist    export-ignore
 /infection.json.dist export-ignore
 /phpbench.json       export-ignore
