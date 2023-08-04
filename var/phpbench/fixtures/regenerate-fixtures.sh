@@ -165,7 +165,7 @@ regenerate_fixture () {
         drupal/tablefield
 }
 
-regenerate_fixture "09.5.9"
-regenerate_fixture "10.0.8"
-regenerate_fixture "10.1.0"
-regenerate_fixture "10.1.1"
+regenerate_fixture "09.5.9" # Begin
+regenerate_fixture "10.0.8" # Major update
+regenerate_fixture "10.1.0" # Minor update
+regenerate_fixture "10.1.1" # Point update
