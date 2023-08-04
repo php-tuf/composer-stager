@@ -36,13 +36,14 @@ class Updater
         private readonly StagerInterface $stager,
         private readonly CommitterInterface $committer,
         private readonly CleanerInterface $cleaner,
+        private readonly PathFactoryInterface $pathFactory,
     ) {
     }
 
     public function update(): void
     {
-        $activeDir = PathFactory::create('/var/www/public');
-        $stagingDir = PathFactory::create('/var/www/staging');
+        $activeDir = $this->pathFactory::create('/var/www/public');
+        $stagingDir = $this->pathFactory::create('/var/www/staging');
         $exclusions = new PathList(
             'cache',
             'uploads',
