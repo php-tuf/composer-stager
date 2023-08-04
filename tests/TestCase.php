@@ -182,14 +182,14 @@ abstract class TestCase extends PHPUnitTestCase
         FilesystemHelper::createDirectories($dirname);
     }
 
-    protected static function changeFile(string $dir, $filename): void
+    protected static function changeFile(string $dir, string $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($pathname, self::CHANGED_CONTENT);
         assert($result !== false, "Changed file {$pathname}.");
     }
 
-    protected static function deleteFile(string $dir, $filename): void
+    protected static function deleteFile(string $dir, string $filename): void
     {
         $pathname = self::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
