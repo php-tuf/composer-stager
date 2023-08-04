@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 /**
  * @package Path
@@ -22,7 +23,10 @@ final class PathList implements PathListInterface
     /** @return array<string> */
     public function getAll(): array
     {
-        return $this->paths;
+        return array_map(
+            static fn ($path): string => SymfonyPath::canonicalize($path),
+            $this->paths,
+        );
     }
 
     public function add(string ...$paths): void

@@ -19,8 +19,6 @@ final class PathListUnitTest extends TestCase
     {
         $sut = new PathList(...$given);
 
-        self::assertEquals($given, $sut->getAll(), 'Correctly set paths via constructor and got them.');
-
         $sut->add(...$add);
 
         self::assertEquals($expected, $sut->getAll(), 'Correctly added paths and got them.');
@@ -70,6 +68,24 @@ final class PathListUnitTest extends TestCase
                     'two',
                     'three',
                     'four',
+                ],
+            ],
+            'Different directory separators' => [
+                'paths' => [
+                    'one',
+                    'two/two',
+                    'three\\three\\three',
+                ],
+                'add' => [
+                    'four/four\\four/four',
+                    'five\\five/five\\five/five',
+                ],
+                'expected' => [
+                    'one',
+                    'two/two',
+                    'three/three/three',
+                    'four/four/four/four',
+                    'five/five/five/five/five',
                 ],
             ],
         ];
