@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Internal\Path\Factory;
 
 use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 
 /**
  * @package Path

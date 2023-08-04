@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory */

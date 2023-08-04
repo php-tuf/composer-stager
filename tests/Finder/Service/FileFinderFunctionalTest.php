@@ -2,10 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /**
