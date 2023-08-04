@@ -30,4 +30,4 @@ jobs:
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
 
             -   name: "Run performance tests"
-                run: "composer phpbench -- --progress=plain --iterations=5 --ansi"
+                run: "composer phpbench -- --progress=plain --ansi"
