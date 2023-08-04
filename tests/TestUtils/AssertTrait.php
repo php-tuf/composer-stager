@@ -36,7 +36,7 @@ trait AssertTrait
         $actual = self::getFlatDirectoryListing($dir);
 
         // Remove ignored paths.
-        $actual = array_map(static function ($path) use ($dir, $ignoreDir): bool|string {
+        $actual = array_map(static function (string $path) use ($dir, $ignoreDir): bool|string {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
             $matchPath = self::ensureTrailingSlash($dir) . $path;

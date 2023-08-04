@@ -346,7 +346,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ];
     }
 
-    private static function assertComposerJsonName($directory, $expected, string $message = ''): void
+    private static function assertComposerJsonName(string $directory, $expected, string $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
         assert(is_string($json));
@@ -362,7 +362,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
 
-    private static function assertFileChanged(string $dir, $path, string $message = ''): void
+    private static function assertFileChanged(string $dir, string $path, string $message = ''): void
     {
         self::assertStringEqualsFile(
             self::ensureTrailingSlash($dir) . $path,
@@ -371,7 +371,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         );
     }
 
-    private static function assertFileNotChanged(string $dir, $path, string $message = ''): void
+    private static function assertFileNotChanged(string $dir, string $path, string $message = ''): void
     {
         self::assertStringEqualsFile(
             self::ensureTrailingSlash($dir) . $path,
