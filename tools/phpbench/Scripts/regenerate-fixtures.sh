@@ -13,6 +13,8 @@
 #     dependencies. Other than that, this serves as executable documentation
 #     of how the fixtures were originally generated.
 
+cd "$(dirname "$0")/../../../var/phpbench/fixtures" || exit
+
 regenerate_fixture () {
     VERSION="$1"; DIR=drupal-"$1"
 
@@ -165,7 +167,7 @@ regenerate_fixture () {
         drupal/tablefield
 }
 
-regenerate_fixture "09.5.9" # Begin
+regenerate_fixture "09.5.9" # Active directory
 regenerate_fixture "10.0.8" # Major update
 regenerate_fixture "10.1.0" # Minor update
 regenerate_fixture "10.1.1" # Point update

@@ -95,6 +95,7 @@
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"><properties>
         <property name="annotationsGroups" type="array">
+            <element value="@file"/>
             <element value="@coversDefaultClass"/>
             <element value="@covers,@coversNothing"/>
             <element value="@uses"/>
