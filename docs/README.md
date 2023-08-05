@@ -37,6 +37,7 @@ class Updater
         private readonly CommitterInterface $committer,
         private readonly CleanerInterface $cleaner,
         private readonly PathFactoryInterface $pathFactory,
+        private readonly PathListFactoryInterface $pathListFactory,
     ) {
     }
 
@@ -44,7 +45,7 @@ class Updater
     {
         $activeDir = $this->pathFactory::create('/var/www/public');
         $stagingDir = $this->pathFactory::create('/var/www/staging');
-        $exclusions = new PathList(
+        $exclusions = $this->pathListFactory->create(
             'cache',
             'uploads',
         );
