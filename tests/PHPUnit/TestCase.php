@@ -26,7 +26,7 @@ abstract class TestCase extends PHPUnitTestCase
     use AssertTrait;
     use ProphecyTrait;
 
-    protected const TEST_ENV_ABSOLUTE = __DIR__ . '/../var/phpunit/test-env';
+    protected const TEST_ENV_ABSOLUTE = __DIR__ . '/../../var/phpunit/test-env';
     protected const TEST_WORKING_DIR_ABSOLUTE = self::TEST_ENV_ABSOLUTE . '/working-dir';
     protected const ACTIVE_DIR_RELATIVE = 'active-dir';
     protected const STAGING_DIR_RELATIVE = 'staging-dir';

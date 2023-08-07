@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 final class PathHelper
 {
-    private const REPOSITORY_ROOT = '../..';
+    private const REPOSITORY_ROOT = '../../..';
     private const TEST_ENV = 'var/phpunit/test-env';
     private const WORKING_DIR = 'working-dir';
     private const ACTIVE_DIR = 'active-dir';
