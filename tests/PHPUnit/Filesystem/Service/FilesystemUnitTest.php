@@ -54,7 +54,7 @@ final class FilesystemUnitTest extends TestCase
         $source = new TestPath($source);
         $destination = new TestPath($destination);
         $this->symfonyFilesystem
-            ->copy($source->resolved(), $destination->resolved(), true)
+            ->copy($source->absolute(), $destination->absolute(), true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -102,7 +102,7 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->resolved());
+        $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->absolute());
         self::assertTranslatableException(function () use ($sut): void {
             $sut->copy($this->activeDir, $this->stagingDir);
         }, LogicException::class, $message, $previous);
@@ -115,7 +115,7 @@ final class FilesystemUnitTest extends TestCase
         $destination = $source;
         $sut = $this->createSut();
 
-        $message = sprintf('The source and destination files cannot be the same at %s', $source->resolved());
+        $message = sprintf('The source and destination files cannot be the same at %s', $source->absolute());
         self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
             $sut->copy($source, $destination);
         }, LogicException::class, $message);

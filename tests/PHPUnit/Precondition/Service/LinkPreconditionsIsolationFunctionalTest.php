@@ -95,8 +95,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoAbsoluteSymlinksExist(): void
     {
-        $source = self::path('source.txt')->resolved();
-        $target = self::path('target.txt')->resolved();
+        $source = self::path('source.txt')->absolute();
+        $target = self::path('target.txt')->absolute();
         touch($target);
         symlink($target, $source);
 
@@ -106,8 +106,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group windows_only */
     public function testNoLinksExistOnWindows(): void
     {
-        $source = self::path('source.txt')->resolved();
-        $target = self::path('target.txt')->resolved();
+        $source = self::path('source.txt')->absolute();
+        $target = self::path('target.txt')->absolute();
         touch($target);
         symlink($target, $source);
 
@@ -124,7 +124,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoSymlinksPointOutsideTheCodebase(): void
     {
-        $source = self::path('source.txt')->resolved();
+        $source = self::path('source.txt')->absolute();
         $target = self::path('../target.txt')->raw();
         touch($target);
         symlink($target, $source);
@@ -135,7 +135,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoSymlinksPointToADirectory(): void
     {
-        $source = self::path('link')->resolved();
+        $source = self::path('link')->absolute();
         $target = self::path('directory')->raw();
         FilesystemHelper::createDirectories($target);
         symlink($target, $source);
@@ -146,8 +146,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoHardLinksExistExist(): void
     {
-        $source = self::path('source.txt')->resolved();
-        $target = self::path('target.txt')->resolved();
+        $source = self::path('source.txt')->absolute();
+        $target = self::path('target.txt')->absolute();
         touch($target);
         link($target, $source);
 

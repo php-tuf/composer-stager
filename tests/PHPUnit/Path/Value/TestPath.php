@@ -10,6 +10,11 @@ final class TestPath implements PathInterface
     {
     }
 
+    public function absolute(): string
+    {
+        return $this->path;
+    }
+
     public function isAbsolute(): bool
     {
         return true;
@@ -20,12 +25,7 @@ final class TestPath implements PathInterface
         return $this->path;
     }
 
-    public function resolved(): string
-    {
-        return $this->path;
-    }
-
-    public function resolvedRelativeTo(PathInterface $basePath): string
+    public function relative(PathInterface $basePath): string
     {
         return $this->path;
     }

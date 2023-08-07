@@ -52,7 +52,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     ): void {
         try {
             $exclusions ??= new PathList();
-            $exclusions->add($stagingDir->resolved());
+            $exclusions->add($stagingDir->absolute());
 
             if ($this->exitEarly($activeDir, $stagingDir, $exclusions)) {
                 return;

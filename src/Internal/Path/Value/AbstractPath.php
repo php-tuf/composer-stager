@@ -13,7 +13,7 @@ abstract class AbstractPath implements PathInterface
 {
     protected string $basePath;
 
-    abstract protected function doResolve(string $basePath): string;
+    abstract protected function doAbsolute(string $basePath): string;
 
     /**
      * @param string $path
@@ -32,8 +32,13 @@ abstract class AbstractPath implements PathInterface
         // object should be immune to environmental details like the current
         // working directory. Cache the CWD at time of creation.
         $this->basePath = $basePath instanceof PathInterface
-            ? $basePath->resolved()
+            ? $basePath->absolute()
             : $this->getcwd();
+    }
+
+    public function absolute(): string
+    {
+        return $this->doAbsolute($this->basePath);
     }
 
     public function raw(): string
@@ -41,16 +46,11 @@ abstract class AbstractPath implements PathInterface
         return $this->path;
     }
 
-    public function resolved(): string
+    public function relative(PathInterface $basePath): string
     {
-        return $this->doResolve($this->basePath);
-    }
+        $basePathAbsolute = $basePath->absolute();
 
-    public function resolvedRelativeTo(PathInterface $basePath): string
-    {
-        $resolvedBasePath = $basePath->resolved();
-
-        return $this->doResolve($resolvedBasePath);
+        return $this->doAbsolute($basePathAbsolute);
     }
 
     // Once support for Symfony 4 is dropped, some of this logic could possibly be

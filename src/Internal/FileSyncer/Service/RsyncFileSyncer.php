@@ -48,25 +48,25 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         ?OutputCallbackInterface $callback = null,
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $sourceResolved = $source->resolved();
-        $destinationResolved = $destination->resolved();
+        $sourceAbsolute = $source->absolute();
+        $destinationAbsolute = $destination->absolute();
 
         $this->assertDirectoriesAreNotTheSame($source, $destination);
         $this->assertSourceExists($source);
         set_time_limit((int) $timeout);
-        $this->runCommand($exclusions, $sourceResolved, $destinationResolved, $destination, $callback);
+        $this->runCommand($exclusions, $sourceAbsolute, $destinationAbsolute, $destination, $callback);
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
     private function assertDirectoriesAreNotTheSame(PathInterface $source, PathInterface $destination): void
     {
-        $sourceResolved = $source->resolved();
-        $destinationResolved = $destination->resolved();
+        $sourceAbsolute = $source->absolute();
+        $destinationAbsolute = $destination->absolute();
 
-        if ($sourceResolved === $destinationResolved) {
+        if ($sourceAbsolute === $destinationAbsolute) {
             throw new LogicException($this->t(
                 'The source and destination directories cannot be the same at %path',
-                $this->p(['%path' => $sourceResolved]),
+                $this->p(['%path' => $sourceAbsolute]),
                 $this->d()->exceptions(),
             ));
         }
@@ -78,7 +78,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         if (!$this->filesystem->exists($source)) {
             throw new LogicException($this->t(
                 'The source directory does not exist at %path',
-                $this->p(['%path' => $source->resolved()]),
+                $this->p(['%path' => $source->absolute()]),
                 $this->d()->exceptions(),
             ));
         }
@@ -87,13 +87,13 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
     private function runCommand(
         ?PathListInterface $exclusions,
-        string $sourceResolved,
-        string $destinationResolved,
+        string $sourceAbsolute,
+        string $destinationAbsolute,
         PathInterface $destination,
         ?OutputCallbackInterface $callback,
     ): void {
         $this->ensureDestinationDirectoryExists($destination);
-        $command = $this->buildCommand($exclusions, $sourceResolved, $destinationResolved);
+        $command = $this->buildCommand($exclusions, $sourceAbsolute, $destinationAbsolute);
 
         try {
             $this->rsync->run($command, $callback);
@@ -115,8 +115,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     /** @return array<string> */
     private function buildCommand(
         ?PathListInterface $exclusions,
-        string $sourceResolved,
-        string $destinationResolved,
+        string $sourceAbsolute,
+        string $destinationAbsolute,
     ): array {
         $exclusions ??= new PathList();
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -135,8 +135,8 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         ];
 
         // Prevent infinite recursion if the source is inside the destination.
-        if ($this->isDescendant($sourceResolved, $destinationResolved)) {
-            $exclusions[] = self::getRelativePath($destinationResolved, $sourceResolved);
+        if ($this->isDescendant($sourceAbsolute, $destinationAbsolute)) {
+            $exclusions[] = self::getRelativePath($destinationAbsolute, $sourceAbsolute);
         }
 
         // There's no reason to process duplicates.
@@ -148,9 +148,9 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = $sourceResolved . DIRECTORY_SEPARATOR;
+        $command[] = $sourceAbsolute . DIRECTORY_SEPARATOR;
 
-        $command[] = $destinationResolved;
+        $command[] = $destinationAbsolute;
 
         return $command;
     }

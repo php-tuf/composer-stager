@@ -22,8 +22,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $this->destination = PathFactory::create(self::DESTINATION_DIR);
 
         FilesystemHelper::createDirectories([
-            $this->source->resolved(),
-            $this->destination->resolved(),
+            $this->source->absolute(),
+            $this->destination->absolute(),
         ]);
     }
 
@@ -78,15 +78,15 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $link = PathFactory::create('link', $this->source);
         $target = PathFactory::create('directory', $this->source);
-        FilesystemHelper::createDirectories($target->resolved());
-        $file = PathFactory::create('directory/file.txt', $this->source)->resolved();
+        FilesystemHelper::createDirectories($target->absolute());
+        $file = PathFactory::create('directory/file.txt', $this->source)->absolute();
         touch($file);
-        symlink($target->resolved(), $link->resolved());
+        symlink($target->absolute(), $link->absolute());
         $sut = $this->createSut();
 
         $sut->sync($this->source, $this->destination);
 
-        self::assertDirectoryListing($this->destination->resolved(), [
+        self::assertDirectoryListing($this->destination->absolute(), [
             'link',
             'directory/file.txt',
         ], '', 'Correctly synced files, including a symlink to a directory.');

@@ -44,8 +44,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
      */
     public function testFulfilledWithSymlink(): void
     {
-        $target = PathFactory::create('target.txt', $this->activeDir)->resolved();
-        $link = PathFactory::create('link.txt', $this->activeDir)->resolved();
+        $target = PathFactory::create('target.txt', $this->activeDir)->absolute();
+        $link = PathFactory::create('link.txt', $this->activeDir)->absolute();
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -63,8 +63,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
      */
     public function testUnfulfilled(string $directory, string $dirName): void
     {
-        $target = PathFactory::create($directory . '/target.txt')->resolved();
-        $link = PathFactory::create($directory . '/link.txt')->resolved();
+        $target = PathFactory::create($directory . '/target.txt')->absolute();
+        $link = PathFactory::create($directory . '/link.txt')->absolute();
         touch($target);
         link($target, $link);
         $sut = $this->createSut();
@@ -72,7 +72,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $message = sprintf(
             'The %s directory at %s contains hard links, which is not supported. The first one is %s.',
             $dirName,
-            PathFactory::create($directory)->resolved(),
+            PathFactory::create($directory)->absolute(),
             $link,
         );
         self::assertTranslatableException(function () use ($sut): void {
@@ -120,7 +120,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = $this->activeDir->resolved();
+        $dirPath = $this->activeDir->absolute();
         self::createFile($dirPath, $targetFile);
         self::createHardlinks($dirPath, $links);
         $sut = $this->createSut();

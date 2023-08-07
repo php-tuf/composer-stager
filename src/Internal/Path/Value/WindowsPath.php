@@ -33,7 +33,7 @@ final class WindowsPath extends AbstractPath
      *
      * @see https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats
      */
-    protected function doResolve(string $basePath): string
+    protected function doAbsolute(string $basePath): string
     {
         $path = $this->path;
 
