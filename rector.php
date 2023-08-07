@@ -22,7 +22,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnR
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__ . '/tests/PHPUnit',
     ]);
 
     $rectorConfig->cacheClass(MemoryCacheStorage::class);

@@ -35,11 +35,6 @@ final class PackageAnnotationRule extends AbstractRule
         $reflection = $class->getNativeReflection();
         $namespace = $reflection->getNamespaceName();
 
-        // Ignore tests.
-        if ($this->isInNamespace($namespace, 'PhpTuf\\ComposerStager\\Tests\\')) {
-            return [];
-        }
-
         $docComment = $node->getDocComment();
 
         if (!$docComment instanceof Doc) {

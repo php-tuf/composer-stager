@@ -14,7 +14,7 @@ parameters:
     paths:
         - .gitattributes
         - src
-        - tests
+        - tests/PHPUnit
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     preconditionSystemHash: 3b4e79e47411a0380918a4e6b28a16c9
@@ -82,6 +82,9 @@ parameters:
             path: tests/PHPUnit
         -
             message: '#.*caught .* must be rethrown.*#'
+            path: tests/PHPUnit
+        -
+            message: '#Docblock must contain "@package.*#'
             path: tests/PHPUnit
         -
             message: '#Method .* no (value )?type specified.*#'
