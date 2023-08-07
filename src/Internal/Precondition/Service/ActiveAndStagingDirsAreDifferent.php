@@ -31,7 +31,7 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
     ): void {
-        if ($activeDir->resolved() === $stagingDir->resolved()) {
+        if ($activeDir->absolute() === $stagingDir->absolute()) {
             throw new PreconditionException($this, $this->t(
                 'The active and staging directories are the same.',
                 null,

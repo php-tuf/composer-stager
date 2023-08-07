@@ -43,9 +43,9 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testFulfilledWithValidLink(): void
     {
-        $link = PathFactory::create('link.txt', $this->activeDir)->resolved();
+        $link = PathFactory::create('link.txt', $this->activeDir)->absolute();
         self::ensureParentDirectory($link);
-        $target = PathFactory::create('target.txt', $this->activeDir)->resolved();
+        $target = PathFactory::create('target.txt', $this->activeDir)->absolute();
         self::ensureParentDirectory($target);
         touch($target);
         symlink($target, $link);
@@ -64,8 +64,8 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
-        $target = PathFactory::create($targetDir . '/target_directory')->resolved();
-        $link = PathFactory::create($linkDir . '/directory_link')->resolved();
+        $target = PathFactory::create($targetDir . '/target_directory')->absolute();
+        $link = PathFactory::create($linkDir . '/directory_link')->absolute();
         FilesystemHelper::createDirectories($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -73,7 +73,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $message = sprintf(
             'The %s directory at %s contains symlinks that point to a directory, which is not supported. The first one is %s.',
             $linkDirName,
-            PathFactory::create($linkDir)->resolved(),
+            PathFactory::create($linkDir)->absolute(),
             $link,
         );
         self::assertTranslatableException(function () use ($sut): void {
@@ -106,10 +106,10 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetDir = './target_directory';
-        FilesystemHelper::createDirectories(PathFactory::create($targetDir, $this->activeDir)->resolved());
+        FilesystemHelper::createDirectories(PathFactory::create($targetDir, $this->activeDir)->absolute());
         $links = array_fill_keys($links, $targetDir);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = $this->activeDir->resolved();
+        $dirPath = $this->activeDir->absolute();
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 

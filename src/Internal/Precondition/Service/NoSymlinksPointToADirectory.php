@@ -77,8 +77,8 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
                     . 'which is not supported. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
-                        '%codebase_root' => $codebaseRoot->resolved(),
-                        '%file' => $file->resolved(),
+                        '%codebase_root' => $codebaseRoot->absolute(),
+                        '%file' => $file->absolute(),
                     ]),
                     $this->d()->exceptions(),
                 ),

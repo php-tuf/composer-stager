@@ -107,7 +107,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $basePath, string $filename): void
     {
-        $filename = PathFactory::create("{$basePath}/{$filename}")->resolved();
+        $filename = PathFactory::create("{$basePath}/{$filename}")->absolute();
         static::ensureParentDirectory($filename);
 
         $touchResult = touch($filename);
@@ -146,7 +146,7 @@ abstract class TestCase extends PHPUnitTestCase
 
         self::prepareForLink($link, $target);
 
-        symlink($target->resolved(), $link->resolved());
+        symlink($target->absolute(), $link->absolute());
     }
 
     protected static function createHardlinks(string $basePath, array $symlinks): void
@@ -163,17 +163,17 @@ abstract class TestCase extends PHPUnitTestCase
 
         self::prepareForLink($link, $target);
 
-        link($target->resolved(), $link->resolved());
+        link($target->absolute(), $link->absolute());
     }
 
     private static function prepareForLink(PathInterface $link, PathInterface $target): void
     {
-        static::ensureParentDirectory($link->resolved());
+        static::ensureParentDirectory($link->absolute());
 
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
-        assert(file_exists($target->resolved()), 'Symlink target exists.');
+        assert(file_exists($target->absolute()), 'Symlink target exists.');
     }
 
     protected static function ensureParentDirectory(string $filename): void

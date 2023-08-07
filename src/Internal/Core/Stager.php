@@ -89,7 +89,7 @@ final class Stager implements StagerInterface
         ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $command = array_merge(
-            ['--working-dir=' . $stagingDir->resolved()],
+            ['--working-dir=' . $stagingDir->absolute()],
             $composerCommand,
         );
 

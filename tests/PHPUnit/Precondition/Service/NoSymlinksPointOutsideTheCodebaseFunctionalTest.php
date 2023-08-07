@@ -36,9 +36,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testFulfilledWithValidLink(string $link, string $target): void
     {
-        $link = PathFactory::create($link, $this->activeDir)->resolved();
+        $link = PathFactory::create($link, $this->activeDir)->absolute();
         self::ensureParentDirectory($link);
-        $target = PathFactory::create($target, $this->activeDir)->resolved();
+        $target = PathFactory::create($target, $this->activeDir)->absolute();
         self::ensureParentDirectory($target);
         touch($target);
         symlink($target, $link);
@@ -89,8 +89,8 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
-        $target = PathFactory::create($targetDir . '/target.txt')->resolved();
-        $link = PathFactory::create($linkDir . '/link.txt')->resolved();
+        $target = PathFactory::create($targetDir . '/target.txt')->absolute();
+        $link = PathFactory::create($linkDir . '/link.txt')->absolute();
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -98,7 +98,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $message = sprintf(
             'The %s directory at %s contains links that point outside the codebase, which is not supported. The first one is %s.',
             $linkDirName,
-            PathFactory::create($linkDir)->resolved(),
+            PathFactory::create($linkDir)->absolute(),
             $link,
         );
         self::assertTranslatableException(function () use ($sut): void {
@@ -139,8 +139,8 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     public function testWithHardLink(): void
     {
         $dirPath = self::activeDirPath();
-        $link = PathFactory::create('link.txt', $dirPath)->resolved();
-        $target = PathFactory::create('target.txt', $dirPath)->resolved();
+        $link = PathFactory::create('link.txt', $dirPath)->absolute();
+        $target = PathFactory::create('target.txt', $dirPath)->absolute();
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
         touch($target);
@@ -161,8 +161,8 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     public function testWithAbsoluteLink(): void
     {
         $dirPath = self::activeDirPath();
-        $link = PathFactory::create('link.txt', $dirPath)->resolved();
-        $target = PathFactory::create('target.txt', $dirPath)->resolved();
+        $link = PathFactory::create('link.txt', $dirPath)->absolute();
+        $target = PathFactory::create('target.txt', $dirPath)->absolute();
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
         touch($target);
@@ -188,7 +188,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $targetFile = '../';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = $this->activeDir->resolved();
+        $dirPath = $this->activeDir->absolute();
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 

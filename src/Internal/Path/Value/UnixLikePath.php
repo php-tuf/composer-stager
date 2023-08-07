@@ -21,7 +21,7 @@ final class UnixLikePath extends AbstractPath
         return str_starts_with($this->path, DIRECTORY_SEPARATOR);
     }
 
-    protected function doResolve(string $basePath): string
+    protected function doAbsolute(string $basePath): string
     {
         $absolute = $this->makeAbsolute($basePath);
 

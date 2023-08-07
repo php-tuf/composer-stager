@@ -71,8 +71,8 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
                     . 'which is not supported on Windows. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
-                        '%codebase_root' => $codebaseRoot->resolved(),
-                        '%file' => $file->resolved(),
+                        '%codebase_root' => $codebaseRoot->absolute(),
+                        '%file' => $file->absolute(),
                     ]),
                     $this->d()->exceptions(),
                 ),

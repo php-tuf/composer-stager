@@ -47,31 +47,31 @@ final class Filesystem implements FilesystemInterface
 
     public function copy(PathInterface $source, PathInterface $destination): void
     {
-        $sourceResolved = $source->resolved();
-        $destinationResolved = $destination->resolved();
+        $sourceAbsolute = $source->absolute();
+        $destinationAbsolute = $destination->absolute();
 
-        if ($sourceResolved === $destinationResolved) {
+        if ($sourceAbsolute === $destinationAbsolute) {
             throw new LogicException($this->t(
                 'The source and destination files cannot be the same at %path',
-                $this->p(['%path' => $sourceResolved]),
+                $this->p(['%path' => $sourceAbsolute]),
                 $this->d()->exceptions(),
             ));
         }
 
         try {
-            $this->symfonyFilesystem->copy($sourceResolved, $destinationResolved, true);
+            $this->symfonyFilesystem->copy($sourceAbsolute, $destinationAbsolute, true);
         } catch (SymfonyFileNotFoundException $e) {
             throw new LogicException($this->t(
                 'The source file does not exist or is not a file at %path',
-                $this->p(['%path' => $sourceResolved]),
+                $this->p(['%path' => $sourceAbsolute]),
                 $this->d()->exceptions(),
             ), 0, $e);
         } catch (SymfonyIOException $e) {
             throw new IOException($this->t(
                 'Failed to copy %source to %destination: %details',
                 $this->p([
-                    '%source' => $sourceResolved,
-                    '%destination' => $destinationResolved,
+                    '%source' => $sourceAbsolute,
+                    '%destination' => $destinationAbsolute,
                     '%details' => $e->getMessage(),
                 ]),
                 $this->d()->exceptions(),
@@ -92,7 +92,7 @@ final class Filesystem implements FilesystemInterface
     /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
     public function isDirEmpty(PathInterface $path): bool
     {
-        $scandir = @scandir($path->resolved());
+        $scandir = @scandir($path->absolute());
 
         if ($scandir === false) {
             // @todo This doesn't seem to fail without the exceptions domain.
@@ -100,7 +100,7 @@ final class Filesystem implements FilesystemInterface
             /** @noinspection PhpUnhandledExceptionInspection */
             throw new IOException($this->t(
                 'The path does not exist or is not a directory at %path',
-                $this->p(['%path' => $path->resolved()]),
+                $this->p(['%path' => $path->absolute()]),
                 $this->d()->exceptions(),
             ));
         }
@@ -133,19 +133,19 @@ final class Filesystem implements FilesystemInterface
 
     public function isWritable(PathInterface $path): bool
     {
-        return is_writable($path->resolved()); // @codeCoverageIgnore
+        return is_writable($path->absolute()); // @codeCoverageIgnore
     }
 
     public function mkdir(PathInterface $path): void
     {
-        $pathResolved = $path->resolved();
+        $pathAbsolute = $path->absolute();
 
         try {
-            $this->symfonyFilesystem->mkdir($pathResolved);
+            $this->symfonyFilesystem->mkdir($pathAbsolute);
         } catch (SymfonyIOException $e) {
             throw new IOException($this->t(
                 'Failed to create directory at %path',
-                $this->p(['%path' => $pathResolved]),
+                $this->p(['%path' => $pathAbsolute]),
                 $this->d()->exceptions(),
             ), 0, $e);
         }
@@ -157,12 +157,12 @@ final class Filesystem implements FilesystemInterface
             // @todo This doesn't seem to fail without the exceptions domain.
             throw new IOException($this->t(
                 'The path does not exist or is not a symlink at %path',
-                $this->p(['%path' => $path->resolved()]),
+                $this->p(['%path' => $path->absolute()]),
                 $this->d()->exceptions(),
             ));
         }
 
-        $target = readlink($path->resolved());
+        $target = readlink($path->absolute());
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
@@ -181,7 +181,7 @@ final class Filesystem implements FilesystemInterface
             // timeout, so we have to enforce it ourselves.
             set_time_limit((int) $timeout);
 
-            $this->symfonyFilesystem->remove($path->resolved());
+            $this->symfonyFilesystem->remove($path->absolute());
         } catch (SymfonyExceptionInterface $e) {
             throw new IOException($this->t(
                 $e->getMessage(),
@@ -198,7 +198,7 @@ final class Filesystem implements FilesystemInterface
         // and `is_link()`, etc., not to mention being the only way to detect hard links at all.
         // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
         // which may or may not throw an exception depending on error_reporting configuration.
-        $lstat = @lstat($path->resolved());
+        $lstat = @lstat($path->absolute());
 
         if ($lstat === false) {
             return self::PATH_DOES_NOT_EXIST;

@@ -108,7 +108,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ]);
 
         $arbitrarySymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
-        self::createSymlinks($activeDirPath->resolved(), [
+        self::createSymlinks($activeDirPath->absolute(), [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
         ]);
@@ -139,7 +139,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Non-existent (ignore).
             'file_that_NEVER_EXISTS_anywhere.txt',
             // Absolute path (ignore).
-            PathFactory::create('absolute/path')->resolved(),
+            PathFactory::create('absolute/path')->absolute(),
         ];
         $exclusions = new PathList(...$exclusions);
 
@@ -154,7 +154,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $preconditionMet = false;
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
-            assert(filetype($activeDirPath->resolved() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
+            assert(filetype($activeDirPath->absolute() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
         }
 
@@ -174,7 +174,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
         ];
-        self::assertDirectoryListing($stagingDirPath->resolved(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
+        self::assertDirectoryListing($stagingDirPath->absolute(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
 
         // Stage: Execute a Composer command (that doesn't make any HTTP requests).
         $newComposerName = 'new/name';
@@ -201,12 +201,12 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::createFile($stagingDir, 'another_subdir/CREATE_in_staging_dir.txt');
 
         // Create symlink.
-        self::createSymlink($stagingDirPath->resolved(), 'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt', $arbitrarySymlinkTarget);
+        self::createSymlink($stagingDirPath->absolute(), 'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt', $arbitrarySymlinkTarget);
 
         // Sanity check to ensure that the expected changes were made.
         $deletion = array_search('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $expectedStagingDirListing, true);
         unset($expectedStagingDirListing[$deletion]);
-        self::assertDirectoryListing($stagingDirPath->resolved(), [
+        self::assertDirectoryListing($stagingDirPath->absolute(), [
             ...$expectedStagingDirListing,
             // Additions.
             'CREATE_in_staging_dir.txt',
@@ -227,14 +227,14 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $preconditionMet = false;
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
-            assert(filetype($activeDirPath->resolved() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
+            assert(filetype($activeDirPath->absolute() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
         }
 
         // Commit: Sync files from the staging directory back to the directory.
         $this->committer->commit($stagingDirPath, $activeDirPath, $exclusions);
 
-        self::assertDirectoryListing($activeDirPath->resolved(), [
+        self::assertDirectoryListing($activeDirPath->absolute(), [
             'composer.json',
             // Unchanged files are left alone.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
@@ -271,7 +271,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Files included despite including excluded paths at the wrong depth.
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
-        ], $stagingDirPath->resolved(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
+        ], $stagingDirPath->absolute(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
 
         // Unchanged file contents.
         self::assertFileNotChanged($activeDir, 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt');
@@ -304,7 +304,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         // Clean: Remove the staging directory.
         $this->cleaner->clean($activeDirPath, $stagingDirPath);
 
-        self::assertFileDoesNotExist($stagingDirPath->resolved(), 'Staging directory was completely removed.');
+        self::assertFileDoesNotExist($stagingDirPath->absolute(), 'Staging directory was completely removed.');
     }
 
     public function providerDirectories(): array

@@ -47,8 +47,8 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
                     . 'which is not supported. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
-                        '%codebase_root' => $codebaseRoot->resolved(),
-                        '%file' => $file->resolved(),
+                        '%codebase_root' => $codebaseRoot->absolute(),
+                        '%file' => $file->absolute(),
                     ]),
                     $this->d()->exceptions(),
                 ),
@@ -61,7 +61,7 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
     {
         $target = $this->filesystem->readLink($link);
 
-        return !$this->isDescendant($target->resolved(), $path->resolved());
+        return !$this->isDescendant($target->absolute(), $path->absolute());
     }
 
     private function isDescendant(string $descendant, string $ancestor): bool
