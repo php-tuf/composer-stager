@@ -18,7 +18,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     preconditionSystemHash: 3b4e79e47411a0380918a4e6b28a16c9
-    translationSystemHash: b85aa58adb85670485957d344bbdd1c5
+    translationSystemHash: 058417bf8b7d9da4205fb9755876e60f
     gitattributesExportInclude:
         - composer.json
         - docs

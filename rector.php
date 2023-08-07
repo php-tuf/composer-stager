@@ -16,7 +16,6 @@ use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector;
 
 /** @see https://getrector.com/documentation/ */
 return static function (RectorConfig $rectorConfig): void {
@@ -39,7 +38,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        ArrayShapeFromConstantArrayReturnRector::class => [__DIR__],
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
         EncapsedStringsToSprintfRector::class => [__DIR__],
         FinalizeClassesWithoutChildrenRector::class => [__DIR__], // This is duplicative of PHPCS sniff SlevomatCodingStandard.Classes.RequireAbstractOrFinal.

@@ -1,6 +1,13 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="Annotator" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="CheckEmptyScriptTag" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CheckImageSize" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CheckValidXmlInScriptTagBody" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="ContainerConstant" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="ContainerSettingDeprecatedInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="EventMethodCall" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ForgottenDebugOutputInspection" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="configuration">
         <list>
@@ -68,12 +75,135 @@
       </option>
       <option name="migratedIntoUserSpace" value="true" />
     </inspection_tool>
+    <inspection_tool class="HtmlDeprecatedAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlDeprecatedTag" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlExtraClosingTag" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlFormInputWithoutLabel" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlMissingClosingTag" enabled="false" level="INFORMATION" enabled_by_default="false" />
+    <inspection_tool class="HtmlRequiredAltAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlRequiredLangAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlRequiredTitleElement" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlUnknownAnchorTarget" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="myValues">
+        <value>
+          <list size="0" />
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownBooleanAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlUnknownTag" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="myValues">
+        <value>
+          <list size="6">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownTarget" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="HtmlWrongAttributeValue" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownIncorrectTableFormatting" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownIncorrectlyNumberedListItem" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownLinkDestinationWithSpaces" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownNoTableBorders" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="MarkdownOutdatedTableOfContents" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownUnresolvedFileReference" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownUnresolvedHeaderReference" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownUnresolvedLinkLabel" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MissingService" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpMultipleClassDeclarationsInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpUnhandledExceptionInspection" enabled="true" level="WEAK WARNING" enabled_by_default="false">
       <scope name="Production Code" level="WEAK WARNING" enabled="true" />
     </inspection_tool>
+    <inspection_tool class="PhpUnused" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedAliasInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedFieldDefaultValueInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedLocalVariableInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedParameterInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedPrivateFieldInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpUnusedPrivateMethodInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpVoidFunctionResultUsedInspection" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Production Code" level="WARNING" enabled="true" />
     </inspection_tool>
+    <inspection_tool class="PropertyInitializationFlawsInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="RequiredAttributes" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="myAdditionalRequiredHtmlAttributes" value="" />
+    </inspection_tool>
+    <inspection_tool class="SecurityAdvisoriesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="optionConfiguration">
+        <list>
+          <option value="barryvdh/laravel-debugbar" />
+          <option value="behat/behat" />
+          <option value="brianium/paratest" />
+          <option value="codeception/codeception" />
+          <option value="codedungeon/phpunit-result-printer" />
+          <option value="composer/composer" />
+          <option value="doctrine/coding-standard" />
+          <option value="filp/whoops" />
+          <option value="friendsofphp/php-cs-fixer" />
+          <option value="humbug/humbug" />
+          <option value="infection/infection" />
+          <option value="jakub-onderka/php-parallel-lint" />
+          <option value="johnkary/phpunit-speedtrap" />
+          <option value="kalessil/production-dependencies-guard" />
+          <option value="mikey179/vfsStream" />
+          <option value="mockery/mockery" />
+          <option value="mybuilder/phpunit-accelerator" />
+          <option value="orchestra/testbench" />
+          <option value="pdepend/pdepend" />
+          <option value="phan/phan" />
+          <option value="phing/phing" />
+          <option value="phpcompatibility/php-compatibility" />
+          <option value="phpmd/phpmd" />
+          <option value="phpro/grumphp" />
+          <option value="phpspec/phpspec" />
+          <option value="phpspec/prophecy" />
+          <option value="phpstan/phpstan" />
+          <option value="phpunit/phpunit" />
+          <option value="povils/phpmnd" />
+          <option value="roave/security-advisories" />
+          <option value="satooshi/php-coveralls" />
+          <option value="sebastian/phpcpd" />
+          <option value="slevomat/coding-standard" />
+          <option value="spatie/phpunit-watcher" />
+          <option value="squizlabs/php_codesniffer" />
+          <option value="sstalle/php7cc" />
+          <option value="symfony/debug" />
+          <option value="symfony/maker-bundle" />
+          <option value="symfony/phpunit-bridge" />
+          <option value="symfony/var-dumper" />
+          <option value="vimeo/psalm" />
+          <option value="wimg/php-compatibility" />
+          <option value="wp-coding-standards/wpcs" />
+          <option value="yiisoft/yii2-coding-standards" />
+          <option value="yiisoft/yii2-debug" />
+          <option value="yiisoft/yii2-gii" />
+          <option value="zendframework/zend-coding-standard" />
+          <option value="zendframework/zend-debug" />
+          <option value="zendframework/zend-test" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="ServiceNamedArgumentExistsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Symfony2XmlDuplicateParameterKeyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Symfony2XmlDuplicateServiceKeyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Symfony2YamlDuplicateParameterKeyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Symfony2YamlDuplicateServiceKeyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="TaggedExtendsInterfaceClass" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="XmlServiceArgumentInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="XmlServiceInstanceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="YamlClassInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="YamlDeprecatedClasses" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="YamlParameterInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="YamlServiceArgumentInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="YamlXmlServiceInstanceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>
