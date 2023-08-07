@@ -41,11 +41,6 @@ abstract class AbstractPath implements PathInterface
         return $this->doAbsolute($this->basePath);
     }
 
-    public function raw(): string
-    {
-        return $this->path;
-    }
-
     public function relative(PathInterface $basePath): string
     {
         $basePathAbsolute = $basePath->absolute();

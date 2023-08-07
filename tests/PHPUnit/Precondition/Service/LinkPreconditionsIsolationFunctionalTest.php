@@ -125,7 +125,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     public function testNoSymlinksPointOutsideTheCodebase(): void
     {
         $source = self::path('source.txt')->absolute();
-        $target = self::path('../target.txt')->raw();
+        $target = '../target.txt';
         touch($target);
         symlink($target, $source);
 
@@ -136,7 +136,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     public function testNoSymlinksPointToADirectory(): void
     {
         $source = self::path('link')->absolute();
-        $target = self::path('directory')->raw();
+        $target = 'directory';
         FilesystemHelper::createDirectories($target);
         symlink($target, $source);
 
