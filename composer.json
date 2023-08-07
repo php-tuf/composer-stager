@@ -85,7 +85,7 @@
     },
     "scripts": {
         "all": [
-            "@c",
+            "phpstan clear-result-cache",
             "grumphp run"
         ],
         "bench": "@phpbench",
@@ -115,7 +115,7 @@
         "rector": "rector",
         "stan": "@phpstan",
         "static": [
-            "@c",
+            "phpstan clear-result-cache",
             "grumphp run --testsuite=static"
         ],
         "tests": "grumphp run --testsuite=test",
