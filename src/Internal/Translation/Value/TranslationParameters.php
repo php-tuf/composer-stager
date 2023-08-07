@@ -23,8 +23,8 @@ final class TranslationParameters implements TranslationParametersInterface
      *   Values must be strings. Example:
      *   ```php
      *   $parameters = [
-     *     '%first_name' => 'John',
-     *     '%last_name' => 'Doe',
+     *       '%first_name' => 'John',
+     *       '%last_name' => 'Doe',
      *   ];
      *   ```
      */
