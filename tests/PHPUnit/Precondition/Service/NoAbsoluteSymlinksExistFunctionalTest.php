@@ -108,13 +108,14 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     public function testOnlyRelativeLinksExist(string $dirName, PathInterface $dirPath, string $link): void
     {
         $link = PathFactory::create($link, $dirPath);
-        $target = PathFactory::create('target.txt', $dirPath);
+        $targetFile = 'target.txt';
+        $targetPath = PathFactory::create($targetFile, $dirPath);
         $parentDir = dirname($link->absolute());
         @mkdir($parentDir, 0777, true);
-        touch($target->absolute());
+        touch($targetPath->absolute());
         chdir($parentDir);
-        // Point at the raw target, i.e., its relative path.
-        symlink($target->raw(), $link->absolute());
+        // Point at the relative target path.
+        symlink($targetFile, $link->absolute());
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());

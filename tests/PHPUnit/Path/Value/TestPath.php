@@ -20,11 +20,6 @@ final class TestPath implements PathInterface
         return true;
     }
 
-    public function raw(): string
-    {
-        return $this->path;
-    }
-
     public function relative(PathInterface $basePath): string
     {
         return $this->path;

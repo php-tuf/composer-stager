@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
-use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
@@ -253,7 +252,7 @@ final class FilesystemFunctionalTest extends TestCase
      *
      * @dataProvider providerReadlink
      */
-    public function testReadlink(string $given, string $expectedRaw, string $expectedAbsolute): void
+    public function testReadlink(string $given, string $expectedAbsolute): void
     {
         $basePath = self::sourceDir();
         $symlinkPath = PathFactory::create('symlink.txt', $basePath);
@@ -270,7 +269,6 @@ final class FilesystemFunctionalTest extends TestCase
 
         $symlinkTarget = $sut->readLink($symlinkPath);
 
-        self::assertEquals($expectedRaw, $symlinkTarget->raw(), 'Got the correct raw target value.');
         self::assertEquals($expectedAbsolute, $symlinkTarget->absolute(), 'Got the correct absolute target value.');
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $hardLinkPath->absolute());
@@ -293,12 +291,10 @@ final class FilesystemFunctionalTest extends TestCase
         return [
             'Absolute link' => [
                 'given' => $absolute('target.txt'),
-                'expectedRaw' => $absolute('target.txt'),
                 'expectedAbsolute' => $absolute('target.txt'),
             ],
             'Relative link' => [
                 'given' => 'target.txt',
-                'expectedRaw' => Host::isWindows() ? $absolute('target.txt') : 'target.txt',
                 'expectedAbsolute' => $absolute('target.txt'),
             ],
         ];
