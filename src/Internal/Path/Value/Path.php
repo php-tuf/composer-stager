@@ -3,17 +3,17 @@
 namespace PhpTuf\ComposerStager\Internal\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use Symfony\Component\Filesystem\Path as SymfonyPath;
+use Throwable;
 
 /**
  * @package Path
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-abstract class AbstractPath implements PathInterface
+final class Path implements PathInterface
 {
-    protected string $basePath;
-
-    abstract protected function doAbsolute(string $basePath): string;
+    private string $basePath;
 
     /**
      * @param string $path
@@ -41,61 +41,16 @@ abstract class AbstractPath implements PathInterface
         return $this->doAbsolute($this->basePath);
     }
 
+    public function isAbsolute(): bool
+    {
+        return SymfonyPath::isAbsolute($this->path);
+    }
+
     public function relative(PathInterface $basePath): string
     {
         $basePathAbsolute = $basePath->absolute();
 
         return $this->doAbsolute($basePathAbsolute);
-    }
-
-    // Once support for Symfony 4 is dropped, some of this logic could possibly be
-    // eliminated in favor of the new path manipulation utilities in Symfony 5.4:
-    // https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
-    protected function normalize(string $absolutePath, string $prefix = ''): string
-    {
-        // If the absolute path begins with a directory separator, append it to
-        // the prefix, or it will be lost below when exploding the string. (A
-        // trailing directory separator SHOULD BE lost.)
-        if (str_starts_with($absolutePath, DIRECTORY_SEPARATOR)) {
-            $prefix .= DIRECTORY_SEPARATOR;
-        }
-
-        // Strip the given prefix.
-        $absolutePath = substr($absolutePath, strlen($prefix));
-
-        // Normalize directory separators and explode around them.
-        $absolutePath = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $absolutePath);
-        $parts = explode(DIRECTORY_SEPARATOR, $absolutePath);
-
-        $normalized = [];
-
-        foreach ($parts as $part) {
-            // A zero-length part comes from (meaningless) double slashes. Skip it.
-            if ($part === '') {
-                continue;
-            }
-
-            // A single dot has no effect. Skip it.
-            if ($part === '.') {
-                continue;
-            }
-
-            // Two dots goes "up" a directory. Pop one off the current normalized array.
-            if ($part === '..') {
-                array_pop($normalized);
-
-                continue;
-            }
-
-            // Otherwise, add the part to the current normalized array.
-            $normalized[] = $part;
-        }
-
-        // Replace directory separators.
-        $normalized = implode(DIRECTORY_SEPARATOR, $normalized);
-
-        // Replace the prefix and return.
-        return $prefix . $normalized;
     }
 
     /**
@@ -112,5 +67,37 @@ abstract class AbstractPath implements PathInterface
         // IO exceptions. Cast the return value to a string for the purpose of
         // static analysis and move on.
         return (string) getcwd();
+    }
+
+    private function doAbsolute(string $basePath): string
+    {
+        try {
+            $absolute = SymfonyPath::makeAbsolute($this->path, $basePath);
+        } catch (Throwable) {
+            // SymfonyPath throws an exception if the base path isn't absolute. That
+            // shouldn't be possible here because, in order to get to this point in the
+            // code, the base path must necessarily have been set to an absolute path in
+            // the constructor--either explicitly or via `getcwd()`. Nevertheless, as a
+            // matter of defensive programming, use an assertion and return the normalized
+            // path, whatever it is, in case of the "impossible" in production.
+            //
+            // @todo It's probably better to throw an InvalidArgumentException, but that will
+            //   have a widespread effect on error-handling, so come back to it in a follow-up.
+            assert(false, sprintf('Base paths must be absolute. Got %s.', $basePath));
+
+            /** @noinspection PhpUnreachableStatementInspection */
+            return $this->normalize($this->path);
+        }
+
+        return $this->normalize($absolute);
+    }
+
+    private function normalize(string $absolutePath): string
+    {
+        return str_replace(
+            ['//', '/'], // Some Windows paths end up with double slashes after the drive name.
+            ['/', DIRECTORY_SEPARATOR], // SymfonyPath always uses forward slashes. Use the OS-specific separator.
+            SymfonyPath::canonicalize($absolutePath),
+        );
     }
 }
