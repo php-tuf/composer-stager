@@ -2,7 +2,6 @@
 
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
-use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
@@ -13,6 +12,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -39,6 +39,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
+        ReadOnlyPropertyRector::class => [__DIR__ . '/src/Internal/Path/Value/Path.php'],
         EncapsedStringsToSprintfRector::class => [__DIR__],
         FinalizeClassesWithoutChildrenRector::class => [__DIR__], // This is duplicative of PHPCS sniff SlevomatCodingStandard.Classes.RequireAbstractOrFinal.
         LocallyCalledStaticMethodToNonStaticRector::class => [__DIR__],
@@ -48,7 +49,6 @@ return static function (RectorConfig $rectorConfig): void {
         NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/PHPUnit/TestUtils/AssertTrait.php'],
         RemoveUselessParamTagRector::class => [__DIR__], // This one has a bug: https://github.com/rectorphp/rector-src/pull/4480
         RemoveUselessReturnTagRector::class => [__DIR__], // This one has a bug: https://github.com/rectorphp/rector-src/pull/4482
-        SimplifyIfReturnBoolRector::class => [__DIR__ . '/src/Internal/Path/Value/WindowsPath.php'],
         UnSpreadOperatorRector::class => [__DIR__],
     ]);
 };

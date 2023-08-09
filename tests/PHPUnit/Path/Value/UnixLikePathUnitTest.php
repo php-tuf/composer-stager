@@ -2,62 +2,21 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath;
-use PhpTuf\ComposerStager\Tests\TestCase;
-
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\UnixLikePath
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
  *
  * @covers ::__construct
  * @covers ::absolute
  * @covers ::doAbsolute
  * @covers ::isAbsolute
- * @covers ::makeAbsolute
  * @covers ::normalize
  * @covers ::relative
- * @covers \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath::getcwd
+ * @covers \PhpTuf\ComposerStager\Internal\Path\Value\Path::getcwd
  *
  * @group no_windows
  */
-final class UnixLikePathUnitTest extends TestCase
+final class UnixLikePathUnitTest extends PathUnitTestCase
 {
-    public string $basePath;
-
-    /** @dataProvider providerBasicFunctionality */
-    public function testBasicFunctionality(
-        string $given,
-        string $basePath,
-        bool $isAbsolute,
-        string $absolute,
-        string $relativeBase,
-        string $relative,
-    ): void {
-        $equalInstance = new UnixLikePath($given);
-        $unequalInstance = new UnixLikePath(__DIR__);
-        $relativeBase = new UnixLikePath($relativeBase);
-        $sut = new UnixLikePath($given);
-
-        // Dynamically override baseDir.
-        $setBaseDir = function ($basePath): void {
-            $this->basePath = $basePath;
-        };
-        $setBaseDir->call($sut, $basePath);
-        $setBaseDir->call($equalInstance, $basePath);
-
-        self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
-        self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
-        self::assertEquals($relative, $sut->relative($relativeBase), 'Got absolute path relative to another given path.');
-        self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');
-        self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
-
-        // Make sure object is truly immutable.
-        chdir(__DIR__);
-        self::assertEquals($absolute, $sut->absolute(), 'Retained correct value after changing working directory.');
-        self::assertEquals($sut, $equalInstance, 'Path value still considered equal to another instance with the same input after changing working directory.');
-        self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
-    }
-
     public function providerBasicFunctionality(): array
     {
         return [
@@ -193,14 +152,6 @@ final class UnixLikePathUnitTest extends TestCase
                 'relative' => '/one/six',
             ],
         ];
-    }
-
-    /** @dataProvider providerBaseDirArgument */
-    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $absolute): void
-    {
-        $sut = new UnixLikePath($path, $basePath);
-
-        self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
     }
 
     public function providerBaseDirArgument(): array

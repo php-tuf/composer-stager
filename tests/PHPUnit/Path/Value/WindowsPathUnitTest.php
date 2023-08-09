@@ -3,29 +3,21 @@
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath;
-use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\WindowsPath
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
  *
  * @covers ::__construct
  * @covers ::absolute
  * @covers ::doAbsolute
- * @covers ::getAbsoluteFromRelative
  * @covers ::isAbsolute
- * @covers ::isAbsoluteFromCurrentDrive
- * @covers ::isAbsoluteFromSpecificDrive
  * @covers ::normalize
- * @covers ::normalizeAbsoluteFromCurrentDrive
- * @covers ::normalizeAbsoluteFromSpecificDrive
  * @covers ::relative
- * @covers \PhpTuf\ComposerStager\Internal\Path\Value\AbstractPath::getcwd
+ * @covers \PhpTuf\ComposerStager\Internal\Path\Value\Path::getcwd
  */
-final class WindowsPathUnitTest extends TestCase
+final class WindowsPathUnitTest extends PathUnitTestCase
 {
-    public string $basePath;
-
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
@@ -35,31 +27,13 @@ final class WindowsPathUnitTest extends TestCase
         string $relativeBase,
         string $relative,
     ): void {
-        self::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
+        // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
+        // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
+        if (!Host::isWindows()) {
+            self::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
+        }
 
-        $sut = new WindowsPath($given);
-        $equalInstance = new WindowsPath($given);
-        $unequalInstance = new WindowsPath(__DIR__);
-        $relativeBase = new WindowsPath($relativeBase);
-
-        // Dynamically override base path.
-        $setBaseDir = function ($basePath): void {
-            $this->basePath = $basePath;
-        };
-        $setBaseDir->call($sut, $basePath);
-        $setBaseDir->call($equalInstance, $basePath);
-
-        self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
-        self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
-        self::assertEquals($relative, $sut->relative($relativeBase), 'Got absolute path relative to another given path.');
-        self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');
-        self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
-
-        // Make sure object is truly immutable.
-        chdir(__DIR__);
-        self::assertEquals($absolute, $sut->absolute(), 'Retained correct value after changing working directory.');
-        self::assertEquals($sut, $equalInstance, 'Path value still considered equal to another instance with the same input after changing working directory.');
-        self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
+        parent::testBasicFunctionality($given, $basePath, $isAbsolute, $absolute, $relativeBase, $relative);
     }
 
     public function providerBasicFunctionality(): array
@@ -188,61 +162,21 @@ final class WindowsPathUnitTest extends TestCase
                 'relativeBase' => 'D:\\Eleven\\Twelve\\Fourteen',
                 'relative' => 'D:\\One\\Six',
             ],
-            // Absolute paths from the root of the current drive.
-            'Absolute path to the root of the current drive' => [
-                'given' => '\\',
-                'baseDir' => 'C:\\',
-                'isAbsolute' => true,
-                'absolute' => 'C:\\',
-                'relativeBase' => 'C:\\',
-                'relative' => 'C:\\',
-            ],
-            'Absolute path from the root of the current drive as a simple string' => [
-                'given' => '\\One',
-                'baseDir' => 'C:\\Windows',
-                'isAbsolute' => true,
-                'absolute' => 'C:\\One',
-                'relativeBase' => 'D:\\Users',
-                'relative' => 'D:\\One',
-            ],
-            'Absolute path from the root of the current drive with nesting' => [
-                'given' => '\\One\\Two\\Three\\Four\\Five',
-                'baseDir' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
-                'isAbsolute' => true,
-                'absolute' => 'C:\\One\\Two\\Three\\Four\\Five',
-                'relativeBase' => 'D:\\Users',
-                'relative' => 'D:\\One\\Two\\Three\\Four\\Five',
-            ],
-            'Crazy absolute path from the root of the current drive' => [
-                'given' => '\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
-                'isAbsolute' => true,
-                'absolute' => 'C:\\One\\Six',
-                'relativeBase' => 'D:\\Users',
-                'relative' => 'D:\\One\\Six',
-            ],
-            'Crazy absolute path from the root of a specified drive' => [
-                'given' => '\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
-                'isAbsolute' => true,
-                'absolute' => 'C:\\One\\Six',
-                'relativeBase' => 'D:\\Users',
-                'relative' => 'D:\\One\\Six',
-            ],
         ];
     }
 
     /**
      * @dataProvider providerBaseDirArgument
      *
+     * @noinspection SenselessProxyMethodInspection
+     *   This method only exists so the "@group" annotation can be added to it.
+     *
      * @group windows_only
      *   This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
      */
     public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $absolute): void
     {
-        $sut = new WindowsPath($path, $basePath);
-
-        self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
+        parent::testOptionalBaseDirArgument($path, $basePath, $absolute);
     }
 
     public function providerBaseDirArgument(): array
