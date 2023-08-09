@@ -42,6 +42,9 @@ parameters:
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
+            message: '#Concrete class must implement an interface#'
+            path: src/Internal/Helper/PathHelper.php
+        -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             paths:
                 - src/Internal/Path/Value/Path.php
@@ -53,10 +56,14 @@ parameters:
             message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
             path: src/API/Exception/PreconditionException.php
         -
-            message: '#Method (run|create)\(\) should not be public because it doesn''t implement a method on an interface.#'
-            paths:
-                - src/Internal/Process/Service/AbstractProcessRunner.php
-                - src/Internal/Translation/Service/Translator.php
+            message: '#Method .*\(\) should not be public because it doesn''t implement a method on an interface.#'
+            path: src/Internal/Helper/PathHelper.php
+        -
+            message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
+            path: src/Internal/Process/Service/AbstractProcessRunner.php
+        -
+            message: '#Method create\(\) should not be public because it doesn''t implement a method on an interface.#'
+            path: src/Internal/Translation/Service/Translator.php
 
         # Test code.
         -

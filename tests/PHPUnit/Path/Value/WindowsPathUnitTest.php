@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\Internal\Host\Service\Host;
  * @covers ::absolute
  * @covers ::doAbsolute
  * @covers ::isAbsolute
- * @covers ::normalize
  * @covers ::relative
  * @covers \PhpTuf\ComposerStager\Internal\Path\Value\Path::getcwd
  */
