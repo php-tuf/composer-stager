@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase
@@ -110,12 +111,12 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
     {
         return [
             'In active directory' => [
-                'targetDir' => self::TEST_WORKING_DIR_ABSOLUTE,
+                'targetDir' => PathHelper::testWorkingDirAbsolute(),
                 'linkDir' => self::ACTIVE_DIR_RELATIVE,
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
-                'targetDir' => self::TEST_WORKING_DIR_ABSOLUTE,
+                'targetDir' => PathHelper::testWorkingDirAbsolute(),
                 'linkDir' => self::STAGING_DIR_RELATIVE,
                 'linkDirName' => 'staging',
             ],

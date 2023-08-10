@@ -6,6 +6,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
@@ -44,7 +46,10 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = self::TEST_WORKING_DIR_ABSOLUTE . '/65eb69a274470dd84e9b5371f7e1e8c8';
+        $nonexistentDir = SymfonyPath::makeAbsolute(
+            '65eb69a274470dd84e9b5371f7e1e8c8',
+            PathHelper::testWorkingDirAbsolute(),
+        );
 
         return [
             'Active directory' => [

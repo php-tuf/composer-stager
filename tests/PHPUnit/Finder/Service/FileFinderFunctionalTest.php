@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
@@ -157,7 +158,7 @@ final class FileFinderFunctionalTest extends TestCase
             $path = implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    self::TEST_WORKING_DIR_ABSOLUTE,
+                    PathHelper::testWorkingDirAbsolute(),
                     self::ACTIVE_DIR_RELATIVE,
                     $path,
                 ],
