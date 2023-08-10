@@ -2,12 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
@@ -15,9 +15,6 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     {
         self::createTestEnvironment();
         FilesystemHelper::createDirectories(PathHelper::stagingDirRelative());
-
-        $this->activeDir = self::activeDirPath();
-        $this->stagingDir = self::stagingDirPath();
     }
 
     protected function tearDown(): void
@@ -28,15 +25,15 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     abstract protected function createSut(): PreconditionInterface;
 
     /** @dataProvider providerFulfilledDirectoryDoesNotExist */
-    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
-    final protected function doTestFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
-    {
-        $activeDir = PathFactory::create($activeDir);
-        $stagingDir = PathFactory::create($stagingDir);
+    final protected function doTestFulfilledDirectoryDoesNotExist(
+        PathInterface $activeDir,
+        PathInterface $stagingDir,
+    ): void {
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
@@ -46,18 +43,15 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = SymfonyPath::makeAbsolute(
-            '65eb69a274470dd84e9b5371f7e1e8c8',
-            PathHelper::testWorkingDirAbsolute(),
-        );
+        $nonexistentDir = PathFactory::create('65eb69a274470dd84e9b5371f7e1e8c8');
 
         return [
             'Active directory' => [
                 'activeDir' => $nonexistentDir,
-                'stagingDir' => PathHelper::stagingDirRelative(),
+                'stagingDir' => PathHelper::stagingDirPath(),
             ],
             'Staging directory' => [
-                'activeDir' => PathHelper::activeDirRelative(),
+                'activeDir' => PathHelper::activeDirPath(),
                 'stagingDir' => $nonexistentDir,
             ],
         ];

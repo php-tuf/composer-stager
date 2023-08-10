@@ -166,7 +166,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      *
      * @dataProvider providerFulfilledDirectoryDoesNotExist
      */
-    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }

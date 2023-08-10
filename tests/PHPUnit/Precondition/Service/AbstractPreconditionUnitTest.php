@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -102,9 +103,12 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         string $unfulfilledStatusMessage,
         string $expectedStatusMessage,
     ): void {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->spy
-            ->report([$this->activeDir, $this->stagingDir, $exclusions])
+            ->report([$activeDirPath, $stagingDirPath, $exclusions])
             ->shouldBeCalledTimes(2)
             ->willReturn($isFulfilled);
 
@@ -116,8 +120,8 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($this->activeDir, $this->stagingDir, $exclusions), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($activeDirPath, $stagingDirPath, $exclusions), $expectedStatusMessage);
         self::assertEquals($sut->getLeaves(), [$sut]);
     }
 
@@ -151,21 +155,24 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
      */
     public function testFulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->spy
             ->report(Argument::cetera())
             ->willReturn(true);
         $this->spy
-            ->report([$this->activeDir, $this->stagingDir])
+            ->report([$activeDirPath, $stagingDirPath])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $this->spy
-            ->report([$this->activeDir, $this->stagingDir, new TestPathList()])
+            ->report([$activeDirPath, $stagingDirPath, new TestPathList()])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, new TestPathList());
     }
 
     /**
@@ -174,16 +181,19 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
      */
     public function testUnfulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $message = __METHOD__;
         $this->spy
-            ->report([$this->activeDir, $this->stagingDir, new TestPathList()])
+            ->report([$activeDirPath, $stagingDirPath, new TestPathList()])
             ->willReturn(false);
         $sut = $this->createSut();
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $sut->theUnfulfilledStatusMessage = $message;
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, new TestPathList());
+        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, new TestPathList());
         }, PreconditionException::class, $message);
     }
 }

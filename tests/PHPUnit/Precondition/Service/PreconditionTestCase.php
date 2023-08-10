@@ -3,9 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -18,8 +18,6 @@ abstract class PreconditionTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->exclusions = new TestPathList();
     }
 
@@ -40,13 +38,18 @@ abstract class PreconditionTestCase extends TestCase
         self::assertIsArray($sut->getLeaves());
     }
 
-    protected function doTestFulfilled(string $expectedStatusMessage): void
-    {
+    protected function doTestFulfilled(
+        string $expectedStatusMessage,
+        ?PathInterface $activeDirPath = null,
+        ?PathInterface $stagingDirPath = null,
+    ): void {
+        $activeDirPath ??= PathHelper::activeDirPath();
+        $stagingDirPath ??= PathHelper::stagingDirPath();
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
-        $actualStatusMessage = $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions);
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
+        $actualStatusMessage = $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
 
         self::assertTrue($isFulfilled);
         self::assertTranslatableMessage($expectedStatusMessage, $actualStatusMessage, 'Got correct status message.');
@@ -55,11 +58,15 @@ abstract class PreconditionTestCase extends TestCase
     protected function doTestUnfulfilled(
         TranslatableInterface $expectedStatusMessage,
         ?string $previousException = null,
+        ?PathInterface $activeDirPath = null,
+        ?PathInterface $stagingDirPath = null,
     ): void {
+        $activeDirPath ??= PathHelper::activeDirPath();
+        $stagingDirPath ??= PathHelper::stagingDirPath();
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
         }, PreconditionException::class, $expectedStatusMessage, $previousException);
     }
 }

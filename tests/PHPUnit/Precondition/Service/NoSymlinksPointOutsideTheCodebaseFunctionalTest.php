@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
@@ -37,15 +38,18 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testFulfilledWithValidLink(string $link, string $target): void
     {
-        $link = PathFactory::create($link, $this->activeDir)->absolute();
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
+        $link = PathFactory::create($link, $activeDirPath)->absolute();
         self::ensureParentDirectory($link);
-        $target = PathFactory::create($target, $this->activeDir)->absolute();
+        $target = PathFactory::create($target, $activeDirPath)->absolute();
         self::ensureParentDirectory($target);
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertTrue($isFulfilled, 'Allowed link pointing within the codebase.');
     }
@@ -90,8 +94,11 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
-        $target = PathFactory::create($targetDir . '/target.txt')->absolute();
-        $link = PathFactory::create($linkDir . '/link.txt')->absolute();
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
+        $target = PathHelper::makeAbsolute('target.txt', $targetDir);
+        $link = PathHelper::makeAbsolute('link.txt', $linkDir);
         touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -99,11 +106,11 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $message = sprintf(
             'The %s directory at %s contains links that point outside the codebase, which is not supported. The first one is %s.',
             $linkDirName,
-            PathFactory::create($linkDir)->absolute(),
+            PathHelper::makeAbsolute($linkDir, getcwd()),
             $link,
         );
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
         }, PreconditionException::class, $message);
     }
 
@@ -112,12 +119,12 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         return [
             'In active directory' => [
                 'targetDir' => PathHelper::testWorkingDirAbsolute(),
-                'linkDir' => PathHelper::activeDirRelative(),
+                'linkDir' => PathHelper::activeDirAbsolute(),
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
                 'targetDir' => PathHelper::testWorkingDirAbsolute(),
-                'linkDir' => PathHelper::stagingDirRelative(),
+                'linkDir' => PathHelper::stagingDirAbsolute(),
                 'linkDirName' => 'staging',
             ],
         ];
@@ -128,7 +135,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      *
      * @dataProvider providerFulfilledDirectoryDoesNotExist
      */
-    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
@@ -139,16 +146,19 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testWithHardLink(): void
     {
-        $dirPath = self::activeDirPath();
-        $link = PathFactory::create('link.txt', $dirPath)->absolute();
-        $target = PathFactory::create('target.txt', $dirPath)->absolute();
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
+        $basePathAbsolute = PathHelper::activeDirAbsolute();
+        $link = PathHelper::makeAbsolute('link.txt', $basePathAbsolute);
+        $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
         touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertTrue($isFulfilled, 'Ignored hard link link.');
     }
@@ -161,6 +171,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testWithAbsoluteLink(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $dirPath = self::activeDirPath();
         $link = PathFactory::create('link.txt', $dirPath)->absolute();
         $target = PathFactory::create('target.txt', $dirPath)->absolute();
@@ -170,8 +183,8 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertTrue($isFulfilled, 'Ignored hard link link.');
     }
@@ -186,14 +199,17 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
      */
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $targetFile = '../';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = $this->activeDir->absolute();
+        $dirPath = PathHelper::activeDirAbsolute();
         self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions);
 
         self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }

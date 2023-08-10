@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -48,11 +49,14 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->commonPreconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsReady
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The preconditions for removing the staging directory are fulfilled.');
@@ -60,10 +64,13 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));

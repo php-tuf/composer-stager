@@ -20,12 +20,12 @@ final class PathHelper
 
     public static function testEnvAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute(self::TEST_ENV, self::repositoryRootAbsolute());
+        return self::makeAbsolute(self::TEST_ENV, self::repositoryRootAbsolute());
     }
 
     public static function testWorkingDirAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute(self::WORKING_DIR, self::testEnvAbsolute());
+        return self::makeAbsolute(self::WORKING_DIR, self::testEnvAbsolute());
     }
 
     public static function activeDirRelative(): string
@@ -35,7 +35,7 @@ final class PathHelper
 
     public static function activeDirAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute(self::activeDirRelative(), self::testWorkingDirAbsolute());
+        return self::makeAbsolute(self::activeDirRelative(), self::testWorkingDirAbsolute());
     }
 
     public static function activeDirPath(): PathInterface
@@ -50,11 +50,30 @@ final class PathHelper
 
     public static function stagingDirAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute(self::stagingDirRelative(), self::testWorkingDirAbsolute());
+        return self::makeAbsolute(self::stagingDirRelative(), self::testWorkingDirAbsolute());
     }
 
     public static function stagingDirPath(): PathInterface
     {
         return new TestPath(self::stagingDirAbsolute());
+    }
+
+    public static function canonicalize(string $path): string
+    {
+        $path = SymfonyPath::canonicalize($path);
+
+        return (string) preg_replace('#/+#', DIRECTORY_SEPARATOR, $path);
+    }
+
+    public static function isAbsolute(string $path): bool
+    {
+        return SymfonyPath::isAbsolute($path);
+    }
+
+    public static function makeAbsolute(string $path, string $basePath): string
+    {
+        $absolute = SymfonyPath::makeAbsolute($path, $basePath);
+
+        return self::canonicalize($absolute);
     }
 }

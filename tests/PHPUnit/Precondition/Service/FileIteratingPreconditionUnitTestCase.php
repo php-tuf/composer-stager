@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
@@ -45,6 +46,9 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::exitEarly */
     public function testExitEarly(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->filesystem
             ->exists(Argument::cetera())
             ->shouldNotBeCalled();
@@ -93,23 +97,26 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
             }
         };
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertTrue($isFulfilled);
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
     }
 
     /** @covers ::assertIsFulfilled */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->filesystem
-            ->exists($this->activeDir)
+            ->exists($activeDirPath)
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-        $statusMessage = $sut->getStatusMessage($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
+        $statusMessage = $sut->getStatusMessage($activeDirPath, $stagingDirPath);
 
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
@@ -117,13 +124,16 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers ::assertIsFulfilled */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->filesystem
-            ->exists($this->stagingDir)
+            ->exists($stagingDirPath)
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-        $statusMessage = $sut->getStatusMessage($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
+        $statusMessage = $sut->getStatusMessage($activeDirPath, $stagingDirPath);
 
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
@@ -131,13 +141,16 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers ::assertIsFulfilled */
     public function testNoFilesFound(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
             ->willReturn([]);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
-        $statusMessage = $sut->getStatusMessage($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
+        $statusMessage = $sut->getStatusMessage($activeDirPath, $stagingDirPath);
 
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated empty codebase as fulfilled.');
     }
@@ -149,17 +162,20 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
      */
     public function testFileFinderExceptions(ExceptionInterface $previous): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertFalse($isFulfilled);
 
         try {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
         } catch (Throwable $e) {
             self::assertInstanceOf(PreconditionException::class, $e);
             self::assertSame($e->getMessage(), $previous->getMessage());

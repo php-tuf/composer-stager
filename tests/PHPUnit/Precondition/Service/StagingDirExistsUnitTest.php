@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -38,8 +39,10 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->filesystem
-            ->exists($this->stagingDir)
+            ->exists($stagingDirPath)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
@@ -51,7 +54,7 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
     {
         $message = new TestTranslatableExceptionMessage('The staging directory does not exist.');
         $this->filesystem
-            ->exists($this->stagingDir)
+            ->exists(PathHelper::stagingDirPath())
             ->willReturn(false);
 
         $this->doTestUnfulfilled($message);

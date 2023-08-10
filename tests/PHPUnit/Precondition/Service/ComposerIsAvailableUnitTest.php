@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -101,6 +102,9 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /** @covers ::assertExecutableExists */
     public function testExecutableNotFound(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $previous = LogicException::class;
         $this->executableFinder
             ->find('composer')
@@ -110,10 +114,10 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         $message = 'Cannot find Composer.';
         self::assertTranslatableMessage(
             $message,
-            $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
+            $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
         }, PreconditionException::class, $message, $previous);
     }
 
@@ -140,6 +144,9 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /** @covers ::getProcess */
     public function testFailedToRunProcess(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->process
             ->mustRun()
             ->willThrow(LogicException::class);
@@ -148,16 +155,19 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         $message = $this->invalidComposerErrorMessage();
         self::assertTranslatableMessage(
             $message,
-            $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
+            $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
         }, PreconditionException::class, $message);
     }
 
     /** @covers ::isValidExecutable */
     public function testFailedToGetOutput(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $previous = LogicException::class;
         $this->process
             ->getOutput()
@@ -167,16 +177,19 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         $message = $this->invalidComposerErrorMessage();
         self::assertTranslatableMessage(
             $message,
-            $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
+            $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
         }, PreconditionException::class, $message);
     }
 
     /** @dataProvider providerInvalidOutput */
     public function testInvalidOutput(string $output): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->process
             ->getOutput()
             ->willReturn($output);
@@ -185,10 +198,10 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         $message = $this->invalidComposerErrorMessage();
         self::assertTranslatableMessage(
             $message,
-            $sut->getStatusMessage($this->activeDir, $this->stagingDir, $this->exclusions),
+            $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions),
         );
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions);
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
         }, PreconditionException::class, $message);
     }
 

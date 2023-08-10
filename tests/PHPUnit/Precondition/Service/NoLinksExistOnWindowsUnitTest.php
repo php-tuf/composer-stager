@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\Internal\Host\Service\HostInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Tests\Host\Service\TestHost;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 
@@ -73,6 +74,9 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 
     public function testExitEarlyOnNonWindows(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->host = $this->createNonWindowsHost();
         $this->filesystem
             ->exists(Argument::cetera())
@@ -83,10 +87,10 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertTrue($isFulfilled);
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
     }
 }

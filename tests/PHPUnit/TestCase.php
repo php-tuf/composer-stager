@@ -19,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 abstract class TestCase extends PHPUnitTestCase
 {
@@ -32,8 +31,6 @@ abstract class TestCase extends PHPUnitTestCase
     final public const DOMAIN_EXCEPTIONS = 'exceptions';
 
     protected PathListInterface $exclusions;
-    protected PathInterface $activeDir;
-    protected PathInterface $stagingDir;
 
     protected static function testWorkingDirPath(): PathInterface
     {
@@ -54,7 +51,7 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
-        $config = SymfonyPath::makeAbsolute('config/services.yml', PathHelper::repositoryRootAbsolute());
+        $config = PathHelper::makeAbsolute('config/services.yml', PathHelper::repositoryRootAbsolute());
         $loader->load($config);
 
         return $container;
@@ -69,7 +66,7 @@ abstract class TestCase extends PHPUnitTestCase
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
         $workingDirAbsolute = PathHelper::testWorkingDirAbsolute();
-        $activeDirAbsolute = SymfonyPath::makeAbsolute($activeDir, $workingDirAbsolute);
+        $activeDirAbsolute = PathHelper::makeAbsolute($activeDir, $workingDirAbsolute);
         FilesystemHelper::createDirectories([$workingDirAbsolute, $activeDirAbsolute]);
         chdir($workingDirAbsolute);
     }

@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
@@ -100,6 +101,9 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
      */
     public function testExitEarly(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->filesystem
             ->exists(Argument::cetera())
             ->shouldNotBeCalled();
@@ -110,10 +114,10 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $sut->exitEarly = true;
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
         self::assertTrue($isFulfilled);
 
-        $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
     }
 }

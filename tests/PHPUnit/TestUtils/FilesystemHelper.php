@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 final class FilesystemHelper
 {
@@ -16,8 +15,8 @@ final class FilesystemHelper
 
         // If a base path is provided, use it to make all directories absolute.
         if (is_string($basePath)) {
-            assert(SymfonyPath::isAbsolute($basePath), 'base path must be absolute.');
-            $directories = array_map(static fn ($dirname): string => SymfonyPath::makeAbsolute($dirname, $basePath), $directories);
+            assert(PathHelper::isAbsolute($basePath), 'base path must be absolute.');
+            $directories = array_map(static fn ($dirname): string => PathHelper::makeAbsolute($dirname, $basePath), $directories);
         }
 
         (new SymfonyFilesystem())->mkdir($directories);
@@ -31,6 +30,6 @@ final class FilesystemHelper
 
     private static function makeAbsolute(array $paths, ?string $basePath = null): array
     {
-        return array_map(static fn ($dirname): string => SymfonyPath::makeAbsolute($dirname, $basePath), $paths);
+        return array_map(static fn ($dirname): string => PathHelper::makeAbsolute($dirname, $basePath), $paths);
     }
 }

@@ -34,8 +34,6 @@ final class CommitterUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->preconditions = $this->prophesize(CommitterPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
@@ -52,14 +50,14 @@ final class CommitterUnitTest extends TestCase
     public function testCommitWithMinimumParams(): void
     {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($this->stagingDir, $this->activeDir, null, null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->sync(PathHelper::stagingDirPath(), PathHelper::activeDirPath(), null, null, ProcessInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit($this->stagingDir, $this->activeDir);
+        $sut->commit(PathHelper::stagingDirPath(), PathHelper::activeDirPath());
     }
 
     /**
@@ -110,16 +108,19 @@ final class CommitterUnitTest extends TestCase
     /** @covers ::commit */
     public function testCommitPreconditionsUnfulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, Argument::cetera())
             ->shouldBeCalled()
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->commit($this->stagingDir, $this->activeDir);
+        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->commit($stagingDirPath, $activeDirPath);
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
@@ -130,13 +131,16 @@ final class CommitterUnitTest extends TestCase
      */
     public function testExceptions(ExceptionInterface $exception, string $message): void
     {
+        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathHelper::activeDirPath();
+
         $this->fileSyncer
-            ->sync($this->stagingDir, $this->activeDir, Argument::cetera())
+            ->sync($stagingDirPath, $activeDirPath, Argument::cetera())
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->commit($this->stagingDir, $this->activeDir);
+        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->commit($stagingDirPath, $activeDirPath);
         }, RuntimeException::class, $message, $exception::class);
     }
 

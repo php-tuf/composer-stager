@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -55,14 +56,17 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->commonPreconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noUnsupportedLinksExist
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirDoesNotExist
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The preconditions for beginning the staging process are fulfilled.');
@@ -70,10 +74,13 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));

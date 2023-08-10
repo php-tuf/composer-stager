@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -24,8 +23,6 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         self::createTestEnvironment();
         FilesystemHelper::createDirectories(PathHelper::stagingDirRelative());
 
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->executableFinderClass = ExecutableFinder::class;
     }
 
@@ -61,8 +58,8 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, PreconditionException::class, $message, LogicException::class);
     }
 
@@ -72,8 +69,8 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, PreconditionException::class, $message);
     }
 }

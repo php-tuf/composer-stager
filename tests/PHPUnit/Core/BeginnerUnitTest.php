@@ -34,8 +34,6 @@ final class BeginnerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->preconditions = $this->prophesize(BeginnerPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
     }
@@ -52,14 +50,14 @@ final class BeginnerUnitTest extends TestCase
     public function testBeginWithMinimumParams(): void
     {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($this->activeDir, $this->stagingDir, null, null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->sync(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, null, ProcessInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($this->activeDir, $this->stagingDir);
+        $sut->begin(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
     }
 
     /**
@@ -113,12 +111,12 @@ final class BeginnerUnitTest extends TestCase
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->begin($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->begin(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
@@ -134,8 +132,8 @@ final class BeginnerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->begin($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->begin(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, RuntimeException::class, $exception->getMessage(), $exception::class);
     }
 

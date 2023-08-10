@@ -76,12 +76,12 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     public function testSyncDirectoriesTheSame(): void
     {
-        $same = new TestPath('same');
+        $samePath = PathHelper::activeDirPath();
         $sut = $this->createSut();
 
-        $message = sprintf('The source and destination directories cannot be the same at %s', $same->absolute());
-        self::assertTranslatableException(static function () use ($sut, $same): void {
-            $sut->sync($same, $same);
+        $message = sprintf('The source and destination directories cannot be the same at %s', $samePath->absolute());
+        self::assertTranslatableException(static function () use ($sut, $samePath): void {
+            $sut->sync($samePath, $samePath);
         }, LogicException::class, $message);
     }
 
@@ -234,9 +234,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function testTransMissingTranslatableFactory(): void
     {
         self::assertTranslatableException(function (): void {
-            $same = new TestPath('same');
-            $source = $same;
-            $destination = $same;
+            $samePath = PathHelper::activeDirPath();
             $sut = $this->createSut();
 
             $reflection = new ReflectionClass($sut);
@@ -244,7 +242,7 @@ final class PhpFileSyncerUnitTest extends TestCase
             $translatableFactory = $reflection->getProperty('translatableFactory');
             $translatableFactory->setValue($sut, null);
 
-            $sut->sync($source, $destination);
+            $sut->sync($samePath, $samePath);
         }, AssertionError::class, 'The "p()" method requires a translatable factory. '
             . 'Provide one by calling "setTranslatableFactory()" in the constructor.');
     }

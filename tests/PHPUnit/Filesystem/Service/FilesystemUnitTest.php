@@ -30,8 +30,6 @@ final class FilesystemUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
@@ -80,7 +78,12 @@ final class FilesystemUnitTest extends TestCase
     public function testCopyFailure(): void
     {
         $previousMessage = 'Something went wrong';
-        $message = sprintf('Failed to copy active-dir to staging-dir: %s', $previousMessage);
+        $message = sprintf(
+            'Failed to copy %s to %s: %s',
+            PathHelper::activeDirAbsolute(),
+            PathHelper::stagingDirAbsolute(),
+            $previousMessage,
+        );
         $previous = new SymfonyIOException($previousMessage);
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
@@ -88,8 +91,8 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->copy($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, IOException::class, $message, $previous::class);
     }
 
@@ -103,22 +106,21 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        $message = sprintf('The source file does not exist or is not a file at %s', $this->activeDir->absolute());
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->copy($this->activeDir, $this->stagingDir);
+        $message = sprintf('The source file does not exist or is not a file at %s', PathHelper::activeDirAbsolute());
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, LogicException::class, $message, $previous);
     }
 
     /** @covers ::copy */
     public function testCopyDirectoriesTheSame(): void
     {
-        $source = new TestPath('same');
-        $destination = $source;
+        $samePath = PathHelper::activeDirPath();
         $sut = $this->createSut();
 
-        $message = sprintf('The source and destination files cannot be the same at %s', $source->absolute());
-        self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
-            $sut->copy($source, $destination);
+        $message = sprintf('The source and destination files cannot be the same at %s', $samePath->absolute());
+        self::assertTranslatableException(static function () use ($sut, $samePath): void {
+            $sut->copy($samePath, $samePath);
         }, LogicException::class, $message);
     }
 
@@ -149,15 +151,15 @@ final class FilesystemUnitTest extends TestCase
     /** @covers ::mkdir */
     public function testMkdirFailure(): void
     {
-        $message = 'Failed to create directory at staging-dir';
+        $message = sprintf('Failed to create directory at %s', PathHelper::stagingDirAbsolute());
         $previous = new SymfonyIOException($message);
         $this->symfonyFilesystem
             ->mkdir(Argument::any())
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->mkdir($this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->mkdir(PathHelper::stagingDirPath());
         }, IOException::class, $message, $previous::class);
     }
 
@@ -211,8 +213,8 @@ final class FilesystemUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->remove($this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->remove(PathHelper::stagingDirPath());
         }, IOException::class, $message, $previous::class);
     }
 }

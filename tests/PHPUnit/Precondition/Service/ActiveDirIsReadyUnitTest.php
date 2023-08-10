@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -47,11 +48,14 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 
     public function testFulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->activeDirExists
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsWritable
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled('The active directory is ready to use.');
@@ -59,10 +63,13 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->activeDirExists
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->willThrow($previous);
 
         $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));

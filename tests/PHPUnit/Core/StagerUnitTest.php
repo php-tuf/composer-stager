@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -37,8 +36,6 @@ final class StagerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->composerRunner = $this->prophesize(ComposerProcessRunnerInterface::class);
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
     }
@@ -55,11 +52,14 @@ final class StagerUnitTest extends TestCase
     /** @covers ::stage */
     public function testStageWithMinimumParams(): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath)
             ->shouldBeCalledOnce();
         $expectedCommand = [
-            '--working-dir=' . PathHelper::stagingDirRelative(),
+            '--working-dir=' . PathHelper::stagingDirAbsolute(),
             self::INERT_COMMAND,
         ];
         $this->composerRunner
@@ -67,7 +67,7 @@ final class StagerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        $sut->stage([self::INERT_COMMAND], $activeDirPath, $stagingDirPath);
     }
 
     /** @dataProvider providerStageWithOptionalParams */
@@ -77,15 +77,18 @@ final class StagerUnitTest extends TestCase
         ?OutputCallbackInterface $callback,
         ?int $timeout,
     ): void {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath)
             ->shouldBeCalledOnce();
         $this->composerRunner
             ->run($expectedCommand, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->stage($givenCommand, $this->activeDir, $this->stagingDir, $callback, $timeout);
+        $sut->stage($givenCommand, $activeDirPath, $stagingDirPath, $callback, $timeout);
     }
 
     public function providerStageWithOptionalParams(): array
@@ -94,7 +97,7 @@ final class StagerUnitTest extends TestCase
             [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
-                    '--working-dir=' . PathHelper::stagingDirRelative(),
+                    '--working-dir=' . PathHelper::stagingDirAbsolute(),
                     'update',
                 ],
                 'callback' => null,
@@ -103,7 +106,7 @@ final class StagerUnitTest extends TestCase
             [
                 'givenCommand' => [self::INERT_COMMAND],
                 'expectedCommand' => [
-                    '--working-dir=' . PathHelper::stagingDirRelative(),
+                    '--working-dir=' . PathHelper::stagingDirAbsolute(),
                     self::INERT_COMMAND,
                 ],
                 'callback' => new TestOutputCallback(),
@@ -119,8 +122,8 @@ final class StagerUnitTest extends TestCase
         $expectedExceptionMessage = new TestTranslatableExceptionMessage($message);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->stage([], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->stage([], PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
@@ -134,11 +137,11 @@ final class StagerUnitTest extends TestCase
             null,
             self::DOMAIN_EXCEPTIONS,
         );
-        self::assertTranslatableException(function () use ($sut): void {
+        self::assertTranslatableException(static function () use ($sut): void {
             $sut->stage([
                 'composer',
                 self::INERT_COMMAND,
-            ], $this->activeDir, $this->stagingDir);
+            ], PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
@@ -156,8 +159,8 @@ final class StagerUnitTest extends TestCase
             null,
             self::DOMAIN_EXCEPTIONS,
         );
-        self::assertTranslatableException(function () use ($sut, $command): void {
-            $sut->stage($command, $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut, $command): void {
+            $sut->stage($command, PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
@@ -175,13 +178,13 @@ final class StagerUnitTest extends TestCase
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), Argument::cetera())
             ->shouldBeCalled()
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->stage([self::INERT_COMMAND], PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
@@ -193,8 +196,8 @@ final class StagerUnitTest extends TestCase
             ->willThrow($exception);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->stage([self::INERT_COMMAND], $this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->stage([self::INERT_COMMAND], PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, RuntimeException::class, $message, $exception::class);
     }
 

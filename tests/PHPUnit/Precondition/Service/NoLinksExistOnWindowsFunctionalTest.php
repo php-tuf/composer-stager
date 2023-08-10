@@ -3,9 +3,10 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
@@ -34,7 +35,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     {
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }
@@ -51,24 +52,28 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      */
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
+
         $basePath = self::activeDirPath();
-        $link = PathFactory::create('link.txt', $basePath)->absolute();
-        $target = PathFactory::create('target.txt', $basePath)->absolute();
+        $basePathAbsolute = $basePath->absolute();
+        $link = PathHelper::makeAbsolute('link.txt', $basePathAbsolute);
+        $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
         touch($target);
-        self::createSymlinks($basePath->absolute(), $symlinks);
-        self::createHardlinks($basePath->absolute(), $hardLinks);
+        self::createSymlinks($basePathAbsolute, $symlinks);
+        self::createHardlinks($basePathAbsolute, $hardLinks);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir);
+        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
         self::assertFalse($isFulfilled, 'Rejected link on Windows.');
 
         $message = sprintf(
             'The active directory at %s contains links, which is not supported on Windows. The first one is %s.',
-            $basePath->absolute(),
+            $basePathAbsolute,
             $link,
         );
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->assertIsFulfilled($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
         }, PreconditionException::class, $message);
     }
 
@@ -93,7 +98,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      *
      * @dataProvider providerFulfilledDirectoryDoesNotExist
      */
-    public function testFulfilledDirectoryDoesNotExist(string $activeDir, string $stagingDir): void
+    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
@@ -111,12 +116,12 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = $this->activeDir->absolute();
-        self::createFile($dirPath, $targetFile);
-        self::createSymlinks($dirPath, $links);
+        $basePath = PathHelper::activeDirAbsolute();
+        self::createFile($basePath, $targetFile);
+        self::createSymlinks($basePath, $links);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled($this->activeDir, $this->stagingDir, $exclusions);
+        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);
 
         self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }

@@ -8,13 +8,12 @@ use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
     private static function sourceDirAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute('source', PathHelper::testEnvAbsolute());
+        return PathHelper::makeAbsolute('source', PathHelper::testEnvAbsolute());
     }
 
     private static function sourcePath(): PathInterface
@@ -24,7 +23,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
     public static function destinationDirAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute('destination', PathHelper::testEnvAbsolute());
+        return PathHelper::makeAbsolute('destination', PathHelper::testEnvAbsolute());
     }
 
     private static function destinationPath(): PathInterface
@@ -89,10 +88,10 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers ::sync */
     public function testSyncWithDirectorySymlinks(): void
     {
-        $link = SymfonyPath::makeAbsolute('link', self::sourceDirAbsolute());
-        $target = SymfonyPath::makeAbsolute('directory', self::sourceDirAbsolute());
+        $link = PathHelper::makeAbsolute('link', self::sourceDirAbsolute());
+        $target = PathHelper::makeAbsolute('directory', self::sourceDirAbsolute());
         FilesystemHelper::createDirectories($target);
-        $file = SymfonyPath::makeAbsolute('directory/file.txt', self::sourceDirAbsolute());
+        $file = PathHelper::makeAbsolute('directory/file.txt', self::sourceDirAbsolute());
         touch($file);
         symlink($target, $link);
         $sut = $this->createSut();

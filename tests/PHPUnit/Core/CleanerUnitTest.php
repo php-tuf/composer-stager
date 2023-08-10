@@ -30,8 +30,6 @@ final class CleanerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->preconditions = $this->prophesize(CleanerPreconditionsInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
     }
@@ -48,14 +46,14 @@ final class CleanerUnitTest extends TestCase
     public function testCleanWithMinimumParams(): void
     {
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, null)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove($this->stagingDir, null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->remove(PathHelper::stagingDirPath(), null, ProcessInterface::DEFAULT_TIMEOUT)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean($this->activeDir, $this->stagingDir);
+        $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
     }
 
     /**
@@ -67,14 +65,14 @@ final class CleanerUnitTest extends TestCase
     {
         $path = new TestPath($path);
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $path)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), $path)
             ->shouldBeCalledOnce();
         $this->filesystem
             ->remove($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean($this->activeDir, $path, $callback, $timeout);
+        $sut->clean(PathHelper::activeDirPath(), $path, $callback, $timeout);
     }
 
     public function providerCleanWithOptionalParams(): array
@@ -99,12 +97,12 @@ final class CleanerUnitTest extends TestCase
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled($this->activeDir, $this->stagingDir, Argument::cetera())
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->clean($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
@@ -118,8 +116,8 @@ final class CleanerUnitTest extends TestCase
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->clean($this->activeDir, $this->stagingDir);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, RuntimeException::class, $message, $previous::class);
     }
 }
