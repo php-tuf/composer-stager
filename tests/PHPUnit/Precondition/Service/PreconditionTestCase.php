@@ -19,7 +19,7 @@ abstract class PreconditionTestCase extends TestCase
     protected function setUp(): void
     {
         $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->exclusions = new TestPathList();
     }
 

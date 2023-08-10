@@ -37,7 +37,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     protected function setUp(): void
     {
         $this->source = new TestPath(PathHelper::activeDirRelative());
-        $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
+        $this->destination = new TestPath(PathHelper::stagingDirRelative());
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem

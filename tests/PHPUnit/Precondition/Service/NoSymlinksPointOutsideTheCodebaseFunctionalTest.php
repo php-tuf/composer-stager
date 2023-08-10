@@ -117,7 +117,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
             ],
             'In staging directory' => [
                 'targetDir' => PathHelper::testWorkingDirAbsolute(),
-                'linkDir' => self::STAGING_DIR_RELATIVE,
+                'linkDir' => PathHelper::stagingDirRelative(),
                 'linkDirName' => 'staging',
             ],
         ];

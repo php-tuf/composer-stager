@@ -38,7 +38,7 @@ final class StagerUnitTest extends TestCase
     protected function setUp(): void
     {
         $this->activeDir = new TestPath(PathHelper::activeDirRelative());
-        $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
+        $this->stagingDir = new TestPath(PathHelper::stagingDirRelative());
         $this->composerRunner = $this->prophesize(ComposerProcessRunnerInterface::class);
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);
     }
@@ -59,7 +59,7 @@ final class StagerUnitTest extends TestCase
             ->assertIsFulfilled($this->activeDir, $this->stagingDir)
             ->shouldBeCalledOnce();
         $expectedCommand = [
-            '--working-dir=' . self::STAGING_DIR_RELATIVE,
+            '--working-dir=' . PathHelper::stagingDirRelative(),
             self::INERT_COMMAND,
         ];
         $this->composerRunner

@@ -14,7 +14,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemHelper::createDirectories(self::STAGING_DIR_RELATIVE);
+        FilesystemHelper::createDirectories(PathHelper::stagingDirRelative());
 
         $this->activeDir = self::activeDirPath();
         $this->stagingDir = self::stagingDirPath();
@@ -54,7 +54,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
         return [
             'Active directory' => [
                 'activeDir' => $nonexistentDir,
-                'stagingDir' => self::STAGING_DIR_RELATIVE,
+                'stagingDir' => PathHelper::stagingDirRelative(),
             ],
             'Staging directory' => [
                 'activeDir' => PathHelper::activeDirRelative(),

@@ -89,7 +89,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
                 'dirName' => 'active',
             ],
             'In staging directory' => [
-                'directory' => self::STAGING_DIR_RELATIVE,
+                'directory' => PathHelper::stagingDirRelative(),
                 'dirName' => 'staging',
             ],
         ];

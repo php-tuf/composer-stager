@@ -26,7 +26,6 @@ abstract class TestCase extends PHPUnitTestCase
     use AssertTrait;
     use ProphecyTrait;
 
-    protected const STAGING_DIR_RELATIVE = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
     final public const DOMAIN_DEFAULT = 'messages';
@@ -48,7 +47,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function stagingDirPath(): PathInterface
     {
-        return PathFactory::create(self::STAGING_DIR_RELATIVE, self::testWorkingDirPath());
+        return PathFactory::create(PathHelper::stagingDirRelative(), self::testWorkingDirPath());
     }
 
     public function container(): ContainerBuilder
