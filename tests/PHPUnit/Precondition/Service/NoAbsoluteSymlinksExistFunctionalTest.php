@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
@@ -37,7 +38,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testDoesNotContainLinks(array $files): void
     {
-        self::createFiles(self::ACTIVE_DIR_RELATIVE, $files);
+        self::createFiles(PathHelper::activeDirRelative(), $files);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());

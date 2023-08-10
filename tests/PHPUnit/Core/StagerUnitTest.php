@@ -37,7 +37,7 @@ final class StagerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
         $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->composerRunner = $this->prophesize(ComposerProcessRunnerInterface::class);
         $this->preconditions = $this->prophesize(StagerPreconditionsInterface::class);

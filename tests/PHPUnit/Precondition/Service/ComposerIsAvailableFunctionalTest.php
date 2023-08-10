@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -23,7 +24,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         self::createTestEnvironment();
         FilesystemHelper::createDirectories(self::STAGING_DIR_RELATIVE);
 
-        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
         $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->executableFinderClass = ExecutableFinder::class;
     }

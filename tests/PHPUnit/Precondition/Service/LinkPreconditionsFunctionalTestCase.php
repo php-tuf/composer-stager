@@ -57,7 +57,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
                 'stagingDir' => self::STAGING_DIR_RELATIVE,
             ],
             'Staging directory' => [
-                'activeDir' => self::ACTIVE_DIR_RELATIVE,
+                'activeDir' => PathHelper::activeDirRelative(),
                 'stagingDir' => $nonexistentDir,
             ],
         ];

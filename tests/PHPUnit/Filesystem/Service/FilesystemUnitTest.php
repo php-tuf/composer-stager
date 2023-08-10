@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -29,7 +30,7 @@ final class FilesystemUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
         $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);

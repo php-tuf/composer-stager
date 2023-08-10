@@ -17,6 +17,7 @@ use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -33,7 +34,7 @@ final class CommitterUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
         $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->preconditions = $this->prophesize(CommitterPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);

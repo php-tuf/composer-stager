@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
@@ -35,7 +36,7 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->source = new TestPath(PathHelper::activeDirRelative());
         $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);

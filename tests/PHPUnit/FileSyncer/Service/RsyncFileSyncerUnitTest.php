@@ -16,6 +16,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
@@ -45,7 +46,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->source = new TestPath(PathHelper::activeDirRelative());
         $this->destination = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem

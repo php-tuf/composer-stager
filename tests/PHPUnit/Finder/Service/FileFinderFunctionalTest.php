@@ -159,7 +159,7 @@ final class FileFinderFunctionalTest extends TestCase
                 DIRECTORY_SEPARATOR,
                 [
                     PathHelper::testWorkingDirAbsolute(),
-                    self::ACTIVE_DIR_RELATIVE,
+                    PathHelper::activeDirRelative(),
                     $path,
                 ],
             );

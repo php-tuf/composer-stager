@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 abstract class PreconditionTestCase extends TestCase
 {
@@ -17,7 +18,7 @@ abstract class PreconditionTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $this->activeDir = new TestPath(self::ACTIVE_DIR_RELATIVE);
+        $this->activeDir = new TestPath(PathHelper::activeDirRelative());
         $this->stagingDir = new TestPath(self::STAGING_DIR_RELATIVE);
         $this->exclusions = new TestPathList();
     }

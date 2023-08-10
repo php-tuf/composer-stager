@@ -26,7 +26,6 @@ abstract class TestCase extends PHPUnitTestCase
     use AssertTrait;
     use ProphecyTrait;
 
-    protected const ACTIVE_DIR_RELATIVE = 'active-dir';
     protected const STAGING_DIR_RELATIVE = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
@@ -44,7 +43,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function activeDirPath(): PathInterface
     {
-        return PathFactory::create(self::ACTIVE_DIR_RELATIVE, self::testWorkingDirPath());
+        return PathFactory::create(PathHelper::activeDirRelative(), self::testWorkingDirPath());
     }
 
     protected static function stagingDirPath(): PathInterface
@@ -62,8 +61,10 @@ abstract class TestCase extends PHPUnitTestCase
         return $container;
     }
 
-    protected static function createTestEnvironment(string $activeDir = self::ACTIVE_DIR_RELATIVE): void
+    protected static function createTestEnvironment(?string $activeDir = null): void
     {
+        $activeDir ??= PathHelper::activeDirRelative();
+
         self::removeTestEnvironment();
 
         // Create the active directory only. The staging directory is created

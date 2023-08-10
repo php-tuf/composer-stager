@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist
@@ -84,7 +85,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         return [
             'In active directory' => [
-                'directory' => self::ACTIVE_DIR_RELATIVE,
+                'directory' => PathHelper::activeDirRelative(),
                 'dirName' => 'active',
             ],
             'In staging directory' => [
