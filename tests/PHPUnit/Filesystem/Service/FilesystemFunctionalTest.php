@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -16,12 +17,12 @@ final class FilesystemFunctionalTest extends TestCase
 {
     private static function sourceDir(): PathInterface
     {
-        return PathFactory::create(self::TEST_ENV_ABSOLUTE . '/source');
+        return PathFactory::create(PathHelper::testEnvAbsolute() . '/source');
     }
 
     private static function destinationDir(): PathInterface
     {
-        return PathFactory::create(self::TEST_ENV_ABSOLUTE . '/destination');
+        return PathFactory::create(PathHelper::testEnvAbsolute() . '/destination');
     }
 
     protected function setUp(): void
@@ -67,7 +68,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyTrue(): void
     {
-        $directory = PathFactory::create(self::TEST_ENV_ABSOLUTE . '/empty');
+        $directory = PathFactory::create(PathHelper::testEnvAbsolute() . '/empty');
         FilesystemHelper::createDirectories($directory->absolute());
         $sut = $this->createSut();
 
@@ -86,7 +87,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyErrorIsNotADirectory(): void
     {
-        $path = PathFactory::create(self::TEST_ENV_ABSOLUTE);
+        $path = PathFactory::create(PathHelper::testEnvAbsolute());
         $file = PathFactory::create('file.txt', $path);
         touch($file->absolute());
         $message = sprintf(

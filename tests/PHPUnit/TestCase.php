@@ -26,7 +26,6 @@ abstract class TestCase extends PHPUnitTestCase
     use AssertTrait;
     use ProphecyTrait;
 
-    protected const TEST_ENV_ABSOLUTE = __DIR__ . '/../../var/phpunit/test-env';
     protected const ACTIVE_DIR_RELATIVE = 'active-dir';
     protected const STAGING_DIR_RELATIVE = 'staging-dir';
     protected const ORIGINAL_CONTENT = '';
@@ -79,12 +78,12 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $filesystem = new Filesystem();
 
-        if (!$filesystem->exists(self::TEST_ENV_ABSOLUTE)) {
+        if (!$filesystem->exists(PathHelper::testEnvAbsolute())) {
             return;
         }
 
         try {
-            $filesystem->remove(self::TEST_ENV_ABSOLUTE);
+            $filesystem->remove(PathHelper::testEnvAbsolute());
         } catch (IOException) {
             // @todo Windows chokes on this every time, e.g.,
             //    | Failed to remove directory
