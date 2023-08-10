@@ -7,22 +7,31 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
-    private const SOURCE_DIR = self::TEST_ENV_ABSOLUTE . DIRECTORY_SEPARATOR . 'source';
     private const DESTINATION_DIR = self::TEST_ENV_ABSOLUTE . DIRECTORY_SEPARATOR . 'destination';
 
     private PathInterface $destination;
-    private PathInterface $source;
+
+    private static function sourceDirAbsolute(): string
+    {
+        return SymfonyPath::makeAbsolute('source', PathHelper::testEnvAbsolute());
+    }
+
+    private static function sourcePath(): PathInterface
+    {
+        return PathFactory::create(self::sourceDirAbsolute());
+    }
 
     protected function setUp(): void
     {
-        $this->source = PathFactory::create(self::SOURCE_DIR);
         $this->destination = PathFactory::create(self::DESTINATION_DIR);
 
         FilesystemHelper::createDirectories([
-            $this->source->absolute(),
+            self::sourceDirAbsolute(),
             $this->destination->absolute(),
         ]);
     }
@@ -54,7 +63,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination, null, null, $givenTimeout);
+        $sut->sync(self::sourcePath(), $this->destination, null, null, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -76,15 +85,15 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers ::sync */
     public function testSyncWithDirectorySymlinks(): void
     {
-        $link = PathFactory::create('link', $this->source);
-        $target = PathFactory::create('directory', $this->source);
-        FilesystemHelper::createDirectories($target->absolute());
-        $file = PathFactory::create('directory/file.txt', $this->source)->absolute();
+        $link = SymfonyPath::makeAbsolute('link', self::sourceDirAbsolute());
+        $target = SymfonyPath::makeAbsolute('directory', self::sourceDirAbsolute());
+        FilesystemHelper::createDirectories($target);
+        $file = SymfonyPath::makeAbsolute('directory/file.txt', self::sourceDirAbsolute());
         touch($file);
-        symlink($target->absolute(), $link->absolute());
+        symlink($target, $link);
         $sut = $this->createSut();
 
-        $sut->sync($this->source, $this->destination);
+        $sut->sync(self::sourcePath(), $this->destination);
 
         self::assertDirectoryListing($this->destination->absolute(), [
             'link',
