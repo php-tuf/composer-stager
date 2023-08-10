@@ -10,7 +10,6 @@ use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class FixtureHelper
 {
-    private const REPOSITORY_ROOT = '../../..';
     private const TEST_ENV = 'var/phpbench';
     private const FIXTURES_DIR = 'fixtures';
     private const WORKING_DIR = 'working-dir';
@@ -30,7 +29,7 @@ final class FixtureHelper
 
     public static function repositoryRootAbsolute(): string
     {
-        return SymfonyPath::makeAbsolute(self::REPOSITORY_ROOT, __DIR__);
+        return dirname(__DIR__, 3);
     }
 
     public static function workingDirAbsolute(): string
