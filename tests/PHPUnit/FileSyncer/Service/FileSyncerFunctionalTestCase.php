@@ -12,10 +12,6 @@ use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
-    private const DESTINATION_DIR = self::TEST_ENV_ABSOLUTE . DIRECTORY_SEPARATOR . 'destination';
-
-    private PathInterface $destination;
-
     private static function sourceDirAbsolute(): string
     {
         return SymfonyPath::makeAbsolute('source', PathHelper::testEnvAbsolute());
@@ -26,13 +22,21 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         return PathFactory::create(self::sourceDirAbsolute());
     }
 
+    public static function destinationDirAbsolute(): string
+    {
+        return SymfonyPath::makeAbsolute('destination', PathHelper::testEnvAbsolute());
+    }
+
+    private static function destinationPath(): PathInterface
+    {
+        return PathFactory::create(self::destinationDirAbsolute());
+    }
+
     protected function setUp(): void
     {
-        $this->destination = PathFactory::create(self::DESTINATION_DIR);
-
         FilesystemHelper::createDirectories([
             self::sourceDirAbsolute(),
-            $this->destination->absolute(),
+            self::destinationDirAbsolute(),
         ]);
     }
 
@@ -63,7 +67,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $sut->sync(self::sourcePath(), $this->destination, null, null, $givenTimeout);
+        $sut->sync(self::sourcePath(), self::destinationPath(), null, null, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -93,9 +97,9 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $sut->sync(self::sourcePath(), $this->destination);
+        $sut->sync(self::sourcePath(), self::destinationPath());
 
-        self::assertDirectoryListing($this->destination->absolute(), [
+        self::assertDirectoryListing(self::destinationDirAbsolute(), [
             'link',
             'directory/file.txt',
         ], '', 'Correctly synced files, including a symlink to a directory.');
