@@ -15,12 +15,6 @@ namespace PhpTuf\ComposerStager\API\Path\Value;
  */
 interface PathInterface
 {
-    /** Determines whether the original path string as given is absolute, without resolving it. */
-    public function isAbsolute(): bool;
-
-    /** Gets the unresolved path string, exactly as given. */
-    public function raw(): string;
-
     /**
      * Gets the fully resolved, absolute path string without trailing slash.
      *
@@ -28,7 +22,10 @@ interface PathInterface
      * by `getcwd()` at runtime, e.g., "/var/www/example" given a path of
      * "example" and a working directory of "/var/www".
      */
-    public function resolved(): string;
+    public function absolute(): string;
+
+    /** Determines whether the original path string as given is absolute, without resolving it. */
+    public function isAbsolute(): bool;
 
     /**
      * Gets the fully resolved, absolute path string without trailing slash, relative to another given path.
@@ -40,5 +37,5 @@ interface PathInterface
      * "/var/one/two/three" relative to "/var/four/five/six" would return
      * "/var/one/two/three".
      */
-    public function resolvedRelativeTo(PathInterface $basePath): string;
+    public function relative(PathInterface $basePath): string;
 }

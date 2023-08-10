@@ -2,7 +2,7 @@
     "$schema": "./vendor/phpbench/phpbench/phpbench.schema.json",
 
     "runner.bootstrap": "vendor/autoload.php",
-    "runner.path": "tools/phpbench",
+    "runner.path": "tests/PHPBench",
     "runner.iterations": 1,
     "runner.file_pattern": "*Bench.php",
 
@@ -13,6 +13,7 @@
                 "preconditions-trees-chart",
                 "preconditions-individuals-chart",
                 "fileSyncers-chart",
+                "detail",
                 "default"
             ]
         },
@@ -57,6 +58,11 @@
                     "y_axes_label": "yValue as time precision 1"
                 }
             ]
+        },
+
+        "detail": {
+            "generator": "expression",
+            "break": ["benchmark", "subject"]
         }
     },
 

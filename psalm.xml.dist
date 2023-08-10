@@ -7,7 +7,6 @@
         ensureArrayIntOffsetsExist="true"
         ensureArrayStringOffsetsExist="true"
         errorLevel="1"
-        resolveFromConfigFile="true"
         findUnusedPsalmSuppress="true"
         runTaintAnalysis="true"
         strictBinaryOperands="true"

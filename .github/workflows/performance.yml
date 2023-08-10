@@ -1,0 +1,33 @@
+---
+name: Performance
+
+on:
+    schedule:
+        # Every Wednesday at 00:00:00 UTC.
+        # @see https://crontab.cronhub.io/
+        -   cron: "0 0 * * 3"
+
+jobs:
+    performance:
+        name: "Bench: ${{ matrix.os }}"
+        runs-on: "${{ matrix.os }}"
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ ubuntu-latest, macos-latest, windows-latest ]
+                php: [ "8.1" ]
+        steps:
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "8.1"
+                    coverage: none
+
+            -   name: "Checkout code"
+                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
+
+            -   name: "Run performance tests"
+                run: "composer phpbench -- --progress=plain --ansi"

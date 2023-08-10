@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="PHPBench Tests" pattern="file[composer-stager]:tests/PHPBench//*" />
+</component>

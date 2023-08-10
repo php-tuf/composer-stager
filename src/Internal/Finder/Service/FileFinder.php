@@ -7,9 +7,9 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -36,11 +36,11 @@ final class FileFinder implements FileFinderInterface
     {
         $exclusions ??= new PathList();
 
-        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->resolved());
+        $directoryIterator = $this->getRecursiveDirectoryIterator($directory->absolute());
 
         // Resolve the exclusions relative to the search directory.
         $exclusions = array_map(fn ($path): string => $this->pathFactory::create($path)
-            ->resolvedRelativeTo($directory), $exclusions->getAll());
+            ->relative($directory), $exclusions->getAll());
 
         // Apply exclusions. On the surface, it may look like individual descendants
         // of an excluded directory, i.e., files "underneath" or "inside" it, won't

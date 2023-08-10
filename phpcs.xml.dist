@@ -13,11 +13,10 @@
 
     <file>src</file>
     <file>tests</file>
-    <file>tools</file>
     <file>rector.php</file>
 
     <!-- Custom sniffs -->
-    <rule ref="tools/phpcs/phpcs.xml"/>
+    <rule ref="tests/PHPCS/phpcs.xml"/>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>
@@ -95,6 +94,7 @@
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"><properties>
         <property name="annotationsGroups" type="array">
+            <element value="@file"/>
             <element value="@coversDefaultClass"/>
             <element value="@covers,@coversNothing"/>
             <element value="@uses"/>
@@ -249,17 +249,14 @@
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>rector.php</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong"><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern><exclude-pattern>tools/phpcs</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>rector.php</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall.DisallowDirectMagicInvokeCall"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint"><exclude-pattern>tools/phpcs</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint"><exclude-pattern>tools/phpcs</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>tests</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification"><exclude-pattern>tools/phpcs</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint"><exclude-pattern>tests</exclude-pattern></rule>
 

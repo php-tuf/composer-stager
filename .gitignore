@@ -1,12 +1,13 @@
 /.idea/dictionaries/*
 !/.idea/dictionaries/project.xml
+/.idea/php-test-framework.xml
 /.idea/workspace.xml
 /grumphp.yml
 /phpcs.xml
 /phpunit.xml
 /psalm.xml
-/tests/Exploratory/*
-!/tests/Exploratory/ExploratoryTestTemplate.php
+/tests/PHPUnit/Exploratory/*
+!/tests/PHPUnit/Exploratory/ExploratoryTestTemplate.php
 /var/*/*
 /vendor/
 !/**/.gitkeep

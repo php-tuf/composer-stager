@@ -1,5 +1,5 @@
 ---
-name: Security Check
+name: Security
 
 on:
     schedule:

@@ -1,5 +1,5 @@
 ---
-name: Tests
+name: Main
 
 on:
     push:
@@ -18,14 +18,15 @@ on:
         -   cron: "0 0 * * 1"
 
 jobs:
-    quality_check:
-        name: "Quality Check"
+    static_analysis:
+        name: "Static Analysis: ubuntu-latest"
         runs-on: ubuntu-latest
         steps:
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "8.1"
+                    coverage: none
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
@@ -33,11 +34,11 @@ jobs:
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
 
-            -   name: "Run all quality checks"
+            -   name: "Run all static analysis tools"
                 run: "composer static"
 
     tests:
-        name: "${{ matrix.os }} / ${{ matrix.dependencies }} / ${{ matrix.php }}"
+        name: "Test: ${{ matrix.os }} / deps-${{ matrix.dependencies }}"
         runs-on: "${{ matrix.os }}"
         strategy:
             fail-fast: false
@@ -50,10 +51,19 @@ jobs:
                 run: "rsync --version | head -1"
                 if: ${{ runner.os != 'Windows' }}
 
-            -   name: "Set up PHP"
+            -   name: "Set up PHP w/ Coverage"
+                if: ${{ matrix.os == 'ubuntu-latest' && matrix.dependencies == 'highest' }}
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
+                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+
+            -   name: "Set up PHP w/o Coverage"
+                if: ${{ !( matrix.os == 'ubuntu-latest' && matrix.dependencies == 'highest' ) }}
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "${{ matrix.php }}"
+                    coverage: none
                     ini-values: assert.active=1, assert.exception=1, zend.assertions=1
 
             -   name: "PHP info"
@@ -81,23 +91,20 @@ jobs:
                 if: ${{ runner.os == 'Windows' }}
 
     performance:
-        name: "Performance"
+        name: "Performance: ubuntu-latest"
         runs-on: ubuntu-latest
         steps:
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "8.1"
+                    coverage: none
 
             -   name: "Checkout code"
                 uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
-                with:
-                    # Disable Composer caching due to random failures it causes.
-                    # @see https://github.com/ramsey/composer-install/issues/79
-                    composer-options: "--no-cache"
 
             -   name: "Run performance tests"
-                run: "composer phpbench -- --progress=plain --iterations=5 --ansi"
+                run: "composer phpbench -- --progress=plain --ansi"

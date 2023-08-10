@@ -8,11 +8,11 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathList;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 /**
@@ -54,11 +54,11 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
     private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
     {
-        if ($source->resolved() === $destination->resolved()) {
+        if ($source->absolute() === $destination->absolute()) {
             throw new LogicException(
                 $this->t(
                     'The source and destination directories cannot be the same at %path',
-                    $this->p(['%path' => $source->resolved()]),
+                    $this->p(['%path' => $source->absolute()]),
                     $this->d()->exceptions(),
                 ),
             );
@@ -71,7 +71,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         if (!$this->filesystem->exists($source)) {
             throw new LogicException($this->t(
                 'The source directory does not exist at %path',
-                $this->p(['%path' => $source->resolved()]),
+                $this->p(['%path' => $source->absolute()]),
                 $this->d()->exceptions(),
             ));
         }
@@ -97,12 +97,12 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
 
         $destinationFiles = $this->fileFinder->find($destination, $exclusions);
 
-        $sourceResolved = $source->resolved();
-        $destinationResolved = $destination->resolved();
+        $sourceAbsolute = $source->absolute();
+        $destinationAbsolute = $destination->absolute();
 
         foreach ($destinationFiles as $destinationFilePathname) {
-            $relativePathname = self::getRelativePath($destinationResolved, $destinationFilePathname);
-            $sourceFilePathname = $sourceResolved . DIRECTORY_SEPARATOR . $relativePathname;
+            $relativePathname = self::getRelativePath($destinationAbsolute, $destinationFilePathname);
+            $sourceFilePathname = $sourceAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
 
             $sourceFilePath = $this->pathFactory::create($sourceFilePathname);
 
@@ -128,15 +128,15 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     ): void {
         $sourceFiles = $this->fileFinder->find($source, $exclusions);
 
-        $sourceResolved = $source->resolved();
-        $destinationResolved = $destination->resolved();
+        $sourceAbsolute = $source->absolute();
+        $destinationAbsolute = $destination->absolute();
 
         foreach ($sourceFiles as $sourceFilePathname) {
             // Once support for Symfony 4 is dropped, see if any of this logic can be
             // eliminated in favor of the new path manipulation utilities in Symfony 5.4:
             // https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
-            $relativePathname = self::getRelativePath($sourceResolved, $sourceFilePathname);
-            $destinationFilePathname = $destinationResolved . DIRECTORY_SEPARATOR . $relativePathname;
+            $relativePathname = self::getRelativePath($sourceAbsolute, $sourceFilePathname);
+            $destinationFilePathname = $destinationAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
 
             $sourceFilePathname = $this->pathFactory::create($sourceFilePathname);
             $destinationFilePathname = $this->pathFactory::create($destinationFilePathname);

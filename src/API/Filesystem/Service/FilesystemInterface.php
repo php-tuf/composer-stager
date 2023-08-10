@@ -151,7 +151,7 @@ interface FilesystemInterface
      *
      * Note: PHP does not distinguish between absolute and relative links on
      * Windows, so the returned path object there will be based on a canonicalized,
-     * absolute raw path string. In other words, ALL link paths on Windows will
+     * absolute path string. In other words, ALL link paths on Windows will
      * behave like absolute links, whether they really are or not.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path

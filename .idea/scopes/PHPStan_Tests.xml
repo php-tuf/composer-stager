@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="PHPStan Tests" pattern="file[composer-stager]:tests/PHPStan//*" />
+</component>
