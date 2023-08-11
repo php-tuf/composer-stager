@@ -22,8 +22,10 @@ final class PathFactoryUnitTest extends TestCase
         PathInterface $expected,
         PathInterface $expectedWithBaseDir,
     ): void {
-        $actual = PathFactory::create($string);
-        $actualWithBaseDir = PathFactory::create($string, $basePath);
+        $sut = new PathFactory();
+
+        $actual = $sut->create($string);
+        $actualWithBaseDir = $sut->create($string, $basePath);
 
         self::assertEquals($expected, $actual, 'Returned correct path object.');
         self::assertEquals($expectedWithBaseDir, $actualWithBaseDir, 'Returned correct path object given a $basePath argument.');
@@ -34,7 +36,7 @@ final class PathFactoryUnitTest extends TestCase
         return [
             [
                 'string' => 'test.txt',
-                'baseDir' => new TestPath(),
+                'basePath' => new TestPath(),
                 'expected' => new Path('test.txt'),
                 'expectedWithBaseDir' => new Path('test.txt', new TestPath()),
             ],

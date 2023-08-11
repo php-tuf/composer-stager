@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\PHPBench\TestUtils;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -39,22 +39,22 @@ final class FixtureHelper
 
     public static function drupalOriginalCodebasePath(): PathInterface
     {
-        return PathFactory::create(self::drupalOriginalCodebaseAbsolute());
+        return PathHelper::createPath(self::drupalOriginalCodebaseAbsolute());
     }
 
     public static function drupalMajorUpdateCodebasePath(): PathInterface
     {
-        return PathFactory::create(self::drupalMajorUpdateCodebaseAbsolute());
+        return PathHelper::createPath(self::drupalMajorUpdateCodebaseAbsolute());
     }
 
     public static function drupalMinorUpdateCodebasePath(): PathInterface
     {
-        return PathFactory::create(self::drupalMinorUpdateCodebaseAbsolute());
+        return PathHelper::createPath(self::drupalMinorUpdateCodebaseAbsolute());
     }
 
     public static function drupalPointUpdateCodebasePath(): PathInterface
     {
-        return PathFactory::create(self::drupalPointUpdateCodebaseAbsolute());
+        return PathHelper::createPath(self::drupalPointUpdateCodebaseAbsolute());
     }
 
     public static function removeWorkingDir(): void

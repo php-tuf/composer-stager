@@ -67,7 +67,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
                 $files = $this->findFiles($directoryRootDir, $exclusions);
 
                 foreach ($files as $file) {
-                    $file = $this->pathFactory::create($file);
+                    $file = $this->pathFactory->create($file);
                     $this->assertIsSupportedFile($directoryName, $directoryRootDir, $file);
                 }
             }

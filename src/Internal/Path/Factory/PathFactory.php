@@ -15,7 +15,7 @@ use PhpTuf\ComposerStager\Internal\Path\Value\Path;
  */
 final class PathFactory implements PathFactoryInterface
 {
-    public static function create(string $path, ?PathInterface $basePath = null): PathInterface
+    public function create(string $path, ?PathInterface $basePath = null): PathInterface
     {
         return new Path($path, $basePath);
     }

@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -43,7 +42,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = PathFactory::create('65eb69a274470dd84e9b5371f7e1e8c8');
+        $nonexistentDir = PathHelper::createPath('65eb69a274470dd84e9b5371f7e1e8c8');
 
         return [
             'Active directory' => [

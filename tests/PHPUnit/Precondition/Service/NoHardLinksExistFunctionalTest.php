@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -66,8 +65,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
      */
     public function testUnfulfilled(string $directory, string $dirName): void
     {
-        $target = PathFactory::create($directory . '/target.txt')->absolute();
-        $link = PathFactory::create($directory . '/link.txt')->absolute();
+        $target = PathHelper::makeAbsolute('target.txt', $directory);
+        $link = PathHelper::makeAbsolute('link.txt', $directory);
         touch($target);
         link($target, $link);
         $sut = $this->createSut();
@@ -75,7 +74,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $message = sprintf(
             'The %s directory at %s contains hard links, which is not supported. The first one is %s.',
             $dirName,
-            PathFactory::create($directory)->absolute(),
+            $directory,
             $link,
         );
         self::assertTranslatableException(static function () use ($sut): void {
@@ -87,11 +86,11 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         return [
             'In active directory' => [
-                'directory' => PathHelper::activeDirRelative(),
+                'directory' => PathHelper::activeDirAbsolute(),
                 'dirName' => 'active',
             ],
             'In staging directory' => [
-                'directory' => PathHelper::stagingDirRelative(),
+                'directory' => PathHelper::stagingDirAbsolute(),
                 'dirName' => 'staging',
             ],
         ];

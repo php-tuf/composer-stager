@@ -43,8 +43,8 @@ class Updater
 
     public function update(): void
     {
-        $activeDir = $this->pathFactory::create('/var/www/public');
-        $stagingDir = $this->pathFactory::create('/var/www/staging');
+        $activeDir = $this->pathFactory->create('/var/www/public');
+        $stagingDir = $this->pathFactory->create('/var/www/staging');
         $exclusions = $this->pathListFactory->create(
             'cache',
             'uploads',

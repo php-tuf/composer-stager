@@ -3,39 +3,17 @@
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
-    private static function sourceDirAbsolute(): string
-    {
-        return PathHelper::makeAbsolute('source', PathHelper::testEnvAbsolute());
-    }
-
-    private static function sourcePath(): PathInterface
-    {
-        return PathFactory::create(self::sourceDirAbsolute());
-    }
-
-    public static function destinationDirAbsolute(): string
-    {
-        return PathHelper::makeAbsolute('destination', PathHelper::testEnvAbsolute());
-    }
-
-    private static function destinationPath(): PathInterface
-    {
-        return PathFactory::create(self::destinationDirAbsolute());
-    }
-
     protected function setUp(): void
     {
         FilesystemHelper::createDirectories([
-            self::sourceDirAbsolute(),
-            self::destinationDirAbsolute(),
+            PathHelper::sourceDirAbsolute(),
+            PathHelper::destinationDirAbsolute(),
         ]);
     }
 
@@ -66,7 +44,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $sut->sync(self::sourcePath(), self::destinationPath(), null, null, $givenTimeout);
+        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath(), null, null, $givenTimeout);
 
         self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -88,17 +66,17 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers ::sync */
     public function testSyncWithDirectorySymlinks(): void
     {
-        $link = PathHelper::makeAbsolute('link', self::sourceDirAbsolute());
-        $target = PathHelper::makeAbsolute('directory', self::sourceDirAbsolute());
+        $link = PathHelper::makeAbsolute('link', PathHelper::sourceDirAbsolute());
+        $target = PathHelper::makeAbsolute('directory', PathHelper::sourceDirAbsolute());
         FilesystemHelper::createDirectories($target);
-        $file = PathHelper::makeAbsolute('directory/file.txt', self::sourceDirAbsolute());
+        $file = PathHelper::makeAbsolute('directory/file.txt', PathHelper::sourceDirAbsolute());
         touch($file);
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $sut->sync(self::sourcePath(), self::destinationPath());
+        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
 
-        self::assertDirectoryListing(self::destinationDirAbsolute(), [
+        self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [
             'link',
             'directory/file.txt',
         ], '', 'Correctly synced files, including a symlink to a directory.');
