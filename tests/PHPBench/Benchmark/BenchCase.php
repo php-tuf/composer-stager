@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\PHPBench\Benchmark;
 
+use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
 use Symfony\Component\Config\FileLocator as SymfonyFileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
@@ -11,10 +13,12 @@ use Symfony\Component\Filesystem\Path as SymfonyPath;
 abstract class BenchCase
 {
     protected SymfonyContainerBuilder $container;
+    protected PathFactoryInterface $pathFactory;
 
     public function __construct()
     {
         $this->container = $this->getContainer();
+        $this->pathFactory = $this->container->get(PathFactory::class);
     }
 
     public static function setUpBeforeClass(): void

@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\Domain;
@@ -86,7 +85,7 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $basePath, string $filename): void
     {
-        $filename = PathFactory::create("{$basePath}/{$filename}")->absolute();
+        $filename = PathHelper::makeAbsolute($filename, $basePath);
         static::ensureParentDirectory($filename);
 
         $touchResult = touch($filename);
@@ -120,8 +119,8 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createSymlink(string $basePath, string $link, string $target): void
     {
-        $link = PathFactory::create("{$basePath}/{$link}");
-        $target = PathFactory::create("{$basePath}/{$target}");
+        $link = PathHelper::createPath($link, $basePath);
+        $target = PathHelper::createPath($target, $basePath);
 
         self::prepareForLink($link, $target);
 
@@ -137,8 +136,8 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createHardlink(string $basePath, string $link, string $target): void
     {
-        $link = PathFactory::create("{$basePath}/{$link}");
-        $target = PathFactory::create("{$basePath}/{$target}");
+        $link = PathHelper::createPath($link, $basePath);
+        $target = PathHelper::createPath($target, $basePath);
 
         self::prepareForLink($link, $target);
 

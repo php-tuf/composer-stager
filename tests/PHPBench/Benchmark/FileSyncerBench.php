@@ -10,7 +10,6 @@ use PhpBench\Attributes\ParamProviders;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\ProcessHelper;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -40,7 +39,7 @@ final class FileSyncerBench extends BenchCase
         assert($sut instanceof FileSyncerInterface);
 
         $destinationAbsolute = self::getDestinationAbsolute($syncerClassName);
-        $destinationPath = PathFactory::create($destinationAbsolute);
+        $destinationPath = $this->pathFactory->create($destinationAbsolute);
 
         $sut->sync($sourcePath, $destinationPath, null, null, ProcessHelper::PROCESS_TIMEOUT);
     }

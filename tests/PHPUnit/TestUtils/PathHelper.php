@@ -12,6 +12,8 @@ final class PathHelper
     private const WORKING_DIR = 'working-dir';
     private const ACTIVE_DIR = 'active-dir';
     private const STAGING_DIR = 'staging-dir';
+    private const SOURCE_DIR = 'source';
+    private const DESTINATION_DIR = 'destination';
 
     public static function repositoryRootAbsolute(): string
     {
@@ -40,7 +42,7 @@ final class PathHelper
 
     public static function activeDirPath(): PathInterface
     {
-        return new TestPath(self::activeDirAbsolute());
+        return self::createPath(self::activeDirAbsolute());
     }
 
     public static function stagingDirRelative(): string
@@ -55,7 +57,47 @@ final class PathHelper
 
     public static function stagingDirPath(): PathInterface
     {
-        return new TestPath(self::stagingDirAbsolute());
+        return self::createPath(self::stagingDirAbsolute());
+    }
+
+    public static function sourceDirRelative(): string
+    {
+        return self::SOURCE_DIR;
+    }
+
+    public static function sourceDirAbsolute(): string
+    {
+        return self::makeAbsolute(self::sourceDirRelative(), self::testEnvAbsolute());
+    }
+
+    public static function sourceDirPath(): PathInterface
+    {
+        return self::createPath(self::sourceDirAbsolute());
+    }
+
+    public static function destinationDirRelative(): string
+    {
+        return self::DESTINATION_DIR;
+    }
+
+    public static function destinationDirAbsolute(): string
+    {
+        return self::makeAbsolute(self::destinationDirRelative(), self::testEnvAbsolute());
+    }
+
+    public static function destinationDirPath(): PathInterface
+    {
+        return self::createPath(self::destinationDirAbsolute());
+    }
+
+    public static function createPath(string $path, ?string $basePath = null): PathInterface
+    {
+        if (is_string($basePath)) {
+            assert(self::isAbsolute($basePath));
+            $path = self::makeAbsolute($path, $basePath);
+        }
+
+        return new TestPath($path);
     }
 
     public static function canonicalize(string $path): string

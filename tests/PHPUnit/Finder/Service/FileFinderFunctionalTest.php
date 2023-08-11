@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -163,7 +162,7 @@ final class FileFinderFunctionalTest extends TestCase
                 ],
             );
 
-            return PathFactory::create($path)->absolute();
+            return PathHelper::makeAbsolute($path, getcwd());
         }, $paths);
 
         sort($paths);

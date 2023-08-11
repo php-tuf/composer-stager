@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
@@ -66,8 +65,8 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
-        $target = PathFactory::create($targetDir . '/target_directory')->absolute();
-        $link = PathFactory::create($linkDir . '/directory_link')->absolute();
+        $target = PathHelper::makeAbsolute('target_directory', $targetDir);
+        $link = PathHelper::makeAbsolute('directory_link', $linkDir);
         FilesystemHelper::createDirectories($target);
         symlink($target, $link);
         $sut = $this->createSut();
@@ -75,7 +74,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $message = sprintf(
             'The %s directory at %s contains symlinks that point to a directory, which is not supported. The first one is %s.',
             $linkDirName,
-            PathFactory::create($linkDir)->absolute(),
+            $linkDir,
             $link,
         );
         self::assertTranslatableException(static function () use ($sut): void {
@@ -88,12 +87,12 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         return [
             'In active directory' => [
                 'targetDir' => PathHelper::testWorkingDirAbsolute(),
-                'linkDir' => PathHelper::activeDirRelative(),
+                'linkDir' => PathHelper::activeDirAbsolute(),
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
                 'targetDir' => PathHelper::testWorkingDirAbsolute(),
-                'linkDir' => PathHelper::stagingDirRelative(),
+                'linkDir' => PathHelper::stagingDirAbsolute(),
                 'linkDirName' => 'staging',
             ],
         ];
