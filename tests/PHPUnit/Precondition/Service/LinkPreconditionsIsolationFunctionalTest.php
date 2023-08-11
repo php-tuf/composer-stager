@@ -155,10 +155,9 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     }
 
     /** @group no_windows */
-    private function assertPreconditionIsIsolated(string $sut, array $conflictingPreconditions = []): void
+    private function assertPreconditionIsIsolated(string $sut): void
     {
-        $excludePreconditions = array_merge($conflictingPreconditions, [$sut]);
-        $sut = $this->createTestPreconditionsTree($excludePreconditions);
+        $sut = $this->createTestPreconditionsTree([$sut]);
 
         $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
 
