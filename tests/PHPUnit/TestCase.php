@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
+use PhpTuf\ComposerStager\Tests\TestUtils\Domain;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -27,8 +28,6 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
-    final public const DOMAIN_DEFAULT = 'messages';
-    final public const DOMAIN_EXCEPTIONS = 'exceptions';
 
     protected PathListInterface $exclusions;
 
@@ -100,7 +99,7 @@ abstract class TestCase extends PHPUnitTestCase
     public static function createTestPreconditionException(
         string $message = '',
         ?TranslationParametersInterface $parameters = null,
-        $domain = self::DOMAIN_EXCEPTIONS,
+        $domain = Domain::EXCEPTIONS,
     ): PreconditionException {
         return new PreconditionException(
             new TestPrecondition(),

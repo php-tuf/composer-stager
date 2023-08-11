@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\Domain;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -135,7 +136,7 @@ final class StagerUnitTest extends TestCase
         $expectedExceptionMessage = new TestTranslatableMessage(
             'The Composer command cannot begin with "composer"--it is implied',
             null,
-            self::DOMAIN_EXCEPTIONS,
+            Domain::EXCEPTIONS,
         );
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->stage([
@@ -157,7 +158,7 @@ final class StagerUnitTest extends TestCase
         $expectedExceptionMessage = new TestTranslatableMessage(
             'Cannot stage a Composer command containing the "--working-dir" (or "-d") option',
             null,
-            self::DOMAIN_EXCEPTIONS,
+            Domain::EXCEPTIONS,
         );
         self::assertTranslatableException(static function () use ($sut, $command): void {
             $sut->stage($command, PathHelper::activeDirPath(), PathHelper::stagingDirPath());
