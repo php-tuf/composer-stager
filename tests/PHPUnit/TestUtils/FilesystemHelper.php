@@ -15,7 +15,7 @@ final class FilesystemHelper
 
         // If a base path is provided, use it to make all directories absolute.
         if (is_string($basePath)) {
-            assert(PathHelper::isAbsolute($basePath), 'base path must be absolute.');
+            assert(PathHelper::isAbsolute($basePath), 'Base path must be absolute.');
             $directories = array_map(static fn ($dirname): string => PathHelper::makeAbsolute($dirname, $basePath), $directories);
         }
 

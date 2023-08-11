@@ -46,9 +46,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::exitEarly */
     public function testExitEarly(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
-
         $this->filesystem
             ->exists(Argument::cetera())
             ->shouldNotBeCalled();
@@ -96,6 +93,9 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
                 return true;
             }
         };
+
+        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = PathHelper::stagingDirPath();
 
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
