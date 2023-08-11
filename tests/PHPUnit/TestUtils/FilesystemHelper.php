@@ -21,15 +21,4 @@ final class FilesystemHelper
 
         (new SymfonyFilesystem())->mkdir($directories);
     }
-
-    public function delete(array $paths, ?string $basePath = null): void
-    {
-        $paths = self::makeAbsolute($paths, $basePath);
-        (new SymfonyFilesystem())->remove($paths);
-    }
-
-    private static function makeAbsolute(array $paths, ?string $basePath = null): array
-    {
-        return array_map(static fn ($dirname): string => PathHelper::makeAbsolute($dirname, $basePath), $paths);
-    }
 }
