@@ -44,11 +44,10 @@ final class FileFinderFunctionalTest extends TestCase
      */
     public function testFind(array $files, ?PathListInterface $exclusions, array $expected): void
     {
-        $directory = self::activeDirPath();
-        self::createFiles($directory->absolute(), $files);
+        self::createFiles(PathHelper::activeDirAbsolute(), $files);
         $sut = $this->createSut();
 
-        $actual = $sut->find($directory, $exclusions);
+        $actual = $sut->find(PathHelper::activeDirPath(), $exclusions);
 
         self::assertSame($expected, $actual);
     }

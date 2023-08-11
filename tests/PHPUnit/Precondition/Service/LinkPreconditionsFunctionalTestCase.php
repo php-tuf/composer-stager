@@ -65,7 +65,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }

@@ -55,8 +55,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
 
-        $basePath = self::activeDirPath();
-        $basePathAbsolute = $basePath->absolute();
+        $basePathAbsolute = PathHelper::activeDirAbsolute();
         $link = PathHelper::makeAbsolute('link.txt', $basePathAbsolute);
         $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
         touch($target);

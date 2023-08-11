@@ -3,8 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
@@ -13,6 +11,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTh
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Throwable;
 
 /**
@@ -30,9 +29,9 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoSymlinksPointToADirectory::class,
     ];
 
-    private static function path(string $path): PathInterface
+    private static function path(string $path): string
     {
-        return PathFactory::create($path, self::activeDirPath());
+        return PathHelper::makeAbsolute($path, PathHelper::activeDirAbsolute());
     }
 
     protected function setUp(): void
@@ -87,7 +86,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $sut = $this->createTestPreconditionsTree();
 
         self::assertTrue(
-            $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath()),
+            $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath()),
             'All preconditions passed together without any links present.',
         );
     }
@@ -95,8 +94,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoAbsoluteSymlinksExist(): void
     {
-        $source = self::path('source.txt')->absolute();
-        $target = self::path('target.txt')->absolute();
+        $source = self::path('source.txt');
+        $target = self::path('target.txt');
         touch($target);
         symlink($target, $source);
 
@@ -106,8 +105,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group windows_only */
     public function testNoLinksExistOnWindows(): void
     {
-        $source = self::path('source.txt')->absolute();
-        $target = self::path('target.txt')->absolute();
+        $source = self::path('source.txt');
+        $target = self::path('target.txt');
         touch($target);
         symlink($target, $source);
 
@@ -117,14 +116,14 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $sut = $container->get(NoLinksExistOnWindows::class);
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
+            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
         }, PreconditionException::class);
     }
 
     /** @group no_windows */
     public function testNoSymlinksPointOutsideTheCodebase(): void
     {
-        $source = self::path('source.txt')->absolute();
+        $source = self::path('source.txt');
         $target = '../target.txt';
         touch($target);
         symlink($target, $source);
@@ -135,7 +134,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoSymlinksPointToADirectory(): void
     {
-        $source = self::path('link')->absolute();
+        $source = self::path('link');
         $target = 'directory';
         FilesystemHelper::createDirectories($target);
         symlink($target, $source);
@@ -146,8 +145,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** @group no_windows */
     public function testNoHardLinksExistExist(): void
     {
-        $source = self::path('source.txt')->absolute();
-        $target = self::path('target.txt')->absolute();
+        $source = self::path('source.txt');
+        $target = self::path('target.txt');
         touch($target);
         link($target, $source);
 
@@ -159,7 +158,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $sut = $this->createTestPreconditionsTree([$sut]);
 
-        $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
+        $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
 
         $this->expectNotToPerformAssertions();
     }

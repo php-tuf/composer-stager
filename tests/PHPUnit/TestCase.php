@@ -32,21 +32,6 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected PathListInterface $exclusions;
 
-    protected static function testWorkingDirPath(): PathInterface
-    {
-        return PathFactory::create(PathHelper::testWorkingDirAbsolute());
-    }
-
-    protected static function activeDirPath(): PathInterface
-    {
-        return PathFactory::create(PathHelper::activeDirRelative(), self::testWorkingDirPath());
-    }
-
-    protected static function stagingDirPath(): PathInterface
-    {
-        return PathFactory::create(PathHelper::stagingDirRelative(), self::testWorkingDirPath());
-    }
-
     public function container(): ContainerBuilder
     {
         $container = new ContainerBuilder();

@@ -174,7 +174,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
 
-        $dirPath = self::activeDirPath();
+        $dirPath = PathHelper::activeDirPath();
         $link = PathFactory::create('link.txt', $dirPath)->absolute();
         $target = PathFactory::create('target.txt', $dirPath)->absolute();
         $parentDir = dirname($link);
