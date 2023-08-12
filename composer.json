@@ -59,9 +59,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PhpTuf\\ComposerStager\\": "tests/PHPCS/",
-            "PhpTuf\\ComposerStager\\PHPBench\\": "tests/PHPBench/",
-            "PhpTuf\\ComposerStager\\PHPStan\\": "tests/PHPStan/",
+            "PhpTuf\\ComposerStager\\": "tools/PHPCS/",
+            "PhpTuf\\ComposerStager\\PHPBench\\": "tools/PHPBench/",
+            "PhpTuf\\ComposerStager\\PHPStan\\": "tools/PHPStan/",
             "PhpTuf\\ComposerStager\\Tests\\": "tests/PHPUnit/"
         }
     },
