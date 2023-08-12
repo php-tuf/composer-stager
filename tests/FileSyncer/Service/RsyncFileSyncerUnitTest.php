@@ -143,6 +143,27 @@ final class RsyncFileSyncerUnitTest extends TestCase
                 ],
                 'callback' => null,
             ],
+            'Siblings: Windows directory separators' => [
+                'source' => 'source/one\\two',
+                'destination' => 'destination\\one/two',
+                'exclusions' => new PathList(...[
+                    'three\\four',
+                    'five/six/seven/eight',
+                    'five/six/seven/eight',
+                    'five\\six/seven\\eight',
+                    'five/six\\seven/eight',
+                ]),
+                'command' => [
+                    '--archive',
+                    '--delete-after',
+                    '--verbose',
+                    '--exclude=/three/four',
+                    '--exclude=/five/six/seven/eight',
+                    'source/one/two/',
+                    'destination/one/two',
+                ],
+                'callback' => null,
+            ],
             'Nested: destination inside source (neither is excluded)' => [
                 'source' => 'source',
                 'destination' => 'source/destination',
@@ -164,7 +185,22 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    // This is the only case where the source directory needs to be excluded.
+                    // "Source inside destination" is the only case where the source directory needs to be excluded.
+                    '--exclude=/source',
+                    'destination/source/',
+                    'destination',
+                ],
+                'callback' => null,
+            ],
+            'Nested: with Windows directory separators' => [
+                'source' => 'destination\\source',
+                'destination' => 'destination',
+                'exclusions' => null,
+                'command' => [
+                    '--archive',
+                    '--delete-after',
+                    '--verbose',
+                    // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
                     'destination/source/',
                     'destination',
