@@ -14,7 +14,7 @@ parameters:
     paths:
         - .gitattributes
         - src
-        - tests/PHPUnit
+        - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     preconditionSystemHash: edc0e29f2fd55b848b7a587e7a16e557
@@ -68,49 +68,49 @@ parameters:
         # Test code.
         -
             message: '#.*::__construct\(\) does not call parent constructor from .*.#'
-            path: tests/PHPUnit/Translation/Value/TestTranslatableExceptionMessage.php
+            path: tests/Translation/Value/TestTranslatableExceptionMessage.php
         -
             message: '#Access to an undefined property.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Built-in or third party exception ".*" cannot be thrown from public methods.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Cannot call method .*\(\) on .*MethodProphecy.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Concrete class must implement an interface#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#.*caught .* must be rethrown.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Docblock must contain "@package.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Method .* no (value )?type specified.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Method .* should not be public because it doesn''t implement a method on an interface.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Parameter .* of (static )?(class|method) .* expects .* given.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Property .* does not accept .*.#'
-            path: tests/PHPUnit
+            path: tests
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

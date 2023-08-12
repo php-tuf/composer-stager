@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="End-to-End Test" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-    <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" directory="$PROJECT_DIR$/tests/PHPUnit/EndToEnd" scope="Pattern" options="--exclude-group=windows_only">
+    <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" directory="$PROJECT_DIR$/tests/EndToEnd" scope="Pattern" options="--exclude-group=windows_only">
       <test_patterns>
         <composite_test_pattern class_fqn="PhpTuf\ComposerStager\Tests\EndToEnd\PhpFileSyncerEndToEndFunctionalTest" file_path="$PROJECT_DIR$/tests/PHPUnit/EndToEnd/PhpFileSyncerEndToEndFunctionalTest.php" />
         <composite_test_pattern class_fqn="PhpTuf\ComposerStager\Tests\EndToEnd\RsyncFileSyncerEndToEndFunctionalTest" file_path="$PROJECT_DIR$/tests/EndToEnd/RsyncFileSyncerEndToEndFunctionalTest.php" />

@@ -17,7 +17,7 @@ final class PathHelper
 
     public static function repositoryRootAbsolute(): string
     {
-        return dirname(__DIR__, 3);
+        return dirname(__DIR__, 2);
     }
 
     public static function testEnvAbsolute(): string

@@ -62,7 +62,7 @@
             "PhpTuf\\ComposerStager\\": "tools/PHPCS/",
             "PhpTuf\\ComposerStager\\PHPBench\\": "tools/PHPBench/",
             "PhpTuf\\ComposerStager\\PHPStan\\": "tools/PHPStan/",
-            "PhpTuf\\ComposerStager\\Tests\\": "tests/PHPUnit/"
+            "PhpTuf\\ComposerStager\\Tests\\": "tests/"
         }
     },
     "config": {
