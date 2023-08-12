@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
@@ -92,6 +93,9 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         PathInterface $destination,
         ?OutputCallbackInterface $callback,
     ): void {
+        $sourceAbsolute = PathHelper::canonicalize($sourceAbsolute);
+        $destinationAbsolute = PathHelper::canonicalize($destinationAbsolute);
+
         $this->ensureDestinationDirectoryExists($destination);
         $command = $this->buildCommand($exclusions, $sourceAbsolute, $destinationAbsolute);
 
