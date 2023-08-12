@@ -52,7 +52,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
         $phpcsFile->addError(
             sprintf(
                 'API-layer class %s must not depend on non-API-layer class %s.',
-                $namespace,
+                $this->getClass($phpcsFile),
                 $namespace,
             ),
             $stackPtr,
@@ -86,7 +86,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
 
     private function isAPILayerNamespace(string $namespace): bool
     {
-        return str_starts_with($namespace, 'PhpTuf\\ComposerStager');
+        return str_starts_with($namespace, 'PhpTuf\\ComposerStager\\API');
     }
 
     private function isExcluded(string $namespace): bool
@@ -101,5 +101,27 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
         $asKeywordPtr = $phpcsFile->findPrevious(T_AS, $lastStringPtr, $stackPtr);
 
         return $asKeywordPtr !== false;
+    }
+
+    private function getClass(File $phpcsFile): string
+    {
+        return $this->getClassNamespace($phpcsFile) . '\\' . $this->getClassName($phpcsFile);
+    }
+
+    private function getClassNamespace(File $phpcsFile): string
+    {
+        $namespaceTokenPtr = $phpcsFile->findNext(T_NAMESPACE, 0);
+        $namespacePtr = $phpcsFile->findNext(T_STRING, $namespaceTokenPtr);
+
+        return $this->getNamespace($phpcsFile, $namespacePtr);
+    }
+
+    private function getClassName(File $phpcsFile): mixed
+    {
+        $tokens = $phpcsFile->getTokens();
+        $scopeTokenPtr = $phpcsFile->findNext(Tokens::$ooScopeTokens, 0);
+        $classNamePtr = $phpcsFile->findNext(T_STRING, $scopeTokenPtr);
+
+        return $tokens[$classNamePtr]['content'];
     }
 }
