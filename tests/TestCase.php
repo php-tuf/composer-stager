@@ -86,12 +86,9 @@ abstract class TestCase extends PHPUnitTestCase
     protected static function createFile(string $basePath, string $filename): void
     {
         $filename = PathHelper::makeAbsolute($filename, $basePath);
-        static::ensureParentDirectory($filename);
-
-        $touchResult = touch($filename);
+        FilesystemHelper::touch($filename);
         $realpathResult = realpath($filename);
 
-        assert($touchResult, "Created file {$filename}.");
         assert($realpathResult !== false, "Got absolute path of {$filename}.");
     }
 
@@ -146,18 +143,12 @@ abstract class TestCase extends PHPUnitTestCase
 
     private static function prepareForLink(PathInterface $link, PathInterface $target): void
     {
-        static::ensureParentDirectory($link->absolute());
+        FilesystemHelper::ensureParentDirectory($link->absolute());
 
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
         assert(file_exists($target->absolute()), 'Symlink target exists.');
-    }
-
-    protected static function ensureParentDirectory(string $filename): void
-    {
-        $dirname = dirname($filename);
-        FilesystemHelper::createDirectories($dirname);
     }
 
     protected static function changeFile(string $dir, string $filename): void

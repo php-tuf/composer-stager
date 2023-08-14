@@ -96,7 +96,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('source.txt');
         $target = self::path('target.txt');
-        touch($target);
+        FilesystemHelper::touch($target);
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoAbsoluteSymlinksExist::class);
@@ -107,7 +107,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('source.txt');
         $target = self::path('target.txt');
-        touch($target);
+        FilesystemHelper::touch($target);
         symlink($target, $source);
 
         $container = $this->container();

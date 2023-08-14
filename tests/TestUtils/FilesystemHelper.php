@@ -21,4 +21,25 @@ final class FilesystemHelper
 
         (new SymfonyFilesystem())->mkdir($directories);
     }
+
+    public static function touch(string $path): void
+    {
+        assert(PathHelper::isAbsolute($path));
+
+        self::ensureParentDirectory($path);
+        self::symfonyFilesystem()->touch($path);
+
+        assert(self::symfonyFilesystem()->exists($path));
+    }
+
+    public static function ensureParentDirectory(string $filename): void
+    {
+        $dirname = dirname($filename);
+        self::createDirectories($dirname);
+    }
+
+    private static function symfonyFilesystem(): SymfonyFilesystem
+    {
+        return new SymfonyFilesystem();
+    }
 }

@@ -43,7 +43,7 @@ final class FilesystemFunctionalTest extends TestCase
         $filenameRelative = 'file.txt';
         $sourceFilePath = PathHelper::createPath($filenameRelative, PathHelper::sourceDirAbsolute());
         $destinationFilePath = PathHelper::createPath($filenameRelative, PathHelper::destinationDirAbsolute());
-        touch($sourceFilePath->absolute());
+        FilesystemHelper::touch($sourceFilePath->absolute());
 
         // Copy an individual file.
         $filesystem = $this->createSut();
@@ -75,7 +75,7 @@ final class FilesystemFunctionalTest extends TestCase
     public function testIsDirEmptyErrorIsNotADirectory(): void
     {
         $filePath = PathHelper::createPath('file.txt', PathHelper::testEnvAbsolute());
-        touch($filePath->absolute());
+        FilesystemHelper::touch($filePath->absolute());
         $message = sprintf(
             'The path does not exist or is not a directory at %s',
             $filePath->absolute(),
@@ -246,7 +246,7 @@ final class FilesystemFunctionalTest extends TestCase
         $hardLinkPath = PathHelper::createPath('hard_link.txt', $basePath);
         $targetPath = PathHelper::createPath($given, $basePath);
         chdir($basePath);
-        touch($targetPath->absolute());
+        FilesystemHelper::touch($targetPath->absolute());
         symlink($given, $symlinkPath->absolute());
         link($given, $hardLinkPath->absolute());
         $sut = $this->createSut();
@@ -285,7 +285,7 @@ final class FilesystemFunctionalTest extends TestCase
     public function testReadlinkOnNonLink(): void
     {
         $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
-        touch($file->absolute());
+        FilesystemHelper::touch($file->absolute());
         assert(file_exists($file->absolute()));
         $sut = $this->createSut();
 
@@ -327,8 +327,7 @@ final class FilesystemFunctionalTest extends TestCase
         $filename = 'arbitrary_file.txt';
         $sourceFile = PathHelper::createPath($filename, PathHelper::sourceDirAbsolute());
         $destinationFile = PathHelper::createPath($filename, PathHelper::destinationDirAbsolute());
-        touch($sourceFile->absolute());
-        assert(file_exists($sourceFile->absolute()));
+        FilesystemHelper::touch($sourceFile->absolute());
 
         $sut = new SymfonyFilesystem();
 

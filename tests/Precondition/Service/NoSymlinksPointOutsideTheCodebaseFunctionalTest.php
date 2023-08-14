@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
@@ -42,10 +43,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $stagingDirPath = PathHelper::stagingDirPath();
 
         $link = PathHelper::makeAbsolute($link, $activeDirAbsolute);
-        self::ensureParentDirectory($link);
+        FilesystemHelper::ensureParentDirectory($link);
         $target = PathHelper::makeAbsolute($target, $activeDirAbsolute);
-        self::ensureParentDirectory($target);
-        touch($target);
+        FilesystemHelper::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -99,7 +99,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
         $target = PathHelper::makeAbsolute('target.txt', $targetDir);
         $link = PathHelper::makeAbsolute('link.txt', $linkDir);
-        touch($target);
+        FilesystemHelper::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -154,7 +154,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
-        touch($target);
+        FilesystemHelper::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
@@ -179,7 +179,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $targetAbsolute = PathHelper::makeAbsolute('target.txt', $dirPathAbsolute);
         $parentDir = dirname($linkAbsolute);
         @mkdir($parentDir, 0777, true);
-        touch($targetAbsolute);
+        FilesystemHelper::touch($targetAbsolute);
         symlink($targetAbsolute, $linkAbsolute);
         $sut = $this->createSut();
 

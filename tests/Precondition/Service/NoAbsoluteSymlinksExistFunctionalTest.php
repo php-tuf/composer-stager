@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
@@ -81,7 +82,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $targetAbsolute = PathHelper::makeAbsolute($targetRelative, $basePath);
         $parentDir = dirname($linkAbsolute);
         @mkdir($parentDir, 0777, true);
-        touch($targetAbsolute);
+        FilesystemHelper::touch($targetAbsolute);
         // Point at the absolute target path.
         symlink($targetAbsolute, $linkAbsolute);
         $sut = $this->createSut();
@@ -113,7 +114,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $targetAbsolute = PathHelper::makeAbsolute($targetRelative, $basePath);
         $parentDirAbsolute = dirname($linkAbsolute);
         @mkdir($parentDirAbsolute, 0777, true);
-        touch($targetAbsolute);
+        FilesystemHelper::touch($targetAbsolute);
         chdir($parentDirAbsolute);
         // Point at the relative target path.
         symlink($targetRelative, $linkAbsolute);
@@ -181,7 +182,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $target = PathHelper::makeAbsolute('target.txt', PathHelper::activeDirAbsolute());
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
-        touch($target);
+        FilesystemHelper::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 

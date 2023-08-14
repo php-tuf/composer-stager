@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Symfony\Component\Filesystem\Path;
 
@@ -48,7 +49,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         $target = Path::makeAbsolute('target.txt', PathHelper::activeDirAbsolute());
         $link = Path::makeAbsolute('link.txt', PathHelper::activeDirAbsolute());
-        touch($target);
+        FilesystemHelper::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -67,7 +68,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         $target = PathHelper::makeAbsolute('target.txt', $directory);
         $link = PathHelper::makeAbsolute('link.txt', $directory);
-        touch($target);
+        FilesystemHelper::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 

@@ -46,9 +46,8 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $parentDir = PathHelper::activeDirAbsolute();
         $link = PathHelper::makeAbsolute('link.txt', $parentDir);
         $target = PathHelper::makeAbsolute('target.txt', $parentDir);
-        self::ensureParentDirectory($link);
-        self::ensureParentDirectory($target);
-        touch($target);
+        FilesystemHelper::ensureParentDirectory($link);
+        FilesystemHelper::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 

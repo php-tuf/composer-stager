@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
@@ -58,7 +59,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $basePathAbsolute = PathHelper::activeDirAbsolute();
         $link = PathHelper::makeAbsolute('link.txt', $basePathAbsolute);
         $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
-        touch($target);
+        FilesystemHelper::touch($target);
         self::createSymlinks($basePathAbsolute, $symlinks);
         self::createHardlinks($basePathAbsolute, $hardLinks);
         $sut = $this->createSut();

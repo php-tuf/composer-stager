@@ -70,7 +70,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $target = PathHelper::makeAbsolute('directory', PathHelper::sourceDirAbsolute());
         FilesystemHelper::createDirectories($target);
         $file = PathHelper::makeAbsolute('directory/file.txt', PathHelper::sourceDirAbsolute());
-        touch($file);
+        FilesystemHelper::touch($file);
         symlink($target, $link);
         $sut = $this->createSut();
 
