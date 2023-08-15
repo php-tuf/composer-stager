@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class FilesystemHelper
@@ -41,5 +42,49 @@ final class FilesystemHelper
     private static function symfonyFilesystem(): SymfonyFilesystem
     {
         return new SymfonyFilesystem();
+    }
+
+    public static function createSymlinks(string $basePath, array $symlinks): void
+    {
+        foreach ($symlinks as $link => $target) {
+            self::createSymlink($basePath, $link, $target);
+        }
+    }
+
+    public static function createSymlink(string $basePath, string $link, string $target): void
+    {
+        $link = PathHelper::createPath($link, $basePath);
+        $target = PathHelper::createPath($target, $basePath);
+
+        self::prepareForLink($link, $target);
+
+        symlink($target->absolute(), $link->absolute());
+    }
+
+    public static function createHardlinks(string $basePath, array $symlinks): void
+    {
+        foreach ($symlinks as $link => $target) {
+            self::createHardlink($basePath, $link, $target);
+        }
+    }
+
+    public static function createHardlink(string $basePath, string $link, string $target): void
+    {
+        $link = PathHelper::createPath($link, $basePath);
+        $target = PathHelper::createPath($target, $basePath);
+
+        self::prepareForLink($link, $target);
+
+        link($target->absolute(), $link->absolute());
+    }
+
+    private static function prepareForLink(PathInterface $link, PathInterface $target): void
+    {
+        self::ensureParentDirectory($link->absolute());
+
+        // If the symlink target doesn't exist, the tests will pass on Unix-like
+        // systems but fail on Windows. Avoid hard-to-debug problems by making
+        // sure it fails everywhere in that case.
+        assert(file_exists($target->absolute()), 'Symlink target exists.');
     }
 }

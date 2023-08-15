@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
@@ -110,7 +111,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ]);
 
         $arbitrarySymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
-        self::createSymlinks($activeDirAbsolute, [
+        FilesystemHelper::createSymlinks($activeDirAbsolute, [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
         ]);
@@ -204,7 +205,11 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::createFile($stagingDirAbsolute, 'another_subdir/CREATE_in_staging_dir.txt');
 
         // Create symlink.
-        self::createSymlink($stagingDirAbsolute, 'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt', $arbitrarySymlinkTarget);
+        FilesystemHelper::createSymlink(
+            $stagingDirAbsolute,
+            'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
+            $arbitrarySymlinkTarget,
+        );
 
         // Sanity check to ensure that the expected changes were made.
         $deletion = array_search('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $expectedStagingDirListing, true);

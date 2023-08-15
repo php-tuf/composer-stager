@@ -128,8 +128,8 @@ final class FilesystemFunctionalTest extends TestCase
     ): void {
         self::createFiles(PathHelper::sourceDirAbsolute(), $files);
         FilesystemHelper::createDirectories($directories, PathHelper::sourceDirAbsolute());
-        self::createSymlinks(PathHelper::sourceDirAbsolute(), $symlinks);
-        self::createHardlinks(PathHelper::sourceDirAbsolute(), $hardLinks);
+        FilesystemHelper::createSymlinks(PathHelper::sourceDirAbsolute(), $symlinks);
+        FilesystemHelper::createHardlinks(PathHelper::sourceDirAbsolute(), $hardLinks);
         $subject = PathHelper::createPath($subject, PathHelper::sourceDirAbsolute());
         $sut = $this->createSut();
 

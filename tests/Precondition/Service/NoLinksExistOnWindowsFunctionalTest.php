@@ -60,8 +60,8 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $link = PathHelper::makeAbsolute('link.txt', $basePathAbsolute);
         $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
         FilesystemHelper::touch($target);
-        self::createSymlinks($basePathAbsolute, $symlinks);
-        self::createHardlinks($basePathAbsolute, $hardLinks);
+        FilesystemHelper::createSymlinks($basePathAbsolute, $symlinks);
+        FilesystemHelper::createHardlinks($basePathAbsolute, $hardLinks);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
@@ -118,7 +118,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $exclusions = new PathList(...$exclusions);
         $basePath = PathHelper::activeDirAbsolute();
         self::createFile($basePath, $targetFile);
-        self::createSymlinks($basePath, $links);
+        FilesystemHelper::createSymlinks($basePath, $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);

@@ -110,7 +110,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         FilesystemHelper::createDirectories($targetDirAbsolute);
         $links = array_fill_keys($links, $targetDirRelative);
         $exclusions = new PathList(...$exclusions);
-        self::createSymlinks(PathHelper::activeDirAbsolute(), $links);
+        FilesystemHelper::createSymlinks(PathHelper::activeDirAbsolute(), $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);

@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
@@ -105,50 +104,6 @@ abstract class TestCase extends PHPUnitTestCase
                 $domain,
             ),
         );
-    }
-
-    protected static function createSymlinks(string $basePath, array $symlinks): void
-    {
-        foreach ($symlinks as $link => $target) {
-            self::createSymlink($basePath, $link, $target);
-        }
-    }
-
-    protected static function createSymlink(string $basePath, string $link, string $target): void
-    {
-        $link = PathHelper::createPath($link, $basePath);
-        $target = PathHelper::createPath($target, $basePath);
-
-        self::prepareForLink($link, $target);
-
-        symlink($target->absolute(), $link->absolute());
-    }
-
-    protected static function createHardlinks(string $basePath, array $symlinks): void
-    {
-        foreach ($symlinks as $link => $target) {
-            self::createHardlink($basePath, $link, $target);
-        }
-    }
-
-    protected static function createHardlink(string $basePath, string $link, string $target): void
-    {
-        $link = PathHelper::createPath($link, $basePath);
-        $target = PathHelper::createPath($target, $basePath);
-
-        self::prepareForLink($link, $target);
-
-        link($target->absolute(), $link->absolute());
-    }
-
-    private static function prepareForLink(PathInterface $link, PathInterface $target): void
-    {
-        FilesystemHelper::ensureParentDirectory($link->absolute());
-
-        // If the symlink target doesn't exist, the tests will pass on Unix-like
-        // systems but fail on Windows. Avoid hard-to-debug problems by making
-        // sure it fails everywhere in that case.
-        assert(file_exists($target->absolute()), 'Symlink target exists.');
     }
 
     protected static function changeFile(string $dir, string $filename): void

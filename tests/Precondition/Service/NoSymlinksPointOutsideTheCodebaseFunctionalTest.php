@@ -203,7 +203,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
         $dirPath = PathHelper::activeDirAbsolute();
-        self::createSymlinks($dirPath, $links);
+        FilesystemHelper::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);
