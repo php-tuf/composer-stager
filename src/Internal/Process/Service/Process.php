@@ -106,7 +106,7 @@ final class Process implements ProcessInterface
         return $this;
     }
 
-    public function setTimeout(?float $timeout = self::DEFAULT_TIMEOUT): self
+    public function setTimeout(?int $timeout = self::DEFAULT_TIMEOUT): self
     {
         try {
             $this->symfonyProcess->setTimeout($timeout);
