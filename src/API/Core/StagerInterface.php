@@ -16,6 +16,8 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 interface StagerInterface
 {
     /**
+     * Executes a Composer command.
+     *
      * @param array<string> $composerCommand
      *   The Composer command parts exactly as they would be typed in the terminal.
      *   There's no need to escape them in any way, only to separate them. Example:

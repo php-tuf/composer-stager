@@ -24,7 +24,11 @@ trait TranslatableExceptionTrait
         parent::__construct((string) $translatableMessage, $code, $previous);
     }
 
-    /** @see \PhpTuf\ComposerStager\API\Exception\ExceptionInterface::getTranslatableMessage */
+    /**
+     * Gets the translatable form of the message with original metadata intact.
+     *
+     * @see \PhpTuf\ComposerStager\API\Exception\ExceptionInterface::getTranslatableMessage
+     */
     public function getTranslatableMessage(): TranslatableInterface
     {
         return $this->translatableMessage;

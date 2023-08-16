@@ -14,7 +14,9 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 interface PathListFactoryInterface
 {
     /**
-     * Creates a path list value object from a list of relative path strings. Example:
+     * Creates a path list value object from a list of relative path strings.
+     *
+     * Example:
      * ```php
      * $pathListFactory->create(
      *     'cache',
