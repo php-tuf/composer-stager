@@ -33,6 +33,7 @@ class PreconditionException extends PhpRuntimeException implements ExceptionInte
         $this->__traitConstruct($translatableMessage, $code, $previous);
     }
 
+    /** Gets the unfulfilled precondition. */
     public function getPrecondition(): PreconditionInterface
     {
         return $this->precondition;
