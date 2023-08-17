@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -20,6 +21,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
+use Throwable;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
@@ -28,6 +30,7 @@ use ReflectionClass;
  */
 final class PhpFileSyncerUnitTest extends TestCase
 {
+    private EnvironmentInterface|ObjectProphecy $environment;
     private FileFinderInterface|ObjectProphecy $fileFinder;
     private FilesystemInterface|ObjectProphecy $filesystem;
     private PathFactoryInterface|ObjectProphecy $pathFactory;
@@ -38,6 +41,9 @@ final class PhpFileSyncerUnitTest extends TestCase
     {
         $this->source = new TestPath(PathHelper::activeDirRelative());
         $this->destination = new TestPath(PathHelper::stagingDirRelative());
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment->setTimeLimit(Argument::type('integer'))
+            ->willReturn(true);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
@@ -53,12 +59,13 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     private function createSut(): PhpFileSyncer
     {
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new PhpFileSyncer($fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new PhpFileSyncer($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function testSyncSourceNotFound(): void
@@ -239,11 +246,44 @@ final class PhpFileSyncerUnitTest extends TestCase
 
             $reflection = new ReflectionClass($sut);
             $sut = $reflection->newInstanceWithoutConstructor();
+            $environment = $reflection->getProperty('environment');
+            $environment->setValue($sut, $this->environment->reveal());
             $translatableFactory = $reflection->getProperty('translatableFactory');
             $translatableFactory->setValue($sut, null);
 
             $sut->sync($samePath, $samePath);
         }, AssertionError::class, 'The "p()" method requires a translatable factory. '
             . 'Provide one by calling "setTranslatableFactory()" in the constructor.');
+    }
+
+    /**
+     * @covers ::sync
+     *
+     * @dataProvider providerTimeout
+     */
+    public function testTimeout(int $timeout): void
+    {
+        $this->environment->setTimeLimit($timeout)
+            ->shouldBeCalledOnce();
+        $sut = $this->createSut();
+
+        // Use the same path for the source and destination in
+        // order to fail validation and avoid side effects.
+        try {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::sourceDirPath(), null, null, $timeout);
+        } catch (Throwable) {
+            // @ignoreException
+        }
+    }
+
+    public function providerTimeout(): array
+    {
+        return [
+            [-30],
+            [-5],
+            [0],
+            [5],
+            [30],
+        ];
     }
 }

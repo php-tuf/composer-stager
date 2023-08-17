@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
@@ -25,6 +26,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     use TranslatableAwareTrait;
 
     public function __construct(
+        private readonly EnvironmentInterface $environment,
         private readonly FileFinderInterface $fileFinder,
         private readonly FilesystemInterface $filesystem,
         private readonly PathFactoryInterface $pathFactory,
@@ -40,7 +42,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        set_time_limit($timeout);
+        $this->environment->setTimeLimit($timeout);
 
         $exclusions ??= new PathList();
 
