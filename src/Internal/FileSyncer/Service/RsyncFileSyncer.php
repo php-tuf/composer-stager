@@ -47,14 +47,14 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $sourceAbsolute = $source->absolute();
         $destinationAbsolute = $destination->absolute();
 
         $this->assertDirectoriesAreNotTheSame($source, $destination);
         $this->assertSourceExists($source);
-        set_time_limit((int) $timeout);
+        set_time_limit($timeout);
         $this->runCommand($exclusions, $sourceAbsolute, $destinationAbsolute, $destination, $callback);
     }
 

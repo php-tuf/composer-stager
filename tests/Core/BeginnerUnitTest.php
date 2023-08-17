@@ -70,7 +70,7 @@ final class BeginnerUnitTest extends TestCase
         string $stagingDir,
         ?PathListInterface $exclusions,
         ?OutputCallbackInterface $callback,
-        ?int $timeout,
+        int $timeout,
     ): void {
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);
@@ -93,7 +93,7 @@ final class BeginnerUnitTest extends TestCase
                 'stagingDir' => 'three/four',
                 'givenExclusions' => null,
                 'callback' => null,
-                'timeout' => null,
+                'timeout' => 0,
             ],
             [
                 'activeDir' => 'five/six',

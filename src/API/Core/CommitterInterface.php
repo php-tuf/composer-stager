@@ -28,9 +28,9 @@ interface CommitterInterface
      *   you should use the same exclusions when committing as when beginning.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
-     * @param int|null $timeout
-     *   An optional process timeout (maximum runtime) in seconds. Set to null
-     *   to disable.
+     * @param int $timeout
+     *   An optional process timeout (maximum runtime) in seconds. If set to
+     *   zero (0), no time limit is imposed.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException
      *   If the preconditions are unfulfilled.
@@ -44,6 +44,6 @@ interface CommitterInterface
         PathInterface $activeDir,
         ?PathListInterface $exclusions = null,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

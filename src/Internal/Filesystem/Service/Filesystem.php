@@ -174,12 +174,12 @@ final class Filesystem implements FilesystemInterface
     public function remove(
         PathInterface $path,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         try {
             // Symfony Filesystem doesn't have a builtin mechanism for setting a
             // timeout, so we have to enforce it ourselves.
-            set_time_limit((int) $timeout);
+            set_time_limit($timeout);
 
             $this->symfonyFilesystem->remove($path->absolute());
         } catch (SymfonyExceptionInterface $e) {

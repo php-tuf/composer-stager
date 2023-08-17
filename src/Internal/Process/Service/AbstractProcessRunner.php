@@ -52,7 +52,7 @@ abstract class AbstractProcessRunner
     public function run(
         array $command,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         array_unshift($command, $this->findExecutable());
         $process = $this->processFactory->create($command);
