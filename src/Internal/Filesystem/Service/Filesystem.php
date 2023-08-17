@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
@@ -38,6 +39,7 @@ final class Filesystem implements FilesystemInterface
     private const PATH_IS_SYMLINK = 'PATH_IS_SYMLINK';
 
     public function __construct(
+        private readonly EnvironmentInterface $environment,
         private readonly PathFactoryInterface $pathFactory,
         private readonly SymfonyFilesystem $symfonyFilesystem,
         TranslatableFactoryInterface $translatableFactory,
@@ -177,9 +179,7 @@ final class Filesystem implements FilesystemInterface
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         try {
-            // Symfony Filesystem doesn't have a builtin mechanism for setting a
-            // timeout, so we have to enforce it ourselves.
-            set_time_limit($timeout);
+            $this->environment->setTimeLimit($timeout);
 
             $this->symfonyFilesystem->remove($path->absolute());
         } catch (SymfonyExceptionInterface $e) {

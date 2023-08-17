@@ -15,7 +15,6 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -37,7 +36,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @group no_windows
  */
-final class RsyncFileSyncerUnitTest extends TestCase
+final class RsyncFileSyncerUnitTest extends FileSyncerTestCase
 {
     private FilesystemInterface|ObjectProphecy $filesystem;
     private PathInterface $destination;
@@ -55,15 +54,18 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $this->filesystem
             ->mkdir(Argument::any());
         $this->rsync = $this->prophesize(RsyncProcessRunnerInterface::class);
+
+        parent::setUp();
     }
 
-    private function createSut(): RsyncFileSyncer
+    protected function createSut(): RsyncFileSyncer
     {
+        $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         $rsync = $this->rsync->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new RsyncFileSyncer($filesystem, $rsync, $translatableFactory);
+        return new RsyncFileSyncer($environment, $filesystem, $rsync, $translatableFactory);
     }
 
     /**

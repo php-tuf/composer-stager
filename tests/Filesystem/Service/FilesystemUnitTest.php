@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
@@ -25,22 +26,27 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class FilesystemUnitTest extends TestCase
 {
+    private EnvironmentInterface|ObjectProphecy $environment;
     private PathFactoryInterface|ObjectProphecy $pathFactory;
     private SymfonyFilesystem|ObjectProphecy $symfonyFilesystem;
 
     protected function setUp(): void
     {
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment->setTimeLimit(Argument::type('integer'))
+            ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
     private function createSut(): Filesystem
     {
+        $environment = $this->environment->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $symfonyFilesystem = $this->symfonyFilesystem->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new Filesystem($pathFactory, $symfonyFilesystem, $translatableFactory);
+        return new Filesystem($environment, $pathFactory, $symfonyFilesystem, $translatableFactory);
     }
 
     /**
@@ -168,21 +174,17 @@ final class FilesystemUnitTest extends TestCase
      *
      * @dataProvider providerRemove
      */
-    public function testRemove(
-        string $path,
-        ?OutputCallbackInterface $callback,
-        ?int $givenTimeout,
-        int $expectedTimeout,
-    ): void {
+    public function testRemove(string $path, ?OutputCallbackInterface $callback, int $timeout): void
+    {
+        $this->environment->setTimeLimit($timeout)
+            ->shouldBeCalledOnce();
         $stagingDir = new TestPath($path);
         $this->symfonyFilesystem
             ->remove($path)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($stagingDir, $callback, $givenTimeout);
-
-        self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
+        $sut->remove($stagingDir, $callback, $timeout);
     }
 
     public function providerRemove(): array
@@ -191,14 +193,12 @@ final class FilesystemUnitTest extends TestCase
             [
                 'path' => '/one/two',
                 'callback' => null,
-                'givenTimeout' => 0,
-                'expectedTimeout' => 0,
+                'timeout' => 0,
             ],
             [
                 'path' => 'three/four',
                 'callback' => new TestOutputCallback(),
-                'givenTimeout' => 10,
-                'expectedTimeout' => 10,
+                'timeout' => 10,
             ],
         ];
     }
