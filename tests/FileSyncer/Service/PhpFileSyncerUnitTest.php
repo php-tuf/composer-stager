@@ -10,11 +10,9 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -28,9 +26,8 @@ use Throwable;
  *
  * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  */
-final class PhpFileSyncerUnitTest extends TestCase
+final class PhpFileSyncerUnitTest extends FileSyncerTestCase
 {
-    private EnvironmentInterface|ObjectProphecy $environment;
     private FileFinderInterface|ObjectProphecy $fileFinder;
     private FilesystemInterface|ObjectProphecy $filesystem;
     private PathFactoryInterface|ObjectProphecy $pathFactory;
@@ -41,9 +38,6 @@ final class PhpFileSyncerUnitTest extends TestCase
     {
         $this->source = new TestPath(PathHelper::activeDirRelative());
         $this->destination = new TestPath(PathHelper::stagingDirRelative());
-        $this->environment = $this->prophesize(EnvironmentInterface::class);
-        $this->environment->setTimeLimit(Argument::type('integer'))
-            ->willReturn(true);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
@@ -55,9 +49,11 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->filesystem
             ->mkdir(Argument::any());
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
+
+        parent::setUp();
     }
 
-    private function createSut(): PhpFileSyncer
+    protected function createSut(): PhpFileSyncer
     {
         $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
