@@ -40,7 +40,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
      *
      * @dataProvider providerSyncTimeout
      */
-    public function testSyncTimeout(?int $givenTimeout, int $expectedTimeout): void
+    public function testSyncTimeout(int $givenTimeout, int $expectedTimeout): void
     {
         $sut = $this->createSut();
 
@@ -53,7 +53,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         return [
             [
-                'givenTimeout' => null,
+                'givenTimeout' => 0,
                 'expectedTimeout' => 0,
             ],
             [

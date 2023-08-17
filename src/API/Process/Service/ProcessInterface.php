@@ -82,12 +82,12 @@ interface ProcessInterface
     /**
      * Sets the process timeout (max. runtime) in seconds.
      *
-     * @param int|null $timeout
-     *   An optional process timeout (maximum runtime) in seconds. Set to null
-     *   to disable.
+     * @param int $timeout
+     *   An optional process timeout (maximum runtime) in seconds. If set to
+     *   zero (0), no time limit is imposed.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
      *   If the given timeout is negative.
      */
-    public function setTimeout(?int $timeout = self::DEFAULT_TIMEOUT): self;
+    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): self;
 }

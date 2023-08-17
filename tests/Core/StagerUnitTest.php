@@ -76,7 +76,7 @@ final class StagerUnitTest extends TestCase
         array $givenCommand,
         array $expectedCommand,
         ?OutputCallbackInterface $callback,
-        ?int $timeout,
+        int $timeout,
     ): void {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
@@ -102,7 +102,7 @@ final class StagerUnitTest extends TestCase
                     'update',
                 ],
                 'callback' => null,
-                'timeout' => null,
+                'timeout' => 0,
             ],
             [
                 'givenCommand' => [self::INERT_COMMAND],

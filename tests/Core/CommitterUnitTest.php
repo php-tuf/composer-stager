@@ -70,7 +70,7 @@ final class CommitterUnitTest extends TestCase
         string $activeDir,
         ?PathListInterface $exclusions,
         ?OutputCallbackInterface $callback,
-        ?int $timeout,
+        int $timeout,
     ): void {
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);
@@ -93,7 +93,7 @@ final class CommitterUnitTest extends TestCase
                 'activeDir' => '/three/four',
                 'exclusions' => null,
                 'callback' => null,
-                'timeout' => null,
+                'timeout' => 0,
             ],
             [
                 'stagingDir' => 'five/six',

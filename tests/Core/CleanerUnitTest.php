@@ -61,7 +61,7 @@ final class CleanerUnitTest extends TestCase
      *
      * @dataProvider providerCleanWithOptionalParams
      */
-    public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, ?int $timeout): void
+    public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
         $path = new TestPath($path);
         $this->preconditions
@@ -81,7 +81,7 @@ final class CleanerUnitTest extends TestCase
             [
                 'path' => '/one/two',
                 'callback' => null,
-                'timeout' => null,
+                'timeout' => 0,
             ],
             [
                 'path' => 'three/four',

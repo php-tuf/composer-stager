@@ -84,7 +84,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         array $givenCommand,
         array $expectedCommand,
         ?OutputCallbackInterface $callback,
-        ?int $timeout,
+        int $timeout,
     ): void {
         $this->executableFinder
             ->find($executableName)
@@ -116,7 +116,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 'givenCommand' => [],
                 'expectedCommand' => ['one'],
                 'callback' => null,
-                'timeout' => null,
+                'timeout' => 0,
             ],
             [
                 'executableName' => 'two',

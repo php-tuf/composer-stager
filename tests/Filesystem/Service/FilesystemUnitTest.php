@@ -191,7 +191,7 @@ final class FilesystemUnitTest extends TestCase
             [
                 'path' => '/one/two',
                 'callback' => null,
-                'givenTimeout' => null,
+                'givenTimeout' => 0,
                 'expectedTimeout' => 0,
             ],
             [

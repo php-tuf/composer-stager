@@ -38,9 +38,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        set_time_limit((int) $timeout);
+        set_time_limit($timeout);
 
         $exclusions ??= new PathList();
 
