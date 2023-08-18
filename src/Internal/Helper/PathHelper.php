@@ -9,7 +9,7 @@ use Symfony\Component\Filesystem\Path as SymfonyPath;
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class PathHelper
+final class PathHelper implements PathHelperInterface
 {
     /** @codeCoverageIgnore */
     private function __construct()
