@@ -95,7 +95,7 @@ final class StagerUnitTest extends TestCase
     public function providerStageWithOptionalParams(): array
     {
         return [
-            [
+            'Minimum values ' => [
                 'givenCommand' => ['update'],
                 'expectedCommand' => [
                     '--working-dir=' . PathHelper::stagingDirAbsolute(),
@@ -104,7 +104,7 @@ final class StagerUnitTest extends TestCase
                 'callback' => null,
                 'timeout' => 0,
             ],
-            [
+            'Simple values ' => [
                 'givenCommand' => [self::INERT_COMMAND],
                 'expectedCommand' => [
                     '--working-dir=' . PathHelper::stagingDirAbsolute(),
@@ -168,8 +168,8 @@ final class StagerUnitTest extends TestCase
     public function providerCommandContainsWorkingDirOption(): array
     {
         return [
-            [['--working-dir' => 'example/package']],
-            [['-d' => 'example/package']],
+            'Full name' => [['--working-dir' => 'example/package']],
+            'Short name' => [['-d' => 'example/package']],
         ];
     }
 
@@ -205,11 +205,11 @@ final class StagerUnitTest extends TestCase
     public function providerExceptions(): array
     {
         return [
-            [
+            'IOException' => [
                 'exception' => new IOException(new TestTranslatableExceptionMessage('one')),
                 'message' => 'one',
             ],
-            [
+            'LogicException' => [
                 'exception' => new LogicException(new TestTranslatableExceptionMessage('two')),
                 'message' => 'two',
             ],

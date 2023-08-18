@@ -128,7 +128,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            [
+            'Fulfilled, without exclusions' => [
                 'name' => 'Name 1',
                 'description' => 'Description 1',
                 'exclusions' => null,
@@ -137,7 +137,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 1',
                 'expectedStatusMessage' => 'Fulfilled status message 1',
             ],
-            [
+            'Unfulfilled, with exclusions' => [
                 'name' => 'Name 2',
                 'description' => 'Description 2',
                 'exclusions' => new TestPathList(),

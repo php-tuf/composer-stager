@@ -14,9 +14,9 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
      * @covers ::__construct
      * @covers ::create
      *
-     * @dataProvider providerFactory
+     * @dataProvider providerBasicFunctionality
      */
-    public function testFactory(array $command): void
+    public function testBasicFunctionality(array $command): void
     {
         $translatableFactory = new TestTranslatableFactory();
         $sut = new SymfonyProcessFactory($translatableFactory);
@@ -27,12 +27,12 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function providerFactory(): array
+    public function providerBasicFunctionality(): array
     {
         return [
-            [[]],
-            [['one']],
-            [['one', 'two']],
+            'Empty command' => [[]],
+            'Simple command' => [['one']],
+            'Command with options' => [['one', 'two', 'three']],
         ];
     }
 }

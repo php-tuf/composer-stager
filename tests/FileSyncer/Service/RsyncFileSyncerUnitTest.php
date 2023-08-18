@@ -234,11 +234,11 @@ final class RsyncFileSyncerUnitTest extends FileSyncerTestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
 
         return [
-            [
+            'LogicException' => [
                 'caught' => new LogicException($message),
                 'thrown' => IOException::class,
             ],
-            [
+            'RuntimeException' => [
                 'caught' => new RuntimeException($message),
                 'thrown' => IOException::class,
             ],

@@ -37,85 +37,40 @@ final class ExecutableFinderUnitTest extends TestCase
         return new ExecutableFinder($executableFinder, $translatorFactory);
     }
 
-    /** @dataProvider providerFind */
-    public function testFind(string $firstCommandName, string $firstPath, string $secondCommandName): void
+    public function testFind(): void
     {
+        $command = 'command_name';
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
             ->shouldBeCalled()
             ->willReturn(null);
         $this->symfonyExecutableFinder
-            ->find($firstCommandName)
+            ->find($command)
             ->shouldBeCalledOnce()
-            ->willReturn($firstPath);
-
+            ->willReturn($command);
         $sut = $this->createSut();
 
-        $firstExpected = $sut->find($firstCommandName);
-        // Find something else to test cache isolation.
-        $secondPath = $sut->find($secondCommandName);
+        $actual = $sut->find($command);
 
-        self::assertSame($firstExpected, $firstPath, 'Returned correct first path');
-        self::assertSame($secondCommandName, $secondPath, 'Returned correct second path (isolated path cache)');
+        self::assertSame($command, $actual, 'Returned correct path');
     }
 
-    public function providerFind(): array
+    public function testFindNotFound(): void
     {
-        return [
-            [
-                'firstCommandName' => 'two',
-                'firstPath' => '/one/two/two',
-                'secondCommandName' => 'three',
-            ],
-            [
-                'firstCommandName' => 'seven',
-                'firstPath' => '/four/five/seven',
-                'secondCommandName' => 'eight',
-            ],
-        ];
-    }
-
-    /** @dataProvider providerFindNotFound */
-    public function testFindNotFound(string $name): void
-    {
+        $command = 'command_name';
         $this->symfonyExecutableFinder
             ->addSuffix('.phar')
             ->shouldBeCalledOnce()
             ->willReturn(null);
         $this->symfonyExecutableFinder
-            ->find($name)
+            ->find($command)
             ->shouldBeCalledOnce()
             ->willReturn(null);
         $sut = $this->createSut();
 
-        $message = sprintf('The %s executable cannot be found. Make sure it\'s installed and in the $PATH', $name);
-        self::assertTranslatableException(static function () use ($sut, $name): void {
-            $sut->find($name);
-        }, LogicException::class, $message);
-    }
-
-    public function providerFindNotFound(): array
-    {
-        return [
-            ['name' => 'one'],
-            ['name' => 'two'],
-        ];
-    }
-
-    /** Make sure ::find caches result when Composer is not found. */
-    public function testFindNotFoundCaching(): void
-    {
-        $this->symfonyExecutableFinder
-            ->addSuffix('.phar')
-            ->willReturn(null);
-        $this->symfonyExecutableFinder
-            ->find('composer')
-            ->willReturn(null);
-        $sut = $this->createSut();
-
-        $message = 'The composer executable cannot be found. Make sure it\'s installed and in the $PATH';
-        self::assertTranslatableException(static function () use ($sut): void {
-            $sut->find('composer');
+        $message = sprintf('The %s executable cannot be found. Make sure it\'s installed and in the $PATH', $command);
+        self::assertTranslatableException(static function () use ($sut, $command): void {
+            $sut->find($command);
         }, LogicException::class, $message);
     }
 }

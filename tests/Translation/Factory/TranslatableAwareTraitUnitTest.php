@@ -19,7 +19,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 final class TranslatableAwareTraitUnitTest extends TestCase
 {
     /** @covers ::d */
-    public function testD(): void
+    public function testDMethod(): void
     {
         $domainOptions = new DomainOptions();
         $translator = new TestTranslator();
@@ -40,7 +40,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     }
 
     /** @covers ::d */
-    public function testDomainMissingDomainOptions(): void
+    public function testDMethodWithMissingTranslatableFactory(): void
     {
         $this->expectException(AssertionError::class);
         $this->expectExceptionMessage('The "d()" method requires a translatable factory. '
@@ -57,9 +57,9 @@ final class TranslatableAwareTraitUnitTest extends TestCase
      * @covers ::setTranslatableFactory
      * @covers ::t
      *
-     * @dataProvider providerT
+     * @dataProvider providerTMethod
      */
-    public function testT(array $arguments): void
+    public function testTMethod(array $arguments): void
     {
         $arguments = array_values($arguments);
         $expected = new TestTranslatableMessage(...$arguments);
@@ -79,10 +79,10 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         self::assertEquals($expected, $actual, 'Returned correct translatable object.');
     }
 
-    public function providerT(): array
+    public function providerTMethod(): array
     {
         return [
-            'String message' => [
+            'Minimum values' => [
                 ['message' => 'String message'],
             ],
             'Default values' => [
@@ -103,7 +103,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     }
 
     /** @covers ::t */
-    public function testTMissingTranslatableFactory(): void
+    public function testTMethodWithMissingTranslatableFactory(): void
     {
         $this->expectException(AssertionError::class);
         $this->expectExceptionMessage('The "t()" method requires a translatable factory. '
@@ -119,9 +119,9 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     /**
      * @covers ::p
      *
-     * @dataProvider providerP
+     * @dataProvider providerPMethod
      */
-    public function testP(array $parameters): void
+    public function testPMethod(array $parameters): void
     {
         $translatableFactory = new TestTranslatableFactory();
 
@@ -141,7 +141,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function providerP(): array
+    public function providerPMethod(): array
     {
         return [
             'Empty parameters' => [
@@ -157,7 +157,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     }
 
     /** @covers ::p */
-    public function testPMissingTranslatableFactory(): void
+    public function testPMethodWithMissingTranslatableFactory(): void
     {
         $this->expectException(AssertionError::class);
         $this->expectExceptionMessage('The "p()" method requires a translatable factory. '

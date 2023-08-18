@@ -62,13 +62,13 @@ final class FileSyncerFactoryUnitTest extends TestCase
     public function providerCreate(): array
     {
         return [
-            [
+            'rsync found' => [
                 'executable' => 'rsync',
                 'calledTimes' => 1,
                 'path' => '/usr/bin/rsync',
                 'instanceOf' => RsyncFileSyncerInterface::class,
             ],
-            [
+            'rsync not found' => [
                 'executable' => 'n/a',
                 'calledTimes' => 0,
                 'path' => null,

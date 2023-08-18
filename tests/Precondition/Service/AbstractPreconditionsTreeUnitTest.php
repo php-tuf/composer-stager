@@ -115,7 +115,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            [
+            'Fulfilled, without exclusions' => [
                 'name' => 'Name 1',
                 'description' => 'Description 1',
                 'isFulfilled' => true,
@@ -124,7 +124,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 'expectedStatusMessage' => 'Fulfilled status message 1',
                 'exclusions' => null,
             ],
-            [
+            'Unfulfilled, with exclusions' => [
                 'name' => 'Name 2',
                 'description' => 'Description 2',
                 'isFulfilled' => false,

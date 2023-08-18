@@ -78,12 +78,12 @@ final class CleanerUnitTest extends TestCase
     public function providerCleanWithOptionalParams(): array
     {
         return [
-            [
+            'Minimum values' => [
                 'path' => '/one/two',
                 'callback' => null,
                 'timeout' => 0,
             ],
-            [
+            'Simple values' => [
                 'path' => 'three/four',
                 'callback' => new TestOutputCallback(),
                 'timeout' => 10,

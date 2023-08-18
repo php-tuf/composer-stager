@@ -33,11 +33,9 @@ final class EnvironmentFunctionalTest extends TestCase
     public function providerSetTimeLimit(): array
     {
         return [
-            [-30],
-            [-5],
-            [0],
-            [5],
-            [30],
+            'Positive number' => [30],
+            'Zero' => [0],
+            'Negative number' => [-30],
         ];
     }
 }

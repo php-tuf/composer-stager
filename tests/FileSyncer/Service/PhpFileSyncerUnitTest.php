@@ -19,7 +19,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessa
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
-use Throwable;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
@@ -250,36 +249,5 @@ final class PhpFileSyncerUnitTest extends FileSyncerTestCase
             $sut->sync($samePath, $samePath);
         }, AssertionError::class, 'The "p()" method requires a translatable factory. '
             . 'Provide one by calling "setTranslatableFactory()" in the constructor.');
-    }
-
-    /**
-     * @covers ::sync
-     *
-     * @dataProvider providerTimeout
-     */
-    public function testTimeout(int $timeout): void
-    {
-        $this->environment->setTimeLimit($timeout)
-            ->shouldBeCalledOnce();
-        $sut = $this->createSut();
-
-        // Use the same path for the source and destination in
-        // order to fail validation and avoid side effects.
-        try {
-            $sut->sync(PathHelper::sourceDirPath(), PathHelper::sourceDirPath(), null, null, $timeout);
-        } catch (Throwable) {
-            // @ignoreException
-        }
-    }
-
-    public function providerTimeout(): array
-    {
-        return [
-            [-30],
-            [-5],
-            [0],
-            [5],
-            [30],
-        ];
     }
 }

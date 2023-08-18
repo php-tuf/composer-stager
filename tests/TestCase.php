@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\Domain;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ProviderTrait;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -23,6 +24,7 @@ abstract class TestCase extends PHPUnitTestCase
 {
     use AssertTrait;
     use ProphecyTrait;
+    use ProviderTrait;
 
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';

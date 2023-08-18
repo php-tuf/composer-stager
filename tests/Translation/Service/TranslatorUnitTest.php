@@ -249,12 +249,8 @@ final class TranslatorUnitTest extends TestCase
     public function providerTranslatorException(): array
     {
         return [
-            [
-                new Error('An Error'),
-            ],
-            [
-                new LogicException('A LogicException'),
-            ],
+            'Error' => [new Error('An Error')],
+            'LogicException' => [new LogicException('A LogicException')],
         ];
     }
 }

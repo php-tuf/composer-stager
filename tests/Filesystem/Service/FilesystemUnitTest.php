@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
@@ -49,35 +50,15 @@ final class FilesystemUnitTest extends TestCase
         return new Filesystem($environment, $pathFactory, $symfonyFilesystem, $translatableFactory);
     }
 
-    /**
-     * @covers ::copy
-     *
-     * @dataProvider providerCopy
-     */
-    public function testCopy(string $source, string $destination): void
+    /** @covers ::copy */
+    public function testCopy(): void
     {
-        $source = new TestPath($source);
-        $destination = new TestPath($destination);
         $this->symfonyFilesystem
-            ->copy($source->absolute(), $destination->absolute(), true)
+            ->copy(PathHelper::sourceDirAbsolute(), PathHelper::destinationDirAbsolute(), true)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->copy($source, $destination);
-    }
-
-    public function providerCopy(): array
-    {
-        return [
-            [
-                'source' => 'one',
-                'destination' => 'two',
-            ],
-            [
-                'source' => 'three',
-                'destination' => 'four',
-            ],
-        ];
+        $sut->copy(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
     }
 
     /** @covers ::copy */
@@ -130,28 +111,15 @@ final class FilesystemUnitTest extends TestCase
         }, LogicException::class, $message);
     }
 
-    /**
-     * @covers ::mkdir
-     *
-     * @dataProvider providerMkdir
-     */
-    public function testMkdir(string $dir): void
+    /** @covers ::mkdir */
+    public function testMkdir(): void
     {
-        $stagingDir = new TestPath($dir);
         $this->symfonyFilesystem
-            ->mkdir($dir)
+            ->mkdir(PathHelper::stagingDirAbsolute())
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->mkdir($stagingDir);
-    }
-
-    public function providerMkdir(): array
-    {
-        return [
-            ['dir' => 'one'],
-            ['dir' => 'two'],
-        ];
+        $sut->mkdir(PathHelper::stagingDirPath());
     }
 
     /** @covers ::mkdir */
@@ -190,12 +158,12 @@ final class FilesystemUnitTest extends TestCase
     public function providerRemove(): array
     {
         return [
-            [
+            'Default values' => [
                 'path' => '/one/two',
                 'callback' => null,
-                'timeout' => 0,
+                'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
-            [
+            'Simple values' => [
                 'path' => 'three/four',
                 'callback' => new TestOutputCallback(),
                 'timeout' => 10,

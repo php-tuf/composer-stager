@@ -34,7 +34,7 @@ final class PathFactoryUnitTest extends TestCase
     public function providerBasicFunctionality(): array
     {
         return [
-            [
+            'Simple values' => [
                 'string' => 'test.txt',
                 'basePath' => new TestPath(),
                 'expected' => new Path('test.txt'),

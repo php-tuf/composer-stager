@@ -186,8 +186,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     public function providerFileFinderExceptions(): array
     {
         return [
-            [new InvalidArgumentException(new TestTranslatableMessage('Exclusions include invalid paths.'))],
-            [new IOException(new TestTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
+            'InvalidArgumentException' => [new InvalidArgumentException(new TestTranslatableMessage('Exclusions include invalid paths.'))],
+            'IOException' => [new IOException(new TestTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
         ];
     }
 

@@ -88,14 +88,14 @@ final class BeginnerUnitTest extends TestCase
     public function providerBeginWithOptionalParams(): array
     {
         return [
-            [
+            'Minimum values' => [
                 'activeDir' => 'one/two',
                 'stagingDir' => 'three/four',
                 'givenExclusions' => null,
                 'callback' => null,
                 'timeout' => 0,
             ],
-            [
+            'Simple values' => [
                 'activeDir' => 'five/six',
                 'stagingDir' => 'seven/eight',
                 'givenExclusions' => new TestPathList(),
@@ -140,12 +140,12 @@ final class BeginnerUnitTest extends TestCase
     public function providerExceptions(): array
     {
         return [
-            [
+            'InvalidArgumentException' => [
                 'exception' => new InvalidArgumentException(
                     new TestTranslatableExceptionMessage('one'),
                 ),
             ],
-            [
+            'IOException' => [
                 'exception' => new IOException(
                     new TestTranslatableExceptionMessage('two'),
                 ),

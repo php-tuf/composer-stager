@@ -39,9 +39,9 @@ final class ProcessFactoryUnitTest extends TestCase
     public function providerFactory(): array
     {
         return [
-            [[]],
-            [['one']],
-            [['one', 'two']],
+            'Empty command' => [[]],
+            'Simple command' => [['one']],
+            'Command with options' => [['one', 'two', 'three']],
         ];
     }
 }

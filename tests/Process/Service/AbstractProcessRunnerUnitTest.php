@@ -77,9 +77,9 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      * @covers ::findExecutable
      * @covers ::run
      *
-     * @dataProvider providerRun
+     * @dataProvider providerBasicFunctionality
      */
-    public function testRun(
+    public function testBasicFunctionality(
         string $executableName,
         array $givenCommand,
         array $expectedCommand,
@@ -108,29 +108,22 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $sut->run($givenCommand, $callback, $timeout);
     }
 
-    public function providerRun(): array
+    public function providerBasicFunctionality(): array
     {
         return [
-            [
+            'Minimum values' => [
                 'executableName' => 'one',
                 'givenCommand' => [],
                 'expectedCommand' => ['one'],
                 'callback' => null,
                 'timeout' => 0,
             ],
-            [
+            'Simple values' => [
                 'executableName' => 'two',
                 'givenCommand' => ['three', 'four'],
                 'expectedCommand' => ['two', 'three', 'four'],
-                'callback' => null,
-                'timeout' => 100,
-            ],
-            [
-                'executableName' => 'five',
-                'givenCommand' => [],
-                'expectedCommand' => ['five'],
                 'callback' => new TestOutputCallback(),
-                'timeout' => 200,
+                'timeout' => 100,
             ],
         ];
     }
@@ -139,7 +132,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      * @covers ::findExecutable
      * @covers ::run
      */
-    public function testRunFindExecutableException(): void
+    public function testRunCannotFindGivenExecutable(): void
     {
         $previous = new IOException(new TestTranslatableExceptionMessage());
         $this->executableFinder

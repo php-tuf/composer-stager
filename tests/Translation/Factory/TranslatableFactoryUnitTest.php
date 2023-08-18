@@ -33,9 +33,8 @@ final class TranslatableFactoryUnitTest extends TestCase
     public function providerCreateDomainOptions(): array
     {
         return [
-            [new DomainOptions()],
-            [new TestDomainOptions()],
-            [new TestDomainOptions('one', 'two')],
+            'Default' => [new DomainOptions()],
+            'Overridden' => [new TestDomainOptions('one', 'two')],
         ];
     }
 

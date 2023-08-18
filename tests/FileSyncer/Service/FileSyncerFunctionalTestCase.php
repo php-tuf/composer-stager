@@ -38,29 +38,15 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /**
      * @covers ::sync
      *
-     * @dataProvider providerSyncTimeout
+     * @dataProvider providerTimeouts
      */
-    public function testSyncTimeout(int $givenTimeout, int $expectedTimeout): void
+    public function testSyncTimeout(int $timeout): void
     {
         $sut = $this->createSut();
 
-        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath(), null, null, $givenTimeout);
+        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath(), null, null, $timeout);
 
-        self::assertSame((string) $expectedTimeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
-    }
-
-    public function providerSyncTimeout(): array
-    {
-        return [
-            [
-                'givenTimeout' => 0,
-                'expectedTimeout' => 0,
-            ],
-            [
-                'givenTimeout' => 10,
-                'expectedTimeout' => 10,
-            ],
-        ];
+        self::assertSame((string) $timeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
 
     /** @covers ::sync */

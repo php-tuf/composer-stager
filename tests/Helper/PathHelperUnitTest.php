@@ -97,13 +97,13 @@ final class PathHelperUnitTest extends TestCase
     {
         return [
             // Yes.
-            [true, '/one/two'],
-            [true, 'C:\\One\\Two'],
-            [true, '\\One\\Two'],
+            'True: Unix' => [true, '/one/two'],
+            'True: Windows' => [true, 'C:\\One\\Two'],
+            'True: UNC' => [true, '\\One\\Two'],
             // No.
-            [false, 'one/two'],
-            [false, '../one/two'],
-            [false, '..\\One\\Two'],
+            'False: Unix' => [false, 'one/two'],
+            'False: Windows' => [false, '../one/two'],
+            'False: UNC' => [false, '..\\One\\Two'],
         ];
     }
 }

@@ -26,9 +26,9 @@ abstract class FileSyncerTestCase extends TestCase
     /**
      * @covers ::sync
      *
-     * @dataProvider providerTimeout
+     * @dataProvider providerTimeouts
      */
-    public function testTimeout(int $timeout): void
+    public function testSyncTimeout(int $timeout): void
     {
         $this->environment->setTimeLimit($timeout)
             ->shouldBeCalledOnce();
@@ -41,16 +41,5 @@ abstract class FileSyncerTestCase extends TestCase
         } catch (Throwable) {
             // @ignoreException
         }
-    }
-
-    public function providerTimeout(): array
-    {
-        return [
-            [-30],
-            [-5],
-            [0],
-            [5],
-            [30],
-        ];
     }
 }

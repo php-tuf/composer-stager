@@ -187,9 +187,9 @@ final class ProcessUnitTest extends TestCase
     public function providerRunStatusCode(): array
     {
         return [
-            ['success' => 0],
-            ['failure' => 1],
-            ['arbitrary' => 42],
+            'success' => [0],
+            'failure' => [1],
+            'arbitrary' => [42],
         ];
     }
 
@@ -245,9 +245,9 @@ final class ProcessUnitTest extends TestCase
     public function providerRunException(): array
     {
         return [
-            [new SymfonyLogicException('SymfonyLogicException')],
-            [new SymfonyRuntimeException()],
-            [new Exception('Exception')],
+            'SymfonyLogicException' => [new SymfonyLogicException('SymfonyLogicException')],
+            'SymfonyRuntimeException' => [new SymfonyRuntimeException()],
+            'Exception' => [new Exception('Exception')],
         ];
     }
 

@@ -88,14 +88,14 @@ final class CommitterUnitTest extends TestCase
     public function providerCommitWithOptionalParams(): array
     {
         return [
-            [
+            'Minimum values' => [
                 'stagingDir' => '/one/two',
                 'activeDir' => '/three/four',
                 'exclusions' => null,
                 'callback' => null,
                 'timeout' => 0,
             ],
-            [
+            'Simple values' => [
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
                 'exclusions' => new TestPathList(),
@@ -147,11 +147,11 @@ final class CommitterUnitTest extends TestCase
     public function providerExceptions(): array
     {
         return [
-            [
+            'InvalidArgumentException' => [
                 'exception' => new InvalidArgumentException(new TestTranslatableExceptionMessage('one')),
                 'message' => 'one',
             ],
-            [
+            'IOException' => [
                 'exception' => new IOException(new TestTranslatableExceptionMessage('two')),
                 'message' => 'two',
             ],
