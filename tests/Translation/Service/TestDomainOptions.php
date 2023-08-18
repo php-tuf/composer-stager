@@ -3,13 +3,15 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
-use PhpTuf\ComposerStager\Tests\TestUtils\Domain;
 
 final class TestDomainOptions implements DomainOptionsInterface
 {
+    public const EXCEPTIONS = 'exceptions';
+    public const DEFAULT = 'messages';
+
     public function __construct(
-        private readonly string $default = Domain::DEFAULT,
-        private readonly string $exceptions = Domain::EXCEPTIONS,
+        private readonly string $default = self::DEFAULT,
+        private readonly string $exceptions = self::EXCEPTIONS,
     ) {
     }
 

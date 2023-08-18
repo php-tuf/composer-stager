@@ -7,10 +7,10 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
-use PhpTuf\ComposerStager\Tests\TestUtils\Domain;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProviderTrait;
+use PhpTuf\ComposerStager\Tests\Translation\Service\TestDomainOptions;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -96,7 +96,7 @@ abstract class TestCase extends PHPUnitTestCase
     public static function createTestPreconditionException(
         string $message = '',
         ?TranslationParametersInterface $parameters = null,
-        $domain = Domain::EXCEPTIONS,
+        $domain = TestDomainOptions::EXCEPTIONS,
     ): PreconditionException {
         return new PreconditionException(
             new TestPrecondition(),
