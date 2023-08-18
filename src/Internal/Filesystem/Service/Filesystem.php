@@ -179,6 +179,7 @@ final class Filesystem implements FilesystemInterface
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->environment->setTimeLimit($timeout);
+
         try {
             $this->symfonyFilesystem->remove($path->absolute());
         } catch (SymfonyExceptionInterface $e) {
