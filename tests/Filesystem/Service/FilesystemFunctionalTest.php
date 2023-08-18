@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -28,7 +29,7 @@ final class FilesystemFunctionalTest extends TestCase
 
     private function createSut(): Filesystem
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem $filesystem */

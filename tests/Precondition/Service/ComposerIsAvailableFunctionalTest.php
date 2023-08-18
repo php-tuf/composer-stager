@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
@@ -33,7 +34,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
     private function createSut(): ComposerIsAvailable
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
 
         // Override the ExecutableFinder implementation.
         $executableFinder = new Definition($this->executableFinderClass);

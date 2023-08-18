@@ -14,9 +14,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Service\TestDomainOptions;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -30,16 +27,6 @@ abstract class TestCase extends PHPUnitTestCase
     protected const CHANGED_CONTENT = 'changed';
 
     protected PathListInterface $exclusions;
-
-    public function container(): ContainerBuilder
-    {
-        $container = new ContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator());
-        $config = PathHelper::makeAbsolute('config/services.yml', PathHelper::repositoryRootAbsolute());
-        $loader->load($config);
-
-        return $container;
-    }
 
     protected static function createTestEnvironment(?string $activeDir = null): void
     {

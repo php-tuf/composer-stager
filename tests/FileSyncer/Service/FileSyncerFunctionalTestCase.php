@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
@@ -24,7 +25,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
     final protected function createSut(): FileSyncerInterface
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface $sut */

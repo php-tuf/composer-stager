@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
@@ -34,7 +35,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
     protected function setUp(): void
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);

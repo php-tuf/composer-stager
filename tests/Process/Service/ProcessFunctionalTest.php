@@ -5,13 +5,14 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 
 /** @coversNothing */
 final class ProcessFunctionalTest extends TestCase
 {
     private function createSut(array $command): ProcessInterface
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $factory */

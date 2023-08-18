@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
@@ -15,7 +16,7 @@ final class HostSupportsRunningProcessesFunctionalTest extends TestCase
 {
     private function createSut(): HostSupportsRunningProcesses
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
         $container->compile();
 
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses $sut */

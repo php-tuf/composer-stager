@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
@@ -20,7 +21,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
 {
     protected function createSut(): NoSymlinksPointToADirectory
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
 
         // Override the FileSyncer implementation.
         $fileSyncer = $container->getDefinition(FileSyncerInterface::class);

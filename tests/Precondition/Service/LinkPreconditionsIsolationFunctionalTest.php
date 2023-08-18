@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Throwable;
@@ -42,7 +43,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
     private function createTestPreconditionsTree(array $excludePreconditions = []): TestPreconditionsTree
     {
-        $container = $this->container();
+        $container = ContainerHelper::container();
         $container->compile();
 
         $allNoUnsupportedLinkPreconditions = [];
@@ -110,7 +111,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         FilesystemHelper::touch($target);
         symlink($target, $source);
 
-        $container = $this->container();
+        $container = ContainerHelper::container();
         $container->compile();
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
         $sut = $container->get(NoLinksExistOnWindows::class);
