@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -51,7 +50,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
     /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
-        $message = new TestTranslatableExceptionMessage('The staging directory is not writable.');
+        $message = 'The staging directory is not writable.';
         $this->filesystem
             ->isWritable(PathHelper::stagingDirPath())
             ->willReturn(false);

@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterfa
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -83,6 +82,6 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage($message));
+        $this->doTestUnfulfilled($message);
     }
 }

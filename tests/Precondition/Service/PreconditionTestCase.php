@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 
 abstract class PreconditionTestCase extends TestCase
 {
@@ -56,11 +57,15 @@ abstract class PreconditionTestCase extends TestCase
     }
 
     protected function doTestUnfulfilled(
-        TranslatableInterface $expectedStatusMessage,
+        TranslatableInterface|string $expectedStatusMessage,
         ?string $previousException = null,
         ?PathInterface $activeDirPath = null,
         ?PathInterface $stagingDirPath = null,
     ): void {
+        if (is_string($expectedStatusMessage)) {
+            $expectedStatusMessage = new TestTranslatableExceptionMessage($expectedStatusMessage);
+        }
+
         $activeDirPath ??= PathHelper::activeDirPath();
         $stagingDirPath ??= PathHelper::stagingDirPath();
         $sut = $this->createSut();
