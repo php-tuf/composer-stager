@@ -61,10 +61,6 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
             ->shouldBeCalled()
             ->willThrow($previous);
 
-        // @todo Now that ::doTestUnfulfilled() is taking a whole translatable message, it's no
-        //   longer testing the translated value of the message, just its parts--which is more
-        //   like testing assumptions than testing expectations. Add an argument to it to test
-        //   the translated string, too.
         $this->doTestUnfulfilled(sprintf(
             'The host does not support running independent PHP processes: %s',
             $message,

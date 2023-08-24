@@ -97,8 +97,6 @@ final class Filesystem implements FilesystemInterface
         $scandir = @scandir($path->absolute());
 
         if ($scandir === false) {
-            // @todo This doesn't seem to fail without the exceptions domain.
-
             /** @noinspection PhpUnhandledExceptionInspection */
             throw new IOException($this->t(
                 'The path does not exist or is not a directory at %path',
@@ -156,7 +154,6 @@ final class Filesystem implements FilesystemInterface
     public function readLink(PathInterface $path): PathInterface
     {
         if (!$this->isSymlink($path)) {
-            // @todo This doesn't seem to fail without the exceptions domain.
             throw new IOException($this->t(
                 'The path does not exist or is not a symlink at %path',
                 $this->p(['%path' => $path->absolute()]),
