@@ -22,14 +22,14 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
-        HostSupportsRunningProcessesInterface $hostCanRunProcesses,
+        HostSupportsRunningProcessesInterface $hostSupportsRunningProcesses,
     ) {
         parent::__construct(
             $translatableFactory,
             $activeAndStagingDirsAreDifferent,
             $activeDirIsReady,
             $composerIsAvailable,
-            $hostCanRunProcesses,
+            $hostSupportsRunningProcesses,
         );
     }
 
