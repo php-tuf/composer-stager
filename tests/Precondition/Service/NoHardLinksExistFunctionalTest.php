@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
@@ -29,23 +28,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         return $sut;
     }
 
-    /**
-     * @covers ::assertIsFulfilled
-     * @covers ::assertIsSupportedFile
-     */
-    public function testFulfilledWithNoLinks(): void
-    {
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-
-        self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
-    }
-
-    /**
-     * @covers ::assertIsFulfilled
-     * @covers ::assertIsSupportedFile
-     */
+    /** @covers ::assertIsSupportedFile */
     public function testFulfilledWithSymlink(): void
     {
         $target = Path::makeAbsolute('target.txt', PathHelper::activeDirAbsolute());
@@ -60,7 +43,6 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     }
 
     /**
-     * @covers ::assertIsFulfilled
      * @covers ::assertIsSupportedFile
      *
      * @dataProvider providerUnfulfilled
@@ -99,18 +81,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     }
 
     /**
-     * @covers ::assertIsFulfilled
-     *
-     * @dataProvider providerFulfilledDirectoryDoesNotExist
-     */
-    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
-    {
-        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
-    }
-
-    /**
      * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
      *
      * @dataProvider providerExclusions
      */

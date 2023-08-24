@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
 use JsonException;
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
@@ -25,11 +26,12 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     private string $executablePath;
 
     public function __construct(
+        EnvironmentInterface $environment,
         private readonly ExecutableFinderInterface $executableFinder,
         private readonly ProcessFactoryInterface $processFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($translatableFactory);
+        parent::__construct($environment, $translatableFactory);
     }
 
     public function getName(): TranslatableInterface
@@ -42,10 +44,11 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         return $this->t('Composer must be available in order to stage commands.');
     }
 
-    public function assertIsFulfilled(
+    protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->assertExecutableExists();
         $this->assertIsActuallyComposer();

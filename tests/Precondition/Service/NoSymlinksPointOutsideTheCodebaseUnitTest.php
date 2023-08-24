@@ -15,10 +15,8 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
+ * @covers ::assertIsSupportedFile
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreconditionUnitTestCase
 {
@@ -44,11 +42,12 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
 
     protected function createSut(): NoSymlinksPointOutsideTheCodebase
     {
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new NoSymlinksPointOutsideTheCodebase($fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new NoSymlinksPointOutsideTheCodebase($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 }

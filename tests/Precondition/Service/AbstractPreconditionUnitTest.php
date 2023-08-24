@@ -2,9 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
@@ -32,12 +34,13 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
     protected function createSut(): AbstractPrecondition
     {
+        $environment = $this->environment->reveal();
         $spy = $this->spy->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class ($spy, $translatableFactory) extends AbstractPrecondition
+        return new class ($environment, $spy, $translatableFactory) extends AbstractPrecondition
         {
             use TranslatableAwareTrait;
 
@@ -47,12 +50,11 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
             public string $theUnfulfilledStatusMessage = 'Unfulfilled';
 
             public function __construct(
+                EnvironmentInterface $environment,
                 protected TestSpyInterface $spy,
                 TranslatableFactoryInterface $translatableFactory,
             ) {
-                parent::__construct(new TestTranslatableFactory());
-
-                $this->setTranslatableFactory($translatableFactory);
+                parent::__construct($environment, $translatableFactory);
             }
 
             public function getName(): TranslatableInterface
@@ -70,10 +72,11 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
                 return new TestTranslatableMessage($this->theFulfilledStatusMessage);
             }
 
-            public function assertIsFulfilled(
+            protected function doAssertIsFulfilled(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
                 ?PathListInterface $exclusions = null,
+                int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
             ): void {
                 if (!$this->spy->report(func_get_args())) {
                     throw TestCase::createTestPreconditionException($this->theUnfulfilledStatusMessage);
@@ -102,13 +105,14 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
         string $fulfilledStatusMessage,
         string $unfulfilledStatusMessage,
         string $expectedStatusMessage,
+        int $timeout,
     ): void {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
 
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $this->spy
-            ->report([$activeDirPath, $stagingDirPath, $exclusions])
+            ->report([$activeDirPath, $stagingDirPath, $exclusions, $timeout])
             ->shouldBeCalledTimes(2)
             ->willReturn($isFulfilled);
 
@@ -120,8 +124,8 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
 
         self::assertEquals($sut->getName(), $name);
         self::assertEquals($sut->getDescription(), $description);
-        self::assertEquals($sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions), $isFulfilled);
-        self::assertEquals($sut->getStatusMessage($activeDirPath, $stagingDirPath, $exclusions), $expectedStatusMessage);
+        self::assertEquals($sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout), $isFulfilled);
+        self::assertEquals($sut->getStatusMessage($activeDirPath, $stagingDirPath, $exclusions, $timeout), $expectedStatusMessage);
         self::assertEquals($sut->getLeaves(), [$sut]);
     }
 
@@ -136,6 +140,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
                 'fulfilledStatusMessage' => 'Fulfilled status message 1',
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 1',
                 'expectedStatusMessage' => 'Fulfilled status message 1',
+                'timeout' => 0,
             ],
             'Unfulfilled, with exclusions' => [
                 'name' => 'Name 2',
@@ -145,6 +150,7 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
                 'fulfilledStatusMessage' => 'Fulfilled status message 2',
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 2',
                 'expectedStatusMessage' => 'Unfulfilled status message 2',
+                'timeout' => 100,
             ],
         ];
     }
@@ -157,22 +163,23 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $this->spy
             ->report(Argument::cetera())
             ->willReturn(true);
         $this->spy
-            ->report([$activeDirPath, $stagingDirPath])
+            ->report([$activeDirPath, $stagingDirPath, $this->exclusions, $timeout])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $this->spy
-            ->report([$activeDirPath, $stagingDirPath, new TestPathList()])
+            ->report([$activeDirPath, $stagingDirPath, new TestPathList(), $timeout])
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
-        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, new TestPathList());
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, null, $timeout);
+        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, new TestPathList(), $timeout);
     }
 
     /**
@@ -183,17 +190,19 @@ final class AbstractPreconditionUnitTest extends PreconditionTestCase
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $exclusions = $this->exclusions;
+        $timeout = 42;
 
         $message = __METHOD__;
         $this->spy
-            ->report([$activeDirPath, $stagingDirPath, new TestPathList()])
+            ->report([$activeDirPath, $stagingDirPath, $exclusions, $timeout])
             ->willReturn(false);
         $sut = $this->createSut();
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         $sut->theUnfulfilledStatusMessage = $message;
 
-        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
-            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, new TestPathList());
+        self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath, $exclusions, $timeout): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout);
         }, PreconditionException::class, $message);
     }
 }

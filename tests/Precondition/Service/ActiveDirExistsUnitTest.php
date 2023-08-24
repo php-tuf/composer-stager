@@ -12,10 +12,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class ActiveDirExistsUnitTest extends PreconditionTestCase
 {
@@ -30,12 +26,17 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
 
     protected function createSut(): ActiveDirExists
     {
+        $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new ActiveDirExists($filesystem, $translatableFactory);
+        return new ActiveDirExists($environment, $filesystem, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -46,7 +47,7 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The active directory exists.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The active directory does not exist.';

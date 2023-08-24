@@ -55,6 +55,7 @@ final class StagerUnitTest extends TestCase
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = ProcessInterface::DEFAULT_TIMEOUT;
 
         $this->preconditions
             ->assertIsFulfilled($activeDirPath, $stagingDirPath)
@@ -64,7 +65,7 @@ final class StagerUnitTest extends TestCase
             self::INERT_COMMAND,
         ];
         $this->composerRunner
-            ->run($expectedCommand, null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->run($expectedCommand, null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

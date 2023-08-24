@@ -12,10 +12,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
+ * @covers ::doAssertIsFulfilled
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class StagingDirExistsUnitTest extends PreconditionTestCase
 {
@@ -30,10 +28,11 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
 
     protected function createSut(): StagingDirExists
     {
+        $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new StagingDirExists($filesystem, $translatableFactory);
+        return new StagingDirExists($environment, $filesystem, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -46,7 +45,7 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The staging directory exists.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The staging directory does not exist.';

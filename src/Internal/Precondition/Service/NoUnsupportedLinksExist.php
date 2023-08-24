@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
@@ -19,6 +20,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements NoUnsupportedLinksExistInterface
 {
     public function __construct(
+        EnvironmentInterface $environment,
         TranslatableFactoryInterface $translatableFactory,
         NoAbsoluteSymlinksExistInterface $noAbsoluteSymlinksExist,
         NoHardLinksExistInterface $noHardLinksExist,
@@ -27,6 +29,7 @@ final class NoUnsupportedLinksExist extends AbstractPreconditionsTree implements
         NoSymlinksPointToADirectoryInterface $noSymlinksPointToADirectory,
     ) {
         parent::__construct(
+            $environment,
             $translatableFactory,
             $noAbsoluteSymlinksExist,
             $noHardLinksExist,

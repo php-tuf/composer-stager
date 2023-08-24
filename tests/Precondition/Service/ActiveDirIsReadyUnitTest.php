@@ -13,9 +13,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::isFulfilled
  */
 final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 {
@@ -38,39 +35,43 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
 
     protected function createSut(): ActiveDirIsReady
     {
+        $environment = $this->environment->reveal();
         $stagingDirExists = $this->activeDirExists->reveal();
         $stagingDirIsWritable = $this->activeDirIsWritable->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new ActiveDirIsReady($stagingDirExists, $stagingDirIsWritable, $translatableFactory);
+        return new ActiveDirIsReady($environment, $stagingDirExists, $stagingDirIsWritable, $translatableFactory);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $this->activeDirExists
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsWritable
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The active directory is ready to use.');
+        $this->doTestFulfilled('The active directory is ready to use.', $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->activeDirExists
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled($message);
+        $this->doTestUnfulfilled($message, null, $activeDirPath, $stagingDirPath, $timeout);
     }
 }

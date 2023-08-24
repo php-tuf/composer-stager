@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
@@ -16,11 +17,12 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class StagingDirIsReady extends AbstractPreconditionsTree implements StagingDirIsReadyInterface
 {
     public function __construct(
+        EnvironmentInterface $environment,
         TranslatableFactoryInterface $translatableFactory,
         StagingDirExistsInterface $stagingDirExists,
         StagingDirIsWritableInterface $stagingDirIsWritable,
     ) {
-        parent::__construct($translatableFactory, $stagingDirExists, $stagingDirIsWritable);
+        parent::__construct($environment, $translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }
 
     public function getName(): TranslatableInterface

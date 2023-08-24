@@ -18,7 +18,7 @@ use Throwable;
 /**
  * Tests the interaction of unsupported links preconditions.
  *
- * @coversNothing
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  */
 final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 {

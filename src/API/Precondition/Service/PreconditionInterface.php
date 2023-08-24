@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\API\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
@@ -38,22 +39,38 @@ interface PreconditionInterface
      * example dependency is ready," or if unfulfilled, "The example dependency
      * cannot be found. Make sure it's installed." If the precondition has
      * unfulfilled leaves, the status message from the first one will be returned.
+     *
+     * @param int $timeout
+     *   An optional process timeout (maximum runtime) in seconds. If set to
+     *   zero (0), no time limit is imposed.
      */
     public function getStatusMessage(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): TranslatableInterface;
 
-    /** Determines whether the precondition is fulfilled. */
+    /**
+     * Determines whether the precondition is fulfilled.
+     *
+     * @param int $timeout
+     *   An optional process timeout (maximum runtime) in seconds. If set to
+     *   zero (0), no time limit is imposed.
+     */
     public function isFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): bool;
 
     /**
      * Asserts that the precondition is fulfilled.
+     *
+     * @param int $timeout
+     *   An optional process timeout (maximum runtime) in seconds. If set to
+     *   zero (0), no time limit is imposed.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException
      *   If the precondition is unfulfilled.
@@ -62,6 +79,7 @@ interface PreconditionInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 
     /**

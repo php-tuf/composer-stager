@@ -15,7 +15,7 @@ use Symfony\Component\Process\Process;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
+ * @covers ::doAssertIsFulfilled
  * @covers ::getFulfilledStatusMessage
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
@@ -36,10 +36,11 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
 
     protected function createSut(): HostSupportsRunningProcesses
     {
+        $environment = $this->environment->reveal();
         $processFactory = $this->processFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new HostSupportsRunningProcesses($processFactory, $translatableFactory);
+        return new HostSupportsRunningProcesses($environment, $processFactory, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -51,7 +52,7 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The host supports running independent PHP processes.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = __METHOD__;

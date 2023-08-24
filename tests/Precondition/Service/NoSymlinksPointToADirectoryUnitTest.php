@@ -20,11 +20,9 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
+ * @covers ::assertIsSupportedFile
  * @covers ::exitEarly
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditionUnitTestCase
 {
@@ -53,13 +51,14 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
 
     protected function createSut(): NoSymlinksPointToADirectory
     {
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $fileSyncer = $this->fileSyncer->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new NoSymlinksPointToADirectory($fileFinder, $fileSyncer, $filesystem, $pathFactory, $translatableFactory);
+        return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncer, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function testExitEarlyWithRsyncFileSyncer(): void

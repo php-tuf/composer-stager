@@ -40,43 +40,56 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
 
     protected function createSut(): StagerPreconditions
     {
+        $environment = $this->environment->reveal();
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new StagerPreconditions($translatableFactory, $commonPreconditions, $stagingDirIsReady);
+        return new StagerPreconditions($environment, $translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }
 
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsReady
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The preconditions for staging Composer commands are fulfilled.');
+        $this->doTestFulfilled(
+            'The preconditions for staging Composer commands are fulfilled.',
+            $activeDirPath,
+            $stagingDirPath,
+            $timeout,
+        );
     }
 
     public function testUnfulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableMessage($message, $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions));
-        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
-            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
+        self::assertTranslatableMessage($message, $sut->getStatusMessage(
+            $activeDirPath,
+            $stagingDirPath,
+            $this->exclusions,
+            $timeout,
+        ));
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath, $timeout): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout);
         }, PreconditionException::class, $message);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
@@ -30,11 +32,12 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
     protected function createSut(...$children): AbstractPreconditionsTree
     {
+        $environment = $this->environment->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
-        return new class ($translatableFactory, ...$children) extends AbstractPreconditionsTree
+        return new class ($environment, $translatableFactory, ...$children) extends AbstractPreconditionsTree
         {
             public string $name = 'Name';
             public string $description = 'Description';
@@ -59,9 +62,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
     }
 
     /**
-     * @covers ::getDescription
      * @covers ::getLeaves
-     * @covers ::getName
      * @covers ::getStatusMessage
      *
      * @dataProvider providerBasicFunctionality
@@ -76,6 +77,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         string $unfulfilledStatusMessage,
         string $expectedStatusMessage,
         ?TestPathList $exclusions,
+        int $timeout,
     ): void {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
@@ -89,11 +91,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
             ->willReturn([$child]);
 
         // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
-        $child->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions)
+        $child->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout)
             ->shouldBeCalledOnce();
 
         if (!$isFulfilled) {
-            $child->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions)
+            $child->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout)
                 ->willThrow(PreconditionException::class);
         }
 
@@ -109,7 +111,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
         self::assertEquals($name, $sut->getName());
         self::assertEquals($description, $sut->getDescription());
-        self::assertEquals($isFulfilled, $sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions));
+        self::assertEquals($isFulfilled, $sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout));
     }
 
     public function providerBasicFunctionality(): array
@@ -123,6 +125,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 1',
                 'expectedStatusMessage' => 'Fulfilled status message 1',
                 'exclusions' => null,
+                'timeout' => 10,
             ],
             'Unfulfilled, with exclusions' => [
                 'name' => 'Name 2',
@@ -132,6 +135,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 'unfulfilledStatusMessage' => 'Unfulfilled status message 2',
                 'expectedStatusMessage' => 'Unfulfilled status message 2',
                 'exclusions' => new TestPathList(),
+                'timeout' => 100,
             ],
         ];
     }
@@ -142,6 +146,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
 
         $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
+            $environment = $this->environment->reveal();
             /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface $spy */
             $spy = $this->prophesize(TestSpyInterface::class);
             $spy->report('assertIsFulfilled')
@@ -149,14 +154,15 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                 ->shouldBeCalledTimes(2);
             $spy = $spy->reveal();
 
-            return new Class($isFulfilled, $message, $spy) extends AbstractPrecondition
+            return new Class($environment, $isFulfilled, $message, $spy) extends AbstractPrecondition
             {
                 public function __construct(
+                    EnvironmentInterface $environment,
                     private readonly bool $isFulfilled,
                     private readonly TranslatableInterface $message,
                     private readonly TestSpyInterface $spy,
                 ) {
-                    parent::__construct(new TestTranslatableFactory());
+                    parent::__construct($environment, new TestTranslatableFactory());
                 }
 
                 protected function getFulfilledStatusMessage(): TranslatableInterface
@@ -174,10 +180,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
                     return new TestTranslatableMessage();
                 }
 
-                public function assertIsFulfilled(
+                protected function doAssertIsFulfilled(
                     PathInterface $activeDir,
                     PathInterface $stagingDir,
                     ?PathListInterface $exclusions = null,
+                    int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
                 ): void {
                     $this->spy->report('assertIsFulfilled');
 

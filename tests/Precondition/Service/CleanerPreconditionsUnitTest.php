@@ -13,10 +13,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 {
@@ -39,39 +35,48 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     protected function createSut(): CleanerPreconditions
     {
+        $environment = $this->environment->reveal();
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new CleanerPreconditions($commonPreconditions, $stagingDirIsReady, $translatableFactory);
+        return new CleanerPreconditions($environment, $commonPreconditions, $stagingDirIsReady, $translatableFactory);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->stagingDirIsReady
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The preconditions for removing the staging directory are fulfilled.');
+        $this->doTestFulfilled(
+            'The preconditions for removing the staging directory are fulfilled.',
+            $activeDirPath,
+            $stagingDirPath,
+            $timeout,
+        );
     }
 
     public function testUnfulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->commonPreconditions
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled($message);
+        $this->doTestUnfulfilled($message, null, $activeDirPath, $stagingDirPath, $timeout);
     }
 }

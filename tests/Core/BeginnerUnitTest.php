@@ -49,11 +49,13 @@ final class BeginnerUnitTest extends TestCase
     /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
+        $timeout = ProcessInterface::DEFAULT_TIMEOUT;
+
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->sync(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -75,7 +77,7 @@ final class BeginnerUnitTest extends TestCase
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)

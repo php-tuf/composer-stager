@@ -6,24 +6,21 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreD
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent
- *
- * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent */
 final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase
 {
     protected function createSut(): ActiveAndStagingDirsAreDifferent
     {
+        $environment = $this->environment->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new ActiveAndStagingDirsAreDifferent($translatableFactory);
+        return new ActiveAndStagingDirsAreDifferent($environment, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->doTestFulfilled(
@@ -33,7 +30,7 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
         );
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The active and staging directories are the same.';
