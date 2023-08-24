@@ -11,8 +11,8 @@ use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
-use PhpTuf\ComposerStager\Internal\Host\Service\Host;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -139,7 +139,7 @@ final class PhpFileSyncerUnitTest extends FileSyncerTestCase
     public function providerGetRelativePath(): array
     {
         // UNIX-like OS paths.
-        if (!Host::isWindows()) {
+        if (!EnvironmentHelper::isWindows()) {
             return [
                 'Match: single directory depth' => [
                     'ancestor' => 'one',

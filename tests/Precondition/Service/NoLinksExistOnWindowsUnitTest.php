@@ -2,9 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\Internal\Host\Service\HostInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Tests\Host\Service\TestHost;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
@@ -21,13 +19,13 @@ use Prophecy\Argument;
  */
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {
-    private HostInterface $host;
-
     protected function setUp(): void
     {
-        $this->host = $this->createWindowsHost();
-
         parent::setUp();
+
+        $this->environment
+            ->isWindows()
+            ->willReturn(true);
     }
 
     protected function fulfilledStatusMessage(): string
@@ -37,34 +35,13 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 
     protected function createSut(): NoLinksExistOnWindows
     {
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new NoLinksExistOnWindows($fileFinder, $filesystem, $this->host, $pathFactory, $translatableFactory);
-    }
-
-    private function createWindowsHost(): HostInterface
-    {
-        return new class() extends TestHost
-        {
-            public static function isWindows(): bool
-            {
-                return true;
-            }
-        };
-    }
-
-    private function createNonWindowsHost(): HostInterface
-    {
-        return new class() extends TestHost
-        {
-            public static function isWindows(): bool
-            {
-                return false;
-            }
-        };
+        return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -77,7 +54,9 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
 
-        $this->host = $this->createNonWindowsHost();
+        $this->environment
+            ->isWindows()
+            ->willReturn(false);
         $this->filesystem
             ->exists(Argument::cetera())
             ->shouldNotBeCalled();

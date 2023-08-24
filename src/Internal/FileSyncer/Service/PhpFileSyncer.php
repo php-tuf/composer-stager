@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
@@ -12,7 +13,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 

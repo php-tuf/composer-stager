@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
@@ -11,7 +12,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Internal\Host\Service\HostInterface;
 
 /**
  * @package Precondition
@@ -21,9 +21,9 @@ use PhpTuf\ComposerStager\Internal\Host\Service\HostInterface;
 final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition implements NoLinksExistOnWindowsInterface
 {
     public function __construct(
+        private readonly EnvironmentInterface $environment,
         FileFinderInterface $fileFinder,
         FilesystemInterface $filesystem,
-        private readonly HostInterface $host,
         PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
@@ -46,7 +46,7 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
         ?PathListInterface $exclusions,
     ): bool {
         // This is a Windows-specific precondition. No need to run it anywhere else.
-        return !$this->host::isWindows();
+        return !$this->environment->isWindows();
     }
 
     protected function getFulfilledStatusMessage(): TranslatableInterface

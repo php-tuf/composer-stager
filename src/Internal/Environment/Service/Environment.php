@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Internal\Environment\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
+
 /**
  * @package Environment
  *
@@ -9,6 +11,11 @@ namespace PhpTuf\ComposerStager\Internal\Environment\Service;
  */
 final class Environment implements EnvironmentInterface
 {
+    public function isWindows(): bool
+    {
+        return PHP_OS_FAMILY === 'Windows';
+    }
+
     public function setTimeLimit(int $seconds): bool
     {
         if (!function_exists('set_time_limit')) {

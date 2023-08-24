@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
@@ -24,12 +25,17 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
 {
     abstract protected function fulfilledStatusMessage(): string;
 
+    protected EnvironmentInterface|ObjectProphecy $environment;
     protected FileFinderInterface|ObjectProphecy $fileFinder;
     protected FilesystemInterface|ObjectProphecy $filesystem;
     protected PathFactoryInterface|ObjectProphecy $pathFactory;
 
     protected function setUp(): void
     {
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment
+            ->isWindows()
+            ->willReturn(false);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))

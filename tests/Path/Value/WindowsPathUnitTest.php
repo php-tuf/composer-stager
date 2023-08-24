@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Host\Service\Host;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
@@ -28,7 +28,7 @@ final class WindowsPathUnitTest extends PathUnitTestCase
     ): void {
         // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
         // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
-        if (!Host::isWindows()) {
+        if (!EnvironmentHelper::isWindows()) {
             self::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
         }
 
