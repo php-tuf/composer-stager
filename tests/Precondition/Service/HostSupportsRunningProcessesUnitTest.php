@@ -6,9 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Process;
@@ -67,9 +65,9 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
         //   longer testing the translated value of the message, just its parts--which is more
         //   like testing assumptions than testing expectations. Add an argument to it to test
         //   the translated string, too.
-        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage(
-            'The host does not support running independent PHP processes: %details',
-            new TestTranslationParameters(['%details' => $message]),
+        $this->doTestUnfulfilled(sprintf(
+            'The host does not support running independent PHP processes: %s',
+            $message,
         ), $previous::class);
     }
 }

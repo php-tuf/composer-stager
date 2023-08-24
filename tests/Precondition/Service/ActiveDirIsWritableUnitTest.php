@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -50,7 +49,7 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
     /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
-        $message = new TestTranslatableExceptionMessage('The active directory is not writable.');
+        $message = 'The active directory is not writable.';
         $this->filesystem
             ->isWritable(PathHelper::activeDirPath())
             ->willReturn(false);

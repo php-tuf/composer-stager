@@ -10,9 +10,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -135,9 +133,9 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             ->create(Argument::type('array'))
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled(new TestTranslatableExceptionMessage(
-            'Cannot check for Composer due to a host configuration problem: %details',
-            new TestTranslationParameters(['%details' => $message]),
+        $this->doTestUnfulfilled(sprintf(
+            'Cannot check for Composer due to a host configuration problem: %s',
+            $message,
         ), $previous::class);
     }
 

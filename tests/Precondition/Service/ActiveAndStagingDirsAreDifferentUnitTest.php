@@ -36,8 +36,9 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
     /** @covers ::assertIsFulfilled */
     public function testUnfulfilled(): void
     {
+        $message = 'The active and staging directories are the same.';
         $samePath = PathHelper::activeDirPath();
 
-        $this->doTestUnfulfilled('The active and staging directories are the same.', null, $samePath, $samePath);
+        $this->doTestUnfulfilled($message, null, $samePath, $samePath);
     }
 }
