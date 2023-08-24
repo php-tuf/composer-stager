@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Prophecy\Argument;

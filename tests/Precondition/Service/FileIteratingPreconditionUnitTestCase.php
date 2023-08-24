@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
@@ -12,7 +13,6 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;

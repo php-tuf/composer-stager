@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
@@ -11,7 +12,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 
 /**
  * @package Precondition

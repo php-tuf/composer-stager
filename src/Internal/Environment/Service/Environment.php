@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Internal\Environment\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
+
 /**
  * @package Environment
  *
