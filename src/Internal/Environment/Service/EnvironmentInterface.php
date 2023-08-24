@@ -11,6 +11,9 @@ namespace PhpTuf\ComposerStager\Internal\Environment\Service;
  */
 interface EnvironmentInterface
 {
+    /** Determines whether the operating system is Windows. */
+    public function isWindows(): bool;
+
     /**
      * Limits the maximum execution time of the current script in seconds.
      *

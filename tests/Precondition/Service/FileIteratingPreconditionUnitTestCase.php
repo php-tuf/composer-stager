@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Internal\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -24,12 +25,17 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
 {
     abstract protected function fulfilledStatusMessage(): string;
 
+    protected EnvironmentInterface|ObjectProphecy $environment;
     protected FileFinderInterface|ObjectProphecy $fileFinder;
     protected FilesystemInterface|ObjectProphecy $filesystem;
     protected PathFactoryInterface|ObjectProphecy $pathFactory;
 
     protected function setUp(): void
     {
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment
+            ->isWindows()
+            ->willReturn(false);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
