@@ -26,6 +26,17 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
     /** @var array<\PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface> */
     private readonly array $children;
 
+    final public function getLeaves(): array
+    {
+        $leaves = [];
+
+        foreach ($this->children as $child) {
+            $leaves[] = $child->getLeaves();
+        }
+
+        return array_merge(...$leaves);
+    }
+
     /** Gets a status message for when the precondition is fulfilled. */
     abstract protected function getFulfilledStatusMessage(): TranslatableInterface;
 
@@ -77,17 +88,5 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         foreach ($this->getLeaves() as $leaf) {
             $leaf->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
         }
-    }
-
-    /** This function is non-final in case subclasses want to implement a different strategy. */
-    public function getLeaves(): array
-    {
-        $leaves = [];
-
-        foreach ($this->children as $child) {
-            $leaves[] = $child->getLeaves();
-        }
-
-        return array_merge(...$leaves);
     }
 }
