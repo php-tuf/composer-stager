@@ -77,6 +77,6 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
         self::assertTranslatableMessage($message, $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions));
         self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
             $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
-        }, PreconditionException::class);
+        }, PreconditionException::class, $message);
     }
 }
