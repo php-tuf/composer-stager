@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Source Files" pattern="file[composer-stager]:src//*||file[composer-stager]:tests//*||file[composer-stager]:tools//*" />
+</component>
