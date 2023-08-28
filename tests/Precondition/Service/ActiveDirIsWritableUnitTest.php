@@ -12,10 +12,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
 {
@@ -30,12 +26,17 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
 
     protected function createSut(): ActiveDirIsWritable
     {
+        $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new ActiveDirIsWritable($filesystem, $translatableFactory);
+        return new ActiveDirIsWritable($environment, $filesystem, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -46,7 +47,7 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The active directory is writable.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The active directory is not writable.';

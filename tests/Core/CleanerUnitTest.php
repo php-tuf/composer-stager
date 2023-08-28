@@ -45,11 +45,13 @@ final class CleanerUnitTest extends TestCase
     /** @covers ::clean */
     public function testCleanWithMinimumParams(): void
     {
+        $timeout = ProcessInterface::DEFAULT_TIMEOUT;
+
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove(PathHelper::stagingDirPath(), null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->remove(PathHelper::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -65,7 +67,7 @@ final class CleanerUnitTest extends TestCase
     {
         $path = new TestPath($path);
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), $path)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), $path, null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
             ->remove($path, $callback, $timeout)

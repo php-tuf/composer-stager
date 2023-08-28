@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
@@ -13,7 +12,6 @@ use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
  *
  * @covers ::__construct
- * @covers ::findFiles
  *
  * @group no_windows
  */
@@ -31,9 +29,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     }
 
     /**
-     * @covers ::assertIsFulfilled
      * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
      *
      * @dataProvider providerDoesNotContainLinks
      */
@@ -71,8 +67,6 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::findFiles
-     * @covers ::isFulfilled
      *
      * @dataProvider providerLinksExist
      */
@@ -103,8 +97,6 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::findFiles
-     * @covers ::isFulfilled
      *
      * @dataProvider providerLinksExist
      */
@@ -162,21 +154,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         ];
     }
 
-    /**
-     * @covers ::findFiles
-     * @covers ::isFulfilled
-     *
-     * @dataProvider providerFulfilledDirectoryDoesNotExist
-     */
-    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
-    {
-        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
-    }
-
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
-     */
+    /** @covers ::assertIsSupportedFile */
     public function testWithHardLink(): void
     {
         $link = PathHelper::makeAbsolute('link.txt', PathHelper::activeDirAbsolute());
@@ -194,7 +172,6 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
      *
      * @dataProvider providerExclusions
      */

@@ -17,10 +17,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 {
@@ -58,6 +55,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     protected function createSut(): NoUnsupportedLinksExist
     {
+        $environment = $this->environment->reveal();
         $noAbsoluteSymlinksExist = $this->noAbsoluteSymlinksExist->reveal();
         $noHardLinksExist = $this->noHardLinksExist->reveal();
         $noLinksExistOnWindows = $this->noLinksExistOnWindows->reveal();
@@ -66,6 +64,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $translatableFactory = new TestTranslatableFactory();
 
         return new NoUnsupportedLinksExist(
+            $environment,
             $translatableFactory,
             $noAbsoluteSymlinksExist,
             $noHardLinksExist,
@@ -79,41 +78,53 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $this->noAbsoluteSymlinksExist
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noHardLinksExist
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noLinksExistOnWindows
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointOutsideTheCodebase
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->noSymlinksPointToADirectory
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('There are no unsupported links in the codebase.');
+        $this->doTestFulfilled(
+            'There are no unsupported links in the codebase.',
+            $activeDirPath,
+            $stagingDirPath,
+            $timeout,
+        );
     }
 
     public function testUnfulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->noAbsoluteSymlinksExist
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableMessage($message, $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions));
-        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
-            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
+        self::assertTranslatableMessage($message, $sut->getStatusMessage(
+            $activeDirPath,
+            $stagingDirPath,
+            $this->exclusions,
+            $timeout,
+        ));
+        self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath, $timeout): void {
+            $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout);
         }, PreconditionException::class, $message);
     }
 }

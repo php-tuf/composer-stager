@@ -8,22 +8,20 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
  *
- * @covers ::assertIsFulfilled
  * @covers ::exitEarly
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class NoAbsoluteSymlinksExistUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected function createSut(): NoAbsoluteSymlinksExist
     {
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new NoAbsoluteSymlinksExist($fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new NoAbsoluteSymlinksExist($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     protected function fulfilledStatusMessage(): string

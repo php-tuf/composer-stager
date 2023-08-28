@@ -12,10 +12,8 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
+ * @covers ::doAssertIsFulfilled
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class StagingDirIsWritableUnitTest extends PreconditionTestCase
 {
@@ -30,11 +28,12 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
 
     protected function createSut(): StagingDirIsWritable
     {
+        $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         assert($filesystem instanceof FilesystemInterface);
         $translatableFactory = new TestTranslatableFactory();
 
-        return new StagingDirIsWritable($filesystem, $translatableFactory);
+        return new StagingDirIsWritable($environment, $filesystem, $translatableFactory);
     }
 
     public function testFulfilled(): void
@@ -47,7 +46,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
         $this->doTestFulfilled('The staging directory is writable.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The staging directory is not writable.';

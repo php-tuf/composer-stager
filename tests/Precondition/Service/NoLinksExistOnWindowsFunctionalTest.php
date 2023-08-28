@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
@@ -29,24 +28,8 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     }
 
     /**
-     * @covers ::exitEarly
-     * @covers ::findFiles
-     * @covers ::isFulfilled
-     */
-    public function testFulfilledWithNoLinks(): void
-    {
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-
-        self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
-    }
-
-    /**
      * @covers ::assertIsSupportedFile
      * @covers ::exitEarly
-     * @covers ::findFiles
-     * @covers ::isFulfilled
      *
      * @dataProvider providerUnfulfilled
      *
@@ -90,18 +73,6 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
                 'hardLinks' => ['link.txt' => 'target.txt'],
             ],
         ];
-    }
-
-    /**
-     * @covers ::exitEarly
-     * @covers ::findFiles
-     * @covers ::isFulfilled
-     *
-     * @dataProvider providerFulfilledDirectoryDoesNotExist
-     */
-    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
-    {
-        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
     /**

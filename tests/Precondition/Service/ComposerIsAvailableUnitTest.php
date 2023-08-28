@@ -20,11 +20,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::__construct
  * @covers ::assertExecutableExists
  * @covers ::assertIsActuallyComposer
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
  * @covers ::getProcess
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  * @covers ::isValidExecutable
  */
 final class ComposerIsAvailableUnitTest extends PreconditionTestCase
@@ -60,6 +56,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
 
     protected function createSut(): ComposerIsAvailable
     {
+        $environment = $this->environment->reveal();
         $executableFinder = $this->executableFinder->reveal();
         $process = $this->process->reveal();
         $this->processFactory
@@ -68,12 +65,13 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         $processFactory = $this->processFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new ComposerIsAvailable($executableFinder, $processFactory, $translatableFactory);
+        return new ComposerIsAvailable($environment, $executableFinder, $processFactory, $translatableFactory);
     }
 
     /**
      * @covers ::assertExecutableExists
      * @covers ::assertIsActuallyComposer
+     * @covers ::getFulfilledStatusMessage
      * @covers ::getProcess
      * @covers ::isValidExecutable
      */
@@ -122,7 +120,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /**
      * @covers ::assertExecutableExists
      * @covers ::assertIsActuallyComposer
-     * @covers ::assertIsFulfilled
+     * @covers ::doAssertIsFulfilled
      * @covers ::getProcess
      */
     public function testFailedToCreateProcess(): void

@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
+use PhpTuf\ComposerStager\Tests\Environment\Service\TestEnvironment;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
@@ -26,9 +27,10 @@ final class TestPreconditionsTree extends AbstractPreconditionsTree
 
     public function __construct(PreconditionInterface ...$children)
     {
+        $environment = new TestEnvironment();
         $translatableFactory = new TestTranslatableFactory();
 
-        parent::__construct($translatableFactory, ...$children);
+        parent::__construct($environment, $translatableFactory, ...$children);
     }
 
     public function getDescription(): TranslatableInterface

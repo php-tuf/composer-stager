@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
@@ -9,6 +10,7 @@ use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 
@@ -37,18 +39,20 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     ): void;
 
     public function __construct(
+        EnvironmentInterface $environment,
         protected readonly FileFinderInterface $fileFinder,
         protected readonly FilesystemInterface $filesystem,
         protected readonly PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($translatableFactory);
+        parent::__construct($environment, $translatableFactory);
     }
 
-    public function assertIsFulfilled(
+    protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         try {
             $exclusions ??= new PathList();

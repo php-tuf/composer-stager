@@ -49,11 +49,13 @@ final class CommitterUnitTest extends TestCase
     /** @covers ::commit */
     public function testCommitWithMinimumParams(): void
     {
+        $timeout = ProcessInterface::DEFAULT_TIMEOUT;
+
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null)
+            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync(PathHelper::stagingDirPath(), PathHelper::activeDirPath(), null, null, ProcessInterface::DEFAULT_TIMEOUT)
+            ->sync(PathHelper::stagingDirPath(), PathHelper::activeDirPath(), null, null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -75,7 +77,7 @@ final class CommitterUnitTest extends TestCase
         $activeDir = new TestPath($activeDir);
         $stagingDir = new TestPath($stagingDir);
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions)
+            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
             ->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout)

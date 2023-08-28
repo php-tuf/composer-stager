@@ -21,6 +21,7 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
 abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCase
 {
     abstract protected function fulfilledStatusMessage(): string;
@@ -32,10 +33,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
 
     protected function setUp(): void
     {
-        $this->environment = $this->prophesize(EnvironmentInterface::class);
-        $this->environment
-            ->isWindows()
-            ->willReturn(false);
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
@@ -49,7 +46,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         parent::setUp();
     }
 
-    /** @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::exitEarly */
+    /** @covers ::exitEarly */
     public function testExitEarly(): void
     {
         $this->filesystem
@@ -59,6 +56,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
             ->find(Argument::cetera())
             ->shouldNotBeCalled();
 
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
@@ -66,7 +64,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        $sut = new class ($fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
+        $sut = new class ($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
         {
             // @phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
             protected function assertIsSupportedFile(
@@ -110,7 +108,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
@@ -127,7 +125,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
@@ -144,7 +142,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /** @covers ::assertIsFulfilled */
+    /** @covers ::doAssertIsFulfilled */
     public function testNoFilesFound(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
@@ -162,7 +160,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     }
 
     /**
-     * @covers ::assertIsFulfilled
+     * @covers ::doAssertIsFulfilled
      *
      * @dataProvider providerFileFinderExceptions
      */
@@ -197,6 +195,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         ];
     }
 
+    /** @covers ::doAssertIsFulfilled */
     public function assertFulfilled(
         bool $isFulfilled,
         TranslatableInterface $statusMessage,

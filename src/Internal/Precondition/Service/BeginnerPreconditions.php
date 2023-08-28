@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
@@ -17,12 +18,14 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class BeginnerPreconditions extends AbstractPreconditionsTree implements BeginnerPreconditionsInterface
 {
     public function __construct(
+        EnvironmentInterface $environment,
         CommonPreconditionsInterface $commonPreconditions,
         NoUnsupportedLinksExistInterface $noUnsupportedLinksExist,
         StagingDirDoesNotExistInterface $stagingDirDoesNotExist,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct(
+            $environment,
             $translatableFactory,
             $commonPreconditions,
             $noUnsupportedLinksExist,

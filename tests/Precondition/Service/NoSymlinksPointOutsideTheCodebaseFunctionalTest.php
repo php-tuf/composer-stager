@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
@@ -129,16 +128,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
                 'linkDirName' => 'staging',
             ],
         ];
-    }
-
-    /**
-     * @covers ::isFulfilled
-     *
-     * @dataProvider providerFulfilledDirectoryDoesNotExist
-     */
-    public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
-    {
-        $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
     /**

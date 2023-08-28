@@ -11,11 +11,9 @@ use Prophecy\Argument;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
+ * @covers ::assertIsSupportedFile
  * @covers ::exitEarly
  * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {

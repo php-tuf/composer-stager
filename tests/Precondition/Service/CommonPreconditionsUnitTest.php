@@ -15,10 +15,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
  *
  * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
- * @covers ::isFulfilled
  */
 final class CommonPreconditionsUnitTest extends PreconditionTestCase
 {
@@ -54,10 +50,12 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $activeAndStagingDirsAreDifferent = $this->activeAndStagingDirsAreDifferent->reveal();
         $activeDirIsReady = $this->activeDirIsReady->reveal();
         $composerIsAvailable = $this->composerIsAvailable->reveal();
+        $environment = $this->environment->reveal();
         $hostSupportsRunningProcesses = $this->hostSupportsRunningProcesses->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
         return new CommonPreconditions(
+            $environment,
             $translatableFactory,
             $activeAndStagingDirsAreDifferent,
             $activeDirIsReady,
@@ -66,38 +64,41 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         );
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $this->composerIsAvailable
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeDirIsReady
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->hostSupportsRunningProcesses
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The common preconditions are fulfilled.');
+        $this->doTestFulfilled('The common preconditions are fulfilled.', $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
+        $timeout = 42;
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->activeAndStagingDirsAreDifferent
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions)
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->willThrow($previous);
 
-        $this->doTestUnfulfilled($message);
+        $this->doTestUnfulfilled($message, null, $activeDirPath, $stagingDirPath, $timeout);
     }
 }

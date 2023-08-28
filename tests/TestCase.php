@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
@@ -25,8 +24,6 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
-
-    protected PathListInterface $exclusions;
 
     protected static function createTestEnvironment(?string $activeDir = null): void
     {

@@ -26,7 +26,7 @@ final class HostSupportsRunningProcessesFunctionalTest extends TestCase
     }
 
     /**
-     * @covers ::assertIsFulfilled
+     * @covers ::doAssertIsFulfilled
      *
      * This test proves that the precondition correctly detects a failure from
      * the Symfony Process component when the the proc_open() function is

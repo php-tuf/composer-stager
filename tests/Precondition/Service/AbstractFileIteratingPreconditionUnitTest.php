@@ -20,8 +20,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  *
  * @covers ::__construct
- * @covers ::findFiles
- * @covers ::isFulfilled
  */
 final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreconditionUnitTestCase
 {
@@ -51,6 +49,7 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
 
     protected function createSut(): PreconditionInterface
     {
+        $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
@@ -58,7 +57,13 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        return new class ($fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
+        return new class (
+            $environment,
+            $fileFinder,
+            $filesystem,
+            $pathFactory,
+            $translatableFactory,
+        ) extends AbstractFileIteratingPrecondition
         {
             public bool $exitEarly = false;
 
@@ -96,8 +101,8 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
     }
 
     /**
-     * @covers ::assertIsFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::exitEarly
+     * @covers ::doAssertIsFulfilled
+     * @covers ::exitEarly
      */
     public function testExitEarly(): void
     {
