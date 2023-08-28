@@ -88,6 +88,20 @@ final class PathListUnitTest extends TestCase
                     'five/five/five/five/five',
                 ],
             ],
+            'Complex paths' => [
+                'paths' => [
+                    'one/two',
+                    'three\\four\\five',
+                    'six/seven\\../eight\\nine',
+                ],
+                'add' => ['nine/ten/../../eleven/twelve'],
+                'expected' => [
+                    'one/two',
+                    'three/four/five',
+                    'six/eight/nine',
+                    'eleven/twelve',
+                ],
+            ],
         ];
     }
 }
