@@ -97,7 +97,6 @@ final class Filesystem implements FilesystemInterface
         $scandir = @scandir($path->absolute());
 
         if ($scandir === false) {
-            /** @noinspection PhpUnhandledExceptionInspection */
             throw new IOException($this->t(
                 'The path does not exist or is not a directory at %path',
                 $this->p(['%path' => $path->absolute()]),

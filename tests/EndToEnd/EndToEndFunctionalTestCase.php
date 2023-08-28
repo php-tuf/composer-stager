@@ -234,7 +234,6 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $preconditionMet = true;
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
-            $preconditionMet = false;
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
             assert(filetype($activeDirPath->absolute() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');

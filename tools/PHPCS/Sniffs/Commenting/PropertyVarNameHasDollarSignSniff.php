@@ -27,7 +27,7 @@ final class PropertyVarNameHasDollarSignSniff implements Sniff
 
         $content = $tag->getContent();
         $contentParts = explode(' ', $content);
-        $contentParts = array_values((array) $contentParts);
+        $contentParts = array_values($contentParts);
         $varName = array_pop($contentParts);
 
         // The variable name (correctly) begins with a dollar sign.

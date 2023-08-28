@@ -53,7 +53,7 @@ final class InternalLayerDependsOnNonProductionCodeSniff implements Sniff
     {
         $srcDir = dirname(__DIR__, 4) . '/src/Internal';
 
-        return str_starts_with((string) $phpcsFile->getFilename(), $srcDir);
+        return str_starts_with($phpcsFile->getFilename(), $srcDir);
     }
 
     private function getNamespace(File $phpcsFile, int $scopePtr): string

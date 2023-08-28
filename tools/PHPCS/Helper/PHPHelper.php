@@ -1,6 +1,5 @@
 <?php
 
-/** @noinspection ClassConstantCanBeUsedInspection */
 /** @phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBeforeDeclare */
 
 declare(strict_types=1);

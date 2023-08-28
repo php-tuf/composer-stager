@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 use ReflectionMethod;
 
-/** Ensures that the docblockss for TranslatableMessage creation methods stay in sync. */
+/** Ensures that the docblocks for TranslatableMessage creation methods stay in sync. */
 final class TranslatablePhpDocRule extends AbstractRule
 {
     /** The class that covered methods must be in sync with. */

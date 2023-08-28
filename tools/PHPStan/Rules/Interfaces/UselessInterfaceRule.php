@@ -18,6 +18,7 @@ final class UselessInterfaceRule extends AbstractRule
     public function processNode(Node $node, Scope $scope): array
     {
         $interface = $this->getClassReflection($node);
+        /** @noinspection NullPointerExceptionInspection */
         $reflection = $interface->getNativeReflection();
         $methods = $reflection->getMethods();
         $constants = $reflection->getReflectionConstants();

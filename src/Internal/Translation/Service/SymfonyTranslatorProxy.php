@@ -27,14 +27,13 @@ final class SymfonyTranslatorProxy implements SymfonyTranslatorProxyInterface
         };
     }
 
-    /** @noinspection PhpParameterNameChangedDuringInheritanceInspection */
     public function trans(
-        string $message,
+        string $id,
         array $parameters = [],
         ?string $domain = null,
         ?string $locale = self::LOCALE,
     ): string {
-        return $this->symfonyTranslator->trans($message, $parameters, $domain, $locale);
+        return $this->symfonyTranslator->trans($id, $parameters, $domain, $locale);
     }
 
     public function getLocale(): string

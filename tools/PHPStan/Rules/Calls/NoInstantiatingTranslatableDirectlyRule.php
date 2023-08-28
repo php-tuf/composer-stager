@@ -28,7 +28,6 @@ final class NoInstantiatingTranslatableDirectlyRule extends AbstractRule
         return New_::class;
     }
 
-    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     public function processNode(Node $node, Scope $scope): array
     {
         // Target instantiation via the "new" keyword.

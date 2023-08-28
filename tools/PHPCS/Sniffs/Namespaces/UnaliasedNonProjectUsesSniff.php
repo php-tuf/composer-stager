@@ -26,7 +26,7 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
             return;
         }
 
-        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr, $this);
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr);
 
         // Not a scope-level namespace, e.g., a class or interface.
         // (It's probably an anonymous function declaration.)
@@ -63,7 +63,7 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
     {
         $srcDir = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'src';
 
-        return str_starts_with((string) $phpcsFile->getFilename(), $srcDir);
+        return str_starts_with($phpcsFile->getFilename(), $srcDir);
     }
 
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
