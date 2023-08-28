@@ -115,6 +115,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         FilesystemHelper::createSymlinks($activeDirAbsolute, [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
+            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => PathHelper::testWorkingDirAbsolute(),
         ]);
 
         // Create initial composer.json. (Doing so manually can be up to one
@@ -259,6 +260,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt',
             'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt',
+            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt',
             'another_EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
             'arbitrary_subdir/with/nested/EXCLUDED_dir/with/a/file/in/it/that/is/NEVER/CHANGED/anywhere.txt',
             // Files excluded by "hidden" directory are still in the active directory.
