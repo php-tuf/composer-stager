@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDifferentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
@@ -18,18 +19,20 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class CommonPreconditions extends AbstractPreconditionsTree implements CommonPreconditionsInterface
 {
     public function __construct(
+        EnvironmentInterface $environment,
         TranslatableFactoryInterface $translatableFactory,
         ActiveAndStagingDirsAreDifferentInterface $activeAndStagingDirsAreDifferent,
         ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
-        HostSupportsRunningProcessesInterface $hostCanRunProcesses,
+        HostSupportsRunningProcessesInterface $hostSupportsRunningProcesses,
     ) {
         parent::__construct(
+            $environment,
             $translatableFactory,
             $activeAndStagingDirsAreDifferent,
             $activeDirIsReady,
             $composerIsAvailable,
-            $hostCanRunProcesses,
+            $hostSupportsRunningProcesses,
         );
     }
 

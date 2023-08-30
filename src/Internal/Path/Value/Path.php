@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Throwable;
 
@@ -43,7 +44,7 @@ final class Path implements PathInterface
 
     public function isAbsolute(): bool
     {
-        return SymfonyPath::isAbsolute($this->path);
+        return PathHelper::isAbsolute($this->path);
     }
 
     public function relative(PathInterface $basePath): string
@@ -86,18 +87,9 @@ final class Path implements PathInterface
             assert(false, sprintf('Base paths must be absolute. Got %s.', $basePath));
 
             /** @noinspection PhpUnreachableStatementInspection */
-            return $this->normalize($this->path);
+            return PathHelper::canonicalize($this->path);
         }
 
-        return $this->normalize($absolute);
-    }
-
-    private function normalize(string $absolutePath): string
-    {
-        return str_replace(
-            ['//', '/'], // Some Windows paths end up with double slashes after the drive name.
-            ['/', DIRECTORY_SEPARATOR], // SymfonyPath always uses forward slashes. Use the OS-specific separator.
-            SymfonyPath::canonicalize($absolutePath),
-        );
+        return PathHelper::canonicalize($absolute);
     }
 }

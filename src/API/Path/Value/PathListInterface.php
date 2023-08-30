@@ -12,7 +12,10 @@ namespace PhpTuf\ComposerStager\API\Path\Value;
 interface PathListInterface
 {
     /**
-     * Returns all path strings as given, i.e., unresolved.
+     * Returns all path strings as given, canonicalized but unresolved.
+     *
+     * In other words, directory separators will be normalized and complex
+     * paths will be simplified, but they will not be made absolute.
      *
      * @return array<string>
      */
@@ -21,8 +24,8 @@ interface PathListInterface
     /**
      * Adds a list of raw path strings.
      *
-     * Path strings may be absolute or relative, e.g., "/var/www/example" or
-     * "example". Nothing needs to actually exist at them.
+     * Path strings must be relative, e.g., "example" or "../example" but
+     * not "/var/www/example". Nothing needs to actually exist at them.
      */
     public function add(string ...$paths): void;
 }

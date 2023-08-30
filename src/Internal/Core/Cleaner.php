@@ -28,9 +28,9 @@ final class Cleaner implements CleanerInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir);
+        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, null, $timeout);
 
         try {
             $this->filesystem->remove($stagingDir, $callback, $timeout);

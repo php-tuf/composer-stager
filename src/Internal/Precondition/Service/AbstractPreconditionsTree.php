@@ -2,10 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
@@ -26,6 +28,17 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
     /** @var array<\PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface> */
     private readonly array $children;
 
+    final public function getLeaves(): array
+    {
+        $leaves = [];
+
+        foreach ($this->children as $child) {
+            $leaves[] = $child->getLeaves();
+        }
+
+        return array_merge(...$leaves);
+    }
+
     /** Gets a status message for when the precondition is fulfilled. */
     abstract protected function getFulfilledStatusMessage(): TranslatableInterface;
 
@@ -35,8 +48,11 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
      *
      * @see https://github.com/php-tuf/composer-stager/issues/75
      */
-    public function __construct(TranslatableFactoryInterface $translatableFactory, PreconditionInterface ...$children)
-    {
+    public function __construct(
+        private readonly EnvironmentInterface $environment,
+        TranslatableFactoryInterface $translatableFactory,
+        PreconditionInterface ...$children,
+    ) {
         $this->setTranslatableFactory($translatableFactory);
         $this->children = $children;
     }
@@ -45,9 +61,10 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): TranslatableInterface {
         try {
-            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout);
         } catch (PreconditionException $e) {
             return $e->getTranslatableMessage();
         }
@@ -59,9 +76,10 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): bool {
         try {
-            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+            $this->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout);
         } catch (PreconditionException) {
             return false;
         }
@@ -73,21 +91,12 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
+        $this->environment->setTimeLimit($timeout);
+
         foreach ($this->getLeaves() as $leaf) {
-            $leaf->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+            $leaf->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout);
         }
-    }
-
-    /** This function is non-final in case subclasses want to implement a different strategy. */
-    public function getLeaves(): array
-    {
-        $leaves = [];
-
-        foreach ($this->children as $child) {
-            $leaves[] = $child->getLeaves();
-        }
-
-        return array_merge(...$leaves);
     }
 }

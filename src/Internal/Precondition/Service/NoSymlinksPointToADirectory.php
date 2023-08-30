@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
@@ -23,13 +24,14 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
     NoSymlinksPointToADirectoryInterface
 {
     public function __construct(
+        EnvironmentInterface $environment,
         FileFinderInterface $fileFinder,
         private readonly FileSyncerInterface $fileSyncer,
         FilesystemInterface $filesystem,
         PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        parent::__construct($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function getName(): TranslatableInterface

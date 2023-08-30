@@ -5,6 +5,8 @@
       <w>Shmop</w>
       <w>Spoofchecker</w>
       <w>Transliterator</w>
+      <w>autoloaders</w>
+      <w>autoloading</w>
       <w>autowire</w>
       <w>autowiring</w>
       <w>canonicalized</w>
@@ -58,6 +60,7 @@
       <w>strlen</w>
       <w>subdir</w>
       <w>sysexits</w>
+      <w>testdox</w>
       <w>testsuites</w>
       <w>thecodingmachine</w>
       <w>translatables</w>

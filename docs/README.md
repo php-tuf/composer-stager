@@ -43,8 +43,8 @@ class Updater
 
     public function update(): void
     {
-        $activeDir = $this->pathFactory::create('/var/www/public');
-        $stagingDir = $this->pathFactory::create('/var/www/staging');
+        $activeDir = $this->pathFactory->create('/var/www/public');
+        $stagingDir = $this->pathFactory->create('/var/www/staging');
         $exclusions = $this->pathListFactory->create(
             'cache',
             'uploads',
@@ -88,12 +88,12 @@ services:
             - '../vendor/php-tuf/composer-stager/src/*/*/Value'
             - '../vendor/php-tuf/composer-stager/src/API/Exception'
 
+    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
+        factory: [ '@PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface', 'create' ]
     PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory:
         arguments:
             $phpFileSyncer: '@PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface'
             $rsyncFileSyncer: '@PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface'
-    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface', 'create' ]
 
     Symfony\Component\Filesystem\Filesystem: ~
     Symfony\Component\Process\ExecutableFinder: ~

@@ -16,6 +16,8 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 interface StagerInterface
 {
     /**
+     * Executes a Composer command.
+     *
      * @param array<string> $composerCommand
      *   The Composer command parts exactly as they would be typed in the terminal.
      *   There's no need to escape them in any way, only to separate them. Example:
@@ -33,9 +35,9 @@ interface StagerInterface
      *   The staging directory.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
-     * @param int|null $timeout
-     *   An optional process timeout (maximum runtime) in seconds. Set to null
-     *   to disable.
+     * @param int $timeout
+     *   An optional process timeout (maximum runtime) in seconds. If set to
+     *   zero (0), no time limit is imposed.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
      *   If the given Composer command is invalid.
@@ -49,6 +51,6 @@ interface StagerInterface
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
 }

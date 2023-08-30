@@ -21,7 +21,7 @@ use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/src',
-        __DIR__ . '/tests/PHPUnit',
+        __DIR__ . '/tests',
     ]);
 
     $rectorConfig->cacheClass(MemoryCacheStorage::class);
@@ -46,7 +46,7 @@ return static function (RectorConfig $rectorConfig): void {
         MixedTypeRector::class => [__DIR__],
         NewlineAfterStatementRector::class => [__DIR__],
         NewlineBeforeNewAssignSetRector::class => [__DIR__],
-        NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/PHPUnit/TestUtils/AssertTrait.php'],
+        NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/TestUtils/AssertTrait.php'],
         RemoveUselessParamTagRector::class => [__DIR__], // This one has a bug: https://github.com/rectorphp/rector-src/pull/4480
         RemoveUselessReturnTagRector::class => [__DIR__], // This one has a bug: https://github.com/rectorphp/rector-src/pull/4482
         UnSpreadOperatorRector::class => [__DIR__],

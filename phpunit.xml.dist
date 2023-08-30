@@ -16,13 +16,13 @@
 >
     <testsuites>
         <testsuite name="all">
-            <directory>tests/PHPUnit</directory>
+            <directory>tests</directory>
         </testsuite>
         <testsuite name="unit">
-            <directory suffix="UnitTest.php">tests/PHPUnit</directory>
+            <directory suffix="UnitTest.php">tests</directory>
         </testsuite>
         <testsuite name="functional">
-            <directory suffix="FunctionalTest.php">tests/PHPUnit</directory>
+            <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
     </testsuites>
 

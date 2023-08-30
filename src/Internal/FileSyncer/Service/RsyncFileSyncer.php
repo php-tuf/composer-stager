@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
@@ -13,6 +14,7 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
@@ -26,6 +28,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     use TranslatableAwareTrait;
 
     public function __construct(
+        private readonly EnvironmentInterface $environment,
         private readonly FilesystemInterface $filesystem,
         private readonly RsyncProcessRunnerInterface $rsync,
         TranslatableFactoryInterface $translatableFactory,
@@ -38,22 +41,21 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
      * descendant requires a unique approach, which has been documented here:
      *
      * @see https://serverfault.com/q/1094803/956603
-     *
-     * @noinspection PhpUnhandledExceptionInspection
      */
     public function sync(
         PathInterface $source,
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
+        $this->environment->setTimeLimit($timeout);
+
         $sourceAbsolute = $source->absolute();
         $destinationAbsolute = $destination->absolute();
 
         $this->assertDirectoriesAreNotTheSame($source, $destination);
         $this->assertSourceExists($source);
-        set_time_limit((int) $timeout);
         $this->runCommand($exclusions, $sourceAbsolute, $destinationAbsolute, $destination, $callback);
     }
 
@@ -92,6 +94,9 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
         PathInterface $destination,
         ?OutputCallbackInterface $callback,
     ): void {
+        $sourceAbsolute = PathHelper::canonicalize($sourceAbsolute);
+        $destinationAbsolute = PathHelper::canonicalize($destinationAbsolute);
+
         $this->ensureDestinationDirectoryExists($destination);
         $command = $this->buildCommand($exclusions, $sourceAbsolute, $destinationAbsolute);
 

@@ -10,12 +10,10 @@ use PhpTuf\ComposerStager\Internal\Path\Value\Path;
  * @package Path
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
- *
- * @SuppressWarnings(PHPMD.StaticAccess)
  */
 final class PathFactory implements PathFactoryInterface
 {
-    public static function create(string $path, ?PathInterface $basePath = null): PathInterface
+    public function create(string $path, ?PathInterface $basePath = null): PathInterface
     {
         return new Path($path, $basePath);
     }

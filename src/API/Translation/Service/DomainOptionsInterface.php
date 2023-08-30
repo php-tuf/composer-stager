@@ -11,9 +11,9 @@ namespace PhpTuf\ComposerStager\API\Translation\Service;
  */
 interface DomainOptionsInterface
 {
-    /** The default domain. */
+    /** Gets the default domain. */
     public function default(): string;
 
-    /** The domain for exceptions. */
+    /** Gets the domain for exceptions. */
     public function exceptions(): string;
 }

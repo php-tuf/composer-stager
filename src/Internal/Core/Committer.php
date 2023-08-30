@@ -30,9 +30,9 @@ final class Committer implements CommitterInterface
         PathInterface $activeDir,
         ?PathListInterface $exclusions = null,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $exclusions);
+        $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout);
 
         try {
             $this->fileSyncer->sync($stagingDir, $activeDir, $exclusions, $callback, $timeout);

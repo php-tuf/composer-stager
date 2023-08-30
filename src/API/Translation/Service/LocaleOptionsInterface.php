@@ -11,6 +11,6 @@ namespace PhpTuf\ComposerStager\API\Translation\Service;
  */
 interface LocaleOptionsInterface
 {
-    /** The default locale. */
+    /** Gets the default locale. */
     public function default(): string;
 }

@@ -13,20 +13,18 @@ parameters:
     tmpDir: var/phpstan
     paths:
         - .gitattributes
+        - config/services.yml
         - src
-        - tests/PHPUnit
+        - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: 28b3482e0ec91cbdd68d150e5c486918
-    translationSystemHash: ef73496b0fe8d024eba0831e405db0af
+    preconditionSystemHash: 54a37bf8c9e9be8e703d4e2219df1d49
+    translationSystemHash: 0df1e2f49634b4bf0b655f2eada7f493
     gitattributesExportInclude:
         - composer.json
         - docs
         - LICENSE
         - src
-    excludePaths:
-        # @see https://github.com/phpstan/phpstan/issues/9577
-        - src/API/Exception/TranslatableExceptionTrait.php
     ignoreErrors:
         # Production code.
         -
@@ -53,57 +51,63 @@ parameters:
             message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
             path: src/API/Exception/PreconditionException.php
         -
-            message: '#Method (run|create)\(\) should not be public because it doesn''t implement a method on an interface.#'
-            paths:
-                - src/Internal/Process/Service/AbstractProcessRunner.php
-                - src/Internal/Translation/Service/Translator.php
+            message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
+            path: src/Internal/Process/Service/AbstractProcessRunner.php
+        -
+            message: '#Method create\(\) should not be public because it doesn''t implement a method on an interface.#'
+            path: src/Internal/Translation/Service/Translator.php
+        -
+            # @todo Ignore this error until the error can be resolved:
+            # @see https://github.com/php-tuf/composer-stager/issues/268
+            message: '#Service autoloading depends on the Internal layer.*#'
+            path: config/services.yml
 
         # Test code.
         -
             message: '#.*::__construct\(\) does not call parent constructor from .*.#'
-            path: tests/PHPUnit/Translation/Value/TestTranslatableExceptionMessage.php
+            path: tests/Translation/Value/TestTranslatableExceptionMessage.php
         -
             message: '#Access to an undefined property.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Built-in or third party exception ".*" cannot be thrown from public methods.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Cannot call method .*\(\) on .*MethodProphecy.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Concrete class must implement an interface#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#.*caught .* must be rethrown.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Docblock must contain "@package.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Method .* no (value )?type specified.*#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Method .* should not be public because it doesn''t implement a method on an interface.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Parameter .* of (static )?(class|method) .* expects .* given.#'
-            path: tests/PHPUnit
+            path: tests
         -
             message: '#Property .* does not accept .*.#'
-            path: tests/PHPUnit
+            path: tests
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:
@@ -113,6 +117,7 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\WrongExceptionNamespaceRule # Requires exceptions to be in the correct namespace.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Files\InternalLayerExposureRule # Ensures that a client autoloaders don't depend on the Internal layer.
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenThrowsRule # Forbids throwing third party exceptions from public methods.

@@ -2,11 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
@@ -18,10 +20,11 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExistsInterface
 {
     public function __construct(
+        EnvironmentInterface $environment,
         private readonly FilesystemInterface $filesystem,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($translatableFactory);
+        parent::__construct($environment, $translatableFactory);
     }
 
     public function getName(): TranslatableInterface
@@ -34,10 +37,11 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
         return $this->t('There must be an active directory present before any operations can be performed.');
     }
 
-    public function assertIsFulfilled(
+    protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         if (!$this->filesystem->exists($activeDir)) {
             throw new PreconditionException($this, $this->t(

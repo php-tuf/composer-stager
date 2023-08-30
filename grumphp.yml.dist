@@ -39,6 +39,11 @@ grumphp:
                 - windows_only
         psalm: ~
         rector: ~
+        shell:
+            scripts:
+                # Check for PSR-4 mapping errors.
+                - - '-c'
+                  - composer dump-autoload --strict-psr
         xmllint:
             ignore_patterns:
                 - .idea
@@ -65,6 +70,7 @@ grumphp:
                 - psalm
                 - phpstan
                 - rector
+                - shell
                 - xmllint
                 - yamllint
         test:

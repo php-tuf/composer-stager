@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Filesystem\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
@@ -38,6 +39,7 @@ final class Filesystem implements FilesystemInterface
     private const PATH_IS_SYMLINK = 'PATH_IS_SYMLINK';
 
     public function __construct(
+        private readonly EnvironmentInterface $environment,
         private readonly PathFactoryInterface $pathFactory,
         private readonly SymfonyFilesystem $symfonyFilesystem,
         TranslatableFactoryInterface $translatableFactory,
@@ -95,9 +97,6 @@ final class Filesystem implements FilesystemInterface
         $scandir = @scandir($path->absolute());
 
         if ($scandir === false) {
-            // @todo This doesn't seem to fail without the exceptions domain.
-
-            /** @noinspection PhpUnhandledExceptionInspection */
             throw new IOException($this->t(
                 'The path does not exist or is not a directory at %path',
                 $this->p(['%path' => $path->absolute()]),
@@ -154,7 +153,6 @@ final class Filesystem implements FilesystemInterface
     public function readLink(PathInterface $path): PathInterface
     {
         if (!$this->isSymlink($path)) {
-            // @todo This doesn't seem to fail without the exceptions domain.
             throw new IOException($this->t(
                 'The path does not exist or is not a symlink at %path',
                 $this->p(['%path' => $path->absolute()]),
@@ -166,21 +164,19 @@ final class Filesystem implements FilesystemInterface
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
-        $basePath = $this->pathFactory::create('..', $path);
+        $basePath = $this->pathFactory->create('..', $path);
 
-        return $this->pathFactory::create($target, $basePath);
+        return $this->pathFactory->create($target, $basePath);
     }
 
     public function remove(
         PathInterface $path,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        try {
-            // Symfony Filesystem doesn't have a builtin mechanism for setting a
-            // timeout, so we have to enforce it ourselves.
-            set_time_limit((int) $timeout);
+        $this->environment->setTimeLimit($timeout);
 
+        try {
             $this->symfonyFilesystem->remove($path->absolute());
         } catch (SymfonyExceptionInterface $e) {
             throw new IOException($this->t(

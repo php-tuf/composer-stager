@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
@@ -25,6 +26,7 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     use TranslatableAwareTrait;
 
     public function __construct(
+        private readonly EnvironmentInterface $environment,
         private readonly FileFinderInterface $fileFinder,
         private readonly FilesystemInterface $filesystem,
         private readonly PathFactoryInterface $pathFactory,
@@ -38,9 +40,9 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         PathInterface $destination,
         ?PathListInterface $exclusions = null,
         ?OutputCallbackInterface $callback = null,
-        ?int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        set_time_limit((int) $timeout);
+        $this->environment->setTimeLimit($timeout);
 
         $exclusions ??= new PathList();
 
@@ -104,13 +106,13 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             $relativePathname = self::getRelativePath($destinationAbsolute, $destinationFilePathname);
             $sourceFilePathname = $sourceAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
 
-            $sourceFilePath = $this->pathFactory::create($sourceFilePathname);
+            $sourceFilePath = $this->pathFactory->create($sourceFilePathname);
 
             if ($this->filesystem->exists($sourceFilePath)) {
                 continue;
             }
 
-            $destinationFilePath = $this->pathFactory::create($destinationFilePathname);
+            $destinationFilePath = $this->pathFactory->create($destinationFilePathname);
 
             // If it doesn't exist in the source, delete it from the destination.
             $this->filesystem->remove($destinationFilePath);
@@ -138,8 +140,8 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
             $relativePathname = self::getRelativePath($sourceAbsolute, $sourceFilePathname);
             $destinationFilePathname = $destinationAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
 
-            $sourceFilePathname = $this->pathFactory::create($sourceFilePathname);
-            $destinationFilePathname = $this->pathFactory::create($destinationFilePathname);
+            $sourceFilePathname = $this->pathFactory->create($sourceFilePathname);
+            $destinationFilePathname = $this->pathFactory->create($destinationFilePathname);
 
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but

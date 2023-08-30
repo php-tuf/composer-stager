@@ -26,5 +26,5 @@ interface PathFactoryInterface
      *   assumed to represent a directory, as opposed to a file--even if
      *   it has an extension, which is no guarantee of type.
      */
-    public static function create(string $path, ?PathInterface $basePath = null): PathInterface;
+    public function create(string $path, ?PathInterface $basePath = null): PathInterface;
 }
