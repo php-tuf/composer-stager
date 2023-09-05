@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\PHPBench\TestUtils\ProcessHelper;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
+use function assert;
 
 #[BeforeClassMethods(['setUpBeforeClass'])]
 #[AfterClassMethods(['tearDownAfterClass'])]

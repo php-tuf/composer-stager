@@ -20,6 +20,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
+use function assert;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\Translator

@@ -13,6 +13,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
+use function assert;
 
 /** Ensures that translation system diagrams stay current. */
 final class TranslationDiagramsInSyncRule extends AbstractRule

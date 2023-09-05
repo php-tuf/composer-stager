@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Throwable;
+use function assert;
 
 /**
  * Tests the interaction of unsupported links preconditions.

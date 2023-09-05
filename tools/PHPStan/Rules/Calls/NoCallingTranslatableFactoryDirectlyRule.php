@@ -9,6 +9,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
+use function assert;
 
 /**
  * Forbids calling TranslatableFactory::create() directly.

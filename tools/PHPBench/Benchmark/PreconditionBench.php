@@ -23,6 +23,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirDoesNotExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
+use function assert;
 
 #[BeforeClassMethods(['setUpBeforeClass'])]
 final class PreconditionBench extends BenchCase

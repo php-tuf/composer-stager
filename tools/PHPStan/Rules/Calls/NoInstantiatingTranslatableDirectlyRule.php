@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
+use function assert;
 
 /**
  * Forbids instantiating translatables directly.

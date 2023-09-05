@@ -13,6 +13,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
+use function assert;
 
 /** Ensures that precondtion system diagrams stay current. */
 final class PreconditionDiagramsInSyncRule extends AbstractRule

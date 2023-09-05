@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use function assert;
 
 /**
  * Handles an array of translation parameters.
