@@ -6,6 +6,7 @@ use AssertionError;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use ReflectionClass;
 
 /**
@@ -77,7 +78,7 @@ abstract class PathUnitTestCase extends TestCase
     public function testNonAbsoluteBasePath(): void
     {
         $path = '../arbitrary/../path.txt';
-        $canonicalizedPath = self::fixSeparators('../path.txt');
+        $canonicalizedPath = PathHelper::fixSeparators('../path.txt');
         $sut = new Path($path);
 
         $invalidBasePath = '../relative-path.txt';

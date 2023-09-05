@@ -381,7 +381,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertFileChanged(string $dir, string $path, string $message = ''): void
     {
         self::assertStringEqualsFile(
-            self::ensureTrailingSlash($dir) . $path,
+            PathHelper::ensureTrailingSlash($dir) . $path,
             self::CHANGED_CONTENT,
             $message,
         );
@@ -390,7 +390,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertFileNotChanged(string $dir, string $path, string $message = ''): void
     {
         self::assertStringEqualsFile(
-            self::ensureTrailingSlash($dir) . $path,
+            PathHelper::ensureTrailingSlash($dir) . $path,
             self::ORIGINAL_CONTENT,
             $message,
         );

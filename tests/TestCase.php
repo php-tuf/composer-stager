@@ -94,34 +94,21 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function changeFile(string $dir, string $filename): void
     {
-        $pathname = self::ensureTrailingSlash($dir) . $filename;
+        $pathname = PathHelper::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($pathname, self::CHANGED_CONTENT);
         assert($result !== false, "Changed file {$pathname}.");
     }
 
     protected static function deleteFile(string $dir, string $filename): void
     {
-        $pathname = self::ensureTrailingSlash($dir) . $filename;
+        $pathname = PathHelper::ensureTrailingSlash($dir) . $filename;
         $result = unlink($pathname);
         assert($result, "Deleted file {$pathname}.");
     }
 
-    protected static function fixSeparators(string $path): string
-    {
-        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
-    }
-
-    /** @phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
-    protected static function fixSeparatorsMultiple(&...$paths): void
-    {
-        foreach ($paths as &$path) {
-            $path = self::fixSeparators($path);
-        }
-    }
-
     protected static function getDirectoryContents(string $dir): array
     {
-        $dir = self::ensureTrailingSlash($dir);
+        $dir = PathHelper::ensureTrailingSlash($dir);
         $dirListing = self::getFlatDirectoryListing($dir);
 
         $contents = [];
@@ -137,46 +124,5 @@ abstract class TestCase extends PHPUnitTestCase
         }
 
         return $contents;
-    }
-
-    /**
-     * Strips the trailing slash (directory separator) from a given path.
-     *
-     * @param string $path
-     *   Any path, absolute or relative, existing or not. Empty paths and device
-     *   roots will be returned unchanged. Remote paths and UNC (Universal
-     *   Naming Convention) paths are not supported. No validation is done to
-     *   ensure that given paths are valid.
-     */
-    protected static function stripTrailingSlash(string $path): string
-    {
-        // Don't change a Windows drive letter root path, e.g., "C:\".
-        if (preg_match('/^[a-z]:\\\\?$/i', $path) === 1) {
-            return $path;
-        }
-
-        $trimmedPath = rtrim($path, '/\\');
-
-        // Don't change a UNIX-like root path.
-        if ($trimmedPath === '') {
-            return $path;
-        }
-
-        return $trimmedPath;
-    }
-
-    /**
-     * Ensures that the given path ends with a slash (directory separator).
-     *
-     * @param string $path
-     *   Any path, absolute or relative, existing or not.
-     */
-    protected static function ensureTrailingSlash(string $path): string
-    {
-        if ($path === '') {
-            $path = '.';
-        }
-
-        return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
     }
 }

@@ -31,7 +31,7 @@ trait AssertTrait
         string $ignoreDir = '',
         string $message = '',
     ): void {
-        $expected = array_map(self::fixSeparators(...), $expected);
+        $expected = array_map(PathHelper::fixSeparators(...), $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
 
@@ -39,14 +39,14 @@ trait AssertTrait
         $actual = array_map(static function (string $path) use ($dir, $ignoreDir): bool|string {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
-            $matchPath = self::ensureTrailingSlash($dir) . $path;
-            $ignoreDir = self::ensureTrailingSlash($ignoreDir);
+            $matchPath = PathHelper::ensureTrailingSlash($dir) . $path;
+            $ignoreDir = PathHelper::ensureTrailingSlash($ignoreDir);
 
             if (str_starts_with($matchPath, $ignoreDir)) {
                 return false;
             }
 
-            return self::fixSeparators($path);
+            return PathHelper::fixSeparators($path);
         }, $actual);
 
         // Normalize arrays for comparison.
@@ -198,7 +198,7 @@ trait AssertTrait
      */
     private static function getFlatDirectoryListing(string $dir): array
     {
-        $dir = self::stripTrailingSlash($dir);
+        $dir = PathHelper::stripTrailingSlash($dir);
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir),
