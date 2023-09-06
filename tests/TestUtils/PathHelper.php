@@ -68,7 +68,7 @@ final class PathHelper
 
     public static function sourceDirAbsolute(): string
     {
-        return self::makeAbsolute(self::sourceDirRelative(), self::testEnvAbsolute());
+        return self::makeAbsolute(self::sourceDirRelative(), self::testWorkingDirAbsolute());
     }
 
     public static function sourceDirPath(): PathInterface
@@ -83,7 +83,7 @@ final class PathHelper
 
     public static function destinationDirAbsolute(): string
     {
-        return self::makeAbsolute(self::destinationDirRelative(), self::testEnvAbsolute());
+        return self::makeAbsolute(self::destinationDirRelative(), self::testWorkingDirAbsolute());
     }
 
     public static function destinationDirPath(): PathInterface

@@ -44,12 +44,12 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $filesystem = new Filesystem();
 
-        if (!$filesystem->exists(PathHelper::testEnvAbsolute())) {
+        if (!$filesystem->exists(PathHelper::testWorkingDirAbsolute())) {
             return;
         }
 
         try {
-            $filesystem->remove(PathHelper::testEnvAbsolute());
+            $filesystem->remove(PathHelper::testWorkingDirAbsolute());
         } catch (IOException) {
             // @todo Windows chokes on this every time, e.g.,
             //    | Failed to remove directory
