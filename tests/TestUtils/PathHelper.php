@@ -10,7 +10,8 @@ use function assert;
 final class PathHelper
 {
     private const TEST_ENV = 'var/phpunit/test-env';
-    private const WORKING_DIR = 'working-dir';
+    private const FRESH_FIXTURES_DIR = 'fresh-fixtures';
+    private const PERSISTENT_FIXTURES_DIR = 'persistent-fixtures';
     private const ACTIVE_DIR = 'active-dir';
     private const STAGING_DIR = 'staging-dir';
     private const SOURCE_DIR = 'source';
@@ -21,14 +22,19 @@ final class PathHelper
         return dirname(__DIR__, 2);
     }
 
-    public static function testEnvAbsolute(): string
+    private static function testEnvAbsolute(): string
     {
         return self::makeAbsolute(self::TEST_ENV, self::repositoryRootAbsolute());
     }
 
-    public static function testWorkingDirAbsolute(): string
+    public static function testFreshFixturesDirAbsolute(): string
     {
-        return self::makeAbsolute(self::WORKING_DIR, self::testEnvAbsolute());
+        return self::makeAbsolute(self::FRESH_FIXTURES_DIR, self::testEnvAbsolute());
+    }
+
+    public static function testPersistentFixturesAbsolute(): string
+    {
+        return self::makeAbsolute(self::PERSISTENT_FIXTURES_DIR, self::testEnvAbsolute());
     }
 
     public static function activeDirRelative(): string
@@ -38,7 +44,7 @@ final class PathHelper
 
     public static function activeDirAbsolute(): string
     {
-        return self::makeAbsolute(self::activeDirRelative(), self::testWorkingDirAbsolute());
+        return self::makeAbsolute(self::activeDirRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function activeDirPath(): PathInterface
@@ -53,7 +59,7 @@ final class PathHelper
 
     public static function stagingDirAbsolute(): string
     {
-        return self::makeAbsolute(self::stagingDirRelative(), self::testWorkingDirAbsolute());
+        return self::makeAbsolute(self::stagingDirRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function stagingDirPath(): PathInterface
@@ -68,7 +74,7 @@ final class PathHelper
 
     public static function sourceDirAbsolute(): string
     {
-        return self::makeAbsolute(self::sourceDirRelative(), self::testWorkingDirAbsolute());
+        return self::makeAbsolute(self::sourceDirRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function sourceDirPath(): PathInterface
@@ -83,7 +89,7 @@ final class PathHelper
 
     public static function destinationDirAbsolute(): string
     {
-        return self::makeAbsolute(self::destinationDirRelative(), self::testWorkingDirAbsolute());
+        return self::makeAbsolute(self::destinationDirRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function destinationDirPath(): PathInterface

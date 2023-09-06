@@ -66,7 +66,10 @@ final class CompatabilityFunctionalTest extends TestCase
 
     private static function fixtureDir(string $versionConstraint): string
     {
-        return PathHelper::testEnvAbsolute() . '/persistent-fixtures/drupal-' . $versionConstraint;
+        return PathHelper::makeAbsolute(
+            'drupal-' . $versionConstraint,
+            PathHelper::testPersistentFixturesAbsolute(),
+        );
     }
 
     private static function ensureFixtures(): void

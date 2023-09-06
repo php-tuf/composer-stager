@@ -34,7 +34,7 @@ abstract class TestCase extends PHPUnitTestCase
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
-        $workingDirAbsolute = PathHelper::testWorkingDirAbsolute();
+        $workingDirAbsolute = PathHelper::testFreshFixturesDirAbsolute();
         $activeDirAbsolute = PathHelper::makeAbsolute($activeDir, $workingDirAbsolute);
         FilesystemHelper::createDirectories([$workingDirAbsolute, $activeDirAbsolute]);
         chdir($workingDirAbsolute);
@@ -44,12 +44,12 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $filesystem = new Filesystem();
 
-        if (!$filesystem->exists(PathHelper::testWorkingDirAbsolute())) {
+        if (!$filesystem->exists(PathHelper::testFreshFixturesDirAbsolute())) {
             return;
         }
 
         try {
-            $filesystem->remove(PathHelper::testWorkingDirAbsolute());
+            $filesystem->remove(PathHelper::testFreshFixturesDirAbsolute());
         } catch (IOException) {
             // @todo Windows chokes on this every time, e.g.,
             //    | Failed to remove directory

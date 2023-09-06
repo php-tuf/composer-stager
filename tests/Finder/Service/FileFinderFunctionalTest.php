@@ -157,7 +157,7 @@ final class FileFinderFunctionalTest extends TestCase
             $path = implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    PathHelper::testWorkingDirAbsolute(),
+                    PathHelper::testFreshFixturesDirAbsolute(),
                     PathHelper::activeDirRelative(),
                     $path,
                 ],

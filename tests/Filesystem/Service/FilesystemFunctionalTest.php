@@ -57,7 +57,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyTrue(): void
     {
-        $directoryPath = PathHelper::createPath('empty', PathHelper::testWorkingDirAbsolute());
+        $directoryPath = PathHelper::createPath('empty', PathHelper::testPersistentFixturesAbsolute());
         FilesystemHelper::createDirectories($directoryPath->absolute());
         $sut = $this->createSut();
 
@@ -76,7 +76,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyErrorIsNotADirectory(): void
     {
-        $filePath = PathHelper::createPath('file.txt', PathHelper::testWorkingDirAbsolute());
+        $filePath = PathHelper::createPath('file.txt', PathHelper::testFreshFixturesDirAbsolute());
         FilesystemHelper::touch($filePath->absolute());
         $message = sprintf(
             'The path does not exist or is not a directory at %s',
