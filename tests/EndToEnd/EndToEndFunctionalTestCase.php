@@ -75,13 +75,13 @@ abstract class EndToEndFunctionalTestCase extends TestCase
      */
     public function testSync(string $activeDir, string $stagingDir): void
     {
-        $activeDirPath = PathHelper::createPath($activeDir, PathHelper::testWorkingDirAbsolute());
+        $activeDirPath = PathHelper::createPath($activeDir, PathHelper::testFreshFixturesDirAbsolute());
         $activeDirAbsolute = $activeDirPath->absolute();
-        $stagingDirPath = PathHelper::createPath($stagingDir, PathHelper::testWorkingDirAbsolute());
+        $stagingDirPath = PathHelper::createPath($stagingDir, PathHelper::testFreshFixturesDirAbsolute());
         $stagingDirAbsolute = $stagingDirPath->absolute();
 
         // Create fixture (active directory).
-        self::createFiles(PathHelper::makeAbsolute($activeDir, PathHelper::testWorkingDirAbsolute()), [
+        self::createFiles(PathHelper::makeAbsolute($activeDir, PathHelper::testFreshFixturesDirAbsolute()), [
             // Unchanging files.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -116,7 +116,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         FilesystemHelper::createSymlinks($activeDirAbsolute, [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
-            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => PathHelper::testWorkingDirAbsolute(),
+            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => PathHelper::testFreshFixturesDirAbsolute(),
         ]);
 
         // Create initial composer.json. (Doing so manually can be up to one
@@ -145,7 +145,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Non-existent (ignore).
             'file_that_NEVER_EXISTS_anywhere.txt',
             // Absolute path (ignore).
-            PathHelper::makeAbsolute('absolute/path', PathHelper::testWorkingDirAbsolute()),
+            PathHelper::makeAbsolute('absolute/path', PathHelper::testFreshFixturesDirAbsolute()),
         ];
         $exclusions = new PathList(...$exclusions);
 
