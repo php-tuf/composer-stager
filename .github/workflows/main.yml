@@ -76,6 +76,7 @@ jobs:
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
+                    extensions: gd
                     ini-values: assert.active=1, assert.exception=1, zend.assertions=1
 
             -   name: "Set up PHP w/o Coverage"
@@ -84,6 +85,7 @@ jobs:
                 with:
                     php-version: "${{ matrix.php }}"
                     coverage: none
+                    extensions: gd
                     ini-values: assert.active=1, assert.exception=1, zend.assertions=1
 
             -   name: "PHP info"
