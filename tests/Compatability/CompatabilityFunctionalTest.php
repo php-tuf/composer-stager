@@ -14,9 +14,15 @@ use Symfony\Component\Process\Process;
  */
 final class CompatabilityFunctionalTest extends TestCase
 {
+    // @see https://github.com/php-tuf/composer-stager/wiki/Library-compatibility-policy#drupal
     private const SUPPORTED_DRUPAL_VERSIONS = [
+        // Current major, oldest supported minor.
         '10.0.0',
+        '10.0.10',
+        // Current minor.
         '10.1.0',
+        '10.1.2',
+        // Next minor dev.
         '11.x-dev',
     ];
 
