@@ -47,8 +47,6 @@ return static function (RectorConfig $rectorConfig): void {
         NewlineAfterStatementRector::class => [__DIR__],
         NewlineBeforeNewAssignSetRector::class => [__DIR__],
         NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/TestUtils/AssertTrait.php'],
-        RemoveUselessParamTagRector::class => [__DIR__], // This one has a bug: https://github.com/rectorphp/rector-src/pull/4480
-        RemoveUselessReturnTagRector::class => [__DIR__], // This one has a bug: https://github.com/rectorphp/rector-src/pull/4482
         UnSpreadOperatorRector::class => [__DIR__],
     ]);
 };
