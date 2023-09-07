@@ -54,6 +54,19 @@ final class Process implements ProcessInterface
         return $this->symfonyProcess->getEnv();
     }
 
+    public function getErrorOutput(): string
+    {
+        try {
+            return $this->symfonyProcess->getErrorOutput();
+        } catch (Throwable $e) {
+            throw new LogicException($this->t(
+                'Failed to get process error output: %details',
+                $this->p(['%details' => $e->getMessage()]),
+                $this->d()->exceptions(),
+            ), 0, $e);
+        }
+    }
+
     public function getOutput(): string
     {
         try {

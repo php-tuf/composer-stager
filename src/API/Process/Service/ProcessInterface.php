@@ -24,10 +24,22 @@ interface ProcessInterface
     public function getEnv(): array;
 
     /**
+     * Returns the current error output of the process (STDERR).
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     *   If the process is not started.
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getOutput
+     */
+    public function getErrorOutput(): string;
+
+    /**
      * Returns the current output of the process (STDOUT).
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process is not started.
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getErrorOutput
      */
     public function getOutput(): string;
 
