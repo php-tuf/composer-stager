@@ -12,7 +12,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
-use function assert;
 
 /** Provides a base class for PHPStan rules. */
 abstract class AbstractRule implements Rule

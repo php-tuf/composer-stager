@@ -7,7 +7,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use Throwable;
-use function assert;
 
 /** Forbids public methods that are not on an interface. */
 final class NoNonInterfacePublicMethodsRule extends AbstractRule

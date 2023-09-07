@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Throwable;
-use function assert;
 
 /**
  * @package Path

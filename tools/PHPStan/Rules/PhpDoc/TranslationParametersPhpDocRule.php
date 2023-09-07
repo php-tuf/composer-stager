@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 use ReflectionMethod;
-use function assert;
 
 /** Ensures that the docblocks for TranslationParameters creation methods stay in sync. */
 final class TranslationParametersPhpDocRule extends AbstractRule

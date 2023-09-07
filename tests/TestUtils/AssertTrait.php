@@ -9,7 +9,6 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Throwable;
-use function assert;
 
 /** Provides custom test assertions. */
 trait AssertTrait

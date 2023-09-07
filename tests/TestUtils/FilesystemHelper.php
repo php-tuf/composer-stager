@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-use function assert;
 
 final class FilesystemHelper
 {

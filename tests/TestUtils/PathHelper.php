@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\TestUtils;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
-use function assert;
 
 final class PathHelper
 {

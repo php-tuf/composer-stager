@@ -34,10 +34,6 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
             return;
         }
 
-        if ($this->isFunctionNamespace($phpcsFile, $stackPtr)) {
-            return;
-        }
-
         // The namespace is within the project.
         if ($this->isProjectNamespace($namespace)) {
             return;
@@ -80,13 +76,6 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
     private function isProjectNamespace(string $namespace): bool
     {
         return str_starts_with($namespace, 'PhpTuf\\ComposerStager');
-    }
-
-    private function isFunctionNamespace(File $phpcsFile, int $stackPtr): bool
-    {
-        $functionKeywordPtr = $phpcsFile->findNext(T_STRING, $stackPtr, $stackPtr + 3, false, 'function');
-
-        return $functionKeywordPtr !== false;
     }
 
     private function isAllowedWithoutAlias(string $namespace): bool

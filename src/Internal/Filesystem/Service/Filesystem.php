@@ -16,7 +16,6 @@ use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptio
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-use function assert;
 
 /**
  * @package Filesystem

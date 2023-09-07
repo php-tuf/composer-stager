@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use function assert;
 
 abstract class TestCase extends PHPUnitTestCase
 {

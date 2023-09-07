@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\PHPStan\Rules\AbstractRule;
 use ReflectionClass;
 use ReflectionMethod;
-use function assert;
 
 /** Ensures that the docblocks for TranslatableMessage creation methods stay in sync. */
 final class TranslatablePhpDocRule extends AbstractRule
