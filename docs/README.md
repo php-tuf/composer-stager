@@ -71,33 +71,7 @@ class Updater
 
 ## Configuring services
 
-Composer Stager uses the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) pattern, and its services are best accessed via a container that supports autowiring, e.g., [Symfony's](https://symfony.com/doc/current/service_container.html). A basic implementation could look something like this:
-
-```yaml
-services:
-
-    _defaults:
-        autoconfigure: true
-        autowire: true
-        public: false
-
-    PhpTuf\ComposerStager\:
-        resource: '../vendor/php-tuf/composer-stager/src/*'
-        public: true
-        exclude:
-            - '../vendor/php-tuf/composer-stager/src/*/*/Value'
-            - '../vendor/php-tuf/composer-stager/src/API/Exception'
-
-    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface', 'create' ]
-    PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory:
-        arguments:
-            $phpFileSyncer: '@PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface'
-            $rsyncFileSyncer: '@PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface'
-
-    Symfony\Component\Filesystem\Filesystem: ~
-    Symfony\Component\Process\ExecutableFinder: ~
-```
+Composer Stager uses the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) pattern, and its services are best accessed via a container that supports autowiring, e.g., [Symfony's](https://symfony.com/doc/current/service_container.html). (Manual wiring is brittle and therefore not officially supported.) See [`services.yml`](services.yml) for a working example.
 
 ## Example
 

@@ -14,6 +14,7 @@ parameters:
     paths:
         - .gitattributes
         - config/services.yml
+        - docs/services.yml
         - src
         - tests
     treatPhpDocTypesAsCertain: false
@@ -112,6 +113,7 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\WrongExceptionNamespaceRule # Requires exceptions to be in the correct namespace.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Files\ExampleServicesConfigIsCurrentRule # Ensures that the example docs/services.yml is current.
     - PhpTuf\ComposerStager\PHPStan\Rules\Files\InternalLayerExposureRule # Ensures that a client autoloaders don't depend on the Internal layer.
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.
