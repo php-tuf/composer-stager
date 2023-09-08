@@ -2,17 +2,15 @@
 services:
 
     _defaults:
-        autoconfigure: true
         autowire: true
-        public: false
 
     PhpTuf\ComposerStager\:
         resource: '../src/*'
-        public: true
         exclude:
             - '../src/*/*/Value'
             - '../src/API/Exception'
+        public: true
 
     Symfony\Component\Filesystem\Filesystem: ~
-
     Symfony\Component\Process\ExecutableFinder: ~
+    Symfony\Component\Process\PhpExecutableFinder: ~
