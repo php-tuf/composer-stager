@@ -3,10 +3,11 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
+use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\Tests\FileSyncer\Factory\PhpFileSyncerFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -23,11 +24,10 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     {
         $container = ContainerHelper::container();
 
-        // Override the FileSyncer implementation.
-        $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
-        $fileSyncer->setFactory(null);
-        $fileSyncer->setClass(PhpFileSyncer::class);
-        $container->setDefinition(FileSyncerInterface::class, $fileSyncer);
+        // Override the FileSyncerFactory implementation to always return a PhpFileSyncer.
+        $fileSyncerFactory = $container->getDefinition(FileSyncerFactory::class);
+        $fileSyncerFactory->setClass(PhpFileSyncerFactory::class);
+        $container->setDefinition(FileSyncerFactoryInterface::class, $fileSyncerFactory);
 
         // Compile the container.
         $container->compile();

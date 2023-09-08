@@ -18,7 +18,7 @@ parameters:
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: 54a37bf8c9e9be8e703d4e2219df1d49
+    preconditionSystemHash: 6de860de22cb2816e8d2c2e1f4abbcf0
     translationSystemHash: 0df1e2f49634b4bf0b655f2eada7f493
     gitattributesExportInclude:
         - composer.json
@@ -56,11 +56,6 @@ parameters:
         -
             message: '#Method create\(\) should not be public because it doesn''t implement a method on an interface.#'
             path: src/Internal/Translation/Service/Translator.php
-        -
-            # @todo Ignore this error until the error can be resolved:
-            # @see https://github.com/php-tuf/composer-stager/issues/268
-            message: '#Service autoloading depends on the Internal layer.*#'
-            path: config/services.yml
 
         # Test code.
         -

@@ -4,6 +4,7 @@ services:
     _defaults:
         autoconfigure: true
         autowire: true
+        public: false
 
     PhpTuf\ComposerStager\:
         resource: '../src/*'
@@ -11,9 +12,6 @@ services:
         exclude:
             - '../src/*/*/Value'
             - '../src/API/Exception'
-
-    PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface:
-        factory: [ '@PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface', 'create' ]
 
     Symfony\Component\Filesystem\Filesystem: ~
 
