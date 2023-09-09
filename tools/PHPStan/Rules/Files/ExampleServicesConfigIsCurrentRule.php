@@ -62,11 +62,19 @@ final class ExampleServicesConfigIsCurrentRule extends AbstractRule
                 )
                 . PHP_EOL . PHP_EOL
                 . self::EXAMPLE_CONFIG_FILE . ':' . PHP_EOL
-                . $exampleConfig
+                . $this->formatDebugOutput($exampleConfig)
+                . PHP_EOL . PHP_EOL
+                . '------------------------------------------------------------'
                 . PHP_EOL . PHP_EOL
                 . self::PROJECT_CONFIG_FILE . ':' . PHP_EOL
-                . $projectConfig,
+                . $this->formatDebugOutput($projectConfig)
+                . PHP_EOL,
             ),
         ];
+    }
+
+    private function formatDebugOutput(string $string): string
+    {
+        return str_replace(' ', '·', $string);
     }
 }
