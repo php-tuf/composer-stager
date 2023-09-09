@@ -55,7 +55,7 @@ final class ExampleServicesConfigIsCurrentRule extends AbstractRule
         return [
             $this->buildErrorMessage(
                 sprintf(
-                    '%s no longer matches %s. Has there been '
+                    '%s and %s have diverged. Has there been '
                     . 'a BC break, such as adding a new dependency?',
                     self::EXAMPLE_CONFIG_FILE,
                     self::PROJECT_CONFIG_FILE,
