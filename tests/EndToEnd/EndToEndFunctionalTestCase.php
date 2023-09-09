@@ -7,11 +7,12 @@ use PhpTuf\ComposerStager\API\Core\CleanerInterface;
 use PhpTuf\ComposerStager\API\Core\CommitterInterface;
 use PhpTuf\ComposerStager\API\Core\StagerInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Core\Beginner;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -37,11 +38,10 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     {
         $container = ContainerHelper::container();
 
-        // Override the FileSyncer implementation.
-        $fileSyncer = $container->getDefinition(FileSyncerInterface::class);
-        $fileSyncer->setFactory(null);
-        $fileSyncer->setClass($this->fileSyncerClass());
-        $container->setDefinition(FileSyncerInterface::class, $fileSyncer);
+        // Override the FileSyncerFactory to control which FileSyncer is used.
+        $fileSyncerFactory = $container->getDefinition(FileSyncerFactory::class);
+        $fileSyncerFactory->setClass($this->fileSyncerFactoryClass());
+        $container->setDefinition(FileSyncerFactoryInterface::class, $fileSyncerFactory);
 
         // Compile the container.
         $container->compile();
@@ -65,7 +65,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
      * Specifies the file syncer implementation to use, e.g.,
      * \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::class.
      */
-    abstract protected function fileSyncerClass(): string;
+    abstract protected function fileSyncerFactoryClass(): string;
 
     /**
      * @dataProvider providerDirectories

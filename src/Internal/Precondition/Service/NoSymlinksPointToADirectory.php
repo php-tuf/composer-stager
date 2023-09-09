@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
@@ -26,7 +26,7 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
     public function __construct(
         EnvironmentInterface $environment,
         FileFinderInterface $fileFinder,
-        private readonly FileSyncerInterface $fileSyncer,
+        private readonly FileSyncerFactoryInterface $fileSyncerFactory,
         FilesystemInterface $filesystem,
         PathFactoryInterface $pathFactory,
         TranslatableFactoryInterface $translatableFactory,
@@ -54,10 +54,10 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
         PathInterface $stagingDir,
         ?PathListInterface $exclusions,
     ): bool {
-        // RsyncFileSyncer supports symlinks pointing to directories, but
-        // PhpFileSyncer does not yet.
+        // RsyncFileSyncer supports symlinks pointing to directories, though PhpFileSyncer
+        // does not yet. So skip this precondition when RsyncFileSyncer is in use.
         // @see https://github.com/php-tuf/composer-stager/issues/99
-        return $this->fileSyncer instanceof RsyncFileSyncerInterface;
+        return $this->fileSyncerFactory->create() instanceof RsyncFileSyncerInterface;
     }
 
     protected function assertIsSupportedFile(

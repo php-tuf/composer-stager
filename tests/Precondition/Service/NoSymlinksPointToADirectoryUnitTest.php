@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
@@ -26,6 +27,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    private FileSyncerFactoryInterface|ObjectProphecy $fileSyncerFactory;
     private FileSyncerInterface|ObjectProphecy $fileSyncer;
 
     protected function setUp(): void
@@ -39,6 +41,7 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
             ->exists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->fileSyncer = $this->prophesize(PhpFileSyncerInterface::class);
+        $this->fileSyncerFactory = $this->prophesize(FileSyncerFactoryInterface::class);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
@@ -53,12 +56,15 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
     {
         $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
-        $fileSyncer = $this->fileSyncer->reveal();
+        $this->fileSyncerFactory
+            ->create()
+            ->willReturn($this->fileSyncer->reveal());
+        $fileSyncerFactory = $this->fileSyncerFactory->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
 
-        return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncer, $filesystem, $pathFactory, $translatableFactory);
+        return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncerFactory, $filesystem, $pathFactory, $translatableFactory);
     }
 
     public function testExitEarlyWithRsyncFileSyncer(): void

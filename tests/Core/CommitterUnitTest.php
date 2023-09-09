@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterface;
@@ -30,20 +31,25 @@ use Prophecy\Prophecy\ObjectProphecy;
 final class CommitterUnitTest extends TestCase
 {
     private CommitterPreconditionsInterface|ObjectProphecy $preconditions;
+    private FileSyncerFactoryInterface|ObjectProphecy $fileSyncerFactory;
     private FileSyncerInterface|ObjectProphecy $fileSyncer;
 
     protected function setUp(): void
     {
         $this->preconditions = $this->prophesize(CommitterPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
+        $this->fileSyncerFactory = $this->prophesize(FileSyncerFactoryInterface::class);
     }
 
     private function createSut(): Committer
     {
         $preconditions = $this->preconditions->reveal();
-        $fileSyncer = $this->fileSyncer->reveal();
+        $this->fileSyncerFactory
+            ->create()
+            ->willReturn($this->fileSyncer->reveal());
+        $fileSyncerFactory = $this->fileSyncerFactory->reveal();
 
-        return new Committer($fileSyncer, $preconditions);
+        return new Committer($fileSyncerFactory, $preconditions);
     }
 
     /** @covers ::commit */
