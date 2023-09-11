@@ -29,7 +29,7 @@ jobs:
                     coverage: none
 
             -   name: "Checkout code"
-                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
@@ -49,7 +49,7 @@ jobs:
                     coverage: none
 
             -   name: "Checkout code"
-                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
@@ -92,7 +92,7 @@ jobs:
                 run: "php -i"
 
             -   name: "Checkout code"
-                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
@@ -123,7 +123,7 @@ jobs:
                     coverage: none
 
             -   name: "Checkout code"
-                uses: actions/checkout@v3 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
