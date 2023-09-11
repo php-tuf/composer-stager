@@ -160,7 +160,6 @@
     <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength"><properties>
         <!-- @todo It would be nice to reduce this. -->
         <property name="maxLinesLength" value="37"/>
