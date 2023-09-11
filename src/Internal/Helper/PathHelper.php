@@ -24,7 +24,11 @@ final class PathHelper implements PathHelperInterface
         // SymfonyPath always uses forward slashes. Use the OS's
         // directory separator instead. And it doesn't reduce repeated
         // slashes after Windows drive names, so eliminate them, too.
-        return (string) preg_replace('#/+#', DIRECTORY_SEPARATOR, $path);
+        $canonicalized = preg_replace('#/+#', DIRECTORY_SEPARATOR, $path);
+
+        assert(is_string($canonicalized));
+
+        return $canonicalized;
     }
 
     public static function isAbsolute(string $path): bool
