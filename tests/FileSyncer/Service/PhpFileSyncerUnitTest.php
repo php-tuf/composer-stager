@@ -243,8 +243,6 @@ final class PhpFileSyncerUnitTest extends FileSyncerTestCase
             $sut = $reflection->newInstanceWithoutConstructor();
             $environment = $reflection->getProperty('environment');
             $environment->setValue($sut, $this->environment->reveal());
-            $translatableFactory = $reflection->getProperty('translatableFactory');
-            $translatableFactory->setValue($sut, null);
 
             $sut->sync($samePath, $samePath);
         }, AssertionError::class, 'The "p()" method requires a translatable factory. '

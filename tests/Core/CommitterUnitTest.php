@@ -137,31 +137,29 @@ final class CommitterUnitTest extends TestCase
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions(ExceptionInterface $exception, string $message): void
+    public function testExceptions(ExceptionInterface $caughtException): void
     {
         $stagingDirPath = PathHelper::stagingDirPath();
         $activeDirPath = PathHelper::activeDirPath();
 
         $this->fileSyncer
             ->sync($stagingDirPath, $activeDirPath, Argument::cetera())
-            ->willThrow($exception);
+            ->willThrow($caughtException);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
             $sut->commit($stagingDirPath, $activeDirPath);
-        }, RuntimeException::class, $message, $exception::class);
+        }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             'InvalidArgumentException' => [
-                'exception' => new InvalidArgumentException(new TestTranslatableExceptionMessage('one')),
-                'message' => 'one',
+                'caughtException' => new InvalidArgumentException(new TestTranslatableExceptionMessage('one')),
             ],
             'IOException' => [
-                'exception' => new IOException(new TestTranslatableExceptionMessage('two')),
-                'message' => 'two',
+                'caughtException' => new IOException(new TestTranslatableExceptionMessage('two')),
             ],
         ];
     }

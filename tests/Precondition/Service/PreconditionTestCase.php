@@ -88,6 +88,6 @@ abstract class PreconditionTestCase extends TestCase
 
         self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath, $timeout): void {
             $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout);
-        }, PreconditionException::class, $expectedStatusMessage, $previousException);
+        }, PreconditionException::class, $expectedStatusMessage, null, $previousException);
     }
 }

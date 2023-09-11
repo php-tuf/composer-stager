@@ -87,6 +87,8 @@ trait AssertTrait
      * @param \PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface|string|null $expectedExceptionMessage
      *   The expected message that the exception should return,
      *   both raw and translatable, or null to ignore the message.
+     * @param int|null $expectedExceptionCode
+     *   The expected code that the exception should return, or null to use zero (0).
      * @param string|null $expectedPreviousExceptionClass
      *   An optional expected "$previous" exception class.
      */
@@ -94,28 +96,40 @@ trait AssertTrait
         callable $callback,
         string $expectedExceptionClass,
         TranslatableInterface|string|null $expectedExceptionMessage = null,
+        ?int $expectedExceptionCode = 0,
         ?string $expectedPreviousExceptionClass = null,
     ): void {
         try {
             $callback();
         } catch (Throwable $actualException) {
-            $actualExceptionMessage = $actualException instanceof ExceptionInterface
-                ? $actualException->getTranslatableMessage()->trans()
-                : $actualException->getMessage();
+            $actualExceptionClass = $actualException::class;
+            $expectedExceptionCode = (int) $expectedExceptionCode;
 
-            if ($actualException::class !== $expectedExceptionClass) {
+            if ($actualException instanceof ExceptionInterface) {
+                $actualExceptionMessage = $actualException->getTranslatableMessage()->trans();
+                $actualExceptionCode = $actualException->getCode();
+            } else {
+                $actualExceptionMessage = $actualException->getMessage();
+                $actualExceptionCode = 0;
+            }
+
+            if ($actualExceptionClass !== $expectedExceptionClass || $actualExceptionCode !== $expectedExceptionCode) {
                 self::fail(sprintf(
                     'Failed to throw correct exception.'
                     . PHP_EOL . 'Expected:'
                     . PHP_EOL . ' - Class: %s'
                     . PHP_EOL . ' - Message: %s'
+                    . PHP_EOL . ' - Code: %s'
                     . PHP_EOL . 'Got:'
                     . PHP_EOL . ' - Class: %s'
-                    . PHP_EOL . ' - Message: %s',
+                    . PHP_EOL . ' - Message: %s'
+                    . PHP_EOL . ' - Code: %s',
                     $expectedExceptionClass,
                     $expectedExceptionMessage,
-                    $actualException::class,
+                    $expectedExceptionCode,
+                    $actualExceptionClass,
                     $actualExceptionMessage,
+                    $actualExceptionCode,
                 ));
             }
 

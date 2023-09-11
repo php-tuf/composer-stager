@@ -133,28 +133,28 @@ final class BeginnerUnitTest extends TestCase
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions(ExceptionInterface $exception): void
+    public function testExceptions(ExceptionInterface $caughtException): void
     {
         $this->fileSyncer
             ->sync(Argument::cetera())
-            ->willThrow($exception);
+            ->willThrow($caughtException);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->begin(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, RuntimeException::class, $exception->getMessage(), $exception::class);
+        }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             'InvalidArgumentException' => [
-                'exception' => new InvalidArgumentException(
+                'caughtException' => new InvalidArgumentException(
                     new TestTranslatableExceptionMessage('one'),
                 ),
             ],
             'IOException' => [
-                'exception' => new IOException(
+                'caughtException' => new IOException(
                     new TestTranslatableExceptionMessage('two'),
                 ),
             ],

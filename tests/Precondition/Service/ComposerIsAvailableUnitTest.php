@@ -114,7 +114,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         );
         self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
             $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
-        }, PreconditionException::class, $message, $previous);
+        }, PreconditionException::class, $message, null, $previous);
     }
 
     /**
