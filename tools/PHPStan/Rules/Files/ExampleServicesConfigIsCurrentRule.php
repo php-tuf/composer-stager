@@ -35,11 +35,7 @@ final class ExampleServicesConfigIsCurrentRule extends AbstractRule
         $exampleConfig = file_get_contents($exampleConfigFile);
 
         // Convert paths for comparison.
-        $exampleConfig = str_replace(
-            '../vendor/php-tuf/composer-stager/src/',
-            '../src/',
-            $exampleConfig,
-        );
+        $exampleConfig = str_replace('../vendor/php-tuf/composer-stager/src/', '../src/', $exampleConfig);
 
         // Get example config.
         $projectConfig = file_get_contents($projectConfigFile);
