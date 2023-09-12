@@ -80,7 +80,7 @@ final class FilesystemUnitTest extends TestCase
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, IOException::class, $message, $previous::class);
+        }, IOException::class, $message, null, $previous::class);
     }
 
     /** @covers ::copy */
@@ -96,7 +96,7 @@ final class FilesystemUnitTest extends TestCase
         $message = sprintf('The source file does not exist or is not a file at %s', PathHelper::activeDirAbsolute());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, LogicException::class, $message, $previous);
+        }, LogicException::class, $message, null, $previous);
     }
 
     /** @covers ::copy */
@@ -134,7 +134,7 @@ final class FilesystemUnitTest extends TestCase
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->mkdir(PathHelper::stagingDirPath());
-        }, IOException::class, $message, $previous::class);
+        }, IOException::class, $message, null, $previous::class);
     }
 
     /**
@@ -183,6 +183,6 @@ final class FilesystemUnitTest extends TestCase
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->remove(PathHelper::stagingDirPath());
-        }, IOException::class, $message, $previous::class);
+        }, IOException::class, $message, null, $previous::class);
     }
 }

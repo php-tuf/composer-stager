@@ -216,7 +216,7 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to get process output: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->getOutput();
-        }, LogicException::class, $expectedExceptionMessage, $previous::class);
+        }, LogicException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     /** @covers ::getErrorOutput */
@@ -231,7 +231,7 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to get process error output: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->getErrorOutput();
-        }, LogicException::class, $expectedExceptionMessage, $previous::class);
+        }, LogicException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     /** @covers ::mustRun */
@@ -246,7 +246,7 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->mustRun();
-        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
+        }, RuntimeException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     /**
@@ -265,7 +265,7 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->run();
-        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
+        }, RuntimeException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     public function providerRunException(): array
@@ -379,6 +379,6 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to set process timeout: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->setTimeout();
-        }, InvalidArgumentException::class, $expectedExceptionMessage, $previous::class);
+        }, InvalidArgumentException::class, $expectedExceptionMessage, null, $previous::class);
     }
 }

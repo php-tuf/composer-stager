@@ -61,7 +61,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, PreconditionException::class, $message, LogicException::class);
+        }, PreconditionException::class, $message, null, LogicException::class);
     }
 
     public function testInvalidComposerFound(): void

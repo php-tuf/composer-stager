@@ -217,16 +217,16 @@ final class RsyncFileSyncerUnitTest extends FileSyncerTestCase
      *
      * @dataProvider providerSyncFailure
      */
-    public function testSyncFailure(ExceptionInterface $caught, string $thrown): void
+    public function testSyncFailure(ExceptionInterface $caughtException, string $thrownException): void
     {
         $this->rsync
             ->run(Argument::cetera())
-            ->willThrow($caught);
+            ->willThrow($caughtException);
         $sut = $this->createSut();
 
         self::assertTranslatableException(function () use ($sut): void {
             $sut->sync($this->source, $this->destination);
-        }, $thrown, $caught->getMessage(), $caught::class);
+        }, $thrownException, $caughtException->getMessage(), null, $caughtException::class);
     }
 
     public function providerSyncFailure(): array
@@ -235,12 +235,12 @@ final class RsyncFileSyncerUnitTest extends FileSyncerTestCase
 
         return [
             'LogicException' => [
-                'caught' => new LogicException($message),
-                'thrown' => IOException::class,
+                'caughtException' => new LogicException($message),
+                'thrownException' => IOException::class,
             ],
             'RuntimeException' => [
-                'caught' => new RuntimeException($message),
-                'thrown' => IOException::class,
+                'caughtException' => new RuntimeException($message),
+                'thrownException' => IOException::class,
             ],
         ];
     }

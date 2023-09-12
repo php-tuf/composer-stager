@@ -110,3 +110,23 @@ jobs:
 
             -   name: "Run performance tests"
                 run: "composer phpbench -- --progress=plain --ansi"
+
+    mutation:
+        name: "Mutation"
+        runs-on: ubuntu-latest
+        steps:
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "8.1"
+                    extensions: gd
+                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+
+            -   name: "Checkout code"
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
+
+            -   name: "Run mutation tests"
+                run: "composer infection -- --show-mutations --ansi"

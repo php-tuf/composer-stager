@@ -120,6 +120,6 @@ final class CleanerUnitTest extends TestCase
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, RuntimeException::class, $message, $previous::class);
+        }, RuntimeException::class, $message, null, $previous::class);
     }
 }

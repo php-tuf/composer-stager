@@ -7,9 +7,12 @@
     },
     "timeout": 30,
     "logs": {
-        "text": "var/infection/infection.log"
+        "text": "var/infection/infection.log",
+        "html": "var/infection/log/infection.html",
+        "summary": "var/infection/log/summary.log"
     },
     "mutators": {
         "@default": true
-    }
+    },
+    "testFrameworkOptions": "--exclude-group=windows_only"
 }

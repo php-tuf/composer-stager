@@ -191,28 +191,26 @@ final class StagerUnitTest extends TestCase
     }
 
     /** @dataProvider providerExceptions */
-    public function testExceptions(ExceptionInterface $exception, string $message): void
+    public function testExceptions(ExceptionInterface $caughtException): void
     {
         $this->composerRunner
             ->run(Argument::cetera())
-            ->willThrow($exception);
+            ->willThrow($caughtException);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->stage([self::INERT_COMMAND], PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, RuntimeException::class, $message, $exception::class);
+        }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             'IOException' => [
-                'exception' => new IOException(new TestTranslatableExceptionMessage('one')),
-                'message' => 'one',
+                'caughtException' => new IOException(new TestTranslatableExceptionMessage('one')),
             ],
             'LogicException' => [
-                'exception' => new LogicException(new TestTranslatableExceptionMessage('two')),
-                'message' => 'two',
+                'caughtException' => new LogicException(new TestTranslatableExceptionMessage('two')),
             ],
         ];
     }
