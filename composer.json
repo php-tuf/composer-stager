@@ -49,6 +49,7 @@
         "thecodingmachine/phpstan-strict-rules": "^1.0"
     },
     "suggest": {
+        "symfony/dependency-injection": "For dependency injection",
         "symfony/translation": "For internationalization tools"
     },
     "minimum-stability": "dev",
