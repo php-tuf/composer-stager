@@ -17,6 +17,7 @@ grumphp:
             level: 100
         composer: ~
         composer_normalize: ~
+        composer_require_checker: ~
         phpcs:
             standard: []
             whitelist_patterns:
@@ -64,6 +65,7 @@ grumphp:
             tasks:
                 - composer
                 - composer_normalize
+                - composer_require_checker
                 - phpcs
                 - phplint
                 - phpmd
