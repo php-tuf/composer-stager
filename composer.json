@@ -149,7 +149,7 @@
         "phpcs": "[cs] Checks code for standards compliance",
         "phpmd": "[md] Looks for potential problems within the source code",
         "phpstan": "[stan] Analyzes code to find bugs",
-        "psalm": "Automatically fixes Psalm errors where possible",
+        "psalm": "Finds type-related bugs",
         "rector": "Instantly upgrade and automatically refactors PHP code",
         "stan": "[phpstan] Analyzes code to find bugs",
         "static": "Runs all static analysis tools",
