@@ -52,6 +52,7 @@
       <path value="$PROJECT_DIR$/vendor/jangregor/phpstan-prophecy" />
       <path value="$PROJECT_DIR$/vendor/justinrainbow/json-schema" />
       <path value="$PROJECT_DIR$/vendor/localheinz/diff" />
+      <path value="$PROJECT_DIR$/vendor/maglnet/composer-require-checker" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/ondram/ci-detector" />
