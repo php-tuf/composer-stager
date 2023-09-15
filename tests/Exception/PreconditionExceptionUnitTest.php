@@ -7,23 +7,47 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use Throwable;
 
 final class PreconditionExceptionUnitTest extends TestCase
 {
-    /** @covers \PhpTuf\ComposerStager\API\Exception\PreconditionException */
-    public function testBasicFunctionality(): void
+    /**
+     * @covers \PhpTuf\ComposerStager\API\Exception\PreconditionException
+     *
+     * @dataProvider providerBasicFunctionality
+     */
+    public function testBasicFunctionality(array $arguments, int $code, ?Throwable $previous): void
     {
-        $message = 'Message';
-        $translatableMessage = new TestTranslatableMessage($message);
-        $code = 42;
-        $previous = new Exception();
-        $precondition = new TestPrecondition();
-        $sut = new PreconditionException($precondition, $translatableMessage, $code, $previous);
+        $sut = new PreconditionException(...array_values($arguments));
 
-        self::assertSame($precondition, $sut->getPrecondition(), 'Got precondition.');
-        self::assertSame($message, $sut->getMessage(), 'Got untranslated message.');
-        self::assertSame($translatableMessage, $sut->getTranslatableMessage(), 'Got translatable message.');
+        self::assertSame($arguments['precondition'], $sut->getPrecondition(), 'Got precondition.');
+        self::assertSame((string) $arguments['translatableMessage'], $sut->getMessage(), 'Got untranslated message.');
+        self::assertSame($arguments['translatableMessage'], $sut->getTranslatableMessage(), 'Got translatable message.');
         self::assertSame($code, $sut->getCode(), 'Got code.');
-        self::assertSame($previous, $sut->getPrevious(), 'Got previous exception.');
+        self::assertEquals($previous, $sut->getPrevious(), 'Got previous exception.');
+    }
+
+    public function providerBasicFunctionality(): array
+    {
+        return [
+            'Minimum values' => [
+                'arguments' => [
+                    'precondition' => new TestPrecondition('one'),
+                    'translatableMessage' => new TestTranslatableMessage('two'),
+                ],
+                'code' => 0,
+                'previous' => null,
+            ],
+            'Simple values' => [
+                'arguments' => [
+                    'precondition' => new TestPrecondition('one'),
+                    'translatableMessage' => new TestTranslatableMessage('two'),
+                    'code' => 0,
+                    'previous' => new Exception('three'),
+                ],
+                'code' => 0,
+                'previous' => new Exception('three'),
+            ],
+        ];
     }
 }
