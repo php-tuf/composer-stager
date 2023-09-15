@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
 use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
@@ -13,16 +14,38 @@ final class TranslatableExceptionTraitUnitTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getTranslatableMessage
+     *
+     * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(): void
+    public function testBasicFunctionality(array $arguments, TranslatableInterface $message, int $code): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
-
-        $sut = new class($message) extends Exception {
+        $sut = new class(...$arguments) extends Exception {
             use TranslatableExceptionTrait;
         };
 
         self::assertSame((string) $message, $sut->getMessage(), 'Returned correct untranslated message.');
-        self::assertSame($message, $sut->getTranslatableMessage(), 'Returned correct translatable message.');
+        self::assertEquals($message, $sut->getTranslatableMessage(), 'Returned correct translatable message.');
+        self::assertSame($code, $sut->getCode(), 'Returned correct code.');
+    }
+
+    public function providerBasicFunctionality(): array
+    {
+        return [
+            [
+                'arguments' => [
+                    new TestTranslatableMessage('One'),
+                ],
+                'message' => new TestTranslatableMessage('One'),
+                'code' => 0,
+            ],
+            [
+                'arguments' => [
+                    new TestTranslatableMessage('Two'),
+                    10,
+                ],
+                'message' => new TestTranslatableMessage('Two'),
+                'code' => 10,
+            ],
+        ];
     }
 }
