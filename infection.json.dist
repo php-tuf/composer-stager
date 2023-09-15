@@ -7,7 +7,7 @@
     },
     "timeout": 30,
     "logs": {
-        "text": "var/infection/infection.log",
+        "text": "var/infection/log/infection.log",
         "html": "var/infection/log/infection.html",
         "summary": "var/infection/log/summary.log"
     },
