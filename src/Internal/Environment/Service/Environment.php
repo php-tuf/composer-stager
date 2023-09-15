@@ -19,8 +19,7 @@ final class Environment implements EnvironmentInterface
     public function setTimeLimit(int $seconds): bool
     {
         if (!function_exists('set_time_limit')) {
-            // It's impractical to mock a built-in class for the sake of code coverage. Ignore.
-            return false; // @codeCoverageIgnore
+            return false;
         }
 
         return set_time_limit($seconds);
