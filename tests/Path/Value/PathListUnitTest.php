@@ -102,6 +102,23 @@ final class PathListUnitTest extends TestCase
                     'eleven/twelve',
                 ],
             ],
+            'Duplicate paths' => [
+                'paths' => [
+                    'one/two',
+                    'one/two',
+                    'three/four/five',
+                ],
+                'add' => [
+                    'three/four/five',
+                    'six/seven/eight/nine',
+                    'six/seven/eight/nine',
+                ],
+                'expected' => [
+                    'one/two',
+                    'three/four/five',
+                    'six/seven/eight/nine',
+                ],
+            ],
         ];
     }
 }

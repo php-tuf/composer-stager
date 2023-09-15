@@ -23,10 +23,10 @@ final class PathList implements PathListInterface
     /** @return array<string> */
     public function getAll(): array
     {
-        return array_map(
+        return array_values(array_unique(array_map(
             static fn ($path): string => SymfonyPath::canonicalize($path),
             $this->paths,
-        );
+        )));
     }
 
     public function add(string ...$paths): void

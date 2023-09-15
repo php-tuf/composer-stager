@@ -17,6 +17,8 @@ interface PathListInterface
      * In other words, directory separators will be normalized and complex
      * paths will be simplified, but they will not be made absolute.
      *
+     * Only unique values will be returned, i.e., duplicates will be omitted.
+     *
      * @return array<string>
      */
     public function getAll(): array;
