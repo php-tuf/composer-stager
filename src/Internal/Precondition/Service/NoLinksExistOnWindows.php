@@ -42,6 +42,8 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
     /**
      * @codeCoverageIgnore This code is host-specific, so it shouldn't be counted against
      *   code coverage numbers. Nevertheless, it IS covered by tests on Windows-based CI jobs.
+     *
+     * @infection-ignore-all
      */
     protected function assertIsSupportedFile(
         string $codebaseName,
