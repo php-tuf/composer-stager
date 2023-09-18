@@ -4,7 +4,6 @@ use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
-use Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
@@ -45,6 +44,5 @@ return static function (RectorConfig $rectorConfig): void {
         NewlineAfterStatementRector::class => [__DIR__],
         NewlineBeforeNewAssignSetRector::class => [__DIR__],
         NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/TestUtils/AssertTrait.php'],
-        UnSpreadOperatorRector::class => [__DIR__],
     ]);
 };
