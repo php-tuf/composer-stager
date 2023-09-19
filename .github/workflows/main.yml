@@ -4,14 +4,17 @@ name: Main
 on:
     push:
         branches: [ main, develop, wip ]
+        # As of September 19, 2023, these branches-ignore patterns don't work due to
+        # a bug in GitHub Actions See https://github.com/actions/runner/issues/2324
+        # Ditto below.
         paths-ignore:
-            - .idea/**
-            - docs/**
+            - '.idea/**'
+            - '**/*.md'
     pull_request:
         branches: [ develop ]
         paths-ignore:
-            - .idea/**
-            - docs/**
+            - '.idea/**'
+            - '**/*.md'
     schedule:
         # Every Monday at 00:00:00 UTC.
         # @see https://crontab.cronhub.io/
