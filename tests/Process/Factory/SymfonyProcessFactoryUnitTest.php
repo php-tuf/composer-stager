@@ -25,6 +25,7 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
 
         $expected = new Process($command);
         self::assertEquals($expected, $actual);
+        self::assertTranslatableAware($sut);
     }
 
     public function providerBasicFunctionality(): array

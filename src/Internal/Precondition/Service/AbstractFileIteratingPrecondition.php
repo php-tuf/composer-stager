@@ -94,7 +94,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      */
-    protected function findFiles(PathInterface $path, PathListInterface $exclusions): array
+    private function findFiles(PathInterface $path, PathListInterface $exclusions): array
     {
         // Ignore non-existent directories.
         if (!$this->filesystem->exists($path)) {

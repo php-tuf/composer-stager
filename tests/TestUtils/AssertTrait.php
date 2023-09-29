@@ -3,10 +3,12 @@
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
+use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TranslatableReflection;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionProperty;
 use SplFileInfo;
 use Throwable;
 
@@ -75,6 +77,16 @@ trait AssertTrait
         $expected = new TranslatableReflection($expected);
         $actual = new TranslatableReflection($actual);
         self::assertSame($expected->getProperties(), $actual->getProperties(), $message);
+    }
+
+    /** Asserts that a given class is translatable aware. */
+    protected static function assertTranslatableAware(object $sut): void
+    {
+        $reflection = new ReflectionProperty($sut, 'translatableFactory');
+        $value = $reflection->getValue($sut);
+
+        $message = sprintf('%s is not translatable aware.', get_debug_type($sut));
+        self::assertInstanceOf(TranslatableFactoryInterface::class, $value, $message);
     }
 
     /**
