@@ -25,6 +25,11 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
         return $this->t('The codebase cannot contain links if on Windows.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('There are no links in the codebase if on Windows.');
+    }
+
     protected function exitEarly(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -32,11 +37,6 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
     ): bool {
         // This is a Windows-specific precondition. No need to run it anywhere else.
         return !$this->environment->isWindows();
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('There are no links in the codebase if on Windows.');
     }
 
     /**

@@ -14,9 +14,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class CommitterPreconditionsUnitTest extends PreconditionTestCase
+final class CommitterPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Committer preconditions';
+    protected const DESCRIPTION = 'The preconditions for making staged changes live.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for making staged changes live are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private NoUnsupportedLinksExistInterface|ObjectProphecy $noUnsupportedLinksExist;
     private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;

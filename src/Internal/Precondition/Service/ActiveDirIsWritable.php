@@ -37,6 +37,11 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
         return $this->t('The active directory must be writable before any operations can be performed.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The active directory is writable.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -50,10 +55,5 @@ final class ActiveDirIsWritable extends AbstractPrecondition implements ActiveDi
                 $this->d()->exceptions(),
             ));
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The active directory is writable.');
     }
 }

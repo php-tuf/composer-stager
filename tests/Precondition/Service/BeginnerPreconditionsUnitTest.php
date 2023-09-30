@@ -14,9 +14,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
+final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Beginner preconditions';
+    protected const DESCRIPTION = 'The preconditions for beginning the staging process.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for beginning the staging process are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private NoUnsupportedLinksExistInterface|ObjectProphecy $noUnsupportedLinksExist;
     private StagingDirDoesNotExistInterface|ObjectProphecy $stagingDirDoesNotExist;

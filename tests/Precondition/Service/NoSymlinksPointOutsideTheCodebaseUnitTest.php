@@ -20,6 +20,10 @@ use Prophecy\Argument;
  */
 final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected const NAME = 'No symlinks point outside the codebase';
+    protected const DESCRIPTION = 'The codebase cannot contain symlinks that point outside the codebase.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no symlinks that point outside the codebase.';
+
     protected function setUp(): void
     {
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
@@ -33,11 +37,6 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
-    }
-
-    protected function fulfilledStatusMessage(): string
-    {
-        return 'There are no symlinks that point outside the codebase.';
     }
 
     protected function createSut(): NoSymlinksPointOutsideTheCodebase

@@ -13,10 +13,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers ::__construct
  * @covers ::doAssertIsFulfilled
- * @covers ::getFulfilledStatusMessage
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
  */
-final class StagingDirIsWritableUnitTest extends PreconditionTestCase
+final class StagingDirIsWritableUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Staging directory is writable';
+    protected const DESCRIPTION = 'The staging directory must be writable before any operations can be performed.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The staging directory is writable.';
+
     private FilesystemInterface|ObjectProphecy $filesystem;
 
     protected function setUp(): void
@@ -36,6 +40,10 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
         return new StagingDirIsWritable($environment, $filesystem, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -43,7 +51,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        $this->doTestFulfilled('The staging directory is writable.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */

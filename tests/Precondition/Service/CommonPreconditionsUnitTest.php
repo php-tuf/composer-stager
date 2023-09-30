@@ -15,9 +15,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class CommonPreconditionsUnitTest extends PreconditionTestCase
+final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Common preconditions';
+    protected const DESCRIPTION = 'The preconditions common to all operations.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The common preconditions are fulfilled.';
+
     private ActiveAndStagingDirsAreDifferentInterface|ObjectProphecy $activeAndStagingDirsAreDifferent;
     private ActiveDirIsReadyInterface|ObjectProphecy $activeDirIsReady;
     private ComposerIsAvailableInterface|ObjectProphecy $composerIsAvailable;
@@ -84,7 +89,7 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The common preconditions are fulfilled.', $activeDirPath, $stagingDirPath, $timeout);
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE, $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void

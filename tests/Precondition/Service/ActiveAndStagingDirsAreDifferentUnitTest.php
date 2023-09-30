@@ -6,9 +6,17 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreD
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent */
-final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent
+ *
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
+ */
+final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active and staging directories are different';
+    protected const DESCRIPTION = 'The active and staging directories cannot be the same.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active and staging directories are different.';
+
     protected function createSut(): ActiveAndStagingDirsAreDifferent
     {
         $environment = $this->environment->reveal();

@@ -44,6 +44,11 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         return $this->t('Composer must be available in order to stage commands.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('Composer is available.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -52,11 +57,6 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     ): void {
         $this->assertExecutableExists();
         $this->assertIsActuallyComposer();
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('Composer is available.');
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */

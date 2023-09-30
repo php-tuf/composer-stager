@@ -2,21 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
@@ -25,7 +18,7 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
  * @covers ::assertIsFulfilled
  * @covers ::isFulfilled
  */
-final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
+final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
 {
     // @phpcs:ignore SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty
     public PathListInterface $exclusions;
@@ -39,26 +32,39 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         // abstract, can't be instantiated directly.
         return new class ($environment, $translatableFactory, ...$children) extends AbstractPreconditionsTree
         {
-            public string $name = 'Name';
-            public string $description = 'Description';
-            public bool $isFulfilled = true;
-            public string $fulfilledStatusMessage = 'Fulfilled';
+            public const NAME = 'NAME';
+            public const DESCRIPTION = 'DESCRIPTION';
+            public const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
 
             public function getName(): TranslatableInterface
             {
-                return new TestTranslatableMessage($this->name);
+                return $this->t(static::NAME);
             }
 
             public function getDescription(): TranslatableInterface
             {
-                return new TestTranslatableMessage($this->description);
+                return $this->t(static::DESCRIPTION);
             }
 
             protected function getFulfilledStatusMessage(): TranslatableInterface
             {
-                return new TestTranslatableMessage($this->fulfilledStatusMessage);
+                return $this->t(static::FULFILLED_STATUS_MESSAGE);
             }
         };
+    }
+
+    public function testGetters(): void
+    {
+        // Neutralize the "getters" test for this special case class.
+        $this->expectNotToPerformAssertions();
+    }
+
+    private function createPrecondition(?string $class = null): PreconditionInterface
+    {
+        $environment = $this->environment->reveal();
+        $translatableFactory = new TestTranslatableFactory();
+
+        return new $class($environment, $translatableFactory);
     }
 
     /**
@@ -66,19 +72,9 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
      * @covers ::getStatusMessage
      *
      * @dataProvider providerBasicFunctionality
-     *
-     * @noinspection PhpPossiblePolymorphicInvocationInspection
      */
-    public function testBasicFunctionality(
-        string $name,
-        string $description,
-        bool $isFulfilled,
-        string $fulfilledStatusMessage,
-        string $unfulfilledStatusMessage,
-        string $expectedStatusMessage,
-        ?TestPathList $exclusions,
-        int $timeout,
-    ): void {
+    public function testBasicFunctionality(string $class, ?PathListInterface $exclusions, int $timeout): void
+    {
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
 
@@ -90,50 +86,35 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
         $child->getLeaves()
             ->willReturn([$child]);
 
-        // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
         $child->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout)
             ->shouldBeCalledOnce();
 
-        if (!$isFulfilled) {
+        if (!$class::IS_FULFILLED) {
             $child->assertIsFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout)
                 ->willThrow(PreconditionException::class);
         }
 
         $child = $child->reveal();
 
+        /** @var \PhpTuf\ComposerStager\Tests\Precondition\Service\AbstractTestPrecondition $sut */
         $sut = $this->createSut($child);
 
-        $sut->name = $name;
-        $sut->description = $description;
-        $sut->isFulfilled = $isFulfilled;
-        $sut->fulfilledStatusMessage = $fulfilledStatusMessage;
-        $sut->unfulfilledStatusMessage = $unfulfilledStatusMessage;
-
-        self::assertEquals($name, $sut->getName());
-        self::assertEquals($description, $sut->getDescription());
-        self::assertEquals($isFulfilled, $sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout));
+        self::assertSame($sut::NAME, $sut->getName()->trans());
+        self::assertSame($sut::DESCRIPTION, $sut->getDescription()->trans());
+        self::assertSame($class::IS_FULFILLED, $sut->isFulfilled($activeDirPath, $stagingDirPath, $exclusions, $timeout));
+        self::assertSame([$child], $sut->getLeaves());
     }
 
     public function providerBasicFunctionality(): array
     {
         return [
             'Fulfilled, without exclusions' => [
-                'name' => 'Name 1',
-                'description' => 'Description 1',
-                'isFulfilled' => true,
-                'fulfilledStatusMessage' => 'Fulfilled status message 1',
-                'unfulfilledStatusMessage' => 'Unfulfilled status message 1',
-                'expectedStatusMessage' => 'Fulfilled status message 1',
+                'class' => TestFulfilledPrecondition::class,
                 'exclusions' => null,
                 'timeout' => 10,
             ],
             'Unfulfilled, with exclusions' => [
-                'name' => 'Name 2',
-                'description' => 'Description 2',
-                'isFulfilled' => false,
-                'fulfilledStatusMessage' => 'Fulfilled status message 2',
-                'unfulfilledStatusMessage' => 'Unfulfilled status message 2',
-                'expectedStatusMessage' => 'Unfulfilled status message 2',
+                'class' => TestUnfulfilledPrecondition::class,
                 'exclusions' => new TestPathList(),
                 'timeout' => 100,
             ],
@@ -143,63 +124,11 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
     /** @covers ::getLeaves */
     public function testIsFulfilledBubbling(): void
     {
-        $message = new TestTranslatableExceptionMessage(__METHOD__);
-
-        $createLeaf = function (bool $isFulfilled) use ($message): PreconditionInterface {
-            $environment = $this->environment->reveal();
-            /** @var \Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface $spy */
-            $spy = $this->prophesize(TestSpyInterface::class);
-            $spy->report('assertIsFulfilled')
-                // Double expectations: once for ::isFulfilled() and once for ::assertIsFulfilled().
-                ->shouldBeCalledTimes(2);
-            $spy = $spy->reveal();
-
-            return new Class($environment, $isFulfilled, $message, $spy) extends AbstractPrecondition
-            {
-                public function __construct(
-                    EnvironmentInterface $environment,
-                    private readonly bool $isFulfilled,
-                    private readonly TranslatableInterface $message,
-                    private readonly TestSpyInterface $spy,
-                ) {
-                    parent::__construct($environment, new TestTranslatableFactory());
-                }
-
-                protected function getFulfilledStatusMessage(): TranslatableInterface
-                {
-                    return new TestTranslatableMessage();
-                }
-
-                public function getName(): TranslatableInterface
-                {
-                    return new TestTranslatableMessage();
-                }
-
-                public function getDescription(): TranslatableInterface
-                {
-                    return new TestTranslatableMessage();
-                }
-
-                protected function doAssertIsFulfilled(
-                    PathInterface $activeDir,
-                    PathInterface $stagingDir,
-                    ?PathListInterface $exclusions = null,
-                    int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
-                ): void {
-                    $this->spy->report('assertIsFulfilled');
-
-                    if (!$this->isFulfilled) {
-                        throw new PreconditionException($this, $this->message);
-                    }
-                }
-            };
-        };
-
         $leaves = [
-            $createLeaf(true),
-            $createLeaf(true),
-            $createLeaf(true),
-            $createLeaf(false),
+            $this->createPrecondition(TestFulfilledPrecondition::class),
+            $this->createPrecondition(TestFulfilledPrecondition::class),
+            $this->createPrecondition(TestFulfilledPrecondition::class),
+            $this->createPrecondition(TestUnfulfilledPrecondition::class),
         ];
 
         // @phpcs:disable SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma
@@ -253,6 +182,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionTestCase
 
         self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
             $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
-        }, PreconditionException::class, $message);
+        }, PreconditionException::class, TestUnfulfilledPrecondition::UNFULFILLED_STATUS_MESSAGE);
     }
 }

@@ -13,10 +13,13 @@ use Prophecy\Argument;
  * @covers ::__construct
  * @covers ::assertIsSupportedFile
  * @covers ::exitEarly
- * @covers ::getFulfilledStatusMessage
  */
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected const NAME = 'No links exist on Windows';
+    protected const DESCRIPTION = 'The codebase cannot contain links if on Windows.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no links in the codebase if on Windows.';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,11 +27,6 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         $this->environment
             ->isWindows()
             ->willReturn(true);
-    }
-
-    protected function fulfilledStatusMessage(): string
-    {
-        return 'There are no links in the codebase if on Windows.';
     }
 
     protected function createSut(): NoLinksExistOnWindows
@@ -42,9 +40,10 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $this->doTestFulfilled('There are no links in the codebase if on Windows.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     public function testExitEarlyOnNonWindows(): void

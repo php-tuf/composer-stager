@@ -16,8 +16,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::__construct
  * @covers ::getFulfilledStatusMessage
  */
-final class StagingDirIsReadyUnitTest extends PreconditionTestCase
+final class StagingDirIsReadyUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Staging directory is ready';
+    protected const DESCRIPTION = 'The preconditions for using the staging directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The staging directory is ready to use.';
+
     private StagingDirExistsInterface|ObjectProphecy $stagingDirExists;
     private StagingDirIsWritableInterface|ObjectProphecy $stagingDirIsWritable;
 
@@ -45,6 +49,7 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         return new StagingDirIsReady($environment, $translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();
@@ -58,7 +63,7 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The staging directory is ready to use.', $activeDirPath, $stagingDirPath, $timeout);
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE, $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void

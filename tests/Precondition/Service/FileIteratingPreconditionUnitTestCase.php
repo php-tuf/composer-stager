@@ -22,9 +22,12 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
-abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCase
+abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTestCase
 {
-    abstract protected function fulfilledStatusMessage(): string;
+    // Override in subclasses.
+    protected const NAME = 'NAME';
+    protected const DESCRIPTION = 'DESCRIPTION';
+    protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
 
     protected EnvironmentInterface|ObjectProphecy $environment;
     protected FileFinderInterface|ObjectProphecy $fileFinder;
@@ -66,6 +69,10 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         // this case, being abstract, can't be instantiated directly.
         $sut = new class ($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
         {
+            protected const NAME = 'NAME';
+            protected const DESCRIPTION = 'DESCRIPTION';
+            protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
+
             // @phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
             protected function assertIsSupportedFile(
                 string $codebaseName,
@@ -74,27 +81,27 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
             ): void {
             }
 
-            protected function getFulfilledStatusMessage(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
-            public function getName(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
-            public function getDescription(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
             protected function exitEarly(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
                 ?PathListInterface $exclusions,
             ): bool {
                 return true;
+            }
+
+            public function getName(): TranslatableInterface
+            {
+                return $this->t(static::NAME);
+            }
+
+            public function getDescription(): TranslatableInterface
+            {
+                return $this->t(static::DESCRIPTION);
+            }
+
+            protected function getFulfilledStatusMessage(): TranslatableInterface
+            {
+                return $this->t(static::FULFILLED_STATUS_MESSAGE);
             }
         };
 
@@ -195,13 +202,13 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         ];
     }
 
-    /** @covers ::doAssertIsFulfilled */
+    /** @covers ::getFulfilledStatusMessage */
     public function assertFulfilled(
         bool $isFulfilled,
         TranslatableInterface $statusMessage,
         string $assertionMessage,
     ): void {
         self::assertTrue($isFulfilled, $assertionMessage);
-        self::assertEquals($this->fulfilledStatusMessage(), $statusMessage, 'Got correct status message');
+        self::assertEquals(static::FULFILLED_STATUS_MESSAGE, $statusMessage->trans(), 'Got correct status message');
     }
 }

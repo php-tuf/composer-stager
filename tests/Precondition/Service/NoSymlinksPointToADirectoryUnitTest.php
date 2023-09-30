@@ -27,6 +27,10 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected const NAME = 'No symlinks point to a directory';
+    protected const DESCRIPTION = 'The codebase cannot contain symlinks that point to a directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no symlinks that point to a directory.';
+
     private FileSyncerFactoryInterface|ObjectProphecy $fileSyncerFactory;
     private FileSyncerInterface|ObjectProphecy $fileSyncer;
 
@@ -45,11 +49,6 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
-    }
-
-    protected function fulfilledStatusMessage(): string
-    {
-        return 'There are no symlinks that point to a directory.';
     }
 
     protected function createSut(): NoSymlinksPointToADirectory

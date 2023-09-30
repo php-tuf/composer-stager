@@ -13,9 +13,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class CleanerPreconditionsUnitTest extends PreconditionTestCase
+final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Cleaner preconditions';
+    protected const DESCRIPTION = 'The preconditions for removing the staging directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for removing the staging directory are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;
 

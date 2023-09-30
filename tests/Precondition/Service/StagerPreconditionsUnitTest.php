@@ -19,8 +19,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  */
-final class StagerPreconditionsUnitTest extends PreconditionTestCase
+final class StagerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Stager preconditions';
+    protected const DESCRIPTION = 'The preconditions for staging Composer commands.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for staging Composer commands are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;
 
@@ -48,6 +52,7 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
         return new StagerPreconditions($environment, $translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();

@@ -12,17 +12,16 @@ use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
 {
+    protected const NAME = 'Test preconditions tree';
+    protected const DESCRIPTION = 'A generic preconditions tree for automated tests.';
+    protected const FULFILLED_STATUS_MESSAGE = 'TestPreconditionsTree is unfulfilled.';
+
     protected function t(
         string $message,
         ?TranslationParametersInterface $parameters = null,
         ?string $domain = null,
     ): TranslatableInterface {
         return new TestTranslatableMessage($message);
-    }
-
-    public function getName(): TranslatableInterface
-    {
-        return $this->t('Test preconditions tree');
     }
 
     public function __construct(PreconditionInterface ...$children)
@@ -33,13 +32,18 @@ final class TestPreconditionsTree extends AbstractPreconditionsTree
         parent::__construct($environment, $translatableFactory, ...$children);
     }
 
+    public function getName(): TranslatableInterface
+    {
+        return $this->t(self::NAME);
+    }
+
     public function getDescription(): TranslatableInterface
     {
-        return $this->t('A generic preconditions tree for automated tests.');
+        return $this->t(self::DESCRIPTION);
     }
 
     protected function getFulfilledStatusMessage(): TranslatableInterface
     {
-        return $this->t('TestPreconditionsTree is unfulfilled.');
+        return $this->t(self::FULFILLED_STATUS_MESSAGE);
     }
 }

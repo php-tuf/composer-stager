@@ -23,8 +23,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::getProcess
  * @covers ::isValidExecutable
  */
-final class ComposerIsAvailableUnitTest extends PreconditionTestCase
+final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Composer';
+    protected const DESCRIPTION = 'Composer must be available in order to stage commands.';
+    protected const FULFILLED_STATUS_MESSAGE = 'Composer is available.';
+
     private const COMPOSER_PATH = '/usr/bin/composer';
 
     private ExecutableFinderInterface|ObjectProphecy $executableFinder;
@@ -71,6 +75,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /**
      * @covers ::assertExecutableExists
      * @covers ::assertIsActuallyComposer
+     * @covers ::doAssertIsFulfilled
      * @covers ::getFulfilledStatusMessage
      * @covers ::getProcess
      * @covers ::isValidExecutable
@@ -92,7 +97,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn($this->process->reveal());
 
-        $this->doTestFulfilled('Composer is available.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::assertExecutableExists */

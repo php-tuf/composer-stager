@@ -37,6 +37,11 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
         return $this->t('The staging directory must exist before any operations can be performed.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The staging directory exists.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -50,10 +55,5 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
                 $this->d()->exceptions(),
             ));
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The staging directory exists.');
     }
 }

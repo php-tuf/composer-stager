@@ -13,9 +13,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
+final class ActiveDirIsReadyUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active directory is ready';
+    protected const DESCRIPTION = 'The preconditions for using the active directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active directory is ready to use.';
+
     private ActiveDirExistsInterface|ObjectProphecy $activeDirExists;
     private ActiveDirIsWritableInterface|ObjectProphecy $activeDirIsWritable;
 
@@ -57,7 +62,7 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The active directory is ready to use.', $activeDirPath, $stagingDirPath, $timeout);
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE, $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void

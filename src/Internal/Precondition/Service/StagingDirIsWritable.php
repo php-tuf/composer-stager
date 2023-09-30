@@ -37,6 +37,11 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
         return $this->t('The staging directory must be writable before any operations can be performed.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The staging directory is writable.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -50,10 +55,5 @@ final class StagingDirIsWritable extends AbstractPrecondition implements Staging
                 $this->d()->exceptions(),
             ));
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The staging directory is writable.');
     }
 }

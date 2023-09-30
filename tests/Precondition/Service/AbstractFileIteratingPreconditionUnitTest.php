@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -23,14 +22,13 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected const NAME = 'NAME';
+    protected const DESCRIPTION = 'DESCRIPTION';
+    protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
+
     protected FileFinderInterface|ObjectProphecy $fileFinder;
     protected FilesystemInterface|ObjectProphecy $filesystem;
     protected PathFactoryInterface|ObjectProphecy $pathFactory;
-
-    protected function fulfilledStatusMessage(): string
-    {
-        return '';
-    }
 
     protected function setUp(): void
     {
@@ -70,6 +68,10 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
             $translatableFactory,
         ) extends AbstractFileIteratingPrecondition
         {
+            protected const NAME = 'NAME';
+            protected const DESCRIPTION = 'DESCRIPTION';
+            protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
+
             public bool $exitEarly = false;
 
             // @phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
@@ -80,27 +82,27 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
             ): void {
             }
 
-            protected function getFulfilledStatusMessage(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
-            public function getName(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
-            public function getDescription(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
             protected function exitEarly(
                 PathInterface $activeDir,
                 PathInterface $stagingDir,
                 ?PathListInterface $exclusions,
             ): bool {
                 return $this->exitEarly;
+            }
+
+            public function getName(): TranslatableInterface
+            {
+                return $this->t(static::NAME);
+            }
+
+            public function getDescription(): TranslatableInterface
+            {
+                return $this->t(static::DESCRIPTION);
+            }
+
+            protected function getFulfilledStatusMessage(): TranslatableInterface
+            {
+                return $this->t(static::FULFILLED_STATUS_MESSAGE);
             }
         };
     }

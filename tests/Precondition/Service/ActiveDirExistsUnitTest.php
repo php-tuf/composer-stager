@@ -12,9 +12,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists
  *
  * @covers ::__construct
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
  */
-final class ActiveDirExistsUnitTest extends PreconditionTestCase
+final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active directory exists';
+    protected const DESCRIPTION = 'There must be an active directory present before any operations can be performed.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active directory exists.';
+
     private FilesystemInterface|ObjectProphecy $filesystem;
 
     protected function setUp(): void
@@ -44,7 +49,7 @@ final class ActiveDirExistsUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        $this->doTestFulfilled('The active directory exists.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */

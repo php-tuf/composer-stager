@@ -37,6 +37,11 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
         return $this->t('There must be an active directory present before any operations can be performed.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The active directory exists.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -50,10 +55,5 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
                 $this->d()->exceptions(),
             ));
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The active directory exists.');
     }
 }

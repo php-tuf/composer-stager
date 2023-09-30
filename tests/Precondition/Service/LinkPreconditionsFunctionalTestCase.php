@@ -38,10 +38,8 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
         $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
     }
 
-    final protected function doTestFulfilledDirectoryDoesNotExist(
-        PathInterface $activeDir,
-        PathInterface $stagingDir,
-    ): void {
+    private function doTestFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
+    {
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);

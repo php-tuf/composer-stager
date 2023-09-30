@@ -13,10 +13,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers ::__construct
  * @covers ::doAssertIsFulfilled
- * @covers ::getFulfilledStatusMessage
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
  */
-final class StagingDirExistsUnitTest extends PreconditionTestCase
+final class StagingDirExistsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Staging directory exists';
+    protected const DESCRIPTION = 'The staging directory must exist before any operations can be performed.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The staging directory exists.';
+
     private FilesystemInterface|ObjectProphecy $filesystem;
 
     protected function setUp(): void
@@ -35,6 +39,10 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
         return new StagingDirExists($environment, $filesystem, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -42,7 +50,7 @@ final class StagingDirExistsUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        $this->doTestFulfilled('The staging directory exists.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */

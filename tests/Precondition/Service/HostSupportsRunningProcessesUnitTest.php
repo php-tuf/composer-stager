@@ -16,12 +16,15 @@ use Symfony\Component\Process\Process;
  *
  * @covers ::__construct
  * @covers ::doAssertIsFulfilled
- * @covers ::getFulfilledStatusMessage
- * @covers ::getStatusMessage
  * @covers ::isFulfilled
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
  */
-final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
+final class HostSupportsRunningProcessesUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Host supports running processes';
+    protected const DESCRIPTION = 'The host must support running independent PHP processes in order to run Composer and other shell commands.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The host supports running independent PHP processes.';
+
     private ProcessFactoryInterface|ObjectProphecy $processFactory;
 
     protected function setUp(): void
@@ -43,13 +46,17 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionTestCase
         return new HostSupportsRunningProcesses($environment, $processFactory, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->processFactory
             ->create(Argument::type('array'))
             ->shouldBeCalled();
 
-        $this->doTestFulfilled('The host supports running independent PHP processes.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */

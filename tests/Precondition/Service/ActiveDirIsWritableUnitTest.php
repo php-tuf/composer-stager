@@ -13,8 +13,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers ::__construct
  */
-final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
+final class ActiveDirIsWritableUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active directory is writable';
+    protected const DESCRIPTION = 'The active directory must be writable before any operations can be performed.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active directory is writable.';
+
     private FilesystemInterface|ObjectProphecy $filesystem;
 
     protected function setUp(): void
@@ -44,7 +48,7 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        $this->doTestFulfilled('The active directory is writable.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */

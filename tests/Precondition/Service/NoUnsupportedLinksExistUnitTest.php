@@ -19,8 +19,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::__construct
  * @covers ::getFulfilledStatusMessage
  */
-final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
+final class NoUnsupportedLinksExistUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Unsupported links preconditions';
+    protected const DESCRIPTION = 'Preconditions concerning unsupported links.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no unsupported links in the codebase.';
+
     private NoAbsoluteSymlinksExistInterface|ObjectProphecy $noAbsoluteSymlinksExist;
     private NoHardLinksExistInterface|ObjectProphecy $noHardLinksExist;
     private NoLinksExistOnWindowsInterface|ObjectProphecy $noLinksExistOnWindows;
@@ -74,6 +78,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         );
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = PathHelper::activeDirPath();

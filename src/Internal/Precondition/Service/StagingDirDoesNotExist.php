@@ -37,6 +37,11 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
         return $this->t('The staging directory must not already exist before beginning the staging process.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The staging directory does not already exist.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -50,10 +55,5 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
                 $this->d()->exceptions(),
             ));
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The staging directory does not already exist.');
     }
 }
