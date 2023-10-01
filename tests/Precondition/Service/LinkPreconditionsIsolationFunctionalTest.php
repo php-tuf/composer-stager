@@ -40,6 +40,11 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         self::createTestEnvironment();
     }
 
+    protected function tearDown(): void
+    {
+        self::removeTestEnvironment();
+    }
+
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
     private function createTestPreconditionsTree(array $excludePreconditions = []): TestPreconditionsTree
     {
@@ -130,6 +135,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
+
+        FilesystemHelper::remove($target);
     }
 
     /** @group no_windows */

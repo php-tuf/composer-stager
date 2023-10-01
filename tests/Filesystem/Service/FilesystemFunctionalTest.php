@@ -61,6 +61,8 @@ final class FilesystemFunctionalTest extends TestCase
         $sut = $this->createSut();
 
         self::assertTrue($sut->isDirEmpty($directoryPath), 'Correctly detected empty directory.');
+
+        FilesystemHelper::remove(PathHelper::testPersistentFixturesAbsolute());
     }
 
     /** @covers ::isDirEmpty */

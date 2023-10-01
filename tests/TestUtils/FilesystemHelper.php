@@ -23,6 +23,11 @@ final class FilesystemHelper
         (new SymfonyFilesystem())->mkdir($directories);
     }
 
+    public static function remove(string|iterable $paths): void
+    {
+        self::symfonyFilesystem()->remove($paths);
+    }
+
     public static function touch(string $path): void
     {
         assert(PathHelper::isAbsolute($path));

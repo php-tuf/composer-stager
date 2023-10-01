@@ -47,6 +47,11 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         parent::setUp();
     }
 
+    protected function tearDown(): void
+    {
+        self::removeTestEnvironment();
+    }
+
     protected function createSut(): PreconditionInterface
     {
         $environment = $this->environment->reveal();
