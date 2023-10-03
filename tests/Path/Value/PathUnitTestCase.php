@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
+use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
 
 /**
@@ -21,6 +23,9 @@ use ReflectionClass;
  */
 abstract class PathUnitTestCase extends TestCase
 {
+    public static ObjectProphecy $getcwdSpy;
+    public static ObjectProphecy $md5Spy;
+
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
@@ -71,6 +76,50 @@ abstract class PathUnitTestCase extends TestCase
     abstract public function providerBaseDirArgument(): array;
 
     /**
+     * @dataProvider providerGetCwd
+     *
+     * @runInSeparateProcess
+     */
+    public function testGetCwd(string|false $builtInReturn, string $md5, string $expectedSutReturn): void
+    {
+        $this->mockGlobalFunctions();
+
+        self::$getcwdSpy = $this->prophesize(TestSpyInterface::class);
+        self::$getcwdSpy
+            ->report()
+            ->shouldBeCalledOnce()
+            ->willReturn($builtInReturn);
+        self::$md5Spy = $this->prophesize(TestSpyInterface::class);
+        self::$md5Spy
+            ->report()
+            ->willReturn($md5);
+
+        $reflection = new ReflectionClass(Path::class);
+        $sut = $reflection->newInstanceWithoutConstructor();
+        $method = $reflection->getMethod('getcwd');
+        $method->setAccessible(true);
+        $actualSutReturn = $method->invoke($sut);
+
+        self::assertSame($expectedSutReturn, $actualSutReturn);
+    }
+
+    public function providerGetCwd(): array
+    {
+        return [
+            'Normal return' => [
+                'builtInReturn' => __DIR__,
+                'md5' => '',
+                'expectedSutReturn' => __DIR__,
+            ],
+            'Failure' => [
+                'builtInReturn' => false,
+                'md5' => '1234',
+                'expectedSutReturn' => sys_get_temp_dir() . '/composer-stager/error-1234',
+            ],
+        ];
+    }
+
+    /**
      * @covers ::absolute
      * @covers ::doAbsolute
      * @covers ::relative
@@ -116,5 +165,10 @@ abstract class PathUnitTestCase extends TestCase
         $assertException('relative', static function () use ($sut): void {
             $sut->relative($sut);
         });
+    }
+
+    private function mockGlobalFunctions(): void
+    {
+        require_once __DIR__ . '/path_unit_test_function_mocks.inc';
     }
 }

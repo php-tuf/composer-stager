@@ -50,6 +50,7 @@ final class EnvironmentUnitTest extends TestCase
     public function testSetTimeLimitFunctionExists(int $seconds, bool $setTimeLimitReturn): void
     {
         $this->mockGlobalFunctions();
+
         self::$functionExistsSpy
             ->report('set_time_limit')
             ->shouldBeCalledOnce()
@@ -65,28 +66,6 @@ final class EnvironmentUnitTest extends TestCase
         self::assertSame($actualReturn, $setTimeLimitReturn, 'Passed through the return value from set_time_limit().');
     }
 
-    /**
-     * @covers ::setTimeLimit
-     *
-     * @runInSeparateProcess
-     */
-    public function testSetTimeLimitFunctionDoesNotExist(): void
-    {
-        $this->mockGlobalFunctions();
-        self::$functionExistsSpy
-            ->report('set_time_limit')
-            ->shouldBeCalledOnce()
-            ->willReturn(false);
-        self::$setTimeLimitSpy
-            ->report(Argument::any())
-            ->shouldNotBeCalled();
-        $sut = $this->createSut();
-
-        $actualReturn = $sut->setTimeLimit(42);
-
-        self::assertFalse($actualReturn);
-    }
-
     public function providerSetTimeLimitFunctionExists(): array
     {
         return [
@@ -99,6 +78,29 @@ final class EnvironmentUnitTest extends TestCase
                 'setTimeLimitReturn' => false,
             ],
         ];
+    }
+
+    /**
+     * @covers ::setTimeLimit
+     *
+     * @runInSeparateProcess
+     */
+    public function testSetTimeLimitFunctionDoesNotExist(): void
+    {
+        $this->mockGlobalFunctions();
+
+        self::$functionExistsSpy
+            ->report('set_time_limit')
+            ->shouldBeCalledOnce()
+            ->willReturn(false);
+        self::$setTimeLimitSpy
+            ->report(Argument::any())
+            ->shouldNotBeCalled();
+        $sut = $this->createSut();
+
+        $actualReturn = $sut->setTimeLimit(42);
+
+        self::assertFalse($actualReturn);
     }
 
     private function mockGlobalFunctions(): void

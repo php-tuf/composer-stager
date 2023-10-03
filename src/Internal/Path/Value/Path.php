@@ -65,9 +65,16 @@ final class Path implements PathInterface
         // parent directories does not have the readable or search mode set, even
         // if the current directory does.) But the likelihood is probably so slight
         // that it hardly seems worth cluttering up client code handling theoretical
-        // IO exceptions. Cast the return value to a string for the purpose of
-        // static analysis and move on.
-        return (string) getcwd();
+        // IO exceptions. Instead, fall back to a non-existent path in the temporary
+        // directory to avoid throwing errors as well as operating on unintended
+        // directories.
+        $getcwd = getcwd();
+
+        if ($getcwd === false) {
+            return sys_get_temp_dir() .'/composer-stager/error-' . md5(microtime());
+        }
+
+        return $getcwd;
     }
 
     private function doAbsolute(string $basePath): string
