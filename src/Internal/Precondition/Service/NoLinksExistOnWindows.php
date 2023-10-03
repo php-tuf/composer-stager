@@ -53,8 +53,8 @@ final class NoLinksExistOnWindows extends AbstractFileIteratingPrecondition impl
             throw new PreconditionException(
                 $this,
                 $this->t(
-                    'The %codebase_name directory at %codebase_root contains links, '
-                    . 'which is not supported on Windows. The first one is %file.',
+                    // @phpcs:ignore Generic.Files.LineLength.TooLong
+                    'The %codebase_name directory at %codebase_root contains links, which is not supported on Windows. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
                         '%codebase_root' => $codebaseRoot->absolute(),
