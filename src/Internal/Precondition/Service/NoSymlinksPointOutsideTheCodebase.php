@@ -43,8 +43,8 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
             throw new PreconditionException(
                 $this,
                 $this->t(
-                    'The %codebase_name directory at %codebase_root contains links that point outside the codebase, '
-                    . 'which is not supported. The first one is %file.',
+                    // @phpcs:ignore Generic.Files.LineLength.TooLong
+                    'The %codebase_name directory at %codebase_root contains links that point outside the codebase, which is not supported. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
                         '%codebase_root' => $codebaseRoot->absolute(),

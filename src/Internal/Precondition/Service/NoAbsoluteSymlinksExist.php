@@ -45,8 +45,8 @@ final class NoAbsoluteSymlinksExist extends AbstractFileIteratingPrecondition im
             throw new PreconditionException(
                 $this,
                 $this->t(
-                    'The %codebase_name directory at %codebase_root contains absolute links, '
-                    . 'which is not supported. The first one is %file.',
+                    // @phpcs:ignore Generic.Files.LineLength.TooLong
+                    'The %codebase_name directory at %codebase_root contains absolute links, which is not supported. The first one is %file.',
                     $this->p([
                         '%codebase_name' => $codebaseName,
                         '%codebase_root' => $codebaseRoot->absolute(),

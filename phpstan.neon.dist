@@ -19,7 +19,7 @@ parameters:
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: 007df614bcb782abcd5763502393410c
+    preconditionSystemHash: abea35f46ca341e6e7e961a393df3ca8
     translationSystemHash: 0df1e2f49634b4bf0b655f2eada7f493
     gitattributesExportInclude:
         - composer.json
@@ -109,6 +109,7 @@ parameters:
 rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoCallingTranslatableFactoryDirectlyRule # Forbids calling TranslatableFactory::create() directly.
     - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoInstantiatingTranslatableDirectlyRule # Forbids instantiating translatables directly.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\ValidTranslatableStringsRule # Ensures that TranslatableAwareTrait::t() is only called with literal string messages.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
