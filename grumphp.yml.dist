@@ -1,4 +1,5 @@
 # https://github.com/phpro/grumphp#configuration
+---
 grumphp:
     ascii:
         failed: ~
