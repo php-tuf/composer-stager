@@ -20,9 +20,6 @@ use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
  */
 final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
 {
-    // @phpcs:ignore SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty
-    public PathListInterface $exclusions;
-
     protected function createSut(...$children): AbstractPreconditionsTree
     {
         $environment = $this->environment->reveal();
