@@ -52,13 +52,14 @@ final class FileSyncerBench extends BenchCase
         ];
 
         // Only test RsyncFileSyncer if rsync is available.
-        // @phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
-        if ((new SymfonyExecutableFinder())->find('rsync') !== null) {
-            yield 'RsyncFileSyncer' => [
-                'syncerClassName' => 'RsyncFileSyncer',
-                'syncerClassFQN' => RsyncFileSyncer::class,
-            ];
+        if ((new SymfonyExecutableFinder())->find('rsync') === null) {
+            return;
         }
+
+        yield 'RsyncFileSyncer' => [
+            'syncerClassName' => 'RsyncFileSyncer',
+            'syncerClassFQN' => RsyncFileSyncer::class,
+        ];
     }
 
     public function providerOperation(): Generator

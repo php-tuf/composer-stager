@@ -74,12 +74,12 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
 
             public bool $exitEarly = false;
 
-            // @phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
             protected function assertIsSupportedFile(
                 string $codebaseName,
                 PathInterface $codebaseRoot,
                 PathInterface $file,
             ): void {
+                // Always pass.
             }
 
             protected function exitEarly(

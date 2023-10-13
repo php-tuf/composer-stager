@@ -36,7 +36,6 @@ final class HostSupportsRunningProcesses extends AbstractPrecondition implements
     public function getDescription(): TranslatableInterface
     {
         return $this->t(
-            // @phpcs:ignore Generic.Files.LineLength.TooLong
             'The host must support running independent PHP processes in order to run Composer and other shell commands.',
         );
     }

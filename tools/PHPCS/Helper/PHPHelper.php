@@ -1,8 +1,4 @@
-<?php
-
-/** @phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.IncorrectWhitespaceBeforeDeclare */
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PhpTuf\ComposerStager\Helper;
 
