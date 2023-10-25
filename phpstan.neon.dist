@@ -16,7 +16,6 @@ parameters:
         - config/services.yml
         - docs/services.yml
         - src
-        - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
     preconditionSystemHash: 7e28694cff723f06c55f41e37c733791
@@ -57,53 +56,6 @@ parameters:
         -
             message: '#Method create\(\) should not be public because it doesn''t implement a method on an interface.#'
             path: src/Internal/Translation/Service/Translator.php
-
-        # Test code.
-        -
-            message: '#.*::__construct\(\) does not call parent constructor from .*.#'
-            path: tests/Translation/Value/TestTranslatableExceptionMessage.php
-        -
-            message: '#Access to an undefined property.*#'
-            path: tests
-        -
-            message: '#Built-in or third party exception ".*" cannot be thrown from public methods.*#'
-            path: tests
-        -
-            message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
-            path: tests
-        -
-            message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
-            path: tests
-        -
-            message: '#Cannot call method .*\(\) on .*MethodProphecy.#'
-            path: tests
-        -
-            message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
-            path: tests
-        -
-            message: '#Concrete class must implement an interface#'
-            path: tests
-        -
-            message: '#.*caught .* must be rethrown.*#'
-            path: tests
-        -
-            message: '#Docblock must contain "@package.*#'
-            path: tests
-        -
-            message: '#Method .* no (value )?type specified.*#'
-            path: tests
-        -
-            message: '#Method .* should not be public because it doesn''t implement a method on an interface.#'
-            path: tests
-        -
-            message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
-            path: tests
-        -
-            message: '#Parameter .* of (static )?(class|method) .* expects .* given.#'
-            path: tests
-        -
-            message: '#Property .* does not accept .*.#'
-            path: tests
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:

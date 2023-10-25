@@ -43,7 +43,6 @@
       <path value="$PROJECT_DIR$/vendor/infection/extension-installer" />
       <path value="$PROJECT_DIR$/vendor/infection/include-interceptor" />
       <path value="$PROJECT_DIR$/vendor/infection/infection" />
-      <path value="$PROJECT_DIR$/vendor/jangregor/phpstan-prophecy" />
       <path value="$PROJECT_DIR$/vendor/justinrainbow/json-schema" />
       <path value="$PROJECT_DIR$/vendor/maglnet/composer-require-checker" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
