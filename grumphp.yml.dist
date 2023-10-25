@@ -17,7 +17,6 @@ grumphp:
             # this ever changes, that strategy will have to change accordingly.
             level: 100
         composer: ~
-        composer_normalize: ~
         composer_require_checker: ~
         phpcs:
             standard: []
@@ -65,7 +64,6 @@ grumphp:
         static:
             tasks:
                 - composer
-                - composer_normalize
                 - composer_require_checker
                 - phpcs
                 - phplint
