@@ -23,11 +23,6 @@ grumphp:
             whitelist_patterns:
                 - src
                 - tests
-        phplint:
-            ignore_patterns:
-                - .idea
-                - var
-                - vendor
         phpstan:
             use_grumphp_paths: false
         phpunit:
@@ -60,7 +55,6 @@ grumphp:
                 - composer
                 - composer_require_checker
                 - phpcs
-                - phplint
                 - phpstan
                 - rector
                 - shell
