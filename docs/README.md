@@ -8,11 +8,37 @@
 
 Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
 
+- [Whom is it for?](#whom-is-it-for)
+- [Why is it needed?](#why-is-it-needed)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuring services](#configuring-services)
 - [Example](#example)
 - [Contributing](#contributing)
+
+## Whom is it for?
+
+Composer Stager enables PHP products and frameworks (like [Drupal](https://drupal.org/)) to provide automated Composer-based self-updates for users without access to more robust solutions like [staged](https://en.wikipedia.org/wiki/Development,_testing,_acceptance_and_production) and [blue-green](https://martinfowler.com/bliki/BlueGreenDeployment.html) deployments--on restrictive or low-cost hosting, for example, or with little or no budget or development staff. It could conceivably be used with custom Composer-based apps, as well. It is not intended for end users.
+
+## Why is it needed?
+
+It may not be obvious at first that a tool like this is really necessary. Why not just use Composer in-place? Or why not just rsync files out and back? It turns out that the problem is incredibly complex, and the edge cases are myriad:
+
+- You can't use Composer directly on a live codebase, because long-running commands put it in an unknown in-between state, and failures can irrecoverably corrupt it. The only safe option is to copy it elsewhere, run the commands there, and sync the result back to the live version. But...
+
+- You may not have write access to directories outside the codebase--especially on low end shared hosting--so you must provide a (more complicated) alternative strategy using a subdirectory of the live codebase.
+
+- You can't assume the availability of such tools as rsync, so you must provide PHP-based fallbacks.
+
+- There are lots of cross-platform issues, including Unix vs. Windows paths, process execution peculiarities, disabled PHP functions, and symlink support, to name a few.
+
+- Symlinks represent a problem space unto themselves, with as many logical issues as technical ones.
+
+- You have to account for non-code files, like user uploads, cache files, and logs that may be changed in the original codebase while Composer commands are being run on the copy and could be clobbered when syncing it back.
+
+- Failure to handle any of these challenges can easily have catastrophic results, including data loss or complete destruction of a live codebase. You need to anticipate and prevent them and provide actionable user feedback. 
+
+The list could go on. It should be obvious by now that a dedicated library is warranted.
 
 ## Installation
 
