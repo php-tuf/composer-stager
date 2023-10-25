@@ -6,7 +6,6 @@
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml) <!-- A static "100%" value can be used safely here because grumphp will fail builds if coverage falls below that. See grumphp.yml.dist. -->
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![Psalm](https://img.shields.io/badge/Psalm-1-brightgreen.svg?style=flat)](https://psalm.dev/)
-[![PHPMD](https://img.shields.io/static/v1?label=PHPMD&message=all&color=brightgreen)](https://phpmd.org/)
 
 Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
 
