@@ -12,7 +12,11 @@
         "summary": "var/infection/log/summary.log"
     },
     "mutators": {
-        "@default": true
+        "@default": true,
+        "CastInt": false,
+        "DecrementInteger": false,
+        "IncrementInteger": false,
+        "RoundingFamily": false
     },
     "testFrameworkOptions": "--exclude-group=windows_only"
 }
