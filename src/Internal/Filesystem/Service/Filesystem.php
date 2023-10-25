@@ -91,7 +91,6 @@ final class Filesystem implements FilesystemInterface
         return $this->getFileType($path) === self::PATH_IS_DIRECTORY;
     }
 
-    /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
     public function isDirEmpty(PathInterface $path): bool
     {
         $scandir = @scandir($path->absolute());
@@ -187,7 +186,6 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
     private function getFileType(PathInterface $path): string
     {
         // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
