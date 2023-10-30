@@ -31,6 +31,6 @@ final class PathList implements PathListInterface
 
     public function add(string ...$paths): void
     {
-        $this->paths = array_merge($this->paths, $paths);
+        $this->paths = [...$this->paths, ...$paths];
     }
 }
