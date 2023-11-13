@@ -17,7 +17,6 @@ grumphp:
             # this ever changes, that strategy will have to change accordingly.
             level: 100
         composer: ~
-        composer_require_checker: ~
         phpcs:
             standard: []
             whitelist_patterns:
@@ -53,7 +52,6 @@ grumphp:
         static:
             tasks:
                 - composer
-                - composer_require_checker
                 - phpcs
                 - phpstan
                 - rector

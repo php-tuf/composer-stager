@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "335f25528990a1179af901ec88d9e7d9",
+    "content-hash": "85e768660b9362d185cdc5981bf47cea",
     "packages": [
         {
             "name": "symfony/filesystem",
@@ -1390,86 +1390,6 @@
                 "source": "https://github.com/justinrainbow/json-schema/tree/v5.2.13"
             },
             "time": "2023-09-26T02:20:38+00:00"
-        },
-        {
-            "name": "maglnet/composer-require-checker",
-            "version": "4.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/maglnet/ComposerRequireChecker.git",
-                "reference": "e49c58b18fef21e37941a642c1a70d3962e86f28"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/e49c58b18fef21e37941a642c1a70d3962e86f28",
-                "reference": "e49c58b18fef21e37941a642c1a70d3962e86f28",
-                "shasum": ""
-            },
-            "require": {
-                "composer-runtime-api": "^2.0.0",
-                "ext-phar": "*",
-                "nikic/php-parser": "^4.17.1",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
-                "symfony/console": "^6.3.4",
-                "webmozart/assert": "^1.11.0",
-                "webmozart/glob": "^4.6.0"
-            },
-            "require-dev": {
-                "doctrine/coding-standard": "^12.0.0",
-                "ext-zend-opcache": "*",
-                "mikey179/vfsstream": "^1.6.11",
-                "phing/phing": "^2.17.4",
-                "phpstan/phpstan": "^1.10.34",
-                "phpunit/phpunit": "^10.3.4",
-                "roave/infection-static-analysis-plugin": "^1.33",
-                "vimeo/psalm": "^5.15"
-            },
-            "bin": [
-                "bin/composer-require-checker"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ComposerRequireChecker\\": "src/ComposerRequireChecker"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.io/"
-                },
-                {
-                    "name": "Matthias Glaub",
-                    "email": "magl@magl.net",
-                    "homepage": "http://magl.net"
-                }
-            ],
-            "description": "CLI tool to analyze composer dependencies and verify that no unknown symbols are used in the sources of a package",
-            "homepage": "https://github.com/maglnet/ComposerRequireChecker",
-            "keywords": [
-                "analysis",
-                "cli",
-                "composer",
-                "dependency",
-                "imports",
-                "require",
-                "requirements"
-            ],
-            "support": {
-                "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
-                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.7.1"
-            },
-            "time": "2023-09-27T14:57:19+00:00"
         },
         {
             "name": "myclabs/deep-copy",

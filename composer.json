@@ -26,7 +26,6 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "infection/infection": "^0.27.0",
-        "maglnet/composer-require-checker": "^4.6",
         "phpbench/phpbench": "^1.2",
         "phpro/grumphp-shim": "^2.0",
         "phpspec/prophecy": "^1.17",
