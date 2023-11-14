@@ -69,11 +69,6 @@ final class FileFinder implements FileFinderInterface
     /**
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the directory cannot be found or is not actually a directory.
-     *
-     * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator
-     *   to throw an exception here (because the given directory has disappeared)
-     *   but extremely unlikely, and it's infeasible to simulate in automated
-     *   tests--at least without way more trouble than it's worth.
      */
     private function getRecursiveDirectoryIterator(string $directory): RecursiveDirectoryIterator
     {
@@ -83,7 +78,6 @@ final class FileFinder implements FileFinderInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (PhpUnexpectedValueException $e) {
-            // @todo Find a way to add test coverage for this.
             throw new IOException($this->t(
                 'The directory cannot be found or is not a directory at %path.',
                 $this->p(['%path' => $directory]),
