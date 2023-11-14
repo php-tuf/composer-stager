@@ -169,6 +169,6 @@ abstract class PathUnitTestCase extends TestCase
 
     private function mockGlobalFunctions(): void
     {
-        require_once __DIR__ . '/path_unit_test_function_mocks.inc';
+        require_once __DIR__ . '/path_unit_test_global_mocks.inc';
     }
 }
