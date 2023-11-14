@@ -132,4 +132,4 @@ jobs:
                 uses: ramsey/composer-install@v2 # https://github.com/marketplace/actions/install-composer-dependencies
 
             -   name: "Run mutation tests"
-                run: "composer infection -- --show-mutations --ansi"
+                run: "composer infection"

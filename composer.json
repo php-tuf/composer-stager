@@ -100,7 +100,7 @@
         "fast": "phpunit --exclude-group=slow,windows_only",
         "fix": "@phpcbf",
         "functional": "phpunit --testsuite=functional --exclude-group=windows_only",
-        "infection": "infection",
+        "infection": "infection --ansi",
         "phpbench": "phpbench run --report=all --output=console --output=html",
         "phpcbf": "phpcbf",
         "phpcs": "phpcs -s",
