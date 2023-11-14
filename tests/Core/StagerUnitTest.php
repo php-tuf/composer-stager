@@ -106,10 +106,11 @@ final class StagerUnitTest extends TestCase
                 'timeout' => 0,
             ],
             'Simple values ' => [
-                'givenCommand' => [self::INERT_COMMAND],
+                'givenCommand' => [self::INERT_COMMAND, '--quiet'],
                 'expectedCommand' => [
                     '--working-dir=' . PathHelper::stagingDirAbsolute(),
                     self::INERT_COMMAND,
+                    '--quiet',
                 ],
                 'callback' => new TestOutputCallback(),
                 'timeout' => 10,
