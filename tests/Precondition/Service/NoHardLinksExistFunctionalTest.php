@@ -19,13 +19,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 {
     protected function createSut(): NoHardLinksExist
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist $sut */
-        $sut = $container->get(NoHardLinksExist::class);
-
-        return $sut;
+        return ContainerHelper::get(NoHardLinksExist::class);
     }
 
     /** @covers ::assertIsSupportedFile */

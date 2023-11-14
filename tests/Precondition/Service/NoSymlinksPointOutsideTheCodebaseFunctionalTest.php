@@ -19,13 +19,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 {
     protected function createSut(): NoSymlinksPointOutsideTheCodebase
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase $sut */
-        $sut = $container->get(NoSymlinksPointOutsideTheCodebase::class);
-
-        return $sut;
+        return ContainerHelper::get(NoSymlinksPointOutsideTheCodebase::class);
     }
 
     /**

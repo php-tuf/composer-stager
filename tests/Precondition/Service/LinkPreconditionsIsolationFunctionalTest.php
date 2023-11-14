@@ -116,10 +116,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         FilesystemHelper::touch($target);
         symlink($target, $source);
 
-        $container = ContainerHelper::container();
-        $container->compile();
         /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
-        $sut = $container->get(NoLinksExistOnWindows::class);
+        $sut = ContainerHelper::get(NoLinksExistOnWindows::class);
 
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());

@@ -12,11 +12,8 @@ final class ProcessFunctionalTest extends TestCase
 {
     private function createSut(array $command): ProcessInterface
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
         /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $factory */
-        $factory = $container->get(ProcessFactory::class);
+        $factory = ContainerHelper::get(ProcessFactory::class);
 
         /** @var \PhpTuf\ComposerStager\Internal\Process\Service\Process $sut */
         $sut = $factory->create($command);

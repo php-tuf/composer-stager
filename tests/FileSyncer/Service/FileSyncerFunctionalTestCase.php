@@ -25,13 +25,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
     final protected function createSut(): FileSyncerInterface
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface $sut */
-        $sut = $container->get($this->fileSyncerClass());
-
-        return $sut;
+        return ContainerHelper::get($this->fileSyncerClass());
     }
 
     abstract protected function fileSyncerClass(): string;

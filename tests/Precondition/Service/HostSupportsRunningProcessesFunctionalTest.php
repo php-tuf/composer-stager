@@ -16,13 +16,7 @@ final class HostSupportsRunningProcessesFunctionalTest extends TestCase
 {
     private function createSut(): HostSupportsRunningProcesses
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses $sut */
-        $sut = $container->get(HostSupportsRunningProcesses::class);
-
-        return $sut;
+        return ContainerHelper::get(HostSupportsRunningProcesses::class);
     }
 
     /**
