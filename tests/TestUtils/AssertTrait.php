@@ -68,6 +68,16 @@ trait AssertTrait
         self::assertEquals($expected, $actual, $message);
     }
 
+    protected static function assertFilePerms(string $path, int $permissions): void
+    {
+        assert(PathHelper::isAbsolute($path));
+        assert(FilesystemHelper::exists($path));
+
+        $actual = FilesystemHelper::filePerms($path);
+
+        self::assertSame($permissions, $actual, sprintf('File has expected permissions (%d).', $permissions));
+    }
+
     /** Asserts that two translatables are equivalent, i.e., have the same properties. */
     protected static function assertTranslatableEquals(
         TranslatableInterface $expected,

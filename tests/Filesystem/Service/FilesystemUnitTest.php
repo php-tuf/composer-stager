@@ -29,6 +29,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class FilesystemUnitTest extends TestCase
 {
+    public static ObjectProphecy $chmodSpy;
     public static ObjectProphecy $filePermsSpy;
 
     private EnvironmentInterface|ObjectProphecy $environment;
@@ -52,6 +53,34 @@ final class FilesystemUnitTest extends TestCase
         $translatableFactory = new TestTranslatableFactory();
 
         return new Filesystem($environment, $pathFactory, $symfonyFilesystem, $translatableFactory);
+    }
+
+    /**
+     * @covers ::chmod
+     *
+     * @group no_windows
+     * @runInSeparateProcess
+     */
+    public function testChmodFailure(): void
+    {
+        $this->mockGlobalFunctions();
+
+        $permissions = 777;
+        $path = PathHelper::sourceDirAbsolute();
+        $this->symfonyFilesystem
+            ->exists(Argument::any())
+            ->willReturn(true);
+        self::$chmodSpy = $this->prophesize(TestSpyInterface::class);
+        self::$chmodSpy
+            ->report($path, $permissions)
+            ->shouldBeCalledOnce()
+            ->willReturn(false);
+        $sut = $this->createSut();
+
+        $message = sprintf('The file mode could not be changed on %s.', $path);
+        self::assertTranslatableException(static function () use ($sut, $permissions): void {
+            $sut->chmod(PathHelper::sourceDirPath(), $permissions);
+        }, IOException::class, $message);
     }
 
     /** @covers ::copy */

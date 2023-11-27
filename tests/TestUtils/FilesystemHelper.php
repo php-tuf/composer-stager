@@ -7,6 +7,18 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class FilesystemHelper
 {
+    public static function chmod(string $path, int $permissions): void
+    {
+        assert(PathHelper::isAbsolute($path));
+        assert(self::exists($path));
+
+        chmod($path, $permissions);
+
+        assert(self::filePerms($path) === (int) decoct($permissions), 'chmod worked.');
+
+        clearstatcache(true, $path);
+    }
+
     public static function createDirectories(array|string $directories, ?string $basePath = null): void
     {
         // Convert $directories to an array if only a single string is given.
@@ -21,6 +33,13 @@ final class FilesystemHelper
         }
 
         (new SymfonyFilesystem())->mkdir($directories);
+    }
+
+    public static function exists(string $path): bool
+    {
+        assert(PathHelper::isAbsolute($path));
+
+        return self::symfonyFilesystem()->exists($path);
     }
 
     public static function filePerms(string $path): int

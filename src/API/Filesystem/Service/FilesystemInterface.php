@@ -16,6 +16,22 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 interface FilesystemInterface
 {
     /**
+     * Changes the mode (permissions) of a given file.
+     *
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
+     *   The file to change the mode on.
+     * @param int $permissions
+     *   The permissions for the file according to the rules at
+     *   {@see https://www.php.net/manual/en/function.chmod.php}.
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     *    If the mode cannot be changed.
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     *    If the file does not exist.
+     */
+    public function chmod(PathInterface $path, int $permissions): void;
+
+    /**
      * Copies a given file from one place to another.
      *
      * If the file already exists at the destination it will be overwritten.
