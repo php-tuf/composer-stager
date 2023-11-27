@@ -2057,22 +2057,22 @@
         },
         {
             "name": "phpro/grumphp-shim",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpro/grumphp-shim.git",
-                "reference": "b75325940c3e923d4f47ae0aad7b52136be1ace6"
+                "reference": "976cfa9822ed9821a8e8aa1ee7376ac12034c4e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpro/grumphp-shim/zipball/b75325940c3e923d4f47ae0aad7b52136be1ace6",
-                "reference": "b75325940c3e923d4f47ae0aad7b52136be1ace6",
+                "url": "https://api.github.com/repos/phpro/grumphp-shim/zipball/976cfa9822ed9821a8e8aa1ee7376ac12034c4e2",
+                "reference": "976cfa9822ed9821a8e8aa1ee7376ac12034c4e2",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "~2.0",
                 "ext-json": "*",
-                "php": "^8.1"
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "replace": {
                 "phpro/grumphp": "self.version"
@@ -2110,9 +2110,9 @@
             "description": "GrumPHP Phar distribution",
             "support": {
                 "issues": "https://github.com/phpro/grumphp-shim/issues",
-                "source": "https://github.com/phpro/grumphp-shim/tree/v2.2.0"
+                "source": "https://github.com/phpro/grumphp-shim/tree/v2.3.0"
             },
-            "time": "2023-10-27T05:22:40+00:00"
+            "time": "2023-11-24T06:58:33+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -2327,16 +2327,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.43",
+            "version": "1.10.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2c4129f6ca8c7cfa870098884b8869b410a5a361"
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2c4129f6ca8c7cfa870098884b8869b410a5a361",
-                "reference": "2c4129f6ca8c7cfa870098884b8869b410a5a361",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
                 "shasum": ""
             },
             "require": {
@@ -2385,7 +2385,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-19T19:55:25+00:00"
+            "time": "2023-11-21T16:30:46+00:00"
         },
         {
             "name": "phpstan/phpstan-strict-rules",
