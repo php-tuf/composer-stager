@@ -23,7 +23,7 @@ use ReflectionClass;
  */
 abstract class PathUnitTestCase extends TestCase
 {
-    public static ObjectProphecy $getcwdSpy;
+    public static ObjectProphecy $chmodSpy;
     public static ObjectProphecy $md5Spy;
 
     /** @dataProvider providerBasicFunctionality */
@@ -84,8 +84,8 @@ abstract class PathUnitTestCase extends TestCase
     {
         $this->mockGlobalFunctions();
 
-        self::$getcwdSpy = $this->prophesize(TestSpyInterface::class);
-        self::$getcwdSpy
+        self::$chmodSpy = $this->prophesize(TestSpyInterface::class);
+        self::$chmodSpy
             ->report()
             ->shouldBeCalledOnce()
             ->willReturn($builtInReturn);

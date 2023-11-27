@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Tests\Path\Value\PathUnitTestCase;
 
 function getcwd(): string|false
 {
-    return PathUnitTestCase::$getcwdSpy
+    return PathUnitTestCase::$chmodSpy
         ->reveal()
         ->report();
 }
