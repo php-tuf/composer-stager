@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
@@ -45,6 +46,48 @@ final class FilesystemFunctionalTest extends TestCase
         $sut->copy($sourceFilePath, $destinationFilePath);
 
         self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [$filenameRelative]);
+    }
+
+    /**
+     * @covers ::filePerms
+     *
+     * @dataProvider providerFilePerms
+     *
+     * @group no_windows
+     */
+    public function testFilePerms(int $permissions): void
+    {
+        $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
+        $fileAbsolute = $file->absolute();
+        touch($fileAbsolute);
+        chmod($fileAbsolute, $permissions);
+        $sut = $this->createSut();
+
+        $actual = $sut->filePerms($file);
+
+        self::assertSame($permissions, $actual, 'Got correct permissions.');
+    }
+
+    public function providerFilePerms(): array
+    {
+        return [
+            [644],
+            [666],
+            [755],
+            [775],
+        ];
+    }
+
+    /** @covers ::filePerms */
+    public function testFilePermsFileDoesNotExist(): void
+    {
+        $path = PathHelper::createPath('/var/www/non-existent.txt');
+        $sut = $this->createSut();
+
+        $message = sprintf('No such file: %s', $path->absolute());
+        self::assertTranslatableException(static function () use ($sut, $path): void {
+            $sut->filePerms($path);
+        }, LogicException::class, $message);
     }
 
     /** @covers ::isDirEmpty */

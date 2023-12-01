@@ -43,6 +43,23 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
+     * Gets file permissions for a given path.
+     *
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
+     *   The path to get permissions for.
+     *
+     * @return int
+     *   Returns the file's permissions as a numeric mode, e.g., 644 or 775.
+     *   See {@see https://www.php.net/manual/en/function.fileperms.php}.
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     *    If case of failure.
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     *    If the file does not exist.
+     */
+    public function filePerms(PathInterface $path): int;
+
+    /**
      * Determines whether the given path is a directory.
      *
      * Unlike PHP's built-in is_dir() function, this method distinguishes

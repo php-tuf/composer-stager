@@ -12,7 +12,9 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -27,6 +29,8 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class FilesystemUnitTest extends TestCase
 {
+    public static ObjectProphecy $filePermsSpy;
+
     private EnvironmentInterface|ObjectProphecy $environment;
     private PathFactoryInterface|ObjectProphecy $pathFactory;
     private SymfonyFilesystem|ObjectProphecy $symfonyFilesystem;
@@ -111,6 +115,33 @@ final class FilesystemUnitTest extends TestCase
         }, LogicException::class, $message);
     }
 
+    /**
+     * @covers ::filePerms
+     *
+     * @runInSeparateProcess
+     */
+    public function testFilePermsFailure(): void
+    {
+        $this->mockGlobalFunctions();
+
+        $path = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
+        FilesystemHelper::touch($path->absolute());
+        self::$filePermsSpy = $this->prophesize(TestSpyInterface::class);
+        self::$filePermsSpy
+            ->report($path->absolute())
+            ->shouldBeCalledOnce()
+            ->willReturn(false);
+        $this->symfonyFilesystem
+            ->exists(Argument::any())
+            ->willReturn(true);
+        $sut = $this->createSut();
+
+        $message = sprintf('Failed to get permissions on path at %s', $path->absolute());
+        self::assertTranslatableException(static function () use ($sut, $path): void {
+            $sut->filePerms($path);
+        }, IOException::class, $message);
+    }
+
     /** @covers ::mkdir */
     public function testMkdir(): void
     {
@@ -184,5 +215,10 @@ final class FilesystemUnitTest extends TestCase
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->remove(PathHelper::stagingDirPath());
         }, IOException::class, $message, null, $previous::class);
+    }
+
+    private function mockGlobalFunctions(): void
+    {
+        require_once __DIR__ . '/filesystem_unit_test_global_mocks.inc';
     }
 }

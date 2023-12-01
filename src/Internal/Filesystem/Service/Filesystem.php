@@ -86,6 +86,33 @@ final class Filesystem implements FilesystemInterface
         return $this->getFileType($path) !== self::PATH_DOES_NOT_EXIST;
     }
 
+    public function filePerms(PathInterface $path): int
+    {
+        $pathAbsolute = $path->absolute();
+
+        $permissions = @fileperms($pathAbsolute);
+
+        if (is_int($permissions)) {
+            $permissions = substr(sprintf('%o', $permissions), -4);
+
+            return (int) octdec($permissions);
+        }
+
+        if (!$this->symfonyFilesystem->exists($pathAbsolute)) {
+            throw new LogicException($this->t(
+                'No such file: %file',
+                $this->p(['%file' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ), 0);
+        }
+
+        throw new IOException($this->t(
+            'Failed to get permissions on path at %file',
+            $this->p(['%file' => $pathAbsolute]),
+            $this->d()->exceptions(),
+        ), 0);
+    }
+
     public function isDir(PathInterface $path): bool
     {
         return $this->getFileType($path) === self::PATH_IS_DIRECTORY;

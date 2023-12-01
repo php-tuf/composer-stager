@@ -23,6 +23,34 @@ final class FilesystemHelper
         (new SymfonyFilesystem())->mkdir($directories);
     }
 
+    public static function filePerms(string $path): int
+    {
+        assert(PathHelper::isAbsolute($path), 'The given path is absolute.');
+        assert(file_exists($path), 'The path exists');
+
+        clearstatcache(true, $path);
+
+        // Try to do everything a little differently than the corresponding
+        // production code so as to avoid comparing assumptions to assumptions
+        // instead of actually testing code. Convert the permissions to a
+        // decimal value in two ways and compare them as a sanity check.
+        $permissions = fileperms($path);
+        assert($permissions === stat($path)['mode']);
+
+        $firstWay = substr(sprintf('%o', $permissions), -4);
+        $firstWay = octdec($firstWay);
+
+        $secondWay = decoct($permissions);
+        $secondWay -= 100_000;
+        $secondWay = octdec(sprintf('%s', $secondWay));
+
+        assert($firstWay === $secondWay, 'Both ways return the same result.');
+
+        clearstatcache(true, $path);
+
+        return $firstWay;
+    }
+
     public static function remove(string|iterable $paths): void
     {
         self::symfonyFilesystem()->remove($paths);
