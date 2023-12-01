@@ -41,8 +41,8 @@ final class FilesystemFunctionalTest extends TestCase
         FilesystemHelper::touch($sourceFilePath->absolute());
 
         // Copy an individual file.
-        $filesystem = $this->createSut();
-        $filesystem->copy($sourceFilePath, $destinationFilePath);
+        $sut = $this->createSut();
+        $sut->copy($sourceFilePath, $destinationFilePath);
 
         self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [$filenameRelative]);
     }
