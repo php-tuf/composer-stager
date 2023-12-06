@@ -93,9 +93,7 @@ final class Filesystem implements FilesystemInterface
         $permissions = @fileperms($pathAbsolute);
 
         if (is_int($permissions)) {
-            $permissions = substr(sprintf('%o', $permissions), -4);
-
-            return (int) octdec($permissions);
+            return $permissions;
         }
 
         if (!$this->symfonyFilesystem->exists($pathAbsolute)) {

@@ -49,8 +49,8 @@ interface FilesystemInterface
      *   The path to get permissions for.
      *
      * @return int
-     *   Returns the file's permissions as a numeric mode, e.g., 644 or 775.
-     *   See {@see https://www.php.net/manual/en/function.fileperms.php}.
+     *   Returns the file's permissions. See
+     *   {@see https://www.php.net/manual/en/function.fileperms.php}.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *    If case of failure.
