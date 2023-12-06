@@ -55,26 +55,30 @@ final class FilesystemFunctionalTest extends TestCase
      *
      * @group no_windows
      */
-    public function testFilePerms(int $permissions): void
+    public function testFilePerms(int $mode, int $expected): void
     {
         $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
         $fileAbsolute = $file->absolute();
         touch($fileAbsolute);
-        chmod($fileAbsolute, $permissions);
+        chmod($fileAbsolute, $mode);
         $sut = $this->createSut();
 
         $actual = $sut->filePerms($file);
 
-        self::assertSame($permissions, $actual, 'Got correct permissions.');
+        self::assertSame($expected, $actual, 'Got correct permissions.');
     }
 
     public function providerFilePerms(): array
     {
         return [
-            [644],
-            [666],
-            [755],
-            [775],
+            // Decimal modes.
+            [644, 33_412],
+            [755, 33_523],
+            [775, 33_543],
+            // Octal modes.
+            [0644, 33_188],
+            [0755, 33_261],
+            [0775, 33_277],
         ];
     }
 
