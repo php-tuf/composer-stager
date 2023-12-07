@@ -47,6 +47,31 @@ final class Filesystem implements FilesystemInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
+    public function chmod(PathInterface $path, int $permissions): void
+    {
+        $pathAbsolute = $path->absolute();
+
+        $result = @chmod($pathAbsolute, $permissions);
+
+        if ($result) {
+            return;
+        }
+
+        if (!$this->symfonyFilesystem->exists($pathAbsolute)) {
+            throw new LogicException($this->t(
+                'The file cannot be found at %path.',
+                $this->p(['%path' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+
+        throw new IOException($this->t(
+            'The file mode could not be changed on %path.',
+            $this->p(['%path' => $pathAbsolute]),
+            $this->d()->exceptions(),
+        ));
+    }
+
     public function copy(PathInterface $source, PathInterface $destination): void
     {
         $sourceAbsolute = $source->absolute();

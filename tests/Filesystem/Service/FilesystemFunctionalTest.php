@@ -77,6 +77,42 @@ final class FilesystemFunctionalTest extends TestCase
         ];
     }
 
+    /**
+     * @covers ::chmod
+     *
+     * @group no_windows
+     */
+    public function testChmod(): void
+    {
+        $mode = 0775;
+        $filePath = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
+        $fileAbsolute = $filePath->absolute();
+        FilesystemHelper::touch($fileAbsolute);
+        $sut = $this->createSut();
+
+        $sut->chmod($filePath, $mode);
+
+        $result = fileperms($fileAbsolute) & 0777;
+        self::assertSame($result, $mode);
+    }
+
+    /**
+     * @covers ::chmod
+     *
+     * @group no_windows
+     */
+    public function testChmodFileDoesNotExist(): void
+    {
+        $nonExistentAbsolute = '/var/www/non-existent.txt';
+        $nonExistentPath = PathHelper::createPath($nonExistentAbsolute);
+        $sut = $this->createSut();
+
+        $message = sprintf('The file cannot be found at %s.', $nonExistentAbsolute);
+        self::assertTranslatableException(static function () use ($sut, $nonExistentPath): void {
+            $sut->chmod($nonExistentPath, 0777);
+        }, LogicException::class, $message);
+    }
+
     /** @covers ::filePerms */
     public function testFilePermsFileDoesNotExist(): void
     {

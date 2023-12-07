@@ -6,6 +6,13 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service;
 
 use PhpTuf\ComposerStager\Tests\Filesystem\Service\FilesystemUnitTest;
 
+function chmod(string $filename, int $permissions): bool
+{
+    return FilesystemUnitTest::$chmodSpy
+        ->reveal()
+        ->report($filename, $permissions);
+}
+
 function fileperms(string $filename): int|false
 {
     return FilesystemUnitTest::$filePermsSpy
