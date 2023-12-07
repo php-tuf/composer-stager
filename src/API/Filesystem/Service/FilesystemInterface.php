@@ -45,17 +45,37 @@ interface FilesystemInterface
     /**
      * Gets file permissions for a given path.
      *
+     * This function returns permissions exactly as PHP's built-in `fileperms()` function, which is not necessarily
+     * intuitive. Specifically, it returns an integer with no obvious relationship to any value usable with `chmod()`.
+     *
+     * For logical and comparison purposes, use an octal value:
+     *   ```php
+     *   chmod($file, 0644);
+     *   $permissions = $sut->filePerms($file);
+     *   $octal = $permissions & 0777; // This is always and only 0777.
+     *   assert($octal === 0644); // true
+     *   ```
+     *
+     * For human-readable display purposes, use a string:
+     *   ```php
+     *   chmod($file, 0644);
+     *   $permissions = $sut->filePerms($file);
+     *   $string = substr(sprintf('%o', $permissions), -4)
+     *   assert($string === "0644"); // true
+     *   ```
+     *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   The path to get permissions for.
      *
      * @return int
-     *   Returns the file's permissions. See
-     *   {@see https://www.php.net/manual/en/function.fileperms.php}.
+     *   Returns the file's permissions. See above.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *    If case of failure.
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *    If the file does not exist.
+     *
+     * @see https://www.php.net/manual/en/function.fileperms.php for more on return values.
      */
     public function filePerms(PathInterface $path): int;
 
