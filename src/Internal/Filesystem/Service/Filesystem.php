@@ -86,11 +86,16 @@ final class Filesystem implements FilesystemInterface
         }
 
         try {
+            $mode = $this->fileMode($source);
             $this->symfonyFilesystem->copy($sourceAbsolute, $destinationAbsolute, true);
+            $this->chmod($destination, $mode);
         } catch (SymfonyFileNotFoundException $e) {
             throw new LogicException($this->t(
-                'The source file does not exist or is not a file at %path',
-                $this->p(['%path' => $sourceAbsolute]),
+                'The source file does not exist or is not a file at %path: %details',
+                $this->p([
+                    '%path' => $sourceAbsolute,
+                    '%details' => $e->getMessage(),
+                ]),
                 $this->d()->exceptions(),
             ), 0, $e);
         } catch (SymfonyIOException $e) {

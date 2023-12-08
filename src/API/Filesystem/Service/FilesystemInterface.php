@@ -35,6 +35,7 @@ interface FilesystemInterface
      * Copies a given file from one place to another.
      *
      * If the file already exists at the destination it will be overwritten.
+     * File permissions from the source will be preserved in the destination.
      * Copying directories is not supported.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $source
