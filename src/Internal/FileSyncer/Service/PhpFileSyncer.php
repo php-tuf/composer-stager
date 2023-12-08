@@ -98,15 +98,11 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         }
 
         $destinationFiles = $this->fileFinder->find($destination, $exclusions);
-
-        $sourceAbsolute = $source->absolute();
         $destinationAbsolute = $destination->absolute();
 
         foreach ($destinationFiles as $destinationFilePathname) {
             $relativePathname = self::getRelativePath($destinationAbsolute, $destinationFilePathname);
-            $sourceFilePathname = $sourceAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
-
-            $sourceFilePath = $this->pathFactory->create($sourceFilePathname);
+            $sourceFilePath = $this->pathFactory->create($relativePathname, $source);
 
             if ($this->filesystem->exists($sourceFilePath)) {
                 continue;
