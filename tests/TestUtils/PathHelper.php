@@ -13,8 +13,8 @@ final class PathHelper
     private const PERSISTENT_FIXTURES_DIR = 'persistent-fixtures';
     private const ACTIVE_DIR = 'active-dir';
     private const STAGING_DIR = 'staging-dir';
-    private const SOURCE_DIR = 'source';
-    private const DESTINATION_DIR = 'destination';
+    private const SOURCE_DIR = 'source-dir';
+    private const DESTINATION_DIR = 'destination-dir';
 
     public static function repositoryRootAbsolute(): string
     {

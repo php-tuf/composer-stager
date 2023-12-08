@@ -156,6 +156,36 @@ final class FilesystemUnitTest extends TestCase
      *
      * @runInSeparateProcess
      */
+    public function testCopy(): void
+    {
+        $this->mockGlobalFunctions();
+
+        $sourceDirPath = PathHelper::sourceDirPath();
+        $sourceDirAbsolute = $sourceDirPath->absolute();
+        $destinationDirAbsolute = PathHelper::destinationDirAbsolute();
+        $this->symfonyFilesystem
+            ->copy($sourceDirAbsolute, $destinationDirAbsolute, true)
+            ->willReturn(true);
+        $this->symfonyFilesystem
+            ->exists(Argument::cetera())
+            ->willReturn(true);
+        self::$chmodSpy
+            ->report($destinationDirAbsolute, Argument::any())
+            ->shouldBeCalled()
+            ->willReturn(true);
+        self::$filePermsSpy
+            ->report(Argument::cetera())
+            ->willReturn(12_345);
+        $sut = $this->createSut();
+
+        $sut->copy($sourceDirPath, PathHelper::destinationDirPath());
+    }
+
+    /**
+     * @covers ::copy
+     *
+     * @runInSeparateProcess
+     */
     public function testCopyChmodFailure(): void
     {
         $this->mockGlobalFunctions();
