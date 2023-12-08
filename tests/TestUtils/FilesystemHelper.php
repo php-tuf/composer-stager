@@ -7,14 +7,12 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class FilesystemHelper
 {
-    public static function chmod(string $path, int $permissions): void
+    public static function chmod(string $path, int $mode): void
     {
         assert(PathHelper::isAbsolute($path));
         assert(self::exists($path));
 
-        chmod($path, $permissions);
-
-        assert(self::filePerms($path) === (int) decoct($permissions), 'chmod worked.');
+        chmod($path, $mode);
 
         clearstatcache(true, $path);
     }
@@ -42,32 +40,18 @@ final class FilesystemHelper
         return self::symfonyFilesystem()->exists($path);
     }
 
-    public static function filePerms(string $path): int
+    public static function fileMode(string $path): int
     {
         assert(PathHelper::isAbsolute($path), 'The given path is absolute.');
         assert(file_exists($path), 'The path exists');
 
         clearstatcache(true, $path);
 
-        // Try to do everything a little differently than the corresponding
-        // production code so as to avoid comparing assumptions to assumptions
-        // instead of actually testing code. Convert the permissions to a
-        // decimal value in two ways and compare them as a sanity check.
-        $permissions = fileperms($path);
-        assert($permissions === stat($path)['mode']);
-
-        $firstWay = substr(sprintf('%o', $permissions), -4);
-        $firstWay = octdec($firstWay);
-
-        $secondWay = decoct($permissions);
-        $secondWay -= 100_000;
-        $secondWay = octdec(sprintf('%s', $secondWay));
-
-        assert($firstWay === $secondWay, 'Both ways return the same result.');
+        $mode = fileperms($path) & 0777;
 
         clearstatcache(true, $path);
 
-        return $firstWay;
+        return $mode;
     }
 
     public static function remove(string|iterable $paths): void

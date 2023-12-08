@@ -145,11 +145,11 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::filePerms
+     * @covers ::fileMode
      *
      * @runInSeparateProcess
      */
-    public function testFilePermsFailure(): void
+    public function testFileModeFailure(): void
     {
         $this->mockGlobalFunctions();
 
@@ -167,7 +167,7 @@ final class FilesystemUnitTest extends TestCase
 
         $message = sprintf('Failed to get permissions on path at %s', $path->absolute());
         self::assertTranslatableException(static function () use ($sut, $path): void {
-            $sut->filePerms($path);
+            $sut->fileMode($path);
         }, IOException::class, $message);
     }
 
