@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 interface FilesystemInterface
 {
     /**
-     * Changes the mode (permissions) of a given file.
+     * Changes the mode (permissions) of a given file or directory.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   The file to change the mode on.
