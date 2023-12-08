@@ -49,35 +49,6 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /**
-     * @covers ::filePerms
-     *
-     * @dataProvider providerFilePerms
-     *
-     * @group no_windows
-     */
-    public function testFilePerms(int $mode): void
-    {
-        $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
-        $fileAbsolute = $file->absolute();
-        touch($fileAbsolute);
-        chmod($fileAbsolute, $mode);
-        $sut = $this->createSut();
-
-        $actual = $sut->filePerms($file) & 0777;
-
-        self::assertSame($mode, $actual, 'Got correct permissions.');
-    }
-
-    public function providerFilePerms(): array
-    {
-        return [
-            [0644],
-            [0775],
-            [0777],
-        ];
-    }
-
-    /**
      * @covers ::chmod
      *
      * @group no_windows
@@ -92,8 +63,7 @@ final class FilesystemFunctionalTest extends TestCase
 
         $sut->chmod($filePath, $mode);
 
-        $result = fileperms($fileAbsolute) & 0777;
-        self::assertSame($result, $mode);
+        self::assertFileMode($fileAbsolute, $mode);
     }
 
     /**
@@ -113,16 +83,99 @@ final class FilesystemFunctionalTest extends TestCase
         }, LogicException::class, $message);
     }
 
-    /** @covers ::filePerms */
-    public function testFilePermsFileDoesNotExist(): void
+    /**
+     * @covers ::fileMode
+     *
+     * @dataProvider providerFileMode
+     *
+     * @group no_windows
+     */
+    public function testFileModeOnFile(int $mode): void
+    {
+        $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
+        $fileAbsolute = $file->absolute();
+        FilesystemHelper::touch($fileAbsolute);
+        FilesystemHelper::chmod($fileAbsolute, $mode);
+        $sut = $this->createSut();
+
+        $actual = $sut->fileMode($file);
+
+        self::assertSame($mode, $actual, 'Got correct permissions.');
+    }
+
+    /**
+     * @covers ::fileMode
+     *
+     * @dataProvider providerFileMode
+     *
+     * @group no_windows
+     */
+    public function testFileModeOnDirectory(int $mode): void
+    {
+        $directoryPath = PathHelper::createPath('directory', PathHelper::sourceDirAbsolute());
+        $directoryAbsolute = $directoryPath->absolute();
+        FilesystemHelper::createDirectories($directoryAbsolute);
+        FilesystemHelper::chmod($directoryAbsolute, $mode);
+        $sut = $this->createSut();
+
+        $actual = $sut->fileMode($directoryPath);
+
+        self::assertSame($mode, $actual, 'Got correct permissions.');
+    }
+
+    public function providerFileMode(): array
+    {
+        return [
+            [0644],
+            [0775],
+            [0777],
+        ];
+    }
+
+    /** @covers ::fileMode */
+    public function testFileModeFileDoesNotExist(): void
     {
         $path = PathHelper::createPath('/var/www/non-existent.txt');
         $sut = $this->createSut();
 
         $message = sprintf('No such file: %s', $path->absolute());
         self::assertTranslatableException(static function () use ($sut, $path): void {
-            $sut->filePerms($path);
+            $sut->fileMode($path);
         }, LogicException::class, $message);
+    }
+
+    /**
+     * This tests the code examples in the ::fileMode() docblock.
+     *
+     * @coversNothing
+     *
+     * @see \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface::fileMode
+     *
+     * @group no_windows
+     */
+    public function testFileModeDocblockExamples(): void
+    {
+        $filePath = PathHelper::createPath('test.txt', PathHelper::sourceDirAbsolute());
+        $fileAbsolute = $filePath->absolute();
+        FilesystemHelper::touch($fileAbsolute);
+        $filesystem = $this->createSut();
+
+        // Begin first example code.
+        chmod($fileAbsolute, 0644);
+        $mode = $filesystem->fileMode($filePath);
+        assert($mode === 0644); // true
+        // End first example code.
+
+        self::assertSame(0644, $mode, 'The first code example works.');
+
+        // Begin second example code.
+        chmod($fileAbsolute, 0644);
+        $mode = $filesystem->fileMode($filePath);
+        $mode = substr(sprintf('0%o', $mode), -4);
+        assert($mode === "0644"); // true
+        // End second example code.
+
+        self::assertSame("0644", $mode, 'The second code example works.');
     }
 
     /** @covers ::isDirEmpty */

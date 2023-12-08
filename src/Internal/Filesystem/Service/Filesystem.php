@@ -111,14 +111,14 @@ final class Filesystem implements FilesystemInterface
         return $this->getFileType($path) !== self::PATH_DOES_NOT_EXIST;
     }
 
-    public function filePerms(PathInterface $path): int
+    public function fileMode(PathInterface $path): int
     {
         $pathAbsolute = $path->absolute();
 
         $permissions = @fileperms($pathAbsolute);
 
         if (is_int($permissions)) {
-            return $permissions;
+            return $permissions & 0777;
         }
 
         if (!$this->symfonyFilesystem->exists($pathAbsolute)) {

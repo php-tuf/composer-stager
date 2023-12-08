@@ -59,41 +59,36 @@ interface FilesystemInterface
     public function exists(PathInterface $path): bool;
 
     /**
-     * Gets file permissions for a given path.
+     * Gets the mode (permissions) of a given file or directory.
      *
-     * This function returns permissions exactly as PHP's built-in `fileperms()` function, which is not necessarily
-     * intuitive. Specifically, it returns an integer with no obvious relationship to any value usable with `chmod()`.
-     *
-     * For logical and comparison purposes, use an octal value:
+     * This function returns the file mode in octal form, e.g., 0644 or
+     * 0775. It can be used directly for comparison, for example:
      *   ```php
-     *   chmod($file, 0644);
-     *   $permissions = $sut->filePerms($file);
-     *   $octal = $permissions & 0777; // This is always and only 0777.
-     *   assert($octal === 0644); // true
+     *   chmod($fileAbsolute, 0644);
+     *   $mode = $filesystem->fileMode($filePath);
+     *   assert($mode === 0644); // true
      *   ```
      *
-     * For human-readable display purposes, use a string:
+     * For human-readable display purposes, convert it to a string:
      *   ```php
-     *   chmod($file, 0644);
-     *   $permissions = $sut->filePerms($file);
-     *   $string = substr(sprintf('%o', $permissions), -4)
-     *   assert($string === "0644"); // true
+     *   chmod($fileAbsolute, 0644);
+     *   $mode = $filesystem->fileMode($filePath);
+     *   $mode = substr(sprintf('0%o', $mode), -4);
+     *   assert($mode === "0644"); // true
      *   ```
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
-     *   The path to get permissions for.
+     *   The path to get the mode for.
      *
      * @return int
-     *   Returns the file's permissions. See above.
+     *   Returns the file's mode. See above.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *    If case of failure.
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *    If the file does not exist.
-     *
-     * @see https://www.php.net/manual/en/function.fileperms.php for more on return values.
      */
-    public function filePerms(PathInterface $path): int;
+    public function fileMode(PathInterface $path): int;
 
     /**
      * Determines whether the given path is a directory.
