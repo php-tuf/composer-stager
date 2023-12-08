@@ -43,6 +43,8 @@ final class FilesystemUnitTest extends TestCase
             ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
+        self::$chmodSpy = $this->prophesize(TestSpyInterface::class);
+        self::$filePermsSpy = $this->prophesize(TestSpyInterface::class);
     }
 
     private function createSut(): Filesystem
@@ -70,7 +72,6 @@ final class FilesystemUnitTest extends TestCase
         $this->symfonyFilesystem
             ->exists(Argument::any())
             ->willReturn(true);
-        self::$chmodSpy = $this->prophesize(TestSpyInterface::class);
         self::$chmodSpy
             ->report($path, $permissions)
             ->shouldBeCalledOnce()
@@ -83,20 +84,15 @@ final class FilesystemUnitTest extends TestCase
         }, IOException::class, $message);
     }
 
-    /** @covers ::copy */
-    public function testCopy(): void
+    /**
+     * @covers ::copy
+     *
+     * @runInSeparateProcess
+     */
+    public function testCopySymfonyIOException(): void
     {
-        $this->symfonyFilesystem
-            ->copy(PathHelper::sourceDirAbsolute(), PathHelper::destinationDirAbsolute(), true)
-            ->shouldBeCalledOnce();
-        $sut = $this->createSut();
+        $this->mockGlobalFunctions();
 
-        $sut->copy(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
-    }
-
-    /** @covers ::copy */
-    public function testCopyFailure(): void
-    {
         $previousMessage = 'Something went wrong';
         $message = sprintf(
             'Failed to copy %s to %s: %s',
@@ -106,9 +102,15 @@ final class FilesystemUnitTest extends TestCase
         );
         $previous = new SymfonyIOException($previousMessage);
         $this->symfonyFilesystem
+            ->exists(Argument::cetera())
+            ->willReturn(true);
+        $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->shouldBeCalled()
             ->willThrow($previous);
+        self::$filePermsSpy
+            ->report(Argument::cetera())
+            ->willReturn(12_345);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
@@ -116,20 +118,66 @@ final class FilesystemUnitTest extends TestCase
         }, IOException::class, $message, null, $previous::class);
     }
 
-    /** @covers ::copy */
-    public function testCopySourceDirectoryNotFound(): void
+    /**
+     * @covers ::copy
+     *
+     * @runInSeparateProcess
+     */
+    public function testCopySymfonyFileNotFoundException(): void
     {
-        $previous = SymfonyFileNotFoundException::class;
+        $this->mockGlobalFunctions();
+
+        $previousMessage = 'Something went wrong';
+        $message = sprintf(
+            'The source file does not exist or is not a file at %s: %s',
+            PathHelper::activeDirAbsolute(),
+            $previousMessage,
+        );
+        $previous = new SymfonyFileNotFoundException($previousMessage);
+        $this->symfonyFilesystem
+            ->exists(Argument::cetera())
+            ->willReturn(true);
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->shouldBeCalled()
             ->willThrow($previous);
+        self::$filePermsSpy
+            ->report(Argument::cetera())
+            ->willReturn(12_345);
         $sut = $this->createSut();
 
-        $message = sprintf('The source file does not exist or is not a file at %s', PathHelper::activeDirAbsolute());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, LogicException::class, $message, null, $previous);
+        }, LogicException::class, $message, null, $previous::class);
+    }
+
+    /**
+     * @covers ::copy
+     *
+     * @runInSeparateProcess
+     */
+    public function testCopyChmodFailure(): void
+    {
+        $this->mockGlobalFunctions();
+
+        $this->symfonyFilesystem
+            ->copy(Argument::cetera())
+            ->willReturn(true);
+        $this->symfonyFilesystem
+            ->exists(Argument::cetera())
+            ->willReturn(true);
+        self::$chmodSpy
+            ->report(Argument::cetera())
+            ->willReturn(false);
+        self::$filePermsSpy
+            ->report(Argument::cetera())
+            ->willReturn(12_345);
+        $sut = $this->createSut();
+
+        $message = sprintf('The file mode could not be changed on %s.', PathHelper::destinationDirAbsolute());
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->copy(PathHelper::activeDirPath(), PathHelper::destinationDirPath());
+        }, IOException::class, $message);
     }
 
     /** @covers ::copy */
@@ -155,7 +203,6 @@ final class FilesystemUnitTest extends TestCase
 
         $path = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
         FilesystemHelper::touch($path->absolute());
-        self::$filePermsSpy = $this->prophesize(TestSpyInterface::class);
         self::$filePermsSpy
             ->report($path->absolute())
             ->shouldBeCalledOnce()

@@ -70,6 +70,13 @@ trait AssertTrait
 
     protected static function assertFileMode(string $path, int $mode): void
     {
+        if (EnvironmentHelper::isWindows()) {
+            // Windows doesn't support file permissions. Treat it like a pass and move on.
+            self::assertTrue(true, 'Ignore unsupported file permissions on Windows.');
+
+            return;
+        }
+
         assert(PathHelper::isAbsolute($path));
         assert(FilesystemHelper::exists($path));
 

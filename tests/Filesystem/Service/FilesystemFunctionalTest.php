@@ -36,16 +36,37 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::copy */
     public function testCopy(): void
     {
+        $mode = 0775;
         $filenameRelative = 'file.txt';
         $sourceFilePath = PathHelper::createPath($filenameRelative, PathHelper::sourceDirAbsolute());
+        $sourceFileAbsolute = $sourceFilePath->absolute();
         $destinationFilePath = PathHelper::createPath($filenameRelative, PathHelper::destinationDirAbsolute());
-        FilesystemHelper::touch($sourceFilePath->absolute());
+        $destinationFileAbsolute = $destinationFilePath->absolute();
+        FilesystemHelper::touch($sourceFileAbsolute);
+        assert(FilesystemHelper::fileMode($sourceFileAbsolute) !== $mode, "The new file doesn't already have the same permissions as will be set.");
+        FilesystemHelper::chmod($sourceFileAbsolute, $mode);
+        $sut = $this->createSut();
 
         // Copy an individual file.
-        $sut = $this->createSut();
         $sut->copy($sourceFilePath, $destinationFilePath);
 
+        self::assertFileMode($destinationFileAbsolute, $mode);
         self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [$filenameRelative]);
+    }
+
+    /** @covers ::copy */
+    public function testCopySourceFileNotFound(): void
+    {
+        $filenameRelative = 'file.txt';
+        $sourceFilePath = PathHelper::createPath($filenameRelative, PathHelper::sourceDirAbsolute());
+        $sourceFileAbsolute = $sourceFilePath->absolute();
+        $destinationFilePath = PathHelper::createPath($filenameRelative, PathHelper::destinationDirAbsolute());
+        $sut = $this->createSut();
+
+        $message = sprintf('No such file: %s', $sourceFileAbsolute);
+        self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
+            $sut->copy($sourceFilePath, $destinationFilePath);
+        }, LogicException::class, $message);
     }
 
     /**
