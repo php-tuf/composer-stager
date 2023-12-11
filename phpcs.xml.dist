@@ -121,6 +121,11 @@
         </property>
         <property name="linesCountBetweenDifferentAnnotationsTypes" value="1"/>
     </properties></rule>
+
+    <!-- @see https://github.com/slevomat/coding-standard/issues/1632 -->
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectLinesCountAfterLastContent"><exclude-pattern>src/API/Precondition/Service/PreconditionInterface.php</exclude-pattern></rule>
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectLinesCountBetweenDescriptionAndAnnotations"><exclude-pattern>src/API/Precondition/Service/PreconditionInterface.php</exclude-pattern></rule>
+
     <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
