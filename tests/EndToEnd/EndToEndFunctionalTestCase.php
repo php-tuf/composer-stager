@@ -362,7 +362,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ];
     }
 
-    private static function assertComposerJsonName(string $directory, $expected, string $message = ''): void
+    private static function assertComposerJsonName(string $directory, mixed $expected, string $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
         assert(is_string($json));
