@@ -36,7 +36,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @group no_windows
  */
-final class RsyncFileSyncerUnitTest extends FileSyncerTestCase
+final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
 {
     private FilesystemInterface|ObjectProphecy $filesystem;
     private PathInterface $destination;

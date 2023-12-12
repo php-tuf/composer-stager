@@ -10,7 +10,7 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
-abstract class FileSyncerTestCase extends TestCase
+abstract class FileSyncerUnitTestCase extends TestCase
 {
     protected EnvironmentInterface|ObjectProphecy $environment;
 

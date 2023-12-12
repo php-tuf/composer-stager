@@ -25,7 +25,7 @@ use ReflectionClass;
  *
  * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
  */
-final class PhpFileSyncerUnitTest extends FileSyncerTestCase
+final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
 {
     private FileFinderInterface|ObjectProphecy $fileFinder;
     private FilesystemInterface|ObjectProphecy $filesystem;
