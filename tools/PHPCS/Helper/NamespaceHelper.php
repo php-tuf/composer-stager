@@ -7,9 +7,10 @@ use PHP_CodeSniffer\Util\Tokens;
 
 final class NamespaceHelper
 {
-    public static function getNamespace(File $phpcsFile, int $scopePtr): string
+    /** @see \PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\SelfMemberReferenceSniff::getNamespaceOfScope() */
+    public static function getNamespace(File $phpcsFile, int $stackPtr): string
     {
-        $endOfNamespaceDeclaration = self::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
+        $endOfNamespaceDeclaration = self::getEndOfNamespaceDeclaration($phpcsFile, $stackPtr);
 
         return self::getDeclarationNameWithNamespace(
             $phpcsFile->getTokens(),
@@ -17,6 +18,7 @@ final class NamespaceHelper
         );
     }
 
+    /** @see \PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\SelfMemberReferenceSniff::getDeclarationNameWithNamespace() */
     public static function getDeclarationNameWithNamespace(array $tokens, $stackPtr): string
     {
         $nameParts = [];

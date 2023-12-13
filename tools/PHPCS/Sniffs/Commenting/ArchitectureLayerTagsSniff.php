@@ -4,14 +4,14 @@ namespace PhpTuf\ComposerStager\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
+use PhpTuf\ComposerStager\Helper\NamespaceHelper;
 
 /**
  * Finds missing or incorrect "@api" and "@internal" docblock tags.
  *
  * The fixer is crude and doesn't cover all major cases, so the results should be examined carefully.
  */
-final class APITagsSniff implements Sniff
+final class ArchitectureLayerTagsSniff implements Sniff
 {
     private const CODE_MISSING_DOCBLOCK = 'MissingDocblock';
     private const CODE_MISSING_TAG = 'Missing%sTag';
@@ -53,7 +53,7 @@ final class APITagsSniff implements Sniff
         $this->phpcsFile = $phpcsFile;
         $this->scopePtr = $stackPtr;
 
-        $rule = $this->getApplicableRule();
+        $rule = $this->getApplicableRule($phpcsFile, $stackPtr);
 
         // Return early if no rules apply.
         if ($rule === false) {
@@ -154,9 +154,9 @@ final class APITagsSniff implements Sniff
         return $docblockOpener['comment_closer'];
     }
 
-    private function getApplicableRule(): array|false
+    private function getApplicableRule(File $phpcsFile, $stackPtr): array|false
     {
-        $namespace = $this->getNamespace() . '\\';
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr) . '\\';
 
         foreach (array_keys(self::RULES) as $rule) {
             if (str_starts_with($namespace, $rule)) {
@@ -165,51 +165,6 @@ final class APITagsSniff implements Sniff
         }
 
         return false;
-    }
-
-    /** @see \PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\SelfMemberReferenceSniff::getNamespaceOfScope() */
-    private function getNamespace(): string
-    {
-        $namespace = '\\';
-        $namespaceDeclaration = $this->phpcsFile->findPrevious(T_NAMESPACE, $this->scopePtr);
-
-        if ($namespaceDeclaration !== false) {
-            $endOfNamespaceDeclaration = $this->phpcsFile->findNext(
-                [T_SEMICOLON, T_OPEN_CURLY_BRACKET],
-                $namespaceDeclaration,
-            );
-            $namespace = $this->getDeclarationNameWithNamespace(
-                $this->phpcsFile->getTokens(),
-                $endOfNamespaceDeclaration - 1,
-            );
-        }
-
-        return $namespace;
-    }
-
-    /** @see \PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\SelfMemberReferenceSniff::getDeclarationNameWithNamespace() */
-    private function getDeclarationNameWithNamespace(array $tokens, $stackPtr): string
-    {
-        $nameParts = [];
-        $currentPointer = $stackPtr;
-
-        while ($tokens[$currentPointer]['code'] === T_NS_SEPARATOR
-            || $tokens[$currentPointer]['code'] === T_STRING
-            || isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])
-        ) {
-            if (isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])) {
-                --$currentPointer;
-
-                continue;
-            }
-
-            $nameParts[] = $tokens[$currentPointer]['content'];
-            --$currentPointer;
-        }
-
-        $nameParts = array_reverse($nameParts);
-
-        return implode('', $nameParts);
     }
 
     // Gets an array of docblock tag data, keyed by tag pointers with values of their end pointers.

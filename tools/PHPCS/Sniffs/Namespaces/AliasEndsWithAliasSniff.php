@@ -25,7 +25,7 @@ final class AliasEndsWithAliasSniff implements Sniff
             return;
         }
 
-        $namespace = $this->getNamespace($phpcsFile, $stackPtr);
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr);
 
         if (!str_ends_with($namespace, 'Alias')) {
             return;
@@ -62,16 +62,6 @@ final class AliasEndsWithAliasSniff implements Sniff
         return in_array($topLevelDir, ['src', 'tests', 'tools'], true);
     }
 
-    private function getNamespace(File $phpcsFile, int $scopePtr): string
-    {
-        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
-
-        return $this->getDeclarationNameWithNamespace(
-            $phpcsFile->getTokens(),
-            $endOfNamespaceDeclaration - 1,
-        );
-    }
-
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
     {
         $scopePtr = $phpcsFile->findNext(Tokens::$ooScopeTokens, $stackPtr);
@@ -86,29 +76,5 @@ final class AliasEndsWithAliasSniff implements Sniff
         $asKeywordPtr = $phpcsFile->findPrevious(T_AS, $lastStringPtr, $stackPtr);
 
         return $asKeywordPtr !== false;
-    }
-
-    private function getDeclarationNameWithNamespace(array $tokens, $stackPtr): string
-    {
-        $nameParts = [];
-        $currentPointer = $stackPtr;
-
-        while ($tokens[$currentPointer]['code'] === T_NS_SEPARATOR
-            || $tokens[$currentPointer]['code'] === T_STRING
-            || isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])
-        ) {
-            if (isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])) {
-                --$currentPointer;
-
-                continue;
-            }
-
-            $nameParts[] = $tokens[$currentPointer]['content'];
-            --$currentPointer;
-        }
-
-        $nameParts = array_reverse($nameParts);
-
-        return implode('', $nameParts);
     }
 }
