@@ -21,7 +21,7 @@ final class AliasEndsWithAliasSniff implements Sniff
     {
         // Not a project source file. (This apparently can't be controlled with
         // exclusions in phpcs.xml due to the way the custom sniffs are included.)
-        if (!$this->isSrcFile($phpcsFile)) {
+        if (!$this->isProjectFile($phpcsFile)) {
             return;
         }
 
@@ -52,11 +52,14 @@ final class AliasEndsWithAliasSniff implements Sniff
         );
     }
 
-    private function isSrcFile(File $phpcsFile): bool
+    private function isProjectFile(File $phpcsFile): bool
     {
-        $srcDir = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'src';
+        $projectRoot = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR;
+        $pattern = sprintf('#^%s#', preg_quote($projectRoot, DIRECTORY_SEPARATOR));
+        $phpcsFileRelative = preg_replace($pattern, '', $phpcsFile->getFilename());
+        $topLevelDir = strtok($phpcsFileRelative, DIRECTORY_SEPARATOR);
 
-        return str_starts_with($phpcsFile->getFilename(), $srcDir);
+        return in_array($topLevelDir, ['src', 'tests', 'tools'], true);
     }
 
     private function getNamespace(File $phpcsFile, int $scopePtr): string
