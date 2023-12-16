@@ -130,9 +130,6 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         $destinationAbsolute = $destination->absolute();
 
         foreach ($sourceFiles as $sourceFilePathname) {
-            // Once support for Symfony 4 is dropped, see if any of this logic can be
-            // eliminated in favor of the new path manipulation utilities in Symfony 5.4:
-            // https://symfony.com/doc/5.4/components/filesystem.html#path-manipulation-utilities
             $relativePathname = self::getRelativePath($sourceAbsolute, $sourceFilePathname);
             $destinationFilePathname = $destinationAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
 
