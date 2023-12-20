@@ -12,6 +12,7 @@ use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
@@ -43,8 +44,6 @@ final class FilesystemUnitTest extends TestCase
             ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
-        self::$chmodSpy = $this->prophesize(TestSpyInterface::class);
-        self::$filePermsSpy = $this->prophesize(TestSpyInterface::class);
     }
 
     private function createSut(): Filesystem
@@ -65,14 +64,13 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testChmodFailure(): void
     {
-        $this->mockGlobalFunctions();
-
         $permissions = 777;
         $path = PathHelper::sourceDirAbsolute();
         $this->symfonyFilesystem
             ->exists(Argument::any())
             ->willReturn(true);
-        self::$chmodSpy
+        BuiltinFunctionMocker::mock(['chmod']);
+        BuiltinFunctionMocker::$spies['chmod']
             ->report($path, $permissions)
             ->shouldBeCalledOnce()
             ->willReturn(false);
@@ -91,8 +89,6 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopySymfonyIOException(): void
     {
-        $this->mockGlobalFunctions();
-
         $previousMessage = 'Something went wrong';
         $message = sprintf(
             'Failed to copy %s to %s: %s',
@@ -108,7 +104,8 @@ final class FilesystemUnitTest extends TestCase
             ->copy(Argument::cetera())
             ->shouldBeCalled()
             ->willThrow($previous);
-        self::$filePermsSpy
+        BuiltinFunctionMocker::mock(['fileperms']);
+        BuiltinFunctionMocker::$spies['fileperms']
             ->report(Argument::cetera())
             ->willReturn(12_345);
         $sut = $this->createSut();
@@ -125,7 +122,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopySymfonyFileNotFoundException(): void
     {
-        $this->mockGlobalFunctions();
+        BuiltinFunctionMocker::mock(['fileperms']);
 
         $previousMessage = 'Something went wrong';
         $message = sprintf(
@@ -141,7 +138,7 @@ final class FilesystemUnitTest extends TestCase
             ->copy(Argument::cetera())
             ->shouldBeCalled()
             ->willThrow($previous);
-        self::$filePermsSpy
+        BuiltinFunctionMocker::$spies['fileperms']
             ->report(Argument::cetera())
             ->willReturn(12_345);
         $sut = $this->createSut();
@@ -158,22 +155,22 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopy(): void
     {
-        $this->mockGlobalFunctions();
-
         $sourceDirPath = PathHelper::sourceDirPath();
         $sourceDirAbsolute = $sourceDirPath->absolute();
         $destinationDirAbsolute = PathHelper::destinationDirAbsolute();
+        BuiltinFunctionMocker::mock(['chmod', 'fileperms']);
         $this->symfonyFilesystem
             ->copy($sourceDirAbsolute, $destinationDirAbsolute, true)
             ->willReturn(true);
         $this->symfonyFilesystem
             ->exists(Argument::cetera())
             ->willReturn(true);
-        self::$chmodSpy
+        BuiltinFunctionMocker::$spies['chmod'] = $this->prophesize(TestSpyInterface::class);
+        BuiltinFunctionMocker::$spies['chmod']
             ->report($destinationDirAbsolute, Argument::any())
             ->shouldBeCalled()
             ->willReturn(true);
-        self::$filePermsSpy
+        BuiltinFunctionMocker::$spies['fileperms']
             ->report(Argument::cetera())
             ->willReturn(12_345);
         $sut = $this->createSut();
@@ -188,18 +185,17 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopyChmodFailure(): void
     {
-        $this->mockGlobalFunctions();
-
+        BuiltinFunctionMocker::mock(['chmod', 'fileperms']);
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->willReturn(true);
         $this->symfonyFilesystem
             ->exists(Argument::cetera())
             ->willReturn(true);
-        self::$chmodSpy
+        BuiltinFunctionMocker::$spies['chmod']
             ->report(Argument::cetera())
             ->willReturn(false);
-        self::$filePermsSpy
+        BuiltinFunctionMocker::$spies['fileperms']
             ->report(Argument::cetera())
             ->willReturn(12_345);
         $sut = $this->createSut();
@@ -229,11 +225,10 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testFileModeFailure(): void
     {
-        $this->mockGlobalFunctions();
-
         $path = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
         FilesystemHelper::touch($path->absolute());
-        self::$filePermsSpy
+        BuiltinFunctionMocker::mock(['fileperms']);
+        BuiltinFunctionMocker::$spies['fileperms']
             ->report($path->absolute())
             ->shouldBeCalledOnce()
             ->willReturn(false);
@@ -321,10 +316,5 @@ final class FilesystemUnitTest extends TestCase
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->remove(PathHelper::stagingDirPath());
         }, IOException::class, $message, null, $previous::class);
-    }
-
-    private function mockGlobalFunctions(): void
-    {
-        require_once __DIR__ . '/filesystem_unit_test_global_mocks.inc';
     }
 }

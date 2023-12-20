@@ -6,6 +6,7 @@ use AssertionError;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -82,22 +83,20 @@ abstract class PathUnitTestCase extends TestCase
      */
     public function testGetCwd(string|false $builtInReturn, string $md5, string $expectedSutReturn): void
     {
-        $this->mockGlobalFunctions();
-
-        self::$chmodSpy = $this->prophesize(TestSpyInterface::class);
-        self::$chmodSpy
+        BuiltinFunctionMocker::mock(['getcwd', 'md5']);
+        BuiltinFunctionMocker::$spies['getcwd'] = $this->prophesize(TestSpyInterface::class);
+        BuiltinFunctionMocker::$spies['getcwd']
             ->report()
             ->shouldBeCalledOnce()
             ->willReturn($builtInReturn);
-        self::$md5Spy = $this->prophesize(TestSpyInterface::class);
-        self::$md5Spy
+        BuiltinFunctionMocker::$spies['md5'] = $this->prophesize(TestSpyInterface::class);
+        BuiltinFunctionMocker::$spies['md5']
             ->report()
             ->willReturn($md5);
 
         $reflection = new ReflectionClass(Path::class);
         $sut = $reflection->newInstanceWithoutConstructor();
         $method = $reflection->getMethod('getcwd');
-        $method->setAccessible(true);
         $actualSutReturn = $method->invoke($sut);
 
         self::assertSame($expectedSutReturn, $actualSutReturn);
@@ -165,10 +164,5 @@ abstract class PathUnitTestCase extends TestCase
         $assertException('relative', static function () use ($sut): void {
             $sut->relative($sut);
         });
-    }
-
-    private function mockGlobalFunctions(): void
-    {
-        require_once __DIR__ . '/path_unit_test_global_mocks.inc';
     }
 }

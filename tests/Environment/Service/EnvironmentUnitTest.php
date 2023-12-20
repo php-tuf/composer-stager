@@ -4,28 +4,12 @@ namespace PhpTuf\ComposerStager\Tests\Environment\Service;
 
 use PhpTuf\ComposerStager\Internal\Environment\Service\Environment;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
+use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Environment\Service\Environment */
 final class EnvironmentUnitTest extends TestCase
 {
-    public static ObjectProphecy $functionExistsSpy;
-    public static ObjectProphecy $setTimeLimitSpy;
-
-    protected function setUp(): void
-    {
-        self::$functionExistsSpy = $this->prophesize(TestSpyInterface::class);
-        self::$functionExistsSpy
-            ->report(Argument::any())
-            ->willReturn(true);
-        self::$setTimeLimitSpy = $this->prophesize(TestSpyInterface::class);
-        self::$setTimeLimitSpy
-            ->report(Argument::any())
-            ->willReturn(true);
-    }
-
     public function createSut(): Environment
     {
         return new Environment();
@@ -49,13 +33,8 @@ final class EnvironmentUnitTest extends TestCase
      */
     public function testSetTimeLimitFunctionExists(int $seconds, bool $setTimeLimitReturn): void
     {
-        $this->mockGlobalFunctions();
-
-        self::$functionExistsSpy
-            ->report('set_time_limit')
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
-        self::$setTimeLimitSpy
+        BuiltinFunctionMocker::mock(['set_time_limit']);
+        BuiltinFunctionMocker::$spies['set_time_limit']
             ->report($seconds)
             ->shouldBeCalledOnce()
             ->willReturn($setTimeLimitReturn);
@@ -87,13 +66,12 @@ final class EnvironmentUnitTest extends TestCase
      */
     public function testSetTimeLimitFunctionDoesNotExist(): void
     {
-        $this->mockGlobalFunctions();
-
-        self::$functionExistsSpy
+        BuiltinFunctionMocker::mock(['function_exists', 'set_time_limit']);
+        BuiltinFunctionMocker::$spies['function_exists']
             ->report('set_time_limit')
             ->shouldBeCalledOnce()
             ->willReturn(false);
-        self::$setTimeLimitSpy
+        BuiltinFunctionMocker::$spies['set_time_limit']
             ->report(Argument::any())
             ->shouldNotBeCalled();
         $sut = $this->createSut();
@@ -101,10 +79,5 @@ final class EnvironmentUnitTest extends TestCase
         $actualReturn = $sut->setTimeLimit(42);
 
         self::assertFalse($actualReturn);
-    }
-
-    private function mockGlobalFunctions(): void
-    {
-        require_once __DIR__ . '/environment_unit_test_function_mocks.inc';
     }
 }
