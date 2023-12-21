@@ -31,8 +31,6 @@ final class BuiltinFunctionMocker
             }
         };
 
-        // @todo See if you can use magic properties for spies, see https://www.php.net/manual/en/language.oop5.overloading.php#object.get.
-
         foreach ($functionNames as $functionName) {
             self::$spies[$functionName] = $prophet->getProphecy();
         }

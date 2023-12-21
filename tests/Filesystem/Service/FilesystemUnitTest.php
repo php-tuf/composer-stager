@@ -30,9 +30,6 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class FilesystemUnitTest extends TestCase
 {
-    public static ObjectProphecy $chmodSpy;
-    public static ObjectProphecy $filePermsSpy;
-
     private EnvironmentInterface|ObjectProphecy $environment;
     private PathFactoryInterface|ObjectProphecy $pathFactory;
     private SymfonyFilesystem|ObjectProphecy $symfonyFilesystem;

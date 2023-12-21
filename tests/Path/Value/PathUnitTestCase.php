@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
-use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
 
 /**
@@ -24,9 +23,6 @@ use ReflectionClass;
  */
 abstract class PathUnitTestCase extends TestCase
 {
-    public static ObjectProphecy $chmodSpy;
-    public static ObjectProphecy $md5Spy;
-
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
