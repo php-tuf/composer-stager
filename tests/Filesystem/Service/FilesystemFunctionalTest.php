@@ -94,13 +94,12 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testChmodFileDoesNotExist(): void
     {
-        $nonExistentAbsolute = '/var/www/non-existent.txt';
-        $nonExistentPath = PathHelper::createPath($nonExistentAbsolute);
+        $path = PathHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
-        $message = sprintf('The file cannot be found at %s.', $nonExistentAbsolute);
-        self::assertTranslatableException(static function () use ($sut, $nonExistentPath): void {
-            $sut->chmod($nonExistentPath, 0777);
+        $message = sprintf('The file cannot be found at %s.', $path->absolute());
+        self::assertTranslatableException(static function () use ($sut, $path): void {
+            $sut->chmod($path, 0777);
         }, LogicException::class, $message);
     }
 
@@ -156,7 +155,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::fileMode */
     public function testFileModeFileDoesNotExist(): void
     {
-        $path = PathHelper::createPath('/var/www/non-existent.txt');
+        $path = PathHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('No such file: %s', $path->absolute());
@@ -239,13 +238,10 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyError(): void
     {
-        $path = PathHelper::createPath('non-existent');
-        $message = sprintf(
-            'The path does not exist or is not a directory at %s',
-            $path->absolute(),
-        );
+        $path = PathHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
+        $message = sprintf('The path does not exist or is not a directory at %s', $path->absolute());
         self::assertTranslatableException(static function () use ($sut, $path): void {
             $sut->isDirEmpty($path);
         }, IOException::class, $message);
@@ -372,7 +368,7 @@ final class FilesystemFunctionalTest extends TestCase
                 'directories' => [],
                 'symlinks' => [],
                 'hardLinks' => [],
-                'subject' => 'non_existent_path.txt',
+                'subject' => PathHelper::nonExistentFileBasename(),
                 'exists' => false,
                 'isDir' => false,
                 'isFile' => false,
@@ -447,7 +443,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::readLink */
     public function testReadlinkOnNonExistentFile(): void
     {
-        $path = PathHelper::createPath('non-existent_file.txt', PathHelper::sourceDirAbsolute());
+        $path = PathHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $path->absolute());

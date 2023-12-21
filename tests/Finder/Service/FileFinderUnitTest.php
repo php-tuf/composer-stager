@@ -46,13 +46,10 @@ final class FileFinderUnitTest extends TestCase
     /** @covers ::getRecursiveDirectoryIterator */
     public function testGetRecursiveDirectoryIteratorException(): void
     {
-        $nonExistentPath = '/var/www/non-existent.txt';
-
-        $path = PathHelper::createPath($nonExistentPath);
-
+        $path = PathHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
-        $message = sprintf('The directory cannot be found or is not a directory at %s.', $nonExistentPath);
+        $message = sprintf('The directory cannot be found or is not a directory at %s.', $path->absolute());
         self::assertTranslatableException(static function () use ($sut, $path): void {
             $sut->find($path);
         }, IOException::class, $message);

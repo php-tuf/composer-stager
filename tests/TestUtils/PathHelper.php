@@ -96,6 +96,21 @@ final class PathHelper
         return self::createPath(self::destinationDirAbsolute());
     }
 
+    public static function nonExistentFileBasename(): string
+    {
+        return 'non-existent-file.txt';
+    }
+
+    public static function nonExistentFileAbsolute(): string
+    {
+        return self::makeAbsolute(self::nonExistentFileBasename(), '/var/www');
+    }
+
+    public static function nonExistentFilePath(): PathInterface
+    {
+        return self::createPath(self::nonExistentFileAbsolute());
+    }
+
     public static function createPath(string $path, ?string $basePath = null): PathInterface
     {
         if (is_string($basePath)) {
