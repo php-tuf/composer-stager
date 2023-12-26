@@ -2065,16 +2065,16 @@
         },
         {
             "name": "phpro/grumphp-shim",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpro/grumphp-shim.git",
-                "reference": "976cfa9822ed9821a8e8aa1ee7376ac12034c4e2"
+                "reference": "fb231596e179a42e1d3614edcf01cbb00709294d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpro/grumphp-shim/zipball/976cfa9822ed9821a8e8aa1ee7376ac12034c4e2",
-                "reference": "976cfa9822ed9821a8e8aa1ee7376ac12034c4e2",
+                "url": "https://api.github.com/repos/phpro/grumphp-shim/zipball/fb231596e179a42e1d3614edcf01cbb00709294d",
+                "reference": "fb231596e179a42e1d3614edcf01cbb00709294d",
                 "shasum": ""
             },
             "require": {
@@ -2118,9 +2118,9 @@
             "description": "GrumPHP Phar distribution",
             "support": {
                 "issues": "https://github.com/phpro/grumphp-shim/issues",
-                "source": "https://github.com/phpro/grumphp-shim/tree/v2.3.0"
+                "source": "https://github.com/phpro/grumphp-shim/tree/v2.4.0"
             },
-            "time": "2023-11-24T06:58:33+00:00"
+            "time": "2023-12-22T08:41:42+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -3021,16 +3021,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.18.12",
+            "version": "0.18.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "ed8d5352a3faa69e4a5e315896abffd4bc29c828"
+                "reference": "f8011a76d36aa4f839f60f3b4f97707d97176618"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/ed8d5352a3faa69e4a5e315896abffd4bc29c828",
-                "reference": "ed8d5352a3faa69e4a5e315896abffd4bc29c828",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f8011a76d36aa4f839f60f3b4f97707d97176618",
+                "reference": "f8011a76d36aa4f839f60f3b4f97707d97176618",
                 "shasum": ""
             },
             "require": {
@@ -3065,7 +3065,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.18.12"
+                "source": "https://github.com/rectorphp/rector/tree/0.18.13"
             },
             "funding": [
                 {
@@ -3073,7 +3073,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-04T08:47:30+00:00"
+            "time": "2023-12-20T16:08:01+00:00"
         },
         {
             "name": "sanmai/later",
