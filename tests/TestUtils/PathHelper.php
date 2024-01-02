@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 final class PathHelper
@@ -118,7 +118,8 @@ final class PathHelper
             $path = self::makeAbsolute($path, $basePath);
         }
 
-        return new TestPath($path);
+        return (new PathFactory())
+            ->create($path);
     }
 
     public static function canonicalize(string $path): string

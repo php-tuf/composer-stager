@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
@@ -275,9 +274,9 @@ final class FilesystemUnitTest extends TestCase
     {
         $this->environment->setTimeLimit($timeout)
             ->shouldBeCalledOnce();
-        $stagingDir = new TestPath($path);
+        $stagingDir = PathHelper::createPath($path);
         $this->symfonyFilesystem
-            ->remove($path)
+            ->remove($stagingDir->absolute())
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

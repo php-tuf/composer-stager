@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
  *
@@ -158,7 +160,7 @@ final class UnixLikePathUnitTest extends PathUnitTestCase
         return [
             'With $basePath argument.' => [
                 'path' => 'one',
-                'baseDir' => new TestPath('/arg'),
+                'baseDir' => PathHelper::createPath('/arg'),
                 'absolute' => '/arg/one',
             ],
             'With explicit null $basePath argument' => [

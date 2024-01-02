@@ -9,9 +9,7 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -30,13 +28,9 @@ final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
     private FileFinderInterface|ObjectProphecy $fileFinder;
     private FilesystemInterface|ObjectProphecy $filesystem;
     private PathFactoryInterface|ObjectProphecy $pathFactory;
-    private PathInterface $destination;
-    private PathInterface $source;
 
     protected function setUp(): void
     {
-        $this->source = new TestPath(PathHelper::activeDirRelative());
-        $this->destination = new TestPath(PathHelper::stagingDirRelative());
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
@@ -66,13 +60,13 @@ final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
     public function testSyncSourceNotFound(): void
     {
         $this->filesystem
-            ->exists($this->source)
+            ->exists(PathHelper::sourceDirPath())
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $message = sprintf('The source directory does not exist at %s', $this->source->absolute());
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->sync($this->source, $this->destination);
+        $message = sprintf('The source directory does not exist at %s', PathHelper::sourceDirAbsolute());
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
         }, LogicException::class, $message);
     }
 
@@ -93,12 +87,12 @@ final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->mkdir($this->destination)
+            ->mkdir(PathHelper::destinationDirPath())
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
         }, $previous::class, $message);
     }
 
@@ -107,12 +101,12 @@ final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->fileFinder
-            ->find($this->destination, Argument::any())
+            ->find(PathHelper::destinationDirPath(), Argument::any())
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
         }, $previous::class, $message);
     }
 

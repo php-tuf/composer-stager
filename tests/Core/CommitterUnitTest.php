@@ -14,7 +14,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterfa
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -80,8 +79,8 @@ final class CommitterUnitTest extends TestCase
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
-        $activeDir = new TestPath($activeDir);
-        $stagingDir = new TestPath($stagingDir);
+        $activeDir = PathHelper::activeDirPath();
+        $stagingDir = PathHelper::stagingDirPath();
         $this->preconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();

@@ -10,7 +10,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
@@ -65,7 +64,7 @@ final class CleanerUnitTest extends TestCase
      */
     public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
-        $path = new TestPath($path);
+        $path = PathHelper::createPath($path);
         $this->preconditions
             ->assertIsFulfilled(PathHelper::activeDirPath(), $path, null, $timeout)
             ->shouldBeCalledOnce();

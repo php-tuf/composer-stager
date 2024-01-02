@@ -184,7 +184,7 @@ final class WindowsPathUnitTest extends PathUnitTestCase
         return [
             'With $basePath argument.' => [
                 'path' => 'One',
-                'baseDir' => new TestPath('C:\\Arg'),
+                'baseDir' => PathHelper::createPath('C:\\Arg'),
                 'absolute' => 'C:\\Arg\\One',
             ],
             'With explicit null $basePath argument' => [

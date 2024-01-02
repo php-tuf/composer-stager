@@ -14,7 +14,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterfac
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Beginner;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -80,8 +79,8 @@ final class BeginnerUnitTest extends TestCase
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
-        $activeDir = new TestPath($activeDir);
-        $stagingDir = new TestPath($stagingDir);
+        $activeDir = PathHelper::createPath($activeDir);
+        $stagingDir = PathHelper::createPath($stagingDir);
         $this->preconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();

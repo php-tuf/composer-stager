@@ -7,13 +7,11 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -39,14 +37,10 @@ use Prophecy\Prophecy\ObjectProphecy;
 final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
 {
     private FilesystemInterface|ObjectProphecy $filesystem;
-    private PathInterface $destination;
-    private PathInterface $source;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
     protected function setUp(): void
     {
-        $this->source = new TestPath(PathHelper::activeDirRelative());
-        $this->destination = new TestPath(PathHelper::stagingDirRelative());
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->exists(Argument::any())
@@ -80,39 +74,39 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
         array $command,
         ?OutputCallbackInterface $callback,
     ): void {
-        $source = new TestPath($source);
-        $destination = new TestPath($destination);
+        $sourcePath = PathHelper::createPath($source);
+        $destinationPath = PathHelper::createPath($destination);
 
         $this->filesystem
-            ->mkdir($destination)
+            ->mkdir($destinationPath)
             ->shouldBeCalledOnce();
         $this->rsync
             ->run($command, $callback)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->sync($source, $destination, $exclusions, $callback);
+        $sut->sync($sourcePath, $destinationPath, $exclusions, $callback);
     }
 
     public function providerSync(): array
     {
         return [
             'Siblings: no exclusions given' => [
-                'source' => 'source/one',
-                'destination' => 'destination/two',
+                'source' => '/var/www/source/one',
+                'destination' => '/var/www/destination/two',
                 'exclusions' => null,
                 'command' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    'source/one/',
-                    'destination/two',
+                    '/var/www/source/one/',
+                    '/var/www/destination/two',
                 ],
                 'callback' => null,
             ],
             'Siblings: simple exclusions given' => [
-                'source' => 'source/two',
-                'destination' => 'destination/two',
+                'source' => '/var/www/source/two',
+                'destination' => '/var/www/destination/two',
                 'exclusions' => new PathList('three.txt', 'four.txt'),
                 'command' => [
                     '--archive',
@@ -120,14 +114,14 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
                     '--verbose',
                     '--exclude=/three.txt',
                     '--exclude=/four.txt',
-                    'source/two/',
-                    'destination/two',
+                    '/var/www/source/two/',
+                    '/var/www/destination/two',
                 ],
                 'callback' => new TestOutputCallback(),
             ],
             'Siblings: duplicate exclusions given' => [
-                'source' => 'source/three',
-                'destination' => 'destination/three',
+                'source' => '/var/www/source/three',
+                'destination' => '/var/www/destination/three',
                 'exclusions' => new PathList(...[
                     'four/five',
                     'six/seven',
@@ -140,14 +134,14 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
                     '--verbose',
                     '--exclude=/four/five',
                     '--exclude=/six/seven',
-                    'source/three/',
-                    'destination/three',
+                    '/var/www/source/three/',
+                    '/var/www/destination/three',
                 ],
                 'callback' => null,
             ],
             'Siblings: Windows directory separators' => [
-                'source' => 'source/one\\two',
-                'destination' => 'destination\\one/two',
+                'source' => '/var/www/source/one\\two',
+                'destination' => '/var/www/destination\\one/two',
                 'exclusions' => new PathList(...[
                     'three\\four',
                     'five/six/seven/eight',
@@ -161,27 +155,27 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
                     '--verbose',
                     '--exclude=/three/four',
                     '--exclude=/five/six/seven/eight',
-                    'source/one/two/',
-                    'destination/one/two',
+                    '/var/www/source/one/two/',
+                    '/var/www/destination/one/two',
                 ],
                 'callback' => null,
             ],
             'Nested: destination inside source (neither is excluded)' => [
-                'source' => 'source',
-                'destination' => 'source/destination',
+                'source' => '/var/www/source',
+                'destination' => '/var/www/source/destination',
                 'exclusions' => null,
                 'command' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    'source/',
-                    'source/destination',
+                    '/var/www/source/',
+                    '/var/www/source/destination',
                 ],
                 'callback' => null,
             ],
             'Nested: source inside destination (source is excluded)' => [
-                'source' => 'destination/source',
-                'destination' => 'destination',
+                'source' => '/var/www/destination/source',
+                'destination' => '/var/www/destination',
                 'exclusions' => null,
                 'command' => [
                     '--archive',
@@ -189,14 +183,14 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
-                    'destination/source/',
-                    'destination',
+                    '/var/www/destination/source/',
+                    '/var/www/destination',
                 ],
                 'callback' => null,
             ],
             'Nested: with Windows directory separators' => [
-                'source' => 'destination\\source',
-                'destination' => 'destination',
+                'source' => '/var/www/destination\\source',
+                'destination' => '/var/www/destination',
                 'exclusions' => null,
                 'command' => [
                     '--archive',
@@ -204,8 +198,8 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
-                    'destination/source/',
-                    'destination',
+                    '/var/www/destination/source/',
+                    '/var/www/destination',
                 ],
                 'callback' => null,
             ],
@@ -224,8 +218,8 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
             ->willThrow($caughtException);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
         }, $thrownException, $caughtException->getMessage(), null, $caughtException::class);
     }
 
@@ -253,16 +247,16 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $message = sprintf('The source directory does not exist at %s', $this->source->absolute());
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->sync($this->source, $this->destination);
+        $message = sprintf('The source directory does not exist at %s', PathHelper::sourceDirAbsolute());
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
         }, LogicException::class, $message);
     }
 
     /** @covers ::assertDirectoriesAreNotTheSame */
     public function testSyncDirectoriesTheSame(): void
     {
-        $source = new TestPath('same');
+        $source = PathHelper::createPath('same');
         $destination = $source;
         $sut = $this->createSut();
 
@@ -278,12 +272,12 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->mkdir($this->destination)
+            ->mkdir(PathHelper::destinationDirPath())
             ->willThrow($previous);
         $sut = $this->createSut();
 
-        self::assertTranslatableException(function () use ($sut): void {
-            $sut->sync($this->source, $this->destination);
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
         }, IOException::class, $message);
     }
 }
