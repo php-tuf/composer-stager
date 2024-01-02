@@ -51,6 +51,8 @@ final class Filesystem implements FilesystemInterface
     {
         $pathAbsolute = $path->absolute();
 
+        // \Symfony\Component\Filesystem\Filesystem::chmod() isn't used here because
+        // it doesn't distinguish between a non-existent file and a chmod() failure.
         $result = @chmod($pathAbsolute, $permissions);
 
         if ($result) {
