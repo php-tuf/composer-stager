@@ -89,6 +89,16 @@ trait AssertTrait
         );
     }
 
+    /** Asserts that a given class is translatable aware. */
+    protected static function assertTranslatableAware(object $sut): void
+    {
+        $reflection = new ReflectionProperty($sut, 'translatableFactory');
+        $value = $reflection->getValue($sut);
+
+        $message = sprintf('%s is not translatable aware.', get_debug_type($sut));
+        self::assertInstanceOf(TranslatableFactoryInterface::class, $value, $message);
+    }
+
     /** Asserts that two translatables are equivalent, i.e., have the same properties. */
     protected static function assertTranslatableEquals(
         TranslatableInterface $expected,
@@ -98,16 +108,6 @@ trait AssertTrait
         $expected = new TranslatableReflection($expected);
         $actual = new TranslatableReflection($actual);
         self::assertSame($expected->getProperties(), $actual->getProperties(), $message);
-    }
-
-    /** Asserts that a given class is translatable aware. */
-    protected static function assertTranslatableAware(object $sut): void
-    {
-        $reflection = new ReflectionProperty($sut, 'translatableFactory');
-        $value = $reflection->getValue($sut);
-
-        $message = sprintf('%s is not translatable aware.', get_debug_type($sut));
-        self::assertInstanceOf(TranslatableFactoryInterface::class, $value, $message);
     }
 
     /**
