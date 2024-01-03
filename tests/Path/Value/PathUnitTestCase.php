@@ -41,7 +41,7 @@ abstract class PathUnitTestCase extends TestCase
         $overrideBasePath = static function (PathInterface $pathObject, string $basePathOverride): void {
             $reflection = new ReflectionClass($pathObject);
             $reflection->newInstanceWithoutConstructor();
-            $basePathProperty = $reflection->getProperty('basePath');
+            $basePathProperty = $reflection->getProperty('basePathAbsolute');
             $basePathProperty->setValue($pathObject, $basePathOverride);
         };
         $overrideBasePath($sut, $basePath);
@@ -77,9 +77,13 @@ abstract class PathUnitTestCase extends TestCase
      *
      * @runInSeparateProcess
      */
-    public function testGetCwd(string|false $builtInReturn, string $md5, string $expectedSutReturn): void
-    {
-        BuiltinFunctionMocker::mock(['getcwd', 'md5']);
+    public function testGetCwd(
+        string|false $builtInReturn,
+        string $md5,
+        string $sysGetTempDir,
+        string $expectedSutReturn,
+    ): void {
+        BuiltinFunctionMocker::mock(['getcwd', 'md5', 'sys_get_temp_dir']);
         BuiltinFunctionMocker::$spies['getcwd'] = $this->prophesize(TestSpyInterface::class);
         BuiltinFunctionMocker::$spies['getcwd']
             ->report()
@@ -89,6 +93,10 @@ abstract class PathUnitTestCase extends TestCase
         BuiltinFunctionMocker::$spies['md5']
             ->report()
             ->willReturn($md5);
+        BuiltinFunctionMocker::$spies['sys_get_temp_dir'] = $this->prophesize(TestSpyInterface::class);
+        BuiltinFunctionMocker::$spies['sys_get_temp_dir']
+            ->report()
+            ->willReturn($sysGetTempDir);
 
         $reflection = new ReflectionClass(Path::class);
         $sut = $reflection->newInstanceWithoutConstructor();
@@ -104,12 +112,14 @@ abstract class PathUnitTestCase extends TestCase
             'Normal return' => [
                 'builtInReturn' => __DIR__,
                 'md5' => '',
+                'sys_get_temp_dir' => '',
                 'expectedSutReturn' => __DIR__,
             ],
             'Failure' => [
                 'builtInReturn' => false,
                 'md5' => '1234',
-                'expectedSutReturn' => sys_get_temp_dir() . '/composer-stager/error-1234',
+                'sys_get_temp_dir' => '/temp',
+                'expectedSutReturn' => '/temp/composer-stager/error-1234',
             ],
         ];
     }
@@ -128,7 +138,7 @@ abstract class PathUnitTestCase extends TestCase
         $invalidBasePath = '../relative-path.txt';
         $reflection = new ReflectionClass($sut);
         $reflection->newInstanceWithoutConstructor();
-        $basePath = $reflection->getProperty('basePath');
+        $basePath = $reflection->getProperty('basePathAbsolute');
         $basePath->setValue($sut, $invalidBasePath);
 
         // Disable assertions so production error-handling can be tested.

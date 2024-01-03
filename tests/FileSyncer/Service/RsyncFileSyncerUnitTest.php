@@ -247,9 +247,9 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
             ->willReturn(false);
         $sut = $this->createSut();
 
-        $message = sprintf('The source directory does not exist at %s', PathHelper::sourceDirAbsolute());
+        $message = sprintf('The source directory does not exist at %s', PathHelper::nonExistentDirAbsolute());
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
+            $sut->sync(PathHelper::nonExistentDirPath(), PathHelper::destinationDirPath());
         }, LogicException::class, $message);
     }
 

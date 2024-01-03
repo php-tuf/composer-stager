@@ -15,6 +15,8 @@ final class PathHelper
     private const STAGING_DIR = 'staging-dir';
     private const SOURCE_DIR = 'source-dir';
     private const DESTINATION_DIR = 'destination-dir';
+    private const NON_EXISTENT_DIR = 'non-existent-dir';
+    private const NON_EXISTENT_FILE = 'non-existent-file.txt';
 
     public static function repositoryRootAbsolute(): string
     {
@@ -96,9 +98,24 @@ final class PathHelper
         return self::createPath(self::destinationDirAbsolute());
     }
 
+    public static function nonExistentDirBasename(): string
+    {
+        return self::NON_EXISTENT_DIR;
+    }
+
+    public static function nonExistentDirAbsolute(): string
+    {
+        return self::makeAbsolute(self::nonExistentDirBasename(), '/var/www');
+    }
+
+    public static function nonExistentDirPath(): PathInterface
+    {
+        return self::createPath(self::nonExistentDirAbsolute());
+    }
+
     public static function nonExistentFileBasename(): string
     {
-        return 'non-existent-file.txt';
+        return self::NON_EXISTENT_FILE;
     }
 
     public static function nonExistentFileAbsolute(): string

@@ -69,4 +69,13 @@ namespace PhpTuf\ComposerStager\Internal\Path\Value {
                 ->report();
         }
     }
+
+    if (BuiltinFunctionMocker::shouldMock('sys_get_temp_dir')) {
+        function sys_get_temp_dir(): string
+        {
+            return BuiltinFunctionMocker::$spies['sys_get_temp_dir']
+                ->reveal()
+                ->report();
+        }
+    }
 }

@@ -82,10 +82,15 @@ trait AssertTrait
 
         $actual = FilesystemHelper::fileMode($path);
 
+        self::assertOctalEquals($mode, $actual);
+    }
+
+    protected static function assertOctalEquals(int $expected, mixed $actual): void
+    {
         self::assertSame(
-            substr(sprintf('0%o', $mode), -4),
+            substr(sprintf('0%o', $expected), -4),
             substr(sprintf('0%o', $actual), -4),
-            sprintf('File has expected permissions (0%o).', $mode),
+            sprintf('File has expected permissions (0%o).', $expected),
         );
     }
 

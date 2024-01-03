@@ -15,6 +15,12 @@ final class FilesystemHelper
         chmod($path, $mode);
 
         clearstatcache(true, $path);
+
+        if (EnvironmentHelper::isWindows()) {
+            return;
+        }
+
+        assert(self::fileMode($path) === $mode, 'Set file mode.');
     }
 
     public static function createDirectories(array|string $directories, ?string $basePath = null): void

@@ -14,7 +14,7 @@ use Throwable;
  */
 final class Path implements PathInterface
 {
-    private string $basePath;
+    private string $basePathAbsolute;
 
     /**
      * @param string $path
@@ -32,14 +32,14 @@ final class Path implements PathInterface
         // Especially since it accepts relative paths, an immutable path value
         // object should be immune to environmental details like the current
         // working directory. Cache the CWD at time of creation.
-        $this->basePath = $basePath instanceof PathInterface
+        $this->basePathAbsolute = $basePath instanceof PathInterface
             ? $basePath->absolute()
             : $this->getcwd();
     }
 
     public function absolute(): string
     {
-        return $this->doAbsolute($this->basePath);
+        return $this->doAbsolute($this->basePathAbsolute);
     }
 
     public function isAbsolute(): bool
@@ -66,8 +66,7 @@ final class Path implements PathInterface
         // if the current directory does.) But the likelihood is probably so slight
         // that it hardly seems worth cluttering up client code handling theoretical
         // IO exceptions. Instead, fall back to a non-existent path in the temporary
-        // directory to avoid throwing errors as well as operating on unintended
-        // directories.
+        // directory to avoid throwing errors or operating on unintended directories.
         $getcwd = getcwd();
 
         if ($getcwd === false) {
@@ -86,10 +85,10 @@ final class Path implements PathInterface
             // shouldn't be possible here because, in order to get to this point in the
             // code, the base path must necessarily have been set to an absolute path in
             // the constructor--either explicitly or via `getcwd()`. Nevertheless, as a
-            // matter of defensive programming, use an assertion and return the normalized
+            // matter of defensive programming, use an assertion and return the canonicalized
             // path, whatever it is, in case of the "impossible" in production.
             //
-            // @todo It's probably better to throw an InvalidArgumentException, but that will
+            // @todo It may be better to throw an InvalidArgumentException, but that would
             //   have a widespread effect on error-handling, so come back to it in a follow-up.
             assert(false, sprintf('Base paths must be absolute. Got %s.', $basePath));
 
