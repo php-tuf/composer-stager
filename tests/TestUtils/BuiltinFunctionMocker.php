@@ -6,7 +6,11 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/** Provides the ability to mock built-in PHP functions. */
+/**
+ * Provides the ability to mock built-in PHP functions.
+ *
+ * @see tests/TestUtils/builtin_function_mocks.inc
+ */
 final class BuiltinFunctionMocker
 {
     /** @var array string<ObjectProphecy|TestSpyInterface> */
