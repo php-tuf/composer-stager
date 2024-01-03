@@ -12,7 +12,8 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
  * Developer's note: This interface and its method names should correspond as much as possible to
  * PHP's built-in filesystem functions at {@see https://www.php.net/manual/en/book.filesystem.php}.
  *
- * @see \PhpTuf\ComposerStager\API\Path\Value\PathInterface for path string functionality that doesn't touch the filesystem.
+ * @see \PhpTuf\ComposerStager\API\Path\Value\PathInterface
+ *   For path string functionality that doesn't touch the filesystem.
  *
  * @package Filesystem
  *
