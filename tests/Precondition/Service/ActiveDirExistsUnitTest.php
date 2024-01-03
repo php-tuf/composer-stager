@@ -45,7 +45,7 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
     public function testFulfilled(): void
     {
         $this->filesystem
-            ->exists(PathHelper::activeDirPath())
+            ->fileExists(PathHelper::activeDirPath())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
@@ -57,7 +57,7 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
     {
         $message = 'The active directory does not exist.';
         $this->filesystem
-            ->exists(PathHelper::activeDirPath())
+            ->fileExists(PathHelper::activeDirPath())
             ->willReturn(false);
 
         $this->doTestUnfulfilled($message);

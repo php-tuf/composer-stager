@@ -97,7 +97,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
     private function findFiles(PathInterface $path, PathListInterface $exclusions): array
     {
         // Ignore non-existent directories.
-        if (!$this->filesystem->exists($path)) {
+        if (!$this->filesystem->fileExists($path)) {
             return [];
         }
 

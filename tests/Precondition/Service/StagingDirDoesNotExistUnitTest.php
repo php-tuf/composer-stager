@@ -46,7 +46,7 @@ final class StagingDirDoesNotExistUnitTest extends PreconditionUnitTestCase
     public function testFulfilled(): void
     {
         $this->filesystem
-            ->exists(PathHelper::stagingDirPath())
+            ->fileExists(PathHelper::stagingDirPath())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(false);
 
@@ -58,7 +58,7 @@ final class StagingDirDoesNotExistUnitTest extends PreconditionUnitTestCase
     {
         $message = 'The staging directory already exists.';
         $this->filesystem
-            ->exists(PathHelper::stagingDirPath())
+            ->fileExists(PathHelper::stagingDirPath())
             ->willReturn(true);
 
         $this->doTestUnfulfilled($message);

@@ -248,7 +248,7 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /**
-     * @covers ::exists
+     * @covers ::fileExists
      * @covers ::getFileType
      * @covers ::isDir
      * @covers ::isFile
@@ -278,7 +278,7 @@ final class FilesystemFunctionalTest extends TestCase
         $subject = PathHelper::createPath($subject, PathHelper::sourceDirAbsolute());
         $sut = $this->createSut();
 
-        $actualExists = $sut->exists($subject);
+        $actualExists = $sut->fileExists($subject);
         $actualIsDir = $sut->isDir($subject);
         $actualIsFile = $sut->isFile($subject);
         $actualIsLink = $sut->isLink($subject);

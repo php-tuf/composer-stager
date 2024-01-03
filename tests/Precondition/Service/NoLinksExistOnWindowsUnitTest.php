@@ -55,7 +55,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
             ->isWindows()
             ->willReturn(false);
         $this->filesystem
-            ->exists(Argument::cetera())
+            ->fileExists(Argument::cetera())
             ->shouldNotBeCalled();
         $this->fileFinder
             ->find(Argument::cetera())

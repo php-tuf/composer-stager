@@ -32,7 +32,7 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
             ->willReturn([]);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::type(PathInterface::class))
+            ->fileExists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 

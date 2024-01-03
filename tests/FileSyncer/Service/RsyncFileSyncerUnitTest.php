@@ -43,7 +43,7 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::any())
+            ->fileExists(Argument::any())
             ->willReturn(true);
         $this->filesystem
             ->mkdir(Argument::any());
@@ -243,7 +243,7 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
     public function testSyncSourceDirectoryNotFound(): void
     {
         $this->filesystem
-            ->exists(Argument::any())
+            ->fileExists(Argument::any())
             ->willReturn(false);
         $sut = $this->createSut();
 

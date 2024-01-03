@@ -48,7 +48,7 @@ final class StagingDirDoesNotExist extends AbstractPrecondition implements Stagi
         ?PathListInterface $exclusions = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        if ($this->filesystem->exists($stagingDir)) {
+        if ($this->filesystem->fileExists($stagingDir)) {
             throw new PreconditionException($this, $this->t(
                 'The staging directory already exists.',
                 null,
