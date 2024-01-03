@@ -42,7 +42,7 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
             ->willReturn([]);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::type(PathInterface::class))
+            ->fileExists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->fileSyncer = $this->prophesize(PhpFileSyncerInterface::class);
         $this->fileSyncerFactory = $this->prophesize(FileSyncerFactoryInterface::class);
@@ -73,7 +73,7 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
 
         $this->fileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
         $this->filesystem
-            ->exists(Argument::cetera())
+            ->fileExists(Argument::cetera())
             ->shouldNotBeCalled();
         $this->fileFinder
             ->find(Argument::cetera())

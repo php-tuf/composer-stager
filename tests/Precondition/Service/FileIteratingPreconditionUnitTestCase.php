@@ -42,7 +42,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
             ->willReturn([]);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::type(PathInterface::class))
+            ->fileExists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
@@ -53,7 +53,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
     public function testExitEarly(): void
     {
         $this->filesystem
-            ->exists(Argument::cetera())
+            ->fileExists(Argument::cetera())
             ->shouldNotBeCalled();
         $this->fileFinder
             ->find(Argument::cetera())
@@ -122,7 +122,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $stagingDirPath = PathHelper::stagingDirPath();
 
         $this->filesystem
-            ->exists($activeDirPath)
+            ->fileExists($activeDirPath)
             ->willReturn(false);
         $sut = $this->createSut();
 
@@ -139,7 +139,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $stagingDirPath = PathHelper::stagingDirPath();
 
         $this->filesystem
-            ->exists($stagingDirPath)
+            ->fileExists($stagingDirPath)
             ->willReturn(false);
         $sut = $this->createSut();
 

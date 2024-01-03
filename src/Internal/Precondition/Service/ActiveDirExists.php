@@ -48,7 +48,7 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
         ?PathListInterface $exclusions = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        if (!$this->filesystem->exists($activeDir)) {
+        if (!$this->filesystem->fileExists($activeDir)) {
             throw new PreconditionException($this, $this->t(
                 'The active directory does not exist.',
                 null,

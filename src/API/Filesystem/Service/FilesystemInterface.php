@@ -9,6 +9,9 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 /**
  * Provides basic utilities for interacting with the file system.
  *
+ * Developer's note: This interface and its method names should correspond as much as possible to
+ * PHP's built-in filesystem functions at {@see https://www.php.net/manual/en/book.filesystem.php}.
+ *
  * @package Filesystem
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
@@ -57,7 +60,7 @@ interface FilesystemInterface
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   A path to test.
      */
-    public function exists(PathInterface $path): bool;
+    public function fileExists(PathInterface $path): bool;
 
     /**
      * Gets the mode (permissions) of a given file or directory.

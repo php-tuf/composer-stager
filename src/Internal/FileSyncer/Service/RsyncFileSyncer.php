@@ -77,7 +77,7 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
     private function assertSourceExists(PathInterface $source): void
     {
-        if (!$this->filesystem->exists($source)) {
+        if (!$this->filesystem->fileExists($source)) {
             throw new LogicException($this->t(
                 'The source directory does not exist at %path',
                 $this->p(['%path' => $source->absolute()]),

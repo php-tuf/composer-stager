@@ -113,7 +113,7 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    public function exists(PathInterface $path): bool
+    public function fileExists(PathInterface $path): bool
     {
         return $this->getFileType($path) !== self::PATH_DOES_NOT_EXIST;
     }

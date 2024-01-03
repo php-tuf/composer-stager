@@ -34,7 +34,7 @@ final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::any())
+            ->fileExists(Argument::any())
             ->willReturn(true);
         $this->filesystem
             ->isDirEmpty(Argument::any())
@@ -60,7 +60,7 @@ final class PhpFileSyncerUnitTest extends FileSyncerUnitTestCase
     public function testSyncSourceNotFound(): void
     {
         $this->filesystem
-            ->exists(PathHelper::sourceDirPath())
+            ->fileExists(PathHelper::sourceDirPath())
             ->willReturn(false);
         $sut = $this->createSut();
 
