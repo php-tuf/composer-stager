@@ -26,7 +26,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
             return;
         }
 
-        $namespace = $this->getNamespace($phpcsFile, $stackPtr);
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr);
 
         // Not a scope-level namespace, e.g., a class or interface.
         // (It's probably an anonymous function declaration.)
@@ -67,16 +67,6 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
         return str_starts_with($phpcsFile->getFilename(), $srcDir);
     }
 
-    private function getNamespace(File $phpcsFile, int $scopePtr): string
-    {
-        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
-
-        return NamespaceHelper::getDeclarationNameWithNamespace(
-            $phpcsFile->getTokens(),
-            $endOfNamespaceDeclaration - 1,
-        );
-    }
-
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
     {
         $scopePtr = $phpcsFile->findNext(Tokens::$ooScopeTokens, $stackPtr);
@@ -113,7 +103,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
         $namespaceTokenPtr = $phpcsFile->findNext(T_NAMESPACE, 0);
         $namespacePtr = $phpcsFile->findNext(T_STRING, $namespaceTokenPtr);
 
-        return $this->getNamespace($phpcsFile, $namespacePtr);
+        return NamespaceHelper::getNamespace($phpcsFile, $namespacePtr);
     }
 
     private function getClassName(File $phpcsFile): mixed
