@@ -57,7 +57,7 @@ final class Filesystem implements FilesystemInterface
             return;
         }
 
-        if (!$this->symfonyFilesystem->exists($pathAbsolute)) {
+        if (!$this->fileExists($path)) {
             throw new LogicException($this->t(
                 'The file cannot be found at %path.',
                 $this->p(['%path' => $pathAbsolute]),
@@ -113,7 +113,7 @@ final class Filesystem implements FilesystemInterface
 
     public function fileExists(PathInterface $path): bool
     {
-        return $this->getFileType($path) !== self::PATH_DOES_NOT_EXIST;
+        return file_exists($path->absolute());
     }
 
     public function fileMode(PathInterface $path): int
@@ -126,7 +126,7 @@ final class Filesystem implements FilesystemInterface
             return $permissions & 0777;
         }
 
-        if (!$this->symfonyFilesystem->exists($pathAbsolute)) {
+        if (!$this->fileExists($path)) {
             throw new LogicException($this->t(
                 'No such file: %file',
                 $this->p(['%file' => $pathAbsolute]),

@@ -61,20 +61,27 @@ final class FilesystemUnitTest extends TestCase
     public function testChmodFailure(): void
     {
         $permissions = 777;
-        $path = PathHelper::sourceDirAbsolute();
+        $pathAbsolute = PathHelper::arbitraryFileAbsolute();
         $this->symfonyFilesystem
             ->exists(Argument::any())
             ->willReturn(true);
-        BuiltinFunctionMocker::mock(['chmod' => $this->prophesize(TestSpyInterface::class)]);
+        BuiltinFunctionMocker::mock([
+            'chmod' => $this->prophesize(TestSpyInterface::class),
+            'file_exists' => $this->prophesize(TestSpyInterface::class),
+        ]);
         BuiltinFunctionMocker::$spies['chmod']
-            ->report($path, $permissions)
+            ->report($pathAbsolute, $permissions)
             ->shouldBeCalledOnce()
             ->willReturn(false);
+        BuiltinFunctionMocker::$spies['file_exists']
+            ->report($pathAbsolute)
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
         $sut = $this->createSut();
 
-        $message = sprintf('The file mode could not be changed on %s.', $path);
+        $message = sprintf('The file mode could not be changed on %s.', $pathAbsolute);
         self::assertTranslatableException(static function () use ($sut, $permissions): void {
-            $sut->chmod(PathHelper::sourceDirPath(), $permissions);
+            $sut->chmod(PathHelper::arbitraryFilePath(), $permissions);
         }, IOException::class, $message);
     }
 
@@ -185,16 +192,17 @@ final class FilesystemUnitTest extends TestCase
         $this->symfonyFilesystem
             ->copy(Argument::cetera())
             ->willReturn(true);
-        $this->symfonyFilesystem
-            ->exists(Argument::cetera())
-            ->willReturn(true);
         BuiltinFunctionMocker::mock([
             'chmod' => $this->prophesize(TestSpyInterface::class),
+            'file_exists' => $this->prophesize(TestSpyInterface::class),
             'fileperms' => $this->prophesize(TestSpyInterface::class),
         ]);
         BuiltinFunctionMocker::$spies['chmod']
             ->report(Argument::cetera())
             ->willReturn(false);
+        BuiltinFunctionMocker::$spies['file_exists']
+            ->report(Argument::cetera())
+            ->willReturn(true);
         BuiltinFunctionMocker::$spies['fileperms']
             ->report(Argument::cetera())
             ->willReturn(12_345);
