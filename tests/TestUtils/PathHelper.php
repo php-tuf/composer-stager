@@ -98,14 +98,14 @@ final class PathHelper
         return self::createPath(self::destinationDirAbsolute());
     }
 
-    public static function nonExistentDirBasename(): string
+    public static function nonExistentDirRelative(): string
     {
         return self::NON_EXISTENT_DIR;
     }
 
     public static function nonExistentDirAbsolute(): string
     {
-        return self::makeAbsolute(self::nonExistentDirBasename(), '/var/www');
+        return self::makeAbsolute(self::nonExistentDirRelative(), '/var/www');
     }
 
     public static function nonExistentDirPath(): PathInterface
@@ -113,14 +113,14 @@ final class PathHelper
         return self::createPath(self::nonExistentDirAbsolute());
     }
 
-    public static function nonExistentFileBasename(): string
+    public static function nonExistentFileRelative(): string
     {
         return self::NON_EXISTENT_FILE;
     }
 
     public static function nonExistentFileAbsolute(): string
     {
-        return self::makeAbsolute(self::nonExistentFileBasename(), '/var/www');
+        return self::makeAbsolute(self::nonExistentFileRelative(), '/var/www');
     }
 
     public static function nonExistentFilePath(): PathInterface

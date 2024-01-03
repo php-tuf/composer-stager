@@ -368,7 +368,7 @@ final class FilesystemFunctionalTest extends TestCase
                 'directories' => [],
                 'symlinks' => [],
                 'hardLinks' => [],
-                'subject' => PathHelper::nonExistentFileBasename(),
+                'subject' => PathHelper::nonExistentFileRelative(),
                 'exists' => false,
                 'isDir' => false,
                 'isFile' => false,
