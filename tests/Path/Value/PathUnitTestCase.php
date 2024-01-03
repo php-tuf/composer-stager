@@ -2,12 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use AssertionError;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use ReflectionClass;
 
 /**
@@ -118,53 +116,5 @@ abstract class PathUnitTestCase extends TestCase
                 'expectedSutReturn' => '/temp/composer-stager/error-1234',
             ],
         ];
-    }
-
-    /**
-     * @covers ::absolute
-     * @covers ::doAbsolute
-     * @covers ::relative
-     */
-    public function testNonAbsoluteBasePath(): void
-    {
-        $path = '../arbitrary/../path.txt';
-        $canonicalizedPath = PathHelper::fixSeparators('../path.txt');
-        $sut = new Path($path);
-
-        $invalidBasePath = '../relative-path.txt';
-        $reflection = new ReflectionClass($sut);
-        $reflection->newInstanceWithoutConstructor();
-        $basePath = $reflection->getProperty('basePathAbsolute');
-        $basePath->setValue($sut, $invalidBasePath);
-
-        // Disable assertions so production error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 0);
-
-        self::assertSame($canonicalizedPath, $sut->absolute(), '::absolute() returned canonicalized path on failure.');
-        self::assertSame($canonicalizedPath, $sut->relative($sut), '::relative() returned canonicalized path on failure.');
-
-        // Re-enable assertions so development error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 1);
-
-        $assertException = static function (string $methodName, callable $callback) use ($invalidBasePath): void {
-            try {
-                $callback();
-                self::fail(sprintf('::%s() failed to throw "AssertionError".', $methodName));
-            } catch (AssertionError $e) {
-                self::assertSame(
-                    sprintf('Base paths must be absolute. Got %s.', $invalidBasePath),
-                    $e->getMessage(),
-                    sprintf('::%s() used the correct exception message.', $methodName),
-                );
-            }
-        };
-
-        // Each method that ultimately tries to get the absolute path should throw an AssertionError if it fails.
-        $assertException('absolute', static function () use ($sut): void {
-            $sut->absolute();
-        });
-        $assertException('relative', static function () use ($sut): void {
-            $sut->relative($sut);
-        });
     }
 }

@@ -33,7 +33,6 @@ parameters:
         -
             message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
             paths:
-                - src/Internal/Path/Value/Path.php
                 - src/Internal/Translation/Service/Translator.php
                 - src/Internal/Translation/Value/TranslationParameters.php
         -
@@ -42,7 +41,6 @@ parameters:
         -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             paths:
-                - src/Internal/Path/Value/Path.php
                 - src/Internal/Translation/Service/Translator.php
         -
             message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
