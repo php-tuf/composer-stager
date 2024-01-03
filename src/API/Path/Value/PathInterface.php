@@ -9,6 +9,9 @@ namespace PhpTuf\ComposerStager\API\Path\Value;
  * as returned by `getcwd()` at runtime, e.g., "/var/www/example" or "example".
  * Nothing needs to actually exist at the path.
  *
+ * To interact with the actual filesystem at this path, see
+ * {@see \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface}
+ *
  * @package Path
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
