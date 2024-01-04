@@ -34,6 +34,8 @@ interface FilesystemInterface
      *    If the mode cannot be changed.
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *    If the file does not exist.
+     *
+     * @see https://www.php.net/manual/en/function.chmod.php
      */
     public function chmod(PathInterface $path, int $permissions): void;
 
@@ -54,6 +56,8 @@ interface FilesystemInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the source file does not exist, is not actually a file, or is the
      *   same as the destination.
+     *
+     * @see https://www.php.net/manual/en/function.copy.php
      */
     public function copy(PathInterface $source, PathInterface $destination): void;
 
@@ -62,6 +66,8 @@ interface FilesystemInterface
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   A path to test.
+     *
+     * @see https://www.php.net/manual/en/function.file-exists.php
      */
     public function fileExists(PathInterface $path): bool;
 
@@ -109,6 +115,8 @@ interface FilesystemInterface
      *
      * @return bool
      *   Returns true if the path exists and is a directory.
+     *
+     * @see https://www.php.net/manual/en/function.is-dir.php
      */
     public function isDir(PathInterface $path): bool;
 
@@ -135,6 +143,8 @@ interface FilesystemInterface
      *
      * @return bool
      *   Returns true if the path exists and is a regular file.
+     *
+     * @see https://www.php.net/manual/en/function.is-file.php
      */
     public function isFile(PathInterface $path): bool;
 
@@ -162,6 +172,8 @@ interface FilesystemInterface
      *
      * @return bool
      *   Returns true if the filename exists and is a link, false otherwise.
+     *
+     * @see https://www.php.net/manual/en/function.is-link.php
      */
     public function isLink(PathInterface $path): bool;
 
@@ -197,6 +209,8 @@ interface FilesystemInterface
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the directory cannot be created.
+     *
+     * @see https://www.php.net/manual/en/function.mkdir.php
      */
     public function mkdir(PathInterface $path): void;
 
@@ -217,6 +231,8 @@ interface FilesystemInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the path is not a symbolic link (symlink) or cannot be read. Hard
      *   links are distinct from symlinks and will still throw an exception.
+     *
+     * @see https://www.php.net/manual/en/function.readlink.php
      */
     public function readLink(PathInterface $path): PathInterface;
 
