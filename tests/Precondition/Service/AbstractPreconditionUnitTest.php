@@ -41,6 +41,9 @@ final class AbstractPreconditionUnitTest extends PreconditionUnitTestCase
         $activeDirPath = PathHelper::activeDirPath();
         $stagingDirPath = PathHelper::stagingDirPath();
 
+        $this->environment
+            ->setTimeLimit($timeout)
+            ->shouldBeCalled();
         $sut = $this->createSut($class);
 
         self::assertEquals($class::NAME, $sut->getName()->trans());

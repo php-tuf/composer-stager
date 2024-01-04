@@ -144,9 +144,6 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
             $exclusions[] = self::getRelativePath($destinationAbsolute, $sourceAbsolute);
         }
 
-        // There's no reason to process duplicates.
-        $exclusions = array_unique($exclusions);
-
         foreach ($exclusions as $exclusion) {
             $command[] = '--exclude=/' . $exclusion;
         }
