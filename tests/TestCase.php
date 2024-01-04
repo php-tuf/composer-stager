@@ -125,4 +125,24 @@ abstract class TestCase extends PHPUnitTestCase
 
         return $contents;
     }
+
+    protected function normalizePaths(array $paths): array
+    {
+        $paths = array_map(static function ($path): string {
+            $path = implode(
+                DIRECTORY_SEPARATOR,
+                [
+                    PathHelper::testFreshFixturesDirAbsolute(),
+                    PathHelper::activeDirRelative(),
+                    $path,
+                ],
+            );
+
+            return PathHelper::makeAbsolute($path, getcwd());
+        }, $paths);
+
+        sort($paths);
+
+        return $paths;
+    }
 }
