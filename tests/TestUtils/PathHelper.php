@@ -19,7 +19,6 @@ final class PathHelper
     private const ARBITRARY_FILE = 'arbitrary-file.txt';
     private const NON_EXISTENT_DIR = 'non-existent-dir';
     private const NON_EXISTENT_FILE = 'non-existent-file.txt';
-    private const ARBITRARY_BASE_PATH = '/var/www';
 
     public static function repositoryRootAbsolute(): string
     {
@@ -108,7 +107,7 @@ final class PathHelper
 
     public static function arbitraryDirAbsolute(): string
     {
-        return self::makeAbsolute(self::arbitraryDirRelative(), self::ARBITRARY_BASE_PATH);
+        return self::makeAbsolute(self::arbitraryDirRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function arbitraryDirPath(): PathInterface
@@ -123,7 +122,7 @@ final class PathHelper
 
     public static function arbitraryFileAbsolute(): string
     {
-        return self::makeAbsolute(self::arbitraryFileRelative(), self::ARBITRARY_BASE_PATH);
+        return self::makeAbsolute(self::arbitraryFileRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function arbitraryFilePath(): PathInterface
@@ -138,7 +137,7 @@ final class PathHelper
 
     public static function nonExistentDirAbsolute(): string
     {
-        return self::makeAbsolute(self::nonExistentDirRelative(), self::ARBITRARY_BASE_PATH);
+        return self::makeAbsolute(self::nonExistentDirRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function nonExistentDirPath(): PathInterface
@@ -153,7 +152,7 @@ final class PathHelper
 
     public static function nonExistentFileAbsolute(): string
     {
-        return self::makeAbsolute(self::nonExistentFileRelative(), self::ARBITRARY_BASE_PATH);
+        return self::makeAbsolute(self::nonExistentFileRelative(), self::testFreshFixturesDirAbsolute());
     }
 
     public static function nonExistentFilePath(): PathInterface
