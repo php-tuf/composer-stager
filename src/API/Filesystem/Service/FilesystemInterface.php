@@ -184,6 +184,8 @@ interface FilesystemInterface
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   A path to test.
+     *
+     * @see https://www.php.net/manual/en/function.is-writable.php
      */
     public function isWritable(PathInterface $path): bool;
 

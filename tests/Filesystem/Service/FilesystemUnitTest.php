@@ -243,6 +243,35 @@ final class FilesystemUnitTest extends TestCase
         }, IOException::class, $message);
     }
 
+    /**
+     * @covers ::isWritable
+     *
+     * @dataProvider providerIsWritable
+     *
+     * @runInSeparateProcess
+     */
+    public function testIsWritable(bool $expected): void
+    {
+        BuiltinFunctionMocker::mock(['is_writable' => $this->prophesize(TestSpyInterface::class)]);
+        BuiltinFunctionMocker::$spies['is_writable']
+            ->report(PathHelper::arbitraryFileAbsolute())
+            ->shouldBeCalledOnce()
+            ->willReturn($expected);
+        $sut = $this->createSut();
+
+        $actual = $sut->isWritable(PathHelper::arbitraryFilePath());
+
+        self::assertSame($expected, $actual, 'Got correct writable status.');
+    }
+
+    public function providerIsWritable(): array
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
     /** @covers ::mkdir */
     public function testMkdir(): void
     {

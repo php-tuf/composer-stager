@@ -46,6 +46,15 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service {
                 ->report($filename);
         }
     }
+
+    if (BuiltinFunctionMocker::shouldMock('is_writable')) {
+        function is_writable(string $filename): bool
+        {
+            return BuiltinFunctionMocker::$spies['is_writable']
+                ->reveal()
+                ->report($filename);
+        }
+    }
 }
 
 namespace PhpTuf\ComposerStager\Internal\Path\Value {

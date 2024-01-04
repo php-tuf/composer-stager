@@ -186,7 +186,7 @@ final class Filesystem implements FilesystemInterface
 
     public function isWritable(PathInterface $path): bool
     {
-        return is_writable($path->absolute()); // @codeCoverageIgnore
+        return is_writable($path->absolute());
     }
 
     public function mkdir(PathInterface $path): void
