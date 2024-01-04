@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\PathList */
 final class PathListUnitTest extends TestCase
@@ -26,7 +27,7 @@ final class PathListUnitTest extends TestCase
 
     public function providerBasicFunctionality(): array
     {
-        return [
+        $data = [
             'None given, none added' => [
                 'paths' => [],
                 'add' => [],
@@ -70,6 +71,71 @@ final class PathListUnitTest extends TestCase
                     'four',
                 ],
             ],
+        ];
+
+        return array_merge($data, EnvironmentHelper::isWindows()
+            ? $this->providerBasicFunctionalityWindows()
+            : $this->providerBasicFunctionalityUnixLike());
+    }
+
+    private function providerBasicFunctionalityWindows(): array
+    {
+        return [
+            'Different directory separators' => [
+                'paths' => [
+                    'one',
+                    'two\\two',
+                    'three/three/three',
+                ],
+                'add' => [
+                    'four\\four/four\\four',
+                    'five/five\\five/five\\five',
+                ],
+                'expected' => [
+                    'one',
+                    'two\\two',
+                    'three\\three\\three',
+                    'four\\four\\four\\four',
+                    'five\\five\\five\\five\\five',
+                ],
+            ],
+            'Complex paths' => [
+                'paths' => [
+                    'one\\two',
+                    'three/four/five',
+                    'six\\seven/..\\eight/nine',
+                ],
+                'add' => ['nine\\ten\\..\\..\\eleven\\twelve'],
+                'expected' => [
+                    'one\\two',
+                    'three\\four\\five',
+                    'six\\eight\\nine',
+                    'eleven\\twelve',
+                ],
+            ],
+            'Duplicate paths' => [
+                'paths' => [
+                    'one\\two',
+                    'one\\two',
+                    'three\\four\\five',
+                ],
+                'add' => [
+                    'three\\four\\five',
+                    'six\\seven\\eight\\nine',
+                    'six\\seven\\eight\\nine',
+                ],
+                'expected' => [
+                    'one\\two',
+                    'three\\four\\five',
+                    'six\\seven\\eight\\nine',
+                ],
+            ],
+        ];
+    }
+
+    private function providerBasicFunctionalityUnixLike(): array
+    {
+        return [
             'Different directory separators' => [
                 'paths' => [
                     'one',
