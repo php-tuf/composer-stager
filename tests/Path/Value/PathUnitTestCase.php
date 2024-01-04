@@ -6,6 +6,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use ReflectionClass;
 
 /**
@@ -80,7 +81,11 @@ abstract class PathUnitTestCase extends TestCase
         string $sysGetTempDir,
         string $expectedSutReturn,
     ): void {
-        BuiltinFunctionMocker::mock(['getcwd', 'md5', 'sys_get_temp_dir']);
+        BuiltinFunctionMocker::mock([
+            'getcwd' => $this->prophesize(TestSpyInterface::class),
+            'md5' => $this->prophesize(TestSpyInterface::class),
+            'sys_get_temp_dir' => $this->prophesize(TestSpyInterface::class),
+        ]);
         BuiltinFunctionMocker::$spies['getcwd']
             ->report()
             ->shouldBeCalledOnce()

@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Environment\Service;
 use PhpTuf\ComposerStager\Internal\Environment\Service\Environment;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use Prophecy\Argument;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Environment\Service\Environment */
@@ -33,7 +34,7 @@ final class EnvironmentUnitTest extends TestCase
      */
     public function testSetTimeLimitFunctionExists(int $seconds, bool $setTimeLimitReturn): void
     {
-        BuiltinFunctionMocker::mock(['set_time_limit']);
+        BuiltinFunctionMocker::mock(['set_time_limit' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['set_time_limit']
             ->report($seconds)
             ->shouldBeCalledOnce()
@@ -66,7 +67,10 @@ final class EnvironmentUnitTest extends TestCase
      */
     public function testSetTimeLimitFunctionDoesNotExist(): void
     {
-        BuiltinFunctionMocker::mock(['function_exists', 'set_time_limit']);
+        BuiltinFunctionMocker::mock([
+            'function_exists' => $this->prophesize(TestSpyInterface::class),
+            'set_time_limit' => $this->prophesize(TestSpyInterface::class),
+        ]);
         BuiltinFunctionMocker::$spies['function_exists']
             ->report('set_time_limit')
             ->shouldBeCalledOnce()

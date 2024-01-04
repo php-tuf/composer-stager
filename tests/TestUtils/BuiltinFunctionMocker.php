@@ -2,10 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-use PhpTuf\ComposerStager\Tests\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-
 /**
  * Provides the ability to mock built-in PHP functions.
  *
@@ -13,7 +9,7 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 final class BuiltinFunctionMocker
 {
-    /** @var array string<ObjectProphecy|TestSpyInterface> */
+    /** @var array<string,\Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface> */
     public static array $spies = [];
 
     /**
@@ -21,25 +17,26 @@ final class BuiltinFunctionMocker
      *
      * Declare new functions in the appropriate namespace in {@see tests/TestUtils/builtin_function_mocks.inc}.
      *
-     * @param array $functionNames
-     *   An array of names of built-in PHP functions to mock, e.g., `['chmod', 'md5']`.
+     * Example:
+     * ```php
+     * BuiltinFunctionMocker::mock([
+     *     'chmod' => $this->prophesize(TestSpyInterface::class),
+     *     'md5' => $this->prophesize(TestSpyInterface::class),
+     * ]);
+     * ```
+     *
+     * Remember to tag your test method `@runInSeparateProcess` to avoid test pollution.
+     *
+     * @param array<string,\Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface> $spies
+     *   An array of spies (prophecies) keyed by the names of built-in PHP functions to mock. See example above.
      */
-    public static function mock(array $functionNames): void
+    public static function mock(array $spies): void
     {
-        $prophet = new class extends TestCase {
-            use ProphecyTrait;
-
-            public function getProphecy(): ObjectProphecy
-            {
-                return $this->prophesize(TestSpyInterface::class);
-            }
-        };
-
-        foreach ($functionNames as $functionName) {
-            self::$spies[$functionName] = $prophet->getProphecy();
+        foreach ($spies as $functionName => $prophecy) {
+            self::$spies[$functionName] = $prophecy;
         }
 
-        require __DIR__ . '/builtin_function_mocks.inc';
+        require_once __DIR__ . '/builtin_function_mocks.inc';
     }
 
     /** Determines whether to mock the given function. */
