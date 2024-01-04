@@ -204,6 +204,9 @@ interface FilesystemInterface
     /**
      * Recursively creates a directory at the given path.
      *
+     * This differs from PHP's built-in `mkdir()` function in that this method
+     * will not fail is a directory already exists at the given path.
+     *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   The directory to create.
      *

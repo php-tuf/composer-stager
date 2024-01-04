@@ -280,30 +280,55 @@ final class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::mkdir */
+    /**
+     * @covers ::mkdir
+     *
+     * @runInSeparateProcess
+     */
     public function testMkdir(): void
     {
-        $this->symfonyFilesystem
-            ->mkdir(PathHelper::stagingDirAbsolute())
-            ->shouldBeCalledOnce();
+        BuiltinFunctionMocker::mock([
+            'is_dir' => $this->prophesize(TestSpyInterface::class),
+            'mkdir' => $this->prophesize(TestSpyInterface::class),
+        ]);
+        BuiltinFunctionMocker::$spies['is_dir']
+            ->report(PathHelper::arbitraryDirAbsolute())
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
+        BuiltinFunctionMocker::$spies['mkdir']
+            ->report(PathHelper::arbitraryDirAbsolute())
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->mkdir(PathHelper::stagingDirPath());
+        $sut->mkdir(PathHelper::arbitraryDirPath());
     }
 
-    /** @covers ::mkdir */
+    /**
+     * @covers ::mkdir
+     *
+     * @runInSeparateProcess
+     */
     public function testMkdirFailure(): void
     {
-        $message = sprintf('Failed to create directory at %s', PathHelper::stagingDirAbsolute());
-        $previous = new SymfonyIOException($message);
-        $this->symfonyFilesystem
-            ->mkdir(Argument::any())
-            ->willThrow($previous);
+        $dirAbsolute = PathHelper::arbitraryDirAbsolute();
+        BuiltinFunctionMocker::mock([
+            'is_dir' => $this->prophesize(TestSpyInterface::class),
+            'mkdir' => $this->prophesize(TestSpyInterface::class),
+        ]);
+        BuiltinFunctionMocker::$spies['is_dir']
+            ->report($dirAbsolute)
+            ->willReturn(false);
+        BuiltinFunctionMocker::$spies['mkdir']
+            ->report($dirAbsolute)
+            ->shouldBeCalledOnce()
+            ->willReturn(false);
         $sut = $this->createSut();
 
+        $message = sprintf('Failed to create directory at %s', $dirAbsolute);
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->mkdir(PathHelper::stagingDirPath());
-        }, IOException::class, $message, null, $previous::class);
+            $sut->mkdir(PathHelper::arbitraryDirPath());
+        }, IOException::class, $message);
     }
 
     /**

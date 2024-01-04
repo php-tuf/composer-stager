@@ -64,6 +64,24 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service {
                 ->report($filename);
         }
     }
+
+    if (BuiltinFunctionMocker::shouldMock('is_dir')) {
+        function is_dir(string $filename): bool
+        {
+            return BuiltinFunctionMocker::$spies['is_dir']
+                ->reveal()
+                ->report($filename);
+        }
+    }
+
+    if (BuiltinFunctionMocker::shouldMock('mkdir')) {
+        function mkdir(string $filename): bool
+        {
+            return BuiltinFunctionMocker::$spies['mkdir']
+                ->reveal()
+                ->report($filename);
+        }
+    }
 }
 
 namespace PhpTuf\ComposerStager\Internal\Path\Value {

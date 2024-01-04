@@ -193,15 +193,17 @@ final class Filesystem implements FilesystemInterface
     {
         $pathAbsolute = $path->absolute();
 
-        try {
-            $this->symfonyFilesystem->mkdir($pathAbsolute);
-        } catch (SymfonyIOException $e) {
-            throw new IOException($this->t(
-                'Failed to create directory at %path',
-                $this->p(['%path' => $pathAbsolute]),
-                $this->d()->exceptions(),
-            ), 0, $e);
+        @mkdir($pathAbsolute, 0777, true);
+
+        if (is_dir($pathAbsolute)) {
+            return;
         }
+
+        throw new IOException($this->t(
+            'Failed to create directory at %path',
+            $this->p(['%path' => $pathAbsolute]),
+            $this->d()->exceptions(),
+        ));
     }
 
     public function readLink(PathInterface $path): PathInterface
