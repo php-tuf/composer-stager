@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Helper;
 
-final class PHPHelper
+final class PhpHelper
 {
     // All build-in PHP classes, including exceptions.
     public const ALL_BUILTIN_CLASSES = [

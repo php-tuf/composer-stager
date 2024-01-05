@@ -6,7 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PhpTuf\ComposerStager\Helper\NamespaceHelper;
-use PhpTuf\ComposerStager\Helper\PHPHelper;
+use PhpTuf\ComposerStager\Helper\PhpHelper;
 
 /** Finds unaliased "use" statements for non-project code, e.g., vendor libraries and PHP itself. */
 final class UnaliasedNonProjectUsesSniff implements Sniff
@@ -91,7 +91,7 @@ final class UnaliasedNonProjectUsesSniff implements Sniff
 
     private function isAllowedWithoutAlias(string $namespace): bool
     {
-        return in_array($namespace, PHPHelper::UNIVERSALLY_UNAMBIGUOUS_CLASSES, true);
+        return in_array($namespace, PhpHelper::UNIVERSALLY_UNAMBIGUOUS_CLASSES, true);
     }
 
     private function aliasIsFound(File $phpcsFile, int $stackPtr): bool

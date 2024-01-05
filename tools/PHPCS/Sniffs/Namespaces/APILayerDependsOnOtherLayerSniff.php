@@ -6,7 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PhpTuf\ComposerStager\Helper\NamespaceHelper;
-use PhpTuf\ComposerStager\Helper\PHPHelper;
+use PhpTuf\ComposerStager\Helper\PhpHelper;
 
 /** Finds API code that depends on non-API layers, e.g., the internal layer or vendor code. */
 final class APILayerDependsOnOtherLayerSniff implements Sniff
@@ -81,7 +81,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
 
     private function isExcluded(string $namespace): bool
     {
-        return in_array($namespace, PHPHelper::UNAMBIGUOUS_BUILTIN_CLASSES, true);
+        return in_array($namespace, PhpHelper::UNAMBIGUOUS_BUILTIN_CLASSES, true);
     }
 
     private function namespaceIsInAPILayer(File $phpcsFile, int $stackPtr): bool
