@@ -245,7 +245,7 @@ final class Filesystem implements FilesystemInterface
 
     private function getFileType(PathInterface $path): string
     {
-        // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
+        // A single call to `lstat()` may be cheaper than individual calls to `file_exists()`
         // and `is_link()`, etc., not to mention being the only way to detect hard links at all.
         // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
         // which may or may not throw an exception depending on error_reporting configuration.
