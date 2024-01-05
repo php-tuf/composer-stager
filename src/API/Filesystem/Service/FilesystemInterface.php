@@ -46,6 +46,9 @@ interface FilesystemInterface
      * File permissions from the source will be preserved in the destination.
      * Copying directories is not supported.
      *
+     * This differs from PHP's built-in `copy()` function in that this method
+     * will create any parent directories necessary to copy the file.
+     *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $source
      *   The file to copy.
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $destination

@@ -35,7 +35,10 @@ final class FilesystemFunctionalTest extends TestCase
         return ContainerHelper::get(Filesystem::class);
     }
 
-    /** @covers ::copy */
+    /**
+     * @covers ::assertCopyPreconditions
+     * @covers ::copy
+     */
     public function testCopy(): void
     {
         $mode = 0775;
@@ -43,7 +46,7 @@ final class FilesystemFunctionalTest extends TestCase
         vfsStream::create(['source.txt' => $contents]);
         $sourceFilePath = VfsHelper::createPath('source.txt');
         $sourceFileAbsolute = $sourceFilePath->absolute();
-        $destinationFilePath = VfsHelper::createPath('destination.txt');
+        $destinationFilePath = VfsHelper::createPath('some/arbitrary/depth/destination.txt');
         $destinationFileAbsolute = $destinationFilePath->absolute();
         assert(FilesystemHelper::fileMode($sourceFileAbsolute) !== $mode, "The new file doesn't already have the same permissions as will be set.");
         FilesystemHelper::chmod($sourceFileAbsolute, $mode);
@@ -54,24 +57,72 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertSame([
             'root' => [
                 'source.txt' => $contents,
-                'destination.txt' => $contents,
+                'some' => [
+                    'arbitrary' => [
+                        'depth' => ['destination.txt' => $contents],
+                    ],
+                ],
             ],
         ], vfsStream::inspect(new vfsStreamStructureVisitor())->getStructure());
         self::assertFileMode($destinationFileAbsolute, $mode);
     }
 
-    /** @covers ::copy */
+    /**
+     * @covers ::assertCopyPreconditions
+     * @covers ::copy
+     */
     public function testCopySourceFileNotFound(): void
     {
         $sourceFilePath = VfsHelper::nonExistentFilePath();
-        $sourceFileAbsolute = $sourceFilePath->absolute();
         $destinationFilePath = VfsHelper::arbitraryFilePath();
         $sut = $this->createSut();
 
-        $message = sprintf('No such file: %s', $sourceFileAbsolute);
+        $message = sprintf('The source file does not exist at %s', $sourceFilePath->absolute());
         self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
             $sut->copy($sourceFilePath, $destinationFilePath);
         }, LogicException::class, $message);
+    }
+
+    /**
+     * @covers ::assertCopyPreconditions
+     * @covers ::copy
+     */
+    public function testCopySourceIsADirectory(): void
+    {
+        $fileRelative = PathHelper::arbitraryFileRelative();
+        $sourceFilePath = PathHelper::createPath($fileRelative, PathHelper::sourceDirAbsolute());
+        $destinationFilePath = PathHelper::createPath($fileRelative, PathHelper::destinationDirAbsolute());
+        FilesystemHelper::createDirectories($sourceFilePath->absolute());
+        $sut = $this->createSut();
+
+        $message = sprintf('The source cannot be a directory at %s', $sourceFilePath->absolute());
+        self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
+            $sut->copy($sourceFilePath, $destinationFilePath);
+        }, LogicException::class, $message);
+    }
+
+    /**
+     * @covers ::copy
+     *
+     * @group no_windows
+     */
+    public function testCopyFailure(): void
+    {
+        $fileRelative = PathHelper::arbitraryFileRelative();
+        $sourceFilePath = PathHelper::createPath($fileRelative, PathHelper::sourceDirAbsolute());
+        // Try to copy the file to the directory root, which should always fail.
+        $destinationFilePath = PathHelper::createPath($fileRelative, '/');
+        FilesystemHelper::touch($sourceFilePath->absolute());
+        $sut = $this->createSut();
+
+        // Get expected error details.
+        @copy($sourceFilePath->absolute(), $destinationFilePath->absolute());
+        $details = error_get_last()['message'];
+
+        $message = sprintf('Failed to copy %s to %s: %s', $sourceFilePath->absolute(), $destinationFilePath->absolute(), $details);
+        self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
+            $sut->copy($sourceFilePath, $destinationFilePath);
+        }, IOException::class, $message);
     }
 
     /**

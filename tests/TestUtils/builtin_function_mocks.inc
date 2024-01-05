@@ -38,6 +38,15 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service {
         }
     }
 
+    if (BuiltinFunctionMocker::shouldMock('copy')) {
+        function copy(string $from, string $to, $context = null): bool
+        {
+            return BuiltinFunctionMocker::$spies['copy']
+                ->reveal()
+                ->report($from, $to, $context);
+        }
+    }
+
     if (BuiltinFunctionMocker::shouldMock('file_exists')) {
         function file_exists(string $filename): bool
         {

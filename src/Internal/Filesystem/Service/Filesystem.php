@@ -13,8 +13,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
@@ -74,41 +72,32 @@ final class Filesystem implements FilesystemInterface
 
     public function copy(PathInterface $source, PathInterface $destination): void
     {
+        $this->assertCopyPreconditions($source, $destination);
+
         $sourceAbsolute = $source->absolute();
         $destinationAbsolute = $destination->absolute();
 
-        if ($sourceAbsolute === $destinationAbsolute) {
-            throw new LogicException($this->t(
-                'The source and destination files cannot be the same at %path',
-                $this->p(['%path' => $sourceAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
+        $mode = $this->fileMode($source);
 
-        try {
-            $mode = $this->fileMode($source);
-            $this->symfonyFilesystem->copy($sourceAbsolute, $destinationAbsolute, true);
-            $this->chmod($destination, $mode);
-        } catch (SymfonyFileNotFoundException $e) {
-            throw new LogicException($this->t(
-                'The source file does not exist or is not a file at %path: %details',
-                $this->p([
-                    '%path' => $sourceAbsolute,
-                    '%details' => $e->getMessage(),
-                ]),
-                $this->d()->exceptions(),
-            ), 0, $e);
-        } catch (SymfonyIOException $e) {
+        // Ensure the parent directory exists.
+        $parent = $this->pathFactory->create('..', $destination);
+        $this->mkdir($parent);
+
+        $result = @copy($sourceAbsolute, $destinationAbsolute);
+
+        if (!$result) {
             throw new IOException($this->t(
                 'Failed to copy %source to %destination: %details',
                 $this->p([
                     '%source' => $sourceAbsolute,
                     '%destination' => $destinationAbsolute,
-                    '%details' => $e->getMessage(),
+                    '%details' => error_get_last()['message'] ?? 'Unknown error',
                 ]),
                 $this->d()->exceptions(),
-            ), 0, $e);
+            ));
         }
+
+        $this->chmod($destination, $mode);
     }
 
     public function fileExists(PathInterface $path): bool
@@ -247,6 +236,37 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 'Failed to touch file at %path',
                 $this->p(['%path' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
+    private function assertCopyPreconditions(PathInterface $source, PathInterface $destination): void
+    {
+        $sourceAbsolute = $source->absolute();
+        $destinationAbsolute = $destination->absolute();
+
+        if ($sourceAbsolute === $destinationAbsolute) {
+            throw new LogicException($this->t(
+                'The source and destination files cannot be the same at %path',
+                $this->p(['%path' => $sourceAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+
+        if (!$this->fileExists($source)) {
+            throw new LogicException($this->t(
+                'The source file does not exist at %path',
+                $this->p(['%path' => $sourceAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+
+        if ($this->isDir($source)) {
+            throw new LogicException($this->t(
+                'The source cannot be a directory at %path',
+                $this->p(['%path' => $sourceAbsolute]),
                 $this->d()->exceptions(),
             ));
         }

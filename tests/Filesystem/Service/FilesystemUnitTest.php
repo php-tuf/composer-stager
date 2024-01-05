@@ -18,7 +18,6 @@ use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -95,116 +94,23 @@ final class FilesystemUnitTest extends TestCase
      *
      * @runInSeparateProcess
      */
-    public function testCopySymfonyIOException(): void
+    public function testCopyPermissionsFailure(): void
     {
-        $previousMessage = 'Something went wrong';
-        $message = sprintf(
-            'Failed to copy %s to %s: %s',
-            PathHelper::activeDirAbsolute(),
-            PathHelper::stagingDirAbsolute(),
-            $previousMessage,
-        );
-        $previous = new SymfonyIOException($previousMessage);
-        $this->symfonyFilesystem
-            ->exists(Argument::cetera())
-            ->willReturn(true);
-        $this->symfonyFilesystem
-            ->copy(Argument::cetera())
-            ->shouldBeCalled()
-            ->willThrow($previous);
-        BuiltinFunctionMocker::mock(['fileperms' => $this->prophesize(TestSpyInterface::class)]);
-        BuiltinFunctionMocker::$spies['fileperms']
-            ->report(Argument::cetera())
-            ->willReturn(12_345);
-        $sut = $this->createSut();
-
-        self::assertTranslatableException(static function () use ($sut): void {
-            $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, IOException::class, $message, null, $previous::class);
-    }
-
-    /**
-     * @covers ::copy
-     *
-     * @runInSeparateProcess
-     */
-    public function testCopySymfonyFileNotFoundException(): void
-    {
-        $previousMessage = 'Something went wrong';
-        $message = sprintf(
-            'The source file does not exist or is not a file at %s: %s',
-            PathHelper::activeDirAbsolute(),
-            $previousMessage,
-        );
-        $previous = new SymfonyFileNotFoundException($previousMessage);
-        $this->symfonyFilesystem
-            ->exists(Argument::cetera())
-            ->willReturn(true);
-        $this->symfonyFilesystem
-            ->copy(Argument::cetera())
-            ->shouldBeCalled()
-            ->willThrow($previous);
-        BuiltinFunctionMocker::mock(['fileperms' => $this->prophesize(TestSpyInterface::class)]);
-        BuiltinFunctionMocker::$spies['fileperms']
-            ->report(Argument::cetera())
-            ->willReturn(12_345);
-        $sut = $this->createSut();
-
-        self::assertTranslatableException(static function () use ($sut): void {
-            $sut->copy(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, LogicException::class, $message, null, $previous::class);
-    }
-
-    /**
-     * @covers ::copy
-     *
-     * @runInSeparateProcess
-     */
-    public function testCopy(): void
-    {
-        $sourceDirPath = PathHelper::sourceDirPath();
-        $sourceDirAbsolute = $sourceDirPath->absolute();
-        $destinationDirAbsolute = PathHelper::destinationDirAbsolute();
+        $this->pathFactory
+            ->create(Argument::cetera())
+            ->willReturn(PathHelper::createPath(PathHelper::arbitraryFileAbsolute()));
         BuiltinFunctionMocker::mock([
             'chmod' => $this->prophesize(TestSpyInterface::class),
-            'fileperms' => $this->prophesize(TestSpyInterface::class),
-        ]);
-        $this->symfonyFilesystem
-            ->copy($sourceDirAbsolute, $destinationDirAbsolute, true)
-            ->willReturn(true);
-        $this->symfonyFilesystem
-            ->exists(Argument::cetera())
-            ->willReturn(true);
-        BuiltinFunctionMocker::$spies['chmod']
-            ->report($destinationDirAbsolute, Argument::any())
-            ->shouldBeCalled()
-            ->willReturn(true);
-        BuiltinFunctionMocker::$spies['fileperms']
-            ->report(Argument::cetera())
-            ->willReturn(12_345);
-        $sut = $this->createSut();
-
-        $sut->copy($sourceDirPath, PathHelper::destinationDirPath());
-    }
-
-    /**
-     * @covers ::copy
-     *
-     * @runInSeparateProcess
-     */
-    public function testCopyChmodFailure(): void
-    {
-        $this->symfonyFilesystem
-            ->copy(Argument::cetera())
-            ->willReturn(true);
-        BuiltinFunctionMocker::mock([
-            'chmod' => $this->prophesize(TestSpyInterface::class),
+            'copy' => $this->prophesize(TestSpyInterface::class),
             'file_exists' => $this->prophesize(TestSpyInterface::class),
             'fileperms' => $this->prophesize(TestSpyInterface::class),
         ]);
         BuiltinFunctionMocker::$spies['chmod']
             ->report(Argument::cetera())
             ->willReturn(false);
+        BuiltinFunctionMocker::$spies['copy']
+            ->report(Argument::cetera())
+            ->willReturn(true);
         BuiltinFunctionMocker::$spies['file_exists']
             ->report(Argument::cetera())
             ->willReturn(true);
@@ -219,7 +125,10 @@ final class FilesystemUnitTest extends TestCase
         }, IOException::class, $message);
     }
 
-    /** @covers ::copy */
+    /**
+     * @covers ::assertCopyPreconditions
+     * @covers ::copy
+     */
     public function testCopyDirectoriesTheSame(): void
     {
         $samePath = PathHelper::activeDirPath();
