@@ -9,16 +9,7 @@ use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use ReflectionClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
- *
- * @covers ::__construct
- * @covers ::absolute
- * @covers ::doAbsolute
- * @covers ::isAbsolute
- * @covers ::relative
- * @covers \PhpTuf\ComposerStager\Internal\Path\Value\Path::getcwd
- */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path */
 abstract class PathUnitTestCase extends TestCase
 {
     /** @dataProvider providerBasicFunctionality */

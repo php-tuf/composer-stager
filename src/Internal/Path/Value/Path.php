@@ -42,6 +42,10 @@ final class Path implements PathInterface
 
     public function isAbsolute(): bool
     {
+        if ($this->hasProtocol($this->path)) {
+            return true;
+        }
+
         return PathHelper::isAbsolute($this->path);
     }
 
@@ -76,10 +80,35 @@ final class Path implements PathInterface
 
     private function doAbsolute(string $basePathAbsolute): string
     {
-        if (PathHelper::isAbsolute($this->path)) {
+        if ($this->hasProtocol($this->path)) {
+            return $this->getProtocol($this->path) . PathHelper::canonicalize($this->stripProtocol($this->path));
+        }
+
+        if (PathHelper::isAbsolute(PathHelper::canonicalize($this->path))) {
             return PathHelper::canonicalize($this->path);
         }
 
+        if ($this->hasProtocol($this->basePathAbsolute)) {
+            return rtrim($this->basePathAbsolute, '/') . '/' . PathHelper::canonicalize($this->path);
+        }
+
         return PathHelper::canonicalize($basePathAbsolute . DIRECTORY_SEPARATOR . $this->path);
+    }
+
+    private function hasProtocol(string $path): bool
+    {
+        return $this->getProtocol($path) !== '';
+    }
+
+    private function stripProtocol(string $path): string
+    {
+        return substr($path, strlen($this->getProtocol($path)));
+    }
+
+    private function getProtocol(string $path): string
+    {
+        preg_match('#^[a-zA-Z]+:/{2,3}#', $path, $matches);
+
+        return $matches[0] ?? '';
     }
 }

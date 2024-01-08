@@ -10,9 +10,12 @@ use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
  * @covers ::__construct
  * @covers ::absolute
  * @covers ::doAbsolute
+ * @covers ::getcwd
+ * @covers ::getProtocol
+ * @covers ::hasProtocol
  * @covers ::isAbsolute
  * @covers ::relative
- * @covers \PhpTuf\ComposerStager\Internal\Path\Value\Path::getcwd
+ * @covers ::stripProtocol
  *
  * @group no_windows
  */
@@ -151,6 +154,63 @@ final class UnixLikePathUnitTest extends PathUnitTestCase
                 'absolute' => '/one/six',
                 'relativeBase' => '/tmp/ten/eleven/twelve',
                 'relative' => '/one/six',
+            ],
+            // Protocols.
+            'Path with protocol: ftp://' => [
+                'given' => 'ftp://example.com/one/two/three.txt',
+                'baseDir' => '/var',
+                'isAbsolute' => true,
+                'absolute' => 'ftp://example.com/one/two/three.txt',
+                'relativeBase' => '/tmp',
+                'relative' => 'ftp://example.com/one/two/three.txt',
+            ],
+            'Path with protocol: file:///' => [
+                'given' => 'file:///one/two/three.txt',
+                'baseDir' => '/var',
+                'isAbsolute' => true,
+                'absolute' => 'file:///one/two/three.txt',
+                'relativeBase' => '/tmp',
+                'relative' => 'file:///one/two/three.txt',
+            ],
+            'Relative with base path with protocol' => [
+                'given' => 'one/two/three.txt',
+                'baseDir' => 'ftp://example.com',
+                'isAbsolute' => false,
+                'absolute' => 'ftp://example.com/one/two/three.txt',
+                'relativeBase' => '/tmp',
+                'relative' => 'ftp://example.com/one/two/three.txt',
+            ],
+            'Relative with base path with protocol with trailing slash' => [
+                'given' => 'one/two/three.txt',
+                'baseDir' => 'ftp://example.com/',
+                'isAbsolute' => false,
+                'absolute' => 'ftp://example.com/one/two/three.txt',
+                'relativeBase' => '/tmp',
+                'relative' => 'ftp://example.com/one/two/three.txt',
+            ],
+            'Absolute with base path with protocol' => [
+                'given' => '/one/two/three.txt',
+                'baseDir' => 'ftp://example.com',
+                'isAbsolute' => true,
+                'absolute' => '/one/two/three.txt',
+                'relativeBase' => 'ftp://example.com/one/two/three.txt',
+                'relative' => '/one/two/three.txt',
+            ],
+            'Absolute with base path with protocol with trailing slash' => [
+                'given' => '/one/two/three.txt',
+                'baseDir' => 'ftp://example.com/',
+                'isAbsolute' => true,
+                'absolute' => '/one/two/three.txt',
+                'relativeBase' => 'ftp://example.com/one/two/three.txt',
+                'relative' => '/one/two/three.txt',
+            ],
+            'Non-canonicalized path with protocol' => [
+                'given' => 'vfs://example.com/one/../two/three.txt',
+                'baseDir' => '/var',
+                'isAbsolute' => true,
+                'absolute' => 'vfs://example.com/two/three.txt',
+                'relativeBase' => '/tmp',
+                'relative' => 'vfs://example.com/two/three.txt',
             ],
         ];
     }
