@@ -48,8 +48,8 @@ final class FileFinder implements FileFinderInterface
         // matched. But because the directory iterator is recursive, their excluded
         // ancestor WILL BE found, and they will be excluded by extension.
         $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static fn (
-            string $foundPathname,
-        ): bool => !in_array($foundPathname, $exclusions, true));
+            string $foundPathAbsolute,
+        ): bool => !in_array($foundPathAbsolute, $exclusions, true));
 
         /** @var \Traversable<string> $iterator */
         $iterator = new RecursiveIteratorIterator($filterIterator);

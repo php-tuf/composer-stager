@@ -98,17 +98,16 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
         }
 
         $destinationFiles = $this->fileFinder->find($destination, $exclusions);
-        $destinationAbsolute = $destination->absolute();
 
-        foreach ($destinationFiles as $destinationFilePathname) {
-            $relativePathname = self::getRelativePath($destinationAbsolute, $destinationFilePathname);
-            $sourceFilePath = $this->pathFactory->create($relativePathname, $source);
+        foreach ($destinationFiles as $destinationFileAbsolute) {
+            $fileRelative = self::getRelativePath($destination->absolute(), $destinationFileAbsolute);
+            $sourceFilePath = $this->pathFactory->create($fileRelative, $source);
 
             if ($this->filesystem->fileExists($sourceFilePath)) {
                 continue;
             }
 
-            $destinationFilePath = $this->pathFactory->create($destinationFilePathname);
+            $destinationFilePath = $this->pathFactory->create($destinationFileAbsolute);
 
             // If it doesn't exist in the source, delete it from the destination.
             $this->filesystem->remove($destinationFilePath);
@@ -126,21 +125,18 @@ final class PhpFileSyncer implements PhpFileSyncerInterface
     ): void {
         $sourceFiles = $this->fileFinder->find($source, $exclusions);
 
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
+        foreach ($sourceFiles as $sourceFileAbsolute) {
+            $fileRelative = self::getRelativePath($source->absolute(), $sourceFileAbsolute);
+            $destinationFileAbsolute = $destination->absolute() . DIRECTORY_SEPARATOR . $fileRelative;
 
-        foreach ($sourceFiles as $sourceFilePathname) {
-            $relativePathname = self::getRelativePath($sourceAbsolute, $sourceFilePathname);
-            $destinationFilePathname = $destinationAbsolute . DIRECTORY_SEPARATOR . $relativePathname;
-
-            $sourceFilePathname = $this->pathFactory->create($sourceFilePathname);
-            $destinationFilePathname = $this->pathFactory->create($destinationFilePathname);
+            $sourceFilePath = $this->pathFactory->create($sourceFileAbsolute);
+            $destinationFilePath = $this->pathFactory->create($destinationFileAbsolute);
 
             // Copy the file--even if it already exists and is identical in the
             // destination. Obviously, this has performance implications, but
             // for lots of small files (the primary use case), the cost of
             // checking differences first would surely outweigh any savings.
-            $this->filesystem->copy($sourceFilePathname, $destinationFilePathname);
+            $this->filesystem->copy($sourceFilePath, $destinationFilePath);
         }
     }
 

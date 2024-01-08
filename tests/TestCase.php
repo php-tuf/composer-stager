@@ -94,16 +94,16 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function changeFile(string $dir, string $filename): void
     {
-        $pathname = PathHelper::ensureTrailingSlash($dir) . $filename;
-        $result = file_put_contents($pathname, self::CHANGED_CONTENT);
-        assert($result !== false, "Changed file {$pathname}.");
+        $fileAbsolute = PathHelper::ensureTrailingSlash($dir) . $filename;
+        $result = file_put_contents($fileAbsolute, self::CHANGED_CONTENT);
+        assert($result !== false, "Changed file {$fileAbsolute}.");
     }
 
     protected static function deleteFile(string $dir, string $filename): void
     {
-        $pathname = PathHelper::ensureTrailingSlash($dir) . $filename;
-        $result = unlink($pathname);
-        assert($result, "Deleted file {$pathname}.");
+        $fileAbsolute = PathHelper::ensureTrailingSlash($dir) . $filename;
+        $result = unlink($fileAbsolute);
+        assert($result, "Deleted file {$fileAbsolute}.");
     }
 
     protected static function getDirectoryContents(string $dir): array
@@ -113,14 +113,14 @@ abstract class TestCase extends PHPUnitTestCase
 
         $contents = [];
 
-        foreach ($dirListing as $pathname) {
-            if (is_link($dir . $pathname)) {
-                $contents[$pathname] = '';
+        foreach ($dirListing as $pathAbsolute) {
+            if (is_link($dir . $pathAbsolute)) {
+                $contents[$pathAbsolute] = '';
 
                 continue;
             }
 
-            $contents[$pathname] = file_get_contents($dir . $pathname);
+            $contents[$pathAbsolute] = file_get_contents($dir . $pathAbsolute);
         }
 
         return $contents;

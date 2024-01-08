@@ -265,8 +265,8 @@ trait AssertTrait
                 continue;
             }
 
-            $pathname = $splFileInfo->getPathname();
-            $listing[] = substr($pathname, strlen($dir) + 1);
+            $pathAbsolute = $splFileInfo->getPathname();
+            $listing[] = substr($pathAbsolute, strlen($dir) + 1);
         }
 
         sort($listing);
