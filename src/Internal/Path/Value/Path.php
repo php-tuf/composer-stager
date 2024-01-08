@@ -74,12 +74,12 @@ final class Path implements PathInterface
         return $getcwd;
     }
 
-    private function doAbsolute(string $basePath): string
+    private function doAbsolute(string $basePathAbsolute): string
     {
         if (PathHelper::isAbsolute($this->path)) {
             return PathHelper::canonicalize($this->path);
         }
 
-        return PathHelper::canonicalize($basePath . DIRECTORY_SEPARATOR . $this->path);
+        return PathHelper::canonicalize($basePathAbsolute . DIRECTORY_SEPARATOR . $this->path);
     }
 }
