@@ -44,6 +44,7 @@
       <path value="$PROJECT_DIR$/vendor/infection/include-interceptor" />
       <path value="$PROJECT_DIR$/vendor/infection/infection" />
       <path value="$PROJECT_DIR$/vendor/justinrainbow/json-schema" />
+      <path value="$PROJECT_DIR$/vendor/mikey179/vfsstream" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/ondram/ci-detector" />
