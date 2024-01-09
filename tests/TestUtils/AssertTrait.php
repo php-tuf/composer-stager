@@ -77,7 +77,6 @@ trait AssertTrait
             return;
         }
 
-        assert(PathHelper::isAbsolute($path));
         assert(FilesystemHelper::exists($path));
 
         $actual = FilesystemHelper::fileMode($path);

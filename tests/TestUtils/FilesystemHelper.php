@@ -9,7 +9,6 @@ final class FilesystemHelper
 {
     public static function chmod(string $path, int $mode): void
     {
-        assert(PathHelper::isAbsolute($path));
         assert(self::exists($path));
 
         chmod($path, $mode);
@@ -32,7 +31,6 @@ final class FilesystemHelper
 
         // If a base path is provided, use it to make all directories absolute.
         if (is_string($basePath)) {
-            assert(PathHelper::isAbsolute($basePath), 'Base path must be absolute.');
             $directories = array_map(static fn ($dirname): string => PathHelper::makeAbsolute($dirname, $basePath), $directories);
         }
 
@@ -41,14 +39,11 @@ final class FilesystemHelper
 
     public static function exists(string $path): bool
     {
-        assert(PathHelper::isAbsolute($path));
-
         return self::symfonyFilesystem()->exists($path);
     }
 
     public static function fileMode(string $path): int
     {
-        assert(PathHelper::isAbsolute($path), 'The given path is absolute.');
         assert(file_exists($path), 'The path exists');
 
         clearstatcache(true, $path);
@@ -67,8 +62,6 @@ final class FilesystemHelper
 
     public static function touch(string $path): void
     {
-        assert(PathHelper::isAbsolute($path));
-
         self::ensureParentDirectory($path);
         self::symfonyFilesystem()->touch($path);
 

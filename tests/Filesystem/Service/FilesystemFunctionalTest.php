@@ -2,9 +2,12 @@
 
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
+use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
@@ -37,21 +40,26 @@ final class FilesystemFunctionalTest extends TestCase
     public function testCopy(): void
     {
         $mode = 0775;
-        $filenameRelative = 'file.txt';
-        $sourceFilePath = PathHelper::createPath($filenameRelative, PathHelper::sourceDirAbsolute());
+        $contents = 'Arbitrary file contents';
+        vfsStream::setup('root', null, ['source.txt' => $contents]);
+        $vfsRoot = vfsStream::url('root');
+        $sourceFilePath = new Path('source.txt', new Path($vfsRoot));
         $sourceFileAbsolute = $sourceFilePath->absolute();
-        $destinationFilePath = PathHelper::createPath($filenameRelative, PathHelper::destinationDirAbsolute());
+        $destinationFilePath = new Path('destination.txt', new Path($vfsRoot));
         $destinationFileAbsolute = $destinationFilePath->absolute();
-        FilesystemHelper::touch($sourceFileAbsolute);
         assert(FilesystemHelper::fileMode($sourceFileAbsolute) !== $mode, "The new file doesn't already have the same permissions as will be set.");
         FilesystemHelper::chmod($sourceFileAbsolute, $mode);
         $sut = $this->createSut();
 
-        // Copy an individual file.
         $sut->copy($sourceFilePath, $destinationFilePath);
 
+        self::assertSame([
+            'root' => [
+                'source.txt' => $contents,
+                'destination.txt' => $contents,
+            ],
+        ], vfsStream::inspect(new vfsStreamStructureVisitor())->getStructure());
         self::assertFileMode($destinationFileAbsolute, $mode);
-        self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [$filenameRelative]);
     }
 
     /** @covers ::copy */
