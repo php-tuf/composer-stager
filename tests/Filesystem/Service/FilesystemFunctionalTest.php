@@ -12,8 +12,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem */
 final class FilesystemFunctionalTest extends TestCase
@@ -458,42 +456,5 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertTranslatableException(static function () use ($sut, $path): void {
             $sut->readLink($path);
         }, IOException::class, $message);
-    }
-
-    /**
-     * Our filesystem service currently depends on the Symfony Filesystem component
-     * and currently delegates its copy() method directly to it. Therefore, it is
-     * precisely equivalent to its implementation. Symfony's copy() documentation
-     * does not specify whether it supports directories as well as files. This
-     * test is to discover whether it does. (At this time it does not.)
-     *
-     * @coversNothing
-     */
-    public function testSymfonyCopyDirectory(): void
-    {
-        $this->expectException(SymfonyIOException::class);
-        $this->expectExceptionMessageMatches(sprintf(
-            '#"%s"#',
-            preg_quote(PathHelper::sourceDirAbsolute(), '/'),
-        ));
-
-        $filename = 'arbitrary_file.txt';
-        $sourceFile = PathHelper::createPath($filename, PathHelper::sourceDirAbsolute());
-        $destinationFile = PathHelper::createPath($filename, PathHelper::destinationDirAbsolute());
-        FilesystemHelper::touch($sourceFile->absolute());
-
-        $sut = new SymfonyFilesystem();
-
-        // Single file copy: this should work.
-        $sut->copy(
-            $sourceFile->absolute(),
-            $destinationFile->absolute(),
-        );
-
-        // Directory copy: this should fail.
-        $sut->copy(
-            PathHelper::sourceDirAbsolute(),
-            PathHelper::destinationDirPath()->absolute(),
-        );
     }
 }
