@@ -4,11 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\EndToEnd;
 
 use PhpTuf\ComposerStager\Tests\FileSyncer\Factory\PhpFileSyncerFactory;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
- *
- * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
- */
+/** @coversNothing */
 final class PhpFileSyncerEndToEndFunctionalTest extends EndToEndFunctionalTestCase
 {
     protected function fileSyncerFactoryClass(): string
