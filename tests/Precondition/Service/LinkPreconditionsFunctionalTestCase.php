@@ -49,7 +49,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = PathHelper::createPath('65eb69a274470dd84e9b5371f7e1e8c8');
+        $nonexistentDir = PathHelper::nonExistentDirPath();
 
         return [
             'Active directory' => [

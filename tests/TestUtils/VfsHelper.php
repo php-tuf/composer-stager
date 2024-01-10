@@ -23,7 +23,7 @@ final class VfsHelper
         vfsStream::setup();
     }
 
-    public static function createPath(string $path): PathInterface
+    public static function createPath(string $path, string $basePath = self::ROOT_DIR): PathInterface
     {
         return new Path($path, new Path(self::ROOT_DIR));
     }
