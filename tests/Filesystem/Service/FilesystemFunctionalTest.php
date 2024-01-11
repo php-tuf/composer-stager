@@ -7,17 +7,18 @@ use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
-use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\VfsHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem */
 final class FilesystemFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
+        vfsStream::setup();
         FilesystemHelper::createDirectories([
             PathHelper::sourceDirAbsolute(),
             PathHelper::destinationDirAbsolute(),
@@ -39,11 +40,10 @@ final class FilesystemFunctionalTest extends TestCase
     {
         $mode = 0775;
         $contents = 'Arbitrary file contents';
-        vfsStream::setup('root', null, ['source.txt' => $contents]);
-        $vfsRoot = vfsStream::url('root');
-        $sourceFilePath = new Path('source.txt', new Path($vfsRoot));
+        vfsStream::create(['source.txt' => $contents]);
+        $sourceFilePath = VfsHelper::createPath('source.txt');
         $sourceFileAbsolute = $sourceFilePath->absolute();
-        $destinationFilePath = new Path('destination.txt', new Path($vfsRoot));
+        $destinationFilePath = VfsHelper::createPath('destination.txt');
         $destinationFileAbsolute = $destinationFilePath->absolute();
         assert(FilesystemHelper::fileMode($sourceFileAbsolute) !== $mode, "The new file doesn't already have the same permissions as will be set.");
         FilesystemHelper::chmod($sourceFileAbsolute, $mode);
@@ -63,10 +63,9 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::copy */
     public function testCopySourceFileNotFound(): void
     {
-        $filenameRelative = 'file.txt';
-        $sourceFilePath = PathHelper::createPath($filenameRelative, PathHelper::sourceDirAbsolute());
+        $sourceFilePath = VfsHelper::nonExistentFilePath();
         $sourceFileAbsolute = $sourceFilePath->absolute();
-        $destinationFilePath = PathHelper::createPath($filenameRelative, PathHelper::destinationDirAbsolute());
+        $destinationFilePath = VfsHelper::arbitraryFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('No such file: %s', $sourceFileAbsolute);
@@ -83,7 +82,7 @@ final class FilesystemFunctionalTest extends TestCase
     public function testChmod(): void
     {
         $mode = 0775;
-        $filePath = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
+        $filePath = VfsHelper::arbitraryFilePath();
         $fileAbsolute = $filePath->absolute();
         FilesystemHelper::touch($fileAbsolute);
         $sut = $this->createSut();
@@ -100,7 +99,7 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testChmodFileDoesNotExist(): void
     {
-        $path = PathHelper::nonExistentFilePath();
+        $path = VfsHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('The file cannot be found at %s.', $path->absolute());
@@ -118,13 +117,13 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testFileModeOnFile(int $mode): void
     {
-        $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
-        $fileAbsolute = $file->absolute();
+        $filePath = VfsHelper::arbitraryFilePath();
+        $fileAbsolute = $filePath->absolute();
         FilesystemHelper::touch($fileAbsolute);
         FilesystemHelper::chmod($fileAbsolute, $mode);
         $sut = $this->createSut();
 
-        $actual = $sut->fileMode($file);
+        $actual = $sut->fileMode($filePath);
 
         self::assertSame($mode, $actual, 'Got correct permissions.');
     }
@@ -138,7 +137,7 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testFileModeOnDirectory(int $mode): void
     {
-        $directoryPath = PathHelper::createPath('directory', PathHelper::sourceDirAbsolute());
+        $directoryPath = VfsHelper::arbitraryDirPath();
         $directoryAbsolute = $directoryPath->absolute();
         FilesystemHelper::createDirectories($directoryAbsolute);
         FilesystemHelper::chmod($directoryAbsolute, $mode);
@@ -161,7 +160,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::fileMode */
     public function testFileModeFileDoesNotExist(): void
     {
-        $path = PathHelper::nonExistentFilePath();
+        $path = VfsHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('No such file: %s', $path->absolute());
@@ -181,7 +180,7 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testFileModeDocblockExamples(): void
     {
-        $filePath = PathHelper::createPath('test.txt', PathHelper::sourceDirAbsolute());
+        $filePath = VfsHelper::arbitraryFilePath();
         $fileAbsolute = $filePath->absolute();
         FilesystemHelper::touch($fileAbsolute);
         $filesystem = $this->createSut();
@@ -207,7 +206,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyTrue(): void
     {
-        $directoryPath = PathHelper::createPath('empty', PathHelper::testPersistentFixturesAbsolute());
+        $directoryPath = VfsHelper::arbitraryDirPath();
         FilesystemHelper::createDirectories($directoryPath->absolute());
         $sut = $this->createSut();
 
@@ -228,8 +227,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyErrorIsNotADirectory(): void
     {
-        $filePath = PathHelper::createPath('file.txt', PathHelper::testFreshFixturesDirAbsolute());
-        FilesystemHelper::touch($filePath->absolute());
+        $filePath = PathHelper::createPath(__FILE__);
         $message = sprintf(
             'The path does not exist or is not a directory at %s',
             $filePath->absolute(),
@@ -244,7 +242,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyError(): void
     {
-        $path = PathHelper::nonExistentFilePath();
+        $path = VfsHelper::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a directory at %s', $path->absolute());
@@ -435,9 +433,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::readLink */
     public function testReadlinkOnNonLink(): void
     {
-        $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
-        FilesystemHelper::touch($file->absolute());
-        assert(file_exists($file->absolute()));
+        $file = PathHelper::createPath(__FILE__);
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $file->absolute());
