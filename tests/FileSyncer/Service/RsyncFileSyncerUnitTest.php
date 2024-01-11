@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
@@ -13,6 +14,7 @@ use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
@@ -23,8 +25,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
  *
  * @covers ::__construct
- * @covers ::assertDirectoriesAreNotTheSame
- * @covers ::assertSourceExists
  * @covers ::buildCommand
  * @covers ::ensureDestinationDirectoryExists
  * @covers ::getRelativePath
@@ -34,13 +34,17 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @group no_windows
  */
-final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
+final class RsyncFileSyncerUnitTest extends TestCase
 {
+    private EnvironmentInterface|ObjectProphecy $environment;
     private FilesystemInterface|ObjectProphecy $filesystem;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
     protected function setUp(): void
     {
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment->setTimeLimit(Argument::type('integer'))
+            ->willReturn(true);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->fileExists(Argument::any())
@@ -52,7 +56,7 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
         parent::setUp();
     }
 
-    protected function createSut(): RsyncFileSyncer
+    private function createSut(): RsyncFileSyncer
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
@@ -237,33 +241,6 @@ final class RsyncFileSyncerUnitTest extends FileSyncerUnitTestCase
                 'thrownException' => IOException::class,
             ],
         ];
-    }
-
-    /** @covers ::assertSourceExists */
-    public function testSyncSourceDirectoryNotFound(): void
-    {
-        $this->filesystem
-            ->fileExists(Argument::any())
-            ->willReturn(false);
-        $sut = $this->createSut();
-
-        $message = sprintf('The source directory does not exist at %s', PathHelper::nonExistentDirAbsolute());
-        self::assertTranslatableException(static function () use ($sut): void {
-            $sut->sync(PathHelper::nonExistentDirPath(), PathHelper::destinationDirPath());
-        }, LogicException::class, $message);
-    }
-
-    /** @covers ::assertDirectoriesAreNotTheSame */
-    public function testSyncDirectoriesTheSame(): void
-    {
-        $source = PathHelper::createPath('same');
-        $destination = $source;
-        $sut = $this->createSut();
-
-        $message = sprintf('The source and destination directories cannot be the same at %s', $source->absolute());
-        self::assertTranslatableException(static function () use ($sut, $source, $destination): void {
-            $sut->sync($source, $destination);
-        }, LogicException::class, $message);
     }
 
     /** @covers ::ensureDestinationDirectoryExists */

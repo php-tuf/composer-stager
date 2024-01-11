@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
-use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
@@ -16,24 +15,21 @@ use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
-use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 /**
  * @package FileSyncer
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class RsyncFileSyncer implements RsyncFileSyncerInterface
+final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSyncerInterface
 {
-    use TranslatableAwareTrait;
-
     public function __construct(
-        private readonly EnvironmentInterface $environment,
-        private readonly FilesystemInterface $filesystem,
+        EnvironmentInterface $environment,
+        FilesystemInterface $filesystem,
         private readonly RsyncProcessRunnerInterface $rsync,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        $this->setTranslatableFactory($translatableFactory);
+        parent::__construct($environment, $filesystem, $translatableFactory);
     }
 
     /**
@@ -42,48 +38,17 @@ final class RsyncFileSyncer implements RsyncFileSyncerInterface
      *
      * @see https://serverfault.com/q/1094803/956603
      */
-    public function sync(
+    protected function doSync(
         PathInterface $source,
         PathInterface $destination,
-        ?PathListInterface $exclusions = null,
-        ?OutputCallbackInterface $callback = null,
+        PathListInterface $exclusions,
+        ?OutputCallbackInterface $callback,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $this->environment->setTimeLimit($timeout);
-
         $sourceAbsolute = $source->absolute();
         $destinationAbsolute = $destination->absolute();
 
-        $this->assertDirectoriesAreNotTheSame($source, $destination);
-        $this->assertSourceExists($source);
         $this->runCommand($exclusions, $sourceAbsolute, $destinationAbsolute, $destination, $callback);
-    }
-
-    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
-    private function assertDirectoriesAreNotTheSame(PathInterface $source, PathInterface $destination): void
-    {
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
-
-        if ($sourceAbsolute === $destinationAbsolute) {
-            throw new LogicException($this->t(
-                'The source and destination directories cannot be the same at %path',
-                $this->p(['%path' => $sourceAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
-    }
-
-    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
-    private function assertSourceExists(PathInterface $source): void
-    {
-        if (!$this->filesystem->fileExists($source)) {
-            throw new LogicException($this->t(
-                'The source directory does not exist at %path',
-                $this->p(['%path' => $source->absolute()]),
-                $this->d()->exceptions(),
-            ));
-        }
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
