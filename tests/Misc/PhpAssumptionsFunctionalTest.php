@@ -13,6 +13,11 @@ use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
  */
 final class PhpAssumptionsFunctionalTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        self::createTestEnvironment();
+    }
+
     protected function tearDown(): void
     {
         self::removeTestEnvironment();
@@ -20,10 +25,8 @@ final class PhpAssumptionsFunctionalTest extends TestCase
 
     public function testCopyDoesNotCreateParents(): void
     {
-        $fixtureDirAbsolute = PathHelper::testFreshFixturesDirAbsolute();
-        FilesystemHelper::createDirectories($fixtureDirAbsolute);
-        $sourceFile = PathHelper::makeAbsolute('source.txt', $fixtureDirAbsolute);
-        $destinationFile = PathHelper::makeAbsolute('one/two/three/destination.txt', $fixtureDirAbsolute);
+        $sourceFile = PathHelper::makeAbsolute('source.txt');
+        $destinationFile = PathHelper::makeAbsolute('one/two/three/destination.txt');
         FilesystemHelper::touch($sourceFile);
 
         $result = @copy($sourceFile, $destinationFile);

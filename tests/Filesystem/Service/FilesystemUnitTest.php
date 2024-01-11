@@ -42,6 +42,11 @@ final class FilesystemUnitTest extends TestCase
         $this->symfonyFilesystem = $this->prophesize(SymfonyFilesystem::class);
     }
 
+    protected function tearDown(): void
+    {
+        self::removeTestEnvironment();
+    }
+
     private function createSut(): Filesystem
     {
         $environment = $this->environment->reveal();
@@ -233,7 +238,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testFileModeFailure(): void
     {
-        $path = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
+        $path = PathHelper::arbitraryFilePath();
         FilesystemHelper::touch($path->absolute());
         BuiltinFunctionMocker::mock(['fileperms' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['fileperms']

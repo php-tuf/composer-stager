@@ -74,13 +74,13 @@ abstract class EndToEndFunctionalTestCase extends TestCase
      */
     public function testSync(string $activeDir, string $stagingDir): void
     {
-        $activeDirPath = PathHelper::createPath($activeDir, PathHelper::testFreshFixturesDirAbsolute());
+        $activeDirPath = PathHelper::createPath($activeDir);
         $activeDirAbsolute = $activeDirPath->absolute();
-        $stagingDirPath = PathHelper::createPath($stagingDir, PathHelper::testFreshFixturesDirAbsolute());
+        $stagingDirPath = PathHelper::createPath($stagingDir);
         $stagingDirAbsolute = $stagingDirPath->absolute();
 
         // Create fixture (active directory).
-        self::createFiles(PathHelper::makeAbsolute($activeDir, PathHelper::testFreshFixturesDirAbsolute()), [
+        self::createFiles(PathHelper::makeAbsolute($activeDir), [
             // Unchanging files.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -115,7 +115,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         FilesystemHelper::createSymlinks($activeDirAbsolute, [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
-            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => PathHelper::testFreshFixturesDirAbsolute(),
+            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => __DIR__,
         ]);
 
         // Create initial composer.json. (Doing so manually can be up to one
@@ -144,7 +144,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Non-existent (ignore).
             'file_that_NEVER_EXISTS_anywhere.txt',
             // Absolute path (ignore).
-            PathHelper::makeAbsolute('absolute/path', PathHelper::testFreshFixturesDirAbsolute()),
+            PathHelper::makeAbsolute('absolute/path'),
         ];
         $exclusions = new PathList(...$exclusions);
 

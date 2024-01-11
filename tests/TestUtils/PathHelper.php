@@ -47,7 +47,7 @@ final class PathHelper
 
     public static function activeDirAbsolute(): string
     {
-        return self::makeAbsolute(self::activeDirRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::activeDirRelative());
     }
 
     public static function activeDirPath(): PathInterface
@@ -62,7 +62,7 @@ final class PathHelper
 
     public static function stagingDirAbsolute(): string
     {
-        return self::makeAbsolute(self::stagingDirRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::stagingDirRelative());
     }
 
     public static function stagingDirPath(): PathInterface
@@ -77,7 +77,7 @@ final class PathHelper
 
     public static function sourceDirAbsolute(): string
     {
-        return self::makeAbsolute(self::sourceDirRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::sourceDirRelative());
     }
 
     public static function sourceDirPath(): PathInterface
@@ -92,7 +92,7 @@ final class PathHelper
 
     public static function destinationDirAbsolute(): string
     {
-        return self::makeAbsolute(self::destinationDirRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::destinationDirRelative());
     }
 
     public static function destinationDirPath(): PathInterface
@@ -107,7 +107,7 @@ final class PathHelper
 
     public static function arbitraryDirAbsolute(): string
     {
-        return self::makeAbsolute(self::arbitraryDirRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::arbitraryDirRelative());
     }
 
     public static function arbitraryDirPath(): PathInterface
@@ -122,7 +122,7 @@ final class PathHelper
 
     public static function arbitraryFileAbsolute(): string
     {
-        return self::makeAbsolute(self::arbitraryFileRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::arbitraryFileRelative());
     }
 
     public static function arbitraryFilePath(): PathInterface
@@ -137,7 +137,7 @@ final class PathHelper
 
     public static function nonExistentDirAbsolute(): string
     {
-        return self::makeAbsolute(self::nonExistentDirRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::nonExistentDirRelative());
     }
 
     public static function nonExistentDirPath(): PathInterface
@@ -152,7 +152,7 @@ final class PathHelper
 
     public static function nonExistentFileAbsolute(): string
     {
-        return self::makeAbsolute(self::nonExistentFileRelative(), self::testFreshFixturesDirAbsolute());
+        return self::makeAbsolute(self::nonExistentFileRelative());
     }
 
     public static function nonExistentFilePath(): PathInterface
@@ -162,13 +162,10 @@ final class PathHelper
 
     public static function createPath(string $path, ?string $basePath = null): PathInterface
     {
-        if (is_string($basePath)) {
-            assert(self::isAbsolute($basePath));
-            $path = self::makeAbsolute($path, $basePath);
-        }
+        $basePath ??= self::testFreshFixturesDirAbsolute();
+        $basePath = self::pathFactory()->create($basePath);
 
-        return (new PathFactory())
-            ->create($path);
+        return self::pathFactory()->create($path, $basePath);
     }
 
     public static function canonicalize(string $path): string
@@ -183,8 +180,9 @@ final class PathHelper
         return SymfonyPath::isAbsolute($path);
     }
 
-    public static function makeAbsolute(string $path, string $basePath): string
+    public static function makeAbsolute(string $path, ?string $basePath = null): string
     {
+        $basePath ??= self::testFreshFixturesDirAbsolute();
         $absolute = SymfonyPath::makeAbsolute($path, $basePath);
 
         return self::canonicalize($absolute);
@@ -242,5 +240,10 @@ final class PathHelper
         }
 
         return $trimmedPath;
+    }
+
+    public static function pathFactory(): PathFactory
+    {
+        return new PathFactory();
     }
 }
