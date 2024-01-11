@@ -333,10 +333,13 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             ],
 
             // Nested.
-            'Nested: simple' => [
+            'Nested: staging inside active' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/staging-dir',
             ],
+            // It is unnecessary to test with the active directory inside the
+            // staging directory, because the test itself goes both directions
+            // in course. Continue to the next scenario.
             'Nested: with directory depth' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'active-dir/some/directory/depth/staging-dir',

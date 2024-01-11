@@ -43,44 +43,99 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(array $source, array $destination, array $expected): void
-    {
-        self::createFiles(PathHelper::sourceDirAbsolute(), $source);
-        self::createFiles(PathHelper::destinationDirAbsolute(), $destination);
+    public function testBasicFunctionality(
+        string $sourceDirRelative,
+        string $destinationDirRelative,
+        array $givenFiles,
+        array $expectedFiles,
+    ): void {
+        $sourceDirPath = PathHelper::createPath($sourceDirRelative);
+        $destinationDirPath = PathHelper::createPath($destinationDirRelative);
+        self::createFiles(PathHelper::testFreshFixturesDirAbsolute(), $givenFiles);
         $sut = $this->createSut();
 
-        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
+        $sut->sync($sourceDirPath, $destinationDirPath);
 
-        self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), $expected);
+        self::assertDirectoryListing(PathHelper::testFreshFixturesDirAbsolute(), $expectedFiles);
     }
 
     public function providerBasicFunctionality(): array
     {
         return [
             'Source and destination both empty' => [
-                'source' => [],
-                'destination' => [],
+                'sourceDir' => 'source-dir',
+                'destinationDir' => 'destination-dir',
+                'sourceFiles' => [],
+                'destinationFiles' => [],
                 'expected' => [],
             ],
             'Files in source, destination empty' => [
-                'source' => ['one.txt', 'two/three.txt'],
-                'destination' => [],
-                'expected' => ['one.txt', 'two/three.txt'],
+                'sourceDir' => 'source-dir',
+                'destinationDir' => 'destination-dir',
+                'givenFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                ],
+                'expectedFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                    'destination-dir/one.txt',
+                    'destination-dir/two/three.txt',
+                ],
             ],
             'Source empty, files in destination' => [
-                'source' => [],
-                'destination' => ['one.txt', 'two/three.txt'],
-                'expected' => [],
+                'sourceDir' => 'source-dir',
+                'destinationDir' => 'destination-dir',
+                'givenFiles' => [
+                    'destination-dir/one.txt',
+                    'destination-dir/two/three.txt',
+                ],
+                'expectedFiles' => [],
             ],
             'Completely different files in source and destination' => [
-                'source' => ['one.txt', 'two/three.txt'],
-                'destination' => ['four/five.txt', 'five/six.txt'],
+                'sourceDir' => 'source-dir',
+                'destinationDir' => 'destination-dir',
+                'givenFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                ],
+                'expectedFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                    'destination-dir/one.txt',
+                    'destination-dir/two/three.txt',
+                ],
                 'expected' => ['one.txt', 'two/three.txt'],
             ],
             'Some overlap in files in source and destination' => [
-                'source' => ['one.txt', 'two/three.txt'],
-                'destination' => ['two/three.txt', 'four/five.txt'],
-                'expected' => ['one.txt', 'two/three.txt'],
+                'sourceDir' => 'source-dir',
+                'destinationDir' => 'destination-dir',
+                'givenFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                    'destination-dir/two/three.txt',
+                    'destination-dir/four/five.txt',
+                ],
+                'expectedFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                    'destination-dir/one.txt',
+                    'destination-dir/two/three.txt',
+                ],
+            ],
+            'Nested: destination inside source' => [
+                'sourceDir' => 'source-dir',
+                'destinationDir' => 'source-dir/destination-dir',
+                'givenFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                ],
+                'expectedFiles' => [
+                    'source-dir/one.txt',
+                    'source-dir/two/three.txt',
+                    'source-dir/destination-dir/one.txt',
+                    'source-dir/destination-dir/two/three.txt',
+                ],
             ],
         ];
     }
