@@ -62,6 +62,13 @@ abstract class AbstractFileSyncer implements FileSyncerInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
+    protected function isDescendant(string $descendant, string $ancestor): bool
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+
+        return str_starts_with($descendant, $ancestor);
+    }
+
     protected static function getRelativePath(string $ancestor, string $path): string
     {
         $ancestor .= DIRECTORY_SEPARATOR;

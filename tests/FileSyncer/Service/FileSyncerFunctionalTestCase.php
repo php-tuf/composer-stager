@@ -35,6 +35,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::__construct
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceAndDestinationAreDifferent
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists
+     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::isDescendant
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::sync
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::copySourceFilesToDestination
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::deleteExtraneousFilesFromDestination
@@ -136,6 +137,24 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                     'source-dir/two/three.txt',
                     'source-dir/destination-dir/one.txt',
                     'source-dir/destination-dir/two/three.txt',
+                ],
+            ],
+            'Nested: source inside destination' => [
+                'sourceDir' => 'destination-dir/source-dir',
+                'destinationDir' => 'destination-dir',
+                'givenFiles' => [
+                    'destination-dir/source-dir/one.txt',
+                    'destination-dir/source-dir/two/three.txt',
+                    'destination-dir/two/three.txt',
+                    'destination-dir/four/five/six.txt',
+                    'destination-dir/seven/eight/nine/ten.txt',
+                    'destination-dir/zz_a_file_sorted_last_in_the_destination_is_important_for_coverage.txt',
+                ],
+                'expectedFiles' => [
+                    'destination-dir/source-dir/one.txt',
+                    'destination-dir/source-dir/two/three.txt',
+                    'destination-dir/one.txt',
+                    'destination-dir/two/three.txt',
                 ],
             ],
         ];

@@ -74,6 +74,10 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
 
             $destinationFilePath = $this->pathFactory->create($destinationFileAbsolute);
 
+            if ($this->isDescendant($destinationFilePath->absolute(), $source->absolute())) {
+                continue;
+            }
+
             // If it doesn't exist in the source, delete it from the destination.
             $this->filesystem->remove($destinationFilePath);
         }

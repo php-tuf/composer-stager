@@ -28,7 +28,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::buildCommand
  * @covers ::ensureDestinationDirectoryExists
  * @covers ::getRelativePath
- * @covers ::isDescendant
  * @covers ::runCommand
  * @covers ::sync
  *

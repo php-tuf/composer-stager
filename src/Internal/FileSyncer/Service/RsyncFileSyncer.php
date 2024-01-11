@@ -121,11 +121,4 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
 
         return $command;
     }
-
-    private function isDescendant(string $descendant, string $ancestor): bool
-    {
-        $ancestor .= DIRECTORY_SEPARATOR;
-
-        return str_starts_with($descendant, $ancestor);
-    }
 }
