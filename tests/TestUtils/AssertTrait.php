@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
@@ -66,6 +68,21 @@ trait AssertTrait
         }
 
         self::assertEquals($expected, $actual, $message);
+    }
+
+    protected static function assertVfsStructureIsSame(array $given, $message = ''): void
+    {
+        array_multisort($given, SORT_ASC);
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $actual = vfsStream::inspect(new vfsStreamStructureVisitor())
+            ->getStructure()['root'];
+        array_multisort($actual, SORT_ASC);
+
+        if ($message === '') {
+            $message = "Directory contains the expected files.";
+        }
+
+        self::assertSame($given, $actual, $message);
     }
 
     protected static function assertFileMode(string $path, int $mode): void
@@ -250,6 +267,10 @@ trait AssertTrait
     private static function getFlatDirectoryListing(string $dir): array
     {
         $dir = PathHelper::stripTrailingSlash($dir);
+
+        if (!FilesystemHelper::exists($dir)) {
+            return [];
+        }
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir),
