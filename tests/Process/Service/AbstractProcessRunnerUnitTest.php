@@ -8,6 +8,7 @@ use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
@@ -63,6 +64,11 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 TranslatableFactoryInterface $translatableFactory,
             ) {
                 parent::__construct($executableFinder, $processFactory, $translatableFactory);
+            }
+
+            public function getTranslatableMessage(string $message): TranslatableInterface
+            {
+                return $this->t($message);
             }
 
             protected function executableName(): string
@@ -143,5 +149,17 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->run([self::COMMAND_NAME]);
         }, $previous::class);
+    }
+
+    public function testIsTranslatable(): void
+    {
+        $message = 'test';
+        $sut = $this->createSut();
+
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        /** @var \PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface $translatable */
+        $translatable = $sut->getTranslatableMessage($message);
+
+        self::assertSame($message, $translatable->trans());
     }
 }
