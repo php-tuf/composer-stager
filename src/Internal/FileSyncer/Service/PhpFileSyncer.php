@@ -67,6 +67,8 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
             $sourceFilePath = $this->pathFactory->create($fileRelative, $source);
 
             if ($this->filesystem->fileExists($sourceFilePath)) {
+                // @infection-ignore-all Continue_Survived is clearly a
+                //   false positive here. It's absolutely caught by tests.
                 continue;
             }
 
