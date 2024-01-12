@@ -18,5 +18,5 @@
         "IncrementInteger": false,
         "RoundingFamily": false
     },
-    "testFrameworkOptions": "--exclude-group=windows_only"
+    "testFrameworkOptions": "--exclude-group=slow,windows_only"
 }
