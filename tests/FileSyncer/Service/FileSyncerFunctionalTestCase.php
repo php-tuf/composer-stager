@@ -39,6 +39,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::copySourceFilesToDestination
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::deleteExtraneousFilesFromDestination
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::doSync
+     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::isDirEmpty
      * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer::doSync
      *
      * @dataProvider providerBasicFunctionality

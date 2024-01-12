@@ -28,6 +28,16 @@ final class VfsHelper
         return new Path($path, new Path(self::ROOT_DIR));
     }
 
+    public static function rootDirAbsolute(): string
+    {
+        return self::ROOT_DIR;
+    }
+
+    public static function rootDirPath(): PathInterface
+    {
+        return self::createPath(self::ROOT_DIR);
+    }
+
     public static function activeDirRelative(): string
     {
         return self::ACTIVE_DIR;

@@ -146,21 +146,6 @@ final class Filesystem implements FilesystemInterface
         return $this->getFileType($path) === self::PATH_IS_DIRECTORY;
     }
 
-    public function isDirEmpty(PathInterface $path): bool
-    {
-        $scandir = @scandir($path->absolute());
-
-        if ($scandir === false) {
-            throw new IOException($this->t(
-                'The path does not exist or is not a directory at %path',
-                $this->p(['%path' => $path->absolute()]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        return $scandir === ['.', '..'];
-    }
-
     public function isFile(PathInterface $path): bool
     {
         return $this->getFileType($path) === self::PATH_IS_REGULAR_FILE;

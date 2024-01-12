@@ -203,54 +203,6 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertSame("0644", $mode, 'The second code example works.');
     }
 
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyTrue(): void
-    {
-        $directoryPath = VfsHelper::arbitraryDirPath();
-        FilesystemHelper::createDirectories($directoryPath->absolute());
-        $sut = $this->createSut();
-
-        self::assertTrue($sut->isDirEmpty($directoryPath), 'Correctly detected empty directory.');
-
-        FilesystemHelper::remove(PathHelper::testPersistentFixturesAbsolute());
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyFalse(): void
-    {
-        $directoryPath = PathHelper::createPath(__DIR__);
-        $sut = $this->createSut();
-
-        self::assertFalse($sut->isDirEmpty($directoryPath), 'Correctly detected non-empty directory.');
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyErrorIsNotADirectory(): void
-    {
-        $filePath = PathHelper::createPath(__FILE__);
-        $message = sprintf(
-            'The path does not exist or is not a directory at %s',
-            $filePath->absolute(),
-        );
-        $sut = $this->createSut();
-
-        self::assertTranslatableException(static function () use ($sut, $filePath): void {
-            $sut->isDirEmpty($filePath);
-        }, IOException::class, $message);
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyError(): void
-    {
-        $path = VfsHelper::nonExistentFilePath();
-        $sut = $this->createSut();
-
-        $message = sprintf('The path does not exist or is not a directory at %s', $path->absolute());
-        self::assertTranslatableException(static function () use ($sut, $path): void {
-            $sut->isDirEmpty($path);
-        }, IOException::class, $message);
-    }
-
     /**
      * @covers ::fileExists
      * @covers ::getFileType

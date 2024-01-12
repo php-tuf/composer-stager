@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use Closure;
+use org\bovigo\vfs\vfsStream;
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
@@ -11,11 +12,14 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\VfsHelper;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionClass;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer
@@ -31,6 +35,7 @@ final class PhpFileSyncerUnitTest extends TestCase
 
     protected function setUp(): void
     {
+        vfsStream::setup();
         $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->environment->setTimeLimit(Argument::type('integer'))
             ->willReturn(true);
@@ -39,9 +44,6 @@ final class PhpFileSyncerUnitTest extends TestCase
         $this->filesystem
             ->fileExists(Argument::any())
             ->willReturn(true);
-        $this->filesystem
-            ->isDirEmpty(Argument::any())
-            ->willReturn(false);
         $this->filesystem
             ->mkdir(Argument::any());
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
@@ -184,5 +186,57 @@ final class PhpFileSyncerUnitTest extends TestCase
                 'expected' => '',
             ],
         ];
+    }
+
+    /** @covers ::isDirEmpty */
+    public function testIsDirEmptyTrue(): void
+    {
+        $directoryPath = VfsHelper::arbitraryDirPath();
+        FilesystemHelper::createDirectories($directoryPath->absolute());
+        $sut = $this->createSut();
+
+        $reflection = new ReflectionClass(PhpFileSyncer::class);
+        $sut = $reflection->newInstanceWithoutConstructor();
+        $method = $reflection->getMethod('isDirEmpty');
+        $actual = $method->invoke($sut, $directoryPath);
+
+        self::assertTrue($actual, 'Correctly detected empty directory.');
+
+        FilesystemHelper::remove(PathHelper::testPersistentFixturesAbsolute());
+    }
+
+    /** @covers ::isDirEmpty */
+    public function testIsDirEmptyFalse(): void
+    {
+        $directoryPath = VfsHelper::rootDirPath();
+        FilesystemHelper::touch(VfsHelper::arbitraryFileAbsolute());
+        $sut = $this->createSut();
+
+        $reflection = new ReflectionClass(PhpFileSyncer::class);
+        $sut = $reflection->newInstanceWithoutConstructor();
+        $method = $reflection->getMethod('isDirEmpty');
+        $actual = $method->invoke($sut, $directoryPath);
+
+        self::assertFalse($actual, 'Correctly detected non-empty directory.');
+    }
+
+    /**
+     * @covers ::isDirEmpty
+     *
+     * In context, it should be impossible for this method to receive a file,
+     * as opposed to a directory, but this documents the theoretical behavior.
+     */
+    public function testIsDirEmptyNotADirectory(): void
+    {
+        $filePath = VfsHelper::arbitraryFilePath();
+        FilesystemHelper::touch($filePath->absolute());
+        $sut = $this->createSut();
+
+        $reflection = new ReflectionClass(PhpFileSyncer::class);
+        $sut = $reflection->newInstanceWithoutConstructor();
+        $method = $reflection->getMethod('isDirEmpty');
+        $actual = $method->invoke($sut, $filePath);
+
+        self::assertFalse($actual, 'Correctly handled non-empty directory.');
     }
 }

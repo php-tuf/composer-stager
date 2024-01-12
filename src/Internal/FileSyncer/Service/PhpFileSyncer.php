@@ -56,7 +56,7 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
         PathListInterface $exclusions,
     ): void {
         // There's no reason to look for deletions if the destination is already empty.
-        if ($this->filesystem->isDirEmpty($destination)) {
+        if ($this->isDirEmpty($destination)) {
             return;
         }
 
@@ -77,6 +77,15 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
             // If it doesn't exist in the source, delete it from the destination.
             $this->filesystem->remove($destinationFilePath);
         }
+    }
+
+    private function isDirEmpty(PathInterface $path): bool
+    {
+        // `scandir()` can technically generate an error if a directory doesn't exist,
+        // but at this point in the code it has already been ensured that it does.
+        $scandir = @scandir($path->absolute());
+
+        return $scandir === ['.', '..'];
     }
 
     /**
