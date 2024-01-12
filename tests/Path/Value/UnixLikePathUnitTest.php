@@ -212,6 +212,18 @@ final class UnixLikePathUnitTest extends PathUnitTestCase
                 'relativeBase' => '/tmp',
                 'relative' => 'vfs://example.com/two/three.txt',
             ],
+            // Generally speaking, it would be better if an invalid protocol
+            // caused a failure. But since protocols are officially unsupported
+            // and used only internally for testing, it's sufficient just to
+            // document that this is the current behavior.
+            'Invalid protocol' => [
+                'given' => '1ftp://example.com/one/../two/three.txt',
+                'baseDir' => '/var',
+                'isAbsolute' => false,
+                'absolute' => '/var/1ftp:/example.com/two/three.txt',
+                'relativeBase' => '/tmp',
+                'relative' => '/tmp/1ftp:/example.com/two/three.txt',
+            ],
         ];
     }
 
