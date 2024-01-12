@@ -22,10 +22,6 @@ final class SymfonyProcessFactory implements SymfonyProcessFactoryInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
-    /**
-     * @codeCoverageIgnore It's impractical to test a failure creating a Symfony
-     *   process since it depends on a host configuration.
-     */
     public function create(array $command): SymfonyProcess
     {
         try {

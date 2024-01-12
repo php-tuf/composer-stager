@@ -115,3 +115,17 @@ namespace PhpTuf\ComposerStager\Internal\Path\Value {
         }
     }
 }
+
+namespace Symfony\Component\Process {
+
+    use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+
+    if (BuiltinFunctionMocker::shouldMock('getcwd')) {
+        function getcwd(): string|false
+        {
+            return BuiltinFunctionMocker::$spies['getcwd']
+                ->reveal()
+                ->report();
+        }
+    }
+}
