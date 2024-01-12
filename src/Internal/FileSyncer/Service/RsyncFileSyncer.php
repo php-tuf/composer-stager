@@ -128,9 +128,4 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
 
         return str_starts_with($descendant, $ancestor);
     }
-
-    private static function getRelativePath(string $ancestor, string $path): string
-    {
-        return substr($path, strlen($ancestor) + 1);
-    }
 }

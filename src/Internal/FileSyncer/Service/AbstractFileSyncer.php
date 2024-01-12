@@ -62,6 +62,17 @@ abstract class AbstractFileSyncer implements FileSyncerInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
+    protected static function getRelativePath(string $ancestor, string $path): string
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+
+        if (str_starts_with($path, $ancestor)) {
+            return substr($path, strlen($ancestor));
+        }
+
+        return $path;
+    }
+
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
     private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
     {

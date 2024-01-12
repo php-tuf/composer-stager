@@ -104,15 +104,4 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
             $this->filesystem->copy($sourceFilePath, $destinationFilePath);
         }
     }
-
-    private static function getRelativePath(string $ancestor, string $path): string
-    {
-        $ancestor .= DIRECTORY_SEPARATOR;
-
-        if (str_starts_with($path, $ancestor)) {
-            return substr($path, strlen($ancestor));
-        }
-
-        return $path;
-    }
 }
