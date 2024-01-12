@@ -6,10 +6,24 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use ReflectionClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path */
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
+ *
+ * @covers ::__construct
+ * @covers ::absolute
+ * @covers ::doAbsolute
+ * @covers ::getcwd
+ * @covers ::getProtocol
+ * @covers ::hasProtocol
+ * @covers ::isAbsolute
+ * @covers ::relative
+ * @covers ::stripProtocol
+ */
 abstract class PathUnitTestCase extends TestCase
 {
     /** @dataProvider providerBasicFunctionality */
@@ -21,6 +35,12 @@ abstract class PathUnitTestCase extends TestCase
         string $relativeBase,
         string $relative,
     ): void {
+        // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
+        // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
+        if (!EnvironmentHelper::isWindows()) {
+            PathHelper::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
+        }
+
         $equalInstance = new Path($given);
         $unequalInstance = new Path(__DIR__);
         $relativeBase = new Path($relativeBase);
@@ -54,6 +74,12 @@ abstract class PathUnitTestCase extends TestCase
     /** @dataProvider providerBaseDirArgument */
     public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $absolute): void
     {
+        // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
+        // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
+        if (!EnvironmentHelper::isWindows()) {
+            PathHelper::fixSeparatorsMultiple($path, $absolute);
+        }
+
         $sut = new Path($path, $basePath);
 
         self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');

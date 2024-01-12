@@ -2,40 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
- *
- * @covers ::__construct
- * @covers ::absolute
- * @covers ::doAbsolute
- * @covers ::isAbsolute
- * @covers ::relative
- * @covers \PhpTuf\ComposerStager\Internal\Path\Value\Path::getcwd
- */
+/** @coversNothing */
 final class WindowsPathUnitTest extends PathUnitTestCase
 {
-    /** @dataProvider providerBasicFunctionality */
-    public function testBasicFunctionality(
-        string $given,
-        string $basePath,
-        bool $isAbsolute,
-        string $absolute,
-        string $relativeBase,
-        string $relative,
-    ): void {
-        // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
-        // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
-        if (!EnvironmentHelper::isWindows()) {
-            PathHelper::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
-        }
-
-        parent::testBasicFunctionality($given, $basePath, $isAbsolute, $absolute, $relativeBase, $relative);
-    }
-
     public function providerBasicFunctionality(): array
     {
         return [
@@ -163,20 +134,6 @@ final class WindowsPathUnitTest extends PathUnitTestCase
                 'relative' => 'D:\\One\\Six',
             ],
         ];
-    }
-
-    /**
-     * @dataProvider providerBaseDirArgument
-     *
-     * @noinspection SenselessProxyMethodInspection
-     *   This method only exists so the "@group" annotation can be added to it.
-     *
-     * @group windows_only
-     *   This test doesn't work well on non-Windows systems, owing to its dependence on getcwd().
-     */
-    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $absolute): void
-    {
-        parent::testOptionalBaseDirArgument($path, $basePath, $absolute);
     }
 
     public function providerBaseDirArgument(): array
