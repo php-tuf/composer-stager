@@ -33,6 +33,7 @@ final class FileFinderFunctionalTest extends TestCase
 
     /**
      * @covers ::find
+     * @covers ::getRecursiveDirectoryIterator
      *
      * @dataProvider providerFind
      */
