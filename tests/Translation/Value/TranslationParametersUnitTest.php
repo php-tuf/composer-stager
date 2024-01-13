@@ -203,10 +203,14 @@ final class TranslationParametersUnitTest extends TestCase
             ],
             'Mixed with valid values' => [
                 'given' => [
-                    '%string' => 'string',
+                    '%string1' => 'string1',
                     '%invalid' => null,
+                    '%string2' => 'string2',
                 ],
-                'expected' => ['%string' => 'string'],
+                'expected' => [
+                    '%string1' => 'string1',
+                    '%string2' => 'string2',
+                ],
                 'invalidType' => 'null',
             ],
         ];
