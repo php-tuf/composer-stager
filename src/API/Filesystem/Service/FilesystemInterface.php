@@ -229,10 +229,10 @@ interface FilesystemInterface
     public function readLink(PathInterface $path): PathInterface;
 
     /**
-     * Removes the given path.
+     * Recursively deletes a file or directory at the given path.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
-     *   A path to remove.
+     *   A path to delete.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int $timeout
@@ -240,9 +240,12 @@ interface FilesystemInterface
      *   zero (0), no time limit is imposed.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
-     *   If the file cannot be removed.
+     *   If the path cannot be deleted.
+     *
+     * @see https://www.php.net/manual/en/function.rmdir.php
+     * @see https://www.php.net/manual/en/function.unlink.php
      */
-    public function remove(
+    public function rm(
         PathInterface $path,
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,

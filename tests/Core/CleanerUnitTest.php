@@ -50,7 +50,7 @@ final class CleanerUnitTest extends TestCase
             ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove(PathHelper::stagingDirPath(), null, $timeout)
+            ->rm(PathHelper::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -69,7 +69,7 @@ final class CleanerUnitTest extends TestCase
             ->assertIsFulfilled(PathHelper::activeDirPath(), $path, null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove($path, $callback, $timeout)
+            ->rm($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -113,7 +113,7 @@ final class CleanerUnitTest extends TestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->remove(Argument::cetera())
+            ->rm(Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 

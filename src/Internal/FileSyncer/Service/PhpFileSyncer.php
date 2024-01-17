@@ -79,7 +79,7 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
             }
 
             // If it doesn't exist in the source, delete it from the destination.
-            $this->filesystem->remove($destinationFilePath);
+            $this->filesystem->rm($destinationFilePath);
         }
     }
 
