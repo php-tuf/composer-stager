@@ -50,6 +50,9 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->willReturn(true);
         $this->filesystem
             ->mkdir(Argument::any());
+        $this->filesystem
+            ->isDir(Argument::any())
+            ->willReturn(true);
         $this->rsync = $this->prophesize(RsyncProcessRunnerInterface::class);
 
         parent::setUp();

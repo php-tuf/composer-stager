@@ -104,5 +104,13 @@ abstract class AbstractFileSyncer implements FileSyncerInterface
                 $this->d()->exceptions(),
             ));
         }
+
+        if (!$this->filesystem->isDir($source)) {
+            throw new LogicException($this->t(
+                'The source directory is not actually a directory at %path',
+                $this->p(['%path' => $source->absolute()]),
+                $this->d()->exceptions(),
+            ));
+        }
     }
 }

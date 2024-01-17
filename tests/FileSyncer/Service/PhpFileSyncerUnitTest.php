@@ -46,6 +46,9 @@ final class PhpFileSyncerUnitTest extends TestCase
             ->willReturn(true);
         $this->filesystem
             ->mkdir(Argument::any());
+        $this->filesystem
+            ->isDir(Argument::any())
+            ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
     }
 

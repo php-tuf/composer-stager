@@ -227,4 +227,19 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
             $sut->sync($sourcePath, $destinationPath);
         }, LogicException::class, $message);
     }
+
+    /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists */
+    public function testSourceIsNotADirectory(): void
+    {
+        $sourcePath = PathHelper::arbitraryFilePath();
+        $destinationPath = PathHelper::arbitraryDirPath();
+
+        FilesystemHelper::touch($sourcePath->absolute());
+        $sut = $this->createSut();
+
+        $message = sprintf('The source directory is not actually a directory at %s', $sourcePath->absolute());
+        self::assertTranslatableException(static function () use ($sut, $sourcePath, $destinationPath): void {
+            $sut->sync($sourcePath, $destinationPath);
+        }, LogicException::class, $message);
+    }
 }
