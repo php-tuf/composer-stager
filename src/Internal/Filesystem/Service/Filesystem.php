@@ -228,6 +228,30 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
+    public function touch(PathInterface $path, ?int $mtime = null, ?int $atime = null): void
+    {
+        $pathAbsolute = $path->absolute();
+
+        if ($this->isDir($path)) {
+            throw new LogicException($this->t(
+                'Cannot touch file--a directory already exists at %path',
+                $this->p(['%path' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+
+        /** @noinspection PotentialMalwareInspection */
+        $status = touch($pathAbsolute, $mtime, $atime);
+
+        if (!$status) {
+            throw new IOException($this->t(
+                'Failed to touch file at %path',
+                $this->p(['%path' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+    }
+
     private function getFileType(PathInterface $path): string
     {
         // A single call to `lstat()` may be cheaper than individual calls to `file_exists()`
