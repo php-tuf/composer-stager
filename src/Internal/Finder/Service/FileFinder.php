@@ -61,6 +61,7 @@ final class FileFinder implements FileFinderInterface
         // to delete files after their ancestors had already been deleted.
         $files = iterator_to_array($iterator);
 
+        // Sort the array to ensure idempotency.
         sort($files);
 
         return $files;

@@ -17,6 +17,25 @@ use Throwable;
 /** Provides custom test assertions. */
 trait AssertTrait
 {
+    protected static function assertArrayEquals(array $expected, array $actual, string $message = ''): void
+    {
+        // Normalize arrays for comparison.
+        $expected = array_filter($expected);
+        asort($expected);
+        $actual = array_filter($actual);
+        asort($actual);
+
+        // Make diffs easier to read by eliminating noise coming from numeric keys.
+        $expected = array_fill_keys($expected, 0);
+        $actual = array_fill_keys($actual, 0);
+
+        if ($message === '') {
+            $message = 'Failed asserting that two arrays are equal';
+        }
+
+        self::assertEquals($expected, $actual, $message);
+    }
+
     /**
      * Asserts a flattened directory listing similar to what GNU find would
      * return, alphabetized for easier comparison. Example:
@@ -53,21 +72,11 @@ trait AssertTrait
             return PathHelper::fixSeparators($path);
         }, $actual);
 
-        // Normalize arrays for comparison.
-        $expected = array_filter($expected);
-        asort($expected);
-        $actual = array_filter($actual);
-        asort($actual);
-
-        // Make diffs easier to read by eliminating noise coming from numeric keys.
-        $expected = array_fill_keys($expected, 0);
-        $actual = array_fill_keys($actual, 0);
-
         if ($message === '') {
             $message = "Directory {$dir} contains the expected files.";
         }
 
-        self::assertEquals($expected, $actual, $message);
+        self::assertArrayEquals($expected, $actual, $message);
     }
 
     protected static function assertVfsStructureIsSame(array $given, $message = ''): void
