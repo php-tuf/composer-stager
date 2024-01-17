@@ -33,7 +33,7 @@ final class Cleaner implements CleanerInterface
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, null, $timeout);
 
         try {
-            $this->filesystem->remove($stagingDir, $callback, $timeout);
+            $this->filesystem->rm($stagingDir, $callback, $timeout);
         } catch (IOException $e) {
             throw new RuntimeException($e->getTranslatableMessage(), 0, $e);
         }

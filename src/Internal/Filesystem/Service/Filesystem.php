@@ -210,7 +210,7 @@ final class Filesystem implements FilesystemInterface
         return $this->pathFactory->create($target, $basePath);
     }
 
-    public function remove(
+    public function rm(
         PathInterface $path,
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,

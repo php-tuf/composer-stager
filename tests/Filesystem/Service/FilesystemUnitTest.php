@@ -337,7 +337,7 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::remove
+     * @covers ::rm
      *
      * @dataProvider providerRemove
      */
@@ -351,7 +351,7 @@ final class FilesystemUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->remove($stagingDir, $callback, $timeout);
+        $sut->rm($stagingDir, $callback, $timeout);
     }
 
     public function providerRemove(): array
@@ -370,7 +370,7 @@ final class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::remove */
+    /** @covers ::rm */
     public function testRemoveException(): void
     {
         $message = 'Failed to remove directory.';
@@ -381,7 +381,7 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->remove(PathHelper::stagingDirPath());
+            $sut->rm(PathHelper::stagingDirPath());
         }, IOException::class, $message, null, $previous::class);
     }
 }
