@@ -405,4 +405,29 @@ final class FilesystemFunctionalTest extends TestCase
             $sut->readLink($path);
         }, IOException::class, $message);
     }
+
+    /** @covers ::touch */
+    public function testTouch(): void
+    {
+        $path = VfsHelper::arbitraryFilePath();
+        $sut = $this->createSut();
+
+        $sut->touch($path);
+
+        self::assertFileExists($path->absolute());
+    }
+
+    /** @covers ::touch */
+    public function testTouchAlreadyADirectory(): void
+    {
+        $directoryPath = VfsHelper::arbitraryDirPath();
+        $directoryAbsolute = $directoryPath->absolute();
+        FilesystemHelper::createDirectories([$directoryAbsolute]);
+        $sut = $this->createSut();
+
+        $message = sprintf('Cannot touch file--a directory already exists at %s', $directoryAbsolute);
+        self::assertTranslatableException(static function () use ($sut, $directoryPath): void {
+            $sut->touch($directoryPath);
+        }, LogicException::class, $message);
+    }
 }

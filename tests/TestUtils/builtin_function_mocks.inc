@@ -82,6 +82,15 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service {
                 ->report($filename);
         }
     }
+
+    if (BuiltinFunctionMocker::shouldMock('touch')) {
+        function touch(string $filename, ?int $mtime = null, ?int $atime = null): bool
+        {
+            return BuiltinFunctionMocker::$spies['touch']
+                ->reveal()
+                ->report($filename, $mtime, $atime);
+        }
+    }
 }
 
 namespace PhpTuf\ComposerStager\Internal\Path\Value {

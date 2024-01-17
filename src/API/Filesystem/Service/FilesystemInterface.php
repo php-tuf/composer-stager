@@ -250,4 +250,31 @@ interface FilesystemInterface
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;
+
+    /**
+     * Sets the access and modification time of a file at the given path.
+     *
+     * Attempts to set the access and modification times of the file to the
+     * value given in mtime. Note that the access time is always modified,
+     * regardless of the number of parameters.
+     *
+     * If the file does not exist, it will be created.
+     *
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
+     *   The path to touch.
+     * @param int|null $mtime
+     *   The touch time. If `mtime` is `null`, the current system `time()` is used.
+     * @param int|null $atime
+     *   If not `null`, the access time of the given path is set to the value
+     *   of `atime`. Otherwise, it is set to the value passed to the `mtime`
+     *   parameter. If both are `null`, the current system time is used.
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     *   If the operation fails.
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     *   If a directory already exists at the given path.
+     *
+     * @see https://www.php.net/manual/en/function.touch.php
+     */
+    public function touch(PathInterface $path, ?int $mtime = null, ?int $atime = null): void;
 }

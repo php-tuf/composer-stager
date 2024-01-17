@@ -384,4 +384,80 @@ final class FilesystemUnitTest extends TestCase
             $sut->rm(PathHelper::stagingDirPath());
         }, IOException::class, $message, null, $previous::class);
     }
+
+    /**
+     * @covers ::touch
+     *
+     * @dataProvider providerTouch
+     *
+     * @runInSeparateProcess
+     */
+    public function testTouch(string $filename, array $givenArguments, array $expectedArguments): void
+    {
+        $path = PathHelper::createPath($filename);
+        BuiltinFunctionMocker::mock(['touch' => $this->prophesize(TestSpyInterface::class)]);
+        BuiltinFunctionMocker::$spies['touch']
+            ->report($path->absolute(), ...$expectedArguments)
+            ->shouldBeCalledOnce()
+            ->willReturn(true);
+        $sut = $this->createSut();
+
+        $sut->touch($path, ...$givenArguments);
+    }
+
+    public function providerTouch(): array
+    {
+        return [
+            [
+                'filename' => '/one.txt',
+                'givenArguments' => [],
+                'expectedArguments' => [null, null],
+            ],
+            [
+                'filename' => '/one/two.txt',
+                'givenArguments' => [null, null],
+                'expectedArguments' => [null, null],
+            ],
+            [
+                'filename' => '/one/two/three.txt',
+                'givenArguments' => [946_702_800],
+                'expectedArguments' => [946_702_800, null],
+            ],
+            [
+                'filename' => '/one/two/three/four.txt',
+                'givenArguments' => [978_325_200],
+                'expectedArguments' => [978_325_200, null],
+            ],
+            [
+                'filename' => '/one/two/three/four/five.txt',
+                'givenArguments' => [null, 1_009_861_200],
+                'expectedArguments' => [null, 1_009_861_200],
+            ],
+            [
+                'filename' => '/one/two/three/four/five/six.txt',
+                'givenArguments' => [1_041_397_200, 1_072_933_200],
+                'expectedArguments' => [1_041_397_200, 1_072_933_200],
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::touch
+     *
+     * @runInSeparateProcess
+     */
+    public function testTouchFailure(): void
+    {
+        $path = PathHelper::arbitraryFilePath();
+        BuiltinFunctionMocker::mock(['touch' => $this->prophesize(TestSpyInterface::class)]);
+        BuiltinFunctionMocker::$spies['touch']
+            ->report(Argument::cetera())
+            ->willReturn(false);
+        $sut = $this->createSut();
+
+        $expectedExceptionMessage = sprintf('Failed to touch file at %s', $path->absolute());
+        self::assertTranslatableException(static function () use ($sut, $path): void {
+            $sut->touch($path);
+        }, IOException::class, $expectedExceptionMessage);
+    }
 }
