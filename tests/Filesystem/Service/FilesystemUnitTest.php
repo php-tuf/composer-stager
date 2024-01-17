@@ -339,9 +339,9 @@ final class FilesystemUnitTest extends TestCase
     /**
      * @covers ::rm
      *
-     * @dataProvider providerRemove
+     * @dataProvider providerRm
      */
-    public function testRemove(string $path, ?OutputCallbackInterface $callback, int $timeout): void
+    public function testRm(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
         $this->environment->setTimeLimit($timeout)
             ->shouldBeCalledOnce();
@@ -354,7 +354,7 @@ final class FilesystemUnitTest extends TestCase
         $sut->rm($stagingDir, $callback, $timeout);
     }
 
-    public function providerRemove(): array
+    public function providerRm(): array
     {
         return [
             'Default values' => [
@@ -371,7 +371,7 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /** @covers ::rm */
-    public function testRemoveException(): void
+    public function testRmException(): void
     {
         $message = 'Failed to remove directory.';
         $previous = new SymfonyIOException($message);
