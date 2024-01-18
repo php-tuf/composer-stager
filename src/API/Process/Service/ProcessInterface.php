@@ -77,11 +77,11 @@ interface ProcessInterface
      *   environment variables set on your system will be inherited. You can
      *   prevent this by setting to `false` variables you want to remove. Example:
      *   ```php
-     *     $process->setEnv(
-     *         'STRING_VAR' => 'a string',
-     *         'STRINGABLE_VAR' => new StringableObject(),
-     *         'REMOVE_ME' => false,
-     *     );
+     *   $process->setEnv(
+     *       'STRING_VAR' => 'a string',
+     *       'STRINGABLE_VAR' => new StringableObject(),
+     *       'REMOVE_ME' => false,
+     *   );
      *   ```
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
