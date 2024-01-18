@@ -53,8 +53,8 @@ class CommonPreconditions {
 CommonPreconditions *- ActiveDirIsReady
 
 class ActiveDirIsReady {
-    StagingDirExists
-    StagingDirIsWritable
+    ActiveDirExists
+    ActiveDirIsWritable
 }
 
 class StagingDirIsReady {
