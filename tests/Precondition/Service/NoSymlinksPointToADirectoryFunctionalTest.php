@@ -32,10 +32,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         // Compile the container.
         $container->compile();
 
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory $sut */
-        $sut = $container->get(NoSymlinksPointToADirectory::class);
-
-        return $sut;
+        return $container->get(NoSymlinksPointToADirectory::class);
     }
 
     /**

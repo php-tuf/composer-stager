@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
@@ -29,8 +30,8 @@ final class ExceptionUnitTest extends TestCase
         $code = 42;
         $previous = new Exception('Message');
 
-        /** @var \PhpTuf\ComposerStager\API\Exception\ExceptionInterface $sut */
         $sut = new $exception($translatableMessage, $code, $previous);
+        assert($sut instanceof ExceptionInterface);
 
         self::assertSame($message, $sut->getMessage(), 'Got untranslated message.');
         self::assertSame($translatableMessage, $sut->getTranslatableMessage(), 'Got translatable message.');

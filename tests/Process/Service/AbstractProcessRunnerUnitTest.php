@@ -157,7 +157,6 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $sut = $this->createSut();
 
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-        /** @var \PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface $translatable */
         $translatable = $sut->getTranslatableMessage($message);
 
         self::assertSame($message, $translatable->trans());

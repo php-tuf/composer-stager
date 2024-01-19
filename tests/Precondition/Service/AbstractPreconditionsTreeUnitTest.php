@@ -78,7 +78,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
         // Pass a mock child into the SUT so the behavior of ::assertIsFulfilled
         // can be controlled indirectly, without overriding the method on the SUT
         // itself and preventing it from actually being exercised.
-        /** @var \PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface|\Prophecy\Prophecy\ObjectProphecy $child */
         $child = $this->prophesize(PreconditionInterface::class);
         $child->getLeaves()
             ->willReturn([$child]);

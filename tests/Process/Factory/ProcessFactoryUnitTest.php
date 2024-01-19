@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Tests\Process\Service\TestSymfonyProcess;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory */
 final class ProcessFactoryUnitTest extends TestCase
@@ -21,8 +22,8 @@ final class ProcessFactoryUnitTest extends TestCase
      */
     public function testFactory(array $command): void
     {
-        /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface|\Prophecy\Prophecy\ObjectProphecy $symfonyProcessFactory */
         $symfonyProcessFactory = $this->prophesize(SymfonyProcessFactoryInterface::class);
+        assert(in_array($symfonyProcessFactory::class, [SymfonyProcessFactoryInterface::class, ObjectProphecy::class]));
         $symfonyProcessFactory
             ->create(Argument::cetera())
             ->willReturn(new TestSymfonyProcess());

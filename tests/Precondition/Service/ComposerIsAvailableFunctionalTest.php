@@ -44,10 +44,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $container->compile();
 
         // Get services.
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable $sut */
-        $sut = $container->get(ComposerIsAvailable::class);
-
-        return $sut;
+        return $container->get(ComposerIsAvailable::class);
     }
 
     // The happy path, which would usually have a test method here, is implicitly tested in the end-to-end test.
