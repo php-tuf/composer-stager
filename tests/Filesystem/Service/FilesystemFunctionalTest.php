@@ -48,7 +48,7 @@ final class FilesystemFunctionalTest extends TestCase
         $sourceFileAbsolute = $sourceFilePath->absolute();
         $destinationFilePath = VfsHelper::createPath('some/arbitrary/depth/destination.txt');
         $destinationFileAbsolute = $destinationFilePath->absolute();
-        assert(FilesystemHelper::fileMode($sourceFileAbsolute) !== $mode, "The new file doesn't already have the same permissions as will be set.");
+        assert(FilesystemHelper::fileMode($sourceFileAbsolute) !== $mode, 'The new file already has the same permissions as will be set.');
         FilesystemHelper::chmod($sourceFileAbsolute, $mode);
         $sut = $this->createSut();
 

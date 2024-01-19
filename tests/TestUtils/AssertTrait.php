@@ -103,7 +103,7 @@ trait AssertTrait
             return;
         }
 
-        assert(FilesystemHelper::exists($path));
+        assert(FilesystemHelper::exists($path), sprintf('File does not exist: %s', $path));
 
         $actual = FilesystemHelper::fileMode($path);
 
@@ -199,7 +199,7 @@ trait AssertTrait
             self::assertTrue(true, 'Threw correct exception.');
 
             if ($expectedExceptionMessage instanceof TranslatableInterface) {
-                assert($actualException instanceof ExceptionInterface);
+                assert($actualException instanceof ExceptionInterface, sprintf('%s is not a Composer Stager exception class.', $actualException::class));
                 self::assertTranslatableEquals(
                     $expectedExceptionMessage,
                     $actualException->getTranslatableMessage(),

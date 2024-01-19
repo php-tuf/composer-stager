@@ -191,6 +191,7 @@ final class Filesystem implements FilesystemInterface
         }
 
         $target = readlink($path->absolute());
+
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.

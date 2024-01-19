@@ -72,7 +72,7 @@ abstract class TestCase extends PHPUnitTestCase
         FilesystemHelper::touch($filename);
         $realpathResult = realpath($filename);
 
-        assert($realpathResult !== false, "Got absolute path of {$filename}.");
+        assert($realpathResult !== false, sprintf('Failed to create file: %s', $filename));
     }
 
     public static function createTestPreconditionException(
@@ -94,14 +94,14 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $fileAbsolute = PathHelper::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($fileAbsolute, self::CHANGED_CONTENT);
-        assert($result !== false, "Changed file {$fileAbsolute}.");
+        assert($result !== false, sprintf('Failed to change file: %s', $fileAbsolute));
     }
 
     protected static function deleteFile(string $dir, string $filename): void
     {
         $fileAbsolute = PathHelper::ensureTrailingSlash($dir) . $filename;
         $result = unlink($fileAbsolute);
-        assert($result, "Deleted file {$fileAbsolute}.");
+        assert($result, sprintf('Failed to delete file: %s', $fileAbsolute));
     }
 
     protected static function getDirectoryContents(string $dir): array

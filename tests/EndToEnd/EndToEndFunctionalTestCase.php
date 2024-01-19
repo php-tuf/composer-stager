@@ -159,8 +159,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $preconditionMet = false;
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
-            $file = PathHelper::makeAbsolute('EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt', $activeDirAbsolute);
-            assert(filetype($file) === 'link', 'An actual symlink is present in the codebase.');
+            self::assertTestSymlinkExists($activeDirAbsolute);
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
         }
 
@@ -236,7 +235,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             $failedPrecondition = $e->getPrecondition();
             self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
         } finally {
-            assert(filetype($activeDirPath->absolute() . '/EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt') === 'link', 'An actual symlink is present in the codebase.');
+            self::assertTestSymlinkExists($activeDirAbsolute);
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
         }
 
@@ -375,7 +374,6 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::assertEquals($expected, $data['name'], $message);
     }
 
-    /** @noinspection PhpSameParameterValueInspection */
     private static function putJson($filename, $json): void
     {
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
@@ -397,5 +395,11 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             self::ORIGINAL_CONTENT,
             $message,
         );
+    }
+
+    private static function assertTestSymlinkExists(string $activeDirAbsolute): void
+    {
+        $symlink = PathHelper::makeAbsolute('EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt', $activeDirAbsolute);
+        assert(is_link($symlink), sprintf('Expected symlink is missing from the codebase: %s', $symlink));
     }
 }

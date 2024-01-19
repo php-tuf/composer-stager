@@ -9,7 +9,7 @@ final class FilesystemHelper
 {
     public static function chmod(string $path, int $mode): void
     {
-        assert(self::exists($path));
+        assert(self::exists($path), sprintf('Path does not exist: %s', $path));
 
         chmod($path, $mode);
 
@@ -19,7 +19,7 @@ final class FilesystemHelper
             return;
         }
 
-        assert(self::fileMode($path) === $mode, 'Set file mode.');
+        assert(self::fileMode($path) === $mode, sprintf('Failed to set file mode: %s', $path));
     }
 
     public static function createDirectories(array|string $directories, ?string $basePath = null): void
@@ -44,7 +44,7 @@ final class FilesystemHelper
 
     public static function fileMode(string $path): int
     {
-        assert(file_exists($path), 'The path exists');
+        assert(file_exists($path), sprintf('Path does not exist: %s', $path));
 
         clearstatcache(true, $path);
 
@@ -65,7 +65,7 @@ final class FilesystemHelper
         self::ensureParentDirectory($path);
         self::symfonyFilesystem()->touch($path);
 
-        assert(self::symfonyFilesystem()->exists($path));
+        assert(self::symfonyFilesystem()->exists($path), sprintf('Failed to touch file: %s', $path));
     }
 
     public static function ensureParentDirectory(string $filename): void
@@ -120,6 +120,6 @@ final class FilesystemHelper
         // If the symlink target doesn't exist, the tests will pass on Unix-like
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
-        assert(file_exists($target->absolute()), 'Symlink target exists.');
+        assert(file_exists($target->absolute()), sprintf('Symlink target does not exist: %s', $target->absolute()));
     }
 }

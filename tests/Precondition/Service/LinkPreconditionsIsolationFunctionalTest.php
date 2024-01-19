@@ -79,9 +79,10 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         }
 
         $uncoveredPreconditions = array_diff($allNoUnsupportedLinkPreconditions, self::COVERED_PRECONDITIONS);
+        $allPreconditionsAccountedFor = $uncoveredPreconditions === [];
         assert(
-            $uncoveredPreconditions === [],
-            reset($uncoveredPreconditions) . ' is not covered here. Add coverage and then add it to ::ALL_NO_UNSUPPORTED_LINKS_PRECONDITIONS',
+            $allPreconditionsAccountedFor,
+            sprintf('%s is missing coverage here. Add coverage and then add it to ::ALL_NO_UNSUPPORTED_LINKS_PRECONDITIONS', reset($uncoveredPreconditions)),
         );
 
         return new TestPreconditionsTree(...$includedPreconditions);
