@@ -42,7 +42,7 @@ final class FileFinderFunctionalTest extends TestCase
 
         $actual = $sut->find(self::activeDirPath(), ...$exclusions);
 
-        self::assertArrayEquals($expected, $actual);
+        self::assertIteratorEqualsArray($expected, $actual);
     }
 
     public function providerFind(): array
@@ -179,6 +179,6 @@ final class FileFinderFunctionalTest extends TestCase
 
         $actual = $sut->find(self::activeDirPath());
 
-        self::assertSame($expected, $actual);
+        self::assertIteratorEqualsArray($expected, $actual);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
+use Iterator;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
@@ -117,6 +118,14 @@ trait AssertTrait
             substr(sprintf('0%o', $actual), -4),
             sprintf('File has expected permissions (0%o).', $expected),
         );
+    }
+
+    protected static function assertIteratorEqualsArray(array $expected, Iterator $actual, string $message = ''): void
+    {
+        $actual = iterator_to_array($actual);
+        sort($actual);
+
+        self::assertArrayEquals($expected, $actual, $message);
     }
 
     /** Asserts that a given class is translatable aware. */
