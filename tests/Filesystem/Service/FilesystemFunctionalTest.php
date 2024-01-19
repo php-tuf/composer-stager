@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
@@ -54,16 +53,14 @@ final class FilesystemFunctionalTest extends TestCase
 
         $sut->copy($sourceFilePath, $destinationFilePath);
 
-        self::assertSame([
-            'root' => [
-                'source.txt' => $contents,
-                'some' => [
-                    'arbitrary' => [
-                        'depth' => ['destination.txt' => $contents],
-                    ],
+        self::assertVfsStructureIsSame([
+            'source.txt' => $contents,
+            'some' => [
+                'arbitrary' => [
+                    'depth' => ['destination.txt' => $contents],
                 ],
             ],
-        ], vfsStream::inspect(new vfsStreamStructureVisitor())->getStructure());
+        ]);
         self::assertFileMode($destinationFileAbsolute, $mode);
     }
 
