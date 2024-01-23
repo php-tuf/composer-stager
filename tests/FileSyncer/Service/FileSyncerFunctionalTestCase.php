@@ -148,7 +148,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
                     'destination-dir/two/three.txt',
                     'destination-dir/four/five/six.txt',
                     'destination-dir/seven/eight/nine/ten.txt',
-                    'destination-dir/zz_a_file_sorted_last_in_the_destination_is_important_for_coverage.txt',
+                    'destination-dir/zz_a_file_sorted_last_in_the_destination_is_important_for_test_coverage.txt',
                 ],
                 'expectedFiles' => [
                     'destination-dir/source-dir/one.txt',
