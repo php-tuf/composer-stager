@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Exception;
 use Exception;
 use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait */
 final class TranslatableExceptionTraitUnitTest extends TestCase

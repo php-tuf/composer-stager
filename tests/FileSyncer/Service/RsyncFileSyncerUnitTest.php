@@ -13,11 +13,11 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 

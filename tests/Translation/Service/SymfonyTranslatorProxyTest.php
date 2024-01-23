@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestLocaleOptions;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy */

@@ -13,13 +13,13 @@ use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestDomainOptions;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableExceptionMessage;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 

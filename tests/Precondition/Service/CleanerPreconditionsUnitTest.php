@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**

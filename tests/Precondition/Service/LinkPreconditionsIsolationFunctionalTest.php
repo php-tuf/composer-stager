@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
+use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;

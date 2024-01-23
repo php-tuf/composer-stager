@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-use PhpTuf\ComposerStager\Tests\Process\Service\TestSymfonyProcess;
+use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestSymfonyProcess;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
 use Throwable;
 

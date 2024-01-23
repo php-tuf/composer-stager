@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Translation\Service;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Translation\Service;
 
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 

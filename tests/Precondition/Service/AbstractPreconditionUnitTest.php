@@ -4,9 +4,11 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
+use PhpTuf\ComposerStager\Tests\Doubles\Path\Value\TestPathList;
+use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestFulfilledPrecondition;
+use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestUnfulfilledPrecondition;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition */
 final class AbstractPreconditionUnitTest extends PreconditionUnitTestCase

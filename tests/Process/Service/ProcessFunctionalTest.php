@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
+use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 

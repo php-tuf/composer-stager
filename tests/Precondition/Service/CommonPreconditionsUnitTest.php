@@ -7,8 +7,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
 
 final class TestPrecondition implements PreconditionInterface
 {

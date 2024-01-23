@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterfac
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**

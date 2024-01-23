@@ -4,11 +4,11 @@ namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
+use PhpTuf\ComposerStager\Tests\Doubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\TestSpyInterface;
 use ReflectionClass;
 
 /**

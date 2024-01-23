@@ -7,11 +7,11 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Symfony\Component\DependencyInjection\Definition;
 
 /** @coversNothing */

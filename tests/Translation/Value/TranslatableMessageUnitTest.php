@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 

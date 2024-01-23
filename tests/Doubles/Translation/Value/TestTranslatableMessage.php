@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Translation\Value;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestTranslator;
 
 /** @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal */
 class TestTranslatableMessage implements TranslatableInterface

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Process\Service;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Process\Service;
 
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Value\OutputTypeEnum;

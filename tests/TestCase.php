@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Tests;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Tests\Precondition\Service\TestPrecondition;
+use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestPrecondition;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestDomainOptions;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Filesystem\Exception\IOException;

@@ -8,6 +8,7 @@ use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
+use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
@@ -36,13 +37,14 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
-        ReadOnlyPropertyRector::class => [__DIR__ . '/src/Internal/Path/Value/Path.php'],
         EncapsedStringsToSprintfRector::class => [__DIR__],
         FinalizeClassesWithoutChildrenRector::class => [__DIR__], // This is duplicative of PHPCS sniff SlevomatCodingStandard.Classes.RequireAbstractOrFinal.
+        FinalizePublicClassConstantRector::class => [__DIR__ . '/tests/Doubles/Precondition/Service/AbstractTestPrecondition.php'],
         LocallyCalledStaticMethodToNonStaticRector::class => [__DIR__],
         MixedTypeRector::class => [__DIR__],
         NewlineAfterStatementRector::class => [__DIR__],
         NewlineBeforeNewAssignSetRector::class => [__DIR__],
         NullToStrictStringFuncCallArgRector::class => [__DIR__ . '/tests/TestUtils/AssertTrait.php'],
+        ReadOnlyPropertyRector::class => [__DIR__ . '/src/Internal/Path/Value/Path.php'],
     ]);
 };

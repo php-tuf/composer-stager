@@ -8,9 +8,10 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestDomainOptions;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory */
 final class TranslatableFactoryUnitTest extends TestCase

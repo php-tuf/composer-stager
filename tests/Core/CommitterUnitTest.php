@@ -14,11 +14,11 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterfa
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\Doubles\Path\Value\TestPathList;
+use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Environment\Service;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Environment\Service;
 
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 

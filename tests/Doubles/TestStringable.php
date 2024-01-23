@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\TestUtils;
+namespace PhpTuf\ComposerStager\Tests\Doubles;
 
 use Stringable;
 

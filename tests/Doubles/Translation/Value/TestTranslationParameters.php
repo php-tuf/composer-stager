@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Translation\Value;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 

@@ -6,8 +6,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
+use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**

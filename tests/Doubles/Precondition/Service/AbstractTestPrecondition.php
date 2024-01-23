@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
+namespace PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
@@ -12,11 +12,11 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 abstract class AbstractTestPrecondition extends AbstractPrecondition
 {
     // Override in subclasses.
-    public const NAME = 'NAME';
-    public const DESCRIPTION = 'DESCRIPTION';
-    public const IS_FULFILLED = true;
-    public const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
-    public const UNFULFILLED_STATUS_MESSAGE = 'UNFULFILLED_STATUS_MESSAGE';
+    protected const NAME = 'NAME';
+    protected const DESCRIPTION = 'DESCRIPTION';
+    protected const IS_FULFILLED = true;
+    protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
+    protected const UNFULFILLED_STATUS_MESSAGE = 'UNFULFILLED_STATUS_MESSAGE';
 
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
