@@ -7,24 +7,22 @@ use PhpTuf\ComposerStager\API\Core\CleanerInterface;
 use PhpTuf\ComposerStager\API\Core\CommitterInterface;
 use PhpTuf\ComposerStager\API\Core\StagerInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Core\Beginner;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /**
- * Provides a base for end-to-end functional tests, including the API and
- * internal layers. The test cases themselves are supplied by this class.
- * Subclasses specify the file syncer to use via ::fileSyncerClass().
+ * Provides end-to-end functional tests, including the API and internal layers.
+ *
+ * @coversNothing
  *
  * @group slow
  */
-abstract class EndToEndFunctionalTestCase extends TestCase
+final class EndToEndFunctionalTest extends TestCase
 {
     private BeginnerInterface $beginner;
     private CleanerInterface $cleaner;
@@ -34,13 +32,6 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     protected function setUp(): void
     {
         $container = ContainerTestHelper::container();
-
-        // Override the FileSyncerFactory to control which FileSyncer is used.
-        $fileSyncerFactory = $container->getDefinition(FileSyncerFactory::class);
-        $fileSyncerFactory->setClass($this->fileSyncerFactoryClass());
-        $container->setDefinition(FileSyncerFactoryInterface::class, $fileSyncerFactory);
-
-        // Compile the container.
         $container->compile();
 
         // Get services.
@@ -57,12 +48,6 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     {
         self::removeTestEnvironment();
     }
-
-    /**
-     * Specifies the file syncer implementation to use, e.g.,
-     * \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::class.
-     */
-    abstract protected function fileSyncerFactoryClass(): string;
 
     /**
      * @dataProvider providerDirectories

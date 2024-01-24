@@ -5,8 +5,10 @@ namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
@@ -15,42 +17,85 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 /**
  * @package FileSyncer
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSyncerInterface
+final class FileSyncer implements FileSyncerInterface
 {
+    use TranslatableAwareTrait;
+
     public function __construct(
-        EnvironmentInterface $environment,
-        FilesystemInterface $filesystem,
+        private readonly EnvironmentInterface $environment,
+        private readonly ExecutableFinderInterface $executableFinder,
+        private readonly FilesystemInterface $filesystem,
         private readonly PathHelperInterface $pathHelper,
-        PathListFactoryInterface $pathListFactory,
+        private readonly PathListFactoryInterface $pathListFactory,
         private readonly RsyncProcessRunnerInterface $rsync,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($environment, $filesystem, $pathListFactory, $translatableFactory);
+        $this->setTranslatableFactory($translatableFactory);
     }
 
-    /**
-     * The unusual requirement to support syncing a directory with its own
-     * descendant requires a unique approach, which has been documented here:
-     *
-     * @see https://serverfault.com/q/1094803/956603
-     */
-    protected function doSync(
+    public function sync(
         PathInterface $source,
         PathInterface $destination,
-        PathListInterface $exclusions,
-        ?OutputCallbackInterface $callback,
+        ?PathListInterface $exclusions = null,
+        ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
+        $this->environment->setTimeLimit($timeout);
 
-        $this->runCommand($exclusions, $sourceAbsolute, $destinationAbsolute, $destination, $callback);
+        $exclusions ??= $this->pathListFactory->create();
+
+        $this->assertRsyncIsAvailable();
+        $this->assertSourceAndDestinationAreDifferent($source, $destination);
+        $this->assertSourceIsValid($source);
+
+        $this->runCommand($exclusions, $source->absolute(), $destination->absolute(), $destination, $callback);
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
+    private function assertRsyncIsAvailable(): void
+    {
+        $this->executableFinder->find('rsync');
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
+    private function assertSourceAndDestinationAreDifferent(PathInterface $source, PathInterface $destination): void
+    {
+        if ($source->absolute() === $destination->absolute()) {
+            throw new LogicException(
+                $this->t(
+                    'The source and destination directories cannot be the same at %path',
+                    $this->p(['%path' => $source->absolute()]),
+                    $this->d()->exceptions(),
+                ),
+            );
+        }
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
+    private function assertSourceIsValid(PathInterface $source): void
+    {
+        if (!$this->filesystem->fileExists($source)) {
+            throw new LogicException($this->t(
+                'The source directory does not exist at %path',
+                $this->p(['%path' => $source->absolute()]),
+                $this->d()->exceptions(),
+            ));
+        }
+
+        if (!$this->filesystem->isDir($source)) {
+            throw new LogicException($this->t(
+                'The source directory is not actually a directory at %path',
+                $this->p(['%path' => $source->absolute()]),
+                $this->d()->exceptions(),
+            ));
+        }
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
@@ -94,6 +139,9 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $exclusions = $exclusions->getAll();
 
+        // The unusual requirement to support syncing a directory with its own
+        // descendant requires a unique approach, which has been documented here:
+        // {@see https://serverfault.com/q/1094803/956603}.
         $command = [
             // Archive mode--the same as -rlptgoD (no -H), or --recursive,
             // --links, --perms, --times, --group, --owner, --devices, --specials.
@@ -112,15 +160,35 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         }
 
         foreach ($exclusions as $exclusion) {
-            $command[] = '--exclude=/' . $exclusion;
+            // A leading slash anchors paths to the source directory root,
+            // preventing incorrect partial matches.
+            $command[] = sprintf('--exclude=/%s', $exclusion);
         }
 
         // A trailing slash is added to the source directory so the CONTENTS
         // of the directory are synced, not the directory itself.
-        $command[] = $sourceAbsolute . DIRECTORY_SEPARATOR;
+        $command[] = $sourceAbsolute . '/';
 
         $command[] = $destinationAbsolute;
 
         return $command;
+    }
+
+    private function isDescendant(string $descendant, string $ancestor): bool
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+
+        return str_starts_with($descendant, $ancestor);
+    }
+
+    private static function getRelativePath(string $ancestor, string $path): string
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+
+        if (str_starts_with($path, $ancestor)) {
+            return substr($path, strlen($ancestor));
+        }
+
+        return $path;
     }
 }

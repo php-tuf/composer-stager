@@ -2,10 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
-use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
@@ -13,7 +9,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory
@@ -29,9 +24,6 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
     protected const DESCRIPTION = 'The codebase cannot contain symlinks that point to a directory.';
     protected const FULFILLED_STATUS_MESSAGE = 'There are no symlinks that point to a directory.';
 
-    private FileSyncerFactoryInterface|ObjectProphecy $fileSyncerFactory;
-    private FileSyncerInterface|ObjectProphecy $fileSyncer;
-
     protected function setUp(): void
     {
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
@@ -42,8 +34,6 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $this->filesystem
             ->fileExists(Argument::type(PathInterface::class))
             ->willReturn(true);
-        $this->fileSyncer = $this->prophesize(PhpFileSyncerInterface::class);
-        $this->fileSyncerFactory = $this->prophesize(FileSyncerFactoryInterface::class);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
@@ -53,37 +43,11 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
     {
         $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
-        $this->fileSyncerFactory
-            ->create()
-            ->willReturn($this->fileSyncer->reveal());
-        $fileSyncerFactory = $this->fileSyncerFactory->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $pathListFactory = self::createPathListFactory();
         $translatableFactory = self::createTranslatableFactory();
 
-        return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncerFactory, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
-    }
-
-    public function testExitEarlyWithRsyncFileSyncer(): void
-    {
-        $activeDirPath = self::activeDirPath();
-        $stagingDirPath = self::stagingDirPath();
-
-        $this->fileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
-        $this->filesystem
-            ->fileExists(Argument::cetera())
-            ->shouldNotBeCalled();
-        $this->fileFinder
-            ->find(Argument::cetera())
-            ->shouldNotBeCalled();
-
-        $sut = $this->createSut();
-
-        $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
-
-        self::assertTrue($isFulfilled);
-
-        $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
+        return new NoSymlinksPointToADirectory($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 }

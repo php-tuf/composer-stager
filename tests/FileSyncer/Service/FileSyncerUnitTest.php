@@ -2,22 +2,24 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
+use Closure;
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer
  *
  * @covers ::__construct
  * @covers ::buildCommand
@@ -28,9 +30,10 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @group no_windows
  */
-final class RsyncFileSyncerUnitTest extends TestCase
+final class FileSyncerUnitTest extends TestCase
 {
     private EnvironmentInterface|ObjectProphecy $environment;
+    private ExecutableFinderInterface|ObjectProphecy $executableFinder;
     private FilesystemInterface|ObjectProphecy $filesystem;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
@@ -39,6 +42,10 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->environment->setTimeLimit(Argument::type('integer'))
             ->willReturn(true);
+        $this->executableFinder = $this->prophesize(ExecutableFinderInterface::class);
+        $this->executableFinder
+            ->find(Argument::any())
+            ->willReturn('/var/bin/executable');
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->fileExists(Argument::any())
@@ -53,16 +60,17 @@ final class RsyncFileSyncerUnitTest extends TestCase
         parent::setUp();
     }
 
-    private function createSut(): RsyncFileSyncer
+    private function createSut(): FileSyncer
     {
         $environment = $this->environment->reveal();
+        $executableFinder = $this->executableFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathHelper = self::createPathHelper();
         $pathListFactory = self::createPathListFactory();
         $rsync = $this->rsync->reveal();
         $translatableFactory = self::createTranslatableFactory();
 
-        return new RsyncFileSyncer($environment, $filesystem, $pathHelper, $pathListFactory, $rsync, $translatableFactory);
+        return new FileSyncer($environment, $executableFinder, $filesystem, $pathHelper, $pathListFactory, $rsync, $translatableFactory);
     }
 
     /**
@@ -222,6 +230,21 @@ final class RsyncFileSyncerUnitTest extends TestCase
         ];
     }
 
+    /** @covers ::assertRsyncIsAvailable */
+    public function testNoRsyncError(): void
+    {
+        $message = 'Something went wrong.';
+        $previous = new LogicException(self::createTranslatableExceptionMessage($message));
+        $this->executableFinder->find('rsync')
+            ->shouldBeCalledOnce()
+            ->willThrow($previous);
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(self::sourceDirPath(), self::destinationDirPath());
+        }, LogicException::class, $message);
+    }
+
     /**
      * @covers ::runCommand
      *
@@ -251,6 +274,75 @@ final class RsyncFileSyncerUnitTest extends TestCase
             'RuntimeException' => [
                 'caughtException' => new RuntimeException($message),
                 'thrownException' => IOException::class,
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::getRelativePath
+     *
+     * @dataProvider providerGetRelativePath
+     */
+    public function testGetRelativePath(string $ancestor, string $path, string $expected): void
+    {
+        // Expose private method for testing.
+        // @see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/
+        // @phpstan-ignore-next-line
+        $method = static fn (FileSyncer $sut, $ancestor, $path): string => $sut::getRelativePath($ancestor, $path);
+        $sut = $this->createSut();
+        $method = Closure::bind($method, null, $sut);
+
+        $actual = $method($sut, $ancestor, $path);
+
+        self::assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group no_windows
+     * @phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces
+     */
+    public function providerGetRelativePath(): array
+    {
+        return [
+            'Match: single directory depth' => [
+                'ancestor' => 'one',
+                'path'     => 'one/two',
+                'expected' =>     'two',
+            ],
+            'Match: multiple directories depth' => [
+                'ancestor' => 'one/two',
+                'path'     => 'one/two/three/four/five',
+                'expected' =>         'three/four/five',
+            ],
+            'No match: no shared ancestor' => [
+                'ancestor' => 'one/two',
+                'path'     => 'three/four/five/six/seven',
+                'expected' => 'three/four/five/six/seven',
+            ],
+            'No match: identical paths' => [
+                'ancestor' => 'one',
+                'path'     => 'one',
+                'expected' => 'one',
+            ],
+            'No match: ancestor only as absolute path' => [
+                'ancestor' => '/one/two',
+                'path'     => 'one/two/three/four/five',
+                'expected' => 'one/two/three/four/five',
+            ],
+            'No match: path only as absolute path' => [
+                'ancestor' => 'one/two',
+                'path'     => '/one/two/three/four/five',
+                'expected' => '/one/two/three/four/five',
+            ],
+            'No match: sneaky "near match"' => [
+                'ancestor' => 'one',
+                'path'     => 'one_two',
+                'expected' => 'one_two',
+            ],
+            'Special case: empty strings' => [
+                'ancestor' => '',
+                'path'     => '',
+                'expected' => '',
             ],
         ];
     }

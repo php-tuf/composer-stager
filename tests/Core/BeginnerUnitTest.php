@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
-use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface;
@@ -28,24 +27,19 @@ final class BeginnerUnitTest extends TestCase
 {
     private BeginnerPreconditionsInterface|ObjectProphecy $preconditions;
     private FileSyncerInterface|ObjectProphecy $fileSyncer;
-    private FileSyncerFactoryInterface|ObjectProphecy $fileSyncerFactory;
 
     protected function setUp(): void
     {
         $this->preconditions = $this->prophesize(BeginnerPreconditionsInterface::class);
         $this->fileSyncer = $this->prophesize(FileSyncerInterface::class);
-        $this->fileSyncerFactory = $this->prophesize(FileSyncerFactoryInterface::class);
     }
 
     private function createSut(): Beginner
     {
-        $this->fileSyncerFactory
-            ->create()
-            ->willReturn($this->fileSyncer->reveal());
-        $fileSyncerFactory = $this->fileSyncerFactory->reveal();
+        $fileSyncer = $this->fileSyncer->reveal();
         $preconditions = $this->preconditions->reveal();
 
-        return new Beginner($fileSyncerFactory, $preconditions);
+        return new Beginner($fileSyncer, $preconditions);
     }
 
     /** @covers ::begin */

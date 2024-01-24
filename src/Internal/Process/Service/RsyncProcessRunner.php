@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
  * Before using this class outside the internal layer, consider a
  * higher-level abstraction, e.g.:
  *
- * @see \PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface
  * @see \PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface
  *
  * @package Process

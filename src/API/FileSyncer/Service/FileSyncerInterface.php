@@ -42,7 +42,8 @@ interface FileSyncerInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the destination directory cannot be created.
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *   If the source directory does not exist or is the same as the destination.
+     *   If the source directory does not exist or is the same as the destination
+     *   or if rsync cannot be found.
      */
     public function sync(
         PathInterface $source,
