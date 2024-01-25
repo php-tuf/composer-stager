@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
@@ -168,12 +169,12 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
-        $targetFile = 'target.txt';
+        $targetFile = PathTestHelper::makeAbsolute('target.txt', self::activeDirAbsolute());
         $links = array_fill_keys($links, $targetFile);
         $exclusions = self::createPathList(...$exclusions);
-        $dirPath = self::activeDirAbsolute();
-        self::touch($targetFile, $dirPath);
-        self::createSymlinks($dirPath, $links);
+        $basePathAbsolute = self::activeDirAbsolute();
+        self::touch($targetFile, $basePathAbsolute);
+        self::createSymlinks($basePathAbsolute, $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);

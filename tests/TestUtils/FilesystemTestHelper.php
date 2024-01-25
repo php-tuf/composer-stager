@@ -46,14 +46,17 @@ final class FilesystemTestHelper
         }
     }
 
-    public static function createSymlink(string $basePath, string $link, string $target): void
+    public static function createSymlink(string $basePathAbsolute, string $link, string $target): void
     {
-        $link = PathTestHelper::createPath($link, $basePath);
-        $target = PathTestHelper::createPath($target, $basePath);
+        $linkPath = PathTestHelper::createPath($link, $basePathAbsolute);
+        $targetPath = PathTestHelper::createPath($target, $basePathAbsolute);
 
-        self::prepareForLink($link, $target);
+        self::prepareForLink($linkPath, $targetPath);
 
-        symlink($target->absolute(), $link->absolute());
+        $previousCwd = getcwd();
+        chdir($basePathAbsolute);
+        symlink($target, $linkPath->absolute());
+        chdir($previousCwd);
     }
 
     public static function ensureParentDirectory(string|array $filenames): void

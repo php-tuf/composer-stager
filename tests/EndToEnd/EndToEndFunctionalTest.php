@@ -15,6 +15,7 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper as Helper;
 
 /**
  * Provides end-to-end functional tests, including the API and internal layers.
@@ -92,19 +93,22 @@ final class EndToEndFunctionalTest extends TestCase
             'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
             // Excluded file to be deleted from the ACTIVE directory after syncing to the staging directory.
             'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt',
-        ], self::makeAbsolute($activeDir));
+        ], $activeDirAbsolute);
+        self::mkdir('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $activeDirAbsolute);
+        self::mkdir('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute);
 
-        $arbitrarySymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
+        $arbitrarySupportedSymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
         self::createSymlinks($activeDirAbsolute, [
-            'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
-            'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
-            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => __DIR__,
+            'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySupportedSymlinkTarget,
+            'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySupportedSymlinkTarget,
+            'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => __FILE__,
         ]);
+        self::createSymlinkOrEquivalent($activeDirAbsolute, 'symlink_to_a_directory', 'arbitrary_subdir');
 
         // Create initial composer.json. (Doing so manually can be up to one
         // third (1/3) faster than actually using Composer.)
         self::putJson(
-            $activeDir . '/composer.json',
+            $activeDirAbsolute . '/composer.json',
             ['name' => 'original/name'],
         );
 
@@ -161,8 +165,11 @@ final class EndToEndFunctionalTest extends TestCase
             'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
+            'symlink_to_a_directory',
         ];
         self::assertDirectoryListing($stagingDirPath->absolute(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
+        self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $stagingDirAbsolute));
+        self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute));
 
         // Stage: Execute a Composer command (that doesn't make any HTTP requests).
         $newComposerName = 'new/name';
@@ -174,30 +181,27 @@ final class EndToEndFunctionalTest extends TestCase
 
         self::assertComposerJsonName($stagingDirAbsolute, $newComposerName, 'Correctly executed Composer command.');
 
-        // Change files.
+        // Make changes in the active directory.
         self::changeFile($activeDirAbsolute, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt');
+        self::rm(self::makeAbsolute('another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt', $activeDirAbsolute));
+        self::rm(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute));
+
+        // Make changes in the staging directory.
         self::changeFile($stagingDirAbsolute, 'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt');
         self::changeFile($stagingDirAbsolute, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt');
-
-        // Delete files.
-        self::rm(self::makeAbsolute('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute));
-        self::rm(self::makeAbsolute('another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt', $activeDirAbsolute));
-
-        // Create files.
         self::touch('EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt', $stagingDirAbsolute);
         self::touch('CREATE_in_staging_dir.txt', $stagingDirAbsolute);
         self::touch('another_subdir/CREATE_in_staging_dir.txt', $stagingDirAbsolute);
-
-        // Create symlink.
-        self::createSymlink(
+        self::rm(self::makeAbsolute('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute));
+        self::rm(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute));
+        self::createSymlinkOrEquivalent(
             $stagingDirAbsolute,
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
-            $arbitrarySymlinkTarget,
+            $arbitrarySupportedSymlinkTarget,
         );
 
         // Sanity check to ensure that the expected changes were made.
-        $deletion = array_search('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $expectedStagingDirListing, true);
-        unset($expectedStagingDirListing[$deletion]);
+        $expectedStagingDirListing = array_filter($expectedStagingDirListing, static fn ($path): bool => $path !== 'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt');
         self::assertDirectoryListing($stagingDirAbsolute, [
             ...$expectedStagingDirListing,
             // Additions.
@@ -206,6 +210,8 @@ final class EndToEndFunctionalTest extends TestCase
             'another_subdir/CREATE_in_staging_dir.txt',
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
         ], '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
+        self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $stagingDirAbsolute));
+        self::assertDirectoryDoesNotExist(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute));
 
         $previousStagingDirContents = self::getDirectoryContents($stagingDir);
 
@@ -225,7 +231,7 @@ final class EndToEndFunctionalTest extends TestCase
         // Commit: Sync files from the staging directory back to the directory.
         $this->committer->commit($stagingDirPath, $activeDirPath, $exclusions);
 
-        self::assertDirectoryListing($activeDirPath->absolute(), [
+        self::assertDirectoryListing($activeDirAbsolute, [
             'composer.json',
             // Unchanged files are left alone.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
@@ -233,6 +239,7 @@ final class EndToEndFunctionalTest extends TestCase
             'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
             'long_filename_NEVER_CHANGED_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
+            'symlink_to_a_directory',
             // Files excluded by exact pathname are still in the active directory.
             'EXCLUDED_file_in_active_dir_root.txt',
             'EXCLUDED_symlink_in_active_dir_root.txt',
@@ -263,7 +270,9 @@ final class EndToEndFunctionalTest extends TestCase
             // Files included despite including excluded paths at the wrong depth.
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
-        ], $stagingDirPath->absolute(), sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
+        ], $stagingDirAbsolute, sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
+        self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $activeDirAbsolute));
+        self::assertDirectoryDoesNotExist(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute));
 
         // Unchanged file contents.
         self::assertFileNotChanged($activeDir, 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt');
@@ -350,6 +359,19 @@ final class EndToEndFunctionalTest extends TestCase
         }
 
         return $data;
+    }
+
+    private static function createSymlinkOrEquivalent(string $basePath, string $link, string $target): void
+    {
+        // Symlinks are unsupported on Windows, so fake them by creating a file
+        // at the same location to at least satisfy directory listing assertions.
+        if (EnvironmentTestHelper::isWindows()) {
+            self::touch($link, $basePath);
+
+            return;
+        }
+
+        Helper::createSymlink($basePath, $link, $target);
     }
 
     private static function assertComposerJsonName(string $directory, mixed $expected, string $message = ''): void

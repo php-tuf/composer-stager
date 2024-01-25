@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
@@ -26,7 +25,6 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoHardLinksExist::class,
         NoLinksExistOnWindows::class,
         NoSymlinksPointOutsideTheCodebase::class,
-        NoSymlinksPointToADirectory::class,
     ];
 
     private static function path(string $path): string
@@ -135,17 +133,6 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
 
         self::rm($target);
-    }
-
-    /** @group no_windows */
-    public function testNoSymlinksPointToADirectory(): void
-    {
-        $source = self::path('link');
-        $target = 'directory';
-        self::mkdir($target);
-        symlink($target, $source);
-
-        $this->assertPreconditionIsIsolated(NoSymlinksPointToADirectory::class);
     }
 
     /** @group no_windows */
