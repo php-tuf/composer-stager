@@ -7,10 +7,10 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\Doubles\Path\Value\TestPathList;
-use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestFulfilledPrecondition;
-use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestUnfulfilledPrecondition;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestFulfilledPrecondition;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestUnfulfilledPrecondition;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 
 /**
@@ -94,7 +94,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
 
         $child = $child->reveal();
 
-        /** @var \PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\AbstractTestPrecondition $sut */
+        /** @var \PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\AbstractTestPrecondition $sut */
         $sut = $this->createSut($child);
 
         self::assertSame($sut::NAME, $sut->getName()->trans());

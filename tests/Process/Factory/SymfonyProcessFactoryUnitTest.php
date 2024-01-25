@@ -4,9 +4,9 @@ namespace PhpTuf\ComposerStager\Tests\Process\Factory;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
-use PhpTuf\ComposerStager\Tests\Doubles\TestSpyInterface;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Process;

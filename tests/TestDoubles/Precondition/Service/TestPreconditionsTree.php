@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service;
+namespace PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\Doubles\Environment\Service\TestEnvironment;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Environment\Service\TestEnvironment;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
 {

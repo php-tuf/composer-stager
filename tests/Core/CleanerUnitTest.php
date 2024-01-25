@@ -10,9 +10,9 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
-use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;

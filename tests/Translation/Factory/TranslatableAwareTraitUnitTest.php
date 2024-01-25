@@ -11,11 +11,11 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestTranslator;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait */
 final class TranslatableAwareTraitUnitTest extends TestCase

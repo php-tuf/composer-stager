@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestLocaleOptions;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestLocaleOptions;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy */
 final class SymfonyTranslatorProxyTest extends TestCase

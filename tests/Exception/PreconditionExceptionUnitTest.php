@@ -4,9 +4,9 @@ namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service\TestPrecondition;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPrecondition;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use Throwable;
 
 final class PreconditionExceptionUnitTest extends TestCase

@@ -11,10 +11,10 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterfac
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
-use PhpTuf\ComposerStager\Tests\Doubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\Doubles\TestStringable;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;

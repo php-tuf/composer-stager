@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Doubles\Path\Value;
+namespace PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 

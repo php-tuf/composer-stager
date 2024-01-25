@@ -9,8 +9,8 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
 use ReflectionClass;
 
 final class ExceptionUnitTest extends TestCase

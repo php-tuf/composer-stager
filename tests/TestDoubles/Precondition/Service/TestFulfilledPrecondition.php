@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Doubles\Precondition\Service;
+namespace PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service;
 
 final class TestFulfilledPrecondition extends AbstractTestPrecondition
 {

@@ -9,7 +9,7 @@ namespace PhpTuf\ComposerStager\Tests\TestUtils;
  */
 final class BuiltinFunctionMocker
 {
-    /** @var array<string,\Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\Doubles\TestSpyInterface> */
+    /** @var array<string,\Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface> */
     public static array $spies = [];
 
     /**
@@ -27,7 +27,7 @@ final class BuiltinFunctionMocker
      *
      * Remember to tag your test method `@runInSeparateProcess` to avoid test pollution.
      *
-     * @param array<string,\Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\Doubles\TestSpyInterface> $spies
+     * @param array<string,\Prophecy\Prophecy\ObjectProphecy|\PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface> $spies
      *   An array of spies (prophecies) keyed by the names of built-in PHP functions to mock. See example above.
      */
     public static function mock(array $spies): void

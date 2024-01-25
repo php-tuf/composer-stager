@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Doubles\Translation\Value;
+namespace PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
 
-final class TestTranslatableExceptionMessage extends TestTranslatableMessage
+/** @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal */
+class TestTranslatableMessage implements TranslatableInterface
 {
-    /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct(
         private readonly string $message = '',
         private readonly ?TranslationParametersInterface $parameters = null,
-        private readonly ?string $domain = TestDomainOptions::EXCEPTIONS,
+        private readonly ?string $domain = null,
     ) {
     }
 

@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
-use PhpTuf\ComposerStager\Tests\Doubles\Translation\Service\TestDomainOptions;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions */
 final class DomainOptionsUnitTest extends TestCase

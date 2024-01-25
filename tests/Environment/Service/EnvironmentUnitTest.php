@@ -3,8 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Environment\Service;
 
 use PhpTuf\ComposerStager\Internal\Environment\Service\Environment;
-use PhpTuf\ComposerStager\Tests\Doubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use Prophecy\Argument;
 
