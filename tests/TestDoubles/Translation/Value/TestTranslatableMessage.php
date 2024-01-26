@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
 
 /** @phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal */
@@ -13,8 +14,14 @@ class TestTranslatableMessage implements TranslatableInterface
     public function __construct(
         private readonly string $message = '',
         private readonly ?TranslationParametersInterface $parameters = null,
-        private readonly ?string $domain = null,
+        private ?string $domain = null,
     ) {
+        if ($domain !== null) {
+            return;
+        }
+
+        $domainOptions = new DomainOptions();
+        $this->domain = $domainOptions->exceptions();
     }
 
     public function trans(?TranslatorInterface $translator = null, ?string $locale = null): string
