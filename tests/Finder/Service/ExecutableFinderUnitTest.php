@@ -15,7 +15,6 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
  *
  * @covers ::__construct
- * @covers ::find
  */
 final class ExecutableFinderUnitTest extends TestCase
 {
@@ -37,6 +36,7 @@ final class ExecutableFinderUnitTest extends TestCase
         return new ExecutableFinder($executableFinder, $translatorFactory);
     }
 
+    /** @covers ::find */
     public function testFind(): void
     {
         $command = 'command_name';
@@ -55,6 +55,7 @@ final class ExecutableFinderUnitTest extends TestCase
         self::assertSame($command, $actual, 'Returned correct path');
     }
 
+    /** @covers ::find */
     public function testFindNotFound(): void
     {
         $command = 'command_name';
