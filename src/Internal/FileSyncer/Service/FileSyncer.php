@@ -176,14 +176,14 @@ final class FileSyncer implements FileSyncerInterface
 
     private function isDescendant(string $descendant, string $ancestor): bool
     {
-        $ancestor .= DIRECTORY_SEPARATOR;
+        $ancestor .= '/';
 
         return str_starts_with($descendant, $ancestor);
     }
 
     private static function getRelativePath(string $ancestor, string $path): string
     {
-        $ancestor .= DIRECTORY_SEPARATOR;
+        $ancestor .= '/';
 
         if (str_starts_with($path, $ancestor)) {
             return substr($path, strlen($ancestor));

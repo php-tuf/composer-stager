@@ -100,7 +100,7 @@ final class Path implements PathInterface
             return rtrim($this->basePathAbsolute, '/') . '/' . $this->pathHelper->canonicalize($this->path);
         }
 
-        return $this->pathHelper->canonicalize($basePathAbsolute . DIRECTORY_SEPARATOR . $this->path);
+        return $this->pathHelper->canonicalize($basePathAbsolute . '/' . $this->path);
     }
 
     private function hasProtocol(string $path): bool

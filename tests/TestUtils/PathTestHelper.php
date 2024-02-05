@@ -197,7 +197,7 @@ final class PathTestHelper
     {
         $path = SymfonyPath::canonicalize($path);
 
-        return (string) preg_replace('#/+#', DIRECTORY_SEPARATOR, $path);
+        return (string) preg_replace('#[\\\/]+#', '/', $path);
     }
 
     public static function isAbsolute(string $path): bool
@@ -231,7 +231,7 @@ final class PathTestHelper
 
     public static function fixSeparators(string $path): string
     {
-        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+        return str_replace('\\', '/', $path);
     }
 
     /**

@@ -94,10 +94,10 @@ final class PathListUnitTest extends TestCase
                 ],
                 'expected' => [
                     'one',
-                    'two\\two',
-                    'three\\three\\three',
-                    'four\\four\\four\\four',
-                    'five\\five\\five\\five\\five',
+                    'two/two',
+                    'three/three/three',
+                    'four/four/four/four',
+                    'five/five/five/five/five',
                 ],
             ],
             'Complex paths' => [
@@ -108,10 +108,10 @@ final class PathListUnitTest extends TestCase
                 ],
                 'add' => ['nine\\ten\\..\\..\\eleven\\twelve'],
                 'expected' => [
-                    'one\\two',
-                    'three\\four\\five',
-                    'six\\eight\\nine',
-                    'eleven\\twelve',
+                    'one/two',
+                    'three/four/five',
+                    'six/eight/nine',
+                    'eleven/twelve',
                 ],
             ],
             'Duplicate paths' => [
@@ -126,9 +126,9 @@ final class PathListUnitTest extends TestCase
                     'six\\seven\\eight\\nine',
                 ],
                 'expected' => [
-                    'one\\two',
-                    'three\\four\\five',
-                    'six\\seven\\eight\\nine',
+                    'one/two',
+                    'three/four/five',
+                    'six/seven/eight/nine',
                 ],
             ],
         ];

@@ -65,7 +65,7 @@ final class NoSymlinksPointOutsideTheCodebase extends AbstractFileIteratingPreco
 
     private function isDescendant(string $descendant, string $ancestor): bool
     {
-        $ancestor .= DIRECTORY_SEPARATOR;
+        $ancestor .= '/';
 
         return str_starts_with($descendant, $ancestor);
     }
