@@ -161,7 +161,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 
         $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
 
-        self::assertTrue($isFulfilled, 'Ignored hard link link.');
+        self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
 
     /**

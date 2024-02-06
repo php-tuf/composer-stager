@@ -144,7 +144,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
-        self::assertTrue($isFulfilled, 'Ignored hard link link.');
+        self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
 
     /**
@@ -170,7 +170,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
         $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
 
-        self::assertTrue($isFulfilled, 'Ignored hard link link.');
+        self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
 
     /**
