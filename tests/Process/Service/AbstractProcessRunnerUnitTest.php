@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -91,8 +92,8 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testBasicFunctionality(
         string $executableName,
-        array $sutRunArguments,
-        array $factoryCreateArguments,
+        array $givenRunArguments,
+        array $expectedFactoryArguments,
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
@@ -109,12 +110,12 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->process);
         $this->processFactory
-            ->create(...$factoryCreateArguments)
+            ->create(...$expectedFactoryArguments)
             ->shouldBeCalledOnce()
             ->willReturn($this->process);
         $sut = $this->createSut($executableName);
 
-        $sut->run(...$sutRunArguments);
+        $sut->run(...$givenRunArguments);
     }
 
     public function providerBasicFunctionality(): array
@@ -122,21 +123,22 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         return [
             'Minimum values' => [
                 'executableName' => 'one',
-                'sutRunArguments' => [[]],
-                'factoryCreateArguments' => [['one'], []],
+                'givenRunArguments' => [[]],
+                'expectedFactoryArguments' => [['one'], []],
                 'callback' => null,
                 'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Simple values' => [
                 'executableName' => 'two',
-                'sutRunArguments' => [
-                    [],
+                'givenRunArguments' => [
+                    ['three', 'four'],
+                    PathHelper::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                     new TestOutputCallback(),
                     100,
                 ],
-                'factoryCreateArguments' => [
-                    ['two'],
+                'expectedFactoryArguments' => [
+                    ['two', 'three', 'four'],
                     ['ONE' => 'one', 'TWO' => 'two'],
                 ],
                 'callback' => new TestOutputCallback(),
