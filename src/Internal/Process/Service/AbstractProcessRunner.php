@@ -34,7 +34,7 @@ abstract class AbstractProcessRunner
 
     /**
      * @param array<string> $command
-     *   The command to run and its arguments as separate string values, e.g.,
+     *   The command arguments as separate string values, e.g.,
      *   ['require', 'example/package'] or ['source', 'destination']. The return
      *   value of ::executableName() will be automatically prepended.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
