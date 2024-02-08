@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
@@ -22,10 +23,15 @@ final class SymfonyProcessFactory implements SymfonyProcessFactoryInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
-    public function create(array $command, array $env = []): SymfonyProcess
+    public function create(array $command, ?PathInterface $cwd = null, array $env = []): SymfonyProcess
     {
+        if ($cwd instanceof PathInterface) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $cwd = $cwd->absolute();
+        }
+
         try {
-            return new SymfonyProcess($command, null, $env);
+            return new SymfonyProcess($command, $cwd, $env);
         } catch (SymfonyExceptionInterface $e) {
             throw new LogicException($this->t(
                 'Failed to create process: %details',

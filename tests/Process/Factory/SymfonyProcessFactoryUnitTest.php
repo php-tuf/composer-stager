@@ -8,8 +8,9 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory */
 final class SymfonyProcessFactoryUnitTest extends TestCase
@@ -20,15 +21,15 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(array $command, array $optionalArguments): void
+    public function testBasicFunctionality(array $given, array $expected): void
     {
         $translatableFactory = new TestTranslatableFactory();
         $sut = new SymfonyProcessFactory($translatableFactory);
 
-        $actualProcess = $sut->create($command, ...$optionalArguments);
+        $actual = $sut->create(...$given);
 
-        $expectedProcess = new Process($command, null, ...$optionalArguments);
-        self::assertEquals($expectedProcess, $actualProcess);
+        $expected = new SymfonyProcess(...$expected);
+        self::assertEquals($expected, $actual);
         self::assertTranslatableAware($sut);
     }
 
@@ -36,20 +37,24 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
     {
         return [
             'Minimum values' => [
-                'command' => [],
-                'optionalArguments' => [[]],
+                'given' => [['one']],
+                'expected' => [['one'], null, []],
             ],
-            'Simple command' => [
-                'command' => ['one'],
-                'optionalArguments' => [],
+            'Default values' => [
+                'given' => [['one'], null, []],
+                'expected' => [['one'], null, []],
             ],
-            'Command with options' => [
-                'command' => ['one', 'two', 'three'],
-                'optionalArguments' => [],
-            ],
-            'Command plus env' => [
-                'command' => ['one'],
-                'optionalArguments' => [['TWO' => 'two']],
+            'Simple values' => [
+                'given' => [
+                    ['one'],
+                    PathHelper::arbitraryDirPath(),
+                    ['ONE' => 'one', 'TWO' => 'two'],
+                ],
+                'expected' => [
+                    ['one'],
+                    PathHelper::arbitraryDirAbsolute(),
+                    ['ONE' => 'one', 'TWO' => 'two'],
+                ],
             ],
         ];
     }
