@@ -58,7 +58,7 @@ final class ProcessUnitTest extends TestCase
     {
         $symfonyProcess = $this->symfonyProcess->reveal();
         $this->symfonyProcessFactory
-            ->create($expectedCommand)
+            ->create($expectedCommand, Argument::cetera())
             ->willReturn($symfonyProcess);
         $symfonyProcessFactory = $this->symfonyProcessFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
@@ -120,7 +120,7 @@ final class ProcessUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->symfonyProcess);
         $this->symfonyProcessFactory
-            ->create($expectedCommand)
+            ->create($expectedCommand, Argument::cetera())
             ->shouldBeCalledOnce();
         $sut = $this->createSut($givenConstructorArguments, $expectedCommand);
 
@@ -206,11 +206,6 @@ final class ProcessUnitTest extends TestCase
         return [
             'No env argument' => [
                 'optionalArguments' => [],
-                'expectedInitialEnv' => [],
-                'givenNewEnv' => [],
-            ],
-            'Null argument' => [
-                'optionalArguments' => [null],
                 'expectedInitialEnv' => [],
                 'givenNewEnv' => [],
             ],

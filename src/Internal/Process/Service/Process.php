@@ -56,7 +56,7 @@ final class Process implements ProcessInterface
         private readonly SymfonyProcessFactoryInterface $symfonyProcessFactory,
         TranslatableFactoryInterface $translatableFactory,
         array $command = [],
-        ?array $env = null,
+        array $env = [],
     ) {
         $this->setTranslatableFactory($translatableFactory);
         $this->symfonyProcess = $this->symfonyProcessFactory->create($command, $env);

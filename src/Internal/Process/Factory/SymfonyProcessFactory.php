@@ -22,10 +22,10 @@ final class SymfonyProcessFactory implements SymfonyProcessFactoryInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
-    public function create(array $command): SymfonyProcess
+    public function create(array $command, array $env = []): SymfonyProcess
     {
         try {
-            return new SymfonyProcess($command);
+            return new SymfonyProcess($command, null, $env);
         } catch (SymfonyExceptionInterface $e) {
             throw new LogicException($this->t(
                 'Failed to create process: %details',
