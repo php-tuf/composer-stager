@@ -3,13 +3,10 @@
 namespace PhpTuf\ComposerStager\Tests\Process\Factory;
 
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
-use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestSymfonyProcess;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
-use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory */
 final class ProcessFactoryUnitTest extends TestCase
@@ -20,29 +17,38 @@ final class ProcessFactoryUnitTest extends TestCase
      *
      * @dataProvider providerFactory
      */
-    public function testFactory(array $command): void
+    public function testFactory(array $command, array $optionalArguments): void
     {
-        $symfonyProcessFactory = $this->prophesize(SymfonyProcessFactoryInterface::class);
-        assert(in_array($symfonyProcessFactory::class, [SymfonyProcessFactoryInterface::class, ObjectProphecy::class]));
-        $symfonyProcessFactory
-            ->create(Argument::cetera())
-            ->willReturn(new TestSymfonyProcess());
-        $symfonyProcessFactory = $symfonyProcessFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
+        $symfonyProcessFactory = new SymfonyProcessFactory($translatableFactory);
         $sut = new ProcessFactory($symfonyProcessFactory, $translatableFactory);
 
-        $actual = $sut->create($command);
+        $actualProcess = $sut->create($command, ...$optionalArguments);
 
-        $expected = new Process($symfonyProcessFactory, $translatableFactory, $command);
-        self::assertEquals($expected, $actual);
+        $expectedProcess = new Process($symfonyProcessFactory, $translatableFactory, $command, ...$optionalArguments);
+        self::assertEquals($expectedProcess, $actualProcess);
+        self::assertTranslatableAware($sut);
     }
 
     public function providerFactory(): array
     {
         return [
-            'Empty command' => [[]],
-            'Simple command' => [['one']],
-            'Command with options' => [['one', 'two', 'three']],
+            'Minimum values' => [
+                'command' => [],
+                'optionalArguments' => [[]],
+            ],
+            'Simple command' => [
+                'command' => ['one'],
+                'optionalArguments' => [],
+            ],
+            'Command with options' => [
+                'command' => ['one', 'two', 'three'],
+                'optionalArguments' => [],
+            ],
+            'Command plus env' => [
+                'command' => ['one'],
+                'optionalArguments' => [['TWO' => 'two']],
+            ],
         ];
     }
 }
