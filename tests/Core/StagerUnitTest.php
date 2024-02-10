@@ -65,7 +65,7 @@ final class StagerUnitTest extends TestCase
             self::INERT_COMMAND,
         ];
         $this->composerRunner
-            ->run($expectedCommand, null, $timeout)
+            ->run($expectedCommand, [], null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -86,7 +86,7 @@ final class StagerUnitTest extends TestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath)
             ->shouldBeCalledOnce();
         $this->composerRunner
-            ->run($expectedCommand, $callback, $timeout)
+            ->run($expectedCommand, [], $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 

@@ -39,6 +39,9 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
         $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
+            ->mustRun(Argument::any())
+            ->willReturn($this->process);
+        $this->process
             ->setTimeout(Argument::any())
             ->willReturn($this->process);
     }
@@ -88,8 +91,8 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testBasicFunctionality(
         string $executableName,
-        array $givenCommand,
-        array $expectedCommand,
+        array $sutRunArguments,
+        array $factoryCreateArguments,
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
@@ -106,13 +109,12 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->process);
         $this->processFactory
-            ->create($expectedCommand)
-            ->shouldBeCalled()
+            ->create(...$factoryCreateArguments)
+            ->shouldBeCalledOnce()
             ->willReturn($this->process);
-
         $sut = $this->createSut($executableName);
 
-        $sut->run($givenCommand, $callback, $timeout);
+        $sut->run(...$sutRunArguments);
     }
 
     public function providerBasicFunctionality(): array
@@ -120,15 +122,23 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         return [
             'Minimum values' => [
                 'executableName' => 'one',
-                'givenCommand' => [],
-                'expectedCommand' => ['one'],
+                'sutRunArguments' => [[]],
+                'factoryCreateArguments' => [['one'], []],
                 'callback' => null,
-                'timeout' => 0,
+                'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Simple values' => [
                 'executableName' => 'two',
-                'givenCommand' => ['three', 'four'],
-                'expectedCommand' => ['two', 'three', 'four'],
+                'sutRunArguments' => [
+                    [],
+                    ['ONE' => 'one', 'TWO' => 'two'],
+                    new TestOutputCallback(),
+                    100,
+                ],
+                'factoryCreateArguments' => [
+                    ['two'],
+                    ['ONE' => 'one', 'TWO' => 'two'],
+                ],
                 'callback' => new TestOutputCallback(),
                 'timeout' => 100,
             ],

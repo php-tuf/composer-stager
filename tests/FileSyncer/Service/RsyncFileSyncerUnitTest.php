@@ -87,7 +87,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->mkdir($destinationPath)
             ->shouldBeCalledOnce();
         $this->rsync
-            ->run($command, $callback)
+            ->run($command, [], $callback)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
