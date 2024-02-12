@@ -24,6 +24,18 @@ interface ComposerProcessRunnerInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
+     * @param array<string|\Stringable> $env
+     *   An array of environment variables, keyed by variable name with corresponding
+     *   string or stringable values. In addition to those explicitly specified,
+     *   environment variables set on your system will be inherited. You can
+     *   prevent this by setting to `false` variables you want to remove. Example:
+     *   ```php
+     *   $process->setEnv(
+     *       'STRING_VAR' => 'a string',
+     *       'STRINGABLE_VAR' => new StringableObject(),
+     *       'REMOVE_ME' => false,
+     *   );
+     *   ```
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param int $timeout
@@ -39,6 +51,7 @@ interface ComposerProcessRunnerInterface
      */
     public function run(
         array $command,
+        array $env = [],
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void;

@@ -26,11 +26,23 @@ interface SymfonyProcessFactoryInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
+     * @param array<string|\Stringable> $env
+     *   An array of environment variables, keyed by variable name with corresponding
+     *   string or stringable values. In addition to those explicitly specified,
+     *   environment variables set on your system will be inherited. You can
+     *   prevent this by setting to `false` variables you want to remove. Example:
+     *   ```php
+     *   $process->setEnv(
+     *       'STRING_VAR' => 'a string',
+     *       'STRINGABLE_VAR' => new StringableObject(),
+     *       'REMOVE_ME' => false,
+     *   );
+     *   ```
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
      *
      * @see \Symfony\Component\Process\Process::__construct
      */
-    public function create(array $command): SymfonyProcess;
+    public function create(array $command, array $env = []): SymfonyProcess;
 }

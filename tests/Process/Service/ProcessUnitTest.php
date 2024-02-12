@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterface;
@@ -15,6 +16,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -56,7 +58,7 @@ final class ProcessUnitTest extends TestCase
     {
         $symfonyProcess = $this->symfonyProcess->reveal();
         $this->symfonyProcessFactory
-            ->create($expectedCommand)
+            ->create($expectedCommand, Argument::cetera())
             ->willReturn($symfonyProcess);
         $symfonyProcessFactory = $this->symfonyProcessFactory->reveal();
         $translatableFactory = new TestTranslatableFactory();
@@ -118,7 +120,7 @@ final class ProcessUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->symfonyProcess);
         $this->symfonyProcessFactory
-            ->create($expectedCommand)
+            ->create($expectedCommand, Argument::cetera())
             ->shouldBeCalledOnce();
         $sut = $this->createSut($givenConstructorArguments, $expectedCommand);
 
@@ -174,6 +176,59 @@ final class ProcessUnitTest extends TestCase
                 'givenSetTimeoutArguments' => [42],
                 'output' => 'Simple arguments output',
                 'errorOutput' => 'Simple arguments error output',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getEnv
+     * @covers ::setEnv
+     *
+     * @dataProvider providerEnv
+     */
+    public function testEnv(array $optionalArguments, array $expectedInitialEnv, array $givenNewEnv): void
+    {
+        $symfonyProcessFactory = ContainerHelper::get(SymfonyProcessFactory::class);
+        $translatableFactory = new TestTranslatableFactory();
+        $sut = new Process($symfonyProcessFactory, $translatableFactory, ['arbitrary_command'], ...$optionalArguments);
+
+        $actualInitialEnv = $sut->getEnv();
+        $sut->setEnv($givenNewEnv);
+        $actualUpdatedEnv = $sut->getEnv();
+
+        self::assertSame($expectedInitialEnv, $actualInitialEnv);
+        self::assertSame($givenNewEnv, $actualUpdatedEnv);
+    }
+
+    public function providerEnv(): array
+    {
+        return [
+            'No env argument' => [
+                'optionalArguments' => [],
+                'expectedInitialEnv' => [],
+                'givenNewEnv' => [],
+            ],
+            'Initial env, no change' => [
+                'optionalArguments' => [
+                    [
+                        'ONE' => 'one',
+                        'TWO' => 'two',
+                    ],
+                ],
+                'expectedInitialEnv' => [
+                    'ONE' => 'one',
+                    'TWO' => 'two',
+                ],
+                'givenNewEnv' => [],
+            ],
+            'No env argument, changed' => [
+                'optionalArguments' => [['one' => 'two']],
+                'expectedInitialEnv' => ['one' => 'two'],
+                'givenNewEnv' => [
+                    'ONE' => 'one',
+                    'TWO' => 'two',
+                ],
             ],
         ];
     }

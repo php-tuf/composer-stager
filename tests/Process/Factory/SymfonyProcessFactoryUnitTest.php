@@ -20,24 +20,37 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
      *
      * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(array $command): void
+    public function testBasicFunctionality(array $command, array $optionalArguments): void
     {
         $translatableFactory = new TestTranslatableFactory();
         $sut = new SymfonyProcessFactory($translatableFactory);
 
-        $actual = $sut->create($command);
+        $actualProcess = $sut->create($command, ...$optionalArguments);
 
-        $expected = new Process($command);
-        self::assertEquals($expected, $actual);
+        $expectedProcess = new Process($command, null, ...$optionalArguments);
+        self::assertEquals($expectedProcess, $actualProcess);
         self::assertTranslatableAware($sut);
     }
 
     public function providerBasicFunctionality(): array
     {
         return [
-            'Empty command' => [[]],
-            'Simple command' => [['one']],
-            'Command with options' => [['one', 'two', 'three']],
+            'Minimum values' => [
+                'command' => [],
+                'optionalArguments' => [[]],
+            ],
+            'Simple command' => [
+                'command' => ['one'],
+                'optionalArguments' => [],
+            ],
+            'Command with options' => [
+                'command' => ['one', 'two', 'three'],
+                'optionalArguments' => [],
+            ],
+            'Command plus env' => [
+                'command' => ['one'],
+                'optionalArguments' => [['TWO' => 'two']],
+            ],
         ];
     }
 

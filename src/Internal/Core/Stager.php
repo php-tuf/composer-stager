@@ -91,7 +91,7 @@ final class Stager implements StagerInterface
         $command = ['--working-dir=' . $stagingDir->absolute(), ...$composerCommand];
 
         try {
-            $this->composerRunner->run($command, $callback, $timeout);
+            $this->composerRunner->run($command, [], $callback, $timeout);
         } catch (ExceptionInterface $e) {
             throw new RuntimeException($e->getTranslatableMessage(), 0, $e);
         }
