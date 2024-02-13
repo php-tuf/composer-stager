@@ -59,7 +59,7 @@ final class Process implements ProcessInterface
         array $env = [],
     ) {
         $this->setTranslatableFactory($translatableFactory);
-        $this->symfonyProcess = $this->symfonyProcessFactory->create($command, $env);
+        $this->symfonyProcess = $this->symfonyProcessFactory->create($command, null, $env);
     }
 
     public function getEnv(): array

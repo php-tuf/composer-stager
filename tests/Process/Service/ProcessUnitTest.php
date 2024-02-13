@@ -54,8 +54,9 @@ final class ProcessUnitTest extends TestCase
             ->willReturn($this->symfonyProcess);
     }
 
-    private function createSut(array $givenConstructorArguments = [], array $expectedCommand = []): Process
+    private function createSut(array $givenConstructorArguments = [['executable']]): Process
     {
+        $expectedCommand = reset($givenConstructorArguments);
         $symfonyProcess = $this->symfonyProcess->reveal();
         $this->symfonyProcessFactory
             ->create($expectedCommand, Argument::cetera())
@@ -82,7 +83,6 @@ final class ProcessUnitTest extends TestCase
      */
     public function testBasicFunctionality(
         array $givenConstructorArguments,
-        array $expectedCommand,
         array $givenRunArguments,
         ?OutputCallbackAdapterInterface $expectedRunArgument,
         array $envVars,
@@ -90,6 +90,7 @@ final class ProcessUnitTest extends TestCase
         string $output,
         string $errorOutput,
     ): void {
+        $expectedCommand = reset($givenConstructorArguments);
         $expectedRunReturn = 0;
         $this->symfonyProcess
             ->getEnv()
@@ -122,7 +123,7 @@ final class ProcessUnitTest extends TestCase
         $this->symfonyProcessFactory
             ->create($expectedCommand, Argument::cetera())
             ->shouldBeCalledOnce();
-        $sut = $this->createSut($givenConstructorArguments, $expectedCommand);
+        $sut = $this->createSut($givenConstructorArguments);
 
         $actualSetEnvReturn = $sut->setEnv($envVars);
         $actualEnv = $sut->getEnv();
@@ -145,8 +146,7 @@ final class ProcessUnitTest extends TestCase
     {
         return [
             'Minimum arguments' => [
-                'givenConstructorArguments' => [],
-                'expectedCommand' => [],
+                'givenConstructorArguments' => [[]],
                 'givenRunArguments' => [],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
                 'envVars' => [],
@@ -156,7 +156,6 @@ final class ProcessUnitTest extends TestCase
             ],
             'Nullable arguments' => [
                 'givenConstructorArguments' => [['nullable', 'arguments']],
-                'expectedCommand' => ['nullable', 'arguments'],
                 'givenRunArguments' => [null],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
                 'envVars' => [],
@@ -166,7 +165,6 @@ final class ProcessUnitTest extends TestCase
             ],
             'Simple arguments' => [
                 'givenConstructorArguments' => [['simple', 'arguments']],
-                'expectedCommand' => ['simple', 'arguments'],
                 'givenRunArguments' => [new TestOutputCallback()],
                 'expectedRunArgument' => new OutputCallbackAdapter(new TestOutputCallback()),
                 'envVars' => [

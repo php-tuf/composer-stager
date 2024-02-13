@@ -2,6 +2,8 @@
 
 namespace PhpTuf\ComposerStager\API\Process\Service;
 
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+
 /**
  * Runs Composer commands.
  *
@@ -24,6 +26,9 @@ interface ComposerProcessRunnerInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $cwd
+     *   The current working directory (CWD) for the process. If set to null,
+     *   the CWD of the current PHP process will be used.
      * @param array<string|\Stringable> $env
      *   An array of environment variables, keyed by variable name with corresponding
      *   string or stringable values. In addition to those explicitly specified,
@@ -51,6 +56,7 @@ interface ComposerProcessRunnerInterface
      */
     public function run(
         array $command,
+        ?PathInterface $cwd = null,
         array $env = [],
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,

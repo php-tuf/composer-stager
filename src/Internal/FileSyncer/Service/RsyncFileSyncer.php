@@ -66,7 +66,7 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         $command = $this->buildCommand($exclusions, $sourceAbsolute, $destinationAbsolute);
 
         try {
-            $this->rsync->run($command, [], $callback);
+            $this->rsync->run($command, null, [], $callback);
         } catch (ExceptionInterface $e) {
             throw new IOException($e->getTranslatableMessage(), 0, $e);
         }

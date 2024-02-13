@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
@@ -37,6 +38,9 @@ abstract class AbstractProcessRunner
      *   The command arguments as separate string values, e.g.,
      *   ['require', 'example/package'] or ['source', 'destination']. The return
      *   value of ::executableName() will be automatically prepended.
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $cwd
+     *   The current working directory (CWD) for the process. If set to null,
+     *   the CWD of the current PHP process will be used.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
      * @param array<string|\Stringable> $env
@@ -66,6 +70,7 @@ abstract class AbstractProcessRunner
      */
     public function run(
         array $command,
+        ?PathInterface $cwd = null,
         array $env = [],
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,

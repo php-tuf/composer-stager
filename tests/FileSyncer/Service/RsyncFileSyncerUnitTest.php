@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
@@ -76,9 +75,9 @@ final class RsyncFileSyncerUnitTest extends TestCase
     public function testSync(
         string $source,
         string $destination,
-        ?PathListInterface $exclusions,
-        array $command,
-        ?OutputCallbackInterface $callback,
+        array $optionalArguments,
+        array $expectedCommand,
+        ?OutputCallbackInterface $expectedCallback,
     ): void {
         $sourcePath = PathHelper::createPath($source);
         $destinationPath = PathHelper::createPath($destination);
@@ -87,34 +86,48 @@ final class RsyncFileSyncerUnitTest extends TestCase
             ->mkdir($destinationPath)
             ->shouldBeCalledOnce();
         $this->rsync
-            ->run($command, [], $callback)
+            ->run($expectedCommand, null, [], $expectedCallback)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->sync($sourcePath, $destinationPath, $exclusions, $callback);
+        $sut->sync($sourcePath, $destinationPath, ...$optionalArguments);
     }
 
     public function providerSync(): array
     {
         return [
+            'Minimum arguments' => [
+                'source' => '/var/www/source',
+                'destination' => '/var/www/destination',
+                'optionalArguments' => [],
+                'expectedCommand' => [
+                    '--archive',
+                    '--delete-after',
+                    '--verbose',
+                    '/var/www/source/',
+                    '/var/www/destination',
+                ],
+                'expectedCallback' => null,
+            ],
             'Siblings: no exclusions given' => [
                 'source' => '/var/www/source/one',
                 'destination' => '/var/www/destination/two',
-                'exclusions' => null,
-                'command' => [
+                'optionalArguments' => [],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
                     '/var/www/source/one/',
                     '/var/www/destination/two',
                 ],
-                'callback' => null,
+                'expectedCallback' => null,
             ],
+            //'Siblings: simple exclusions given' => [
             'Siblings: simple exclusions given' => [
                 'source' => '/var/www/source/two',
                 'destination' => '/var/www/destination/two',
-                'exclusions' => new PathList('three.txt', 'four.txt'),
-                'command' => [
+                'optionalArguments' => [new PathList('three.txt', 'four.txt'), new TestOutputCallback()],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
@@ -123,18 +136,20 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '/var/www/source/two/',
                     '/var/www/destination/two',
                 ],
-                'callback' => new TestOutputCallback(),
+                'expectedCallback' => new TestOutputCallback(),
             ],
             'Siblings: duplicate exclusions given' => [
                 'source' => '/var/www/source/three',
                 'destination' => '/var/www/destination/three',
-                'exclusions' => new PathList(...[
-                    'four/five',
-                    'six/seven',
-                    'six/seven',
-                    'six/seven',
-                ]),
-                'command' => [
+                'optionalArguments' => [
+                    new PathList(...[
+                        'four/five',
+                        'six/seven',
+                        'six/seven',
+                        'six/seven',
+                    ]),
+                ],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
@@ -143,19 +158,21 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '/var/www/source/three/',
                     '/var/www/destination/three',
                 ],
-                'callback' => null,
+                'expectedCallback' => null,
             ],
             'Siblings: Windows directory separators' => [
                 'source' => '/var/www/source/one\\two',
                 'destination' => '/var/www/destination\\one/two',
-                'exclusions' => new PathList(...[
-                    'three\\four',
-                    'five/six/seven/eight',
-                    'five/six/seven/eight',
-                    'five\\six/seven\\eight',
-                    'five/six\\seven/eight',
-                ]),
-                'command' => [
+                'optionalArguments' => [
+                    new PathList(...[
+                        'three\\four',
+                        'five/six/seven/eight',
+                        'five/six/seven/eight',
+                        'five\\six/seven\\eight',
+                        'five/six\\seven/eight',
+                    ]),
+                ],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
@@ -164,26 +181,26 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '/var/www/source/one/two/',
                     '/var/www/destination/one/two',
                 ],
-                'callback' => null,
+                'expectedCallback' => null,
             ],
             'Nested: destination inside source (neither is excluded)' => [
                 'source' => '/var/www/source',
                 'destination' => '/var/www/source/destination',
-                'exclusions' => null,
-                'command' => [
+                'optionalArguments' => [],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
                     '/var/www/source/',
                     '/var/www/source/destination',
                 ],
-                'callback' => null,
+                'expectedCallback' => null,
             ],
             'Nested: source inside destination (source is excluded)' => [
                 'source' => '/var/www/destination/source',
                 'destination' => '/var/www/destination',
-                'exclusions' => null,
-                'command' => [
+                'optionalArguments' => [],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
@@ -192,13 +209,13 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '/var/www/destination/source/',
                     '/var/www/destination',
                 ],
-                'callback' => null,
+                'expectedCallback' => null,
             ],
             'Nested: with Windows directory separators' => [
                 'source' => '/var/www/destination\\source',
                 'destination' => '/var/www/destination',
-                'exclusions' => null,
-                'command' => [
+                'optionalArguments' => [],
+                'expectedCommand' => [
                     '--archive',
                     '--delete-after',
                     '--verbose',
@@ -207,7 +224,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '/var/www/destination/source/',
                     '/var/www/destination',
                 ],
-                'callback' => null,
+                'expectedCallback' => null,
             ],
         ];
     }
