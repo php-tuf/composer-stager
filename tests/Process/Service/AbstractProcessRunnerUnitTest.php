@@ -124,21 +124,29 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             'Minimum values' => [
                 'executableName' => 'one',
                 'givenRunArguments' => [[]],
-                'expectedFactoryArguments' => [['one'], []],
+                'expectedFactoryArguments' => [['one'], null, []],
+                'callback' => null,
+                'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
+            ],
+            'Default values' => [
+                'executableName' => 'one',
+                'givenRunArguments' => [['two'], null, []],
+                'expectedFactoryArguments' => [['one', 'two'], null, []],
                 'callback' => null,
                 'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Simple values' => [
-                'executableName' => 'two',
+                'executableName' => 'one',
                 'givenRunArguments' => [
-                    ['three', 'four'],
+                    ['two', 'three', 'four'],
                     PathHelper::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                     new TestOutputCallback(),
                     100,
                 ],
                 'expectedFactoryArguments' => [
-                    ['two', 'three', 'four'],
+                    ['one', 'two', 'three', 'four'],
+                    PathHelper::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                 ],
                 'callback' => new TestOutputCallback(),

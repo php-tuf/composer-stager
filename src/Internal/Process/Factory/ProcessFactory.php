@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
@@ -20,8 +21,8 @@ final class ProcessFactory implements ProcessFactoryInterface
     ) {
     }
 
-    public function create(array $command, array $env = []): ProcessInterface
+    public function create(array $command, ?PathInterface $cwd = null, array $env = []): ProcessInterface
     {
-        return new Process($this->symfonyProcessFactory, $this->translatableFactory, $command, $env);
+        return new Process($this->symfonyProcessFactory, $this->translatableFactory, $command, $cwd, $env);
     }
 }

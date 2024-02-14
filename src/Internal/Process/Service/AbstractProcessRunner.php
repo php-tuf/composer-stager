@@ -76,7 +76,7 @@ abstract class AbstractProcessRunner
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         array_unshift($command, $this->findExecutable());
-        $process = $this->processFactory->create($command, $env);
+        $process = $this->processFactory->create($command, $cwd, $env);
         $process->setTimeout($timeout);
         $process->mustRun($callback);
     }

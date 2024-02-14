@@ -34,8 +34,12 @@ final class ProcessFactoryUnitTest extends TestCase
     {
         return [
             'Minimum values' => [
-                'command' => [],
-                'optionalArguments' => [[]],
+                'command' => ['one'],
+                'optionalArguments' => [],
+            ],
+            'Default values' => [
+                'command' => ['one'],
+                'optionalArguments' => [null, []],
             ],
             'Simple command' => [
                 'command' => ['one'],
@@ -45,9 +49,9 @@ final class ProcessFactoryUnitTest extends TestCase
                 'command' => ['one', 'two', 'three'],
                 'optionalArguments' => [],
             ],
-            'Command plus env' => [
+            'Command plus optional arguments' => [
                 'command' => ['one'],
-                'optionalArguments' => [['TWO' => 'two']],
+                'optionalArguments' => [null, ['TWO' => 'two']],
             ],
         ];
     }

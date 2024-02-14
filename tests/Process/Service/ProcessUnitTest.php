@@ -209,6 +209,7 @@ final class ProcessUnitTest extends TestCase
             ],
             'Initial env, no change' => [
                 'optionalArguments' => [
+                    null,
                     [
                         'ONE' => 'one',
                         'TWO' => 'two',
@@ -221,7 +222,7 @@ final class ProcessUnitTest extends TestCase
                 'givenNewEnv' => [],
             ],
             'No env argument, changed' => [
-                'optionalArguments' => [['one' => 'two']],
+                'optionalArguments' => [null, ['one' => 'two']],
                 'expectedInitialEnv' => ['one' => 'two'],
                 'givenNewEnv' => [
                     'ONE' => 'one',
