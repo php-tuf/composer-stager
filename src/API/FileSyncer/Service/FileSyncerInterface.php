@@ -44,6 +44,8 @@ interface FileSyncerInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the source directory does not exist or is the same as the destination
      *   or if rsync cannot be found.
+     * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
+     *   If the operation fails.
      */
     public function sync(
         PathInterface $source,

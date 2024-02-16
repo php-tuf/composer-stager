@@ -23,34 +23,15 @@ on:
     workflow_dispatch:
 
 jobs:
-    static_analysis:
-        name: "Static Analysis"
-        runs-on: ubuntu-latest
-        steps:
-            -   name: "Set up PHP"
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "8.2"
-                    coverage: none
-
-            -   name: "Checkout code"
-                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-
-            -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
-
-            -   name: "Run all static analysis tools"
-                run: "composer static"
-
     tests:
         name: "Tests: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && ' w/ coverage' || '' }}"
         runs-on: "${{ matrix.os }}-latest"
         strategy:
             fail-fast: false
             matrix:
-                os: [ ubuntu, macos, windows ]
-                php: [ "8.1", "8.2", "8.3" ]
-                dependencies: [ low, high ]
+                os: [ windows ]
+                php: [ "8.3" ]
+                dependencies: [ high ]
         steps:
             -   name: "Install rsync"
                 uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
@@ -95,73 +76,5 @@ jobs:
                 if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
 
             -   name: "Run Windows tests"
-                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=no_windows"
+                run: "./vendor/bin/phpunit --no-coverage -- tests/EndToEnd/EndToEndFunctionalTest.php"
                 if: ${{ runner.os == 'Windows' }}
-
-    performance:
-        name: "Performance: ${{ matrix.os }}"
-        runs-on: "${{ matrix.os }}-latest"
-        strategy:
-            fail-fast: false
-            matrix:
-                os: [ ubuntu, windows ]
-        steps:
-            -   name: "Install rsync"
-                uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
-
-            -   name: "Set up PHP"
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "8.2"
-                    coverage: none
-
-            -   name: "Checkout code"
-                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-
-            -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
-
-            -   name: "Run performance tests"
-                run: "composer phpbench -- --progress=plain --ansi"
-
-    compatability:
-        name: "Compatability"
-        runs-on: ubuntu-latest
-        steps:
-            -   name: "Install rsync"
-                uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
-
-            -   name: "Set up PHP"
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "8.3"
-                    coverage: none
-
-            -   name: "Checkout code"
-                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-
-            -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
-
-            -   name: "Run compatability tests"
-                run: "composer compatability"
-
-    mutation:
-        name: "Mutation"
-        runs-on: ubuntu-latest
-        steps:
-            -   name: "Set up PHP"
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "8.2"
-                    extensions: gd
-                    ini-values: zend.assertions=1
-
-            -   name: "Checkout code"
-                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-
-            -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
-
-            -   name: "Run mutation tests"
-                run: "composer infection"

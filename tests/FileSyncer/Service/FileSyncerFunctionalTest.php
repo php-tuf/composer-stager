@@ -4,12 +4,12 @@ namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RobocopyFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RobocopyFileSyncer */
 final class FileSyncerFunctionalTest extends TestCase
 {
     protected function setUp(): void
@@ -27,7 +27,7 @@ final class FileSyncerFunctionalTest extends TestCase
 
     private function createSut(): FileSyncerInterface
     {
-        return ContainerTestHelper::get(FileSyncer::class);
+        return ContainerTestHelper::get(RobocopyFileSyncer::class);
     }
 
     /**

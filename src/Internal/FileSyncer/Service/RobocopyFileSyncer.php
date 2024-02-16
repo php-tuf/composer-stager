@@ -3,8 +3,6 @@
 namespace PhpTuf\ComposerStager\Internal\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
-use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
-use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
@@ -13,10 +11,11 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
-use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 /**
@@ -24,7 +23,7 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
-final class FileSyncer implements FileSyncerInterface
+final class RobocopyFileSyncer implements FileSyncerInterface
 {
     use TranslatableAwareTrait;
 
@@ -32,9 +31,9 @@ final class FileSyncer implements FileSyncerInterface
         private readonly EnvironmentInterface $environment,
         private readonly ExecutableFinderInterface $executableFinder,
         private readonly FilesystemInterface $filesystem,
-        private readonly PathFactoryInterface $pathFactory,
+        private readonly PathHelperInterface $pathHelper,
         private readonly PathListFactoryInterface $pathListFactory,
-        private readonly RsyncProcessRunnerInterface $rsync,
+        private readonly ProcessFactoryInterface $processFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         $this->setTranslatableFactory($translatableFactory);
@@ -51,26 +50,17 @@ final class FileSyncer implements FileSyncerInterface
 
         $exclusions ??= $this->pathListFactory->create();
 
-        $this->assertRsyncIsAvailable();
+        $this->assertRobocopyIsAvailable();
         $this->assertSourceAndDestinationAreDifferent($source, $destination);
-        $this->assertSourceIsValid($source);
+        $this->assertSourceExists($source);
 
-        $this->runCommand($exclusions, $source, $destination, $callback);
-    }
-
-    /** @infection-ignore-all This only makes any difference on Windows, whereas Infection is only run on Linux. */
-    private function makeRelativeToSource(string $sourceAbsolute): string
-    {
-        $position = strpos($sourceAbsolute, '/');
-        $sourceRelative = substr($sourceAbsolute, (int) $position);
-
-        return ltrim($sourceRelative, '/');
+        $this->runCommand($exclusions, $source->absolute(), $destination->absolute(), $destination, $callback);
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
-    private function assertRsyncIsAvailable(): void
+    private function assertRobocopyIsAvailable(): void
     {
-        $this->executableFinder->find('rsync');
+        $this->executableFinder->find('robocopy');
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
@@ -88,7 +78,7 @@ final class FileSyncer implements FileSyncerInterface
     }
 
     /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
-    private function assertSourceIsValid(PathInterface $source): void
+    private function assertSourceExists(PathInterface $source): void
     {
         if (!$this->filesystem->fileExists($source)) {
             throw new LogicException($this->t(
@@ -107,26 +97,27 @@ final class FileSyncer implements FileSyncerInterface
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
+    /**
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
+     */
     private function runCommand(
         ?PathListInterface $exclusions,
-        PathInterface $source,
+        string $sourceAbsolute,
+        string $destinationAbsolute,
         PathInterface $destination,
         ?OutputCallbackInterface $callback,
     ): void {
-        $this->ensureDestinationDirectoryExists($destination);
-        $command = $this->buildCommand($source, $destination, $exclusions);
+        $sourceAbsolute = $this->pathHelper->canonicalize($sourceAbsolute);
+        $destinationAbsolute = $this->pathHelper->canonicalize($destinationAbsolute);
 
-        try {
-            $this->rsync->run(
-                $command,
-                $this->pathFactory->create('/', $source),
-                [],
-                $callback,
-            );
-        } catch (ExceptionInterface $e) {
-            throw new IOException($e->getTranslatableMessage(), 0, $e);
-        }
+        $this->ensureDestinationDirectoryExists($destination);
+        $command = $this->buildCommand($exclusions, $sourceAbsolute, $destinationAbsolute);
+
+        $process = $this->processFactory->create($command);
+
+        $process->run($callback);
     }
 
     /**
@@ -141,61 +132,46 @@ final class FileSyncer implements FileSyncerInterface
 
     /** @return array<string> */
     private function buildCommand(
-        PathInterface $source,
-        PathInterface $destination,
         ?PathListInterface $exclusions,
+        string $sourceAbsolute,
+        string $destinationAbsolute,
     ): array {
         $exclusions ??= $this->pathListFactory->create();
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $exclusions = $exclusions->getAll();
 
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
-
-        // The unusual requirement to support syncing a directory with its own
-        // descendant requires a unique approach, which has been documented here:
-        // {@see https://serverfault.com/q/1094803/956603}.
         $command = [
-            // Archive mode--the same as -rlptgoD (no -H), or --recursive,
-            // --links, --perms, --times, --group, --owner, --devices, --specials.
-            '--archive',
-            // Skip files based on contents, not modification time and filesize.
-            '--checksum',
-            // Delete extraneous files from destination directories. Note: Using
-            // --delete-after rather than alternatives prevents "file has
-            // vanished" errors when syncing a directory with its own ancestor.
-            '--delete-after',
-            // Increase verbosity.
-            '--verbose',
+            'robocopy',
+            $sourceAbsolute,
+            $destinationAbsolute,
+            '/MIR',
         ];
 
         // Prevent infinite recursion if the source is inside the destination.
-        if (str_starts_with($sourceAbsolute, $destinationAbsolute)) {
+        if ($this->isDescendant($sourceAbsolute, $destinationAbsolute)) {
             $exclusions[] = self::getRelativePath($destinationAbsolute, $sourceAbsolute);
         }
 
-        foreach ($exclusions as $exclusion) {
-            $exclusion = $this->pathFactory->create($exclusion, $source);
-            // A leading slash anchors paths to the source directory root,
-            // preventing incorrect partial matches.
-            $relativePath = self::getRelativePath($this->pathFactory->create('/')->absolute(), $exclusion->absolute());
-            $relativePath = str_replace($sourceAbsolute, '', $relativePath);
-
-            $command[] = sprintf('--exclude=%s', $relativePath);
+        if ($exclusions !== []) {
+            $command[] = '/XD';
+            $command[] = implode(' ', $exclusions);
+            $command[] = '/XF';
+            $command[] = implode(' ', $exclusions);
         }
-
-        // A trailing slash is added to the source directory so the CONTENTS
-        // of the directory are synced, not the directory itself.
-        $command[] = $this->makeRelativeToSource($sourceAbsolute) . '/';
-
-        $command[] = $this->makeRelativeToSource($destinationAbsolute);
 
         return $command;
     }
 
+    private function isDescendant(string $descendant, string $ancestor): bool
+    {
+        $ancestor .= DIRECTORY_SEPARATOR;
+
+        return str_starts_with($descendant, $ancestor);
+    }
+
     private static function getRelativePath(string $ancestor, string $path): string
     {
-        $ancestor .= '/';
+        $ancestor .= DIRECTORY_SEPARATOR;
 
         if (str_starts_with($path, $ancestor)) {
             return substr($path, strlen($ancestor));
