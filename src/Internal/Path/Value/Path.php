@@ -72,7 +72,7 @@ final class Path implements PathInterface
         $getcwd = getcwd();
 
         if ($getcwd === false) {
-            return sys_get_temp_dir() .'/composer-stager/error-' . md5(microtime());
+            return sys_get_temp_dir() . '/composer-stager/error-' . md5(microtime());
         }
 
         return $getcwd;
