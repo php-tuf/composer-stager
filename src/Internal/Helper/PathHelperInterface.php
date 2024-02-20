@@ -14,4 +14,7 @@ interface PathHelperInterface
 
     /** Determines whether the given path is absolute. */
     public static function isAbsolute(string $path): bool;
+
+    /** Determines whether the given path is relative. */
+    public static function isRelative(string $path): bool;
 }
