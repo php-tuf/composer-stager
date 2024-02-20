@@ -31,6 +31,9 @@ interface PathInterface
     /** Determines whether the original path string as given is absolute, without resolving it. */
     public function isAbsolute(): bool;
 
+    /** Determines whether the original path string as given is relative, without resolving it. */
+    public function isRelative(): bool;
+
     /**
      * Gets the fully resolved, absolute path string without trailing slash, relative to another given path.
      *

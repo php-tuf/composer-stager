@@ -49,6 +49,11 @@ final class Path implements PathInterface
         return PathHelper::isAbsolute($this->path);
     }
 
+    public function isRelative(): bool
+    {
+        return !$this->isAbsolute();
+    }
+
     public function relative(PathInterface $basePath): string
     {
         $basePathAbsolute = $basePath->absolute();
