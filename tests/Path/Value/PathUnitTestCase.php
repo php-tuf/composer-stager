@@ -21,6 +21,7 @@ use ReflectionClass;
  * @covers ::getProtocol
  * @covers ::hasProtocol
  * @covers ::isAbsolute
+ * @covers ::isRelative
  * @covers ::relative
  * @covers ::stripProtocol
  */
@@ -56,7 +57,8 @@ abstract class PathUnitTestCase extends TestCase
         $overrideBasePath($sut, $basePath);
         $overrideBasePath($equalInstance, $basePath);
 
-        self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
+        self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was absolute.');
+        self::assertEquals(!$isAbsolute, $sut->isRelative(), 'Correctly determined whether given path was relative.');
         self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
         self::assertEquals($relative, $sut->relative($relativeBase), 'Got absolute path relative to another given path.');
         self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');

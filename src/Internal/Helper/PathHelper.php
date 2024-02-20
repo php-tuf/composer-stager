@@ -35,4 +35,9 @@ final class PathHelper implements PathHelperInterface
     {
         return SymfonyPath::isAbsolute($path);
     }
+
+    public static function isRelative(string $path): bool
+    {
+        return SymfonyPath::isRelative($path);
+    }
 }

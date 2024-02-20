@@ -85,12 +85,14 @@ final class PathHelperUnitTest extends TestCase
 
     /**
      * @covers ::isAbsolute
+     * @covers ::isRelative
      *
      * @dataProvider providerIsAbsolute
      */
-    public function testIsAbsolute(bool $expected, string $path): void
+    public function testIsAbsolute(bool $isAbsolute, string $path): void
     {
-        self::assertSame($expected, PathHelper::isAbsolute($path));
+        self::assertSame($isAbsolute, PathHelper::isAbsolute($path));
+        self::assertSame(!$isAbsolute, PathHelper::isRelative($path));
     }
 
     public function providerIsAbsolute(): array

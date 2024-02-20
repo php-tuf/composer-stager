@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
  * @covers ::getProtocol
  * @covers ::hasProtocol
  * @covers ::isAbsolute
+ * @covers ::isRelative
  * @covers ::relative
  * @covers ::stripProtocol
  *
