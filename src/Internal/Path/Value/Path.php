@@ -25,7 +25,7 @@ final class Path implements PathInterface
      *   assumed to represent a directory, as opposed to a file--even if
      *   it has an extension, which is no guarantee of type.
      */
-    public function __construct(protected readonly string $path, ?PathInterface $basePath = null)
+    public function __construct(private readonly string $path, ?PathInterface $basePath = null)
     {
         // Especially since it accepts relative paths, an immutable path value
         // object should be immune to environmental details like the current
