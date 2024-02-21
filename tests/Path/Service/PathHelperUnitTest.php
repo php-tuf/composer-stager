@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Path\Service;
 
 use PhpTuf\ComposerStager\Internal\Path\Service\PathHelper;
-use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Service\PathHelper */

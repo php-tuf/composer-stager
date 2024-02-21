@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
@@ -34,6 +35,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
 {
     private EnvironmentInterface|ObjectProphecy $environment;
     private FilesystemInterface|ObjectProphecy $filesystem;
+    private PathHelperInterface|ObjectProphecy $pathHelper;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
     protected function setUp(): void
@@ -50,6 +52,10 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $this->filesystem
             ->isDir(Argument::any())
             ->willReturn(true);
+        $this->pathHelper = $this->prophesize(PathHelperInterface::class);
+        $this->pathHelper
+            ->canonicalize(Argument::any())
+            ->willReturnArgument();
         $this->rsync = $this->prophesize(RsyncProcessRunnerInterface::class);
 
         parent::setUp();
@@ -59,10 +65,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
+        $pathHelper = $this->pathHelper->reveal();
         $rsync = $this->rsync->reveal();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
-        return new RsyncFileSyncer($environment, $filesystem, $rsync, $translatableFactory);
+        return new RsyncFileSyncer($environment, $filesystem, $pathHelper, $rsync, $translatableFactory);
     }
 
     /**
