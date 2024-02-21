@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use org\bovigo\vfs\vfsStream;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 
 final class VfsTestHelper
 {
@@ -25,7 +24,7 @@ final class VfsTestHelper
 
     public static function createPath(string $path, string $basePath = self::ROOT_DIR): PathInterface
     {
-        return new Path($path, new Path(self::ROOT_DIR));
+        return PathTestHelper::createPath($path, $basePath);
     }
 
     public static function rootDirAbsolute(): string

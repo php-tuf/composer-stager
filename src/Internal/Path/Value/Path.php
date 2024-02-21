@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 
 /**
  * @package Path
@@ -25,8 +25,11 @@ final class Path implements PathInterface
      *   assumed to represent a directory, as opposed to a file--even if
      *   it has an extension, which is no guarantee of type.
      */
-    public function __construct(private readonly string $path, ?PathInterface $basePath = null)
-    {
+    public function __construct(
+        private PathHelperInterface $pathHelper,
+        private readonly string $path,
+        ?PathInterface $basePath = null,
+    ) {
         // Especially since it accepts relative paths, an immutable path value
         // object should be immune to environmental details like the current
         // working directory. Cache the CWD at time of creation.
@@ -46,7 +49,7 @@ final class Path implements PathInterface
             return true;
         }
 
-        return PathHelper::isAbsolute($this->path);
+        return $this->pathHelper->isAbsolute($this->path);
     }
 
     public function isRelative(): bool
@@ -86,18 +89,18 @@ final class Path implements PathInterface
     private function doAbsolute(string $basePathAbsolute): string
     {
         if ($this->hasProtocol($this->path)) {
-            return $this->getProtocol($this->path) . PathHelper::canonicalize($this->stripProtocol($this->path));
+            return $this->getProtocol($this->path) . $this->pathHelper->canonicalize($this->stripProtocol($this->path));
         }
 
-        if (PathHelper::isAbsolute(PathHelper::canonicalize($this->path))) {
-            return PathHelper::canonicalize($this->path);
+        if ($this->pathHelper->isAbsolute($this->pathHelper->canonicalize($this->path))) {
+            return $this->pathHelper->canonicalize($this->path);
         }
 
         if ($this->hasProtocol($this->basePathAbsolute)) {
-            return rtrim($this->basePathAbsolute, '/') . '/' . PathHelper::canonicalize($this->path);
+            return rtrim($this->basePathAbsolute, '/') . '/' . $this->pathHelper->canonicalize($this->path);
         }
 
-        return PathHelper::canonicalize($basePathAbsolute . DIRECTORY_SEPARATOR . $this->path);
+        return $this->pathHelper->canonicalize($basePathAbsolute . DIRECTORY_SEPARATOR . $this->path);
     }
 
     private function hasProtocol(string $path): bool

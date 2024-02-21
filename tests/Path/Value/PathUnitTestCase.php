@@ -27,6 +27,13 @@ use ReflectionClass;
  */
 abstract class PathUnitTestCase extends TestCase
 {
+    public function createSut(): Path
+    {
+        $pathHelper = PathTestHelper::createPathHelper();
+
+        return new Path($pathHelper, ...func_get_args());
+    }
+
     /** @dataProvider providerBasicFunctionality */
     public function testBasicFunctionality(
         string $given,
@@ -42,10 +49,10 @@ abstract class PathUnitTestCase extends TestCase
             PathTestHelper::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
         }
 
-        $equalInstance = new Path($given);
-        $unequalInstance = new Path(__DIR__);
-        $relativeBase = new Path($relativeBase);
-        $sut = new Path($given);
+        $equalInstance = $this->createSut($given);
+        $unequalInstance = $this->createSut(__DIR__);
+        $relativeBase = $this->createSut($relativeBase);
+        $sut = $this->createSut($given);
 
         // Dynamically override basePath.
         $overrideBasePath = static function (PathInterface $pathObject, string $basePathOverride): void {
@@ -82,7 +89,7 @@ abstract class PathUnitTestCase extends TestCase
             PathTestHelper::fixSeparatorsMultiple($path, $absolute);
         }
 
-        $sut = new Path($path, $basePath);
+        $sut = $this->createSut($path, $basePath);
 
         self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
     }
