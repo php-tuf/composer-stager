@@ -11,7 +11,7 @@ use Prophecy\Argument;
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Environment\Service\Environment */
 final class EnvironmentUnitTest extends TestCase
 {
-    public function createSut(): Environment
+    private function createSut(): Environment
     {
         return new Environment();
     }

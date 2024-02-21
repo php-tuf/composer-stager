@@ -28,7 +28,7 @@ final class FileFinderUnitTest extends TestCase
         $this->translatableFactory = ContainerHelper::get(TranslatableFactory::class);
     }
 
-    public function createSut(): FileFinder
+    private function createSut(): FileFinder
     {
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = $this->translatableFactory;
