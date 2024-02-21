@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Compatability;
 
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -72,9 +72,9 @@ final class CompatabilityFunctionalTest extends TestCase
 
     private static function fixtureDir(string $versionConstraint): string
     {
-        return PathHelper::makeAbsolute(
+        return PathTestHelper::makeAbsolute(
             'drupal-' . $versionConstraint,
-            PathHelper::testPersistentFixturesAbsolute(),
+            PathTestHelper::testPersistentFixturesAbsolute(),
         );
     }
 
@@ -132,7 +132,7 @@ final class CompatabilityFunctionalTest extends TestCase
             'config',
             'repositories.php-tuf/composer-stager',
             'path',
-            PathHelper::repositoryRootAbsolute(),
+            PathTestHelper::repositoryRootAbsolute(),
         ], $fixtureDir))->mustRun();
     }
 }

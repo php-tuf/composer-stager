@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -103,8 +103,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
     /** @covers ::assertExecutableExists */
     public function testExecutableNotFound(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $previous = LogicException::class;
         $this->executableFinder
@@ -145,8 +145,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
     /** @covers ::getProcess */
     public function testFailedToRunProcess(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $this->process
             ->mustRun()
@@ -166,8 +166,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
     /** @covers ::isValidExecutable */
     public function testFailedToGetOutput(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $previous = LogicException::class;
         $this->process
@@ -188,8 +188,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
     /** @dataProvider providerInvalidOutput */
     public function testInvalidOutput(string $output): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $this->process
             ->getOutput()

@@ -13,10 +13,10 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
-use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\VfsHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\VfsTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
@@ -69,12 +69,12 @@ final class PhpFileSyncerUnitTest extends TestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->mkdir(PathHelper::destinationDirPath())
+            ->mkdir(PathTestHelper::destinationDirPath())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
+            $sut->sync(PathTestHelper::sourceDirPath(), PathTestHelper::destinationDirPath());
         }, $previous::class, $message);
     }
 
@@ -101,7 +101,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function providerGetRelativePath(): array
     {
         // UNIX-like OS paths.
-        if (!EnvironmentHelper::isWindows()) {
+        if (!EnvironmentTestHelper::isWindows()) {
             return [
                 'Match: single directory depth' => [
                     'ancestor' => 'one',
@@ -194,8 +194,8 @@ final class PhpFileSyncerUnitTest extends TestCase
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyTrue(): void
     {
-        $directoryPath = VfsHelper::arbitraryDirPath();
-        FilesystemHelper::createDirectories($directoryPath->absolute());
+        $directoryPath = VfsTestHelper::arbitraryDirPath();
+        FilesystemTestHelper::createDirectories($directoryPath->absolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);
@@ -205,14 +205,14 @@ final class PhpFileSyncerUnitTest extends TestCase
 
         self::assertTrue($actual, 'Correctly detected empty directory.');
 
-        FilesystemHelper::remove(PathHelper::testPersistentFixturesAbsolute());
+        FilesystemTestHelper::remove(PathTestHelper::testPersistentFixturesAbsolute());
     }
 
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyFalse(): void
     {
-        $directoryPath = VfsHelper::rootDirPath();
-        FilesystemHelper::touch(VfsHelper::arbitraryFileAbsolute());
+        $directoryPath = VfsTestHelper::rootDirPath();
+        FilesystemTestHelper::touch(VfsTestHelper::arbitraryFileAbsolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);
@@ -231,8 +231,8 @@ final class PhpFileSyncerUnitTest extends TestCase
      */
     public function testIsDirEmptyNotADirectory(): void
     {
-        $filePath = VfsHelper::arbitraryFilePath();
-        FilesystemHelper::touch($filePath->absolute());
+        $filePath = VfsTestHelper::arbitraryFilePath();
+        FilesystemTestHelper::touch($filePath->absolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);

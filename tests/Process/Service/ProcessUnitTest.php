@@ -16,8 +16,8 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ProcessTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
@@ -187,7 +187,7 @@ final class ProcessUnitTest extends TestCase
      */
     public function testEnv(array $optionalArguments, array $expectedInitialEnv, array $givenNewEnv): void
     {
-        $symfonyProcessFactory = ContainerHelper::get(SymfonyProcessFactory::class);
+        $symfonyProcessFactory = ContainerTestHelper::get(SymfonyProcessFactory::class);
         $translatableFactory = new TestTranslatableFactory();
         $sut = new Process($symfonyProcessFactory, $translatableFactory, ['arbitrary_command'], ...$optionalArguments);
 
@@ -262,7 +262,7 @@ final class ProcessUnitTest extends TestCase
     /** @covers ::getOutput */
     public function testGetOutputException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->getOutput()
             ->willThrow($previous);
@@ -277,7 +277,7 @@ final class ProcessUnitTest extends TestCase
     /** @covers ::getErrorOutput */
     public function testGetErrorOutputException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->getErrorOutput()
             ->willThrow($previous);
@@ -292,7 +292,7 @@ final class ProcessUnitTest extends TestCase
     /** @covers ::mustRun */
     public function testMustRunException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->mustRun(Argument::cetera())
             ->willThrow($previous);
@@ -425,7 +425,7 @@ final class ProcessUnitTest extends TestCase
     /** @covers ::setTimeout */
     public function testSetTimeoutException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->setTimeout(Argument::cetera())
             ->willThrow($previous);

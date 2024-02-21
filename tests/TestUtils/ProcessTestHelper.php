@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestSymfonyProcess;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
 use Throwable;
 
-final class ProcessHelper
+final class ProcessTestHelper
 {
     /** Creates a SymfonyProcessFailedException for use as a $previous value in test prophesies. */
     public static function createSymfonyProcessFailedException(): Throwable

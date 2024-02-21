@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditio
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -25,15 +25,15 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createTestEnvironment(?string $activeDir = null): void
     {
-        $activeDir ??= PathHelper::activeDirRelative();
+        $activeDir ??= PathTestHelper::activeDirRelative();
 
         self::removeTestEnvironment();
 
         // Create the active directory only. The staging directory is created
         // when the "begin" command is exercised.
-        $workingDirAbsolute = PathHelper::testFreshFixturesDirAbsolute();
-        $activeDirAbsolute = PathHelper::makeAbsolute($activeDir, $workingDirAbsolute);
-        FilesystemHelper::createDirectories([$workingDirAbsolute, $activeDirAbsolute]);
+        $workingDirAbsolute = PathTestHelper::testFreshFixturesDirAbsolute();
+        $activeDirAbsolute = PathTestHelper::makeAbsolute($activeDir, $workingDirAbsolute);
+        FilesystemTestHelper::createDirectories([$workingDirAbsolute, $activeDirAbsolute]);
         chdir($workingDirAbsolute);
     }
 
@@ -41,12 +41,12 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $filesystem = new Filesystem();
 
-        if (!$filesystem->exists(PathHelper::testFreshFixturesDirAbsolute())) {
+        if (!$filesystem->exists(PathTestHelper::testFreshFixturesDirAbsolute())) {
             return;
         }
 
         try {
-            $filesystem->remove(PathHelper::testFreshFixturesDirAbsolute());
+            $filesystem->remove(PathTestHelper::testFreshFixturesDirAbsolute());
         } catch (IOException) {
             // @todo Windows chokes on this every time, e.g.,
             //    | Failed to remove directory
@@ -68,8 +68,8 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function createFile(string $basePath, string $filename): void
     {
-        $filename = PathHelper::makeAbsolute($filename, $basePath);
-        FilesystemHelper::touch($filename);
+        $filename = PathTestHelper::makeAbsolute($filename, $basePath);
+        FilesystemTestHelper::touch($filename);
         $realpathResult = realpath($filename);
 
         assert($realpathResult !== false, sprintf('Failed to create file: %s', $filename));
@@ -92,21 +92,21 @@ abstract class TestCase extends PHPUnitTestCase
 
     protected static function changeFile(string $dir, string $filename): void
     {
-        $fileAbsolute = PathHelper::ensureTrailingSlash($dir) . $filename;
+        $fileAbsolute = PathTestHelper::ensureTrailingSlash($dir) . $filename;
         $result = file_put_contents($fileAbsolute, self::CHANGED_CONTENT);
         assert($result !== false, sprintf('Failed to change file: %s', $fileAbsolute));
     }
 
     protected static function deleteFile(string $dir, string $filename): void
     {
-        $fileAbsolute = PathHelper::ensureTrailingSlash($dir) . $filename;
+        $fileAbsolute = PathTestHelper::ensureTrailingSlash($dir) . $filename;
         $result = unlink($fileAbsolute);
         assert($result, sprintf('Failed to delete file: %s', $fileAbsolute));
     }
 
     protected static function getDirectoryContents(string $dir): array
     {
-        $dir = PathHelper::ensureTrailingSlash($dir);
+        $dir = PathTestHelper::ensureTrailingSlash($dir);
         $dirListing = self::getFlatDirectoryListing($dir);
 
         $contents = [];
@@ -130,13 +130,13 @@ abstract class TestCase extends PHPUnitTestCase
             $path = implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    PathHelper::testFreshFixturesDirAbsolute(),
-                    PathHelper::activeDirRelative(),
+                    PathTestHelper::testFreshFixturesDirAbsolute(),
+                    PathTestHelper::activeDirRelative(),
                     $path,
                 ],
             );
 
-            return PathHelper::makeAbsolute($path, getcwd());
+            return PathTestHelper::makeAbsolute($path, getcwd());
         }, $paths);
 
         sort($paths);

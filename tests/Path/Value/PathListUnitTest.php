@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\PathList */
 final class PathListUnitTest extends TestCase
@@ -73,7 +73,7 @@ final class PathListUnitTest extends TestCase
             ],
         ];
 
-        return array_merge($data, EnvironmentHelper::isWindows()
+        return array_merge($data, EnvironmentTestHelper::isWindows()
             ? $this->providerBasicFunctionalityWindows()
             : $this->providerBasicFunctionalityUnixLike());
     }

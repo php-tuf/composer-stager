@@ -7,13 +7,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-final class ContainerHelper
+final class ContainerTestHelper
 {
     public static function container(): ContainerBuilder
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
-        $config = PathHelper::makeAbsolute('config/services.yml', PathHelper::repositoryRootAbsolute());
+        $config = PathTestHelper::makeAbsolute('config/services.yml', PathTestHelper::repositoryRootAbsolute());
         $loader->load($config);
 
         return $container;

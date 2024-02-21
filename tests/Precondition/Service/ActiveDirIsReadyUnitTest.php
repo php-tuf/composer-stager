@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -51,8 +51,8 @@ final class ActiveDirIsReadyUnitTest extends PreconditionUnitTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
         $timeout = 42;
 
         $this->activeDirExists
@@ -67,8 +67,8 @@ final class ActiveDirIsReadyUnitTest extends PreconditionUnitTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

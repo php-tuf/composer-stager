@@ -54,7 +54,7 @@ trait AssertTrait
         string $ignoreDir = '',
         string $message = '',
     ): void {
-        $expected = array_map(PathHelper::fixSeparators(...), $expected);
+        $expected = array_map(PathTestHelper::fixSeparators(...), $expected);
 
         $actual = self::getFlatDirectoryListing($dir);
 
@@ -62,14 +62,14 @@ trait AssertTrait
         $actual = array_map(static function (string $path) use ($dir, $ignoreDir): bool|string {
             // Paths must be prefixed with the given directory for "ignored paths"
             // matching but returned un-prefixed for later expectation comparison.
-            $matchPath = PathHelper::ensureTrailingSlash($dir) . $path;
-            $ignoreDir = PathHelper::ensureTrailingSlash($ignoreDir);
+            $matchPath = PathTestHelper::ensureTrailingSlash($dir) . $path;
+            $ignoreDir = PathTestHelper::ensureTrailingSlash($ignoreDir);
 
             if (str_starts_with($matchPath, $ignoreDir)) {
                 return false;
             }
 
-            return PathHelper::fixSeparators($path);
+            return PathTestHelper::fixSeparators($path);
         }, $actual);
 
         if ($message === '') {
@@ -96,16 +96,16 @@ trait AssertTrait
 
     protected static function assertFileMode(string $path, int $mode): void
     {
-        if (EnvironmentHelper::isWindows()) {
+        if (EnvironmentTestHelper::isWindows()) {
             // Windows doesn't support file permissions. Treat it like a pass and move on.
             self::assertTrue(true, 'Ignore unsupported file permissions on Windows.');
 
             return;
         }
 
-        assert(FilesystemHelper::exists($path), sprintf('File does not exist: %s', $path));
+        assert(FilesystemTestHelper::exists($path), sprintf('File does not exist: %s', $path));
 
-        $actual = FilesystemHelper::fileMode($path);
+        $actual = FilesystemTestHelper::fileMode($path);
 
         self::assertOctalEquals($mode, $actual);
     }
@@ -215,7 +215,7 @@ trait AssertTrait
 
             if ($actualException instanceof ExceptionInterface) {
                 $reflection = new TranslatableReflection($actualException->getTranslatableMessage());
-                self::assertSame(TranslationHelper::EXCEPTIONS_DOMAIN, $reflection->getDomain(), 'Set correct domain.');
+                self::assertSame(TranslationTestHelper::EXCEPTIONS_DOMAIN, $reflection->getDomain(), 'Set correct domain.');
             }
 
             if ($expectedPreviousExceptionClass === null) {
@@ -275,9 +275,9 @@ trait AssertTrait
      */
     private static function getFlatDirectoryListing(string $dir): array
     {
-        $dir = PathHelper::stripTrailingSlash($dir);
+        $dir = PathTestHelper::stripTrailingSlash($dir);
 
-        if (!FilesystemHelper::exists($dir)) {
+        if (!FilesystemTestHelper::exists($dir)) {
             return [];
         }
 

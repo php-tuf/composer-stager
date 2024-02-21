@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\TestUtils;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-final class FilesystemHelper
+final class FilesystemTestHelper
 {
     public static function chmod(string $path, int $mode): void
     {
@@ -15,7 +15,7 @@ final class FilesystemHelper
 
         clearstatcache(true, $path);
 
-        if (EnvironmentHelper::isWindows()) {
+        if (EnvironmentTestHelper::isWindows()) {
             return;
         }
 
@@ -31,7 +31,7 @@ final class FilesystemHelper
 
         // If a base path is provided, use it to make all directories absolute.
         if (is_string($basePath)) {
-            $directories = array_map(static fn ($dirname): string => PathHelper::makeAbsolute($dirname, $basePath), $directories);
+            $directories = array_map(static fn ($dirname): string => PathTestHelper::makeAbsolute($dirname, $basePath), $directories);
         }
 
         (new SymfonyFilesystem())->mkdir($directories);
@@ -88,8 +88,8 @@ final class FilesystemHelper
 
     public static function createSymlink(string $basePath, string $link, string $target): void
     {
-        $link = PathHelper::createPath($link, $basePath);
-        $target = PathHelper::createPath($target, $basePath);
+        $link = PathTestHelper::createPath($link, $basePath);
+        $target = PathTestHelper::createPath($target, $basePath);
 
         self::prepareForLink($link, $target);
 
@@ -105,8 +105,8 @@ final class FilesystemHelper
 
     public static function createHardlink(string $basePath, string $link, string $target): void
     {
-        $link = PathHelper::createPath($link, $basePath);
-        $target = PathHelper::createPath($target, $basePath);
+        $link = PathTestHelper::createPath($link, $basePath);
+        $target = PathTestHelper::createPath($target, $basePath);
 
         self::prepareForLink($link, $target);
 

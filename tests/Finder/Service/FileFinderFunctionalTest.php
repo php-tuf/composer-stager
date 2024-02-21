@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
@@ -27,7 +27,7 @@ final class FileFinderFunctionalTest extends TestCase
 
     private function createSut(): FileFinder
     {
-        return ContainerHelper::get(FileFinder::class);
+        return ContainerTestHelper::get(FileFinder::class);
     }
 
     /**
@@ -39,10 +39,10 @@ final class FileFinderFunctionalTest extends TestCase
     public function testFind(array $files, array $exclusions, array $expected): void
     {
         $expected = $this->normalizePaths($expected);
-        self::createFiles(PathHelper::activeDirAbsolute(), $files);
+        self::createFiles(PathTestHelper::activeDirAbsolute(), $files);
         $sut = $this->createSut();
 
-        $actual = $sut->find(PathHelper::activeDirPath(), ...$exclusions);
+        $actual = $sut->find(PathTestHelper::activeDirPath(), ...$exclusions);
 
         self::assertArrayEquals($expected, $actual);
     }
@@ -176,10 +176,10 @@ final class FileFinderFunctionalTest extends TestCase
             'middle.txt',
             'zz_last.txt',
         ]);
-        self::createFiles(PathHelper::activeDirAbsolute(), $given);
+        self::createFiles(PathTestHelper::activeDirAbsolute(), $given);
         $sut = $this->createSut();
 
-        $actual = $sut->find(PathHelper::activeDirPath());
+        $actual = $sut->find(PathTestHelper::activeDirPath());
 
         self::assertSame($expected, $actual);
     }

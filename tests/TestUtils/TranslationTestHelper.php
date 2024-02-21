@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-final class TranslationHelper
+final class TranslationTestHelper
 {
     public const DEFAULT_DOMAIN = 'messages';
     public const EXCEPTIONS_DOMAIN = 'exceptions';

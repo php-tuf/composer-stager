@@ -2,15 +2,13 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
+use org\bovigo\vfs\vfsStream;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
-use Symfony\Component\Filesystem\Path as SymfonyPath;
+use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 
-final class PathHelper
+final class VfsTestHelper
 {
-    private const TEST_ENV = 'var/phpunit/test-env';
-    private const FRESH_FIXTURES_DIR = 'fresh-fixtures';
-    private const PERSISTENT_FIXTURES_DIR = 'persistent-fixtures';
+    private const ROOT_DIR = 'vfs://root/';
     private const ACTIVE_DIR = 'active-dir';
     private const STAGING_DIR = 'staging-dir';
     private const SOURCE_DIR = 'source-dir';
@@ -20,24 +18,24 @@ final class PathHelper
     private const NON_EXISTENT_DIR = 'non-existent-dir';
     private const NON_EXISTENT_FILE = 'non-existent-file.txt';
 
-    public static function repositoryRootAbsolute(): string
+    public static function setup(): void
     {
-        return dirname(__DIR__, 2);
+        vfsStream::setup();
     }
 
-    private static function testEnvAbsolute(): string
+    public static function createPath(string $path, string $basePath = self::ROOT_DIR): PathInterface
     {
-        return self::makeAbsolute(self::TEST_ENV, self::repositoryRootAbsolute());
+        return new Path($path, new Path(self::ROOT_DIR));
     }
 
-    public static function testFreshFixturesDirAbsolute(): string
+    public static function rootDirAbsolute(): string
     {
-        return self::makeAbsolute(self::FRESH_FIXTURES_DIR, self::testEnvAbsolute());
+        return self::ROOT_DIR;
     }
 
-    public static function testPersistentFixturesAbsolute(): string
+    public static function rootDirPath(): PathInterface
     {
-        return self::makeAbsolute(self::PERSISTENT_FIXTURES_DIR, self::testEnvAbsolute());
+        return self::createPath(self::ROOT_DIR);
     }
 
     public static function activeDirRelative(): string
@@ -160,90 +158,8 @@ final class PathHelper
         return self::createPath(self::nonExistentFileAbsolute());
     }
 
-    public static function createPath(string $path, ?string $basePath = null): PathInterface
+    private static function makeAbsolute(string $path): string
     {
-        $basePath ??= self::testFreshFixturesDirAbsolute();
-        $basePath = self::pathFactory()->create($basePath);
-
-        return self::pathFactory()->create($path, $basePath);
-    }
-
-    public static function canonicalize(string $path): string
-    {
-        $path = SymfonyPath::canonicalize($path);
-
-        return (string) preg_replace('#/+#', DIRECTORY_SEPARATOR, $path);
-    }
-
-    public static function isAbsolute(string $path): bool
-    {
-        return SymfonyPath::isAbsolute($path);
-    }
-
-    public static function makeAbsolute(string $path, ?string $basePath = null): string
-    {
-        $basePath ??= self::testFreshFixturesDirAbsolute();
-        $absolute = SymfonyPath::makeAbsolute($path, $basePath);
-
-        return self::canonicalize($absolute);
-    }
-
-    /** @phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
-    public static function fixSeparatorsMultiple(&...$paths): void
-    {
-        foreach ($paths as &$path) {
-            $path = self::fixSeparators($path);
-        }
-    }
-
-    public static function fixSeparators(string $path): string
-    {
-        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
-    }
-
-    /**
-     * Ensures that the given path ends with a slash (directory separator).
-     *
-     * @param string $path
-     *   Any path, absolute or relative, existing or not.
-     */
-    public static function ensureTrailingSlash(string $path): string
-    {
-        if ($path === '') {
-            $path = '.';
-        }
-
-        return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Strips the trailing slash (directory separator) from a given path.
-     *
-     * @param string $path
-     *   Any path, absolute or relative, existing or not. Empty paths and device
-     *   roots will be returned unchanged. Remote paths and UNC (Universal
-     *   Naming Convention) paths are not supported. No validation is done to
-     *   ensure that given paths are valid.
-     */
-    public static function stripTrailingSlash(string $path): string
-    {
-        // Don't change a Windows drive letter root path, e.g., "C:\".
-        if (preg_match('/^[a-z]:\\\\?$/i', $path) === 1) {
-            return $path;
-        }
-
-        $trimmedPath = rtrim($path, '/\\');
-
-        // Don't change a UNIX-like root path.
-        if ($trimmedPath === '') {
-            return $path;
-        }
-
-        return $trimmedPath;
-    }
-
-    public static function pathFactory(): PathFactory
-    {
-        return new PathFactory();
+        return self::ROOT_DIR . $path;
     }
 }

@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory */
 final class PathFactoryUnitTest extends TestCase
@@ -37,8 +37,8 @@ final class PathFactoryUnitTest extends TestCase
             'Simple values' => [
                 'string' => 'test.txt',
                 'expected' => new Path('test.txt'),
-                'basePath' => PathHelper::createPath('/var/www'),
-                'expectedWithBaseDir' => new Path('test.txt', PathHelper::createPath('/var/www')),
+                'basePath' => PathTestHelper::createPath('/var/www'),
+                'expectedWithBaseDir' => new Path('test.txt', PathTestHelper::createPath('/var/www')),
             ],
         ];
     }

@@ -14,7 +14,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -139,14 +139,14 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 'executableName' => 'one',
                 'givenRunArguments' => [
                     ['two', 'three', 'four'],
-                    PathHelper::arbitraryDirPath(),
+                    PathTestHelper::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                     new TestOutputCallback(),
                     100,
                 ],
                 'expectedFactoryArguments' => [
                     ['one', 'two', 'three', 'four'],
-                    PathHelper::arbitraryDirPath(),
+                    PathTestHelper::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                 ],
                 'callback' => new TestOutputCallback(),

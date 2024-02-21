@@ -4,9 +4,9 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
@@ -19,7 +19,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
 {
     protected function createSut(): NoAbsoluteSymlinksExist
     {
-        return ContainerHelper::get(NoAbsoluteSymlinksExist::class);
+        return ContainerTestHelper::get(NoAbsoluteSymlinksExist::class);
     }
 
     /**
@@ -29,10 +29,10 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testDoesNotContainLinks(array $files): void
     {
-        self::createFiles(PathHelper::activeDirAbsolute(), $files);
+        self::createFiles(PathTestHelper::activeDirAbsolute(), $files);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Found no links.');
     }
@@ -66,18 +66,18 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testAbsoluteLinksExist(string $dirName, string $basePath, string $link): void
     {
-        $linkAbsolute = PathHelper::makeAbsolute($link, $basePath);
+        $linkAbsolute = PathTestHelper::makeAbsolute($link, $basePath);
         $targetRelative = 'target.txt';
-        $targetAbsolute = PathHelper::makeAbsolute($targetRelative, $basePath);
+        $targetAbsolute = PathTestHelper::makeAbsolute($targetRelative, $basePath);
         $parentDir = dirname($linkAbsolute);
         @mkdir($parentDir, 0777, true);
-        FilesystemHelper::touch($targetAbsolute);
+        FilesystemTestHelper::touch($targetAbsolute);
         // Point at the absolute target path.
         symlink($targetAbsolute, $linkAbsolute);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        $statusMessage = $sut->getStatusMessage(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+        $statusMessage = $sut->getStatusMessage(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertFalse($isFulfilled, 'Found absolute links.');
         $pattern = sprintf(
@@ -96,18 +96,18 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testOnlyRelativeLinksExist(string $dirName, string $basePath, string $link): void
     {
-        $linkAbsolute = PathHelper::makeAbsolute($link, $basePath);
+        $linkAbsolute = PathTestHelper::makeAbsolute($link, $basePath);
         $targetRelative = 'target.txt';
-        $targetAbsolute = PathHelper::makeAbsolute($targetRelative, $basePath);
+        $targetAbsolute = PathTestHelper::makeAbsolute($targetRelative, $basePath);
         $parentDirAbsolute = dirname($linkAbsolute);
         @mkdir($parentDirAbsolute, 0777, true);
-        FilesystemHelper::touch($targetAbsolute);
+        FilesystemTestHelper::touch($targetAbsolute);
         chdir($parentDirAbsolute);
         // Point at the relative target path.
         symlink($targetRelative, $linkAbsolute);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Ignored relative links.');
     }
@@ -117,32 +117,32 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         return [
             'Active directory: root' => [
                 'dirName' => 'active',
-                'basePath' => PathHelper::activeDirAbsolute(),
+                'basePath' => PathTestHelper::activeDirAbsolute(),
                 'link' => 'symlink.txt',
             ],
             'Active directory: subdir' => [
                 'dirName' => 'active',
-                'basePath' => PathHelper::activeDirAbsolute(),
+                'basePath' => PathTestHelper::activeDirAbsolute(),
                 'link' => 'one/symlink.txt',
             ],
             'Active directory: subdir with depth' => [
                 'dirName' => 'active',
-                'basePath' => PathHelper::activeDirAbsolute(),
+                'basePath' => PathTestHelper::activeDirAbsolute(),
                 'link' => 'one/two/three/four/five/symlink.txt',
             ],
             'Staging directory: root' => [
                 'dirName' => 'staging',
-                'basePath' => PathHelper::stagingDirAbsolute(),
+                'basePath' => PathTestHelper::stagingDirAbsolute(),
                 'link' => 'symlink.txt',
             ],
             'Staging directory: subdir' => [
                 'dirName' => 'staging',
-                'basePath' => PathHelper::stagingDirAbsolute(),
+                'basePath' => PathTestHelper::stagingDirAbsolute(),
                 'link' => 'one/symlink.txt',
             ],
             'Staging directory: subdir with depth' => [
                 'dirName' => 'staging',
-                'basePath' => PathHelper::stagingDirAbsolute(),
+                'basePath' => PathTestHelper::stagingDirAbsolute(),
                 'link' => 'one/two/three/four/five/symlink.txt',
             ],
         ];
@@ -151,15 +151,15 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
     /** @covers ::assertIsSupportedFile */
     public function testWithHardLink(): void
     {
-        $link = PathHelper::makeAbsolute('link.txt', PathHelper::activeDirAbsolute());
-        $target = PathHelper::makeAbsolute('target.txt', PathHelper::activeDirAbsolute());
+        $link = PathTestHelper::makeAbsolute('link.txt', PathTestHelper::activeDirAbsolute());
+        $target = PathTestHelper::makeAbsolute('target.txt', PathTestHelper::activeDirAbsolute());
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
-        FilesystemHelper::touch($target);
+        FilesystemTestHelper::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
@@ -174,12 +174,12 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = PathHelper::activeDirAbsolute();
+        $dirPath = PathTestHelper::activeDirAbsolute();
         self::createFile($dirPath, $targetFile);
-        FilesystemHelper::createSymlinks($dirPath, $links);
+        FilesystemTestHelper::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), $exclusions);
 
         self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }

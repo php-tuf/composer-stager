@@ -6,12 +6,12 @@ use Generator;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /** @coversNothing */
-final class PathHelperUnitTest extends TestCase
+final class PathTestHelperUnitTest extends TestCase
 {
     /** @dataProvider providerFixSeparatorsMultiple */
     public function testFixSeparatorsMultiple(array $paths, array $expected): void
     {
-        PathHelper::fixSeparatorsMultiple(...$paths);
+        PathTestHelper::fixSeparatorsMultiple(...$paths);
 
         self::assertSame($expected, $paths);
     }
@@ -28,7 +28,7 @@ final class PathHelperUnitTest extends TestCase
             'expected' => ['simple'],
         ];
 
-        if (EnvironmentHelper::isWindows()) {
+        if (EnvironmentTestHelper::isWindows()) {
             yield 'Single path with depth' => [
                 'paths' => ['one/two'],
                 'expected' => ['one\\two'],

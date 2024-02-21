@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -79,8 +79,8 @@ final class RsyncFileSyncerUnitTest extends TestCase
         array $expectedCommand,
         ?OutputCallbackInterface $expectedCallback,
     ): void {
-        $sourcePath = PathHelper::createPath($source);
-        $destinationPath = PathHelper::createPath($destination);
+        $sourcePath = PathTestHelper::createPath($source);
+        $destinationPath = PathTestHelper::createPath($destination);
 
         $this->filesystem
             ->mkdir($destinationPath)
@@ -242,7 +242,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
+            $sut->sync(PathTestHelper::sourceDirPath(), PathTestHelper::destinationDirPath());
         }, $thrownException, $caughtException->getMessage(), null, $caughtException::class);
     }
 
@@ -268,12 +268,12 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $message = new TestTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->mkdir(PathHelper::destinationDirPath())
+            ->mkdir(PathTestHelper::destinationDirPath())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
+            $sut->sync(PathTestHelper::sourceDirPath(), PathTestHelper::destinationDirPath());
         }, IOException::class, $message);
     }
 }

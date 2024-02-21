@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses
@@ -16,7 +16,7 @@ final class HostSupportsRunningProcessesFunctionalTest extends TestCase
 {
     private function createSut(): HostSupportsRunningProcesses
     {
-        return ContainerHelper::get(HostSupportsRunningProcesses::class);
+        return ContainerTestHelper::get(HostSupportsRunningProcesses::class);
     }
 
     /**
@@ -43,7 +43,7 @@ final class HostSupportsRunningProcessesFunctionalTest extends TestCase
 
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
         self::assertFalse($isFulfilled, 'Detected lack of support for running processes.');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-final class EnvironmentHelper
+final class EnvironmentTestHelper
 {
     public static function isWindows(): bool
     {

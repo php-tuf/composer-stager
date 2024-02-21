@@ -5,15 +5,15 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemHelper::createDirectories(PathHelper::stagingDirRelative());
+        FilesystemTestHelper::createDirectories(PathTestHelper::stagingDirRelative());
     }
 
     protected function tearDown(): void
@@ -49,15 +49,15 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = PathHelper::nonExistentDirPath();
+        $nonexistentDir = PathTestHelper::nonExistentDirPath();
 
         return [
             'Active directory' => [
                 'activeDir' => $nonexistentDir,
-                'stagingDir' => PathHelper::stagingDirPath(),
+                'stagingDir' => PathTestHelper::stagingDirPath(),
             ],
             'Staging directory' => [
-                'activeDir' => PathHelper::activeDirPath(),
+                'activeDir' => PathTestHelper::activeDirPath(),
                 'stagingDir' => $nonexistentDir,
             ],
         ];
@@ -74,7 +74,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }

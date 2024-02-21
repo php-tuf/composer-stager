@@ -16,7 +16,7 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
@@ -105,8 +105,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
             }
         };
 
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
@@ -118,8 +118,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
     /** @covers ::doAssertIsFulfilled */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $this->filesystem
             ->fileExists($activeDirPath)
@@ -135,8 +135,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
     /** @covers ::doAssertIsFulfilled */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $this->filesystem
             ->fileExists($stagingDirPath)
@@ -152,8 +152,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
     /** @covers ::doAssertIsFulfilled */
     public function testNoFilesFound(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
@@ -173,8 +173,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
      */
     public function testFileFinderExceptions(ExceptionInterface $previous): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))

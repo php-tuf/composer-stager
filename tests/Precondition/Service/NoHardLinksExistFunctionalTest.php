@@ -5,9 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -19,19 +19,19 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 {
     protected function createSut(): NoHardLinksExist
     {
-        return ContainerHelper::get(NoHardLinksExist::class);
+        return ContainerTestHelper::get(NoHardLinksExist::class);
     }
 
     /** @covers ::assertIsSupportedFile */
     public function testFulfilledWithSymlink(): void
     {
-        $target = Path::makeAbsolute('target.txt', PathHelper::activeDirAbsolute());
-        $link = Path::makeAbsolute('link.txt', PathHelper::activeDirAbsolute());
-        FilesystemHelper::touch($target);
+        $target = Path::makeAbsolute('target.txt', PathTestHelper::activeDirAbsolute());
+        $link = Path::makeAbsolute('link.txt', PathTestHelper::activeDirAbsolute());
+        FilesystemTestHelper::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Allowed symlink.');
     }
@@ -43,9 +43,9 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
      */
     public function testUnfulfilled(string $directory, string $dirName): void
     {
-        $target = PathHelper::makeAbsolute('target.txt', $directory);
-        $link = PathHelper::makeAbsolute('link.txt', $directory);
-        FilesystemHelper::touch($target);
+        $target = PathTestHelper::makeAbsolute('target.txt', $directory);
+        $link = PathTestHelper::makeAbsolute('link.txt', $directory);
+        FilesystemTestHelper::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
@@ -56,7 +56,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
             $link,
         );
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+            $sut->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
         }, PreconditionException::class, $message);
     }
 
@@ -64,11 +64,11 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         return [
             'In active directory' => [
-                'directory' => PathHelper::activeDirAbsolute(),
+                'directory' => PathTestHelper::activeDirAbsolute(),
                 'dirName' => 'active',
             ],
             'In staging directory' => [
-                'directory' => PathHelper::stagingDirAbsolute(),
+                'directory' => PathTestHelper::stagingDirAbsolute(),
                 'dirName' => 'staging',
             ],
         ];
@@ -89,12 +89,12 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
 
         $links = array_fill_keys($links, $targetFile);
         $exclusions = new PathList(...$exclusions);
-        $dirPath = PathHelper::activeDirAbsolute();
+        $dirPath = PathTestHelper::activeDirAbsolute();
         self::createFile($dirPath, $targetFile);
-        FilesystemHelper::createHardlinks($dirPath, $links);
+        FilesystemTestHelper::createHardlinks($dirPath, $links);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), $exclusions);
 
         self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }

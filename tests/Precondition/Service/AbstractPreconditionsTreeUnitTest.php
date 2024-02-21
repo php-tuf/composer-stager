@@ -11,7 +11,7 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestFulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestUnfulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
@@ -74,8 +74,8 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
      */
     public function testBasicFunctionality(string $class, ?PathListInterface $exclusions, int $timeout): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         // Pass a mock child into the SUT so the behavior of ::assertIsFulfilled
         // can be controlled indirectly, without overriding the method on the SUT
@@ -172,8 +172,8 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
         );
         // @phpcs:enable
 
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = PathTestHelper::stagingDirPath();
 
         self::assertFalse($sut->isFulfilled($activeDirPath, $stagingDirPath), 'Unfulfilled leaf status bubbled up properly.');
         self::assertSame($leaves, $sut->getLeaves());

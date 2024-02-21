@@ -14,8 +14,8 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -65,7 +65,7 @@ final class FilesystemUnitTest extends TestCase
     public function testChmodFailure(): void
     {
         $permissions = 777;
-        $pathAbsolute = PathHelper::arbitraryFileAbsolute();
+        $pathAbsolute = PathTestHelper::arbitraryFileAbsolute();
         $this->symfonyFilesystem
             ->exists(Argument::any())
             ->willReturn(true);
@@ -85,7 +85,7 @@ final class FilesystemUnitTest extends TestCase
 
         $message = sprintf('The file mode could not be changed on %s.', $pathAbsolute);
         self::assertTranslatableException(static function () use ($sut, $permissions): void {
-            $sut->chmod(PathHelper::arbitraryFilePath(), $permissions);
+            $sut->chmod(PathTestHelper::arbitraryFilePath(), $permissions);
         }, IOException::class, $message);
     }
 
@@ -98,7 +98,7 @@ final class FilesystemUnitTest extends TestCase
     {
         $this->pathFactory
             ->create(Argument::cetera())
-            ->willReturn(PathHelper::createPath(PathHelper::arbitraryFileAbsolute()));
+            ->willReturn(PathTestHelper::createPath(PathTestHelper::arbitraryFileAbsolute()));
         BuiltinFunctionMocker::mock([
             'chmod' => $this->prophesize(TestSpyInterface::class),
             'copy' => $this->prophesize(TestSpyInterface::class),
@@ -119,9 +119,9 @@ final class FilesystemUnitTest extends TestCase
             ->willReturn(12_345);
         $sut = $this->createSut();
 
-        $message = sprintf('The file mode could not be changed on %s.', PathHelper::destinationDirAbsolute());
+        $message = sprintf('The file mode could not be changed on %s.', PathTestHelper::destinationDirAbsolute());
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->copy(PathHelper::activeDirPath(), PathHelper::destinationDirPath());
+            $sut->copy(PathTestHelper::activeDirPath(), PathTestHelper::destinationDirPath());
         }, IOException::class, $message);
     }
 
@@ -131,7 +131,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testCopyDirectoriesTheSame(): void
     {
-        $samePath = PathHelper::activeDirPath();
+        $samePath = PathTestHelper::activeDirPath();
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination files cannot be the same at %s', $samePath->absolute());
@@ -147,8 +147,8 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testFileModeFailure(): void
     {
-        $path = PathHelper::arbitraryFilePath();
-        FilesystemHelper::touch($path->absolute());
+        $path = PathTestHelper::arbitraryFilePath();
+        FilesystemTestHelper::touch($path->absolute());
         BuiltinFunctionMocker::mock(['fileperms' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['fileperms']
             ->report($path->absolute())
@@ -176,12 +176,12 @@ final class FilesystemUnitTest extends TestCase
     {
         BuiltinFunctionMocker::mock(['is_writable' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['is_writable']
-            ->report(PathHelper::arbitraryFileAbsolute())
+            ->report(PathTestHelper::arbitraryFileAbsolute())
             ->shouldBeCalledOnce()
             ->willReturn($expected);
         $sut = $this->createSut();
 
-        $actual = $sut->isWritable(PathHelper::arbitraryFilePath());
+        $actual = $sut->isWritable(PathTestHelper::arbitraryFilePath());
 
         self::assertSame($expected, $actual, 'Got correct writable status.');
     }
@@ -206,16 +206,16 @@ final class FilesystemUnitTest extends TestCase
             'mkdir' => $this->prophesize(TestSpyInterface::class),
         ]);
         BuiltinFunctionMocker::$spies['is_dir']
-            ->report(PathHelper::arbitraryDirAbsolute())
+            ->report(PathTestHelper::arbitraryDirAbsolute())
             ->shouldBeCalledOnce()
             ->willReturn(true);
         BuiltinFunctionMocker::$spies['mkdir']
-            ->report(PathHelper::arbitraryDirAbsolute())
+            ->report(PathTestHelper::arbitraryDirAbsolute())
             ->shouldBeCalledOnce()
             ->willReturn(true);
         $sut = $this->createSut();
 
-        $sut->mkdir(PathHelper::arbitraryDirPath());
+        $sut->mkdir(PathTestHelper::arbitraryDirPath());
     }
 
     /**
@@ -225,7 +225,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testMkdirFailure(): void
     {
-        $dirAbsolute = PathHelper::arbitraryDirAbsolute();
+        $dirAbsolute = PathTestHelper::arbitraryDirAbsolute();
         BuiltinFunctionMocker::mock([
             'is_dir' => $this->prophesize(TestSpyInterface::class),
             'mkdir' => $this->prophesize(TestSpyInterface::class),
@@ -241,7 +241,7 @@ final class FilesystemUnitTest extends TestCase
 
         $message = sprintf('Failed to create directory at %s', $dirAbsolute);
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->mkdir(PathHelper::arbitraryDirPath());
+            $sut->mkdir(PathTestHelper::arbitraryDirPath());
         }, IOException::class, $message);
     }
 
@@ -254,7 +254,7 @@ final class FilesystemUnitTest extends TestCase
     {
         $this->environment->setTimeLimit($timeout)
             ->shouldBeCalledOnce();
-        $stagingDir = PathHelper::createPath($path);
+        $stagingDir = PathTestHelper::createPath($path);
         $this->symfonyFilesystem
             ->remove($stagingDir->absolute())
             ->shouldBeCalledOnce();
@@ -290,7 +290,7 @@ final class FilesystemUnitTest extends TestCase
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->rm(PathHelper::stagingDirPath());
+            $sut->rm(PathTestHelper::stagingDirPath());
         }, IOException::class, $message, null, $previous::class);
     }
 
@@ -303,7 +303,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testTouch(string $filename, array $givenArguments, array $expectedArguments): void
     {
-        $path = PathHelper::createPath($filename);
+        $path = PathTestHelper::createPath($filename);
         BuiltinFunctionMocker::mock(['touch' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['touch']
             ->report($path->absolute(), ...$expectedArguments)
@@ -357,7 +357,7 @@ final class FilesystemUnitTest extends TestCase
      */
     public function testTouchFailure(): void
     {
-        $path = PathHelper::arbitraryFilePath();
+        $path = PathTestHelper::arbitraryFilePath();
         BuiltinFunctionMocker::mock(['touch' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['touch']
             ->report(Argument::cetera())

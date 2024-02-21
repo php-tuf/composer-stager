@@ -8,9 +8,9 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\FileSyncer\Factory\PhpFileSyncerFactory;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory
@@ -22,7 +22,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
 {
     protected function createSut(): NoSymlinksPointToADirectory
     {
-        $container = ContainerHelper::container();
+        $container = ContainerTestHelper::container();
 
         // Override the FileSyncerFactory implementation to always return a PhpFileSyncer.
         $fileSyncerFactory = $container->getDefinition(FileSyncerFactory::class);
@@ -41,15 +41,15 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testFulfilledWithValidLink(): void
     {
-        $parentDir = PathHelper::activeDirAbsolute();
-        $link = PathHelper::makeAbsolute('link.txt', $parentDir);
-        $target = PathHelper::makeAbsolute('target.txt', $parentDir);
-        FilesystemHelper::ensureParentDirectory($link);
-        FilesystemHelper::touch($target);
+        $parentDir = PathTestHelper::activeDirAbsolute();
+        $link = PathTestHelper::makeAbsolute('link.txt', $parentDir);
+        $target = PathTestHelper::makeAbsolute('target.txt', $parentDir);
+        FilesystemTestHelper::ensureParentDirectory($link);
+        FilesystemTestHelper::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Allowed link pointing within the codebase.');
     }
@@ -62,9 +62,9 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
      */
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
-        $target = PathHelper::makeAbsolute('target_directory', $targetDir);
-        $link = PathHelper::makeAbsolute('directory_link', $linkDir);
-        FilesystemHelper::createDirectories($target);
+        $target = PathTestHelper::makeAbsolute('target_directory', $targetDir);
+        $link = PathTestHelper::makeAbsolute('directory_link', $linkDir);
+        FilesystemTestHelper::createDirectories($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -75,7 +75,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
             $link,
         );
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+            $sut->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
         }, PreconditionException::class, $message);
     }
 
@@ -83,13 +83,13 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     {
         return [
             'In active directory' => [
-                'targetDir' => PathHelper::testFreshFixturesDirAbsolute(),
-                'linkDir' => PathHelper::activeDirAbsolute(),
+                'targetDir' => PathTestHelper::testFreshFixturesDirAbsolute(),
+                'linkDir' => PathTestHelper::activeDirAbsolute(),
                 'linkDirName' => 'active',
             ],
             'In staging directory' => [
-                'targetDir' => PathHelper::testFreshFixturesDirAbsolute(),
-                'linkDir' => PathHelper::stagingDirAbsolute(),
+                'targetDir' => PathTestHelper::testFreshFixturesDirAbsolute(),
+                'linkDir' => PathTestHelper::stagingDirAbsolute(),
                 'linkDirName' => 'staging',
             ],
         ];
@@ -104,14 +104,14 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetDirRelative = 'target_directory';
-        $targetDirAbsolute = PathHelper::makeAbsolute($targetDirRelative, PathHelper::activeDirAbsolute());
-        FilesystemHelper::createDirectories($targetDirAbsolute);
+        $targetDirAbsolute = PathTestHelper::makeAbsolute($targetDirRelative, PathTestHelper::activeDirAbsolute());
+        FilesystemTestHelper::createDirectories($targetDirAbsolute);
         $links = array_fill_keys($links, $targetDirRelative);
         $exclusions = new PathList(...$exclusions);
-        FilesystemHelper::createSymlinks(PathHelper::activeDirAbsolute(), $links);
+        FilesystemTestHelper::createSymlinks(PathTestHelper::activeDirAbsolute(), $links);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);
+        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), $exclusions);
 
         self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }

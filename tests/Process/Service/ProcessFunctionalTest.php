@@ -6,14 +6,14 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /** @coversNothing */
 final class ProcessFunctionalTest extends TestCase
 {
     private function createSut(array $command): ProcessInterface
     {
-        $factory = ContainerHelper::get(ProcessFactory::class);
+        $factory = ContainerTestHelper::get(ProcessFactory::class);
         assert($factory instanceof ProcessFactory);
 
         return $factory->create($command);

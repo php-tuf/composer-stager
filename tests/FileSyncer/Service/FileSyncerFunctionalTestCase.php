@@ -5,17 +5,17 @@ namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        FilesystemHelper::createDirectories([
-            PathHelper::sourceDirAbsolute(),
-            PathHelper::destinationDirAbsolute(),
+        FilesystemTestHelper::createDirectories([
+            PathTestHelper::sourceDirAbsolute(),
+            PathTestHelper::destinationDirAbsolute(),
         ]);
     }
 
@@ -26,7 +26,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 
     final protected function createSut(): FileSyncerInterface
     {
-        return ContainerHelper::get($this->fileSyncerClass());
+        return ContainerTestHelper::get($this->fileSyncerClass());
     }
 
     abstract protected function fileSyncerClass(): string;
@@ -51,14 +51,14 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         array $givenFiles,
         array $expectedFiles,
     ): void {
-        $sourceDirPath = PathHelper::createPath($sourceDirRelative);
-        $destinationDirPath = PathHelper::createPath($destinationDirRelative);
-        self::createFiles(PathHelper::testFreshFixturesDirAbsolute(), $givenFiles);
+        $sourceDirPath = PathTestHelper::createPath($sourceDirRelative);
+        $destinationDirPath = PathTestHelper::createPath($destinationDirRelative);
+        self::createFiles(PathTestHelper::testFreshFixturesDirAbsolute(), $givenFiles);
         $sut = $this->createSut();
 
         $sut->sync($sourceDirPath, $destinationDirPath);
 
-        self::assertDirectoryListing(PathHelper::testFreshFixturesDirAbsolute(), $expectedFiles);
+        self::assertDirectoryListing(PathTestHelper::testFreshFixturesDirAbsolute(), $expectedFiles);
     }
 
     public function providerBasicFunctionality(): array
@@ -163,7 +163,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceAndDestinationAreDifferent */
     public function testSyncDirectoriesTheSame(): void
     {
-        $samePath = PathHelper::arbitraryDirPath();
+        $samePath = PathTestHelper::arbitraryDirPath();
         $sut = $this->createSut();
 
         $message = sprintf('The source and destination directories cannot be the same at %s', $samePath->absolute());
@@ -181,7 +181,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath(), null, null, $timeout);
+        $sut->sync(PathTestHelper::sourceDirPath(), PathTestHelper::destinationDirPath(), null, null, $timeout);
 
         self::assertSame((string) $timeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
@@ -198,17 +198,17 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers ::sync */
     public function testSyncWithDirectorySymlinks(): void
     {
-        $link = PathHelper::makeAbsolute('link', PathHelper::sourceDirAbsolute());
-        $target = PathHelper::makeAbsolute('directory', PathHelper::sourceDirAbsolute());
-        FilesystemHelper::createDirectories($target);
-        $file = PathHelper::makeAbsolute('directory/file.txt', PathHelper::sourceDirAbsolute());
-        FilesystemHelper::touch($file);
+        $link = PathTestHelper::makeAbsolute('link', PathTestHelper::sourceDirAbsolute());
+        $target = PathTestHelper::makeAbsolute('directory', PathTestHelper::sourceDirAbsolute());
+        FilesystemTestHelper::createDirectories($target);
+        $file = PathTestHelper::makeAbsolute('directory/file.txt', PathTestHelper::sourceDirAbsolute());
+        FilesystemTestHelper::touch($file);
         symlink($target, $link);
         $sut = $this->createSut();
 
-        $sut->sync(PathHelper::sourceDirPath(), PathHelper::destinationDirPath());
+        $sut->sync(PathTestHelper::sourceDirPath(), PathTestHelper::destinationDirPath());
 
-        self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [
+        self::assertDirectoryListing(PathTestHelper::destinationDirAbsolute(), [
             'link',
             'directory/file.txt',
         ], '', 'Correctly synced files, including a symlink to a directory.');
@@ -217,8 +217,8 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists */
     public function testSourceDoesNotExist(): void
     {
-        $sourcePath = PathHelper::nonExistentDirPath();
-        $destinationPath = PathHelper::arbitraryDirPath();
+        $sourcePath = PathTestHelper::nonExistentDirPath();
+        $destinationPath = PathTestHelper::arbitraryDirPath();
 
         $sut = $this->createSut();
 
@@ -231,10 +231,10 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists */
     public function testSourceIsNotADirectory(): void
     {
-        $sourcePath = PathHelper::arbitraryFilePath();
-        $destinationPath = PathHelper::arbitraryDirPath();
+        $sourcePath = PathTestHelper::arbitraryFilePath();
+        $destinationPath = PathTestHelper::arbitraryDirPath();
 
-        FilesystemHelper::touch($sourcePath->absolute());
+        FilesystemTestHelper::touch($sourcePath->absolute());
         $sut = $this->createSut();
 
         $message = sprintf('The source directory is not actually a directory at %s', $sourcePath->absolute());
