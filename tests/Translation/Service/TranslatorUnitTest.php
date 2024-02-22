@@ -34,7 +34,7 @@ final class TranslatorUnitTest extends TestCase
     {
         $this->domainOptions = TranslationTestHelper::createDomainOptions();
         $this->localeOptions = TranslationTestHelper::createLocaleOptions();
-        $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
+        $this->symfonyTranslatorProxy = TranslationTestHelper::createSymfonyTranslatorProxy();
         $this->translatableFactory = TranslationTestHelper::createTranslatableFactory();
     }
 
