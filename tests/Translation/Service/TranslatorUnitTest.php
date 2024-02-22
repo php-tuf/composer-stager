@@ -16,7 +16,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInt
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestLocaleOptions;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -253,5 +252,19 @@ final class TranslatorUnitTest extends TestCase
             'Error' => [new Error('An Error')],
             'LogicException' => [new LogicException('A LogicException')],
         ];
+    }
+}
+
+final class TestLocaleOptions implements LocaleOptionsInterface
+{
+    public const DEFAULT = 'en_US';
+
+    public function __construct(private readonly string $default = self::DEFAULT)
+    {
+    }
+
+    public function default(): string
+    {
+        return $this->default;
     }
 }

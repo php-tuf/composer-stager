@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestLocaleOptions;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy */
 final class SymfonyTranslatorProxyTest extends TestCase
@@ -25,7 +25,7 @@ final class SymfonyTranslatorProxyTest extends TestCase
         $actualLocale = $sut->getLocale();
 
         self::assertEquals($expectedTranslation, $actualTranslation, 'Returned correct translation.');
-        self::assertEquals(TestLocaleOptions::DEFAULT, $actualLocale, 'Got correct default locale.');
+        self::assertEquals(TranslationTestHelper::LOCALE_DEFAULT, $actualLocale, 'Got correct default locale.');
     }
 
     public function providerBasicFunctionality(): array
