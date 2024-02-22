@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -89,12 +88,12 @@ final class TranslatableMessageUnitTest extends TestCase
             'Simple values' => [
                 'message' => 'Simple values',
                 'givenOptionalConstructorArguments' => [
-                    'parameters' => new TestTranslationParameters(),
+                    'parameters' => TranslationTestHelper::createTranslationParameters(),
                     'domain' => 'a_domain',
                 ],
                 'expectedTransArguments' => [
                     'message' => 'Simple values',
-                    'parameters' => new TestTranslationParameters(),
+                    'parameters' => TranslationTestHelper::createTranslationParameters(),
                     'domain' => 'a_domain',
                     'locale' => 'a_locale',
                 ],
@@ -104,11 +103,11 @@ final class TranslatableMessageUnitTest extends TestCase
             'Simple substitution' => [
                 'message' => 'A %mood string',
                 'givenOptionalConstructorArguments' => [
-                    'parameters' => new TestTranslationParameters(['%mood' => 'happy']),
+                    'parameters' => TranslationTestHelper::createTranslationParameters(['%mood' => 'happy']),
                 ],
                 'expectedTransArguments' => [
                     'message' => 'A %mood string',
-                    'parameters' => new TestTranslationParameters(['%mood' => 'happy']),
+                    'parameters' => TranslationTestHelper::createTranslationParameters(['%mood' => 'happy']),
                     'domain' => null,
                     'locale' => null,
                 ],
@@ -118,14 +117,14 @@ final class TranslatableMessageUnitTest extends TestCase
             'Multiple substitutions' => [
                 'message' => 'A %mood %size string',
                 'givenOptionalConstructorArguments' => [
-                    'parameters' => new TestTranslationParameters([
+                    'parameters' => TranslationTestHelper::createTranslationParameters([
                         '%mood' => 'happy',
                         '%size' => 'little',
                     ]),
                 ],
                 'expectedTransArguments' => [
                     'message' => 'A %mood %size string',
-                    'parameters' => new TestTranslationParameters([
+                    'parameters' => TranslationTestHelper::createTranslationParameters([
                         '%mood' => 'happy',
                         '%size' => 'little',
                     ]),

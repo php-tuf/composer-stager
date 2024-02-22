@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory */
@@ -67,13 +66,13 @@ final class TranslatableFactoryUnitTest extends TestCase
             'Simple values' => [
                 'givenCreateMessageArguments' => [
                     'message' => 'Simple values',
-                    'translationParameters' => new TestTranslationParameters(),
+                    'translationParameters' => TranslationTestHelper::createTranslationParameters(),
                     'domain' => 'domain',
                 ],
                 'expectedMessage' => new TranslatableMessage(
                     'Simple values',
                     TranslationTestHelper::createTranslator(),
-                    new TestTranslationParameters(),
+                    TranslationTestHelper::createTranslationParameters(),
                     'domain',
                 ),
             ],

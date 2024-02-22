@@ -17,7 +17,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestLocaleOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -78,28 +77,28 @@ final class TranslatorUnitTest extends TestCase
         return [
             'Empty values' => [
                 'message' => '',
-                'parameters' => new TestTranslationParameters(),
+                'parameters' => TranslationTestHelper::createTranslationParameters(),
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => '',
             ],
             'Simple values' => [
                 'message' => 'A string',
-                'parameters' => new TestTranslationParameters(),
+                'parameters' => TranslationTestHelper::createTranslationParameters(),
                 'domain' => 'a_domain',
                 'locale' => 'a_locale',
                 'expectedTranslation' => 'A string',
             ],
             'Simple substitution' => [
                 'message' => 'A %mood string',
-                'parameters' => new TestTranslationParameters(['%mood' => 'happy']),
+                'parameters' => TranslationTestHelper::createTranslationParameters(['%mood' => 'happy']),
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => 'A happy string',
             ],
             'Multiple substitutions' => [
                 'message' => 'A %mood %size string',
-                'parameters' => new TestTranslationParameters([
+                'parameters' => TranslationTestHelper::createTranslationParameters([
                     '%mood' => 'happy',
                     '%size' => 'little',
                 ]),
