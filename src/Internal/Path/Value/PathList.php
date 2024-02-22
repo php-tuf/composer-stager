@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Path\Value;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
-use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 
 /**
  * @package Path
@@ -15,7 +15,7 @@ final class PathList implements PathListInterface
     /** @var array<string> */
     private array $paths;
 
-    public function __construct(string ...$paths)
+    public function __construct(private readonly PathHelperInterface $pathHelper, string ...$paths)
     {
         $this->paths = $paths;
     }
@@ -24,7 +24,7 @@ final class PathList implements PathListInterface
     public function getAll(): array
     {
         return array_values(array_unique(array_map(
-            static fn ($path): string => PathHelper::canonicalize($path),
+            fn ($path): string => $this->pathHelper->canonicalize($path),
             $this->paths,
         )));
     }

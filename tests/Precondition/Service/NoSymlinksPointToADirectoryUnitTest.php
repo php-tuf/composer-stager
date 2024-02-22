@@ -61,9 +61,10 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $fileSyncerFactory = $this->fileSyncerFactory->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $pathListFactory = PathTestHelper::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
-        return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncerFactory, $filesystem, $pathFactory, $translatableFactory);
+        return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncerFactory, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 
     public function testExitEarlyWithRsyncFileSyncer(): void

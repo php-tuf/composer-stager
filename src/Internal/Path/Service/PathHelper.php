@@ -1,23 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Internal\Helper;
+namespace PhpTuf\ComposerStager\Internal\Path\Service;
 
+use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 /**
- * @package Helper
+ * @package Path
  *
  * @internal Don't depend directly on this class. It may be changed or removed at any time without notice.
  */
 final class PathHelper implements PathHelperInterface
 {
-    /** @codeCoverageIgnore */
-    private function __construct()
-    {
-        // This is a static helper class. Prevent instantiation.
-    }
+    use TranslatableAwareTrait;
 
-    public static function canonicalize(string $path): string
+    public function canonicalize(string $path): string
     {
         $path = SymfonyPath::canonicalize($path);
 
@@ -31,12 +28,12 @@ final class PathHelper implements PathHelperInterface
         return $canonicalized;
     }
 
-    public static function isAbsolute(string $path): bool
+    public function isAbsolute(string $path): bool
     {
         return SymfonyPath::isAbsolute($path);
     }
 
-    public static function isRelative(string $path): bool
+    public function isRelative(string $path): bool
     {
         return SymfonyPath::isRelative($path);
     }

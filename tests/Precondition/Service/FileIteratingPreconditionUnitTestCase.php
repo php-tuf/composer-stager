@@ -62,11 +62,12 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $pathListFactory = PathTestHelper::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        $sut = new class ($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
+        $sut = new class ($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
         {
             protected const NAME = 'NAME';
             protected const DESCRIPTION = 'DESCRIPTION';

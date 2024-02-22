@@ -58,8 +58,9 @@ final class PhpFileSyncerUnitTest extends TestCase
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $pathListFactory = PathTestHelper::createPathListFactory();
 
-        return new PhpFileSyncer($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new PhpFileSyncer($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 
     /** @covers ::ensureDestinationExists */

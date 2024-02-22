@@ -7,6 +7,8 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelper;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 final class PathTestHelper
@@ -173,7 +175,12 @@ final class PathTestHelper
 
     public static function createPathFactory(): PathFactory
     {
-        return new PathFactory();
+        return new PathFactory(self::createPathHelper());
+    }
+
+    public static function createPathHelper(): PathHelperInterface
+    {
+        return new PathHelper();
     }
 
     public static function createPathList(string ...$paths): PathListInterface
@@ -183,7 +190,7 @@ final class PathTestHelper
 
     public static function createPathListFactory(): PathListFactoryInterface
     {
-        return new PathListFactory();
+        return new PathListFactory(self::createPathHelper());
     }
 
     public static function canonicalize(string $path): string

@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /**
@@ -24,8 +25,9 @@ final class NoAbsoluteSymlinksExistUnitTest extends FileIteratingPreconditionUni
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $pathListFactory = PathTestHelper::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
-        return new NoAbsoluteSymlinksExist($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new NoAbsoluteSymlinksExist($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 }

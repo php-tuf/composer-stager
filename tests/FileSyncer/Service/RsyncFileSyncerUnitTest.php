@@ -59,10 +59,12 @@ final class RsyncFileSyncerUnitTest extends TestCase
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
+        $pathHelper = PathTestHelper::createPathHelper();
+        $pathListFactory = PathTestHelper::createPathListFactory();
         $rsync = $this->rsync->reveal();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
-        return new RsyncFileSyncer($environment, $filesystem, $rsync, $translatableFactory);
+        return new RsyncFileSyncer($environment, $filesystem, $pathHelper, $pathListFactory, $rsync, $translatableFactory);
     }
 
     /**

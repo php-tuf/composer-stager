@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
+use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
@@ -18,7 +19,8 @@ final class PathListUnitTest extends TestCase
      */
     public function testBasicFunctionality(array $given, array $add, array $expected): void
     {
-        $sut = PathTestHelper::createPathList(...$given);
+        $pathHelper = PathTestHelper::createPathHelper();
+        $sut = new PathList($pathHelper, ...$given);
 
         $sut->add(...$add);
 

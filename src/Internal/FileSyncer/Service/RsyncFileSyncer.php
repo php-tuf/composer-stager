@@ -7,14 +7,14 @@ use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 
 /**
  * @package FileSyncer
@@ -26,10 +26,12 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
     public function __construct(
         EnvironmentInterface $environment,
         FilesystemInterface $filesystem,
+        private readonly PathHelperInterface $pathHelper,
+        PathListFactoryInterface $pathListFactory,
         private readonly RsyncProcessRunnerInterface $rsync,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($environment, $filesystem, $translatableFactory);
+        parent::__construct($environment, $filesystem, $pathListFactory, $translatableFactory);
     }
 
     /**
@@ -59,8 +61,8 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         PathInterface $destination,
         ?OutputCallbackInterface $callback,
     ): void {
-        $sourceAbsolute = PathHelper::canonicalize($sourceAbsolute);
-        $destinationAbsolute = PathHelper::canonicalize($destinationAbsolute);
+        $sourceAbsolute = $this->pathHelper->canonicalize($sourceAbsolute);
+        $destinationAbsolute = $this->pathHelper->canonicalize($destinationAbsolute);
 
         $this->ensureDestinationDirectoryExists($destination);
         $command = $this->buildCommand($exclusions, $sourceAbsolute, $destinationAbsolute);
@@ -88,7 +90,7 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         string $sourceAbsolute,
         string $destinationAbsolute,
     ): array {
-        $exclusions ??= new PathList();
+        $exclusions ??= $this->pathListFactory->create();
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $exclusions = $exclusions->getAll();
 

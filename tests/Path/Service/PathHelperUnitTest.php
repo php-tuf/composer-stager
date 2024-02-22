@@ -1,13 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Helper;
+namespace PhpTuf\ComposerStager\Tests\Path\Service;
 
-use PhpTuf\ComposerStager\Internal\Helper\PathHelper;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Helper\PathHelper */
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Service\PathHelper */
 final class PathHelperUnitTest extends TestCase
 {
+    public function createSut(): PathHelper
+    {
+        return new PathHelper();
+    }
+
     /**
      * @covers ::canonicalize
      *
@@ -15,8 +20,10 @@ final class PathHelperUnitTest extends TestCase
      */
     public function testCanonicalize(string $unixLike, string $windows, string $expected): void
     {
-        $actualUnixLike = PathHelper::canonicalize($unixLike);
-        $actualWindows = PathHelper::canonicalize($windows);
+        $sut = $this->createSut();
+
+        $actualUnixLike = $sut->canonicalize($unixLike);
+        $actualWindows = $sut->canonicalize($windows);
 
         self::assertSame($expected, $actualUnixLike, 'Correctly canonicalized Unix-like path.');
         self::assertSame($expected, $actualWindows, 'Correctly canonicalized Windows path.');
@@ -87,15 +94,17 @@ final class PathHelperUnitTest extends TestCase
      * @covers ::isAbsolute
      * @covers ::isRelative
      *
-     * @dataProvider providerIsAbsolute
+     * @dataProvider providerAbsoluteRelative
      */
-    public function testIsAbsolute(bool $isAbsolute, string $path): void
+    public function testAbsoluteRelative(bool $isAbsolute, string $path): void
     {
-        self::assertSame($isAbsolute, PathHelper::isAbsolute($path));
-        self::assertSame(!$isAbsolute, PathHelper::isRelative($path));
+        $sut = $this->createSut();
+
+        self::assertSame($isAbsolute, $sut->isAbsolute($path));
+        self::assertSame(!$isAbsolute, $sut->isRelative($path));
     }
 
-    public function providerIsAbsolute(): array
+    public function providerAbsoluteRelative(): array
     {
         return [
             // Yes.
