@@ -215,7 +215,7 @@ trait AssertTrait
 
             if ($actualException instanceof ExceptionInterface) {
                 $reflection = new TranslatableReflection($actualException->getTranslatableMessage());
-                self::assertSame(TranslationTestHelper::EXCEPTIONS_DOMAIN, $reflection->getDomain(), 'Set correct domain.');
+                self::assertSame(TranslationTestHelper::DOMAIN_EXCEPTIONS, $reflection->getDomain(), 'Set correct domain.');
             }
 
             if ($expectedPreviousExceptionClass === null) {
