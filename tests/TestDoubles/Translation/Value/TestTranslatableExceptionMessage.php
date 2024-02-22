@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 final class TestTranslatableExceptionMessage extends TestTranslatableMessage
 {
@@ -19,7 +19,7 @@ final class TestTranslatableExceptionMessage extends TestTranslatableMessage
 
     public function trans(?TranslatorInterface $translator = null, ?string $locale = null): string
     {
-        $translator ??= new TestTranslator();
+        $translator ??= TranslationTestHelper::createTranslator();
         $parameters = $this->parameters instanceof TranslationParametersInterface
             ? $this->parameters
             : new TestTranslationParameters();

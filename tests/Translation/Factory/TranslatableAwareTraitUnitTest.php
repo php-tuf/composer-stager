@@ -13,9 +13,9 @@ use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait */
 final class TranslatableAwareTraitUnitTest extends TestCase
@@ -24,7 +24,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     public function testDMethod(): void
     {
         $domainOptions = new DomainOptions();
-        $translator = new TestTranslator();
+        $translator = TranslationTestHelper::createTranslator();
         $translatableFactory = new TranslatableFactory($domainOptions, $translator);
 
         $sut = new class($translatableFactory) extends AbstractTranslatableAwareClass {

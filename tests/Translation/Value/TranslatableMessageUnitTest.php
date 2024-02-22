@@ -3,13 +3,10 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
-use PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions;
-use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
-use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -51,11 +48,7 @@ final class TranslatableMessageUnitTest extends TestCase
         $sut->trans(null, ...$locale);
 
         /** Call again with a real translator to assert on actual results. */
-        $actualTranslation = $sut->trans(new Translator(
-            new DomainOptions(),
-            new LocaleOptions(),
-            new SymfonyTranslatorProxy(),
-        ));
+        $actualTranslation = $sut->trans(TranslationTestHelper::createTranslator());
 
         self::assertSame($expectedTranslation, $actualTranslation, 'Returned correct translation.');
         self::assertSame($expectedTranslation, (string) $sut, 'Returned correct typecast string value.');

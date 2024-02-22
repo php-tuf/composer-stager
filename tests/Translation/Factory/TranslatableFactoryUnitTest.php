@@ -2,16 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Factory;
 
-use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
-use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestTranslator;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory */
 final class TranslatableFactoryUnitTest extends TestCase
@@ -19,24 +17,15 @@ final class TranslatableFactoryUnitTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::createDomainOptions
-     *
-     * @dataProvider providerCreateDomainOptions
      */
-    public function testCreateDomainOptions(DomainOptionsInterface $expected): void
+    public function testCreateDomainOptions(): void
     {
-        $sut = new TranslatableFactory($expected, new TestTranslator());
+        $expected = TranslationTestHelper::createDomainOptions();
+        $sut = new TranslatableFactory($expected, TranslationTestHelper::createTranslator());
 
         $actual = $sut->createDomainOptions();
 
         self::assertSame($expected, $actual, 'Returned correct domain options object.');
-    }
-
-    public function providerCreateDomainOptions(): array
-    {
-        return [
-            'Default' => [new DomainOptions()],
-            'Overridden' => [new TestDomainOptions('one', 'two')],
-        ];
     }
 
     /**
@@ -49,7 +38,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         TranslatableInterface $expectedMessage,
     ): void {
         $givenCreateMessageArguments = array_values($givenCreateMessageArguments);
-        $sut = new TranslatableFactory(new TestDomainOptions(), new TestTranslator());
+        $sut = new TranslatableFactory(new TestDomainOptions(), TranslationTestHelper::createTranslator());
 
         $actual = $sut->createTranslatableMessage(...$givenCreateMessageArguments);
 
@@ -63,14 +52,14 @@ final class TranslatableFactoryUnitTest extends TestCase
                 'givenCreateMessageArguments' => ['message' => 'Minimum values'],
                 'expectedMessage' => new TranslatableMessage(
                     'Minimum values',
-                    new TestTranslator(),
+                    TranslationTestHelper::createTranslator(),
                 ),
             ],
             'Nullable values' => [
                 'givenCreateMessageArguments' => ['message' => 'Nullable values'],
                 'expectedMessage' => new TranslatableMessage(
                     'Nullable values',
-                    new TestTranslator(),
+                    TranslationTestHelper::createTranslator(),
                     null,
                     null,
                 ),
@@ -83,7 +72,7 @@ final class TranslatableFactoryUnitTest extends TestCase
                 ],
                 'expectedMessage' => new TranslatableMessage(
                     'Simple values',
-                    new TestTranslator(),
+                    TranslationTestHelper::createTranslator(),
                     new TestTranslationParameters(),
                     'domain',
                 ),
@@ -98,7 +87,7 @@ final class TranslatableFactoryUnitTest extends TestCase
      */
     public function testCreateTranslationParameters(array $parameters): void
     {
-        $sut = new TranslatableFactory(new TestDomainOptions(), new TestTranslator());
+        $sut = new TranslatableFactory(new TestDomainOptions(), TranslationTestHelper::createTranslator());
         $expected = new TranslationParameters($parameters);
 
         $actual = $sut->createTranslationParameters($parameters);
