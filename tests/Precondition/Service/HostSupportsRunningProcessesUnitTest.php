@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -63,7 +62,7 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionUnitTestCas
     public function testUnfulfilled(): void
     {
         $message = __METHOD__;
-        $previous = new LogicException(new TestTranslatableMessage($message));
+        $previous = new LogicException(TranslationTestHelper::createTranslatableMessage($message));
         $this->processFactory
             ->create(Argument::type('array'))
             ->shouldBeCalled()

@@ -8,10 +8,10 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Symfony\Component\DependencyInjection\Definition;
 
 /** @coversNothing */
@@ -79,7 +79,7 @@ final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterfac
 
     public function find(string $name): string
     {
-        throw new LogicException(new TestTranslatableMessage(self::EXCEPTION_MESSAGE));
+        throw new LogicException(TranslationTestHelper::createTranslatableMessage(self::EXCEPTION_MESSAGE));
     }
 }
 

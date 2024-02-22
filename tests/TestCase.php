@@ -5,11 +5,10 @@ namespace PhpTuf\ComposerStager\Tests;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPrecondition;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -78,14 +77,12 @@ abstract class TestCase extends PHPUnitTestCase
     public static function createTestPreconditionException(
         string $message = '',
         ?TranslationParametersInterface $parameters = null,
-        $domain = TestDomainOptions::EXCEPTIONS,
     ): PreconditionException {
         return new PreconditionException(
             new TestPrecondition(),
-            new TestTranslatableMessage(
+            TranslationTestHelper::createTranslatableExceptionMessage(
                 $message,
                 $parameters,
-                $domain,
             ),
         );
     }

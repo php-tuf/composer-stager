@@ -6,7 +6,7 @@ use Exception;
 use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait */
 final class TranslatableExceptionTraitUnitTest extends TestCase
@@ -33,17 +33,17 @@ final class TranslatableExceptionTraitUnitTest extends TestCase
         return [
             [
                 'arguments' => [
-                    new TestTranslatableMessage('One'),
+                    TranslationTestHelper::createTranslatableMessage('One'),
                 ],
-                'message' => new TestTranslatableMessage('One'),
+                'message' => TranslationTestHelper::createTranslatableMessage('One'),
                 'code' => 0,
             ],
             [
                 'arguments' => [
-                    new TestTranslatableMessage('Two'),
+                    TranslationTestHelper::createTranslatableMessage('Two'),
                     10,
                 ],
-                'message' => new TestTranslatableMessage('Two'),
+                'message' => TranslationTestHelper::createTranslatableMessage('Two'),
                 'code' => 10,
             ],
         ];

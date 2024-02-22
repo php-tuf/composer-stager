@@ -14,7 +14,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
@@ -197,8 +196,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
     public function providerFileFinderExceptions(): array
     {
         return [
-            'InvalidArgumentException' => [new InvalidArgumentException(new TestTranslatableMessage('Exclusions include invalid paths.'))],
-            'IOException' => [new IOException(new TestTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
+            'InvalidArgumentException' => [new InvalidArgumentException(TranslationTestHelper::createTranslatableMessage('Exclusions include invalid paths.'))],
+            'IOException' => [new IOException(TranslationTestHelper::createTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
         ];
     }
 

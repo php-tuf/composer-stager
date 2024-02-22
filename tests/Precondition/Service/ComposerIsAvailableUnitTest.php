@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
@@ -131,7 +130,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
     public function testFailedToCreateProcess(): void
     {
         $message = __METHOD__;
-        $previous = new LogicException(new TestTranslatableMessage($message));
+        $previous = new LogicException(TranslationTestHelper::createTranslatableMessage($message));
         $this->processFactory
             ->create(Argument::type('array'))
             ->willThrow($previous);

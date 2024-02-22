@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 
 final class TestPrecondition implements PreconditionInterface
 {
@@ -22,12 +21,12 @@ final class TestPrecondition implements PreconditionInterface
 
     public function getName(): TranslatableInterface
     {
-        return new TestTranslatableMessage($this->name);
+        return TranslationTestHelper::createTranslatableMessage($this->name);
     }
 
     public function getDescription(): TranslatableInterface
     {
-        return new TestTranslatableMessage($this->description);
+        return TranslationTestHelper::createTranslatableMessage($this->description);
     }
 
     public function getStatusMessage(
@@ -36,7 +35,7 @@ final class TestPrecondition implements PreconditionInterface
         ?PathListInterface $exclusions = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): TranslatableInterface {
-        return new TestTranslatableMessage($this->statusMessage);
+        return TranslationTestHelper::createTranslatableMessage($this->statusMessage);
     }
 
     public function isFulfilled(
@@ -58,7 +57,7 @@ final class TestPrecondition implements PreconditionInterface
             return;
         }
 
-        throw new PreconditionException($this, new TestTranslatableMessage());
+        throw new PreconditionException($this, TranslationTestHelper::createTranslatableMessage());
     }
 
     public function getLeaves(): array
