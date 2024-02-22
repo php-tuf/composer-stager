@@ -6,10 +6,10 @@ use FilesystemIterator;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -27,6 +27,7 @@ final class FileFinder implements FileFinderInterface
 
     public function __construct(
         private readonly PathFactoryInterface $pathFactory,
+        private readonly PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         $this->setTranslatableFactory($translatableFactory);
@@ -34,7 +35,7 @@ final class FileFinder implements FileFinderInterface
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
     {
-        $exclusions ??= new PathList();
+        $exclusions ??= $this->pathListFactory->create();
 
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->absolute());
 

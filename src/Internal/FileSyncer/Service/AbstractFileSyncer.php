@@ -6,12 +6,12 @@ use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 
 /**
@@ -34,7 +34,7 @@ abstract class AbstractFileSyncer implements FileSyncerInterface
     ): void {
         $this->environment->setTimeLimit($timeout);
 
-        $exclusions ??= new PathList();
+        $exclusions ??= $this->pathListFactory->create();
 
         $this->assertSourceAndDestinationAreDifferent($source, $destination);
         $this->assertSourceExists($source);
@@ -57,6 +57,7 @@ abstract class AbstractFileSyncer implements FileSyncerInterface
     public function __construct(
         protected readonly EnvironmentInterface $environment,
         protected readonly FilesystemInterface $filesystem,
+        protected readonly PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         $this->setTranslatableFactory($translatableFactory);

@@ -9,6 +9,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
@@ -29,9 +30,17 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
         private readonly FileSyncerFactoryInterface $fileSyncerFactory,
         FilesystemInterface $filesystem,
         PathFactoryInterface $pathFactory,
+        PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        parent::__construct(
+            $environment,
+            $fileFinder,
+            $filesystem,
+            $pathFactory,
+            $pathListFactory,
+            $translatableFactory,
+        );
     }
 
     public function getName(): TranslatableInterface

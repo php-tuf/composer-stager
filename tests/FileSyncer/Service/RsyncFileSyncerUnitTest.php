@@ -11,9 +11,11 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory;
 use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
@@ -66,10 +68,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathHelper = $this->pathHelper->reveal();
+        $pathListFactory = ContainerTestHelper::get(PathListFactory::class);
         $rsync = $this->rsync->reveal();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
-        return new RsyncFileSyncer($environment, $filesystem, $pathHelper, $rsync, $translatableFactory);
+        return new RsyncFileSyncer($environment, $filesystem, $pathHelper, $pathListFactory, $rsync, $translatableFactory);
     }
 
     /**

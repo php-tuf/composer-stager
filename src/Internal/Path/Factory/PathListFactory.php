@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\Internal\Path\Factory;
 
 use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 
 /**
@@ -13,8 +14,12 @@ use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
  */
 final class PathListFactory implements PathListFactoryInterface
 {
+    public function __construct(private readonly PathHelperInterface $pathHelper)
+    {
+    }
+
     public function create(string ...$paths): PathListInterface
     {
-        return new PathList(...$paths);
+        return new PathList($this->pathHelper, ...$paths);
     }
 }

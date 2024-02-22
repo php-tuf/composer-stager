@@ -190,7 +190,7 @@ final class PathTestHelper
 
     public static function createPathListFactory(): PathListFactoryInterface
     {
-        return new PathListFactory();
+        return new PathListFactory(self::createPathHelper());
     }
 
     public static function canonicalize(string $path): string

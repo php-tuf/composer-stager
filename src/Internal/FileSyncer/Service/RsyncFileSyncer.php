@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
@@ -14,7 +15,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 
 /**
  * @package FileSyncer
@@ -27,10 +27,11 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         EnvironmentInterface $environment,
         FilesystemInterface $filesystem,
         private readonly PathHelperInterface $pathHelper,
+        PathListFactoryInterface $pathListFactory,
         private readonly RsyncProcessRunnerInterface $rsync,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($environment, $filesystem, $translatableFactory);
+        parent::__construct($environment, $filesystem, $pathListFactory, $translatableFactory);
     }
 
     /**
@@ -89,7 +90,7 @@ final class RsyncFileSyncer extends AbstractFileSyncer implements RsyncFileSynce
         string $sourceAbsolute,
         string $destinationAbsolute,
     ): array {
-        $exclusions ??= new PathList();
+        $exclusions ??= $this->pathListFactory->create();
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $exclusions = $exclusions->getAll();
 

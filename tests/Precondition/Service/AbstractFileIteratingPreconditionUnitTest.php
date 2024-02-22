@@ -56,6 +56,7 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $pathListFactory = PathTestHelper::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT in
@@ -65,6 +66,7 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
             $fileFinder,
             $filesystem,
             $pathFactory,
+            $pathListFactory,
             $translatableFactory,
         ) extends AbstractFileIteratingPrecondition
         {

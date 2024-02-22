@@ -32,8 +32,9 @@ final class FileFinderUnitTest extends TestCase
     {
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = $this->translatableFactory;
+        $pathListFactory = PathTestHelper::createPathListFactory();
 
-        return new FileFinder($pathFactory, $translatableFactory);
+        return new FileFinder($pathFactory, $pathListFactory, $translatableFactory);
     }
 
     public function testIsTranslatable(): void

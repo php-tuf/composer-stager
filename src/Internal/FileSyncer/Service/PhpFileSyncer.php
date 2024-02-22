@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\PhpFileSyncerInterface;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
@@ -25,9 +26,10 @@ final class PhpFileSyncer extends AbstractFileSyncer implements PhpFileSyncerInt
         private readonly FileFinderInterface $fileFinder,
         FilesystemInterface $filesystem,
         private readonly PathFactoryInterface $pathFactory,
+        PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
-        parent::__construct($environment, $filesystem, $translatableFactory);
+        parent::__construct($environment, $filesystem, $pathListFactory, $translatableFactory);
     }
 
     protected function doSync(

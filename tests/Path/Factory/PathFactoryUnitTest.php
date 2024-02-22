@@ -18,7 +18,10 @@ final class PathFactoryUnitTest extends TestCase
         return new PathFactory($pathHelper);
     }
 
-    /** @covers ::create */
+    /**
+     * @covers ::__construct
+     * @covers ::create
+     */
     public function testBasicFunctionality(): void
     {
         $pathHelper = new PathHelper();

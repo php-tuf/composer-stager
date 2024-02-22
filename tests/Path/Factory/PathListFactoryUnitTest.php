@@ -11,13 +11,15 @@ use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 final class PathListFactoryUnitTest extends TestCase
 {
     /**
+     * @covers ::__construct
      * @covers ::create
      *
      * @dataProvider providerBasicFunctionality
      */
     public function testBasicFunctionality(array $paths, PathListInterface $expected): void
     {
-        $sut = new PathListFactory();
+        $pathHelper = PathTestHelper::createPathHelper();
+        $sut = new PathListFactory($pathHelper);
 
         $actual = $sut->create(...$paths);
 
