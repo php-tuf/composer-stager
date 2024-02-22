@@ -6,8 +6,8 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -47,7 +47,7 @@ final class StagerPreconditionsUnitTest extends PreconditionUnitTestCase
         $environment = $this->environment->reveal();
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new StagerPreconditions($environment, $translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }

@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -43,7 +43,7 @@ final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
         $environment = $this->environment->reveal();
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new CleanerPreconditions($environment, $commonPreconditions, $stagingDirIsReady, $translatableFactory);
     }

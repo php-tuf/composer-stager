@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTre
 use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestFulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestUnfulfilledPrecondition;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
@@ -25,7 +25,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
     protected function createSut(...$children): AbstractPreconditionsTree
     {
         $environment = $this->environment->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
@@ -61,7 +61,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
     private function createPrecondition(?string $class = null): PreconditionInterface
     {
         $environment = $this->environment->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new $class($environment, $translatableFactory);
     }

@@ -6,8 +6,8 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -44,7 +44,7 @@ final class StagingDirIsReadyUnitTest extends PreconditionUnitTestCase
         $environment = $this->environment->reveal();
         $stagingDirExists = $this->stagingDirExists->reveal();
         $stagingDirIsWritable = $this->stagingDirIsWritable->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new StagingDirIsReady($environment, $translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }

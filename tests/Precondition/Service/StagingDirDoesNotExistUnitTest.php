@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirDoesNotExist;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -34,7 +34,7 @@ final class StagingDirDoesNotExistUnitTest extends PreconditionUnitTestCase
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new StagingDirDoesNotExist($environment, $filesystem, $translatableFactory);
     }

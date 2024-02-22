@@ -15,10 +15,10 @@ use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestLocaleOptions;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslationParameters;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
@@ -40,7 +40,7 @@ final class TranslatorUnitTest extends TestCase
         $this->domainOptions = new TestDomainOptions();
         $this->localeOptions = new LocaleOptions();
         $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
-        $this->translatableFactory = new TestTranslatableFactory();
+        $this->translatableFactory = TranslationTestHelper::createTranslatableFactory();
     }
 
     private function createSut(): Translator

@@ -7,8 +7,8 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Environment\Service\TestEnvironment;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
 {
@@ -27,7 +27,7 @@ final class TestPreconditionsTree extends AbstractPreconditionsTree
     public function __construct(PreconditionInterface ...$children)
     {
         $environment = new TestEnvironment();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         parent::__construct($environment, $translatableFactory, ...$children);
     }

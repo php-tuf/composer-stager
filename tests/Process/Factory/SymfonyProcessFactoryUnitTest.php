@@ -6,9 +6,9 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Factory\TestTranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
@@ -23,7 +23,7 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
      */
     public function testBasicFunctionality(array $given, array $expected): void
     {
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
         $sut = new SymfonyProcessFactory($translatableFactory);
 
         $actual = $sut->create(...$given);
@@ -73,7 +73,7 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
             ->report()
             ->shouldBeCalledOnce()
             ->willThrow($previous);
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
         $sut = new SymfonyProcessFactory($translatableFactory);
 
         $message = sprintf('Failed to create process: %s', $previousMessage);
