@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\FileSyncer\Factory\PhpFileSyncerFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
@@ -107,7 +106,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $targetDirAbsolute = PathTestHelper::makeAbsolute($targetDirRelative, PathTestHelper::activeDirAbsolute());
         FilesystemTestHelper::createDirectories($targetDirAbsolute);
         $links = array_fill_keys($links, $targetDirRelative);
-        $exclusions = new PathList(...$exclusions);
+        $exclusions = PathTestHelper::createPathList(...$exclusions);
         FilesystemTestHelper::createSymlinks(PathTestHelper::activeDirAbsolute(), $links);
         $sut = $this->createSut();
 

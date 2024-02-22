@@ -11,7 +11,6 @@ use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
@@ -125,7 +124,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
             'Siblings: simple exclusions given' => [
                 'source' => '/var/www/source/two',
                 'destination' => '/var/www/destination/two',
-                'optionalArguments' => [new PathList('three.txt', 'four.txt'), new TestOutputCallback()],
+                'optionalArguments' => [PathTestHelper::createPathList('three.txt', 'four.txt'), new TestOutputCallback()],
                 'expectedCommand' => [
                     '--archive',
                     '--delete-after',
@@ -141,12 +140,7 @@ final class RsyncFileSyncerUnitTest extends TestCase
                 'source' => '/var/www/source/three',
                 'destination' => '/var/www/destination/three',
                 'optionalArguments' => [
-                    new PathList(...[
-                        'four/five',
-                        'six/seven',
-                        'six/seven',
-                        'six/seven',
-                    ]),
+                    PathTestHelper::createPathList('four/five', 'six/seven', 'six/seven', 'six/seven'),
                 ],
                 'expectedCommand' => [
                     '--archive',
@@ -163,13 +157,13 @@ final class RsyncFileSyncerUnitTest extends TestCase
                 'source' => '/var/www/source/one\\two',
                 'destination' => '/var/www/destination\\one/two',
                 'optionalArguments' => [
-                    new PathList(...[
+                    PathTestHelper::createPathList(
                         'three\\four',
                         'five/six/seven/eight',
                         'five/six/seven/eight',
                         'five\\six/seven\\eight',
                         'five/six\\seven/eight',
-                    ]),
+                    ),
                 ],
                 'expectedCommand' => [
                     '--archive',

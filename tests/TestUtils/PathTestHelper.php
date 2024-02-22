@@ -2,8 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
+use PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 final class PathTestHelper
@@ -168,6 +171,21 @@ final class PathTestHelper
         return self::createPathFactory()->create($path, $basePath);
     }
 
+    public static function createPathFactory(): PathFactory
+    {
+        return new PathFactory();
+    }
+
+    public static function createPathList(string ...$paths): PathListInterface
+    {
+        return self::createPathListFactory()->create(...$paths);
+    }
+
+    public static function createPathListFactory(): PathListFactoryInterface
+    {
+        return new PathListFactory();
+    }
+
     public static function canonicalize(string $path): string
     {
         $path = SymfonyPath::canonicalize($path);
@@ -240,10 +258,5 @@ final class PathTestHelper
         }
 
         return $trimmedPath;
-    }
-
-    public static function createPathFactory(): PathFactory
-    {
-        return new PathFactory();
     }
 }

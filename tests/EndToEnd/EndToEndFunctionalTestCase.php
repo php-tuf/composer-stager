@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
@@ -146,7 +145,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Absolute path (ignore).
             PathTestHelper::makeAbsolute('absolute/path'),
         ];
-        $exclusions = new PathList(...$exclusions);
+        $exclusions = PathTestHelper::createPathList(...$exclusions);
 
         // Confirm that the beginner fails with unsupported symlinks present in the codebase.
         $preconditionMet = true;

@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
@@ -88,7 +87,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $exclusions[] = $targetFile;
 
         $links = array_fill_keys($links, $targetFile);
-        $exclusions = new PathList(...$exclusions);
+        $exclusions = PathTestHelper::createPathList(...$exclusions);
         $dirPath = PathTestHelper::activeDirAbsolute();
         self::createFile($dirPath, $targetFile);
         FilesystemTestHelper::createHardlinks($dirPath, $links);

@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -99,7 +98,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         FilesystemTestHelper::touch(PathTestHelper::makeAbsolute('file.txt', $stagingDir->absolute()));
         FilesystemTestHelper::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, new PathList('link.txt', 'file.txt'));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, PathTestHelper::createPathList('link.txt', 'file.txt'));
 
         self::assertTrue($isFulfilled, 'Excluded nested staging directory while scanning parent active directory.');
     }
