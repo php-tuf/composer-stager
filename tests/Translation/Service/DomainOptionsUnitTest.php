@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
 use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions */
 final class DomainOptionsUnitTest extends TestCase
@@ -17,7 +17,7 @@ final class DomainOptionsUnitTest extends TestCase
     {
         $sut = new DomainOptions();
 
-        self::assertSame(TestDomainOptions::DEFAULT, $sut->default(), 'Returned correct default domain.');
-        self::assertSame(TestDomainOptions::EXCEPTIONS, $sut->exceptions(), 'Returned correct typecast exceptions domain.');
+        self::assertSame(TranslationTestHelper::DOMAIN_DEFAULT, $sut->default(), 'Returned correct default domain.');
+        self::assertSame(TranslationTestHelper::DOMAIN_EXCEPTIONS, $sut->exceptions(), 'Returned correct typecast exceptions domain.');
     }
 }
