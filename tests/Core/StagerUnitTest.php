@@ -15,9 +15,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Service\TestDomainOptions;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
@@ -122,7 +119,7 @@ final class StagerUnitTest extends TestCase
     public function testCommandIsEmpty(): void
     {
         $message = 'The Composer command cannot be empty';
-        $expectedExceptionMessage = new TestTranslatableExceptionMessage($message);
+        $expectedExceptionMessage = TranslationTestHelper::createTranslatableExceptionMessage($message);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
@@ -135,10 +132,8 @@ final class StagerUnitTest extends TestCase
     {
         $sut = $this->createSut();
 
-        $expectedExceptionMessage = new TestTranslatableMessage(
+        $expectedExceptionMessage = TranslationTestHelper::createTranslatableExceptionMessage(
             'The Composer command cannot begin with "composer"--it is implied',
-            null,
-            TestDomainOptions::EXCEPTIONS,
         );
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->stage([
@@ -157,10 +152,8 @@ final class StagerUnitTest extends TestCase
     {
         $sut = $this->createSut();
 
-        $expectedExceptionMessage = new TestTranslatableMessage(
+        $expectedExceptionMessage = TranslationTestHelper::createTranslatableExceptionMessage(
             'Cannot stage a Composer command containing the "--working-dir" (or "-d") option',
-            null,
-            TestDomainOptions::EXCEPTIONS,
         );
         self::assertTranslatableException(static function () use ($sut, $command): void {
             $sut->stage($command, PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
@@ -208,10 +201,10 @@ final class StagerUnitTest extends TestCase
     {
         return [
             'IOException' => [
-                'caughtException' => new IOException(new TestTranslatableExceptionMessage('one')),
+                'caughtException' => new IOException(TranslationTestHelper::createTranslatableExceptionMessage('one')),
             ],
             'LogicException' => [
-                'caughtException' => new LogicException(new TestTranslatableExceptionMessage('two')),
+                'caughtException' => new LogicException(TranslationTestHelper::createTranslatableExceptionMessage('two')),
             ],
         ];
     }

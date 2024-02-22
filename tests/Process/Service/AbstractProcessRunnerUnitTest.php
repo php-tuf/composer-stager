@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
@@ -161,7 +160,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testRunCannotFindGivenExecutable(): void
     {
-        $previous = new IOException(new TestTranslatableExceptionMessage());
+        $previous = new IOException(TranslationTestHelper::createTranslatableExceptionMessage(__METHOD__));
         $this->executableFinder
             ->find(Argument::any())
             ->willThrow($previous);

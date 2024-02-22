@@ -11,7 +11,6 @@ use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Translation\Value\TestTranslatableExceptionMessage;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
@@ -66,7 +65,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     /** @covers ::ensureDestinationExists */
     public function testSyncDestinationCouldNotBeCreated(): void
     {
-        $message = new TestTranslatableExceptionMessage(__METHOD__);
+        $message = TranslationTestHelper::createTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
             ->mkdir(PathTestHelper::destinationDirPath())
