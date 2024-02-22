@@ -37,7 +37,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         TranslatableInterface $expectedMessage,
     ): void {
         $givenCreateMessageArguments = array_values($givenCreateMessageArguments);
-        $sut = new TranslatableFactory(new TestDomainOptions(), TranslationTestHelper::createTranslator());
+        $sut = new TranslatableFactory(TranslationTestHelper::createDomainOptions(), TranslationTestHelper::createTranslator());
 
         $actual = $sut->createTranslatableMessage(...$givenCreateMessageArguments);
 
@@ -86,7 +86,7 @@ final class TranslatableFactoryUnitTest extends TestCase
      */
     public function testCreateTranslationParameters(array $parameters): void
     {
-        $sut = new TranslatableFactory(new TestDomainOptions(), TranslationTestHelper::createTranslator());
+        $sut = new TranslatableFactory(TranslationTestHelper::createDomainOptions(), TranslationTestHelper::createTranslator());
         $expected = new TranslationParameters($parameters);
 
         $actual = $sut->createTranslationParameters($parameters);

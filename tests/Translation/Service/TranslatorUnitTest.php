@@ -35,7 +35,7 @@ final class TranslatorUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->domainOptions = new TestDomainOptions();
+        $this->domainOptions = TranslationTestHelper::createDomainOptions();
         $this->localeOptions = new LocaleOptions();
         $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
         $this->translatableFactory = TranslationTestHelper::createTranslatableFactory();
