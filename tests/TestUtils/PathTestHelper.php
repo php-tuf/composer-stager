@@ -163,9 +163,9 @@ final class PathTestHelper
     public static function createPath(string $path, ?string $basePath = null): PathInterface
     {
         $basePath ??= self::testFreshFixturesDirAbsolute();
-        $basePath = self::pathFactory()->create($basePath);
+        $basePath = self::createPathFactory()->create($basePath);
 
-        return self::pathFactory()->create($path, $basePath);
+        return self::createPathFactory()->create($path, $basePath);
     }
 
     public static function canonicalize(string $path): string
@@ -242,7 +242,7 @@ final class PathTestHelper
         return $trimmedPath;
     }
 
-    public static function pathFactory(): PathFactory
+    public static function createPathFactory(): PathFactory
     {
         return new PathFactory();
     }
