@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\LocaleOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -205,10 +204,10 @@ final class TranslatorUnitTest extends TestCase
     /** @covers ::create */
     public function testStaticFactory(): void
     {
-        assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxy);
-
         $domainOptions = self::createDomainOptions();
-        $expected = new Translator($domainOptions, self::createLocaleOptions(), $this->symfonyTranslatorProxy);
+        $localeOptions = self::createLocaleOptions();
+        $symfonyTranslatorProxy = self::createSymfonyTranslatorProxy();
+        $expected = new Translator($domainOptions, $localeOptions, $symfonyTranslatorProxy);
 
         $actual = Translator::create();
 
