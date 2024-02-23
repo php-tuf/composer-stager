@@ -2,11 +2,11 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service;
 
+use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Environment\Service\TestEnvironment;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 final class TestPreconditionsTree extends AbstractPreconditionsTree
@@ -44,5 +44,18 @@ final class TestPreconditionsTree extends AbstractPreconditionsTree
     protected function getFulfilledStatusMessage(): TranslatableInterface
     {
         return $this->t(self::FULFILLED_STATUS_MESSAGE);
+    }
+}
+
+final class TestEnvironment implements EnvironmentInterface
+{
+    public function isWindows(): bool
+    {
+        return false;
+    }
+
+    public function setTimeLimit(int $seconds): bool
+    {
+        return true;
     }
 }
