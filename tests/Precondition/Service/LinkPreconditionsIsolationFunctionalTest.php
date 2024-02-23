@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Throwable;
 
 /**
@@ -33,7 +32,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
     private static function path(string $path): string
     {
-        return PathTestHelper::makeAbsolute($path, PathTestHelper::activeDirAbsolute());
+        return self::makeAbsolute($path, self::activeDirAbsolute());
     }
 
     protected function setUp(): void
@@ -94,7 +93,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $sut = $this->createTestPreconditionsTree();
 
         self::assertTrue(
-            $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath()),
+            $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath()),
             'All preconditions passed together without any links present.',
         );
     }
@@ -122,7 +121,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         assert($sut instanceof NoLinksExistOnWindows);
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class);
     }
 
@@ -166,7 +165,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $sut = $this->createTestPreconditionsTree([$sut]);
 
-        $sut->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+        $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
 
         $this->expectNotToPerformAssertions();
     }

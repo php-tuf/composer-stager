@@ -2,8 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Path\Value;
 
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
-
 /** @coversNothing */
 final class WindowsPathUnitTest extends PathUnitTestCase
 {
@@ -141,7 +139,7 @@ final class WindowsPathUnitTest extends PathUnitTestCase
         return [
             'With $basePath argument.' => [
                 'path' => 'One',
-                'baseDir' => PathTestHelper::createPath('C:\\Arg'),
+                'baseDir' => self::createPath('C:\\Arg'),
                 'absolute' => 'C:\\Arg\\One',
             ],
             'With explicit null $basePath argument' => [

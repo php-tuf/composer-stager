@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\VfsTestHelper;
 use Prophecy\Argument;
@@ -58,7 +57,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
-        $pathListFactory = PathTestHelper::createPathListFactory();
+        $pathListFactory = self::createPathListFactory();
 
         return new PhpFileSyncer($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
@@ -69,12 +68,12 @@ final class PhpFileSyncerUnitTest extends TestCase
         $message = TranslationTestHelper::createTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->mkdir(PathTestHelper::destinationDirPath())
+            ->mkdir(self::destinationDirPath())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->sync(PathTestHelper::sourceDirPath(), PathTestHelper::destinationDirPath());
+            $sut->sync(self::sourceDirPath(), self::destinationDirPath());
         }, $previous::class, $message);
     }
 
@@ -205,7 +204,7 @@ final class PhpFileSyncerUnitTest extends TestCase
 
         self::assertTrue($actual, 'Correctly detected empty directory.');
 
-        FilesystemTestHelper::remove(PathTestHelper::testPersistentFixturesAbsolute());
+        FilesystemTestHelper::remove(self::testPersistentFixturesAbsolute());
     }
 
     /** @covers ::isDirEmpty */

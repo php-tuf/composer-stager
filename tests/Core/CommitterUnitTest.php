@@ -17,7 +17,6 @@ use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -57,14 +56,14 @@ final class CommitterUnitTest extends TestCase
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
 
         $this->preconditions
-            ->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync(PathTestHelper::stagingDirPath(), PathTestHelper::activeDirPath(), null, null, $timeout)
+            ->sync(self::stagingDirPath(), self::activeDirPath(), null, null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit(PathTestHelper::stagingDirPath(), PathTestHelper::activeDirPath());
+        $sut->commit(self::stagingDirPath(), self::activeDirPath());
     }
 
     /**
@@ -79,8 +78,8 @@ final class CommitterUnitTest extends TestCase
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
-        $activeDir = PathTestHelper::activeDirPath();
-        $stagingDir = PathTestHelper::stagingDirPath();
+        $activeDir = self::activeDirPath();
+        $stagingDir = self::stagingDirPath();
         $this->preconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();
@@ -115,8 +114,8 @@ final class CommitterUnitTest extends TestCase
     /** @covers ::commit */
     public function testCommitPreconditionsUnfulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
@@ -138,8 +137,8 @@ final class CommitterUnitTest extends TestCase
      */
     public function testExceptions(ExceptionInterface $caughtException): void
     {
-        $stagingDirPath = PathTestHelper::stagingDirPath();
-        $activeDirPath = PathTestHelper::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
 
         $this->fileSyncer
             ->sync($stagingDirPath, $activeDirPath, Argument::cetera())

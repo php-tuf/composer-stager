@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -61,7 +60,7 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
         $fileSyncerFactory = $this->fileSyncerFactory->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $pathListFactory = PathTestHelper::createPathListFactory();
+        $pathListFactory = self::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new NoSymlinksPointToADirectory($environment, $fileFinder, $fileSyncerFactory, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
@@ -69,8 +68,8 @@ final class NoSymlinksPointToADirectoryUnitTest extends FileIteratingPreconditio
 
     public function testExitEarlyWithRsyncFileSyncer(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->fileSyncer = $this->prophesize(RsyncFileSyncerInterface::class);
         $this->filesystem

@@ -30,7 +30,7 @@ final class PathTestHelper
         return dirname(__DIR__, 2);
     }
 
-    private static function testEnvAbsolute(): string
+    public static function testEnvAbsolute(): string
     {
         return self::makeAbsolute(self::TEST_ENV, self::repositoryRootAbsolute());
     }

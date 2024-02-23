@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestFulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestUnfulfilledPrecondition;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition */
@@ -40,8 +39,8 @@ final class AbstractPreconditionUnitTest extends PreconditionUnitTestCase
      */
     public function testBasicFunctionality(string $class, ?PathListInterface $exclusions, int $timeout): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->environment
             ->setTimeLimit($timeout)

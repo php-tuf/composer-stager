@@ -11,7 +11,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -59,8 +58,8 @@ abstract class PreconditionTestCase extends TestCase
         ?PathInterface $stagingDirPath = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $activeDirPath ??= PathTestHelper::activeDirPath();
-        $stagingDirPath ??= PathTestHelper::stagingDirPath();
+        $activeDirPath ??= self::activeDirPath();
+        $stagingDirPath ??= self::stagingDirPath();
 
         $this->environment
             ->setTimeLimit($timeout)
@@ -82,8 +81,8 @@ abstract class PreconditionTestCase extends TestCase
         ?PathInterface $stagingDirPath = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $activeDirPath ??= PathTestHelper::activeDirPath();
-        $stagingDirPath ??= PathTestHelper::stagingDirPath();
+        $activeDirPath ??= self::activeDirPath();
+        $stagingDirPath ??= self::stagingDirPath();
         $sut = $this->createSut();
 
         self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath, $timeout): void {

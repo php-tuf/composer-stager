@@ -10,7 +10,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -22,7 +21,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::createDirectories(PathTestHelper::stagingDirRelative());
+        FilesystemTestHelper::createDirectories(self::stagingDirRelative());
 
         $this->executableFinderClass = ExecutableFinder::class;
     }
@@ -57,7 +56,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
         $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $message, null, LogicException::class);
     }
 
@@ -68,7 +67,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
         $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $message);
     }
 }

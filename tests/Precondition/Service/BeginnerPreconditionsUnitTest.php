@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -64,8 +63,8 @@ final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->commonPreconditions
@@ -88,8 +87,8 @@ final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

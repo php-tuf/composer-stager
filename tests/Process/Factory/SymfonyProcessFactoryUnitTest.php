@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Process as SymfonyProcess;
@@ -47,12 +46,12 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
             'Simple values' => [
                 'given' => [
                     ['one'],
-                    PathTestHelper::arbitraryDirPath(),
+                    self::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                 ],
                 'expected' => [
                     ['one'],
-                    PathTestHelper::arbitraryDirAbsolute(),
+                    self::arbitraryDirAbsolute(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                 ],
             ],

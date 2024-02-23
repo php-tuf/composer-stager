@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist */
@@ -19,7 +18,7 @@ final class NoHardLinksExistUnitTest extends FileIteratingPreconditionUnitTestCa
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $pathListFactory = PathTestHelper::createPathListFactory();
+        $pathListFactory = self::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new NoHardLinksExist($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);

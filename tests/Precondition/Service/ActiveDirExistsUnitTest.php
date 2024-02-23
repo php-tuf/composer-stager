@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -45,7 +44,7 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
     public function testFulfilled(): void
     {
         $this->filesystem
-            ->fileExists(PathTestHelper::activeDirPath())
+            ->fileExists(self::activeDirPath())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
@@ -57,7 +56,7 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
     {
         $message = 'The active directory does not exist.';
         $this->filesystem
-            ->fileExists(PathTestHelper::activeDirPath())
+            ->fileExists(self::activeDirPath())
             ->willReturn(false);
 
         $this->doTestUnfulfilled($message);

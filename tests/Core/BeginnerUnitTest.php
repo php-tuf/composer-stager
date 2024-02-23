@@ -17,7 +17,6 @@ use PhpTuf\ComposerStager\Internal\Core\Beginner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -57,14 +56,14 @@ final class BeginnerUnitTest extends TestCase
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
 
         $this->preconditions
-            ->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), null, null, $timeout)
+            ->sync(self::activeDirPath(), self::stagingDirPath(), null, null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+        $sut->begin(self::activeDirPath(), self::stagingDirPath());
     }
 
     /**
@@ -79,8 +78,8 @@ final class BeginnerUnitTest extends TestCase
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
-        $activeDir = PathTestHelper::createPath($activeDir);
-        $stagingDir = PathTestHelper::createPath($stagingDir);
+        $activeDir = self::createPath($activeDir);
+        $stagingDir = self::createPath($stagingDir);
         $this->preconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();
@@ -118,12 +117,12 @@ final class BeginnerUnitTest extends TestCase
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), Argument::cetera())
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->begin(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->begin(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
@@ -140,7 +139,7 @@ final class BeginnerUnitTest extends TestCase
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->begin(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->begin(self::activeDirPath(), self::stagingDirPath());
         }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 

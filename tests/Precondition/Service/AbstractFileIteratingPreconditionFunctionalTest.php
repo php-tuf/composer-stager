@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
 final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
@@ -16,7 +15,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::createDirectories(PathTestHelper::stagingDirRelative());
+        FilesystemTestHelper::createDirectories(self::stagingDirRelative());
     }
 
     protected function tearDown(): void
@@ -40,8 +39,8 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
      */
     public function testFulfilled(array $files): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         self::createFiles($activeDirPath->absolute(), $files);
         self::createFiles($stagingDirPath->absolute(), $files);
         $sut = $this->createSut();
@@ -74,9 +73,9 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         // Make sure that when scanning the active directory for links it doesn't
         // recurse into the nested staging directory. Do this by putting unsupported
         // files in the staging directory and excluding them.
-        $activeDir = PathTestHelper::activeDirPath();
-        $stagingDir = PathTestHelper::createPath('staging-dir', PathTestHelper::activeDirAbsolute());
-        FilesystemTestHelper::touch(PathTestHelper::makeAbsolute('file.txt', $stagingDir->absolute()));
+        $activeDir = self::activeDirPath();
+        $stagingDir = self::createPath('staging-dir', self::activeDirAbsolute());
+        FilesystemTestHelper::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
         FilesystemTestHelper::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
@@ -93,12 +92,12 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         // Make sure that when scanning the active directory for links it doesn't
         // recurse into the nested staging directory. Do this by putting unsupported
         // files in the staging directory and excluding them.
-        $activeDir = PathTestHelper::activeDirPath();
-        $stagingDir = PathTestHelper::createPath('staging-dir', PathTestHelper::activeDirAbsolute());
-        FilesystemTestHelper::touch(PathTestHelper::makeAbsolute('file.txt', $stagingDir->absolute()));
+        $activeDir = self::activeDirPath();
+        $stagingDir = self::createPath('staging-dir', self::activeDirAbsolute());
+        FilesystemTestHelper::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
         FilesystemTestHelper::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
 
-        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, PathTestHelper::createPathList('link.txt', 'file.txt'));
+        $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, self::createPathList('link.txt', 'file.txt'));
 
         self::assertTrue($isFulfilled, 'Excluded nested staging directory while scanning parent active directory.');
     }
@@ -120,12 +119,12 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
     {
         return [
             'No active directory' => [
-                'activeDir' => PathTestHelper::nonExistentDirPath(),
-                'stagingDir' => PathTestHelper::stagingDirPath(),
+                'activeDir' => self::nonExistentDirPath(),
+                'stagingDir' => self::stagingDirPath(),
             ],
             'No staging directory' => [
-                'activeDir' => PathTestHelper::activeDirPath(),
-                'stagingDir' => PathTestHelper::nonExistentDirPath(),
+                'activeDir' => self::activeDirPath(),
+                'stagingDir' => self::nonExistentDirPath(),
             ],
         ];
     }

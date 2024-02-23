@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 
@@ -35,7 +34,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $pathListFactory = PathTestHelper::createPathListFactory();
+        $pathListFactory = self::createPathListFactory();
         $translatableFactory = TranslationTestHelper::createTranslatableFactory();
 
         return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
@@ -49,8 +48,8 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
 
     public function testExitEarlyOnNonWindows(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->environment
             ->isWindows()

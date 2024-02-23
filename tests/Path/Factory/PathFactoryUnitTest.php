@@ -6,14 +6,13 @@ use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Service\PathHelper;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory */
 final class PathFactoryUnitTest extends TestCase
 {
     private function createSut(): PathFactory
     {
-        $pathHelper = PathTestHelper::createPathHelper();
+        $pathHelper = self::createPathHelper();
 
         return new PathFactory($pathHelper);
     }

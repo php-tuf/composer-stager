@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Misc;
 
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * Tests assumptions about PHP built-in behavior.
@@ -25,8 +24,8 @@ final class PhpAssumptionsFunctionalTest extends TestCase
 
     public function testCopyDoesNotCreateParents(): void
     {
-        $sourceFile = PathTestHelper::makeAbsolute('source.txt');
-        $destinationFile = PathTestHelper::makeAbsolute('one/two/three/destination.txt');
+        $sourceFile = self::makeAbsolute('source.txt');
+        $destinationFile = self::makeAbsolute('one/two/three/destination.txt');
         FilesystemTestHelper::touch($sourceFile);
 
         $result = @copy($sourceFile, $destinationFile);

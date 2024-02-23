@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -51,8 +50,8 @@ final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->commonPreconditions
@@ -72,8 +71,8 @@ final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

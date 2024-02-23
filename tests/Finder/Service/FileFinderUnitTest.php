@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -32,7 +31,7 @@ final class FileFinderUnitTest extends TestCase
     {
         $pathFactory = $this->pathFactory->reveal();
         $translatableFactory = $this->translatableFactory;
-        $pathListFactory = PathTestHelper::createPathListFactory();
+        $pathListFactory = self::createPathListFactory();
 
         return new FileFinder($pathFactory, $pathListFactory, $translatableFactory);
     }
@@ -47,7 +46,7 @@ final class FileFinderUnitTest extends TestCase
     /** @covers ::getRecursiveDirectoryIterator */
     public function testGetRecursiveDirectoryIteratorException(): void
     {
-        $path = PathTestHelper::nonExistentFilePath();
+        $path = self::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('The directory cannot be found or is not a directory at %s.', $path->absolute());

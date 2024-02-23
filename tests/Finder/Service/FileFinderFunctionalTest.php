@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
@@ -38,10 +37,10 @@ final class FileFinderFunctionalTest extends TestCase
     public function testFind(array $files, array $exclusions, array $expected): void
     {
         $expected = $this->normalizePaths($expected);
-        self::createFiles(PathTestHelper::activeDirAbsolute(), $files);
+        self::createFiles(self::activeDirAbsolute(), $files);
         $sut = $this->createSut();
 
-        $actual = $sut->find(PathTestHelper::activeDirPath(), ...$exclusions);
+        $actual = $sut->find(self::activeDirPath(), ...$exclusions);
 
         self::assertArrayEquals($expected, $actual);
     }
@@ -61,7 +60,7 @@ final class FileFinderFunctionalTest extends TestCase
             ],
             'No files, empty exclusions' => [
                 'files' => [],
-                'exclusions' => [PathTestHelper::createPathList()],
+                'exclusions' => [self::createPathList()],
                 'expected' => [],
             ],
             'Multiple files, null exclusions' => [
@@ -81,7 +80,7 @@ final class FileFinderFunctionalTest extends TestCase
                     'two.txt',
                     'three.txt',
                 ],
-                'exclusions' => [PathTestHelper::createPathList()],
+                'exclusions' => [self::createPathList()],
                 'expected' => [
                     'one.txt',
                     'three.txt',
@@ -101,7 +100,7 @@ final class FileFinderFunctionalTest extends TestCase
             ],
             'One file excluded by name' => [
                 'files' => ['excluded.txt'],
-                'exclusions' => [PathTestHelper::createPathList('excluded.txt')],
+                'exclusions' => [self::createPathList('excluded.txt')],
                 'expected' => [],
             ],
             'Multiple files, partially excluded by name' => [
@@ -109,7 +108,7 @@ final class FileFinderFunctionalTest extends TestCase
                     'included.txt',
                     'excluded.txt',
                 ],
-                'exclusions' => [PathTestHelper::createPathList('excluded.txt')],
+                'exclusions' => [self::createPathList('excluded.txt')],
                 'expected' => ['included.txt'],
             ],
             'Complex scenario' => [
@@ -133,7 +132,7 @@ final class FileFinderFunctionalTest extends TestCase
                     '.hidden_EXCLUDED_dir/three.txt',
                 ],
                 'exclusions' => [
-                    PathTestHelper::createPathList(
+                    self::createPathList(
                         // Exact pathnames.
                         'EXCLUDED_file_in_dir_root.txt',
                         'arbitrary_subdir/EXCLUDED_file.txt',
@@ -175,10 +174,10 @@ final class FileFinderFunctionalTest extends TestCase
             'middle.txt',
             'zz_last.txt',
         ]);
-        self::createFiles(PathTestHelper::activeDirAbsolute(), $given);
+        self::createFiles(self::activeDirAbsolute(), $given);
         $sut = $this->createSut();
 
-        $actual = $sut->find(PathTestHelper::activeDirPath());
+        $actual = $sut->find(self::activeDirPath());
 
         self::assertSame($expected, $actual);
     }

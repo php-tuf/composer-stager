@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -47,14 +46,14 @@ final class CleanerUnitTest extends TestCase
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
 
         $this->preconditions
-            ->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->rm(PathTestHelper::stagingDirPath(), null, $timeout)
+            ->rm(self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+        $sut->clean(self::activeDirPath(), self::stagingDirPath());
     }
 
     /**
@@ -64,16 +63,16 @@ final class CleanerUnitTest extends TestCase
      */
     public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
-        $path = PathTestHelper::createPath($path);
+        $path = self::createPath($path);
         $this->preconditions
-            ->assertIsFulfilled(PathTestHelper::activeDirPath(), $path, null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), $path, null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
             ->rm($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(PathTestHelper::activeDirPath(), $path, $callback, $timeout);
+        $sut->clean(self::activeDirPath(), $path, $callback, $timeout);
     }
 
     public function providerCleanWithOptionalParams(): array
@@ -98,12 +97,12 @@ final class CleanerUnitTest extends TestCase
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath(), Argument::cetera())
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->clean(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->clean(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
@@ -118,7 +117,7 @@ final class CleanerUnitTest extends TestCase
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->clean(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+            $sut->clean(self::activeDirPath(), self::stagingDirPath());
         }, RuntimeException::class, $message, null, $previous::class);
     }
 }

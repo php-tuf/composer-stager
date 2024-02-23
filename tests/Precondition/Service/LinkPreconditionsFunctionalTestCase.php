@@ -6,14 +6,13 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::createDirectories(PathTestHelper::stagingDirRelative());
+        FilesystemTestHelper::createDirectories(self::stagingDirRelative());
     }
 
     protected function tearDown(): void
@@ -49,15 +48,15 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     final public function providerFulfilledDirectoryDoesNotExist(): array
     {
-        $nonexistentDir = PathTestHelper::nonExistentDirPath();
+        $nonexistentDir = self::nonExistentDirPath();
 
         return [
             'Active directory' => [
                 'activeDir' => $nonexistentDir,
-                'stagingDir' => PathTestHelper::stagingDirPath(),
+                'stagingDir' => self::stagingDirPath(),
             ],
             'Staging directory' => [
-                'activeDir' => PathTestHelper::activeDirPath(),
+                'activeDir' => self::activeDirPath(),
                 'stagingDir' => $nonexistentDir,
             ],
         ];
@@ -74,7 +73,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
     {
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathTestHelper::activeDirPath(), PathTestHelper::stagingDirPath());
+        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
 
         self::assertTrue($isFulfilled, 'Passed with no links in the codebase.');
     }

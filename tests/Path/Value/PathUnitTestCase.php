@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use ReflectionClass;
 
 /**
@@ -29,7 +28,7 @@ abstract class PathUnitTestCase extends TestCase
 {
     public function createSut(): Path
     {
-        $pathHelper = PathTestHelper::createPathHelper();
+        $pathHelper = self::createPathHelper();
 
         return new Path($pathHelper, ...func_get_args());
     }
@@ -46,7 +45,7 @@ abstract class PathUnitTestCase extends TestCase
         // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
         // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
         if (!EnvironmentTestHelper::isWindows()) {
-            PathTestHelper::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
+            self::fixSeparatorsMultiple($given, $basePath, $absolute, $relativeBase, $relative);
         }
 
         $equalInstance = $this->createSut($given);
@@ -86,7 +85,7 @@ abstract class PathUnitTestCase extends TestCase
         // Simply fixing separators on non-Windows systems allows for quick smoke testing on them. They'll
         // still be tested "for real" with actual, unchanged paths on an actual Windows system on CI.
         if (!EnvironmentTestHelper::isWindows()) {
-            PathTestHelper::fixSeparatorsMultiple($path, $absolute);
+            self::fixSeparatorsMultiple($path, $absolute);
         }
 
         $sut = $this->createSut($path, $basePath);

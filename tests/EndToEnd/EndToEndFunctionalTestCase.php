@@ -17,7 +17,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /**
  * Provides a base for end-to-end functional tests, including the API and
@@ -73,13 +72,13 @@ abstract class EndToEndFunctionalTestCase extends TestCase
      */
     public function testSync(string $activeDir, string $stagingDir): void
     {
-        $activeDirPath = PathTestHelper::createPath($activeDir);
+        $activeDirPath = self::createPath($activeDir);
         $activeDirAbsolute = $activeDirPath->absolute();
-        $stagingDirPath = PathTestHelper::createPath($stagingDir);
+        $stagingDirPath = self::createPath($stagingDir);
         $stagingDirAbsolute = $stagingDirPath->absolute();
 
         // Create fixture (active directory).
-        self::createFiles(PathTestHelper::makeAbsolute($activeDir), [
+        self::createFiles(self::makeAbsolute($activeDir), [
             // Unchanging files.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -143,9 +142,9 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             // Non-existent (ignore).
             'file_that_NEVER_EXISTS_anywhere.txt',
             // Absolute path (ignore).
-            PathTestHelper::makeAbsolute('absolute/path'),
+            self::makeAbsolute('absolute/path'),
         ];
-        $exclusions = PathTestHelper::createPathList(...$exclusions);
+        $exclusions = self::createPathList(...$exclusions);
 
         // Confirm that the beginner fails with unsupported symlinks present in the codebase.
         $preconditionMet = true;
@@ -381,7 +380,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertFileChanged(string $dir, string $path, string $message = ''): void
     {
         self::assertStringEqualsFile(
-            PathTestHelper::ensureTrailingSlash($dir) . $path,
+            self::ensureTrailingSlash($dir) . $path,
             self::CHANGED_CONTENT,
             $message,
         );
@@ -390,7 +389,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
     private static function assertFileNotChanged(string $dir, string $path, string $message = ''): void
     {
         self::assertStringEqualsFile(
-            PathTestHelper::ensureTrailingSlash($dir) . $path,
+            self::ensureTrailingSlash($dir) . $path,
             self::ORIGINAL_CONTENT,
             $message,
         );
@@ -398,7 +397,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
 
     private static function assertTestSymlinkExists(string $activeDirAbsolute): void
     {
-        $symlink = PathTestHelper::makeAbsolute('EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt', $activeDirAbsolute);
+        $symlink = self::makeAbsolute('EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt', $activeDirAbsolute);
         assert(is_link($symlink), sprintf('Expected symlink is missing from the codebase: %s', $symlink));
     }
 }

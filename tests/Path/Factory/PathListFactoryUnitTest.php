@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory */
 final class PathListFactoryUnitTest extends TestCase
@@ -18,7 +17,7 @@ final class PathListFactoryUnitTest extends TestCase
      */
     public function testBasicFunctionality(array $paths, PathListInterface $expected): void
     {
-        $pathHelper = PathTestHelper::createPathHelper();
+        $pathHelper = self::createPathHelper();
         $sut = new PathListFactory($pathHelper);
 
         $actual = $sut->create(...$paths);
@@ -31,15 +30,15 @@ final class PathListFactoryUnitTest extends TestCase
         return [
             'No paths' => [
                 'paths' => [],
-                'expected' => PathTestHelper::createPathList(),
+                'expected' => self::createPathList(),
             ],
             'One path' => [
                 'paths' => ['one'],
-                'expected' => PathTestHelper::createPathList('one'),
+                'expected' => self::createPathList('one'),
             ],
             'Two paths' => [
                 'paths' => ['one', 'two/two'],
-                'expected' => PathTestHelper::createPathList('one', 'two/two'),
+                'expected' => self::createPathList('one', 'two/two'),
             ],
         ];
     }

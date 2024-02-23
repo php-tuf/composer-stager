@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -72,8 +71,8 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->composerIsAvailable
@@ -94,8 +93,8 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathTestHelper::activeDirPath();
-        $stagingDirPath = PathTestHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;
