@@ -39,7 +39,7 @@ return static function (RectorConfig $rectorConfig): void {
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
         EncapsedStringsToSprintfRector::class => [__DIR__],
         FinalizeClassesWithoutChildrenRector::class => [__DIR__], // This is duplicative of PHPCS sniff SlevomatCodingStandard.Classes.RequireAbstractOrFinal.
-        FinalizePublicClassConstantRector::class => [__DIR__ . '/tests/Doubles/Precondition/Service/AbstractTestPrecondition.php'],
+        FinalizePublicClassConstantRector::class => [__DIR__ . '/tests/TestDoubles/Precondition/Service/AbstractTestPrecondition.php'],
         LocallyCalledStaticMethodToNonStaticRector::class => [__DIR__],
         MixedTypeRector::class => [__DIR__],
         NewlineAfterStatementRector::class => [__DIR__],

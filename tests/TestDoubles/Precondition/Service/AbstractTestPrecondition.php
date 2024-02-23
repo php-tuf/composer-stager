@@ -12,11 +12,11 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 abstract class AbstractTestPrecondition extends AbstractPrecondition
 {
     // Override in subclasses.
-    protected const NAME = 'NAME';
-    protected const DESCRIPTION = 'DESCRIPTION';
-    protected const IS_FULFILLED = true;
-    protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
-    protected const UNFULFILLED_STATUS_MESSAGE = 'UNFULFILLED_STATUS_MESSAGE';
+    public const NAME = 'NAME';
+    public const DESCRIPTION = 'DESCRIPTION';
+    public const IS_FULFILLED = true;
+    public const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
+    public const UNFULFILLED_STATUS_MESSAGE = 'UNFULFILLED_STATUS_MESSAGE';
 
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
