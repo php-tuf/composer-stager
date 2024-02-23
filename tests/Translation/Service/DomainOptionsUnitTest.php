@@ -14,7 +14,7 @@ final class DomainOptionsUnitTest extends TestCase
      */
     public function testBasicFunctionality(): void
     {
-        $sut = TranslationTestHelper::createDomainOptions();
+        $sut = self::createDomainOptions();
 
         self::assertSame(TranslationTestHelper::DOMAIN_DEFAULT, $sut->default(), 'Returned correct default domain.');
         self::assertSame(TranslationTestHelper::DOMAIN_EXCEPTIONS, $sut->exceptions(), 'Returned correct typecast exceptions domain.');

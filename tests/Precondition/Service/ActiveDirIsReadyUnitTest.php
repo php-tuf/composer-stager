@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -42,7 +41,7 @@ final class ActiveDirIsReadyUnitTest extends PreconditionUnitTestCase
         $environment = $this->environment->reveal();
         $stagingDirExists = $this->activeDirExists->reveal();
         $stagingDirIsWritable = $this->activeDirIsWritable->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ActiveDirIsReady($environment, $stagingDirExists, $stagingDirIsWritable, $translatableFactory);
     }

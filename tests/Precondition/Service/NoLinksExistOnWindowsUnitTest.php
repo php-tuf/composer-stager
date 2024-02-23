@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 
 /**
@@ -35,7 +34,7 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $pathListFactory = self::createPathListFactory();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }

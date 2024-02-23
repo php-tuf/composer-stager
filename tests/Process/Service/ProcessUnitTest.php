@@ -17,7 +17,6 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
@@ -62,7 +61,7 @@ final class ProcessUnitTest extends TestCase
             ->create($expectedCommand, Argument::cetera())
             ->willReturn($symfonyProcess);
         $symfonyProcessFactory = $this->symfonyProcessFactory->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new Process($symfonyProcessFactory, $translatableFactory, ...$givenConstructorArguments);
     }
@@ -188,7 +187,7 @@ final class ProcessUnitTest extends TestCase
     public function testEnv(array $optionalArguments, array $expectedInitialEnv, array $givenNewEnv): void
     {
         $symfonyProcessFactory = ContainerTestHelper::get(SymfonyProcessFactory::class);
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
         $sut = new Process($symfonyProcessFactory, $translatableFactory, ['arbitrary_command'], ...$optionalArguments);
 
         $actualInitialEnv = $sut->getEnv();

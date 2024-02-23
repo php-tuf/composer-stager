@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -109,7 +108,7 @@ final class CleanerUnitTest extends TestCase
     /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
-        $message = TranslationTestHelper::createTranslatableExceptionMessage(__METHOD__);
+        $message = self::createTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
             ->rm(Argument::cetera())

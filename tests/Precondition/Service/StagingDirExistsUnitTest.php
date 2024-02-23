@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -33,7 +32,7 @@ final class StagingDirExistsUnitTest extends PreconditionUnitTestCase
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new StagingDirExists($environment, $filesystem, $translatableFactory);
     }

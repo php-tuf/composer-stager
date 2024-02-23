@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -32,7 +31,7 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ActiveDirExists($environment, $filesystem, $translatableFactory);
     }

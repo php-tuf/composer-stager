@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory */
 final class TranslatableFactoryUnitTest extends TestCase
@@ -18,8 +17,8 @@ final class TranslatableFactoryUnitTest extends TestCase
      */
     public function testCreateDomainOptions(): void
     {
-        $expected = TranslationTestHelper::createDomainOptions();
-        $sut = new TranslatableFactory($expected, TranslationTestHelper::createTranslator());
+        $expected = self::createDomainOptions();
+        $sut = new TranslatableFactory($expected, self::createTranslator());
 
         $actual = $sut->createDomainOptions();
 
@@ -36,7 +35,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         TranslatableInterface $expectedMessage,
     ): void {
         $givenCreateMessageArguments = array_values($givenCreateMessageArguments);
-        $sut = new TranslatableFactory(TranslationTestHelper::createDomainOptions(), TranslationTestHelper::createTranslator());
+        $sut = new TranslatableFactory(self::createDomainOptions(), self::createTranslator());
 
         $actual = $sut->createTranslatableMessage(...$givenCreateMessageArguments);
 
@@ -50,14 +49,14 @@ final class TranslatableFactoryUnitTest extends TestCase
                 'givenCreateMessageArguments' => ['message' => 'Minimum values'],
                 'expectedMessage' => new TranslatableMessage(
                     'Minimum values',
-                    TranslationTestHelper::createTranslator(),
+                    self::createTranslator(),
                 ),
             ],
             'Nullable values' => [
                 'givenCreateMessageArguments' => ['message' => 'Nullable values'],
                 'expectedMessage' => new TranslatableMessage(
                     'Nullable values',
-                    TranslationTestHelper::createTranslator(),
+                    self::createTranslator(),
                     null,
                     null,
                 ),
@@ -65,13 +64,13 @@ final class TranslatableFactoryUnitTest extends TestCase
             'Simple values' => [
                 'givenCreateMessageArguments' => [
                     'message' => 'Simple values',
-                    'translationParameters' => TranslationTestHelper::createTranslationParameters(),
+                    'translationParameters' => self::createTranslationParameters(),
                     'domain' => 'domain',
                 ],
                 'expectedMessage' => new TranslatableMessage(
                     'Simple values',
-                    TranslationTestHelper::createTranslator(),
-                    TranslationTestHelper::createTranslationParameters(),
+                    self::createTranslator(),
+                    self::createTranslationParameters(),
                     'domain',
                 ),
             ],
@@ -85,7 +84,7 @@ final class TranslatableFactoryUnitTest extends TestCase
      */
     public function testCreateTranslationParameters(array $parameters): void
     {
-        $sut = new TranslatableFactory(TranslationTestHelper::createDomainOptions(), TranslationTestHelper::createTranslator());
+        $sut = new TranslatableFactory(self::createDomainOptions(), self::createTranslator());
         $expected = new TranslationParameters($parameters);
 
         $actual = $sut->createTranslationParameters($parameters);

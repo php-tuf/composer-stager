@@ -16,7 +16,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Beginner;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -147,12 +146,12 @@ final class BeginnerUnitTest extends TestCase
         return [
             'InvalidArgumentException' => [
                 'caughtException' => new InvalidArgumentException(
-                    TranslationTestHelper::createTranslatableExceptionMessage('one'),
+                    self::createTranslatableExceptionMessage('one'),
                 ),
             ],
             'IOException' => [
                 'caughtException' => new IOException(
-                    TranslationTestHelper::createTranslatableExceptionMessage('two'),
+                    self::createTranslatableExceptionMessage('two'),
                 ),
             ],
         ];

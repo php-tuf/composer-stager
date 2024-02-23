@@ -14,7 +14,6 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -50,7 +49,7 @@ final class FilesystemUnitTest extends TestCase
         $environment = $this->environment->reveal();
         $pathFactory = $this->pathFactory->reveal();
         $symfonyFilesystem = $this->symfonyFilesystem->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new Filesystem($environment, $pathFactory, $symfonyFilesystem, $translatableFactory);
     }

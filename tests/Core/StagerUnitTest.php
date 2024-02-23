@@ -15,7 +15,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -41,7 +40,7 @@ final class StagerUnitTest extends TestCase
     {
         $composerRunner = $this->composerRunner->reveal();
         $preconditions = $this->preconditions->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new Stager($composerRunner, $preconditions, $translatableFactory);
     }
@@ -118,7 +117,7 @@ final class StagerUnitTest extends TestCase
     public function testCommandIsEmpty(): void
     {
         $message = 'The Composer command cannot be empty';
-        $expectedExceptionMessage = TranslationTestHelper::createTranslatableExceptionMessage($message);
+        $expectedExceptionMessage = self::createTranslatableExceptionMessage($message);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
@@ -131,7 +130,7 @@ final class StagerUnitTest extends TestCase
     {
         $sut = $this->createSut();
 
-        $expectedExceptionMessage = TranslationTestHelper::createTranslatableExceptionMessage(
+        $expectedExceptionMessage = self::createTranslatableExceptionMessage(
             'The Composer command cannot begin with "composer"--it is implied',
         );
         self::assertTranslatableException(static function () use ($sut): void {
@@ -151,7 +150,7 @@ final class StagerUnitTest extends TestCase
     {
         $sut = $this->createSut();
 
-        $expectedExceptionMessage = TranslationTestHelper::createTranslatableExceptionMessage(
+        $expectedExceptionMessage = self::createTranslatableExceptionMessage(
             'Cannot stage a Composer command containing the "--working-dir" (or "-d") option',
         );
         self::assertTranslatableException(static function () use ($sut, $command): void {
@@ -200,10 +199,10 @@ final class StagerUnitTest extends TestCase
     {
         return [
             'IOException' => [
-                'caughtException' => new IOException(TranslationTestHelper::createTranslatableExceptionMessage('one')),
+                'caughtException' => new IOException(self::createTranslatableExceptionMessage('one')),
             ],
             'LogicException' => [
-                'caughtException' => new LogicException(TranslationTestHelper::createTranslatableExceptionMessage('two')),
+                'caughtException' => new LogicException(self::createTranslatableExceptionMessage('two')),
             ],
         ];
     }

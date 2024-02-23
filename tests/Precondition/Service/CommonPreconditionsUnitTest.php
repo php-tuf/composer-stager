@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -56,7 +55,7 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
         $composerIsAvailable = $this->composerIsAvailable->reveal();
         $environment = $this->environment->reveal();
         $hostSupportsRunningProcesses = $this->hostSupportsRunningProcesses->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new CommonPreconditions(
             $environment,

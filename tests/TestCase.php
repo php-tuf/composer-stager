@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditio
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelperTrait;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelperTrait;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -19,6 +19,7 @@ abstract class TestCase extends PHPUnitTestCase
     use AssertTrait;
     use PathTestHelperTrait;
     use ProphecyTrait;
+    use TranslationTestHelperTrait;
 
     protected const ORIGINAL_CONTENT = '';
     protected const CHANGED_CONTENT = 'changed';
@@ -81,7 +82,7 @@ abstract class TestCase extends PHPUnitTestCase
     ): PreconditionException {
         return new PreconditionException(
             new TestPrecondition(),
-            TranslationTestHelper::createTranslatableExceptionMessage(
+            self::createTranslatableExceptionMessage(
                 $message,
                 $parameters,
             ),

@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -49,7 +48,7 @@ final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
         $environment = $this->environment->reveal();
         $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new BeginnerPreconditions(
             $environment,

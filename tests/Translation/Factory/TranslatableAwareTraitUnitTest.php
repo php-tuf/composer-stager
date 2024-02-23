@@ -11,7 +11,6 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait */
 final class TranslatableAwareTraitUnitTest extends TestCase
@@ -19,8 +18,8 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     /** @covers ::d */
     public function testDMethod(): void
     {
-        $domainOptions = TranslationTestHelper::createDomainOptions();
-        $translator = TranslationTestHelper::createTranslator();
+        $domainOptions = self::createDomainOptions();
+        $translator = self::createTranslator();
         $translatableFactory = new TranslatableFactory($domainOptions, $translator);
 
         $sut = new class($translatableFactory) extends AbstractTranslatableAwareClass {
@@ -60,8 +59,8 @@ final class TranslatableAwareTraitUnitTest extends TestCase
     public function testTMethod(array $arguments): void
     {
         $arguments = array_values($arguments);
-        $expected = TranslationTestHelper::createTranslatableMessage(...$arguments);
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $expected = self::createTranslatableMessage(...$arguments);
+        $translatableFactory = self::createTranslatableFactory();
 
         $sut = new class($translatableFactory) extends AbstractTranslatableAwareClass {
             use TranslatableAwareTrait;
@@ -93,7 +92,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
             'Simple values' => [
                 [
                     'message' => 'Message',
-                    'parameters' => TranslationTestHelper::createTranslationParameters(),
+                    'parameters' => self::createTranslationParameters(),
                     'domain' => 'domain',
                 ],
             ],
@@ -121,7 +120,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
      */
     public function testPMethod(array $parameters): void
     {
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         $sut = new class($translatableFactory) extends AbstractTranslatableAwareClass {
             use TranslatableAwareTrait;

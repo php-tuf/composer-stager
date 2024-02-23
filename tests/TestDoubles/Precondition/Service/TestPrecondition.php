@@ -21,12 +21,12 @@ final class TestPrecondition implements PreconditionInterface
 
     public function getName(): TranslatableInterface
     {
-        return TranslationTestHelper::createTranslatableMessage($this->name);
+        return self::createTranslatableMessage($this->name);
     }
 
     public function getDescription(): TranslatableInterface
     {
-        return TranslationTestHelper::createTranslatableMessage($this->description);
+        return self::createTranslatableMessage($this->description);
     }
 
     public function getStatusMessage(
@@ -35,7 +35,7 @@ final class TestPrecondition implements PreconditionInterface
         ?PathListInterface $exclusions = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): TranslatableInterface {
-        return TranslationTestHelper::createTranslatableMessage($this->statusMessage);
+        return self::createTranslatableMessage($this->statusMessage);
     }
 
     public function isFulfilled(
@@ -57,7 +57,7 @@ final class TestPrecondition implements PreconditionInterface
             return;
         }
 
-        throw new PreconditionException($this, TranslationTestHelper::createTranslatableMessage());
+        throw new PreconditionException($this, self::createTranslatableMessage());
     }
 
     public function getLeaves(): array

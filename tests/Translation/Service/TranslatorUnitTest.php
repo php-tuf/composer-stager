@@ -32,10 +32,10 @@ final class TranslatorUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->domainOptions = TranslationTestHelper::createDomainOptions();
-        $this->localeOptions = TranslationTestHelper::createLocaleOptions();
-        $this->symfonyTranslatorProxy = TranslationTestHelper::createSymfonyTranslatorProxy();
-        $this->translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $this->domainOptions = self::createDomainOptions();
+        $this->localeOptions = self::createLocaleOptions();
+        $this->symfonyTranslatorProxy = self::createSymfonyTranslatorProxy();
+        $this->translatableFactory = self::createTranslatableFactory();
     }
 
     private function createSut(): Translator
@@ -73,28 +73,28 @@ final class TranslatorUnitTest extends TestCase
         return [
             'Empty values' => [
                 'message' => '',
-                'parameters' => TranslationTestHelper::createTranslationParameters(),
+                'parameters' => self::createTranslationParameters(),
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => '',
             ],
             'Simple values' => [
                 'message' => 'A string',
-                'parameters' => TranslationTestHelper::createTranslationParameters(),
+                'parameters' => self::createTranslationParameters(),
                 'domain' => 'a_domain',
                 'locale' => 'a_locale',
                 'expectedTranslation' => 'A string',
             ],
             'Simple substitution' => [
                 'message' => 'A %mood string',
-                'parameters' => TranslationTestHelper::createTranslationParameters(['%mood' => 'happy']),
+                'parameters' => self::createTranslationParameters(['%mood' => 'happy']),
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => 'A happy string',
             ],
             'Multiple substitutions' => [
                 'message' => 'A %mood %size string',
-                'parameters' => TranslationTestHelper::createTranslationParameters([
+                'parameters' => self::createTranslationParameters([
                     '%mood' => 'happy',
                     '%size' => 'little',
                 ]),
@@ -207,8 +207,8 @@ final class TranslatorUnitTest extends TestCase
     {
         assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxy);
 
-        $domainOptions = TranslationTestHelper::createDomainOptions();
-        $expected = new Translator($domainOptions, TranslationTestHelper::createLocaleOptions(), $this->symfonyTranslatorProxy);
+        $domainOptions = self::createDomainOptions();
+        $expected = new Translator($domainOptions, self::createLocaleOptions(), $this->symfonyTranslatorProxy);
 
         $actual = Translator::create();
 

@@ -9,7 +9,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterfac
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -64,7 +63,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionUnitTestCase
         $noLinksExistOnWindows = $this->noLinksExistOnWindows->reveal();
         $noSymlinksPointOutsideTheCodebase = $this->noSymlinksPointOutsideTheCodebase->reveal();
         $noSymlinksPointToADirectory = $this->noSymlinksPointToADirectory->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new NoUnsupportedLinksExist(
             $environment,

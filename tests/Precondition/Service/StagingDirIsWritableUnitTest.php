@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -34,7 +33,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionUnitTestCase
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         assert($filesystem instanceof FilesystemInterface);
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new StagingDirIsWritable($environment, $filesystem, $translatableFactory);
     }

@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
@@ -31,7 +30,7 @@ final class ExecutableFinderUnitTest extends TestCase
     private function createSut(): ExecutableFinderInterface
     {
         $executableFinder = $this->symfonyExecutableFinder->reveal();
-        $translatorFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatorFactory = self::createTranslatableFactory();
 
         return new ExecutableFinder($executableFinder, $translatorFactory);
     }

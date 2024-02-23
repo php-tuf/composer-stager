@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory */
 final class ProcessFactoryUnitTest extends TestCase
@@ -19,7 +18,7 @@ final class ProcessFactoryUnitTest extends TestCase
      */
     public function testFactory(array $command, array $optionalArguments): void
     {
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
         $symfonyProcessFactory = new SymfonyProcessFactory($translatableFactory);
         $sut = new ProcessFactory($symfonyProcessFactory, $translatableFactory);
 

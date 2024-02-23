@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\VfsTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -56,7 +55,7 @@ final class PhpFileSyncerUnitTest extends TestCase
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
         $pathListFactory = self::createPathListFactory();
 
         return new PhpFileSyncer($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
@@ -65,7 +64,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     /** @covers ::ensureDestinationExists */
     public function testSyncDestinationCouldNotBeCreated(): void
     {
-        $message = TranslationTestHelper::createTranslatableExceptionMessage(__METHOD__);
+        $message = self::createTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
             ->mkdir(self::destinationDirPath())

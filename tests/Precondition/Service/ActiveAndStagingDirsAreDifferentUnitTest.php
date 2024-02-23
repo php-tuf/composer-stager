@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent
@@ -19,7 +18,7 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionUnitTes
     protected function createSut(): ActiveAndStagingDirsAreDifferent
     {
         $environment = $this->environment->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ActiveAndStagingDirsAreDifferent($environment, $translatableFactory);
     }

@@ -6,7 +6,6 @@ use Exception;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPrecondition;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Throwable;
 
 final class PreconditionExceptionUnitTest extends TestCase
@@ -33,7 +32,7 @@ final class PreconditionExceptionUnitTest extends TestCase
             'Minimum values' => [
                 'arguments' => [
                     'precondition' => new TestPrecondition('one'),
-                    'translatableMessage' => TranslationTestHelper::createTranslatableMessage('two'),
+                    'translatableMessage' => self::createTranslatableMessage('two'),
                 ],
                 'code' => 0,
                 'previous' => null,
@@ -41,7 +40,7 @@ final class PreconditionExceptionUnitTest extends TestCase
             'Simple values' => [
                 'arguments' => [
                     'precondition' => new TestPrecondition('one'),
-                    'translatableMessage' => TranslationTestHelper::createTranslatableMessage('two'),
+                    'translatableMessage' => self::createTranslatableMessage('two'),
                     'code' => 0,
                     'previous' => new Exception('three'),
                 ],

@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -49,7 +48,7 @@ final class CommitterPreconditionsUnitTest extends PreconditionUnitTestCase
         $commonPreconditions = $this->commonPreconditions->reveal();
         $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $translatableFactory = TranslationTestHelper::createTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new CommitterPreconditions($environment, $commonPreconditions, $noUnsupportedLinksExist, $stagingDirIsReady, $translatableFactory);
     }

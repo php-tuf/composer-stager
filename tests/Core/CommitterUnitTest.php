@@ -16,7 +16,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
-use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -153,10 +152,10 @@ final class CommitterUnitTest extends TestCase
     {
         return [
             'InvalidArgumentException' => [
-                'caughtException' => new InvalidArgumentException(TranslationTestHelper::createTranslatableExceptionMessage('one')),
+                'caughtException' => new InvalidArgumentException(self::createTranslatableExceptionMessage('one')),
             ],
             'IOException' => [
-                'caughtException' => new IOException(TranslationTestHelper::createTranslatableExceptionMessage('two')),
+                'caughtException' => new IOException(self::createTranslatableExceptionMessage('two')),
             ],
         ];
     }
