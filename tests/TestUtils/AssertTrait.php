@@ -203,13 +203,15 @@ trait AssertTrait
                 self::assertTranslatableEquals(
                     $expectedExceptionMessage,
                     $actualException->getTranslatableMessage(),
-                    'Set correct exception message.',
+                    'Set correct exception message (compared with expected translatable message).',
                 );
-            } elseif (is_string($expectedExceptionMessage)) {
+            }
+
+            if (is_string($expectedExceptionMessage)) {
                 self::assertEquals(
                     $expectedExceptionMessage,
                     $actualExceptionMessage,
-                    'Set correct exception message.',
+                    'Set correct exception message (compared with expected string).',
                 );
             }
 
