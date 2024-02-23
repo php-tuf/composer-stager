@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestSymfonyProcess;
 use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
+use Symfony\Component\Process\Process as SymfonyProcess;
 use Throwable;
 
 final class ProcessTestHelper
@@ -18,5 +18,18 @@ final class ProcessTestHelper
         } catch (Throwable $e) {
             return $e;
         }
+    }
+}
+
+final class TestSymfonyProcess extends SymfonyProcess
+{
+    public function __construct(array $command = [])
+    {
+        parent::__construct($command);
+    }
+
+    public function isSuccessful(): bool
+    {
+        return true;
     }
 }
