@@ -196,6 +196,11 @@ trait PathTestHelperTrait
         return Helper::makeAbsolute($path, $basePath);
     }
 
+    /**
+     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
+     *
+     * @phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference
+     */
     protected static function fixSeparatorsMultiple(&...$paths): void
     {
         Helper::fixSeparatorsMultiple(...$paths);

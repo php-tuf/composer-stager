@@ -15,7 +15,6 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
@@ -104,7 +103,7 @@ final class CommitterUnitTest extends TestCase
             'Simple values' => [
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
-                'exclusions' => new TestPathList(),
+                'exclusions' => self::createPathList(),
                 'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],

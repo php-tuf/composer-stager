@@ -10,7 +10,6 @@ use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -32,7 +31,7 @@ abstract class PreconditionTestCase extends TestCase
         $this->environment
             ->setTimeLimit(Argument::any())
             ->willReturn(true);
-        $this->exclusions = new TestPathList();
+        $this->exclusions = self::createPathList();
     }
 
     abstract protected function createSut(): PreconditionInterface;

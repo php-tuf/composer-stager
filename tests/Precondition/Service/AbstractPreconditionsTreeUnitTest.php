@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestFulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestUnfulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
@@ -112,7 +111,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
             ],
             'Unfulfilled, with exclusions' => [
                 'class' => TestUnfulfilledPrecondition::class,
-                'exclusions' => new TestPathList(),
+                'exclusions' => self::createPathList(),
                 'timeout' => 100,
             ],
         ];
