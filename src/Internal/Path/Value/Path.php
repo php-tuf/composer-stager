@@ -26,7 +26,7 @@ final class Path implements PathInterface
      *   it has an extension, which is no guarantee of type.
      */
     public function __construct(
-        private PathHelperInterface $pathHelper,
+        private readonly PathHelperInterface $pathHelper,
         private readonly string $path,
         ?PathInterface $basePath = null,
     ) {
