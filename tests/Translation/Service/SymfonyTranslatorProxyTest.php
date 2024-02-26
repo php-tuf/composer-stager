@@ -10,7 +10,6 @@ use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 final class SymfonyTranslatorProxyTest extends TestCase
 {
     /**
-     * @covers ::__construct
      * @covers ::getLocale
      * @covers ::trans
      *
@@ -75,5 +74,22 @@ final class SymfonyTranslatorProxyTest extends TestCase
                 'expectedTranslation' => 'A happy little string',
             ],
         ];
+    }
+
+    /**
+     * @covers ::symfonyTranslator
+     * @covers ::trans
+     */
+    public function testSerializable(): void
+    {
+        $id = 'Arbitrary string';
+        $sut = new SymfonyTranslatorProxy();
+
+        self::assertSame($id, $sut->trans($id));
+
+        $sut = serialize($sut);
+        $sut = unserialize($sut);
+
+        self::assertSame($id, $sut->trans($id));
     }
 }
