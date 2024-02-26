@@ -11,7 +11,7 @@
             "generator": "composite",
             "reports": [
                 "preconditions-trees-chart",
-                "preconditions-individuals-chart",
+                "preconditions-leaves-chart",
                 "fileSyncers-chart",
                 "detail",
                 "default"
@@ -20,7 +20,7 @@
 
         "preconditions-trees-chart": {
             "generator": "component",
-            "filter": "benchmark_name='PreconditionBench' and subject_name='benchTrees'",
+            "filter": "benchmark_name='PreconditionBench' and subject_name='benchCoreTrees'",
             "components": [
                 {
                     "component": "bar_chart_aggregate",
@@ -31,9 +31,9 @@
                 }
             ]
         },
-        "preconditions-individuals-chart": {
+        "preconditions-leaves-chart": {
             "generator": "component",
-            "filter": "benchmark_name='PreconditionBench' and subject_name='benchIndividuals'",
+            "filter": "benchmark_name='PreconditionBench' and subject_name='benchLeaves'",
             "components": [
                 {
                     "component": "bar_chart_aggregate",

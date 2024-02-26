@@ -6,34 +6,25 @@ use Generator;
 use PhpBench\Attributes\BeforeClassMethods;
 use PhpBench\Attributes\ParamProviders;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagerPreconditions;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirDoesNotExist;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 #[BeforeClassMethods(['setUpBeforeClass'])]
 final class PreconditionBench extends BenchCase
 {
-    #[ParamProviders(['providerTrees'])]
-    public function benchTrees(array $params): void
+    #[ParamProviders(['providerCoreTrees'])]
+    public function benchCoreTrees(array $params): void
     {
         $this->doBench($params);
     }
 
-    public function providerTrees(): Generator
+    /** Provides the preconditions for the top level, core services. */
+    public function providerCoreTrees(): Generator
     {
         yield 'BeginnerPreconditions' => [BeginnerPreconditions::class];
         yield 'CommitterPreconditions' => [CommitterPreconditions::class];
@@ -41,26 +32,39 @@ final class PreconditionBench extends BenchCase
         yield 'CleanerPreconditions' => [CleanerPreconditions::class];
     }
 
-    #[ParamProviders(['providerIndividuals'])]
-    public function benchIndividuals(array $params): void
+    #[ParamProviders(['providerLeaves'])]
+    public function benchLeaves(array $params): void
     {
         $this->doBench($params);
     }
 
-    public function providerIndividuals(): Generator
+    public function providerLeaves(): Generator
     {
-        yield 'ActiveAndStagingDirsAreDifferent' => [ActiveAndStagingDirsAreDifferent::class];
-        yield 'ActiveDirExists' => [ActiveDirExists::class];
-        yield 'ActiveDirIsWritable' => [ActiveDirIsWritable::class];
-        yield 'ComposerIsAvailable' => [ComposerIsAvailable::class];
-        yield 'HostSupportsRunningProcesses' => [HostSupportsRunningProcesses::class];
-        yield 'NoAbsoluteSymlinksExist' => [NoAbsoluteSymlinksExist::class];
-        yield 'NoHardLinksExist' => [NoHardLinksExist::class];
-        yield 'NoSymlinksPointOutsideTheCodebase' => [NoSymlinksPointOutsideTheCodebase::class];
-        yield 'NoSymlinksPointToADirectory' => [NoSymlinksPointToADirectory::class];
-        yield 'StagingDirDoesNotExist' => [StagingDirDoesNotExist::class];
-        yield 'StagingDirExists' => [StagingDirExists::class];
-        yield 'StagingDirIsWritable' => [StagingDirIsWritable::class];
+        $container = ContainerTestHelper::container();
+        $services = $container->getDefinitions();
+
+        foreach ($services as $id => $definition) {
+            $classFqn = $definition->getClass();
+
+            if (!is_string($classFqn) || !class_exists($classFqn)) {
+                continue;
+            }
+
+            // Target preconditions.
+            if (!is_a($classFqn, PreconditionInterface::class, true)) {
+                continue;
+            }
+
+            // Target leaves.
+            if (is_subclass_of($definition->getClass(), AbstractPreconditionsTree::class)) {
+                continue;
+            }
+
+            $fqnParts = explode('\\', $classFqn);
+            $className = array_pop($fqnParts);
+
+            yield $className => [$classFqn];
+        }
     }
 
     private function doBench(array $params): void
