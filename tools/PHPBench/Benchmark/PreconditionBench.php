@@ -43,7 +43,7 @@ final class PreconditionBench extends BenchCase
         $container = ContainerTestHelper::container();
         $services = $container->getDefinitions();
 
-        foreach ($services as $id => $definition) {
+        foreach ($services as $definition) {
             $classFqn = $definition->getClass();
 
             if (!is_string($classFqn) || !class_exists($classFqn)) {
