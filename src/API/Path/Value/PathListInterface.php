@@ -26,8 +26,10 @@ interface PathListInterface
     /**
      * Adds a list of raw path strings.
      *
-     * Path strings must be relative, e.g., "example" or "../example" but
-     * not "/var/www/example". Nothing needs to actually exist at them.
+     * Path strings must be relative, e.g., "example" or "../example" but not
+     * "/var/www/example". They will be resolved according to the context, e.g.,
+     * relative to the active and staging directories, respectively, when syncing
+     * files. Nothing needs to actually exist at the paths in any context
      */
     public function add(string ...$paths): void;
 }
