@@ -14,6 +14,7 @@ use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
 
 /**
  * Provides end-to-end functional tests, including the API and internal layers.
@@ -306,44 +307,49 @@ final class EndToEndFunctionalTest extends TestCase
 
     public function providerDirectories(): array
     {
-        return [
-            // Siblings.
+        $data = [
             'Siblings' => [
                 'activeDir' => 'active-dir',
                 'stagingDir' => 'staging-dir',
             ],
-
-            // Nested.
-            'Nested: staging inside active' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => 'active-dir/staging-dir',
-            ],
-            // It is unnecessary to test with the active directory inside the
-            // staging directory, because the test itself goes both directions
-            // in course. Continue to the next scenario.
-            'Nested: with directory depth' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => 'active-dir/some/directory/depth/staging-dir',
-            ],
-
-            // These scenarios are the most important for shared hosting
-            // situations, which may not provide access to paths outside the
-            // codebase, e.g., the web root.
-            'Nested: Staging as "hidden" dir' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => 'active-dir/.composer_staging',
-            ],
-
-            // Other.
-            'Other: Staging dir in temp directory' => [
-                'activeDir' => 'active-dir',
-                'stagingDir' => sprintf(
-                    '%s/composer-stager/%s',
-                    sys_get_temp_dir(),
-                    uniqid('', true),
-                ),
+            'Shared distant ancestor' => [
+                'activeDir' => 'one/two/three/four/five/six/seven/eight/nine/ten/active-dir',
+                'stagingDir' => 'eleven/twelve/thirteen/fourteen/fifteen/staging-dir',
             ],
         ];
+
+        // Some scenarios are unsupported on Windows:
+        if (!EnvironmentTestHelper::isWindows()) {
+            // @phpcs:disable Squiz.Arrays.ArrayDeclaration.ValueNoNewline
+            $data = [
+                ...$data,
+                ...[
+                    // Using the temp directory as the staging directory is not currently
+                    // supported by extension of the fact that having the active and
+                    // staging directories on different drives is not unsupported--because
+                    // the temp directory is commonly on a separate drive from the web root.
+                    // @see https://github.com/php-tuf/composer-stager/issues/326
+                    'Temp directory' => [
+                        'activeDir' => 'active-dir',
+                        'stagingDir' => sprintf(
+                            '%s/composer-stager/%s',
+                            sys_get_temp_dir(),
+                            uniqid('', true),
+                        ),
+                    ],
+
+                    // This scenario is important for shared hosting, which may not
+                    // provide access to paths outside the codebase, e.g., the web root.
+                    'Staging directory nested within active directory' => [
+                        'activeDir' => 'active-dir',
+                        'stagingDir' => 'active-dir/staging-dir',
+                    ],
+                ],
+            ];
+            // @phpcs:enable Squiz.Arrays.ArrayDeclaration.ValueNoNewline
+        }
+
+        return $data;
     }
 
     private static function assertComposerJsonName(string $directory, mixed $expected, string $message = ''): void

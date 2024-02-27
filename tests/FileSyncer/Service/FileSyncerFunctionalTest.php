@@ -33,7 +33,6 @@ final class FileSyncerFunctionalTest extends TestCase
      * @covers ::__construct
      * @covers ::assertSourceAndDestinationAreDifferent
      * @covers ::assertSourceIsValid
-     * @covers ::isDescendant
      * @covers ::sync
      *
      * @dataProvider providerBasicFunctionality

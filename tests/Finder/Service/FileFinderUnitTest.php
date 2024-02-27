@@ -17,9 +17,10 @@ final class FileFinderUnitTest extends TestCase
     {
         $pathFactory = self::createPathFactory();
         $translatableFactory = self::createTranslatableFactory();
+        $pathHelper = self::createPathHelper();
         $pathListFactory = self::createPathListFactory();
 
-        return new FileFinder($pathFactory, $pathListFactory, $translatableFactory);
+        return new FileFinder($pathFactory, $pathHelper, $pathListFactory, $translatableFactory);
     }
 
     public function testIsTranslatable(): void

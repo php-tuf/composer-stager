@@ -30,6 +30,10 @@ final class PathTestHelperUnitTest extends TestCase
                 'paths' => ['one/two'],
                 'expected' => ['one/two'],
             ],
+            'Windows directory separators' => [
+                'paths' => ['one\\two\\three'],
+                'expected' => ['one/two/three'],
+            ],
             'Multiple paths with mixed directory separators' => [
                 'paths' => ['one/two\\three'],
                 'expected' => ['one/two/three'],

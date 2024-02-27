@@ -11,6 +11,7 @@ use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
@@ -25,10 +26,9 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::buildCommand
  * @covers ::ensureDestinationDirectoryExists
  * @covers ::getRelativePath
+ * @covers ::makeRelativeToSource
  * @covers ::runCommand
  * @covers ::sync
- *
- * @group no_windows
  */
 final class FileSyncerUnitTest extends TestCase
 {
@@ -62,15 +62,15 @@ final class FileSyncerUnitTest extends TestCase
 
     private function createSut(): FileSyncer
     {
-        $environment = $this->environment->reveal();
-        $executableFinder = $this->executableFinder->reveal();
-        $filesystem = $this->filesystem->reveal();
-        $pathHelper = self::createPathHelper();
-        $pathListFactory = self::createPathListFactory();
-        $rsync = $this->rsync->reveal();
-        $translatableFactory = self::createTranslatableFactory();
-
-        return new FileSyncer($environment, $executableFinder, $filesystem, $pathHelper, $pathListFactory, $rsync, $translatableFactory);
+        return new FileSyncer(
+            $this->environment->reveal(),
+            $this->executableFinder->reveal(),
+            $this->filesystem->reveal(),
+            self::createPathFactory(),
+            self::createPathListFactory(),
+            $this->rsync->reveal(),
+            self::createTranslatableFactory(),
+        );
     }
 
     /**
@@ -84,15 +84,19 @@ final class FileSyncerUnitTest extends TestCase
         array $optionalArguments,
         array $expectedCommand,
         ?OutputCallbackInterface $expectedCallback,
+        int $expectedTimeout,
     ): void {
         $sourcePath = self::createPath($source);
         $destinationPath = self::createPath($destination);
 
+        $this->environment
+            ->setTimeLimit($expectedTimeout)
+            ->shouldBeCalledOnce();
         $this->filesystem
             ->mkdir($destinationPath)
             ->shouldBeCalledOnce();
         $this->rsync
-            ->run($expectedCommand, null, [], $expectedCallback)
+            ->run($expectedCommand, self::createPath('/', $source), [], $expectedCallback)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -110,10 +114,26 @@ final class FileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '/var/www/source/',
-                    '/var/www/destination',
+                    'var/www/source/',
+                    'var/www/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
+            ],
+            'Simple arguments' => [
+                'source' => '/var/www/source',
+                'destination' => '/var/www/destination',
+                'optionalArguments' => [self::createPathList('one.txt'), new TestOutputCallback(), 42],
+                'expectedCommand' => [
+                    '--archive',
+                    '--delete-after',
+                    '--verbose',
+                    '--exclude=/one.txt',
+                    'var/www/source/',
+                    'var/www/destination',
+                ],
+                'expectedCallback' => new TestOutputCallback(),
+                'expectedTimeout' => 42,
             ],
             'Siblings: no exclusions given' => [
                 'source' => '/var/www/source/one',
@@ -123,11 +143,13 @@ final class FileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '/var/www/source/one/',
-                    '/var/www/destination/two',
+                    'var/www/source/one/',
+                    'var/www/destination/two',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
+            ////'Siblings: simple exclusions given' => [
             //'Siblings: simple exclusions given' => [
             'Siblings: simple exclusions given' => [
                 'source' => '/var/www/source/two',
@@ -139,10 +161,11 @@ final class FileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=/three.txt',
                     '--exclude=/four.txt',
-                    '/var/www/source/two/',
-                    '/var/www/destination/two',
+                    'var/www/source/two/',
+                    'var/www/destination/two',
                 ],
                 'expectedCallback' => new TestOutputCallback(),
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Siblings: duplicate exclusions given' => [
                 'source' => '/var/www/source/three',
@@ -156,10 +179,11 @@ final class FileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=/four/five',
                     '--exclude=/six/seven',
-                    '/var/www/source/three/',
-                    '/var/www/destination/three',
+                    'var/www/source/three/',
+                    'var/www/destination/three',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Siblings: Windows directory separators' => [
                 'source' => '/var/www/source/one\\two',
@@ -179,10 +203,11 @@ final class FileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=/three/four',
                     '--exclude=/five/six/seven/eight',
-                    '/var/www/source/one/two/',
-                    '/var/www/destination/one/two',
+                    'var/www/source/one/two/',
+                    'var/www/destination/one/two',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Nested: destination inside source (neither is excluded)' => [
                 'source' => '/var/www/source',
@@ -192,10 +217,11 @@ final class FileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '/var/www/source/',
-                    '/var/www/source/destination',
+                    'var/www/source/',
+                    'var/www/source/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Nested: source inside destination (source is excluded)' => [
                 'source' => '/var/www/destination/source',
@@ -207,10 +233,11 @@ final class FileSyncerUnitTest extends TestCase
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
-                    '/var/www/destination/source/',
-                    '/var/www/destination',
+                    'var/www/destination/source/',
+                    'var/www/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Nested: with Windows directory separators' => [
                 'source' => '/var/www/destination\\source',
@@ -222,10 +249,11 @@ final class FileSyncerUnitTest extends TestCase
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
-                    '/var/www/destination/source/',
-                    '/var/www/destination',
+                    'var/www/destination/source/',
+                    'var/www/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
         ];
     }

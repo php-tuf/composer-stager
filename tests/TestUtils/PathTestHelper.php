@@ -246,7 +246,7 @@ final class PathTestHelper
             $path = '.';
         }
 
-        return self::stripTrailingSlash($path) . DIRECTORY_SEPARATOR;
+        return self::stripTrailingSlash($path) . '/';
     }
 
     /**

@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use ReflectionClass;
 
 /**
@@ -20,6 +19,7 @@ use ReflectionClass;
  * @covers ::getProtocol
  * @covers ::hasProtocol
  * @covers ::isAbsolute
+ * @covers ::isRelative
  * @covers ::relative
  * @covers ::stripProtocol
  */
@@ -27,7 +27,7 @@ final class PathUnitTest extends TestCase
 {
     private function createSut(mixed ...$arguments): Path
     {
-        $pathHelper = PathTestHelper::createPathHelper();
+        $pathHelper = self::createPathHelper();
 
         return new Path($pathHelper, ...func_get_args());
     }
@@ -40,14 +40,14 @@ final class PathUnitTest extends TestCase
     public function testBasicFunctionality(
         string $given,
         string $basePath,
-        bool $isAbsolute,
-        string $absolute,
+        bool $expectedIsAbsolute,
+        string $expectedAbsolute,
         string $relativeBase,
-        string $relative,
+        string $expectedRelative,
     ): void {
-        $equalInstance = PathTestHelper::createPath($given);
-        $unequalInstance = PathTestHelper::createPath(__DIR__);
-        $relativeBase = PathTestHelper::createPath($relativeBase);
+        $equalInstance = self::createPath($given);
+        $unequalInstance = self::createPath(__DIR__);
+        $relativeBase = self::createPath($relativeBase);
         $sut = $this->createSut($given);
 
         // Dynamically override basePath.
@@ -60,474 +60,392 @@ final class PathUnitTest extends TestCase
         $overrideBasePath($sut, $basePath);
         $overrideBasePath($equalInstance, $basePath);
 
-        self::assertEquals($isAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was relative.');
-        self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
-        self::assertEquals($relative, $sut->relative($relativeBase), 'Got absolute path relative to another given path.');
+        self::assertEquals($expectedIsAbsolute, $sut->isAbsolute(), 'Correctly determined whether given path was absolute.');
+        self::assertEquals(!$expectedIsAbsolute, $sut->isRelative(), 'Correctly determined whether given path was relative.');
+        self::assertEquals($expectedAbsolute, $sut->absolute(), 'Got absolute path.');
+        self::assertEquals($expectedRelative, $sut->relative($relativeBase), 'Got absolute path relative to another given path.');
         self::assertEquals($sut, $equalInstance, 'Path value considered equal to another instance with the same input.');
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
 
         // Make sure object is truly immutable.
         chdir(__DIR__);
-        self::assertEquals($absolute, $sut->absolute(), 'Retained correct value after changing working directory.');
+        self::assertEquals($expectedAbsolute, $sut->absolute(), 'Retained correct value after changing working directory.');
         self::assertEquals($sut, $equalInstance, 'Path value still considered equal to another instance with the same input after changing working directory.');
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
     }
 
     public function providerBasicFunctionality(): array
     {
-        $data = [];
-
-        foreach ($this->providerBasicFunctionalityUnixLike() as $description => $datum) {
-            $data[sprintf('Unix-like: %s', $description)] = $datum;
-        }
-
-        foreach ($this->providerBasicFunctionalityWindows() as $description => $datum) {
-            $data[sprintf('Windows: %s', $description)] = $datum;
-        }
-
-        return $data;
+        return array_merge(
+            $this->providerBasicFunctionalityUnixLike(),
+            $this->providerBasicFunctionalityWindows(),
+        );
     }
 
     public function providerBasicFunctionalityUnixLike(): array
     {
-        return [
+        $data = [
             // Special base paths.
             'Unix-like: Path as empty string ()' => [
                 'given' => '',
                 'baseDir' => '/var/one',
-                'isAbsolute' => false,
-                'absolute' => '/var/one',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/one',
                 'relativeBase' => '/tmp/two',
-                'relative' => '/tmp/two',
+                'expectedRelative' => '/tmp/two',
             ],
             'Unix-like: Path as dot (.)' => [
                 'given' => '.',
                 'baseDir' => '/var/three',
-                'isAbsolute' => false,
-                'absolute' => '/var/three',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/three',
                 'relativeBase' => '/tmp/four',
-                'relative' => '/tmp/four',
+                'expectedRelative' => '/tmp/four',
             ],
             'Unix-like: Path as dot-slash (./)' => [
                 'given' => './',
                 'baseDir' => '/var/five',
-                'isAbsolute' => false,
-                'absolute' => '/var/five',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/five',
                 'relativeBase' => '/tmp/six',
-                'relative' => '/tmp/six',
+                'expectedRelative' => '/tmp/six',
             ],
             // Relative paths.
             'Unix-like: Relative path as simple string' => [
                 'given' => 'one',
                 'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/one',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/one',
                 'relativeBase' => '/tmp',
-                'relative' => '/tmp/one',
+                'expectedRelative' => '/tmp/one',
             ],
             'Unix-like: Relative path as space ( )' => [
                 'given' => ' ',
                 'baseDir' => '/var/two',
-                'isAbsolute' => false,
-                'absolute' => '/var/two/ ',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/two/ ',
                 'relativeBase' => '/tmp/three',
-                'relative' => '/tmp/three/ ',
+                'expectedRelative' => '/tmp/three/ ',
             ],
             'Unix-like: Relative path with depth' => [
                 'given' => 'one/two/three/four/five',
                 'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/one/two/three/four/five',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/one/two/three/four/five',
                 'relativeBase' => '/tmp',
-                'relative' => '/tmp/one/two/three/four/five',
+                'expectedRelative' => '/tmp/one/two/three/four/five',
             ],
             'Unix-like: Relative path with trailing slash' => [
                 'given' => 'one/two/',
                 'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/one/two',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/one/two',
                 'relativeBase' => '/tmp',
-                'relative' => '/tmp/one/two',
+                'expectedRelative' => '/tmp/one/two',
             ],
             'Unix-like: Relative path with repeating directory separators' => [
                 'given' => 'one//two////three',
                 'baseDir' => '/var/four',
-                'isAbsolute' => false,
-                'absolute' => '/var/four/one/two/three',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/four/one/two/three',
                 'relativeBase' => '/tmp/five',
-                'relative' => '/tmp/five/one/two/three',
+                'expectedRelative' => '/tmp/five/one/two/three',
             ],
             'Unix-like: Relative path with double dots (..)' => [
                 'given' => '../one/../two/three/four/../../five/six/..',
                 'baseDir' => '/var/seven/eight',
-                'isAbsolute' => false,
-                'absolute' => '/var/seven/two/five',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/seven/two/five',
                 'relativeBase' => '/tmp/nine/ten',
-                'relative' => '/tmp/nine/two/five',
+                'expectedRelative' => '/tmp/nine/two/five',
             ],
             'Unix-like: Relative path with leading double dots (..) and root base path' => [
                 'given' => '../one/two',
                 'baseDir' => '/',
-                'isAbsolute' => false,
-                'absolute' => '/one/two',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/one/two',
                 'relativeBase' => '/three/..',
-                'relative' => '/one/two',
+                'expectedRelative' => '/one/two',
             ],
             'Unix-like: Silly combination of relative path as double dots (..) with root base path' => [
                 'given' => '..',
                 'baseDir' => '/',
-                'isAbsolute' => false,
-                'absolute' => '/',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/',
                 'relativeBase' => '/',
-                'relative' => '/',
+                'expectedRelative' => '/',
             ],
             'Unix-like: Crazy relative path' => [
                 'given' => 'one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
                 'baseDir' => '/seven/eight/nine/ten',
-                'isAbsolute' => false,
-                'absolute' => '/seven/eight/nine/ten/one/six',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/seven/eight/nine/ten/one/six',
                 'relativeBase' => '/eleven/twelve/thirteen/fourteen',
-                'relative' => '/eleven/twelve/thirteen/fourteen/one/six',
+                'expectedRelative' => '/eleven/twelve/thirteen/fourteen/one/six',
             ],
             // Absolute paths.
             'Unix-like: Absolute path to the root' => [
                 'given' => '/',
                 'baseDir' => '/',
-                'isAbsolute' => true,
-                'absolute' => '/',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => '/',
                 'relativeBase' => '/',
-                'relative' => '/',
+                'expectedRelative' => '/',
             ],
             'Unix-like: Absolute path as simple string' => [
                 'given' => '/one',
                 'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => '/one',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => '/one',
                 'relativeBase' => '/tmp',
-                'relative' => '/one',
+                'expectedRelative' => '/one',
             ],
             'Unix-like: Absolute path with depth' => [
                 'given' => '/one/two/three/four/five',
                 'baseDir' => '/var/six/seven/eight/nine',
-                'isAbsolute' => true,
-                'absolute' => '/one/two/three/four/five',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => '/one/two/three/four/five',
                 'relativeBase' => '/tmp/ten/eleven/twelve/thirteen',
-                'relative' => '/one/two/three/four/five',
+                'expectedRelative' => '/one/two/three/four/five',
             ],
             'Unix-like: Crazy absolute path' => [
                 'given' => '/one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
                 'baseDir' => '/var/seven/eight/nine',
-                'isAbsolute' => true,
-                'absolute' => '/one/six',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => '/one/six',
                 'relativeBase' => '/tmp/ten/eleven/twelve',
-                'relative' => '/one/six',
+                'expectedRelative' => '/one/six',
             ],
             // Protocols.
             'Path with protocol: ftp://' => [
                 'given' => 'ftp://example.com/one/two/three.txt',
                 'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => 'ftp://example.com/one/two/three.txt',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'ftp://example.com/one/two/three.txt',
                 'relativeBase' => '/tmp',
-                'relative' => 'ftp://example.com/one/two/three.txt',
+                'expectedRelative' => 'ftp://example.com/one/two/three.txt',
             ],
             'Path with protocol: file:///' => [
                 'given' => 'file:///one/two/three.txt',
                 'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => 'file:///one/two/three.txt',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'file:///one/two/three.txt',
                 'relativeBase' => '/tmp',
-                'relative' => 'file:///one/two/three.txt',
+                'expectedRelative' => 'file:///one/two/three.txt',
             ],
             'Relative with base path with protocol' => [
                 'given' => 'one/two/three.txt',
                 'baseDir' => 'ftp://example.com',
-                'isAbsolute' => false,
-                'absolute' => 'ftp://example.com/one/two/three.txt',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'ftp://example.com/one/two/three.txt',
                 'relativeBase' => '/tmp',
-                'relative' => 'ftp://example.com/one/two/three.txt',
+                'expectedRelative' => 'ftp://example.com/one/two/three.txt',
             ],
             'Relative with base path with protocol with trailing slash' => [
                 'given' => 'one/two/three.txt',
                 'baseDir' => 'ftp://example.com/',
-                'isAbsolute' => false,
-                'absolute' => 'ftp://example.com/one/two/three.txt',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'ftp://example.com/one/two/three.txt',
                 'relativeBase' => '/tmp',
-                'relative' => 'ftp://example.com/one/two/three.txt',
+                'expectedRelative' => 'ftp://example.com/one/two/three.txt',
             ],
             'Absolute with base path with protocol' => [
                 'given' => '/one/two/three.txt',
                 'baseDir' => 'ftp://example.com',
-                'isAbsolute' => true,
-                'absolute' => '/one/two/three.txt',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => '/one/two/three.txt',
                 'relativeBase' => 'ftp://example.com/one/two/three.txt',
-                'relative' => '/one/two/three.txt',
+                'expectedRelative' => '/one/two/three.txt',
             ],
             'Absolute with base path with protocol with trailing slash' => [
                 'given' => '/one/two/three.txt',
                 'baseDir' => 'ftp://example.com/',
-                'isAbsolute' => true,
-                'absolute' => '/one/two/three.txt',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => '/one/two/three.txt',
                 'relativeBase' => 'ftp://example.com/one/two/three.txt',
-                'relative' => '/one/two/three.txt',
+                'expectedRelative' => '/one/two/three.txt',
             ],
             'Non-canonicalized path with protocol' => [
                 'given' => 'vfs://example.com/one/../two/three.txt',
                 'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => 'vfs://example.com/two/three.txt',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'vfs://example.com/two/three.txt',
                 'relativeBase' => '/tmp',
-                'relative' => 'vfs://example.com/two/three.txt',
+                'expectedRelative' => 'vfs://example.com/two/three.txt',
             ],
-            // Generally speaking, it would be better if an invalid protocol
-            // caused a failure. But since protocols are officially unsupported
-            // and used only internally for testing, it's sufficient just to
-            // document that this is the current behavior.
+            // Generally speaking, it would probably be better if an invalid
+            // protocol caused a failure. But since protocols are officially
+            // unsupported and used only internally for testing, it's sufficient
+            // just to document that this is the current behavior.
             'Invalid protocol' => [
                 'given' => '1ftp://example.com/one/../two/three.txt',
                 'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/1ftp:/example.com/two/three.txt',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => '/var/1ftp:/example.com/two/three.txt',
                 'relativeBase' => '/tmp',
-                'relative' => '/tmp/1ftp:/example.com/two/three.txt',
+                'expectedRelative' => '/tmp/1ftp:/example.com/two/three.txt',
             ],
-
         ];
+
+        foreach ($data as $label => $datum) {
+            unset($data[$label]);
+            $data['Unix-like: ' . $label] = $datum;
+        }
+
+        return $data;
     }
 
     public function providerBasicFunctionalityWindows(): array
     {
-        return [
-            // Special base paths.
-            'Path as empty string ()' => [
-                'given' => '',
-                'baseDir' => '/var/one',
-                'isAbsolute' => false,
-                'absolute' => '/var/one',
-                'relativeBase' => '/tmp/two',
-                'relative' => '/tmp/two',
-            ],
-            'Path as dot (.)' => [
-                'given' => '.',
-                'baseDir' => '/var/three',
-                'isAbsolute' => false,
-                'absolute' => '/var/three',
-                'relativeBase' => '/tmp/four',
-                'relative' => '/tmp/four',
-            ],
-            'Path as dot-slash (./)' => [
-                'given' => './',
-                'baseDir' => '/var/five',
-                'isAbsolute' => false,
-                'absolute' => '/var/five',
-                'relativeBase' => '/tmp/six',
-                'relative' => '/tmp/six',
-            ],
+        $data = [
             // Relative paths.
             'Relative path as simple string' => [
-                'given' => 'one',
-                'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/one',
-                'relativeBase' => '/tmp',
-                'relative' => '/tmp/one',
+                'given' => 'One',
+                'baseDir' => 'C:\\Windows',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Windows/One',
+                'relativeBase' => 'D:\\Users',
+                'expectedRelative' => 'D:/Users/One',
             ],
             'Relative path as space ( )' => [
                 'given' => ' ',
-                'baseDir' => '/var/two',
-                'isAbsolute' => false,
-                'absolute' => '/var/two/ ',
-                'relativeBase' => '/tmp/three',
-                'relative' => '/tmp/three/ ',
+                'baseDir' => 'C:\\Windows\\Two',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Windows/Two/ ',
+                'relativeBase' => 'D:\\Users\\Three',
+                'expectedRelative' => 'D:/Users/Three/ ',
             ],
-            'Relative path with depth' => [
-                'given' => 'one/two/three/four/five',
-                'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/one/two/three/four/five',
-                'relativeBase' => '/tmp',
-                'relative' => '/tmp/one/two/three/four/five',
+            'Relative path with nesting' => [
+                'given' => 'One\\Two\\Three\\Four\\Five',
+                'baseDir' => 'C:\\Windows',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Windows/One/Two/Three/Four/Five',
+                'relativeBase' => 'D:\\Users',
+                'expectedRelative' => 'D:/Users/One/Two/Three/Four/Five',
             ],
             'Relative path with trailing slash' => [
-                'given' => 'one/two/',
-                'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/one/two',
-                'relativeBase' => '/tmp',
-                'relative' => '/tmp/one/two',
+                'given' => 'One\\Two\\',
+                'baseDir' => 'C:\\Windows',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Windows/One/Two',
+                'relativeBase' => 'D:\\Users',
+                'expectedRelative' => 'D:/Users/One/Two',
             ],
             'Relative path with repeating directory separators' => [
-                'given' => 'one//two////three',
-                'baseDir' => '/var/four',
-                'isAbsolute' => false,
-                'absolute' => '/var/four/one/two/three',
-                'relativeBase' => '/tmp/five',
-                'relative' => '/tmp/five/one/two/three',
+                'given' => 'One\\\\Two\\\\\\\\Three',
+                'baseDir' => 'C:\\Windows\\Four',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Windows/Four/One/Two/Three',
+                'relativeBase' => 'D:\\Users\\Five',
+                'expectedRelative' => 'D:/Users/Five/One/Two/Three',
             ],
             'Relative path with double dots (..)' => [
-                'given' => '../one/../two/three/four/../../five/six/..',
-                'baseDir' => '/var/seven/eight',
-                'isAbsolute' => false,
-                'absolute' => '/var/seven/two/five',
-                'relativeBase' => '/tmp/nine/ten',
-                'relative' => '/tmp/nine/two/five',
+                'given' => '..\\One\\..\\Two\\Three\\Four\\..\\..\\Five\\Six\\..',
+                'baseDir' => 'C:\\Windows\\Seven\\Eight',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Windows/Seven/Two/Five',
+                'relativeBase' => 'D:\\Users\\Nine\\Ten',
+                'expectedRelative' => 'D:/Users/Nine/Two/Five',
             ],
-            'Relative path with leading double dots (..) and root base path' => [
-                'given' => '../one/two',
-                'baseDir' => '/',
-                'isAbsolute' => false,
-                'absolute' => '/one/two',
-                'relativeBase' => '/three/..',
-                'relative' => '/one/two',
+            'Relative path with leading double dots (..) and root path base path' => [
+                'given' => '..\\One\\Two',
+                'baseDir' => 'C:\\',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/One/Two',
+                'relativeBase' => 'D:\\',
+                'expectedRelative' => 'D:/One/Two',
             ],
-            'Silly combination of relative path as double dots (..) with root base path' => [
+            'Silly combination of relative path as double dots (..) with root path base path' => [
                 'given' => '..',
-                'baseDir' => '/',
-                'isAbsolute' => false,
-                'absolute' => '/',
-                'relativeBase' => '/',
-                'relative' => '/',
+                'baseDir' => 'C:\\',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/',
+                'relativeBase' => 'D:\\',
+                'expectedRelative' => 'D:/',
             ],
             'Crazy relative path' => [
-                'given' => 'one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
-                'baseDir' => '/seven/eight/nine/ten',
-                'isAbsolute' => false,
-                'absolute' => '/seven/eight/nine/ten/one/six',
-                'relativeBase' => '/eleven/twelve/thirteen/fourteen',
-                'relative' => '/eleven/twelve/thirteen/fourteen/one/six',
+                'given' => 'One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
+                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'expectedIsAbsolute' => false,
+                'expectedAbsolute' => 'C:/Seven/Eight/Nine/Ten/One/Six',
+                'relativeBase' => 'D:\\Eleven\\Twelve\\Thirteen\\Fourteen',
+                'expectedRelative' => 'D:/Eleven/Twelve/Thirteen/Fourteen/One/Six',
             ],
-            // Absolute paths.
-            'Absolute path to the root' => [
-                'given' => '/',
-                'baseDir' => '/',
-                'isAbsolute' => true,
-                'absolute' => '/',
-                'relativeBase' => '/',
-                'relative' => '/',
+            // Absolute paths from the root of a specific drive.
+            'Absolute path to the root of a specific drive' => [
+                'given' => 'D:\\',
+                'baseDir' => 'C:\\',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'D:/',
+                'relativeBase' => 'D:\\',
+                'expectedRelative' => 'D:/',
             ],
-            'Absolute path as simple string' => [
-                'given' => '/one',
-                'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => '/one',
-                'relativeBase' => '/tmp',
-                'relative' => '/one',
+            'Absolute path from the root of a specific drive as simple string' => [
+                'given' => 'D:\\One',
+                'baseDir' => 'C:\\Windows',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'D:/One',
+                'relativeBase' => 'D:\\Users',
+                'expectedRelative' => 'D:/One',
             ],
-            'Absolute path with depth' => [
-                'given' => '/one/two/three/four/five',
-                'baseDir' => '/var/six/seven/eight/nine',
-                'isAbsolute' => true,
-                'absolute' => '/one/two/three/four/five',
-                'relativeBase' => '/tmp/ten/eleven/twelve/thirteen',
-                'relative' => '/one/two/three/four/five',
+            'Absolute path from the root of a specific drive with nesting' => [
+                'given' => 'D:\\One\\Two\\Three\\Four\\Five',
+                'baseDir' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'D:/One/Two/Three/Four/Five',
+                'relativeBase' => 'D:\\Users',
+                'expectedRelative' => 'D:/One/Two/Three/Four/Five',
             ],
-            'Crazy absolute path' => [
-                'given' => '/one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
-                'baseDir' => '/var/seven/eight/nine',
-                'isAbsolute' => true,
-                'absolute' => '/one/six',
-                'relativeBase' => '/tmp/ten/eleven/twelve',
-                'relative' => '/one/six',
-            ],
-            // Protocols.
-            'Path with protocol: ftp://' => [
-                'given' => 'ftp://example.com/one/two/three.txt',
-                'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => 'ftp://example.com/one/two/three.txt',
-                'relativeBase' => '/tmp',
-                'relative' => 'ftp://example.com/one/two/three.txt',
-            ],
-            'Path with protocol: file:///' => [
-                'given' => 'file:///one/two/three.txt',
-                'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => 'file:///one/two/three.txt',
-                'relativeBase' => '/tmp',
-                'relative' => 'file:///one/two/three.txt',
-            ],
-            'Relative with base path with protocol' => [
-                'given' => 'one/two/three.txt',
-                'baseDir' => 'ftp://example.com',
-                'isAbsolute' => false,
-                'absolute' => 'ftp://example.com/one/two/three.txt',
-                'relativeBase' => '/tmp',
-                'relative' => 'ftp://example.com/one/two/three.txt',
-            ],
-            'Relative with base path with protocol with trailing slash' => [
-                'given' => 'one/two/three.txt',
-                'baseDir' => 'ftp://example.com/',
-                'isAbsolute' => false,
-                'absolute' => 'ftp://example.com/one/two/three.txt',
-                'relativeBase' => '/tmp',
-                'relative' => 'ftp://example.com/one/two/three.txt',
-            ],
-            'Absolute with base path with protocol' => [
-                'given' => '/one/two/three.txt',
-                'baseDir' => 'ftp://example.com',
-                'isAbsolute' => true,
-                'absolute' => '/one/two/three.txt',
-                'relativeBase' => 'ftp://example.com/one/two/three.txt',
-                'relative' => '/one/two/three.txt',
-            ],
-            'Absolute with base path with protocol with trailing slash' => [
-                'given' => '/one/two/three.txt',
-                'baseDir' => 'ftp://example.com/',
-                'isAbsolute' => true,
-                'absolute' => '/one/two/three.txt',
-                'relativeBase' => 'ftp://example.com/one/two/three.txt',
-                'relative' => '/one/two/three.txt',
-            ],
-            'Non-canonicalized path with protocol' => [
-                'given' => 'vfs://example.com/one/../two/three.txt',
-                'baseDir' => '/var',
-                'isAbsolute' => true,
-                'absolute' => 'vfs://example.com/two/three.txt',
-                'relativeBase' => '/tmp',
-                'relative' => 'vfs://example.com/two/three.txt',
-            ],
-            // Generally speaking, it would be better if an invalid protocol
-            // caused a failure. But since protocols are officially unsupported
-            // and used only internally for testing, it's sufficient just to
-            // document that this is the current behavior.
-            'Invalid protocol' => [
-                'given' => '1ftp://example.com/one/../two/three.txt',
-                'baseDir' => '/var',
-                'isAbsolute' => false,
-                'absolute' => '/var/1ftp:/example.com/two/three.txt',
-                'relativeBase' => '/tmp',
-                'relative' => '/tmp/1ftp:/example.com/two/three.txt',
+            'Crazy absolute path from the root of a specific drive' => [
+                'given' => 'D:\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
+                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'expectedIsAbsolute' => true,
+                'expectedAbsolute' => 'D:/One/Six',
+                'relativeBase' => 'D:\\Eleven\\Twelve\\Fourteen',
+                'expectedRelative' => 'D:/One/Six',
             ],
         ];
+
+        foreach ($data as $label => $datum) {
+            unset($data[$label]);
+            $data['Windows: ' . $label] = $datum;
+        }
+
+        return $data;
     }
 
     /** @dataProvider providerBaseDirArgument */
-    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $absolute): void
+    public function testOptionalBaseDirArgument(string $path, ?PathInterface $baseDir, string $expectedAbsolute): void
     {
-        $sut = $this->createSut($path, $basePath);
+        $sut = $this->createSut($path, $baseDir);
 
-        self::assertEquals($absolute, $sut->absolute(), 'Got absolute path.');
+        self::assertEquals($expectedAbsolute, $sut->absolute(), 'Got absolute path.');
     }
 
     public function providerBaseDirArgument(): array
     {
-        $cwd = str_replace('\\', '', getcwd());
+        $cwd = str_replace('\\', '/', getcwd());
 
         return [
             'Unix-like: with $basePath argument.' => [
                 'path' => 'one',
                 'baseDir' => self::createPath('/arg'),
-                'absolute' => '/arg/one',
+                'expectedAbsolute' => '/arg/one',
+            ],
+            'Unix-like: with null $basePath argument' => [
+                'path' => 'one',
+                'baseDir' => null,
+                'expectedAbsolute' => sprintf('%s/one', $cwd),
             ],
             'Windows: with $basePath argument.' => [
                 'path' => 'One',
                 'baseDir' => self::createPath('C:\\Arg'),
-                'absolute' => 'C:/Arg/One',
+                'expectedAbsolute' => 'C:/Arg/One',
             ],
-            'With explicit null $basePath argument' => [
-                'path' => 'one',
+            'Windows: With null $basePath argument' => [
+                'path' => 'One',
                 'baseDir' => null,
-                'absolute' => sprintf('%s/one', $cwd),
+                'expectedAbsolute' => sprintf('%s/One', $cwd),
             ],
         ];
     }
