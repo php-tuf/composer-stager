@@ -21,13 +21,12 @@ final class ProcessFunctionalTest extends TestCase
 
     public function testGetOutput(): void
     {
-        $command = 'ls';
-        $expectedOutput = shell_exec($command);
+        $expectedOutput = trim(shell_exec('echo test'));
         $expectedStatusCode = 0;
-        $sut = $this->createSut([$command]);
+        $sut = $this->createSut(['echo', 'test']);
 
         $actualStatusCode = $sut->run();
-        $actualOutput = $sut->getOutput();
+        $actualOutput = trim($sut->getOutput());
 
         self::assertSame($expectedStatusCode, $actualStatusCode, 'Returned correct final output via getter.');
         self::assertSame($expectedOutput, $actualOutput, 'Returned correct final output via getter.');
