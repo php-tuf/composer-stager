@@ -4,6 +4,7 @@ namespace PhpTuf\ComposerStager\API\Finder\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
+use RecursiveIteratorIterator;
 
 /**
  * Recursively finds all files "underneath" or "inside" a directory.
@@ -15,25 +16,24 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 interface FileFinderInterface
 {
     /**
-     * Recursively finds all files "underneath" or "inside" a given directory.
-     *
-     * Returns files only--no directories.
+     * Recursively finds all files and directories "underneath" or "inside" a given directory.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $directory
      *   The directory to search.
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathListInterface|null $exclusions
-     *   Paths to exclude, relative to the active directory.
+     *   Paths to exclude, relative to the active directory, e.g.:
+     *   ```php
+     *   $exclusions = $this->pathListFactory->create(
+     *       'cache',
+     *       'uploads',
+     *   );
+     *   ```
      *
-     * @return array<string>
-     *   A sorted list of absolute file pathnames, each beginning with the
-     *   given directory. For example, given "/var/www" as a directory:
-     *
-     *   - /var/www/four/five/six.txt
-     *   - /var/www/one.txt
-     *   - /var/www/two/three.txt
+     * @return \RecursiveIteratorIterator
+     *   Returns a filtered (see `$exclusions`) recursive directory iterator.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the directory cannot be found or is not actually a directory.
      */
-    public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array;
+    public function find(PathInterface $directory, ?PathListInterface $exclusions = null): RecursiveIteratorIterator;
 }

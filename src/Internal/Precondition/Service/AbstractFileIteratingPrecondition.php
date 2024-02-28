@@ -102,6 +102,14 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
             return [];
         }
 
-        return $this->fileFinder->find($path, $exclusions);
+        $files = $this->fileFinder->find($path, $exclusions);
+
+        $files = iterator_to_array($files);
+        /** @var array<string> $files */
+
+        // Sort the array for idempotency.
+        sort($files);
+
+        return $files;
     }
 }

@@ -33,7 +33,7 @@ final class FileFinder implements FileFinderInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
-    public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
+    public function find(PathInterface $directory, ?PathListInterface $exclusions = null): RecursiveIteratorIterator
     {
         $exclusions ??= $this->pathListFactory->create();
 
@@ -52,20 +52,7 @@ final class FileFinder implements FileFinderInterface
             string $foundPathAbsolute,
         ): bool => !in_array($foundPathAbsolute, $exclusions, true));
 
-        /** @var \Traversable<string> $iterator */
-        $iterator = new RecursiveIteratorIterator($filterIterator);
-
-        // The iterator must be converted to a flat list of pathnames rather
-        // than returned whole because its element order is uncertain, leading to
-        // unpredictable behavior in some use cases. For example, a client that
-        // uses the result for file deletion would fail when it sometimes tried
-        // to delete files after their ancestors had already been deleted.
-        $files = iterator_to_array($iterator);
-
-        // Sort the array to ensure idempotency.
-        sort($files);
-
-        return $files;
+        return new RecursiveIteratorIterator($filterIterator);
     }
 
     /**

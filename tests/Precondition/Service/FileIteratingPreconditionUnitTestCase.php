@@ -16,6 +16,8 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Throwable;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
@@ -30,13 +32,15 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
     protected FileFinderInterface|ObjectProphecy $fileFinder;
     protected FilesystemInterface|ObjectProphecy $filesystem;
     protected PathFactoryInterface|ObjectProphecy $pathFactory;
+    protected RecursiveIteratorIterator $fakeIterator;
 
     protected function setUp(): void
     {
+        $this->fakeIterator = new RecursiveIteratorIterator(new RecursiveArrayIterator([]));
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
-            ->willReturn([]);
+            ->willReturn($this->fakeIterator);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->fileExists(Argument::type(PathInterface::class))
