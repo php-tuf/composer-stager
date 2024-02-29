@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
-use PhpTuf\ComposerStager\Internal\Path\Service\PathHelper;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
@@ -23,7 +22,7 @@ final class PathFactoryUnitTest extends TestCase
      */
     public function testBasicFunctionality(): void
     {
-        $pathHelper = new PathHelper();
+        $pathHelper = self::createPathHelper();
         $filename = 'test.txt';
         $basePath = new Path($pathHelper, '/var/www');
 
