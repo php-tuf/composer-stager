@@ -107,13 +107,11 @@ final class FilesystemTestHelper
         link($target->absolute(), $link->absolute());
     }
 
-    /** If a base path is provided, use it to make all directories absolute. */
-    public static function makeAbsolute(array|string $paths, ?string $basePath): string|array
+    /** @todo Replace with \PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper::makeAbsolute(), if possible */
+    private static function makeAbsolute(array|string $paths, ?string $basePath): string|array
     {
-        $paths = BasicTestHelper::ensureIsArray($paths);
-
         if (is_string($basePath)) {
-            return array_map(static fn ($dirname): string => PathTestHelper::makeAbsolute($dirname, $basePath), $paths);
+            return PathTestHelper::makeAbsolute($paths, $basePath);
         }
 
         return $paths;
