@@ -42,16 +42,7 @@ final class FilesystemTestHelper
 
     public static function mkdir(array|string $directories, ?string $basePath = null): void
     {
-        // Convert $directories to an array if only a single string is given.
-        if (is_string($directories)) {
-            $directories = [$directories];
-        }
-
-        // If a base path is provided, use it to make all directories absolute.
-        if (is_string($basePath)) {
-            $directories = array_map(static fn ($dirname): string => PathTestHelper::makeAbsolute($dirname, $basePath), $directories);
-        }
-
+        $directories = self::makeAbsolute($directories, $basePath);
         (new SymfonyFilesystem())->mkdir($directories);
     }
 
@@ -60,18 +51,21 @@ final class FilesystemTestHelper
         self::symfonyFilesystem()->remove($paths);
     }
 
-    public static function touch(string $path): void
+    public static function touch(string|array $paths, ?string $basePath = null): void
     {
-        self::ensureParentDirectory($path);
-        self::symfonyFilesystem()->touch($path);
-
-        assert(self::symfonyFilesystem()->exists($path), sprintf('Failed to touch file: %s', $path));
+        $paths = self::makeAbsolute($paths, $basePath);
+        self::ensureParentDirectory($paths);
+        self::symfonyFilesystem()->touch($paths);
     }
 
-    public static function ensureParentDirectory(string $filename): void
+    public static function ensureParentDirectory(string|array $filenames): void
     {
-        $dirname = dirname($filename);
-        self::mkdir($dirname);
+        $filenames = BasicTestHelper::ensureIsArray($filenames);
+
+        foreach ($filenames as $filename) {
+            $dirname = dirname((string) $filename);
+            self::mkdir($dirname);
+        }
     }
 
     private static function symfonyFilesystem(): SymfonyFilesystem
@@ -111,6 +105,18 @@ final class FilesystemTestHelper
         self::prepareForLink($link, $target);
 
         link($target->absolute(), $link->absolute());
+    }
+
+    /** If a base path is provided, use it to make all directories absolute. */
+    public static function makeAbsolute(array|string $paths, ?string $basePath): string|array
+    {
+        $paths = BasicTestHelper::ensureIsArray($paths);
+
+        if (is_string($basePath)) {
+            return array_map(static fn ($dirname): string => PathTestHelper::makeAbsolute($dirname, $basePath), $paths);
+        }
+
+        return $paths;
     }
 
     private static function prepareForLink(PathInterface $link, PathInterface $target): void

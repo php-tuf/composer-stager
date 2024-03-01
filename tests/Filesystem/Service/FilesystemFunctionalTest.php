@@ -274,7 +274,7 @@ final class FilesystemFunctionalTest extends TestCase
         bool $isHardLink,
         bool $isSymlink,
     ): void {
-        self::createFiles(self::sourceDirAbsolute(), $files);
+        FilesystemTestHelper::touch($files, self::sourceDirAbsolute());
         FilesystemTestHelper::mkdir($directories, self::sourceDirAbsolute());
         FilesystemTestHelper::createSymlinks(self::sourceDirAbsolute(), $symlinks);
         FilesystemTestHelper::createHardlinks(self::sourceDirAbsolute(), $hardLinks);

@@ -81,7 +81,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         $links = array_fill_keys($links, $targetFile);
         $exclusions = self::createPathList(...$exclusions);
         $basePath = self::activeDirAbsolute();
-        self::createFile($basePath, $targetFile);
+        FilesystemTestHelper::touch($targetFile, $basePath);
         FilesystemTestHelper::createSymlinks($basePath, $links);
         $sut = $this->createSut();
 

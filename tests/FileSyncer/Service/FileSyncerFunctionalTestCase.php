@@ -52,7 +52,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     ): void {
         $sourceDirPath = self::createPath($sourceDirRelative);
         $destinationDirPath = self::createPath($destinationDirRelative);
-        self::createFiles(self::testFreshFixturesDirAbsolute(), $givenFiles);
+        FilesystemTestHelper::touch($givenFiles, self::testFreshFixturesDirAbsolute());
         $sut = $this->createSut();
 
         $sut->sync($sourceDirPath, $destinationDirPath);

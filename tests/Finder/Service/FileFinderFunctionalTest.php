@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
@@ -37,7 +38,7 @@ final class FileFinderFunctionalTest extends TestCase
     public function testFind(array $files, array $exclusions, array $expected): void
     {
         $expected = $this->normalizePaths($expected);
-        self::createFiles(self::activeDirAbsolute(), $files);
+        FilesystemTestHelper::touch($files, self::activeDirAbsolute());
         $sut = $this->createSut();
 
         $actual = $sut->find(self::activeDirPath(), ...$exclusions);
@@ -174,7 +175,7 @@ final class FileFinderFunctionalTest extends TestCase
             'middle.txt',
             'zz_last.txt',
         ]);
-        self::createFiles(self::activeDirAbsolute(), $given);
+        FilesystemTestHelper::touch($given, self::activeDirAbsolute());
         $sut = $this->createSut();
 
         $actual = $sut->find(self::activeDirPath());

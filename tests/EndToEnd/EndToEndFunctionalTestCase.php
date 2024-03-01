@@ -78,7 +78,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $stagingDirAbsolute = $stagingDirPath->absolute();
 
         // Create fixture (active directory).
-        self::createFiles(self::makeAbsolute($activeDir), [
+        FilesystemTestHelper::touch([
             // Unchanging files.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -107,7 +107,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
             'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
             // Excluded file to be deleted from the ACTIVE directory after syncing to the staging directory.
             'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt',
-        ]);
+        ], self::makeAbsolute($activeDir));
 
         $arbitrarySymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
         FilesystemTestHelper::createSymlinks($activeDirAbsolute, [
@@ -199,9 +199,9 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::deleteFile($activeDirAbsolute, 'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt');
 
         // Create files.
-        self::createFile($stagingDirAbsolute, 'EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt');
-        self::createFile($stagingDirAbsolute, 'CREATE_in_staging_dir.txt');
-        self::createFile($stagingDirAbsolute, 'another_subdir/CREATE_in_staging_dir.txt');
+        FilesystemTestHelper::touch('EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt', $stagingDirAbsolute);
+        FilesystemTestHelper::touch('CREATE_in_staging_dir.txt', $stagingDirAbsolute);
+        FilesystemTestHelper::touch('another_subdir/CREATE_in_staging_dir.txt', $stagingDirAbsolute);
 
         // Create symlink.
         FilesystemTestHelper::createSymlink(

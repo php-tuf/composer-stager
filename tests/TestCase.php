@@ -60,22 +60,6 @@ abstract class TestCase extends PHPUnitTestCase
         }
     }
 
-    protected static function createFiles(string $basePath, array $filenames): void
-    {
-        foreach ($filenames as $filename) {
-            self::createFile($basePath, $filename);
-        }
-    }
-
-    protected static function createFile(string $basePath, string $filename): void
-    {
-        $filename = self::makeAbsolute($filename, $basePath);
-        FilesystemTestHelper::touch($filename);
-        $realpathResult = realpath($filename);
-
-        assert($realpathResult !== false, sprintf('Failed to create file: %s', $filename));
-    }
-
     public static function createTestPreconditionException(
         string $message = '',
         ?TranslationParametersInterface $parameters = null,

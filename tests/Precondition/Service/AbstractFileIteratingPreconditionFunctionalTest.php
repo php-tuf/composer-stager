@@ -41,8 +41,8 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
     {
         $activeDirPath = self::activeDirPath();
         $stagingDirPath = self::stagingDirPath();
-        self::createFiles($activeDirPath->absolute(), $files);
-        self::createFiles($stagingDirPath->absolute(), $files);
+        FilesystemTestHelper::touch($files, $activeDirPath->absolute());
+        FilesystemTestHelper::touch($files, $stagingDirPath->absolute());
         $sut = $this->createSut();
 
         self::assertTrue($sut->isFulfilled($activeDirPath, $stagingDirPath));

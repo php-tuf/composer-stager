@@ -205,12 +205,20 @@ final class PathTestHelper
         return SymfonyPath::isAbsolute($path);
     }
 
-    public static function makeAbsolute(string $path, ?string $basePath = null): string
+    public static function makeAbsolute(array|string $paths, ?string $basePath = null): string|array
     {
+        $paths = BasicTestHelper::ensureIsArray($paths);
         $basePath ??= self::testFreshFixturesDirAbsolute();
-        $absolute = SymfonyPath::makeAbsolute($path, $basePath);
 
-        return self::canonicalize($absolute);
+        $paths = array_map(static function ($path) use ($basePath): string {
+            $absolute = SymfonyPath::makeAbsolute($path, $basePath);
+
+            return self::canonicalize($absolute);
+        }, $paths);
+
+        return count($paths) === 1
+            ? reset($paths)
+            : $paths;
     }
 
     /** @phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedPassingByReference */
