@@ -133,6 +133,7 @@
     },
     "scripts-aliases": {
         "clear-var-dir": [
+            "cv",
             "var"
         ],
         "compatability": [
