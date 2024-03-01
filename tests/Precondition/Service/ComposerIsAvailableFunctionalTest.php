@@ -21,7 +21,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::createDirectories(self::stagingDirRelative());
+        FilesystemTestHelper::mkdir(self::stagingDirRelative());
 
         $this->executableFinderClass = ExecutableFinder::class;
     }

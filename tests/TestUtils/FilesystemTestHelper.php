@@ -22,21 +22,6 @@ final class FilesystemTestHelper
         assert(self::fileMode($path) === $mode, sprintf('Failed to set file mode: %s', $path));
     }
 
-    public static function createDirectories(array|string $directories, ?string $basePath = null): void
-    {
-        // Convert $directories to an array if only a single string is given.
-        if (is_string($directories)) {
-            $directories = [$directories];
-        }
-
-        // If a base path is provided, use it to make all directories absolute.
-        if (is_string($basePath)) {
-            $directories = array_map(static fn ($dirname): string => PathTestHelper::makeAbsolute($dirname, $basePath), $directories);
-        }
-
-        (new SymfonyFilesystem())->mkdir($directories);
-    }
-
     public static function exists(string $path): bool
     {
         return self::symfonyFilesystem()->exists($path);
@@ -55,6 +40,21 @@ final class FilesystemTestHelper
         return $mode;
     }
 
+    public static function mkdir(array|string $directories, ?string $basePath = null): void
+    {
+        // Convert $directories to an array if only a single string is given.
+        if (is_string($directories)) {
+            $directories = [$directories];
+        }
+
+        // If a base path is provided, use it to make all directories absolute.
+        if (is_string($basePath)) {
+            $directories = array_map(static fn ($dirname): string => PathTestHelper::makeAbsolute($dirname, $basePath), $directories);
+        }
+
+        (new SymfonyFilesystem())->mkdir($directories);
+    }
+
     public static function remove(string|iterable $paths): void
     {
         self::symfonyFilesystem()->remove($paths);
@@ -71,7 +71,7 @@ final class FilesystemTestHelper
     public static function ensureParentDirectory(string $filename): void
     {
         $dirname = dirname($filename);
-        self::createDirectories($dirname);
+        self::mkdir($dirname);
     }
 
     private static function symfonyFilesystem(): SymfonyFilesystem

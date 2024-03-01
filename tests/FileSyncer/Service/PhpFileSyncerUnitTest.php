@@ -193,7 +193,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function testIsDirEmptyTrue(): void
     {
         $directoryPath = VfsTestHelper::arbitraryDirPath();
-        FilesystemTestHelper::createDirectories($directoryPath->absolute());
+        FilesystemTestHelper::mkdir($directoryPath->absolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);

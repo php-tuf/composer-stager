@@ -143,7 +143,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('link');
         $target = 'directory';
-        FilesystemTestHelper::createDirectories($target);
+        FilesystemTestHelper::mkdir($target);
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointToADirectory::class);

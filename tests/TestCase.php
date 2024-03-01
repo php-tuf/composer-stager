@@ -34,7 +34,7 @@ abstract class TestCase extends PHPUnitTestCase
         // when the "begin" command is exercised.
         $workingDirAbsolute = self::testFreshFixturesDirAbsolute();
         $activeDirAbsolute = self::makeAbsolute($activeDir, $workingDirAbsolute);
-        FilesystemTestHelper::createDirectories([$workingDirAbsolute, $activeDirAbsolute]);
+        FilesystemTestHelper::mkdir([$workingDirAbsolute, $activeDirAbsolute]);
         chdir($workingDirAbsolute);
     }
 

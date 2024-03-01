@@ -15,7 +15,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::createDirectories(self::stagingDirRelative());
+        FilesystemTestHelper::mkdir(self::stagingDirRelative());
     }
 
     protected function tearDown(): void

@@ -12,7 +12,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        FilesystemTestHelper::createDirectories([
+        FilesystemTestHelper::mkdir([
             self::sourceDirAbsolute(),
             self::destinationDirAbsolute(),
         ]);
@@ -199,7 +199,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $link = self::makeAbsolute('link', self::sourceDirAbsolute());
         $target = self::makeAbsolute('directory', self::sourceDirAbsolute());
-        FilesystemTestHelper::createDirectories($target);
+        FilesystemTestHelper::mkdir($target);
         $file = self::makeAbsolute('directory/file.txt', self::sourceDirAbsolute());
         FilesystemTestHelper::touch($file);
         symlink($target, $link);

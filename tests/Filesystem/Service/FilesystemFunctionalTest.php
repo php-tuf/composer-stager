@@ -17,7 +17,7 @@ final class FilesystemFunctionalTest extends TestCase
     protected function setUp(): void
     {
         vfsStream::setup();
-        FilesystemTestHelper::createDirectories([
+        FilesystemTestHelper::mkdir([
             self::sourceDirAbsolute(),
             self::destinationDirAbsolute(),
         ]);
@@ -88,7 +88,7 @@ final class FilesystemFunctionalTest extends TestCase
         $fileRelative = self::arbitraryFileRelative();
         $sourceFilePath = self::createPath($fileRelative, self::sourceDirAbsolute());
         $destinationFilePath = self::createPath($fileRelative, self::destinationDirAbsolute());
-        FilesystemTestHelper::createDirectories($sourceFilePath->absolute());
+        FilesystemTestHelper::mkdir($sourceFilePath->absolute());
         $sut = $this->createSut();
 
         $message = sprintf('The source cannot be a directory at %s', $sourceFilePath->absolute());
@@ -186,7 +186,7 @@ final class FilesystemFunctionalTest extends TestCase
     {
         $directoryPath = VfsTestHelper::arbitraryDirPath();
         $directoryAbsolute = $directoryPath->absolute();
-        FilesystemTestHelper::createDirectories($directoryAbsolute);
+        FilesystemTestHelper::mkdir($directoryAbsolute);
         FilesystemTestHelper::chmod($directoryAbsolute, $mode);
         $sut = $this->createSut();
 
@@ -275,7 +275,7 @@ final class FilesystemFunctionalTest extends TestCase
         bool $isSymlink,
     ): void {
         self::createFiles(self::sourceDirAbsolute(), $files);
-        FilesystemTestHelper::createDirectories($directories, self::sourceDirAbsolute());
+        FilesystemTestHelper::mkdir($directories, self::sourceDirAbsolute());
         FilesystemTestHelper::createSymlinks(self::sourceDirAbsolute(), $symlinks);
         FilesystemTestHelper::createHardlinks(self::sourceDirAbsolute(), $hardLinks);
         $subject = self::createPath($subject, self::sourceDirAbsolute());
@@ -469,7 +469,7 @@ final class FilesystemFunctionalTest extends TestCase
     {
         $directoryPath = VfsTestHelper::arbitraryDirPath();
         $directoryAbsolute = $directoryPath->absolute();
-        FilesystemTestHelper::createDirectories([$directoryAbsolute]);
+        FilesystemTestHelper::mkdir([$directoryAbsolute]);
         $sut = $this->createSut();
 
         $message = sprintf('Cannot touch file--a directory already exists at %s', $directoryAbsolute);
