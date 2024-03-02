@@ -56,9 +56,9 @@ trait FilesystemTestHelperTrait
         Helper::mkdir($directories, $basePath);
     }
 
-    public static function remove(string|iterable $paths): void
+    public static function rm(string|iterable $paths): void
     {
-        Helper::remove($paths);
+        Helper::rm($paths);
     }
 
     public static function touch(string|array $paths, ?string $basePath = null): void

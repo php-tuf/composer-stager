@@ -81,13 +81,6 @@ abstract class TestCase extends PHPUnitTestCase
         assert($result !== false, sprintf('Failed to change file: %s', $fileAbsolute));
     }
 
-    protected static function deleteFile(string $dir, string $filename): void
-    {
-        $fileAbsolute = self::ensureTrailingSlash($dir) . $filename;
-        $result = unlink($fileAbsolute);
-        assert($result, sprintf('Failed to delete file: %s', $fileAbsolute));
-    }
-
     protected static function getDirectoryContents(string $dir): array
     {
         $dir = self::ensureTrailingSlash($dir);

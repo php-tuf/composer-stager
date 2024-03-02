@@ -134,7 +134,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
 
-        self::remove($target);
+        self::rm($target);
     }
 
     /** @group no_windows */

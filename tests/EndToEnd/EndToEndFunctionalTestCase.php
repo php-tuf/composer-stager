@@ -194,8 +194,8 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::changeFile($stagingDirAbsolute, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt');
 
         // Delete files.
-        self::deleteFile($stagingDirAbsolute, 'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt');
-        self::deleteFile($activeDirAbsolute, 'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt');
+        self::rm(self::makeAbsolute('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute));
+        self::rm(self::makeAbsolute('another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt', $activeDirAbsolute));
 
         // Create files.
         self::touch('EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt', $stagingDirAbsolute);

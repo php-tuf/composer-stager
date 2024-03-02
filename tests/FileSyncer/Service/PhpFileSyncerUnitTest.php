@@ -202,7 +202,7 @@ final class PhpFileSyncerUnitTest extends TestCase
 
         self::assertTrue($actual, 'Correctly detected empty directory.');
 
-        self::remove(self::testPersistentFixturesAbsolute());
+        self::rm(self::testPersistentFixturesAbsolute());
     }
 
     /** @covers ::isDirEmpty */

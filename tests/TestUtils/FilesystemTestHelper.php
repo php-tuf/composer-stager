@@ -90,7 +90,7 @@ final class FilesystemTestHelper
         (new SymfonyFilesystem())->mkdir($directories);
     }
 
-    public static function remove(string|iterable $paths): void
+    public static function rm(string|iterable $paths): void
     {
         self::symfonyFilesystem()->remove($paths);
     }
