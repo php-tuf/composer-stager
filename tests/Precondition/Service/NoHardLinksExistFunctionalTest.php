@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -25,7 +24,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         $target = Path::makeAbsolute('target.txt', self::activeDirAbsolute());
         $link = Path::makeAbsolute('link.txt', self::activeDirAbsolute());
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -43,7 +42,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
     {
         $target = self::makeAbsolute('target.txt', $directory);
         $link = self::makeAbsolute('link.txt', $directory);
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
@@ -88,8 +87,8 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $links = array_fill_keys($links, $targetFile);
         $exclusions = self::createPathList(...$exclusions);
         $dirPath = self::activeDirAbsolute();
-        FilesystemTestHelper::touch($targetFile, $dirPath);
-        FilesystemTestHelper::createHardlinks($dirPath, $links);
+        self::touch($targetFile, $dirPath);
+        self::createHardlinks($dirPath, $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);

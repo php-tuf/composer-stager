@@ -5,14 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::mkdir(self::stagingDirRelative());
+        self::mkdir(self::stagingDirRelative());
     }
 
     protected function tearDown(): void

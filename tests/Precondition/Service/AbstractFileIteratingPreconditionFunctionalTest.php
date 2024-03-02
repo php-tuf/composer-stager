@@ -7,7 +7,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPre
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
 final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
@@ -15,7 +14,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemTestHelper::mkdir(self::stagingDirRelative());
+        self::mkdir(self::stagingDirRelative());
     }
 
     protected function tearDown(): void
@@ -41,8 +40,8 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
     {
         $activeDirPath = self::activeDirPath();
         $stagingDirPath = self::stagingDirPath();
-        FilesystemTestHelper::touch($files, $activeDirPath->absolute());
-        FilesystemTestHelper::touch($files, $stagingDirPath->absolute());
+        self::touch($files, $activeDirPath->absolute());
+        self::touch($files, $stagingDirPath->absolute());
         $sut = $this->createSut();
 
         self::assertTrue($sut->isFulfilled($activeDirPath, $stagingDirPath));
@@ -75,8 +74,8 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         // files in the staging directory and excluding them.
         $activeDir = self::activeDirPath();
         $stagingDir = self::createPath('staging-dir', self::activeDirAbsolute());
-        FilesystemTestHelper::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
-        FilesystemTestHelper::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
+        self::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
+        self::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
 
@@ -94,8 +93,8 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         // files in the staging directory and excluding them.
         $activeDir = self::activeDirPath();
         $stagingDir = self::createPath('staging-dir', self::activeDirAbsolute());
-        FilesystemTestHelper::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
-        FilesystemTestHelper::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
+        self::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
+        self::createHardlink($stagingDir->absolute(), 'link.txt', 'file.txt');
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, self::createPathList('link.txt', 'file.txt'));
 

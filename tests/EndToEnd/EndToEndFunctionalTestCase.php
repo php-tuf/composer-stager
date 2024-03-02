@@ -16,7 +16,6 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 /**
  * Provides a base for end-to-end functional tests, including the API and
@@ -78,7 +77,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         $stagingDirAbsolute = $stagingDirPath->absolute();
 
         // Create fixture (active directory).
-        FilesystemTestHelper::touch([
+        self::touch([
             // Unchanging files.
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
@@ -110,7 +109,7 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         ], self::makeAbsolute($activeDir));
 
         $arbitrarySymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
-        FilesystemTestHelper::createSymlinks($activeDirAbsolute, [
+        self::createSymlinks($activeDirAbsolute, [
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySymlinkTarget,
             'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => __DIR__,
@@ -199,12 +198,12 @@ abstract class EndToEndFunctionalTestCase extends TestCase
         self::deleteFile($activeDirAbsolute, 'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt');
 
         // Create files.
-        FilesystemTestHelper::touch('EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt', $stagingDirAbsolute);
-        FilesystemTestHelper::touch('CREATE_in_staging_dir.txt', $stagingDirAbsolute);
-        FilesystemTestHelper::touch('another_subdir/CREATE_in_staging_dir.txt', $stagingDirAbsolute);
+        self::touch('EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt', $stagingDirAbsolute);
+        self::touch('CREATE_in_staging_dir.txt', $stagingDirAbsolute);
+        self::touch('another_subdir/CREATE_in_staging_dir.txt', $stagingDirAbsolute);
 
         // Create symlink.
-        FilesystemTestHelper::createSymlink(
+        self::createSymlink(
             $stagingDirAbsolute,
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
             $arbitrarySymlinkTarget,

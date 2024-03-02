@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\VfsTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -193,7 +192,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function testIsDirEmptyTrue(): void
     {
         $directoryPath = VfsTestHelper::arbitraryDirPath();
-        FilesystemTestHelper::mkdir($directoryPath->absolute());
+        self::mkdir($directoryPath->absolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);
@@ -203,14 +202,14 @@ final class PhpFileSyncerUnitTest extends TestCase
 
         self::assertTrue($actual, 'Correctly detected empty directory.');
 
-        FilesystemTestHelper::remove(self::testPersistentFixturesAbsolute());
+        self::remove(self::testPersistentFixturesAbsolute());
     }
 
     /** @covers ::isDirEmpty */
     public function testIsDirEmptyFalse(): void
     {
         $directoryPath = VfsTestHelper::rootDirPath();
-        FilesystemTestHelper::touch(VfsTestHelper::arbitraryFileAbsolute());
+        self::touch(VfsTestHelper::arbitraryFileAbsolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);
@@ -230,7 +229,7 @@ final class PhpFileSyncerUnitTest extends TestCase
     public function testIsDirEmptyNotADirectory(): void
     {
         $filePath = VfsTestHelper::arbitraryFilePath();
-        FilesystemTestHelper::touch($filePath->absolute());
+        self::touch($filePath->absolute());
         $sut = $this->createSut();
 
         $reflection = new ReflectionClass(PhpFileSyncer::class);

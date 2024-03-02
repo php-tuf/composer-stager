@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
@@ -27,7 +26,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
      */
     public function testDoesNotContainLinks(array $files): void
     {
-        FilesystemTestHelper::touch($files, self::activeDirAbsolute());
+        self::touch($files, self::activeDirAbsolute());
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
@@ -69,7 +68,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $targetAbsolute = self::makeAbsolute($targetRelative, $basePath);
         $parentDir = dirname($linkAbsolute);
         @mkdir($parentDir, 0777, true);
-        FilesystemTestHelper::touch($targetAbsolute);
+        self::touch($targetAbsolute);
         // Point at the absolute target path.
         symlink($targetAbsolute, $linkAbsolute);
         $sut = $this->createSut();
@@ -99,7 +98,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $targetAbsolute = self::makeAbsolute($targetRelative, $basePath);
         $parentDirAbsolute = dirname($linkAbsolute);
         @mkdir($parentDirAbsolute, 0777, true);
-        FilesystemTestHelper::touch($targetAbsolute);
+        self::touch($targetAbsolute);
         chdir($parentDirAbsolute);
         // Point at the relative target path.
         symlink($targetRelative, $linkAbsolute);
@@ -153,7 +152,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $target = self::makeAbsolute('target.txt', self::activeDirAbsolute());
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
@@ -173,8 +172,8 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $links = array_fill_keys($links, $targetFile);
         $exclusions = self::createPathList(...$exclusions);
         $dirPath = self::activeDirAbsolute();
-        FilesystemTestHelper::touch($targetFile, $dirPath);
-        FilesystemTestHelper::createSymlinks($dirPath, $links);
+        self::touch($targetFile, $dirPath);
+        self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);

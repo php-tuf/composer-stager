@@ -5,7 +5,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase
@@ -35,9 +34,9 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $stagingDirPath = self::stagingDirPath();
 
         $link = self::makeAbsolute($link, $activeDirAbsolute);
-        FilesystemTestHelper::ensureParentDirectory($link);
+        self::ensureParentDirectory($link);
         $target = self::makeAbsolute($target, $activeDirAbsolute);
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -91,7 +90,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
         $target = self::makeAbsolute('target.txt', $targetDir);
         $link = self::makeAbsolute('link.txt', $linkDir);
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -136,7 +135,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $target = self::makeAbsolute('target.txt', $basePathAbsolute);
         $parentDir = dirname($link);
         @mkdir($parentDir, 0777, true);
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         link($target, $link);
         $sut = $this->createSut();
 
@@ -161,7 +160,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $targetAbsolute = self::makeAbsolute('target.txt', $dirPathAbsolute);
         $parentDir = dirname($linkAbsolute);
         @mkdir($parentDir, 0777, true);
-        FilesystemTestHelper::touch($targetAbsolute);
+        self::touch($targetAbsolute);
         symlink($targetAbsolute, $linkAbsolute);
         $sut = $this->createSut();
 
@@ -185,7 +184,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         $links = array_fill_keys($links, $targetFile);
         $exclusions = self::createPathList(...$exclusions);
         $dirPath = self::activeDirAbsolute();
-        FilesystemTestHelper::createSymlinks($dirPath, $links);
+        self::createSymlinks($dirPath, $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);

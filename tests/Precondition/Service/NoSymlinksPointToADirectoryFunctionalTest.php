@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\FileSyncer\Factory\PhpFileSyncerFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory
@@ -42,8 +41,8 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
         $parentDir = self::activeDirAbsolute();
         $link = self::makeAbsolute('link.txt', $parentDir);
         $target = self::makeAbsolute('target.txt', $parentDir);
-        FilesystemTestHelper::ensureParentDirectory($link);
-        FilesystemTestHelper::touch($target);
+        self::ensureParentDirectory($link);
+        self::touch($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -62,7 +61,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     {
         $target = self::makeAbsolute('target_directory', $targetDir);
         $link = self::makeAbsolute('directory_link', $linkDir);
-        FilesystemTestHelper::mkdir($target);
+        self::mkdir($target);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -103,10 +102,10 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
     {
         $targetDirRelative = 'target_directory';
         $targetDirAbsolute = self::makeAbsolute($targetDirRelative, self::activeDirAbsolute());
-        FilesystemTestHelper::mkdir($targetDirAbsolute);
+        self::mkdir($targetDirAbsolute);
         $links = array_fill_keys($links, $targetDirRelative);
         $exclusions = self::createPathList(...$exclusions);
-        FilesystemTestHelper::createSymlinks(self::activeDirAbsolute(), $links);
+        self::createSymlinks(self::activeDirAbsolute(), $links);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);

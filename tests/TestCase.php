@@ -6,7 +6,7 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPrecondition;
 use PhpTuf\ComposerStager\Tests\TestUtils\AssertTrait;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelperTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelperTrait;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelperTrait;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
@@ -17,6 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 abstract class TestCase extends PHPUnitTestCase
 {
     use AssertTrait;
+    use FilesystemTestHelperTrait;
     use PathTestHelperTrait;
     use ProphecyTrait;
     use TranslationTestHelperTrait;
@@ -34,7 +35,7 @@ abstract class TestCase extends PHPUnitTestCase
         // when the "begin" command is exercised.
         $workingDirAbsolute = self::testFreshFixturesDirAbsolute();
         $activeDirAbsolute = self::makeAbsolute($activeDir, $workingDirAbsolute);
-        FilesystemTestHelper::mkdir([$workingDirAbsolute, $activeDirAbsolute]);
+        self::mkdir([$workingDirAbsolute, $activeDirAbsolute]);
         chdir($workingDirAbsolute);
     }
 

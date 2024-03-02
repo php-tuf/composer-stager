@@ -6,13 +6,12 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 
 abstract class FileSyncerFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
     {
-        FilesystemTestHelper::mkdir([
+        self::mkdir([
             self::sourceDirAbsolute(),
             self::destinationDirAbsolute(),
         ]);
@@ -52,7 +51,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     ): void {
         $sourceDirPath = self::createPath($sourceDirRelative);
         $destinationDirPath = self::createPath($destinationDirRelative);
-        FilesystemTestHelper::touch($givenFiles, self::testFreshFixturesDirAbsolute());
+        self::touch($givenFiles, self::testFreshFixturesDirAbsolute());
         $sut = $this->createSut();
 
         $sut->sync($sourceDirPath, $destinationDirPath);
@@ -199,9 +198,9 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
     {
         $link = self::makeAbsolute('link', self::sourceDirAbsolute());
         $target = self::makeAbsolute('directory', self::sourceDirAbsolute());
-        FilesystemTestHelper::mkdir($target);
+        self::mkdir($target);
         $file = self::makeAbsolute('directory/file.txt', self::sourceDirAbsolute());
-        FilesystemTestHelper::touch($file);
+        self::touch($file);
         symlink($target, $link);
         $sut = $this->createSut();
 
@@ -233,7 +232,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         $sourcePath = self::arbitraryFilePath();
         $destinationPath = self::arbitraryDirPath();
 
-        FilesystemTestHelper::touch($sourcePath->absolute());
+        self::touch($sourcePath->absolute());
         $sut = $this->createSut();
 
         $message = sprintf('The source directory is not actually a directory at %s', $sourcePath->absolute());

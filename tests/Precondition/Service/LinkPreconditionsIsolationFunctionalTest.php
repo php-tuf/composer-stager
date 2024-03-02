@@ -12,7 +12,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirect
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use Throwable;
 
 /**
@@ -103,7 +102,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('source.txt');
         $target = self::path('target.txt');
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoAbsoluteSymlinksExist::class);
@@ -114,7 +113,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('source.txt');
         $target = self::path('target.txt');
-        FilesystemTestHelper::touch($target);
+        self::touch($target);
         symlink($target, $source);
 
         $sut = ContainerTestHelper::get(NoLinksExistOnWindows::class);
@@ -135,7 +134,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
 
-        FilesystemTestHelper::remove($target);
+        self::remove($target);
     }
 
     /** @group no_windows */
@@ -143,7 +142,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('link');
         $target = 'directory';
-        FilesystemTestHelper::mkdir($target);
+        self::mkdir($target);
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointToADirectory::class);

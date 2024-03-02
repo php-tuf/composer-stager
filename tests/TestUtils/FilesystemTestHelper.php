@@ -22,6 +22,50 @@ final class FilesystemTestHelper
         assert(self::fileMode($path) === $mode, sprintf('Failed to set file mode: %s', $path));
     }
 
+    public static function createHardlinks(string $basePath, array $symlinks): void
+    {
+        foreach ($symlinks as $link => $target) {
+            self::createHardlink($basePath, $link, $target);
+        }
+    }
+
+    public static function createHardlink(string $basePath, string $link, string $target): void
+    {
+        $link = PathTestHelper::createPath($link, $basePath);
+        $target = PathTestHelper::createPath($target, $basePath);
+
+        self::prepareForLink($link, $target);
+
+        link($target->absolute(), $link->absolute());
+    }
+
+    public static function createSymlinks(string $basePath, array $symlinks): void
+    {
+        foreach ($symlinks as $link => $target) {
+            self::createSymlink($basePath, $link, $target);
+        }
+    }
+
+    public static function createSymlink(string $basePath, string $link, string $target): void
+    {
+        $link = PathTestHelper::createPath($link, $basePath);
+        $target = PathTestHelper::createPath($target, $basePath);
+
+        self::prepareForLink($link, $target);
+
+        symlink($target->absolute(), $link->absolute());
+    }
+
+    public static function ensureParentDirectory(string|array $filenames): void
+    {
+        $filenames = BasicTestHelper::ensureIsArray($filenames);
+
+        foreach ($filenames as $filename) {
+            $dirname = dirname((string) $filename);
+            self::mkdir($dirname);
+        }
+    }
+
     public static function exists(string $path): bool
     {
         return self::symfonyFilesystem()->exists($path);
@@ -58,53 +102,9 @@ final class FilesystemTestHelper
         self::symfonyFilesystem()->touch($paths);
     }
 
-    public static function ensureParentDirectory(string|array $filenames): void
-    {
-        $filenames = BasicTestHelper::ensureIsArray($filenames);
-
-        foreach ($filenames as $filename) {
-            $dirname = dirname((string) $filename);
-            self::mkdir($dirname);
-        }
-    }
-
     private static function symfonyFilesystem(): SymfonyFilesystem
     {
         return new SymfonyFilesystem();
-    }
-
-    public static function createSymlinks(string $basePath, array $symlinks): void
-    {
-        foreach ($symlinks as $link => $target) {
-            self::createSymlink($basePath, $link, $target);
-        }
-    }
-
-    public static function createSymlink(string $basePath, string $link, string $target): void
-    {
-        $link = PathTestHelper::createPath($link, $basePath);
-        $target = PathTestHelper::createPath($target, $basePath);
-
-        self::prepareForLink($link, $target);
-
-        symlink($target->absolute(), $link->absolute());
-    }
-
-    public static function createHardlinks(string $basePath, array $symlinks): void
-    {
-        foreach ($symlinks as $link => $target) {
-            self::createHardlink($basePath, $link, $target);
-        }
-    }
-
-    public static function createHardlink(string $basePath, string $link, string $target): void
-    {
-        $link = PathTestHelper::createPath($link, $basePath);
-        $target = PathTestHelper::createPath($target, $basePath);
-
-        self::prepareForLink($link, $target);
-
-        link($target->absolute(), $link->absolute());
     }
 
     /** @todo Replace with \PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper::makeAbsolute(), if possible */

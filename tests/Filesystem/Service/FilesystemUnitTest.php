@@ -13,7 +13,6 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -146,7 +145,7 @@ final class FilesystemUnitTest extends TestCase
     public function testFileModeFailure(): void
     {
         $path = self::arbitraryFilePath();
-        FilesystemTestHelper::touch($path->absolute());
+        self::touch($path->absolute());
         BuiltinFunctionMocker::mock(['fileperms' => $this->prophesize(TestSpyInterface::class)]);
         BuiltinFunctionMocker::$spies['fileperms']
             ->report($path->absolute())
