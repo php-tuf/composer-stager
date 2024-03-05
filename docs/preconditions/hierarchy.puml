@@ -49,6 +49,7 @@ class CommonPreconditions {
     ActiveDirIsReady
     ComposerIsAvailable
     HostSupportsRunningProcesses
+    RsyncIsAvailable
 }
 CommonPreconditions *- ActiveDirIsReady
 

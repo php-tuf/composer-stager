@@ -11,6 +11,8 @@ use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
  *
  * @covers ::__construct
  * @covers ::exitEarly
+ *
+ * @group no_windows
  */
 final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {

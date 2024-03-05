@@ -179,6 +179,8 @@ final class FileFinderFunctionalTest extends TestCase
 
         $actual = $sut->find(self::activeDirPath());
 
+        // Don't use ::assertDirectoryListing() here, because it sorts the results,
+        // ignoring the actual order and negating the whole point of this test.
         self::assertSame($expected, $actual);
     }
 }

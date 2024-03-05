@@ -10,6 +10,7 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -27,6 +28,7 @@ final class FileFinder implements FileFinderInterface
 
     public function __construct(
         private readonly PathFactoryInterface $pathFactory,
+        private readonly PathHelperInterface $pathHelper,
         private readonly PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
@@ -48,9 +50,9 @@ final class FileFinder implements FileFinderInterface
         // be excluded because they aren't individually in the array in order to be
         // matched. But because the directory iterator is recursive, their excluded
         // ancestor WILL BE found, and they will be excluded by extension.
-        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static fn (
+        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, fn (
             string $foundPathAbsolute,
-        ): bool => !in_array($foundPathAbsolute, $exclusions, true));
+        ): bool => !in_array($this->pathHelper->canonicalize($foundPathAbsolute), $exclusions, true));
 
         /** @var \Traversable<string> $iterator */
         $iterator = new RecursiveIteratorIterator($filterIterator);
@@ -61,6 +63,9 @@ final class FileFinder implements FileFinderInterface
         // uses the result for file deletion would fail when it sometimes tried
         // to delete files after their ancestors had already been deleted.
         $files = iterator_to_array($iterator);
+
+        /** @infection-ignore-all This only makes any difference on Windows, whereas Infection is only run on Linux. */
+        $files = array_map(fn ($file): string => $this->pathHelper->canonicalize($file), $files);
 
         // Sort the array to ensure idempotency.
         sort($files);

@@ -18,10 +18,8 @@ final class PathHelper implements PathHelperInterface
     {
         $path = SymfonyPath::canonicalize($path);
 
-        // SymfonyPath always uses forward slashes. Use the OS's
-        // directory separator instead. And it doesn't reduce repeated
-        // slashes after Windows drive names, so eliminate them, too.
-        $canonicalized = preg_replace('#/+#', DIRECTORY_SEPARATOR, $path);
+        // Eliminate repeated slashes after Windows drive names.
+        $canonicalized = preg_replace('#/+#', '/', $path);
 
         assert(is_string($canonicalized));
 

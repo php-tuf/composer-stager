@@ -2,35 +2,38 @@
 
 namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
+use Closure;
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
+use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer
  *
  * @covers ::__construct
  * @covers ::buildCommand
  * @covers ::ensureDestinationDirectoryExists
  * @covers ::getRelativePath
+ * @covers ::makeRelativeToSource
  * @covers ::runCommand
  * @covers ::sync
- *
- * @group no_windows
  */
-final class RsyncFileSyncerUnitTest extends TestCase
+final class FileSyncerUnitTest extends TestCase
 {
     private EnvironmentInterface|ObjectProphecy $environment;
+    private ExecutableFinderInterface|ObjectProphecy $executableFinder;
     private FilesystemInterface|ObjectProphecy $filesystem;
     private RsyncProcessRunnerInterface|ObjectProphecy $rsync;
 
@@ -39,6 +42,10 @@ final class RsyncFileSyncerUnitTest extends TestCase
         $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->environment->setTimeLimit(Argument::type('integer'))
             ->willReturn(true);
+        $this->executableFinder = $this->prophesize(ExecutableFinderInterface::class);
+        $this->executableFinder
+            ->find(Argument::any())
+            ->willReturn('/var/bin/executable');
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
             ->fileExists(Argument::any())
@@ -53,16 +60,17 @@ final class RsyncFileSyncerUnitTest extends TestCase
         parent::setUp();
     }
 
-    private function createSut(): RsyncFileSyncer
+    private function createSut(): FileSyncer
     {
-        $environment = $this->environment->reveal();
-        $filesystem = $this->filesystem->reveal();
-        $pathHelper = self::createPathHelper();
-        $pathListFactory = self::createPathListFactory();
-        $rsync = $this->rsync->reveal();
-        $translatableFactory = self::createTranslatableFactory();
-
-        return new RsyncFileSyncer($environment, $filesystem, $pathHelper, $pathListFactory, $rsync, $translatableFactory);
+        return new FileSyncer(
+            $this->environment->reveal(),
+            $this->executableFinder->reveal(),
+            $this->filesystem->reveal(),
+            self::createPathFactory(),
+            self::createPathListFactory(),
+            $this->rsync->reveal(),
+            self::createTranslatableFactory(),
+        );
     }
 
     /**
@@ -76,15 +84,19 @@ final class RsyncFileSyncerUnitTest extends TestCase
         array $optionalArguments,
         array $expectedCommand,
         ?OutputCallbackInterface $expectedCallback,
+        int $expectedTimeout,
     ): void {
         $sourcePath = self::createPath($source);
         $destinationPath = self::createPath($destination);
 
+        $this->environment
+            ->setTimeLimit($expectedTimeout)
+            ->shouldBeCalledOnce();
         $this->filesystem
             ->mkdir($destinationPath)
             ->shouldBeCalledOnce();
         $this->rsync
-            ->run($expectedCommand, null, [], $expectedCallback)
+            ->run($expectedCommand, self::createPath('/', $source), [], $expectedCallback)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
@@ -102,10 +114,26 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '/var/www/source/',
-                    '/var/www/destination',
+                    'var/www/source/',
+                    'var/www/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
+            ],
+            'Simple arguments' => [
+                'source' => '/var/www/source',
+                'destination' => '/var/www/destination',
+                'optionalArguments' => [self::createPathList('one.txt'), new TestOutputCallback(), 42],
+                'expectedCommand' => [
+                    '--archive',
+                    '--delete-after',
+                    '--verbose',
+                    '--exclude=/one.txt',
+                    'var/www/source/',
+                    'var/www/destination',
+                ],
+                'expectedCallback' => new TestOutputCallback(),
+                'expectedTimeout' => 42,
             ],
             'Siblings: no exclusions given' => [
                 'source' => '/var/www/source/one',
@@ -115,11 +143,13 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '/var/www/source/one/',
-                    '/var/www/destination/two',
+                    'var/www/source/one/',
+                    'var/www/destination/two',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
+            ////'Siblings: simple exclusions given' => [
             //'Siblings: simple exclusions given' => [
             'Siblings: simple exclusions given' => [
                 'source' => '/var/www/source/two',
@@ -131,10 +161,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=/three.txt',
                     '--exclude=/four.txt',
-                    '/var/www/source/two/',
-                    '/var/www/destination/two',
+                    'var/www/source/two/',
+                    'var/www/destination/two',
                 ],
                 'expectedCallback' => new TestOutputCallback(),
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Siblings: duplicate exclusions given' => [
                 'source' => '/var/www/source/three',
@@ -148,10 +179,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=/four/five',
                     '--exclude=/six/seven',
-                    '/var/www/source/three/',
-                    '/var/www/destination/three',
+                    'var/www/source/three/',
+                    'var/www/destination/three',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Siblings: Windows directory separators' => [
                 'source' => '/var/www/source/one\\two',
@@ -171,10 +203,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     '--exclude=/three/four',
                     '--exclude=/five/six/seven/eight',
-                    '/var/www/source/one/two/',
-                    '/var/www/destination/one/two',
+                    'var/www/source/one/two/',
+                    'var/www/destination/one/two',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Nested: destination inside source (neither is excluded)' => [
                 'source' => '/var/www/source',
@@ -184,10 +217,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--archive',
                     '--delete-after',
                     '--verbose',
-                    '/var/www/source/',
-                    '/var/www/source/destination',
+                    'var/www/source/',
+                    'var/www/source/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Nested: source inside destination (source is excluded)' => [
                 'source' => '/var/www/destination/source',
@@ -199,10 +233,11 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
-                    '/var/www/destination/source/',
-                    '/var/www/destination',
+                    'var/www/destination/source/',
+                    'var/www/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Nested: with Windows directory separators' => [
                 'source' => '/var/www/destination\\source',
@@ -214,12 +249,28 @@ final class RsyncFileSyncerUnitTest extends TestCase
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
                     '--exclude=/source',
-                    '/var/www/destination/source/',
-                    '/var/www/destination',
+                    'var/www/destination/source/',
+                    'var/www/destination',
                 ],
                 'expectedCallback' => null,
+                'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
         ];
+    }
+
+    /** @covers ::assertRsyncIsAvailable */
+    public function testNoRsyncError(): void
+    {
+        $message = 'Something went wrong.';
+        $previous = new LogicException(self::createTranslatableExceptionMessage($message));
+        $this->executableFinder->find('rsync')
+            ->shouldBeCalledOnce()
+            ->willThrow($previous);
+        $sut = $this->createSut();
+
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->sync(self::sourceDirPath(), self::destinationDirPath());
+        }, LogicException::class, $message);
     }
 
     /**
@@ -251,6 +302,75 @@ final class RsyncFileSyncerUnitTest extends TestCase
             'RuntimeException' => [
                 'caughtException' => new RuntimeException($message),
                 'thrownException' => IOException::class,
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::getRelativePath
+     *
+     * @dataProvider providerGetRelativePath
+     */
+    public function testGetRelativePath(string $ancestor, string $path, string $expected): void
+    {
+        // Expose private method for testing.
+        // @see https://ocramius.github.io/blog/accessing-private-php-class-members-without-reflection/
+        // @phpstan-ignore-next-line
+        $method = static fn (FileSyncer $sut, $ancestor, $path): string => $sut::getRelativePath($ancestor, $path);
+        $sut = $this->createSut();
+        $method = Closure::bind($method, null, $sut);
+
+        $actual = $method($sut, $ancestor, $path);
+
+        self::assertEquals($expected, $actual);
+    }
+
+    /**
+     * @group no_windows
+     * @phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces
+     */
+    public function providerGetRelativePath(): array
+    {
+        return [
+            'Match: single directory depth' => [
+                'ancestor' => 'one',
+                'path'     => 'one/two',
+                'expected' =>     'two',
+            ],
+            'Match: multiple directories depth' => [
+                'ancestor' => 'one/two',
+                'path'     => 'one/two/three/four/five',
+                'expected' =>         'three/four/five',
+            ],
+            'No match: no shared ancestor' => [
+                'ancestor' => 'one/two',
+                'path'     => 'three/four/five/six/seven',
+                'expected' => 'three/four/five/six/seven',
+            ],
+            'No match: identical paths' => [
+                'ancestor' => 'one',
+                'path'     => 'one',
+                'expected' => 'one',
+            ],
+            'No match: ancestor only as absolute path' => [
+                'ancestor' => '/one/two',
+                'path'     => 'one/two/three/four/five',
+                'expected' => 'one/two/three/four/five',
+            ],
+            'No match: path only as absolute path' => [
+                'ancestor' => 'one/two',
+                'path'     => '/one/two/three/four/five',
+                'expected' => '/one/two/three/four/five',
+            ],
+            'No match: sneaky "near match"' => [
+                'ancestor' => 'one',
+                'path'     => 'one_two',
+                'expected' => 'one_two',
+            ],
+            'Special case: empty strings' => [
+                'ancestor' => '',
+                'path'     => '',
+                'expected' => '',
             ],
         ];
     }

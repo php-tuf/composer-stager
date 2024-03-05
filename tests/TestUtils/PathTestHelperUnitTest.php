@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-use Generator;
 use PhpTuf\ComposerStager\Tests\TestCase;
 
 /** @coversNothing */
@@ -16,38 +15,29 @@ final class PathTestHelperUnitTest extends TestCase
         self::assertSame($expected, $paths);
     }
 
-    public function providerFixSeparatorsMultiple(): Generator
+    public function providerFixSeparatorsMultiple(): array
     {
-        yield 'Empty arrays' => [
-            'paths' => [],
-            'expected' => [],
-        ];
-
-        yield 'Single simple path' => [
-            'paths' => ['simple'],
-            'expected' => ['simple'],
-        ];
-
-        if (EnvironmentTestHelper::isWindows()) {
-            yield 'Single path with depth' => [
-                'paths' => ['one/two'],
-                'expected' => ['one\\two'],
-            ];
-
-            yield 'Multiple paths with mixed directory separators' => [
-                'paths' => ['one/two\\three'],
-                'expected' => ['one\\two\\three'],
-            ];
-        } else {
-            yield 'Single path with depth' => [
+        return [
+            'Empty arrays' => [
+                'paths' => [],
+                'expected' => [],
+            ],
+            'Single simple path' => [
+                'paths' => ['simple'],
+                'expected' => ['simple'],
+            ],
+            'Single path with depth' => [
                 'paths' => ['one/two'],
                 'expected' => ['one/two'],
-            ];
-
-            yield 'Multiple paths with mixed directory separators' => [
+            ],
+            'Windows directory separators' => [
+                'paths' => ['one\\two\\three'],
+                'expected' => ['one/two/three'],
+            ],
+            'Multiple paths with mixed directory separators' => [
                 'paths' => ['one/two\\three'],
                 'expected' => ['one/two/three'],
-            ];
-        }
+            ],
+        ];
     }
 }

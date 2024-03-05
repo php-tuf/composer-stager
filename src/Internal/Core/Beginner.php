@@ -5,7 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Core;
 use PhpTuf\ComposerStager\API\Core\BeginnerInterface;
 use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
-use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
+use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\BeginnerPreconditionsInterface;
@@ -20,7 +20,7 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 final class Beginner implements BeginnerInterface
 {
     public function __construct(
-        private readonly FileSyncerFactoryInterface $fileSyncerFactory,
+        private readonly FileSyncerInterface $fileSyncer,
         private readonly BeginnerPreconditionsInterface $preconditions,
     ) {
     }
@@ -35,8 +35,7 @@ final class Beginner implements BeginnerInterface
         $this->preconditions->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout);
 
         try {
-            $fileSyncer = $this->fileSyncerFactory->create();
-            $fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
+            $this->fileSyncer->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout);
         } catch (ExceptionInterface $e) {
             throw new RuntimeException($e->getTranslatableMessage(), 0, $e);
         }

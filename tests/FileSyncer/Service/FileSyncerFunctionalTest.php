@@ -4,10 +4,12 @@ namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
-abstract class FileSyncerFunctionalTestCase extends TestCase
+/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer */
+final class FileSyncerFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -22,24 +24,16 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         self::removeTestEnvironment();
     }
 
-    final protected function createSut(): FileSyncerInterface
+    private function createSut(): FileSyncerInterface
     {
-        return ContainerTestHelper::get($this->fileSyncerClass());
+        return ContainerTestHelper::get(FileSyncer::class);
     }
 
-    abstract protected function fileSyncerClass(): string;
-
     /**
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::__construct
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceAndDestinationAreDifferent
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::isDescendant
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::sync
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::copySourceFilesToDestination
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::deleteExtraneousFilesFromDestination
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::doSync
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer::isDirEmpty
-     * @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer::doSync
+     * @covers ::__construct
+     * @covers ::assertSourceAndDestinationAreDifferent
+     * @covers ::assertSourceIsValid
+     * @covers ::sync
      *
      * @dataProvider providerBasicFunctionality
      */
@@ -158,7 +152,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         ];
     }
 
-    /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceAndDestinationAreDifferent */
+    /** @covers ::assertSourceAndDestinationAreDifferent */
     public function testSyncDirectoriesTheSame(): void
     {
         $samePath = self::arbitraryDirPath();
@@ -212,7 +206,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         ], '', 'Correctly synced files, including a symlink to a directory.');
     }
 
-    /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists */
+    /** @covers ::assertSourceIsValid */
     public function testSourceDoesNotExist(): void
     {
         $sourcePath = self::nonExistentDirPath();
@@ -226,7 +220,7 @@ abstract class FileSyncerFunctionalTestCase extends TestCase
         }, LogicException::class, $message);
     }
 
-    /** @covers \PhpTuf\ComposerStager\Internal\FileSyncer\Service\AbstractFileSyncer::assertSourceExists */
+    /** @covers ::assertSourceIsValid */
     public function testSourceIsNotADirectory(): void
     {
         $sourcePath = self::arbitraryFilePath();

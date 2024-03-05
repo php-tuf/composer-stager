@@ -3,10 +3,7 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Factory\FileSyncerFactory;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
-use PhpTuf\ComposerStager\Tests\FileSyncer\Factory\PhpFileSyncerFactory;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /**
@@ -19,17 +16,7 @@ final class NoSymlinksPointToADirectoryFunctionalTest extends LinkPreconditionsF
 {
     protected function createSut(): NoSymlinksPointToADirectory
     {
-        $container = ContainerTestHelper::container();
-
-        // Override the FileSyncerFactory implementation to always return a PhpFileSyncer.
-        $fileSyncerFactory = $container->getDefinition(FileSyncerFactory::class);
-        $fileSyncerFactory->setClass(PhpFileSyncerFactory::class);
-        $container->setDefinition(FileSyncerFactoryInterface::class, $fileSyncerFactory);
-
-        // Compile the container.
-        $container->compile();
-
-        return $container->get(NoSymlinksPointToADirectory::class);
+        return ContainerTestHelper::get(NoSymlinksPointToADirectory::class);
     }
 
     /**

@@ -2,18 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Internal\Precondition\Service;
 
-use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\API\FileSyncer\Factory\FileSyncerFactoryInterface;
-use PhpTuf\ComposerStager\API\FileSyncer\Service\RsyncFileSyncerInterface;
-use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
-use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
-use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
-use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
-use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
 /**
@@ -24,25 +15,6 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 final class NoSymlinksPointToADirectory extends AbstractFileIteratingPrecondition implements
     NoSymlinksPointToADirectoryInterface
 {
-    public function __construct(
-        EnvironmentInterface $environment,
-        FileFinderInterface $fileFinder,
-        private readonly FileSyncerFactoryInterface $fileSyncerFactory,
-        FilesystemInterface $filesystem,
-        PathFactoryInterface $pathFactory,
-        PathListFactoryInterface $pathListFactory,
-        TranslatableFactoryInterface $translatableFactory,
-    ) {
-        parent::__construct(
-            $environment,
-            $fileFinder,
-            $filesystem,
-            $pathFactory,
-            $pathListFactory,
-            $translatableFactory,
-        );
-    }
-
     public function getName(): TranslatableInterface
     {
         return $this->t('No symlinks point to a directory');
@@ -56,17 +28,6 @@ final class NoSymlinksPointToADirectory extends AbstractFileIteratingPreconditio
     protected function getFulfilledStatusMessage(): TranslatableInterface
     {
         return $this->t('There are no symlinks that point to a directory.');
-    }
-
-    protected function exitEarly(
-        PathInterface $activeDir,
-        PathInterface $stagingDir,
-        ?PathListInterface $exclusions,
-    ): bool {
-        // RsyncFileSyncer supports symlinks pointing to directories, though PhpFileSyncer
-        // does not yet. So skip this precondition when RsyncFileSyncer is in use.
-        // @see https://github.com/php-tuf/composer-stager/issues/99
-        return $this->fileSyncerFactory->create() instanceof RsyncFileSyncerInterface;
     }
 
     protected function assertIsSupportedFile(

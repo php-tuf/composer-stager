@@ -105,7 +105,7 @@ abstract class TestCase extends PHPUnitTestCase
     {
         $paths = array_map(static function ($path): string {
             $path = implode(
-                DIRECTORY_SEPARATOR,
+                '/',
                 [
                     self::testFreshFixturesDirAbsolute(),
                     self::activeDirRelative(),
