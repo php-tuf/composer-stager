@@ -27,7 +27,7 @@ It may not be obvious at first that a tool like this is really necessary. Why no
 
 - You may not have write access to directories outside the codebase--especially on low end shared hosting--so you must provide a (more complicated) alternative strategy using a subdirectory of the live codebase.
 
-- You can't assume the availability of such tools as rsync, so you must provide PHP-based fallbacks.
+- You can't assume the availability of such tools as rsync, so you must provide detection and fallback capabilities.
 
 - There are lots of cross-platform issues, including Unix vs. Windows paths, process execution peculiarities, disabled PHP functions, and symlink support, to name a few.
 
