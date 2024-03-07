@@ -87,15 +87,19 @@ final class EndToEndFunctionalTest extends TestCase
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
             // Files to be changed in the staging directory.
-            'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'CHANGE_CONTENT_in_staging_dir_before_syncing_back_to_active_dir.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
+            'CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt',
             // Files to be deleted from the staging directory.
             'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
             // Excluded file to be deleted from the ACTIVE directory after syncing to the staging directory.
             'another_EXCLUDED_dir/DELETE_file_from_active_dir_after_syncing_to_staging_dir.txt',
         ], $activeDirAbsolute);
+        self::chmod(self::makeAbsolute('CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt', $activeDirAbsolute), 0775);
         self::mkdir('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $activeDirAbsolute);
         self::mkdir('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute);
+        self::mkdir('CHANGE_dir_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute);
+        self::chmod(self::makeAbsolute('CHANGE_dir_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute), 0775);
 
         $arbitrarySupportedSymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
         self::createSymlinks($activeDirAbsolute, [
@@ -158,7 +162,8 @@ final class EndToEndFunctionalTest extends TestCase
             'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt',
             'arbitrary_subdir/file_NEVER_CHANGED_anywhere.txt',
             'somewhat/deeply/nested/file/that/is/NEVER_CHANGED_anywhere.txt',
-            'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'CHANGE_CONTENT_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt',
             'DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt',
             'very/deeply/nested/file/that/is/NEVER/CHANGED/in/either/the/active/directory/or/the/staging/directory.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
@@ -170,6 +175,8 @@ final class EndToEndFunctionalTest extends TestCase
         self::assertDirectoryListing($stagingDirPath->absolute(), $expectedStagingDirListing, '', sprintf('Synced correct files from active directory to new staging directory:%s- From: %s%s- To:   %s', PHP_EOL, $activeDir, PHP_EOL, $stagingDir));
         self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $stagingDirAbsolute));
         self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute));
+        self::assertFileMode(self::makeAbsolute('CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute), 0775);
+        self::assertFileMode(self::makeAbsolute('CHANGE_dir_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute), 0775);
 
         // Stage: Execute a Composer command (that doesn't make any HTTP requests).
         $newComposerName = 'new/name';
@@ -188,7 +195,9 @@ final class EndToEndFunctionalTest extends TestCase
 
         // Make changes in the staging directory.
         self::changeFile($stagingDirAbsolute, 'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt');
-        self::changeFile($stagingDirAbsolute, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt');
+        self::changeFile($stagingDirAbsolute, 'CHANGE_CONTENT_in_staging_dir_before_syncing_back_to_active_dir.txt');
+        self::chmod(self::makeAbsolute('CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute), 0777);
+        self::chmod(self::makeAbsolute('CHANGE_dir_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute), 0777);
         self::touch('EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt', $stagingDirAbsolute);
         self::touch('CREATE_in_staging_dir.txt', $stagingDirAbsolute);
         self::touch('another_subdir/CREATE_in_staging_dir.txt', $stagingDirAbsolute);
@@ -210,6 +219,8 @@ final class EndToEndFunctionalTest extends TestCase
             'another_subdir/CREATE_in_staging_dir.txt',
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
         ], '', sprintf('Made expected changes to the staging directory at %s', $stagingDir));
+        self::assertFileMode(self::makeAbsolute('CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute), 0777);
+        self::assertFileMode(self::makeAbsolute('CHANGE_dir_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute), 0777);
         self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $stagingDirAbsolute));
         self::assertDirectoryDoesNotExist(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute));
 
@@ -259,8 +270,9 @@ final class EndToEndFunctionalTest extends TestCase
             'CREATE_in_staging_dir.txt',
             'another_subdir/CREATE_in_staging_dir.txt',
             // Files changed in the staging directory are synced back. (File contents asserted below.)
-            'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt',
+            'CHANGE_CONTENT_in_staging_dir_before_syncing_back_to_active_dir.txt',
             'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt',
+            'CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt',
             // Files created in the staging directory in an excluded directory are NOT synced back.
             // - EXCLUDED_dir/but_create_file_in_it_in_the_staging_dir.txt
             // - EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt
@@ -271,6 +283,7 @@ final class EndToEndFunctionalTest extends TestCase
             'not/an/EXCLUDED_dir/file.txt',
             'not/the/arbitrary_subdir/with/an/EXCLUDED_file.txt',
         ], $stagingDirAbsolute, sprintf('Synced correct files from staging directory back to active directory:%s%s ->%s%s"', PHP_EOL, $stagingDir, PHP_EOL, $activeDir));
+        self::assertFileMode(self::makeAbsolute('CHANGE_file_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir.txt', $activeDirAbsolute), 0777);
         self::assertDirectoryExists(self::makeAbsolute('empty_dir_in_active_dir_root_NEVER_CHANGED_anywhere', $activeDirAbsolute));
         self::assertDirectoryDoesNotExist(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute));
 
@@ -291,7 +304,7 @@ final class EndToEndFunctionalTest extends TestCase
         // Changed file contents.
         self::assertComposerJsonName($activeDir, $newComposerName, 'Preserved changes to composer.json.');
         self::assertFileChanged($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved in the active directory changes made to an excluded file in the active directory.');
-        self::assertFileChanged($activeDir, 'CHANGE_in_staging_dir_before_syncing_back_to_active_dir.txt', 'Preserved in the active directory changes made to a file in the staging directory.');
+        self::assertFileChanged($activeDir, 'CHANGE_CONTENT_in_staging_dir_before_syncing_back_to_active_dir.txt', 'Preserved in the active directory changes made to a file in the staging directory.');
         self::assertFileChanged($activeDir, 'EXCLUDED_dir/CHANGE_file_in_active_dir_after_syncing_to_staging_dir.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
         self::assertFileChanged($activeDir, 'very/deeply/nested/file/that/is/CHANGED/in/the/staging/directory/before/syncing/back/to/the/active/directory.txt', 'Preserved a preexisting file in the active directory that was never changed anywhere.');
 
