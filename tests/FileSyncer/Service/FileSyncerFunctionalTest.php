@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer */
 final class FileSyncerFunctionalTest extends TestCase
@@ -178,6 +179,32 @@ final class FileSyncerFunctionalTest extends TestCase
 
         self::assertFileMode($fileInSourceAbsolute, 0744);
         self::assertFileMode($directoryInSourceAbsolute, 0744);
+    }
+
+    /**
+     * @covers ::buildCommand
+     *
+     * @see https://github.com/php-tuf/composer-stager/issues/162
+     */
+    public function testSyncGitDirectory(): void
+    {
+        $git = static function (array $command): void {
+            array_unshift($command, 'git');
+            (new SymfonyProcess($command, self::sourceDirAbsolute()))->mustRun();
+        };
+
+        $git(['init']);
+        $git(['config', 'user.name', 'Composer Stager']);
+        $git(['config', 'user.email', 'composer-stager@example.com']);
+        $git(['commit', '--allow-empty', '-m', 'Initial commit.']);
+        // Garbage collection ("gc") creates the ".idx" files that caused the problem
+        // in {@see https://github.com/php-tuf/composer-stager/issues/162}.
+        $git(['gc']);
+        $sut = $this->createSut();
+
+        $sut->sync(self::sourceDirPath(), self::destinationDirPath());
+
+        self::assertDirectoriesAreTheSame(self::sourceDirAbsolute(), self::destinationDirAbsolute());
     }
 
     /** @covers ::buildCommand */

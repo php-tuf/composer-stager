@@ -79,6 +79,18 @@ trait AssertTrait
         self::assertArrayEquals($expected, $actual, $message);
     }
 
+    protected static function assertDirectoriesAreTheSame(
+        string $firstDirAbsolute,
+        string $secondDirAbsolute,
+        $message = '',
+    ): void {
+        self::assertSame(
+            self::getFlatDirectoryListing($firstDirAbsolute),
+            self::getFlatDirectoryListing($secondDirAbsolute),
+            $message,
+        );
+    }
+
     protected static function assertVfsStructureIsSame(array $given, $message = ''): void
     {
         array_multisort($given, SORT_ASC);
