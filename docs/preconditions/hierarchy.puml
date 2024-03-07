@@ -68,7 +68,6 @@ class NoUnsupportedLinksExist {
     NoHardLinksExist
     NoLinksExistOnWindows
     NoSymlinksPointOutsideTheCodebase
-    NoSymlinksPointToADirectory
 }
 
 @enduml
