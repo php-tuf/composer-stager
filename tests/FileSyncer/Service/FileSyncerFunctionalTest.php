@@ -152,6 +152,47 @@ final class FileSyncerFunctionalTest extends TestCase
         ];
     }
 
+    /** @covers ::buildCommand */
+    public function testSyncPermissions(): void
+    {
+        $filename = 'file.txt';
+        $dirname = 'directory';
+        $fileInSourceAbsolute = self::makeAbsolute($filename, self::sourceDirAbsolute());
+        $directoryInSourceAbsolute = self::makeAbsolute($dirname, self::sourceDirAbsolute());
+        $fileInDestinationAbsolute = self::makeAbsolute($filename, self::destinationDirAbsolute());
+        $directoryInDestinationAbsolute = self::makeAbsolute($dirname, self::destinationDirAbsolute());
+        self::touch($fileInSourceAbsolute);
+        self::mkdir($directoryInSourceAbsolute);
+        self::chmod($fileInSourceAbsolute, 0777);
+        self::chmod($directoryInSourceAbsolute, 0777);
+        $sut = $this->createSut();
+
+        $sut->sync(self::sourceDirPath(), self::destinationDirPath());
+
+        self::assertFileMode($fileInDestinationAbsolute, 0777);
+        self::assertFileMode($directoryInDestinationAbsolute, 0777);
+        self::chmod($fileInDestinationAbsolute, 0744);
+        self::chmod($directoryInDestinationAbsolute, 0744);
+
+        $sut->sync(self::destinationDirPath(), self::sourceDirPath());
+
+        self::assertFileMode($fileInSourceAbsolute, 0744);
+        self::assertFileMode($directoryInSourceAbsolute, 0744);
+    }
+
+    /** @covers ::buildCommand */
+    public function testSyncPreservesEmptyDirectories(): void
+    {
+        $dirname = 'directory';
+        $directoryInSourceAbsolute = self::makeAbsolute($dirname, self::sourceDirAbsolute());
+        self::mkdir($directoryInSourceAbsolute);
+        $sut = $this->createSut();
+
+        $sut->sync(self::sourceDirPath(), self::destinationDirPath());
+
+        self::assertDirectoryExists(self::makeAbsolute($dirname, self::destinationDirAbsolute()));
+    }
+
     /** @covers ::assertSourceAndDestinationAreDifferent */
     public function testSyncDirectoriesTheSame(): void
     {
