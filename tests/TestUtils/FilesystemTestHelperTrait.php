@@ -16,24 +16,24 @@ trait FilesystemTestHelperTrait
         Helper::chmod($path, $mode);
     }
 
-    public static function createHardlinks(string $basePath, array $symlinks): void
+    public static function createHardlinks(array $symlinks, ?string $basePath = null): void
     {
-        Helper::createHardlinks($basePath, $symlinks);
+        Helper::createHardlinks($symlinks, $basePath);
     }
 
-    public static function createHardlink(string $basePath, string $link, string $target): void
+    public static function createHardlink(string $link, string $target, ?string $basePath = null): void
     {
-        Helper::createHardlink($basePath, $link, $target);
+        Helper::createHardlink($link, $target, $basePath);
     }
 
-    public static function createSymlinks(string $basePath, array $symlinks): void
+    public static function createSymlinks(array $symlinks, ?string $basePath = null): void
     {
-        Helper::createSymlinks($basePath, $symlinks);
+        Helper::createSymlinks($symlinks, $basePath);
     }
 
-    public static function createSymlink(string $basePath, string $link, string $target): void
+    public static function createSymlink(string $link, string $target, ?string $basePath = null): void
     {
-        Helper::createSymlink($basePath, $link, $target);
+        Helper::createSymlink($link, $target, $basePath);
     }
 
     public static function ensureParentDirectory(string|array $filenames): void

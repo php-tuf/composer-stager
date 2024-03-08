@@ -275,8 +275,8 @@ final class FilesystemFunctionalTest extends TestCase
     ): void {
         self::touch($files, self::sourceDirAbsolute());
         self::mkdir($directories, self::sourceDirAbsolute());
-        self::createSymlinks(self::sourceDirAbsolute(), $symlinks);
-        self::createHardlinks(self::sourceDirAbsolute(), $hardLinks);
+        self::createSymlinks($symlinks, self::sourceDirAbsolute());
+        self::createHardlinks($hardLinks, self::sourceDirAbsolute());
         $subject = self::createPath($subject, self::sourceDirAbsolute());
         $sut = $this->createSut();
 

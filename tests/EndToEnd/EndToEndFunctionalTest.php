@@ -102,12 +102,12 @@ final class EndToEndFunctionalTest extends TestCase
         self::chmod(self::makeAbsolute('CHANGE_dir_PERMISSIONS_in_staging_dir_before_syncing_back_to_active_dir', $activeDirAbsolute), 0775);
 
         $arbitrarySupportedSymlinkTarget = 'file_in_active_dir_root_NEVER_CHANGED_anywhere.txt';
-        self::createSymlinks($activeDirAbsolute, [
+        self::createSymlinks([
             'EXCLUDED_symlink_in_active_dir_root.txt' => $arbitrarySupportedSymlinkTarget,
             'EXCLUDED_dir/symlink_NEVER_CHANGED_anywhere.txt' => $arbitrarySupportedSymlinkTarget,
             'EXCLUDED_dir/UNSUPPORTED_link_pointing_outside_the_codebase.txt' => __FILE__,
-        ]);
-        self::createSymlinkOrEquivalent($activeDirAbsolute, 'symlink_to_a_directory', 'arbitrary_subdir');
+        ], $activeDirAbsolute);
+        self::createOrFakeSymlink('symlink_to_a_directory', 'arbitrary_subdir', $activeDirAbsolute);
 
         // Create initial composer.json. (Doing so manually can be up to one
         // third (1/3) faster than actually using Composer.)
@@ -203,10 +203,10 @@ final class EndToEndFunctionalTest extends TestCase
         self::touch('another_subdir/CREATE_in_staging_dir.txt', $stagingDirAbsolute);
         self::rm(self::makeAbsolute('DELETE_from_staging_dir_before_syncing_back_to_active_dir.txt', $stagingDirAbsolute));
         self::rm(self::makeAbsolute('empty_dir_in_active_that_is_DELETED_from_staging_dir_before_syncing_back_to_active_dir', $stagingDirAbsolute));
-        self::createSymlinkOrEquivalent(
-            $stagingDirAbsolute,
+        self::createOrFakeSymlink(
             'EXCLUDED_dir/symlink_CREATED_in_staging_dir.txt',
             $arbitrarySupportedSymlinkTarget,
+            $stagingDirAbsolute,
         );
 
         // Sanity check to ensure that the expected changes were made.
@@ -374,17 +374,19 @@ final class EndToEndFunctionalTest extends TestCase
         return $data;
     }
 
-    private static function createSymlinkOrEquivalent(string $basePath, string $link, string $target): void
+    /**
+     * Symlinks are unsupported on Windows, so fake them by creating a file
+     * at the same location to at least satisfy directory listing assertions.
+     */
+    private static function createOrFakeSymlink(string $link, string $target, ?string $basePath = null): void
     {
-        // Symlinks are unsupported on Windows, so fake them by creating a file
-        // at the same location to at least satisfy directory listing assertions.
         if (EnvironmentTestHelper::isWindows()) {
             self::touch($link, $basePath);
 
             return;
         }
 
-        Helper::createSymlink($basePath, $link, $target);
+        Helper::createSymlink($link, $target, $basePath);
     }
 
     private static function assertComposerJsonName(string $directory, mixed $expected, string $message = ''): void

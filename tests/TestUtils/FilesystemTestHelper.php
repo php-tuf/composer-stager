@@ -22,14 +22,14 @@ final class FilesystemTestHelper
         assert(self::fileMode($path) === $mode, sprintf('Failed to set file mode: %s', $path));
     }
 
-    public static function createHardlinks(string $basePath, array $symlinks): void
+    public static function createHardlinks(array $symlinks, ?string $basePath = null): void
     {
         foreach ($symlinks as $link => $target) {
-            self::createHardlink($basePath, $link, $target);
+            self::createHardlink($link, $target, $basePath);
         }
     }
 
-    public static function createHardlink(string $basePath, string $link, string $target): void
+    public static function createHardlink(string $link, string $target, ?string $basePath = null): void
     {
         $link = PathTestHelper::createPath($link, $basePath);
         $target = PathTestHelper::createPath($target, $basePath);
@@ -39,22 +39,24 @@ final class FilesystemTestHelper
         link($target->absolute(), $link->absolute());
     }
 
-    public static function createSymlinks(string $basePath, array $symlinks): void
+    public static function createSymlinks(array $symlinks, ?string $basePath = null): void
     {
         foreach ($symlinks as $link => $target) {
-            self::createSymlink($basePath, $link, $target);
+            self::createSymlink($link, $target, $basePath);
         }
     }
 
-    public static function createSymlink(string $basePathAbsolute, string $link, string $target): void
+    public static function createSymlink(string $link, string $target, ?string $basePath = null): void
     {
-        $linkPath = PathTestHelper::createPath($link, $basePathAbsolute);
-        $targetPath = PathTestHelper::createPath($target, $basePathAbsolute);
+        $basePath ??= PathTestHelper::testFreshFixturesDirAbsolute();
+
+        $linkPath = PathTestHelper::createPath($link, $basePath);
+        $targetPath = PathTestHelper::createPath($target, $basePath);
 
         self::prepareForLink($linkPath, $targetPath);
 
         $previousCwd = getcwd();
-        chdir($basePathAbsolute);
+        chdir($basePath);
         symlink($target, $linkPath->absolute());
         chdir($previousCwd);
     }

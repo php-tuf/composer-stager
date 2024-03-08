@@ -88,7 +88,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         $exclusions = self::createPathList(...$exclusions);
         $dirPath = self::activeDirAbsolute();
         self::touch($targetFile, $dirPath);
-        self::createHardlinks($dirPath, $links);
+        self::createHardlinks($links, $dirPath);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);

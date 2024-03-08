@@ -174,7 +174,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         $exclusions = self::createPathList(...$exclusions);
         $basePathAbsolute = self::activeDirAbsolute();
         self::touch($targetFile, $basePathAbsolute);
-        self::createSymlinks($basePathAbsolute, $links);
+        self::createSymlinks($links, $basePathAbsolute);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);
