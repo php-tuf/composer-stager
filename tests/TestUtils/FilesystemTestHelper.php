@@ -3,6 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 final class FilesystemTestHelper
@@ -70,6 +73,68 @@ final class FilesystemTestHelper
         return $mode;
     }
 
+    public static function getDirectoryContents(string $dir): array
+    {
+        $dir = PathTestHelper::ensureTrailingSlash($dir);
+        $dirListing = self::getFlatDirectoryListing($dir);
+
+        $contents = [];
+
+        foreach ($dirListing as $pathAbsolute) {
+            if (is_link($dir . $pathAbsolute)) {
+                $contents[$pathAbsolute] = '';
+
+                continue;
+            }
+
+            $contents[$pathAbsolute] = file_get_contents($dir . $pathAbsolute);
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Returns a flattened directory listing similar to what GNU find would,
+     * alphabetized for easier comparison. Example:
+     * ```php
+     * [
+     *     'eight.txt',
+     *     'four/five.txt',
+     *     'one/two/three.txt',
+     *     'six/seven.txt',
+     * ];
+     * ```
+     */
+    public static function getFlatDirectoryListing(string $dir): array
+    {
+        $dir = PathTestHelper::stripTrailingSlash($dir);
+
+        if (!self::exists($dir)) {
+            return [];
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir),
+        );
+
+        $listing = [];
+
+        foreach ($iterator as $splFileInfo) {
+            assert($splFileInfo instanceof SplFileInfo);
+
+            if (in_array($splFileInfo->getFilename(), ['.', '..'], true)) {
+                continue;
+            }
+
+            $pathAbsolute = $splFileInfo->getPathname();
+            $listing[] = substr($pathAbsolute, strlen($dir) + 1);
+        }
+
+        sort($listing);
+
+        return array_values($listing);
+    }
+
     public static function mkdir(array|string $directories, ?string $basePath = null): void
     {
         $directories = self::makeAbsolute($directories, $basePath);
@@ -90,7 +155,7 @@ final class FilesystemTestHelper
 
     private static function doCreateLinks(array $links, ?string $basePath, string $linkFunction): void
     {
-        $basePath ??= PathTestHelper::testFreshFixturesDirAbsolute();
+        $basePath ??= FixtureTestHelper::testFreshFixturesDirAbsolute();
         $previousCwd = getcwd();
         chdir($basePath);
 

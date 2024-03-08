@@ -13,7 +13,7 @@ final class ContainerTestHelper
     {
         $container = new ContainerBuilder();
         $loader = new YamlFileLoader($container, new FileLocator());
-        $config = PathTestHelper::makeAbsolute('config/services.yml', PathTestHelper::repositoryRootAbsolute());
+        $config = PathTestHelper::makeAbsolute('config/services.yml', FixtureTestHelper::repositoryRootAbsolute());
         $loader->load($config);
 
         return $container;

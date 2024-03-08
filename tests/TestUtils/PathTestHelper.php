@@ -13,161 +13,9 @@ use Symfony\Component\Filesystem\Path as SymfonyPath;
 
 final class PathTestHelper
 {
-    private const TEST_ENV = 'var/phpunit/test-env';
-    private const FRESH_FIXTURES_DIR = 'fresh-fixtures';
-    private const PERSISTENT_FIXTURES_DIR = 'persistent-fixtures';
-    private const ACTIVE_DIR = 'active-dir';
-    private const STAGING_DIR = 'staging-dir';
-    private const SOURCE_DIR = 'source-dir';
-    private const DESTINATION_DIR = 'destination-dir';
-    private const ARBITRARY_DIR = 'arbitrary-dir';
-    private const ARBITRARY_FILE = 'arbitrary-file.txt';
-    private const NON_EXISTENT_DIR = 'non-existent-dir';
-    private const NON_EXISTENT_FILE = 'non-existent-file.txt';
-
-    public static function repositoryRootAbsolute(): string
-    {
-        return dirname(__DIR__, 2);
-    }
-
-    public static function testEnvAbsolute(): string
-    {
-        return self::makeAbsolute(self::TEST_ENV, self::repositoryRootAbsolute());
-    }
-
-    public static function testFreshFixturesDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::FRESH_FIXTURES_DIR, self::testEnvAbsolute());
-    }
-
-    public static function testPersistentFixturesAbsolute(): string
-    {
-        return self::makeAbsolute(self::PERSISTENT_FIXTURES_DIR, self::testEnvAbsolute());
-    }
-
-    public static function activeDirRelative(): string
-    {
-        return self::ACTIVE_DIR;
-    }
-
-    public static function activeDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::activeDirRelative());
-    }
-
-    public static function activeDirPath(): PathInterface
-    {
-        return self::createPath(self::activeDirAbsolute());
-    }
-
-    public static function stagingDirRelative(): string
-    {
-        return self::STAGING_DIR;
-    }
-
-    public static function stagingDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::stagingDirRelative());
-    }
-
-    public static function stagingDirPath(): PathInterface
-    {
-        return self::createPath(self::stagingDirAbsolute());
-    }
-
-    public static function sourceDirRelative(): string
-    {
-        return self::SOURCE_DIR;
-    }
-
-    public static function sourceDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::sourceDirRelative());
-    }
-
-    public static function sourceDirPath(): PathInterface
-    {
-        return self::createPath(self::sourceDirAbsolute());
-    }
-
-    public static function destinationDirRelative(): string
-    {
-        return self::DESTINATION_DIR;
-    }
-
-    public static function destinationDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::destinationDirRelative());
-    }
-
-    public static function destinationDirPath(): PathInterface
-    {
-        return self::createPath(self::destinationDirAbsolute());
-    }
-
-    public static function arbitraryDirRelative(): string
-    {
-        return self::ARBITRARY_DIR;
-    }
-
-    public static function arbitraryDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::arbitraryDirRelative());
-    }
-
-    public static function arbitraryDirPath(): PathInterface
-    {
-        return self::createPath(self::arbitraryDirAbsolute());
-    }
-
-    public static function arbitraryFileRelative(): string
-    {
-        return self::ARBITRARY_FILE;
-    }
-
-    public static function arbitraryFileAbsolute(): string
-    {
-        return self::makeAbsolute(self::arbitraryFileRelative());
-    }
-
-    public static function arbitraryFilePath(): PathInterface
-    {
-        return self::createPath(self::arbitraryFileAbsolute());
-    }
-
-    public static function nonExistentDirRelative(): string
-    {
-        return self::NON_EXISTENT_DIR;
-    }
-
-    public static function nonExistentDirAbsolute(): string
-    {
-        return self::makeAbsolute(self::nonExistentDirRelative());
-    }
-
-    public static function nonExistentDirPath(): PathInterface
-    {
-        return self::createPath(self::nonExistentDirAbsolute());
-    }
-
-    public static function nonExistentFileRelative(): string
-    {
-        return self::NON_EXISTENT_FILE;
-    }
-
-    public static function nonExistentFileAbsolute(): string
-    {
-        return self::makeAbsolute(self::nonExistentFileRelative());
-    }
-
-    public static function nonExistentFilePath(): PathInterface
-    {
-        return self::createPath(self::nonExistentFileAbsolute());
-    }
-
     public static function createPath(string $path, ?string $basePath = null): PathInterface
     {
-        $basePath ??= self::testFreshFixturesDirAbsolute();
+        $basePath ??= FixtureTestHelper::testFreshFixturesDirAbsolute();
         $basePath = self::createPathFactory()->create($basePath);
 
         return self::createPathFactory()->create($path, $basePath);
@@ -208,7 +56,7 @@ final class PathTestHelper
     public static function makeAbsolute(array|string $paths, ?string $basePath = null): string|array
     {
         $paths = BasicTestHelper::ensureIsArray($paths);
-        $basePath ??= self::testFreshFixturesDirAbsolute();
+        $basePath ??= FixtureTestHelper::testFreshFixturesDirAbsolute();
 
         $paths = array_map(static function ($path) use ($basePath): string {
             $absolute = SymfonyPath::makeAbsolute($path, $basePath);

@@ -25,6 +25,9 @@ use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
  */
 final class EndToEndFunctionalTest extends TestCase
 {
+    private const CHANGED_CONTENT = 'changed';
+    private const ORIGINAL_CONTENT = '';
+
     private BeginnerInterface $beginner;
     private CleanerInterface $cleaner;
     private CommitterInterface $committer;
@@ -388,6 +391,18 @@ final class EndToEndFunctionalTest extends TestCase
         self::createSymlinks([$link => $target], $basePath);
     }
 
+    private static function changeFile(string $dir, string $filename): void
+    {
+        $fileAbsolute = self::ensureTrailingSlash($dir) . $filename;
+        $result = file_put_contents($fileAbsolute, self::CHANGED_CONTENT);
+        assert($result !== false, sprintf('Failed to change file: %s', $fileAbsolute));
+    }
+
+    private static function putJson($filename, $json): void
+    {
+        file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
+    }
+
     private static function assertComposerJsonName(string $directory, mixed $expected, string $message = ''): void
     {
         $json = file_get_contents($directory . '/composer.json');
@@ -396,11 +411,6 @@ final class EndToEndFunctionalTest extends TestCase
         assert(is_array($data));
         assert(array_key_exists('name', $data));
         self::assertEquals($expected, $data['name'], $message);
-    }
-
-    private static function putJson($filename, $json): void
-    {
-        file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
 
     private static function assertFileChanged(string $dir, string $path, string $message = ''): void

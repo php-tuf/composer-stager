@@ -36,7 +36,7 @@ final class FileFinderFunctionalTest extends TestCase
      */
     public function testFind(array $files, array $exclusions, array $expected): void
     {
-        $expected = $this->normalizePaths($expected);
+        $expected = self::normalizePaths($expected);
         self::touch($files, self::activeDirAbsolute());
         $sut = $this->createSut();
 
@@ -169,7 +169,7 @@ final class FileFinderFunctionalTest extends TestCase
             'zz_last.txt',
             '__first.txt',
         ];
-        $expected = $this->normalizePaths([
+        $expected = self::normalizePaths([
             '__first.txt',
             'middle.txt',
             'zz_last.txt',
@@ -182,5 +182,25 @@ final class FileFinderFunctionalTest extends TestCase
         // Don't use ::assertDirectoryListing() here, because it sorts the results,
         // ignoring the actual order and negating the whole point of this test.
         self::assertSame($expected, $actual);
+    }
+
+    private static function normalizePaths(array $paths): array
+    {
+        $paths = array_map(static function ($path): string {
+            $path = implode(
+                '/',
+                [
+                    self::testFreshFixturesDirAbsolute(),
+                    self::activeDirRelative(),
+                    $path,
+                ],
+            );
+
+            return self::makeAbsolute($path, getcwd());
+        }, $paths);
+
+        sort($paths);
+
+        return $paths;
     }
 }

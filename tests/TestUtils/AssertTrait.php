@@ -8,10 +8,7 @@ use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\Translation\Value\TranslatableReflection;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use ReflectionProperty;
-use SplFileInfo;
 use Throwable;
 
 /** Provides custom test assertions. */
@@ -273,47 +270,5 @@ trait AssertTrait
         string $message = '',
     ): void {
         self::assertSame($expected, $translatable->trans(), $message);
-    }
-
-    /**
-     * Returns a flattened directory listing similar to what GNU find would,
-     * alphabetized for easier comparison. Example:
-     * ```php
-     * [
-     *     'eight.txt',
-     *     'four/five.txt',
-     *     'one/two/three.txt',
-     *     'six/seven.txt',
-     * ];
-     * ```
-     */
-    private static function getFlatDirectoryListing(string $dir): array
-    {
-        $dir = PathTestHelper::stripTrailingSlash($dir);
-
-        if (!FilesystemTestHelper::exists($dir)) {
-            return [];
-        }
-
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir),
-        );
-
-        $listing = [];
-
-        foreach ($iterator as $splFileInfo) {
-            assert($splFileInfo instanceof SplFileInfo);
-
-            if (in_array($splFileInfo->getFilename(), ['.', '..'], true)) {
-                continue;
-            }
-
-            $pathAbsolute = $splFileInfo->getPathname();
-            $listing[] = substr($pathAbsolute, strlen($dir) + 1);
-        }
-
-        sort($listing);
-
-        return array_values($listing);
     }
 }

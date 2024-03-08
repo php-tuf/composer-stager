@@ -51,6 +51,28 @@ trait FilesystemTestHelperTrait
         return Helper::fileMode($path);
     }
 
+    public static function getDirectoryContents(string $dir): array
+    {
+        return Helper::getDirectoryContents($dir);
+    }
+
+    /**
+     * Returns a flattened directory listing similar to what GNU find would,
+     * alphabetized for easier comparison. Example:
+     * ```php
+     * [
+     *     'eight.txt',
+     *     'four/five.txt',
+     *     'one/two/three.txt',
+     *     'six/seven.txt',
+     * ];
+     * ```
+     */
+    public static function getFlatDirectoryListing(string $dir): array
+    {
+        return Helper::getFlatDirectoryListing($dir);
+    }
+
     public static function mkdir(array|string $directories, ?string $basePath = null): void
     {
         Helper::mkdir($directories, $basePath);
