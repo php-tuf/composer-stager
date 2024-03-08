@@ -16,14 +16,14 @@ trait FilesystemTestHelperTrait
         Helper::chmod($path, $mode);
     }
 
-    public static function createHardlinks(array $symlinks, ?string $basePath = null): void
+    /**
+     * @param array<string, string> $hardlinks
+     *   An array of hard links values, keyed by the link (source) path
+     *   with a corresponding value of the link target path.
+     */
+    public static function createHardlinks(array $hardlinks, ?string $basePath = null): void
     {
-        Helper::createHardlinks($symlinks, $basePath);
-    }
-
-    public static function createHardlink(string $link, string $target, ?string $basePath = null): void
-    {
-        Helper::createHardlink($link, $target, $basePath);
+        Helper::createHardlinks($hardlinks, $basePath);
     }
 
     /**

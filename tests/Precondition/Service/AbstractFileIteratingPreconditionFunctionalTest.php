@@ -75,7 +75,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         $activeDir = self::activeDirPath();
         $stagingDir = self::createPath('staging-dir', self::activeDirAbsolute());
         self::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
-        self::createHardlink('link.txt', 'file.txt', $stagingDir->absolute());
+        self::createHardlinks(['link.txt' => 'file.txt'], $stagingDir->absolute());
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir);
 
@@ -94,7 +94,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         $activeDir = self::activeDirPath();
         $stagingDir = self::createPath('staging-dir', self::activeDirAbsolute());
         self::touch(self::makeAbsolute('file.txt', $stagingDir->absolute()));
-        self::createHardlink('link.txt', 'file.txt', $stagingDir->absolute());
+        self::createHardlinks(['link.txt' => 'file.txt'], $stagingDir->absolute());
 
         $isFulfilled = $sut->isFulfilled($activeDir, $stagingDir, self::createPathList('link.txt', 'file.txt'));
 

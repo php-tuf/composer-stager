@@ -22,21 +22,14 @@ final class FilesystemTestHelper
         assert(self::fileMode($path) === $mode, sprintf('Failed to set file mode: %s', $path));
     }
 
-    public static function createHardlinks(array $symlinks, ?string $basePath = null): void
+    /**
+     * @param array<string, string> $hardlinks
+     *   An array of hard links values, keyed by the link (source) path
+     *   with a corresponding value of the link target path.
+     */
+    public static function createHardlinks(array $hardlinks, ?string $basePath = null): void
     {
-        foreach ($symlinks as $link => $target) {
-            self::createHardlink($link, $target, $basePath);
-        }
-    }
-
-    public static function createHardlink(string $link, string $target, ?string $basePath = null): void
-    {
-        $link = PathTestHelper::createPath($link, $basePath);
-        $target = PathTestHelper::createPath($target, $basePath);
-
-        self::prepareForLink($link, $target);
-
-        link($target->absolute(), $link->absolute());
+        self::doCreateLinks($hardlinks, $basePath, 'link');
     }
 
     /**
@@ -46,20 +39,7 @@ final class FilesystemTestHelper
      */
     public static function createSymlinks(array $symlinks, ?string $basePath = null): void
     {
-        $basePath ??= PathTestHelper::testFreshFixturesDirAbsolute();
-        $previousCwd = getcwd();
-        chdir($basePath);
-
-        foreach ($symlinks as $link => $target) {
-            $linkPath = PathTestHelper::createPath($link, $basePath);
-            $targetPath = PathTestHelper::createPath($target, $basePath);
-
-            self::prepareForLink($linkPath, $targetPath);
-
-            symlink($target, $linkPath->absolute());
-        }
-
-        chdir($previousCwd);
+        self::doCreateLinks($symlinks, $basePath, 'symlink');
     }
 
     public static function ensureParentDirectory(string|array $filenames): void
@@ -106,6 +86,24 @@ final class FilesystemTestHelper
         $paths = self::makeAbsolute($paths, $basePath);
         self::ensureParentDirectory($paths);
         self::symfonyFilesystem()->touch($paths);
+    }
+
+    private static function doCreateLinks(array $links, ?string $basePath, string $linkFunction): void
+    {
+        $basePath ??= PathTestHelper::testFreshFixturesDirAbsolute();
+        $previousCwd = getcwd();
+        chdir($basePath);
+
+        foreach ($links as $link => $target) {
+            $linkPath = PathTestHelper::createPath($link, $basePath);
+            $targetPath = PathTestHelper::createPath($target, $basePath);
+
+            self::prepareForLink($linkPath, $targetPath);
+
+            $linkFunction($target, $linkPath->absolute());
+        }
+
+        chdir($previousCwd);
     }
 
     private static function symfonyFilesystem(): SymfonyFilesystem
