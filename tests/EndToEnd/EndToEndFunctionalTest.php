@@ -15,7 +15,6 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper as Helper;
 
 /**
  * Provides end-to-end functional tests, including the API and internal layers.
@@ -386,7 +385,7 @@ final class EndToEndFunctionalTest extends TestCase
             return;
         }
 
-        Helper::createSymlink($link, $target, $basePath);
+        self::createSymlinks([$link => $target], $basePath);
     }
 
     private static function assertComposerJsonName(string $directory, mixed $expected, string $message = ''): void

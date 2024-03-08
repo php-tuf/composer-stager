@@ -39,25 +39,26 @@ final class FilesystemTestHelper
         link($target->absolute(), $link->absolute());
     }
 
+    /**
+     * @param array<string, string> $symlinks
+     *   An array of symlink values, keyed by the link (source) path
+     *   with a corresponding value of the link target path.
+     */
     public static function createSymlinks(array $symlinks, ?string $basePath = null): void
     {
-        foreach ($symlinks as $link => $target) {
-            self::createSymlink($link, $target, $basePath);
-        }
-    }
-
-    public static function createSymlink(string $link, string $target, ?string $basePath = null): void
-    {
         $basePath ??= PathTestHelper::testFreshFixturesDirAbsolute();
-
-        $linkPath = PathTestHelper::createPath($link, $basePath);
-        $targetPath = PathTestHelper::createPath($target, $basePath);
-
-        self::prepareForLink($linkPath, $targetPath);
-
         $previousCwd = getcwd();
         chdir($basePath);
-        symlink($target, $linkPath->absolute());
+
+        foreach ($symlinks as $link => $target) {
+            $linkPath = PathTestHelper::createPath($link, $basePath);
+            $targetPath = PathTestHelper::createPath($target, $basePath);
+
+            self::prepareForLink($linkPath, $targetPath);
+
+            symlink($target, $linkPath->absolute());
+        }
+
         chdir($previousCwd);
     }
 

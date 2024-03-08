@@ -26,14 +26,14 @@ trait FilesystemTestHelperTrait
         Helper::createHardlink($link, $target, $basePath);
     }
 
+    /**
+     * @param array<string, string> $symlinks
+     *   An array of symlinks values, keyed by the link (source) path
+     *   with a corresponding value of the link target path.
+     */
     public static function createSymlinks(array $symlinks, ?string $basePath = null): void
     {
         Helper::createSymlinks($symlinks, $basePath);
-    }
-
-    public static function createSymlink(string $link, string $target, ?string $basePath = null): void
-    {
-        Helper::createSymlink($link, $target, $basePath);
     }
 
     public static function ensureParentDirectory(string|array $filenames): void
