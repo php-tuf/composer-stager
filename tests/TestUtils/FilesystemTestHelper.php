@@ -106,11 +106,6 @@ final class FilesystemTestHelper
         chdir($previousCwd);
     }
 
-    private static function symfonyFilesystem(): SymfonyFilesystem
-    {
-        return new SymfonyFilesystem();
-    }
-
     /** @todo Replace with \PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper::makeAbsolute(), if possible */
     private static function makeAbsolute(array|string $paths, ?string $basePath): string|array
     {
@@ -129,5 +124,10 @@ final class FilesystemTestHelper
         // systems but fail on Windows. Avoid hard-to-debug problems by making
         // sure it fails everywhere in that case.
         assert(file_exists($target->absolute()), sprintf('Symlink target does not exist: %s', $target->absolute()));
+    }
+
+    private static function symfonyFilesystem(): SymfonyFilesystem
+    {
+        return new SymfonyFilesystem();
     }
 }
