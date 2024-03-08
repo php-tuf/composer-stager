@@ -15,7 +15,7 @@ final class FilesystemFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
-        vfsStream::setup();
+        VfsTestHelper::setup();
         self::mkdir([
             self::sourceDirAbsolute(),
             self::destinationDirAbsolute(),
