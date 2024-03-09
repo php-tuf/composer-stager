@@ -50,38 +50,6 @@ interface FilesystemInterface
     public function fileExists(PathInterface $path): bool;
 
     /**
-     * Gets the mode (permissions) of a given file or directory.
-     *
-     * This function returns the file mode in octal form, e.g., 0644 or
-     * 0775. It can be used directly for comparison, for example:
-     *   ```php
-     *   chmod($fileAbsolute, 0644);
-     *   $mode = $filesystem->fileMode($filePath);
-     *   assert($mode === 0644); // true
-     *   ```
-     *
-     * For human-readable display purposes, convert it to a string:
-     *   ```php
-     *   chmod($fileAbsolute, 0644);
-     *   $mode = $filesystem->fileMode($filePath);
-     *   $mode = substr(sprintf('0%o', $mode), -4);
-     *   assert($mode === "0644"); // true
-     *   ```
-     *
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
-     *   The path to get the mode for.
-     *
-     * @return int
-     *   Returns the file's mode. See above.
-     *
-     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
-     *    If case of failure.
-     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *    If the file does not exist.
-     */
-    public function fileMode(PathInterface $path): int;
-
-    /**
      * Determines whether the given path is a directory.
      *
      * Unlike PHP's built-in is_dir() function, this method distinguishes

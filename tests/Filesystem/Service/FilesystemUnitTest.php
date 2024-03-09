@@ -86,31 +86,6 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::fileMode
-     *
-     * @runInSeparateProcess
-     */
-    public function testFileModeFailure(): void
-    {
-        $path = self::arbitraryFilePath();
-        self::touch($path->absolute());
-        BuiltinFunctionMocker::mock(['fileperms' => $this->prophesize(TestSpyInterface::class)]);
-        BuiltinFunctionMocker::$spies['fileperms']
-            ->report($path->absolute())
-            ->shouldBeCalledOnce()
-            ->willReturn(false);
-        $this->symfonyFilesystem
-            ->exists(Argument::any())
-            ->willReturn(true);
-        $sut = $this->createSut();
-
-        $message = sprintf('Failed to get permissions on path at %s', $path->absolute());
-        self::assertTranslatableException(static function () use ($sut, $path): void {
-            $sut->fileMode($path);
-        }, IOException::class, $message);
-    }
-
-    /**
      * @covers ::isWritable
      *
      * @dataProvider providerIsWritable

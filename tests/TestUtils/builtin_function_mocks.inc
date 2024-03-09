@@ -47,15 +47,6 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service {
         }
     }
 
-    if (BuiltinFunctionMocker::shouldMock('fileperms')) {
-        function fileperms(string $filename): int|false
-        {
-            return BuiltinFunctionMocker::$spies['fileperms']
-                ->reveal()
-                ->report($filename);
-        }
-    }
-
     if (BuiltinFunctionMocker::shouldMock('is_writable')) {
         function is_writable(string $filename): bool
         {
