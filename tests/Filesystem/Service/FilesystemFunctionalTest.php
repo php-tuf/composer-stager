@@ -32,40 +32,6 @@ final class FilesystemFunctionalTest extends TestCase
     }
 
     /**
-     * @covers ::chmod
-     *
-     * @group no_windows
-     */
-    public function testChmod(): void
-    {
-        $mode = 0775;
-        $filePath = VfsTestHelper::arbitraryFilePath();
-        $fileAbsolute = $filePath->absolute();
-        self::touch($fileAbsolute);
-        $sut = $this->createSut();
-
-        $sut->chmod($filePath, $mode);
-
-        self::assertFileMode($fileAbsolute, $mode);
-    }
-
-    /**
-     * @covers ::chmod
-     *
-     * @group no_windows
-     */
-    public function testChmodFileDoesNotExist(): void
-    {
-        $path = VfsTestHelper::nonExistentFilePath();
-        $sut = $this->createSut();
-
-        $message = sprintf('The file cannot be found at %s.', $path->absolute());
-        self::assertTranslatableException(static function () use ($sut, $path): void {
-            $sut->chmod($path, 0777);
-        }, LogicException::class, $message);
-    }
-
-    /**
      * @covers ::fileExists
      * @covers ::getFileType
      * @covers ::isDir

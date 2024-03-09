@@ -53,39 +53,6 @@ final class FilesystemUnitTest extends TestCase
     }
 
     /**
-     * @covers ::chmod
-     *
-     * @group no_windows
-     * @runInSeparateProcess
-     */
-    public function testChmodFailure(): void
-    {
-        $permissions = 777;
-        $pathAbsolute = self::arbitraryFileAbsolute();
-        $this->symfonyFilesystem
-            ->exists(Argument::any())
-            ->willReturn(true);
-        BuiltinFunctionMocker::mock([
-            'chmod' => $this->prophesize(TestSpyInterface::class),
-            'file_exists' => $this->prophesize(TestSpyInterface::class),
-        ]);
-        BuiltinFunctionMocker::$spies['chmod']
-            ->report($pathAbsolute, $permissions)
-            ->shouldBeCalledOnce()
-            ->willReturn(false);
-        BuiltinFunctionMocker::$spies['file_exists']
-            ->report($pathAbsolute)
-            ->shouldBeCalledOnce()
-            ->willReturn(true);
-        $sut = $this->createSut();
-
-        $message = sprintf('The file mode could not be changed on %s.', $pathAbsolute);
-        self::assertTranslatableException(static function () use ($sut, $permissions): void {
-            $sut->chmod(self::arbitraryFilePath(), $permissions);
-        }, IOException::class, $message);
-    }
-
-    /**
      * @covers ::isWritable
      *
      * @dataProvider providerIsWritable
