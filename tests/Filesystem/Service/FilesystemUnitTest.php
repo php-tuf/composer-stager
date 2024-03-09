@@ -4,7 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Environment\Service\EnvironmentInterface;
 use PhpTuf\ComposerStager\API\Exception\IOException;
-use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
@@ -84,57 +83,6 @@ final class FilesystemUnitTest extends TestCase
         self::assertTranslatableException(static function () use ($sut, $permissions): void {
             $sut->chmod(self::arbitraryFilePath(), $permissions);
         }, IOException::class, $message);
-    }
-
-    /**
-     * @covers ::copy
-     *
-     * @runInSeparateProcess
-     */
-    public function testCopyPermissionsFailure(): void
-    {
-        $this->pathFactory
-            ->create(Argument::cetera())
-            ->willReturn(self::createPath(self::arbitraryFileAbsolute()));
-        BuiltinFunctionMocker::mock([
-            'chmod' => $this->prophesize(TestSpyInterface::class),
-            'copy' => $this->prophesize(TestSpyInterface::class),
-            'file_exists' => $this->prophesize(TestSpyInterface::class),
-            'fileperms' => $this->prophesize(TestSpyInterface::class),
-        ]);
-        BuiltinFunctionMocker::$spies['chmod']
-            ->report(Argument::cetera())
-            ->willReturn(false);
-        BuiltinFunctionMocker::$spies['copy']
-            ->report(Argument::cetera())
-            ->willReturn(true);
-        BuiltinFunctionMocker::$spies['file_exists']
-            ->report(Argument::cetera())
-            ->willReturn(true);
-        BuiltinFunctionMocker::$spies['fileperms']
-            ->report(Argument::cetera())
-            ->willReturn(12_345);
-        $sut = $this->createSut();
-
-        $message = sprintf('The file mode could not be changed on %s.', self::destinationDirAbsolute());
-        self::assertTranslatableException(static function () use ($sut): void {
-            $sut->copy(self::activeDirPath(), self::destinationDirPath());
-        }, IOException::class, $message);
-    }
-
-    /**
-     * @covers ::assertCopyPreconditions
-     * @covers ::copy
-     */
-    public function testCopyDirectoriesTheSame(): void
-    {
-        $samePath = self::activeDirPath();
-        $sut = $this->createSut();
-
-        $message = sprintf('The source and destination files cannot be the same at %s', $samePath->absolute());
-        self::assertTranslatableException(static function () use ($sut, $samePath): void {
-            $sut->copy($samePath, $samePath);
-        }, LogicException::class, $message);
     }
 
     /**

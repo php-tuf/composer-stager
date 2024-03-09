@@ -2,7 +2,6 @@
 
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
-use org\bovigo\vfs\vfsStream;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
@@ -30,94 +29,6 @@ final class FilesystemFunctionalTest extends TestCase
     private function createSut(): Filesystem
     {
         return ContainerTestHelper::get(Filesystem::class);
-    }
-
-    /**
-     * @covers ::assertCopyPreconditions
-     * @covers ::copy
-     */
-    public function testCopy(): void
-    {
-        $mode = 0775;
-        $contents = 'Arbitrary file contents';
-        vfsStream::create(['source.txt' => $contents]);
-        $sourceFilePath = VfsTestHelper::createPath('source.txt');
-        $sourceFileAbsolute = $sourceFilePath->absolute();
-        $destinationFilePath = VfsTestHelper::createPath('some/arbitrary/depth/destination.txt');
-        $destinationFileAbsolute = $destinationFilePath->absolute();
-        assert(self::fileMode($sourceFileAbsolute) !== $mode, 'The new file already has the same permissions as will be set.');
-        self::chmod($sourceFileAbsolute, $mode);
-        $sut = $this->createSut();
-
-        $sut->copy($sourceFilePath, $destinationFilePath);
-
-        self::assertVfsStructureIsSame([
-            'source.txt' => $contents,
-            'some' => [
-                'arbitrary' => [
-                    'depth' => ['destination.txt' => $contents],
-                ],
-            ],
-        ]);
-        self::assertFileMode($destinationFileAbsolute, $mode);
-    }
-
-    /**
-     * @covers ::assertCopyPreconditions
-     * @covers ::copy
-     */
-    public function testCopySourceFileNotFound(): void
-    {
-        $sourceFilePath = VfsTestHelper::nonExistentFilePath();
-        $destinationFilePath = VfsTestHelper::arbitraryFilePath();
-        $sut = $this->createSut();
-
-        $message = sprintf('The source file does not exist at %s', $sourceFilePath->absolute());
-        self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
-            $sut->copy($sourceFilePath, $destinationFilePath);
-        }, LogicException::class, $message);
-    }
-
-    /**
-     * @covers ::assertCopyPreconditions
-     * @covers ::copy
-     */
-    public function testCopySourceIsADirectory(): void
-    {
-        $fileRelative = self::arbitraryFileRelative();
-        $sourceFilePath = self::createPath($fileRelative, self::sourceDirAbsolute());
-        $destinationFilePath = self::createPath($fileRelative, self::destinationDirAbsolute());
-        self::mkdir($sourceFilePath->absolute());
-        $sut = $this->createSut();
-
-        $message = sprintf('The source cannot be a directory at %s', $sourceFilePath->absolute());
-        self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
-            $sut->copy($sourceFilePath, $destinationFilePath);
-        }, LogicException::class, $message);
-    }
-
-    /**
-     * @covers ::copy
-     *
-     * @group no_windows
-     */
-    public function testCopyFailure(): void
-    {
-        $fileRelative = self::arbitraryFileRelative();
-        $sourceFilePath = self::createPath($fileRelative, self::sourceDirAbsolute());
-        // Try to copy the file to the directory root, which should always fail.
-        $destinationFilePath = self::createPath($fileRelative, '/');
-        self::touch($sourceFilePath->absolute());
-        $sut = $this->createSut();
-
-        // Get expected error details.
-        @copy($sourceFilePath->absolute(), $destinationFilePath->absolute());
-        $details = error_get_last()['message'];
-
-        $message = sprintf('Failed to copy %s to %s: %s', $sourceFilePath->absolute(), $destinationFilePath->absolute(), $details);
-        self::assertTranslatableException(static function () use ($sut, $sourceFilePath, $destinationFilePath): void {
-            $sut->copy($sourceFilePath, $destinationFilePath);
-        }, IOException::class, $message);
     }
 
     /**

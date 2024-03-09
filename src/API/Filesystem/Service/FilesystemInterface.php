@@ -40,31 +40,6 @@ interface FilesystemInterface
     public function chmod(PathInterface $path, int $permissions): void;
 
     /**
-     * Copies a given file from one place to another.
-     *
-     * If the file already exists at the destination it will be overwritten.
-     * File permissions from the source will be preserved in the destination.
-     * Copying directories is not supported.
-     *
-     * This differs from PHP's built-in `copy()` function in that this method
-     * will create any parent directories necessary to copy the file.
-     *
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $source
-     *   The file to copy.
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $destination
-     *   The file to copy to. If it does not exist it will be created.
-     *
-     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
-     *   If the file cannot be copied.
-     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *   If the source file does not exist, is not actually a file, or is the
-     *   same as the destination.
-     *
-     * @see https://www.php.net/manual/en/function.copy.php
-     */
-    public function copy(PathInterface $source, PathInterface $destination): void;
-
-    /**
      * Determines whether the given path exists.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
