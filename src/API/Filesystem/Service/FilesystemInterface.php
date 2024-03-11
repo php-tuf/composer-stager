@@ -22,49 +22,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 interface FilesystemInterface
 {
     /**
-     * Changes the mode (permissions) of a given file or directory.
-     *
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
-     *   The file to change the mode on.
-     * @param int $permissions
-     *   The permissions for the file according to the rules at
-     *   {@see https://www.php.net/manual/en/function.chmod.php}.
-     *
-     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
-     *    If the mode cannot be changed.
-     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *    If the file does not exist.
-     *
-     * @see https://www.php.net/manual/en/function.chmod.php
-     */
-    public function chmod(PathInterface $path, int $permissions): void;
-
-    /**
-     * Copies a given file from one place to another.
-     *
-     * If the file already exists at the destination it will be overwritten.
-     * File permissions from the source will be preserved in the destination.
-     * Copying directories is not supported.
-     *
-     * This differs from PHP's built-in `copy()` function in that this method
-     * will create any parent directories necessary to copy the file.
-     *
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $source
-     *   The file to copy.
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $destination
-     *   The file to copy to. If it does not exist it will be created.
-     *
-     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
-     *   If the file cannot be copied.
-     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *   If the source file does not exist, is not actually a file, or is the
-     *   same as the destination.
-     *
-     * @see https://www.php.net/manual/en/function.copy.php
-     */
-    public function copy(PathInterface $source, PathInterface $destination): void;
-
-    /**
      * Determines whether the given path exists.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
@@ -73,38 +30,6 @@ interface FilesystemInterface
      * @see https://www.php.net/manual/en/function.file-exists.php
      */
     public function fileExists(PathInterface $path): bool;
-
-    /**
-     * Gets the mode (permissions) of a given file or directory.
-     *
-     * This function returns the file mode in octal form, e.g., 0644 or
-     * 0775. It can be used directly for comparison, for example:
-     *   ```php
-     *   chmod($fileAbsolute, 0644);
-     *   $mode = $filesystem->fileMode($filePath);
-     *   assert($mode === 0644); // true
-     *   ```
-     *
-     * For human-readable display purposes, convert it to a string:
-     *   ```php
-     *   chmod($fileAbsolute, 0644);
-     *   $mode = $filesystem->fileMode($filePath);
-     *   $mode = substr(sprintf('0%o', $mode), -4);
-     *   assert($mode === "0644"); // true
-     *   ```
-     *
-     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
-     *   The path to get the mode for.
-     *
-     * @return int
-     *   Returns the file's mode. See above.
-     *
-     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
-     *    If case of failure.
-     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
-     *    If the file does not exist.
-     */
-    public function fileMode(PathInterface $path): int;
 
     /**
      * Determines whether the given path is a directory.

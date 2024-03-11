@@ -45,89 +45,9 @@ final class Filesystem implements FilesystemInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
-    public function chmod(PathInterface $path, int $permissions): void
-    {
-        $pathAbsolute = $path->absolute();
-
-        $result = @chmod($pathAbsolute, $permissions);
-
-        if ($result) {
-            return;
-        }
-
-        if (!$this->fileExists($path)) {
-            throw new LogicException($this->t(
-                'The file cannot be found at %path.',
-                $this->p(['%path' => $pathAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        throw new IOException($this->t(
-            'The file mode could not be changed on %path.',
-            $this->p(['%path' => $pathAbsolute]),
-            $this->d()->exceptions(),
-        ));
-    }
-
-    public function copy(PathInterface $source, PathInterface $destination): void
-    {
-        $this->assertCopyPreconditions($source, $destination);
-
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
-
-        $mode = $this->fileMode($source);
-
-        // Ensure the parent directory exists.
-        $parent = $this->pathFactory->create('..', $destination);
-        $this->mkdir($parent);
-
-        $result = @copy($sourceAbsolute, $destinationAbsolute);
-
-        if (!$result) {
-            throw new IOException($this->t(
-                'Failed to copy %source to %destination: %details',
-                $this->p([
-                    '%source' => $sourceAbsolute,
-                    '%destination' => $destinationAbsolute,
-                    '%details' => error_get_last()['message'] ?? 'Unknown error',
-                ]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        $this->chmod($destination, $mode);
-    }
-
     public function fileExists(PathInterface $path): bool
     {
         return file_exists($path->absolute());
-    }
-
-    public function fileMode(PathInterface $path): int
-    {
-        $pathAbsolute = $path->absolute();
-
-        $permissions = @fileperms($pathAbsolute);
-
-        if (is_int($permissions)) {
-            return $permissions & 0777;
-        }
-
-        if (!$this->fileExists($path)) {
-            throw new LogicException($this->t(
-                'No such file: %file',
-                $this->p(['%file' => $pathAbsolute]),
-                $this->d()->exceptions(),
-            ), 0);
-        }
-
-        throw new IOException($this->t(
-            'Failed to get permissions on path at %file',
-            $this->p(['%file' => $pathAbsolute]),
-            $this->d()->exceptions(),
-        ), 0);
     }
 
     public function isDir(PathInterface $path): bool
@@ -237,37 +157,6 @@ final class Filesystem implements FilesystemInterface
             throw new IOException($this->t(
                 'Failed to touch file at %path',
                 $this->p(['%path' => $pathAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
-    }
-
-    /** @throws \PhpTuf\ComposerStager\API\Exception\LogicException */
-    private function assertCopyPreconditions(PathInterface $source, PathInterface $destination): void
-    {
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
-
-        if ($sourceAbsolute === $destinationAbsolute) {
-            throw new LogicException($this->t(
-                'The source and destination files cannot be the same at %path',
-                $this->p(['%path' => $sourceAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        if (!$this->fileExists($source)) {
-            throw new LogicException($this->t(
-                'The source file does not exist at %path',
-                $this->p(['%path' => $sourceAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        if ($this->isDir($source)) {
-            throw new LogicException($this->t(
-                'The source cannot be a directory at %path',
-                $this->p(['%path' => $sourceAbsolute]),
                 $this->d()->exceptions(),
             ));
         }

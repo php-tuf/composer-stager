@@ -29,37 +29,10 @@ namespace PhpTuf\ComposerStager\Internal\Filesystem\Service {
 
     use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 
-    if (BuiltinFunctionMocker::shouldMock('chmod')) {
-        function chmod(string $filename, int $permissions): bool
-        {
-            return BuiltinFunctionMocker::$spies['chmod']
-                ->reveal()
-                ->report($filename, $permissions);
-        }
-    }
-
-    if (BuiltinFunctionMocker::shouldMock('copy')) {
-        function copy(string $from, string $to, $context = null): bool
-        {
-            return BuiltinFunctionMocker::$spies['copy']
-                ->reveal()
-                ->report($from, $to, $context);
-        }
-    }
-
     if (BuiltinFunctionMocker::shouldMock('file_exists')) {
         function file_exists(string $filename): bool
         {
             return BuiltinFunctionMocker::$spies['file_exists']
-                ->reveal()
-                ->report($filename);
-        }
-    }
-
-    if (BuiltinFunctionMocker::shouldMock('fileperms')) {
-        function fileperms(string $filename): int|false
-        {
-            return BuiltinFunctionMocker::$spies['fileperms']
                 ->reveal()
                 ->report($filename);
         }
