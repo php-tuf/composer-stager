@@ -100,7 +100,7 @@ final class FilesystemFunctionalTest extends TestCase
                 'hardLinks' => [],
                 'subject' => 'directory_link',
                 'exists' => true,
-                'isDir' => false,
+                'isDir' => true,
                 'isFile' => false,
                 'isLink' => true,
                 'isHardLink' => false,

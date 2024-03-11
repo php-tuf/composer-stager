@@ -52,7 +52,7 @@ final class Filesystem implements FilesystemInterface
 
     public function isDir(PathInterface $path): bool
     {
-        return $this->getFileType($path) === self::PATH_IS_DIRECTORY;
+        return is_dir($path->absolute());
     }
 
     public function isFile(PathInterface $path): bool
