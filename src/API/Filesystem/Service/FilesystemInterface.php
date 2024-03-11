@@ -34,34 +34,38 @@ interface FilesystemInterface
     /**
      * Determines whether the given path is a directory.
      *
-     * Unlike PHP's built-in is_dir() function, this method distinguishes
-     * between directories and LINKS to directories. In other words, if the path
-     * is a link, even if the target is a directory, this method will return false.
+     * Like PHP's built-in
+     * {@see https://www.php.net/manual/en/function.is-dir.php `is_dir()`}
+     * function, if the given path is a symbolic or hard link, then the link
+     * will be resolved and checked. In other words, even if the path is a link,
+     * if the target is a directory, this method will return true. If the
+     * distinction matters to you, check {@see FilesystemInterface::isLink()}
+     * first.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
-     *   Returns true if the path exists and is a directory.
-     *
-     * @see https://www.php.net/manual/en/function.is-dir.php
+     *   Returns true if the path exists and is or points to a directory.
      */
     public function isDir(PathInterface $path): bool;
 
     /**
      * Determines whether the given path is a regular file.
      *
-     * Unlike PHP's built-in is_file() function, this method distinguishes
-     * between regular files and LINKS to files. In other words, if the path is
-     * a link, even if the target is a regular file, this method will return false.
+     * Like PHP's built-in
+     * {@see https://www.php.net/manual/en/function.is-file.php `is_file()`}
+     * function, if the given path is a symbolic or hard link, then the link
+     * will be resolved and checked. In other words, even if the path is a link,
+     * if the target is a regular file, this method will return true. If the
+     * distinction matters to you, check {@see FilesystemInterface::isLink()}
+     * first.
      *
      * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface $path
      *   A path to test.
      *
      * @return bool
-     *   Returns true if the path exists and is a regular file.
-     *
-     * @see https://www.php.net/manual/en/function.is-file.php
+     *   Returns true if the path exists and is or points to a regular file.
      */
     public function isFile(PathInterface $path): bool;
 
