@@ -10,7 +10,6 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirExists
  *
  * @covers ::__construct
- * @covers ::doAssertIsFulfilled
  * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
  */
 final class StagingDirExistsUnitTest extends PreconditionUnitTestCase
@@ -24,6 +23,12 @@ final class StagingDirExistsUnitTest extends PreconditionUnitTestCase
     protected function setUp(): void
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->filesystem
+            ->fileExists(self::stagingDirPath())
+            ->willReturn(true);
+        $this->filesystem
+            ->isDir(self::stagingDirPath())
+            ->willReturn(true);
 
         parent::setUp();
     }
@@ -47,16 +52,30 @@ final class StagingDirExistsUnitTest extends PreconditionUnitTestCase
             ->fileExists(self::stagingDirPath())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
+        $this->filesystem
+            ->isDir(self::stagingDirPath())
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */
-    public function testUnfulfilled(): void
+    public function testDoesNotExist(): void
     {
         $message = 'The staging directory does not exist.';
         $this->filesystem
             ->fileExists(self::stagingDirPath())
+            ->willReturn(false);
+
+        $this->doTestUnfulfilled($message);
+    }
+
+    /** @covers ::doAssertIsFulfilled */
+    public function testIsNotADirectory(): void
+    {
+        $message = 'The staging directory is not actually a directory.';
+        $this->filesystem
+            ->isDir(self::stagingDirPath())
             ->willReturn(false);
 
         $this->doTestUnfulfilled($message);

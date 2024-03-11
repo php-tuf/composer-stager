@@ -55,5 +55,13 @@ final class ActiveDirExists extends AbstractPrecondition implements ActiveDirExi
                 $this->d()->exceptions(),
             ));
         }
+
+        if (!$this->filesystem->isDir($activeDir)) {
+            throw new PreconditionException($this, $this->t(
+                'The active directory is not actually a directory.',
+                null,
+                $this->d()->exceptions(),
+            ));
+        }
     }
 }

@@ -55,5 +55,13 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
                 $this->d()->exceptions(),
             ));
         }
+
+        if (!$this->filesystem->isDir($stagingDir)) {
+            throw new PreconditionException($this, $this->t(
+                'The staging directory is not actually a directory.',
+                null,
+                $this->d()->exceptions(),
+            ));
+        }
     }
 }
