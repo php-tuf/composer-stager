@@ -33,9 +33,11 @@ It may not be obvious at first that a tool like this is really necessary. Why no
 
 - Symlinks represent a problem space unto themselves, with as many logical issues as technical ones.
 
+- Error messages must be translatable (i18n/l10n).
+
 - You have to account for non-code files, like user uploads, cache files, and logs that may be changed in the live codebase while Composer commands are being run on the copy and could be clobbered when syncing it back.
 
-- Failure to handle any of these challenges can easily have catastrophic results, including data loss or complete destruction of a live codebase. You need to anticipate and prevent them and provide actionable user feedback. 
+- Failure to handle any of these challenges can easily have catastrophic results, including data loss or complete destruction of a live codebase. You need to anticipate and prevent them and provide actionable user feedback.
 
 The list could go on. It should be obvious by now that a dedicated library is warranted.
 
