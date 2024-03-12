@@ -7,14 +7,12 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\VfsTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem */
 final class FilesystemFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
-        VfsTestHelper::setup();
         self::mkdir([
             self::sourceDirAbsolute(),
             self::destinationDirAbsolute(),
@@ -237,7 +235,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::touch */
     public function testTouch(): void
     {
-        $path = VfsTestHelper::arbitraryFilePath();
+        $path = self::arbitraryFilePath();
         $sut = $this->createSut();
 
         $sut->touch($path);
@@ -248,7 +246,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::touch */
     public function testTouchAlreadyADirectory(): void
     {
-        $directoryPath = VfsTestHelper::arbitraryDirPath();
+        $directoryPath = self::arbitraryDirPath();
         $directoryAbsolute = $directoryPath->absolute();
         self::mkdir([$directoryAbsolute]);
         $sut = $this->createSut();
