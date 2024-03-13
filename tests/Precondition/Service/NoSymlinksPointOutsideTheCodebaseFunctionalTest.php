@@ -23,7 +23,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::isDescendant
      * @covers ::isFulfilled
      * @covers ::linkPointsOutsidePath
      *
@@ -79,7 +78,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::isDescendant
      * @covers ::isFulfilled
      * @covers ::linkPointsOutsidePath
      *
@@ -148,7 +146,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::isDescendant
      * @covers ::isFulfilled
      * @covers ::linkPointsOutsidePath
      */
@@ -174,7 +171,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
 
     /**
      * @covers ::assertIsSupportedFile
-     * @covers ::isDescendant
      * @covers ::isFulfilled
      * @covers ::linkPointsOutsidePath
      *

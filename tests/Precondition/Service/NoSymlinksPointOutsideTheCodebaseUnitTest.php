@@ -44,9 +44,10 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
+        $pathHelper = self::createPathHelper();
         $pathListFactory = self::createPathListFactory();
         $translatableFactory = self::createTranslatableFactory();
 
-        return new NoSymlinksPointOutsideTheCodebase($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
+        return new NoSymlinksPointOutsideTheCodebase($environment, $fileFinder, $filesystem, $pathFactory, $pathHelper, $pathListFactory, $translatableFactory);
     }
 }
