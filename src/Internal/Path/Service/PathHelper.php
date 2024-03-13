@@ -31,6 +31,13 @@ final class PathHelper implements PathHelperInterface
         return SymfonyPath::isAbsolute($path);
     }
 
+    public function isDescendant(string $descendant, string $ancestor): bool
+    {
+        $ancestor .= '/';
+
+        return str_starts_with($descendant, $ancestor);
+    }
+
     public function isRelative(string $path): bool
     {
         return SymfonyPath::isRelative($path);

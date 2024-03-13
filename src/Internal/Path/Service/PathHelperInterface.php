@@ -15,6 +15,9 @@ interface PathHelperInterface
     /** Determines whether the given path is absolute. */
     public function isAbsolute(string $path): bool;
 
+    /** Determines whether the first path is a descendant of the second one. */
+    public function isDescendant(string $descendant, string $ancestor): bool;
+
     /** Determines whether the given path is relative. */
     public function isRelative(string $path): bool;
 }

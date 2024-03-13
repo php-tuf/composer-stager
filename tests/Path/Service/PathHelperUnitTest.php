@@ -117,4 +117,59 @@ final class PathHelperUnitTest extends TestCase
             'False: UNC' => [false, '..\\One\\Two'],
         ];
     }
+
+    /**
+     * @covers ::isDescendant
+     *
+     * @dataProvider providerIsRelative
+     */
+    public function testIsRelative(string $descendant, string $ancestor, bool $expectedIsDescendant): void
+    {
+        $sut = $this->createSut();
+
+        $actualIsDescendant = $sut->isDescendant($descendant, $ancestor);
+
+        self::assertSame($expectedIsDescendant, $actualIsDescendant);
+    }
+
+    public function providerIsRelative(): array
+    {
+        return [
+            'Simple descendant' => [
+                'descendant' => '/one/two',
+                'ancestor' => '/one',
+                'isDescendant' => true,
+            ],
+            'With depth' => [
+                'descendant' => '/one/two/three/four/five',
+                'ancestor' => '/one/two/three',
+                'isDescendant' => true,
+            ],
+            'Empty values' => [
+                'descendant' => '',
+                'ancestor' => '',
+                'isDescendant' => false,
+            ],
+            'Identical paths' => [
+                'descendant' => '/one/two/three',
+                'ancestor' => '/one/two/three',
+                'isDescendant' => false,
+            ],
+            'Relative descendant' => [
+                'descendant' => 'one/two/three',
+                'ancestor' => '/four/five/six',
+                'isDescendant' => false,
+            ],
+            'Relative ancestor' => [
+                'descendant' => '/one/two/three',
+                'ancestor' => 'one/two/three',
+                'isDescendant' => false,
+            ],
+            'Sneaky "near match"' => [
+                'descendant' => '/one_two',
+                'ancestor' => '/one',
+                'isDescendant' => false,
+            ],
+        ];
+    }
 }
