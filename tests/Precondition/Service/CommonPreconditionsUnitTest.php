@@ -6,6 +6,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDiffer
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoNestingOnWindowsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\RsyncIsAvailableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -25,6 +27,8 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
     private ActiveDirIsReadyInterface|ObjectProphecy $activeDirIsReady;
     private ComposerIsAvailableInterface|ObjectProphecy $composerIsAvailable;
     private HostSupportsRunningProcessesInterface|ObjectProphecy $hostSupportsRunningProcesses;
+    private ObjectProphecy|NoNestingOnWindowsInterface $noNestingOnWindows;
+    private RsyncIsAvailableInterface|ObjectProphecy $rsyncIsAvailable;
 
     protected function setUp(): void
     {
@@ -44,6 +48,14 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
         $this->hostSupportsRunningProcesses
             ->getLeaves()
             ->willReturn([$this->hostSupportsRunningProcesses]);
+        $this->noNestingOnWindows = $this->prophesize(NoNestingOnWindowsInterface::class);
+        $this->noNestingOnWindows
+            ->getLeaves()
+            ->willReturn([$this->noNestingOnWindows]);
+        $this->rsyncIsAvailable = $this->prophesize(RsyncIsAvailableInterface::class);
+        $this->rsyncIsAvailable
+            ->getLeaves()
+            ->willReturn([$this->rsyncIsAvailable]);
 
         parent::setUp();
     }
@@ -55,6 +67,8 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
         $composerIsAvailable = $this->composerIsAvailable->reveal();
         $environment = $this->environment->reveal();
         $hostSupportsRunningProcesses = $this->hostSupportsRunningProcesses->reveal();
+        $noNestingOnWindows = $this->noNestingOnWindows->reveal();
+        $rsyncIsAvailable = $this->rsyncIsAvailable->reveal();
         $translatableFactory = self::createTranslatableFactory();
 
         return new CommonPreconditions(
@@ -64,6 +78,8 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
             $activeDirIsReady,
             $composerIsAvailable,
             $hostSupportsRunningProcesses,
+            $noNestingOnWindows,
+            $rsyncIsAvailable,
         );
     }
 
@@ -84,6 +100,12 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->hostSupportsRunningProcesses
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->noNestingOnWindows
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->rsyncIsAvailable
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
