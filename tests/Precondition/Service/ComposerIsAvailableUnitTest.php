@@ -8,9 +8,6 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -23,8 +20,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::getProcess
  * @covers ::isValidExecutable
  */
-final class ComposerIsAvailableUnitTest extends PreconditionTestCase
+final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Composer';
+    protected const DESCRIPTION = 'Composer must be available in order to stage commands.';
+    protected const FULFILLED_STATUS_MESSAGE = 'Composer is available.';
+
     private const COMPOSER_PATH = '/usr/bin/composer';
 
     private ExecutableFinderInterface|ObjectProphecy $executableFinder;
@@ -63,7 +64,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             ->create(Argument::cetera())
             ->willReturn($process);
         $processFactory = $this->processFactory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ComposerIsAvailable($environment, $executableFinder, $processFactory, $translatableFactory);
     }
@@ -71,6 +72,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /**
      * @covers ::assertExecutableExists
      * @covers ::assertIsActuallyComposer
+     * @covers ::doAssertIsFulfilled
      * @covers ::getFulfilledStatusMessage
      * @covers ::getProcess
      * @covers ::isValidExecutable
@@ -92,14 +94,14 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn($this->process->reveal());
 
-        $this->doTestFulfilled('Composer is available.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::assertExecutableExists */
     public function testExecutableNotFound(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $previous = LogicException::class;
         $this->executableFinder
@@ -114,7 +116,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
         );
         self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath): void {
             $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions);
-        }, PreconditionException::class, $message, $previous);
+        }, PreconditionException::class, $message, null, $previous);
     }
 
     /**
@@ -126,7 +128,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     public function testFailedToCreateProcess(): void
     {
         $message = __METHOD__;
-        $previous = new LogicException(new TestTranslatableMessage($message));
+        $previous = new LogicException(self::createTranslatableMessage($message));
         $this->processFactory
             ->create(Argument::type('array'))
             ->willThrow($previous);
@@ -140,8 +142,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /** @covers ::getProcess */
     public function testFailedToRunProcess(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->process
             ->mustRun()
@@ -161,8 +163,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /** @covers ::isValidExecutable */
     public function testFailedToGetOutput(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $previous = LogicException::class;
         $this->process
@@ -183,8 +185,8 @@ final class ComposerIsAvailableUnitTest extends PreconditionTestCase
     /** @dataProvider providerInvalidOutput */
     public function testInvalidOutput(string $output): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->process
             ->getOutput()

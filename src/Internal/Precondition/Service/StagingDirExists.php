@@ -37,23 +37,31 @@ final class StagingDirExists extends AbstractPrecondition implements StagingDirE
         return $this->t('The staging directory must exist before any operations can be performed.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The staging directory exists.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
         ?PathListInterface $exclusions = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        if (!$this->filesystem->exists($stagingDir)) {
+        if (!$this->filesystem->fileExists($stagingDir)) {
             throw new PreconditionException($this, $this->t(
                 'The staging directory does not exist.',
                 null,
                 $this->d()->exceptions(),
             ));
         }
-    }
 
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The staging directory exists.');
+        if (!$this->filesystem->isDir($stagingDir)) {
+            throw new PreconditionException($this, $this->t(
+                'The staging directory is not actually a directory.',
+                null,
+                $this->d()->exceptions(),
+            ));
+        }
     }
 }

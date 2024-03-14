@@ -22,7 +22,7 @@ interface StagerInterface
      *   The Composer command parts exactly as they would be typed in the terminal.
      *   There's no need to escape them in any way, only to separate them. Example:
      *   ```php
-     *   $command = [
+     *   $composerCommand = [
      *       // "composer" is implied.
      *       'require',
      *       'example/package:"^1 || ^2"',

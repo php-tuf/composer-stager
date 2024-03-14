@@ -6,8 +6,6 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -16,8 +14,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::__construct
  * @covers ::getFulfilledStatusMessage
  */
-final class StagingDirIsReadyUnitTest extends PreconditionTestCase
+final class StagingDirIsReadyUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Staging directory is ready';
+    protected const DESCRIPTION = 'The preconditions for using the staging directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The staging directory is ready to use.';
+
     private StagingDirExistsInterface|ObjectProphecy $stagingDirExists;
     private StagingDirIsWritableInterface|ObjectProphecy $stagingDirIsWritable;
 
@@ -40,15 +42,16 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
         $environment = $this->environment->reveal();
         $stagingDirExists = $this->stagingDirExists->reveal();
         $stagingDirIsWritable = $this->stagingDirIsWritable->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new StagingDirIsReady($environment, $translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->stagingDirExists
@@ -58,13 +61,13 @@ final class StagingDirIsReadyUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The staging directory is ready to use.', $activeDirPath, $stagingDirPath, $timeout);
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE, $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = 'The staging directory is not ready to use.';

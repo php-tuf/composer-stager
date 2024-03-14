@@ -8,10 +8,8 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Symfony\Component\DependencyInjection\Definition;
 
 /** @coversNothing */
@@ -22,7 +20,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
     protected function setUp(): void
     {
         self::createTestEnvironment();
-        FilesystemHelper::createDirectories(PathHelper::stagingDirRelative());
+        self::mkdir(self::stagingDirRelative());
 
         $this->executableFinderClass = ExecutableFinder::class;
     }
@@ -34,7 +32,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
     private function createSut(): ComposerIsAvailable
     {
-        $container = ContainerHelper::container();
+        $container = ContainerTestHelper::container();
 
         // Override the ExecutableFinder implementation.
         $executableFinder = new Definition($this->executableFinderClass);
@@ -44,10 +42,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         $container->compile();
 
         // Get services.
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable $sut */
-        $sut = $container->get(ComposerIsAvailable::class);
-
-        return $sut;
+        return $container->get(ComposerIsAvailable::class);
     }
 
     // The happy path, which would usually have a test method here, is implicitly tested in the end-to-end test.
@@ -60,8 +55,8 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
         $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, PreconditionException::class, $message, LogicException::class);
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
+        }, PreconditionException::class, $message, null, LogicException::class);
     }
 
     public function testInvalidComposerFound(): void
@@ -71,7 +66,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
 
         $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $message);
     }
 }
@@ -82,7 +77,7 @@ final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterfac
 
     public function find(string $name): string
     {
-        throw new LogicException(new TestTranslatableMessage(self::EXCEPTION_MESSAGE));
+        throw new LogicException(TranslationTestHelper::createTranslatableMessage(self::EXCEPTION_MESSAGE));
     }
 }
 

@@ -88,13 +88,10 @@ final class Stager implements StagerInterface
         ?OutputCallbackInterface $callback,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $command = array_merge(
-            ['--working-dir=' . $stagingDir->absolute()],
-            $composerCommand,
-        );
+        $command = ['--working-dir=' . $stagingDir->absolute(), ...$composerCommand];
 
         try {
-            $this->composerRunner->run($command, $callback, $timeout);
+            $this->composerRunner->run($command, null, [], $callback, $timeout);
         } catch (ExceptionInterface $e) {
             throw new RuntimeException($e->getTranslatableMessage(), 0, $e);
         }

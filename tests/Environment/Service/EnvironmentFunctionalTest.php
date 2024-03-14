@@ -8,7 +8,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Environment\Service\Environment */
 final class EnvironmentFunctionalTest extends TestCase
 {
-    public function createSut(): Environment
+    private function createSut(): Environment
     {
         return new Environment();
     }

@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>Falourd</w>
       <w>Ptrs</w>
       <w>Shmop</w>
       <w>Spoofchecker</w>
@@ -20,6 +21,7 @@
       <w>dirname</w>
       <w>docblocks</w>
       <w>ergebnis</w>
+      <w>fileperms</w>
       <w>finfo</w>
       <w>getcwd</w>
       <w>gitattributes</w>

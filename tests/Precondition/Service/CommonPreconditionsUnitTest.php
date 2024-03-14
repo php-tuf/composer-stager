@@ -6,22 +6,29 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveAndStagingDirsAreDiffer
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoNestingOnWindowsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\RsyncIsAvailableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class CommonPreconditionsUnitTest extends PreconditionTestCase
+final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Common preconditions';
+    protected const DESCRIPTION = 'The preconditions common to all operations.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The common preconditions are fulfilled.';
+
     private ActiveAndStagingDirsAreDifferentInterface|ObjectProphecy $activeAndStagingDirsAreDifferent;
     private ActiveDirIsReadyInterface|ObjectProphecy $activeDirIsReady;
     private ComposerIsAvailableInterface|ObjectProphecy $composerIsAvailable;
     private HostSupportsRunningProcessesInterface|ObjectProphecy $hostSupportsRunningProcesses;
+    private ObjectProphecy|NoNestingOnWindowsInterface $noNestingOnWindows;
+    private RsyncIsAvailableInterface|ObjectProphecy $rsyncIsAvailable;
 
     protected function setUp(): void
     {
@@ -41,6 +48,14 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $this->hostSupportsRunningProcesses
             ->getLeaves()
             ->willReturn([$this->hostSupportsRunningProcesses]);
+        $this->noNestingOnWindows = $this->prophesize(NoNestingOnWindowsInterface::class);
+        $this->noNestingOnWindows
+            ->getLeaves()
+            ->willReturn([$this->noNestingOnWindows]);
+        $this->rsyncIsAvailable = $this->prophesize(RsyncIsAvailableInterface::class);
+        $this->rsyncIsAvailable
+            ->getLeaves()
+            ->willReturn([$this->rsyncIsAvailable]);
 
         parent::setUp();
     }
@@ -52,7 +67,9 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $composerIsAvailable = $this->composerIsAvailable->reveal();
         $environment = $this->environment->reveal();
         $hostSupportsRunningProcesses = $this->hostSupportsRunningProcesses->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $noNestingOnWindows = $this->noNestingOnWindows->reveal();
+        $rsyncIsAvailable = $this->rsyncIsAvailable->reveal();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new CommonPreconditions(
             $environment,
@@ -61,14 +78,16 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
             $activeDirIsReady,
             $composerIsAvailable,
             $hostSupportsRunningProcesses,
+            $noNestingOnWindows,
+            $rsyncIsAvailable,
         );
     }
 
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->composerIsAvailable
@@ -83,14 +102,20 @@ final class CommonPreconditionsUnitTest extends PreconditionTestCase
         $this->hostSupportsRunningProcesses
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->noNestingOnWindows
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
+        $this->rsyncIsAvailable
+            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
+            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The common preconditions are fulfilled.', $activeDirPath, $stagingDirPath, $timeout);
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE, $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

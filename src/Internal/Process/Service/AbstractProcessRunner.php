@@ -3,6 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
@@ -34,11 +35,29 @@ abstract class AbstractProcessRunner
 
     /**
      * @param array<string> $command
-     *   The command to run and its arguments as separate string values, e.g.,
+     *   The command arguments as separate string values, e.g.,
      *   ['require', 'example/package'] or ['source', 'destination']. The return
      *   value of ::executableName() will be automatically prepended.
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $cwd
+     *   The current working directory (CWD) for the process. If set to null,
+     *   the CWD of the current PHP process will be used.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
+     * @param array<string|\Stringable> $env
+     *   An array of environment variables, keyed by variable name with corresponding
+     *   string or stringable values. In addition to those explicitly specified,
+     *   environment variables set on your system will be inherited. You can
+     *   prevent this by setting to `false` variables you want to remove. Example:
+     *   ```php
+     *   $process->setEnv(
+     *       'STRING_VAR' => 'a string',
+     *       'STRINGABLE_VAR' => new StringableObject(),
+     *       'REMOVE_ME' => false,
+     *   );
+     *   ```
+     * @param int $timeout
+     *    An optional process timeout (maximum runtime) in seconds. If set to
+     *    zero (0), no time limit is imposed.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
      *   If the given timeout is negative.
@@ -51,11 +70,13 @@ abstract class AbstractProcessRunner
      */
     public function run(
         array $command,
+        ?PathInterface $cwd = null,
+        array $env = [],
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         array_unshift($command, $this->findExecutable());
-        $process = $this->processFactory->create($command);
+        $process = $this->processFactory->create($command, $cwd, $env);
         $process->setTimeout($timeout);
         $process->mustRun($callback);
     }

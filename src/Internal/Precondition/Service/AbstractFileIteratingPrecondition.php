@@ -8,11 +8,11 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 
 /**
  * @package Precondition
@@ -43,6 +43,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
         protected readonly FileFinderInterface $fileFinder,
         protected readonly FilesystemInterface $filesystem,
         protected readonly PathFactoryInterface $pathFactory,
+        protected readonly PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($environment, $translatableFactory);
@@ -55,7 +56,7 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         try {
-            $exclusions ??= new PathList();
+            $exclusions ??= $this->pathListFactory->create();
             $exclusions->add($stagingDir->absolute());
 
             if ($this->exitEarly($activeDir, $stagingDir, $exclusions)) {
@@ -94,10 +95,10 @@ abstract class AbstractFileIteratingPrecondition extends AbstractPrecondition
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      */
-    protected function findFiles(PathInterface $path, PathListInterface $exclusions): array
+    private function findFiles(PathInterface $path, PathListInterface $exclusions): array
     {
         // Ignore non-existent directories.
-        if (!$this->filesystem->exists($path)) {
+        if (!$this->filesystem->fileExists($path)) {
             return [];
         }
 

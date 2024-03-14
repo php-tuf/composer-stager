@@ -7,14 +7,16 @@ use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
+use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ProcessHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\TestStringable;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ProcessTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
@@ -51,14 +53,15 @@ final class ProcessUnitTest extends TestCase
             ->willReturn($this->symfonyProcess);
     }
 
-    private function createSut(array $givenConstructorArguments = [], array $expectedCommand = []): Process
+    private function createSut(array $givenConstructorArguments = [['executable']]): Process
     {
+        $expectedCommand = reset($givenConstructorArguments);
         $symfonyProcess = $this->symfonyProcess->reveal();
         $this->symfonyProcessFactory
-            ->create($expectedCommand)
+            ->create($expectedCommand, Argument::cetera())
             ->willReturn($symfonyProcess);
         $symfonyProcessFactory = $this->symfonyProcessFactory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new Process($symfonyProcessFactory, $translatableFactory, ...$givenConstructorArguments);
     }
@@ -68,6 +71,7 @@ final class ProcessUnitTest extends TestCase
      * @covers ::assertValidEnvName
      * @covers ::assertValidEnvValue
      * @covers ::getEnv
+     * @covers ::getErrorOutput
      * @covers ::getOutput
      * @covers ::mustRun
      * @covers ::run
@@ -78,18 +82,23 @@ final class ProcessUnitTest extends TestCase
      */
     public function testBasicFunctionality(
         array $givenConstructorArguments,
-        array $expectedCommand,
         array $givenRunArguments,
         ?OutputCallbackAdapterInterface $expectedRunArgument,
         array $envVars,
         array $givenSetTimeoutArguments,
         string $output,
+        string $errorOutput,
     ): void {
+        $expectedCommand = reset($givenConstructorArguments);
         $expectedRunReturn = 0;
         $this->symfonyProcess
             ->getEnv()
             ->shouldBeCalledOnce()
             ->willReturn($envVars);
+        $this->symfonyProcess
+            ->getErrorOutput()
+            ->shouldBeCalledOnce()
+            ->willReturn($errorOutput);
         $this->symfonyProcess
             ->getOutput()
             ->shouldBeCalledOnce()
@@ -111,19 +120,21 @@ final class ProcessUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->symfonyProcess);
         $this->symfonyProcessFactory
-            ->create($expectedCommand)
+            ->create($expectedCommand, Argument::cetera())
             ->shouldBeCalledOnce();
-        $sut = $this->createSut($givenConstructorArguments, $expectedCommand);
+        $sut = $this->createSut($givenConstructorArguments);
 
         $actualSetEnvReturn = $sut->setEnv($envVars);
         $actualEnv = $sut->getEnv();
         $actualOutput = $sut->getOutput();
+        $actualErrorOutput = $sut->getErrorOutput();
         $actualMustRunReturn = $sut->mustRun(...$givenRunArguments);
         $actualRunReturn = $sut->run(...$givenRunArguments);
         $actualSetTimeoutReturn = $sut->setTimeout(...$givenSetTimeoutArguments);
 
         self::assertSame($actualEnv, $envVars, 'Returned correct output.');
         self::assertSame($output, $actualOutput, 'Returned correct output.');
+        self::assertSame($errorOutput, $actualErrorOutput, 'Returned correct error output.');
         self::assertSame($sut, $actualMustRunReturn, 'Returned "self" from ::mustRun().');
         self::assertSame($expectedRunReturn, $actualRunReturn, 'Returned correct status code from ::run().');
         self::assertSame($sut, $actualSetEnvReturn, 'Returned "self" from ::setEnv().');
@@ -134,26 +145,25 @@ final class ProcessUnitTest extends TestCase
     {
         return [
             'Minimum arguments' => [
-                'givenConstructorArguments' => [],
-                'expectedCommand' => [],
+                'givenConstructorArguments' => [[]],
                 'givenRunArguments' => [],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
                 'envVars' => [],
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Minimum arguments output',
+                'errorOutput' => 'Minimum arguments error output',
             ],
             'Nullable arguments' => [
                 'givenConstructorArguments' => [['nullable', 'arguments']],
-                'expectedCommand' => ['nullable', 'arguments'],
                 'givenRunArguments' => [null],
                 'expectedRunArgument' => new OutputCallbackAdapter(null),
                 'envVars' => [],
                 'givenSetTimeoutArguments' => [ProcessInterface::DEFAULT_TIMEOUT],
                 'output' => 'Nullable arguments output',
+                'errorOutput' => 'Nullable arguments error output',
             ],
             'Simple arguments' => [
                 'givenConstructorArguments' => [['simple', 'arguments']],
-                'expectedCommand' => ['simple', 'arguments'],
                 'givenRunArguments' => [new TestOutputCallback()],
                 'expectedRunArgument' => new OutputCallbackAdapter(new TestOutputCallback()),
                 'envVars' => [
@@ -162,6 +172,61 @@ final class ProcessUnitTest extends TestCase
                 ],
                 'givenSetTimeoutArguments' => [42],
                 'output' => 'Simple arguments output',
+                'errorOutput' => 'Simple arguments error output',
+            ],
+        ];
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::getEnv
+     * @covers ::setEnv
+     *
+     * @dataProvider providerEnv
+     */
+    public function testEnv(array $optionalArguments, array $expectedInitialEnv, array $givenNewEnv): void
+    {
+        $symfonyProcessFactory = ContainerTestHelper::get(SymfonyProcessFactory::class);
+        $translatableFactory = self::createTranslatableFactory();
+        $sut = new Process($symfonyProcessFactory, $translatableFactory, ['arbitrary_command'], ...$optionalArguments);
+
+        $actualInitialEnv = $sut->getEnv();
+        $sut->setEnv($givenNewEnv);
+        $actualUpdatedEnv = $sut->getEnv();
+
+        self::assertSame($expectedInitialEnv, $actualInitialEnv);
+        self::assertSame($givenNewEnv, $actualUpdatedEnv);
+    }
+
+    public function providerEnv(): array
+    {
+        return [
+            'No env argument' => [
+                'optionalArguments' => [],
+                'expectedInitialEnv' => [],
+                'givenNewEnv' => [],
+            ],
+            'Initial env, no change' => [
+                'optionalArguments' => [
+                    null,
+                    [
+                        'ONE' => 'one',
+                        'TWO' => 'two',
+                    ],
+                ],
+                'expectedInitialEnv' => [
+                    'ONE' => 'one',
+                    'TWO' => 'two',
+                ],
+                'givenNewEnv' => [],
+            ],
+            'No env argument, changed' => [
+                'optionalArguments' => [null, ['one' => 'two']],
+                'expectedInitialEnv' => ['one' => 'two'],
+                'givenNewEnv' => [
+                    'ONE' => 'one',
+                    'TWO' => 'two',
+                ],
             ],
         ];
     }
@@ -196,7 +261,7 @@ final class ProcessUnitTest extends TestCase
     /** @covers ::getOutput */
     public function testGetOutputException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->getOutput()
             ->willThrow($previous);
@@ -205,13 +270,28 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to get process output: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->getOutput();
-        }, LogicException::class, $expectedExceptionMessage, $previous::class);
+        }, LogicException::class, $expectedExceptionMessage, null, $previous::class);
+    }
+
+    /** @covers ::getErrorOutput */
+    public function testGetErrorOutputException(): void
+    {
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
+        $this->symfonyProcess
+            ->getErrorOutput()
+            ->willThrow($previous);
+        $sut = $this->createSut();
+
+        $expectedExceptionMessage = sprintf('Failed to get process error output: %s', $previous->getMessage());
+        self::assertTranslatableException(static function () use ($sut): void {
+            $sut->getErrorOutput();
+        }, LogicException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     /** @covers ::mustRun */
     public function testMustRunException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->mustRun(Argument::cetera())
             ->willThrow($previous);
@@ -220,7 +300,7 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->mustRun();
-        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
+        }, RuntimeException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     /**
@@ -239,7 +319,7 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to run process: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->run();
-        }, RuntimeException::class, $expectedExceptionMessage, $previous::class);
+        }, RuntimeException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
     public function providerRunException(): array
@@ -344,7 +424,7 @@ final class ProcessUnitTest extends TestCase
     /** @covers ::setTimeout */
     public function testSetTimeoutException(): void
     {
-        $previous = ProcessHelper::createSymfonyProcessFailedException();
+        $previous = ProcessTestHelper::createSymfonyProcessFailedException();
         $this->symfonyProcess
             ->setTimeout(Argument::cetera())
             ->willThrow($previous);
@@ -353,6 +433,6 @@ final class ProcessUnitTest extends TestCase
         $expectedExceptionMessage = sprintf('Failed to set process timeout: %s', $previous->getMessage());
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->setTimeout();
-        }, InvalidArgumentException::class, $expectedExceptionMessage, $previous::class);
+        }, InvalidArgumentException::class, $expectedExceptionMessage, null, $previous::class);
     }
 }

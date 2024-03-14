@@ -13,12 +13,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommitterPreconditionsInterfa
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -52,14 +48,14 @@ final class CommitterUnitTest extends TestCase
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
 
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync(PathHelper::stagingDirPath(), PathHelper::activeDirPath(), null, null, $timeout)
+            ->sync(self::stagingDirPath(), self::activeDirPath(), null, null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->commit(PathHelper::stagingDirPath(), PathHelper::activeDirPath());
+        $sut->commit(self::stagingDirPath(), self::activeDirPath());
     }
 
     /**
@@ -74,8 +70,8 @@ final class CommitterUnitTest extends TestCase
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
-        $activeDir = new TestPath($activeDir);
-        $stagingDir = new TestPath($stagingDir);
+        $activeDir = self::activeDirPath();
+        $stagingDir = self::stagingDirPath();
         $this->preconditions
             ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
             ->shouldBeCalledOnce();
@@ -100,7 +96,7 @@ final class CommitterUnitTest extends TestCase
             'Simple values' => [
                 'stagingDir' => 'five/six',
                 'activeDir' => 'seven/eight',
-                'exclusions' => new TestPathList(),
+                'exclusions' => self::createPathList(),
                 'callback' => new TestOutputCallback(),
                 'timeout' => 10,
             ],
@@ -110,8 +106,8 @@ final class CommitterUnitTest extends TestCase
     /** @covers ::commit */
     public function testCommitPreconditionsUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
@@ -131,31 +127,29 @@ final class CommitterUnitTest extends TestCase
      *
      * @dataProvider providerExceptions
      */
-    public function testExceptions(ExceptionInterface $exception, string $message): void
+    public function testExceptions(ExceptionInterface $caughtException): void
     {
-        $stagingDirPath = PathHelper::stagingDirPath();
-        $activeDirPath = PathHelper::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
 
         $this->fileSyncer
             ->sync($stagingDirPath, $activeDirPath, Argument::cetera())
-            ->willThrow($exception);
+            ->willThrow($caughtException);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut, $activeDirPath, $stagingDirPath): void {
             $sut->commit($stagingDirPath, $activeDirPath);
-        }, RuntimeException::class, $message, $exception::class);
+        }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
     public function providerExceptions(): array
     {
         return [
             'InvalidArgumentException' => [
-                'exception' => new InvalidArgumentException(new TestTranslatableExceptionMessage('one')),
-                'message' => 'one',
+                'caughtException' => new InvalidArgumentException(self::createTranslatableExceptionMessage('one')),
             ],
             'IOException' => [
-                'exception' => new IOException(new TestTranslatableExceptionMessage('two')),
-                'message' => 'two',
+                'caughtException' => new IOException(self::createTranslatableExceptionMessage('two')),
             ],
         ];
     }

@@ -6,17 +6,20 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
+final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Beginner preconditions';
+    protected const DESCRIPTION = 'The preconditions for beginning the staging process.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for beginning the staging process are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private NoUnsupportedLinksExistInterface|ObjectProphecy $noUnsupportedLinksExist;
     private StagingDirDoesNotExistInterface|ObjectProphecy $stagingDirDoesNotExist;
@@ -45,7 +48,7 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
         $environment = $this->environment->reveal();
         $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirDoesNotExist = $this->stagingDirDoesNotExist->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new BeginnerPreconditions(
             $environment,
@@ -59,8 +62,8 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->commonPreconditions
@@ -83,8 +86,8 @@ final class BeginnerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

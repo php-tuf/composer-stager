@@ -24,10 +24,22 @@ interface ProcessInterface
     public function getEnv(): array;
 
     /**
+     * Returns the current error output of the process (STDERR).
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
+     *   If the process is not started.
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getOutput
+     */
+    public function getErrorOutput(): string;
+
+    /**
      * Returns the current output of the process (STDOUT).
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process is not started.
+     *
+     * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getErrorOutput
      */
     public function getOutput(): string;
 
@@ -65,11 +77,11 @@ interface ProcessInterface
      *   environment variables set on your system will be inherited. You can
      *   prevent this by setting to `false` variables you want to remove. Example:
      *   ```php
-     *     $process->setEnv(
-     *         'STRING_VAR' => 'a string',
-     *         'STRINGABLE_VAR' => new StringableObject(),
-     *         'REMOVE_ME' => false,
-     *     );
+     *   $process->setEnv(
+     *       'STRING_VAR' => 'a string',
+     *       'STRINGABLE_VAR' => new StringableObject(),
+     *       'REMOVE_ME' => false,
+     *   );
      *   ```
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException

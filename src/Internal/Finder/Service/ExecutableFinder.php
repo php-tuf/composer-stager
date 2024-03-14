@@ -30,7 +30,7 @@ final class ExecutableFinder implements ExecutableFinderInterface
         $this->symfonyExecutableFinder->addSuffix('.phar');
         $path = $this->symfonyExecutableFinder->find($name);
 
-        // Cache and throw exception if not found.
+        // Throw exception if not found.
         if ($path === null) {
             throw new LogicException($this->t(
                 "The %name executable cannot be found. Make sure it's installed and in the \$PATH",

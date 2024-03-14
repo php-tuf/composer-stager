@@ -5,17 +5,20 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsReady
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
+final class ActiveDirIsReadyUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active directory is ready';
+    protected const DESCRIPTION = 'The preconditions for using the active directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active directory is ready to use.';
+
     private ActiveDirExistsInterface|ObjectProphecy $activeDirExists;
     private ActiveDirIsWritableInterface|ObjectProphecy $activeDirIsWritable;
 
@@ -38,7 +41,7 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
         $environment = $this->environment->reveal();
         $stagingDirExists = $this->activeDirExists->reveal();
         $stagingDirIsWritable = $this->activeDirIsWritable->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ActiveDirIsReady($environment, $stagingDirExists, $stagingDirIsWritable, $translatableFactory);
     }
@@ -46,8 +49,8 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->activeDirExists
@@ -57,13 +60,13 @@ final class ActiveDirIsReadyUnitTest extends PreconditionTestCase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
-        $this->doTestFulfilled('The active directory is ready to use.', $activeDirPath, $stagingDirPath, $timeout);
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE, $activeDirPath, $stagingDirPath, $timeout);
     }
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

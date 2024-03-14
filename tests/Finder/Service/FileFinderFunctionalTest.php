@@ -2,12 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 
-use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
@@ -28,41 +25,42 @@ final class FileFinderFunctionalTest extends TestCase
 
     private function createSut(): FileFinder
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder $fileFinder */
-        $fileFinder = $container->get(FileFinder::class);
-
-        return $fileFinder;
+        return ContainerTestHelper::get(FileFinder::class);
     }
 
     /**
      * @covers ::find
+     * @covers ::getRecursiveDirectoryIterator
      *
      * @dataProvider providerFind
      */
-    public function testFind(array $files, ?PathListInterface $exclusions, array $expected): void
+    public function testFind(array $files, array $exclusions, array $expected): void
     {
-        self::createFiles(PathHelper::activeDirAbsolute(), $files);
+        $expected = self::normalizePaths($expected);
+        self::touch($files, self::activeDirAbsolute());
         $sut = $this->createSut();
 
-        $actual = $sut->find(PathHelper::activeDirPath(), $exclusions);
+        $actual = $sut->find(self::activeDirPath(), ...$exclusions);
 
-        self::assertSame($expected, $actual);
+        self::assertArrayEquals($expected, $actual);
     }
 
     public function providerFind(): array
     {
         return [
-            'No files, null exclusions' => [
-                'files' => [],
-                'exclusions' => null,
-                'expected' => [],
-            ],
             'No files, no exclusions' => [
                 'files' => [],
-                'exclusions' => new PathList(),
+                'exclusions' => [],
+                'expected' => [],
+            ],
+            'No files, null exclusions' => [
+                'files' => [],
+                'exclusions' => [null],
+                'expected' => [],
+            ],
+            'No files, empty exclusions' => [
+                'files' => [],
+                'exclusions' => [self::createPathList()],
                 'expected' => [],
             ],
             'Multiple files, null exclusions' => [
@@ -70,11 +68,11 @@ final class FileFinderFunctionalTest extends TestCase
                     'one.txt',
                     'two.txt',
                 ],
-                'exclusions' => null,
-                'expected' => $this->normalizePaths([
+                'exclusions' => [null],
+                'expected' => [
                     'one.txt',
                     'two.txt',
-                ]),
+                ],
             ],
             'Multiple files, no exclusions' => [
                 'files' => [
@@ -82,25 +80,36 @@ final class FileFinderFunctionalTest extends TestCase
                     'two.txt',
                     'three.txt',
                 ],
-                'exclusions' => new PathList(),
-                'expected' => $this->normalizePaths([
+                'exclusions' => [self::createPathList()],
+                'expected' => [
                     'one.txt',
                     'three.txt',
                     'two.txt',
-                ]),
+                ],
+            ],
+            'Multiple files in directories, no exclusions' => [
+                'files' => [
+                    'one/two.txt',
+                    'three/four.txt',
+                ],
+                'exclusions' => [],
+                'expected' => [
+                    'one/two.txt',
+                    'three/four.txt',
+                ],
             ],
             'One file excluded by name' => [
                 'files' => ['excluded.txt'],
-                'exclusions' => new PathList('excluded.txt'),
-                'expected' => $this->normalizePaths([]),
+                'exclusions' => [self::createPathList('excluded.txt')],
+                'expected' => [],
             ],
             'Multiple files, partially excluded by name' => [
                 'files' => [
                     'included.txt',
                     'excluded.txt',
                 ],
-                'exclusions' => new PathList('excluded.txt'),
-                'expected' => $this->normalizePaths(['included.txt']),
+                'exclusions' => [self::createPathList('excluded.txt')],
+                'expected' => ['included.txt'],
             ],
             'Complex scenario' => [
                 'files' => [
@@ -122,48 +131,72 @@ final class FileFinderFunctionalTest extends TestCase
                     '.hidden_EXCLUDED_dir/two.txt',
                     '.hidden_EXCLUDED_dir/three.txt',
                 ],
-                'exclusions' => new PathList(
-                    // Exact pathnames.
-                    'EXCLUDED_file_in_dir_root.txt',
-                    'arbitrary_subdir/EXCLUDED_file.txt',
-                    // Directories.
-                    'EXCLUDED_dir',
-                    'arbitrary_subdir/with/nested/EXCLUDED_dir',
-                    // Directory with a trailing slash.
-                    'another_EXCLUDED_dir/',
-                    // "Hidden" directory.
-                    '.hidden_EXCLUDED_dir',
-                    // Duplicative.
-                    'EXCLUDED_file_in_dir_root.txt',
-                    // Overlapping.
-                    'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
-                    // Non-existent.
-                    'file_that_NEVER_EXISTS_anywhere.txt',
-                ),
-                'expected' => $this->normalizePaths([
+                'exclusions' => [
+                    self::createPathList(
+                        // Exact pathnames.
+                        'EXCLUDED_file_in_dir_root.txt',
+                        'arbitrary_subdir/EXCLUDED_file.txt',
+                        // Directories.
+                        'EXCLUDED_dir',
+                        'arbitrary_subdir/with/nested/EXCLUDED_dir',
+                        // Directory with a trailing slash.
+                        'another_EXCLUDED_dir/',
+                        // "Hidden" directory.
+                        '.hidden_EXCLUDED_dir',
+                        // Duplicative.
+                        'EXCLUDED_file_in_dir_root.txt',
+                        // Overlapping.
+                        'EXCLUDED_dir/make_NO_CHANGES_anywhere.txt',
+                        // Non-existent.
+                        'file_that_NEVER_EXISTS_anywhere.txt',
+                    ),
+                ],
+                'expected' => [
                     'file_in_dir_root.txt',
                     'arbitrary_subdir/file.txt',
                     'somewhat/deeply/nested/file.txt',
                     'very/deeply/nested/file/one/two/three/four/five/six/seven/eight/nine/ten/eleven/twelve/thirteen/fourteen/fifteen.txt',
                     'long_filename_one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve_thirteen_fourteen_fifteen.txt',
-                ]),
+                ],
             ],
         ];
     }
 
-    private function normalizePaths(array $paths): array
+    public function testFindResultSorting(): void
+    {
+        $given = [
+            'middle.txt',
+            'zz_last.txt',
+            '__first.txt',
+        ];
+        $expected = self::normalizePaths([
+            '__first.txt',
+            'middle.txt',
+            'zz_last.txt',
+        ]);
+        self::touch($given, self::activeDirAbsolute());
+        $sut = $this->createSut();
+
+        $actual = $sut->find(self::activeDirPath());
+
+        // Don't use ::assertDirectoryListing() here, because it sorts the results,
+        // ignoring the actual order and negating the whole point of this test.
+        self::assertSame($expected, $actual);
+    }
+
+    private static function normalizePaths(array $paths): array
     {
         $paths = array_map(static function ($path): string {
             $path = implode(
-                DIRECTORY_SEPARATOR,
+                '/',
                 [
-                    PathHelper::testWorkingDirAbsolute(),
-                    PathHelper::activeDirRelative(),
+                    self::testFreshFixturesDirAbsolute(),
+                    self::activeDirRelative(),
                     $path,
                 ],
             );
 
-            return PathHelper::makeAbsolute($path, getcwd());
+            return self::makeAbsolute($path, getcwd());
         }, $paths);
 
         sort($paths);

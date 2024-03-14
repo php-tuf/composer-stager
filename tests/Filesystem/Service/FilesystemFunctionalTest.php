@@ -3,22 +3,19 @@
 namespace PhpTuf\ComposerStager\Tests\Filesystem\Service;
 
 use PhpTuf\ComposerStager\API\Exception\IOException;
+use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem */
 final class FilesystemFunctionalTest extends TestCase
 {
     protected function setUp(): void
     {
-        FilesystemHelper::createDirectories([
-            PathHelper::sourceDirAbsolute(),
-            PathHelper::destinationDirAbsolute(),
+        self::mkdir([
+            self::sourceDirAbsolute(),
+            self::destinationDirAbsolute(),
         ]);
     }
 
@@ -29,82 +26,11 @@ final class FilesystemFunctionalTest extends TestCase
 
     private function createSut(): Filesystem
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem $filesystem */
-        $filesystem = $container->get(Filesystem::class);
-
-        return $filesystem;
-    }
-
-    /** @covers ::copy */
-    public function testCopy(): void
-    {
-        $filenameRelative = 'file.txt';
-        $sourceFilePath = PathHelper::createPath($filenameRelative, PathHelper::sourceDirAbsolute());
-        $destinationFilePath = PathHelper::createPath($filenameRelative, PathHelper::destinationDirAbsolute());
-        FilesystemHelper::touch($sourceFilePath->absolute());
-
-        // Copy an individual file.
-        $filesystem = $this->createSut();
-        $filesystem->copy($sourceFilePath, $destinationFilePath);
-
-        self::assertDirectoryListing(PathHelper::destinationDirAbsolute(), [$filenameRelative]);
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyTrue(): void
-    {
-        $directoryPath = PathHelper::createPath('empty', PathHelper::testEnvAbsolute());
-        FilesystemHelper::createDirectories($directoryPath->absolute());
-        $sut = $this->createSut();
-
-        self::assertTrue($sut->isDirEmpty($directoryPath), 'Correctly detected empty directory.');
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyFalse(): void
-    {
-        $directoryPath = PathHelper::createPath(__DIR__);
-        $sut = $this->createSut();
-
-        self::assertFalse($sut->isDirEmpty($directoryPath), 'Correctly detected non-empty directory.');
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyErrorIsNotADirectory(): void
-    {
-        $filePath = PathHelper::createPath('file.txt', PathHelper::testEnvAbsolute());
-        FilesystemHelper::touch($filePath->absolute());
-        $message = sprintf(
-            'The path does not exist or is not a directory at %s',
-            $filePath->absolute(),
-        );
-        $sut = $this->createSut();
-
-        self::assertTranslatableException(static function () use ($sut, $filePath): void {
-            $sut->isDirEmpty($filePath);
-        }, IOException::class, $message);
-    }
-
-    /** @covers ::isDirEmpty */
-    public function testIsDirEmptyError(): void
-    {
-        $path = PathHelper::createPath('non-existent');
-        $message = sprintf(
-            'The path does not exist or is not a directory at %s',
-            $path->absolute(),
-        );
-        $sut = $this->createSut();
-
-        self::assertTranslatableException(static function () use ($sut, $path): void {
-            $sut->isDirEmpty($path);
-        }, IOException::class, $message);
+        return ContainerTestHelper::get(Filesystem::class);
     }
 
     /**
-     * @covers ::exists
+     * @covers ::fileExists
      * @covers ::getFileType
      * @covers ::isDir
      * @covers ::isFile
@@ -127,14 +53,14 @@ final class FilesystemFunctionalTest extends TestCase
         bool $isHardLink,
         bool $isSymlink,
     ): void {
-        self::createFiles(PathHelper::sourceDirAbsolute(), $files);
-        FilesystemHelper::createDirectories($directories, PathHelper::sourceDirAbsolute());
-        FilesystemHelper::createSymlinks(PathHelper::sourceDirAbsolute(), $symlinks);
-        FilesystemHelper::createHardlinks(PathHelper::sourceDirAbsolute(), $hardLinks);
-        $subject = PathHelper::createPath($subject, PathHelper::sourceDirAbsolute());
+        self::touch($files, self::sourceDirAbsolute());
+        self::mkdir($directories, self::sourceDirAbsolute());
+        self::createSymlinks($symlinks, self::sourceDirAbsolute());
+        self::createHardlinks($hardLinks, self::sourceDirAbsolute());
+        $subject = self::createPath($subject, self::sourceDirAbsolute());
         $sut = $this->createSut();
 
-        $actualExists = $sut->exists($subject);
+        $actualExists = $sut->fileExists($subject);
         $actualIsDir = $sut->isDir($subject);
         $actualIsFile = $sut->isFile($subject);
         $actualIsLink = $sut->isLink($subject);
@@ -172,7 +98,7 @@ final class FilesystemFunctionalTest extends TestCase
                 'hardLinks' => [],
                 'subject' => 'directory_link',
                 'exists' => true,
-                'isDir' => false,
+                'isDir' => true,
                 'isFile' => false,
                 'isLink' => true,
                 'isHardLink' => false,
@@ -224,7 +150,7 @@ final class FilesystemFunctionalTest extends TestCase
                 'directories' => [],
                 'symlinks' => [],
                 'hardLinks' => [],
-                'subject' => 'non_existent_path.txt',
+                'subject' => self::nonExistentFileRelative(),
                 'exists' => false,
                 'isDir' => false,
                 'isFile' => false,
@@ -242,12 +168,12 @@ final class FilesystemFunctionalTest extends TestCase
      */
     public function testReadlink(string $given, string $expectedAbsolute): void
     {
-        $basePath = PathHelper::sourceDirAbsolute();
-        $symlinkPath = PathHelper::createPath('symlink.txt', $basePath);
-        $hardLinkPath = PathHelper::createPath('hard_link.txt', $basePath);
-        $targetPath = PathHelper::createPath($given, $basePath);
+        $basePath = self::sourceDirAbsolute();
+        $symlinkPath = self::createPath('symlink.txt', $basePath);
+        $hardLinkPath = self::createPath('hard_link.txt', $basePath);
+        $targetPath = self::createPath($given, $basePath);
         chdir($basePath);
-        FilesystemHelper::touch($targetPath->absolute());
+        self::touch($targetPath->absolute());
         symlink($given, $symlinkPath->absolute());
         link($given, $hardLinkPath->absolute());
         $sut = $this->createSut();
@@ -267,8 +193,8 @@ final class FilesystemFunctionalTest extends TestCase
 
     public function providerReadlink(): array
     {
-        $basePath = PathHelper::sourceDirAbsolute();
-        $absolute = static fn ($path): string => PathHelper::makeAbsolute($path, $basePath);
+        $basePath = self::sourceDirAbsolute();
+        $absolute = static fn ($path): string => self::makeAbsolute($path, $basePath);
 
         return [
             'Absolute link' => [
@@ -285,9 +211,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::readLink */
     public function testReadlinkOnNonLink(): void
     {
-        $file = PathHelper::createPath('file.txt', PathHelper::sourceDirAbsolute());
-        FilesystemHelper::touch($file->absolute());
-        assert(file_exists($file->absolute()));
+        $file = self::createPath(__FILE__);
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $file->absolute());
@@ -299,7 +223,7 @@ final class FilesystemFunctionalTest extends TestCase
     /** @covers ::readLink */
     public function testReadlinkOnNonExistentFile(): void
     {
-        $path = PathHelper::createPath('non-existent_file.txt', PathHelper::sourceDirAbsolute());
+        $path = self::nonExistentFilePath();
         $sut = $this->createSut();
 
         $message = sprintf('The path does not exist or is not a symlink at %s', $path->absolute());
@@ -308,40 +232,28 @@ final class FilesystemFunctionalTest extends TestCase
         }, IOException::class, $message);
     }
 
-    /**
-     * Our filesystem service currently depends on the Symfony Filesystem component
-     * and currently delegates its copy() method directly to it. Therefore, it is
-     * precisely equivalent to its implementation. Symfony's copy() documentation
-     * does not specify whether it supports directories as well as files. This
-     * test is to discover whether it does. (At this time it does not.)
-     *
-     * @coversNothing
-     */
-    public function testSymfonyCopyDirectory(): void
+    /** @covers ::touch */
+    public function testTouch(): void
     {
-        $this->expectException(SymfonyIOException::class);
-        $this->expectExceptionMessageMatches(sprintf(
-            '#"%s"#',
-            preg_quote(PathHelper::sourceDirAbsolute(), '/'),
-        ));
+        $path = self::arbitraryFilePath();
+        $sut = $this->createSut();
 
-        $filename = 'arbitrary_file.txt';
-        $sourceFile = PathHelper::createPath($filename, PathHelper::sourceDirAbsolute());
-        $destinationFile = PathHelper::createPath($filename, PathHelper::destinationDirAbsolute());
-        FilesystemHelper::touch($sourceFile->absolute());
+        $sut->touch($path);
 
-        $sut = new SymfonyFilesystem();
+        self::assertFileExists($path->absolute());
+    }
 
-        // Single file copy: this should work.
-        $sut->copy(
-            $sourceFile->absolute(),
-            $destinationFile->absolute(),
-        );
+    /** @covers ::touch */
+    public function testTouchAlreadyADirectory(): void
+    {
+        $directoryPath = self::arbitraryDirPath();
+        $directoryAbsolute = $directoryPath->absolute();
+        self::mkdir([$directoryAbsolute]);
+        $sut = $this->createSut();
 
-        // Directory copy: this should fail.
-        $sut->copy(
-            PathHelper::sourceDirAbsolute(),
-            PathHelper::destinationDirPath()->absolute(),
-        );
+        $message = sprintf('Cannot touch file--a directory already exists at %s', $directoryAbsolute);
+        self::assertTranslatableException(static function () use ($sut, $directoryPath): void {
+            $sut->touch($directoryPath);
+        }, LogicException::class, $message);
     }
 }

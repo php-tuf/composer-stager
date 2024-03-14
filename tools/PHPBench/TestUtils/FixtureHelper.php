@@ -3,13 +3,15 @@
 namespace PhpTuf\ComposerStager\PHPBench\TestUtils;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelperTrait;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class FixtureHelper
 {
+    use PathTestHelperTrait;
+
     private const TEST_ENV = 'var/phpbench';
     private const FIXTURES_DIR = 'fixtures';
     private const WORKING_DIR = 'working-dir';
@@ -39,22 +41,22 @@ final class FixtureHelper
 
     public static function drupalOriginalCodebasePath(): PathInterface
     {
-        return PathHelper::createPath(self::drupalOriginalCodebaseAbsolute());
+        return self::createPath(self::drupalOriginalCodebaseAbsolute());
     }
 
     public static function drupalMajorUpdateCodebasePath(): PathInterface
     {
-        return PathHelper::createPath(self::drupalMajorUpdateCodebaseAbsolute());
+        return self::createPath(self::drupalMajorUpdateCodebaseAbsolute());
     }
 
     public static function drupalMinorUpdateCodebasePath(): PathInterface
     {
-        return PathHelper::createPath(self::drupalMinorUpdateCodebaseAbsolute());
+        return self::createPath(self::drupalMinorUpdateCodebaseAbsolute());
     }
 
     public static function drupalPointUpdateCodebasePath(): PathInterface
     {
-        return PathHelper::createPath(self::drupalPointUpdateCodebaseAbsolute());
+        return self::createPath(self::drupalPointUpdateCodebaseAbsolute());
     }
 
     public static function removeWorkingDir(): void

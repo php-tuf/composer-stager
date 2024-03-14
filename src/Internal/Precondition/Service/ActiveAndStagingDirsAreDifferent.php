@@ -27,6 +27,11 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
         return $this->t('The active and staging directories cannot be the same.');
     }
 
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The active and staging directories are different.');
+    }
+
     protected function doAssertIsFulfilled(
         PathInterface $activeDir,
         PathInterface $stagingDir,
@@ -40,10 +45,5 @@ final class ActiveAndStagingDirsAreDifferent extends AbstractPrecondition implem
                 $this->d()->exceptions(),
             ));
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The active and staging directories are different.');
     }
 }

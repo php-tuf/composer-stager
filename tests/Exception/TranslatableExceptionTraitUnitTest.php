@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
 use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait */
 final class TranslatableExceptionTraitUnitTest extends TestCase
@@ -13,16 +13,38 @@ final class TranslatableExceptionTraitUnitTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::getTranslatableMessage
+     *
+     * @dataProvider providerBasicFunctionality
      */
-    public function testBasicFunctionality(): void
+    public function testBasicFunctionality(array $arguments, TranslatableInterface $message, int $code): void
     {
-        $message = new TestTranslatableMessage(__METHOD__);
-
-        $sut = new class($message) extends Exception {
+        $sut = new class(...$arguments) extends Exception {
             use TranslatableExceptionTrait;
         };
 
         self::assertSame((string) $message, $sut->getMessage(), 'Returned correct untranslated message.');
-        self::assertSame($message, $sut->getTranslatableMessage(), 'Returned correct translatable message.');
+        self::assertEquals($message, $sut->getTranslatableMessage(), 'Returned correct translatable message.');
+        self::assertSame($code, $sut->getCode(), 'Returned correct code.');
+    }
+
+    public function providerBasicFunctionality(): array
+    {
+        return [
+            [
+                'arguments' => [
+                    self::createTranslatableMessage('One'),
+                ],
+                'message' => self::createTranslatableMessage('One'),
+                'code' => 0,
+            ],
+            [
+                'arguments' => [
+                    self::createTranslatableMessage('Two'),
+                    10,
+                ],
+                'message' => self::createTranslatableMessage('Two'),
+                'code' => 10,
+            ],
+        ];
     }
 }

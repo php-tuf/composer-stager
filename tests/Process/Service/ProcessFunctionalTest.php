@@ -5,34 +5,28 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /** @coversNothing */
 final class ProcessFunctionalTest extends TestCase
 {
     private function createSut(array $command): ProcessInterface
     {
-        $container = ContainerHelper::container();
-        $container->compile();
+        $factory = ContainerTestHelper::get(ProcessFactory::class);
+        assert($factory instanceof ProcessFactory);
 
-        /** @var \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory $factory */
-        $factory = $container->get(ProcessFactory::class);
-
-        /** @var \PhpTuf\ComposerStager\Internal\Process\Service\Process $sut */
-        $sut = $factory->create($command);
-
-        return $sut;
+        return $factory->create($command);
     }
 
     public function testGetOutput(): void
     {
-        $command = 'ls';
-        $expectedOutput = shell_exec($command);
+        $expectedOutput = trim(shell_exec('echo test'));
         $expectedStatusCode = 0;
-        $sut = $this->createSut([$command]);
+        $sut = $this->createSut(['echo', 'test']);
 
         $actualStatusCode = $sut->run();
-        $actualOutput = $sut->getOutput();
+        $actualOutput = trim($sut->getOutput());
 
         self::assertSame($expectedStatusCode, $actualStatusCode, 'Returned correct final output via getter.');
         self::assertSame($expectedOutput, $actualOutput, 'Returned correct final output via getter.');

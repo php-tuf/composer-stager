@@ -5,6 +5,7 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
+use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
@@ -36,6 +37,21 @@ final class Process implements ProcessInterface
      *       '--with-all-dependencies',
      *   ];
      *   ```
+     * @param \PhpTuf\ComposerStager\API\Path\Value\PathInterface|null $cwd
+     *   The current working directory (CWD) for the process. If set to null,
+     *   the CWD of the current PHP process will be used.
+     * @param array<string|\Stringable> $env
+     *   An array of environment variables, keyed by variable name with corresponding
+     *   string or stringable values. In addition to those explicitly specified,
+     *   environment variables set on your system will be inherited. You can
+     *   prevent this by setting to `false` variables you want to remove. Example:
+     *   ```php
+     *   $process->setEnv(
+     *       'STRING_VAR' => 'a string',
+     *       'STRINGABLE_VAR' => new StringableObject(),
+     *       'REMOVE_ME' => false,
+     *   );
+     *   ```
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
@@ -44,14 +60,29 @@ final class Process implements ProcessInterface
         private readonly SymfonyProcessFactoryInterface $symfonyProcessFactory,
         TranslatableFactoryInterface $translatableFactory,
         array $command = [],
+        ?PathInterface $cwd = null,
+        array $env = [],
     ) {
         $this->setTranslatableFactory($translatableFactory);
-        $this->symfonyProcess = $this->symfonyProcessFactory->create($command);
+        $this->symfonyProcess = $this->symfonyProcessFactory->create($command, $cwd, $env);
     }
 
     public function getEnv(): array
     {
         return $this->symfonyProcess->getEnv();
+    }
+
+    public function getErrorOutput(): string
+    {
+        try {
+            return $this->symfonyProcess->getErrorOutput();
+        } catch (Throwable $e) {
+            throw new LogicException($this->t(
+                'Failed to get process error output: %details',
+                $this->p(['%details' => $e->getMessage()]),
+                $this->d()->exceptions(),
+            ), 0, $e);
+        }
     }
 
     public function getOutput(): string

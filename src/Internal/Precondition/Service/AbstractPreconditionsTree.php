@@ -22,9 +22,6 @@ abstract class AbstractPreconditionsTree implements PreconditionInterface
     // This isn't used directly in this class--it's for children.
     use TranslatableAwareTrait;
 
-    // @phpcs:ignore SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty
-    public string $unfulfilledStatusMessage;
-
     /** @var array<\PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface> */
     private readonly array $children;
 

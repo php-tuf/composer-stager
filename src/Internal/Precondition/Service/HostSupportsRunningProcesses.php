@@ -35,8 +35,14 @@ final class HostSupportsRunningProcesses extends AbstractPrecondition implements
 
     public function getDescription(): TranslatableInterface
     {
-        return $this->t('The host must support running independent '
-            . 'PHP processes in order to run Composer and other shell commands.');
+        return $this->t(
+            'The host must support running independent PHP processes in order to run Composer and other shell commands.',
+        );
+    }
+
+    protected function getFulfilledStatusMessage(): TranslatableInterface
+    {
+        return $this->t('The host supports running independent PHP processes.');
     }
 
     protected function doAssertIsFulfilled(
@@ -54,10 +60,5 @@ final class HostSupportsRunningProcesses extends AbstractPrecondition implements
                 $this->d()->exceptions(),
             ), 0, $e);
         }
-    }
-
-    protected function getFulfilledStatusMessage(): TranslatableInterface
-    {
-        return $this->t('The host supports running independent PHP processes.');
     }
 }

@@ -8,7 +8,6 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 
 /**
@@ -20,6 +19,10 @@ use Prophecy\Argument;
  */
 final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected const NAME = 'No symlinks point outside the codebase';
+    protected const DESCRIPTION = 'The codebase cannot contain symlinks that point outside the codebase.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no symlinks that point outside the codebase.';
+
     protected function setUp(): void
     {
         $this->fileFinder = $this->prophesize(FileFinderInterface::class);
@@ -28,16 +31,11 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
             ->willReturn([]);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::type(PathInterface::class))
+            ->fileExists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
         parent::setUp();
-    }
-
-    protected function fulfilledStatusMessage(): string
-    {
-        return 'There are no symlinks that point outside the codebase.';
     }
 
     protected function createSut(): NoSymlinksPointOutsideTheCodebase
@@ -46,8 +44,10 @@ final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreco
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $pathHelper = self::createPathHelper();
+        $pathListFactory = self::createPathListFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
-        return new NoSymlinksPointOutsideTheCodebase($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new NoSymlinksPointOutsideTheCodebase($environment, $fileFinder, $filesystem, $pathFactory, $pathHelper, $pathListFactory, $translatableFactory);
     }
 }

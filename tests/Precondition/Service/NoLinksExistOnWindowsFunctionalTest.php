@@ -3,11 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
@@ -18,13 +15,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
 {
     protected function createSut(): NoLinksExistOnWindows
     {
-        $container = ContainerHelper::container();
-        $container->compile();
-
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
-        $sut = $container->get(NoLinksExistOnWindows::class);
-
-        return $sut;
+        return ContainerTestHelper::get(NoLinksExistOnWindows::class);
     }
 
     /**
@@ -37,15 +28,15 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
      */
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
-        $basePathAbsolute = PathHelper::activeDirAbsolute();
-        $link = PathHelper::makeAbsolute('link.txt', $basePathAbsolute);
-        $target = PathHelper::makeAbsolute('target.txt', $basePathAbsolute);
-        FilesystemHelper::touch($target);
-        FilesystemHelper::createSymlinks($basePathAbsolute, $symlinks);
-        FilesystemHelper::createHardlinks($basePathAbsolute, $hardLinks);
+        $basePathAbsolute = self::activeDirAbsolute();
+        $link = self::makeAbsolute('link.txt', $basePathAbsolute);
+        $target = self::makeAbsolute('target.txt', $basePathAbsolute);
+        self::touch($target);
+        self::createSymlinks($symlinks, $basePathAbsolute);
+        self::createHardlinks($hardLinks, $basePathAbsolute);
         $sut = $this->createSut();
 
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
@@ -87,13 +78,13 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
     {
         $targetFile = 'target.txt';
         $links = array_fill_keys($links, $targetFile);
-        $exclusions = new PathList(...$exclusions);
-        $basePath = PathHelper::activeDirAbsolute();
-        self::createFile($basePath, $targetFile);
-        FilesystemHelper::createSymlinks($basePath, $links);
+        $exclusions = self::createPathList(...$exclusions);
+        $basePath = self::activeDirAbsolute();
+        self::touch($targetFile, $basePath);
+        self::createSymlinks($links, $basePath);
         $sut = $this->createSut();
 
-        $isFulfilled = $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), $exclusions);
+        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath(), $exclusions);
 
         self::assertEquals($shouldBeFulfilled, $isFulfilled, 'Respected exclusions.');
     }

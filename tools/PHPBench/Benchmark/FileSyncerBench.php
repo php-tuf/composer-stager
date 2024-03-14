@@ -8,13 +8,11 @@ use PhpBench\Attributes\AfterMethods;
 use PhpBench\Attributes\BeforeClassMethods;
 use PhpBench\Attributes\ParamProviders;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\PhpFileSyncer;
-use PhpTuf\ComposerStager\Internal\FileSyncer\Service\RsyncFileSyncer;
+use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\FixtureHelper;
 use PhpTuf\ComposerStager\PHPBench\TestUtils\ProcessHelper;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
-use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
 #[BeforeClassMethods(['setUpBeforeClass'])]
 #[AfterClassMethods(['tearDownAfterClass'])]
@@ -46,19 +44,10 @@ final class FileSyncerBench extends BenchCase
 
     public function providerSyncers(): Generator
     {
-        yield 'PhpFileSyncer' => [
-            'syncerClassName' => 'PhpFileSyncer',
-            'syncerClassFQN' => PhpFileSyncer::class,
+        yield 'FileSyncer' => [
+            'syncerClassName' => 'FileSyncer',
+            'syncerClassFQN' => FileSyncer::class,
         ];
-
-        // Only test RsyncFileSyncer if rsync is available.
-        // @phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
-        if ((new SymfonyExecutableFinder())->find('rsync') !== null) {
-            yield 'RsyncFileSyncer' => [
-                'syncerClassName' => 'RsyncFileSyncer',
-                'syncerClassFQN' => RsyncFileSyncer::class,
-            ];
-        }
     }
 
     public function providerOperation(): Generator

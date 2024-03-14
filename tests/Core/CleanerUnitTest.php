@@ -10,11 +10,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPath;
-use PhpTuf\ComposerStager\Tests\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -48,14 +45,14 @@ final class CleanerUnitTest extends TestCase
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
 
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove(PathHelper::stagingDirPath(), null, $timeout)
+            ->rm(self::stagingDirPath(), null, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $sut->clean(self::activeDirPath(), self::stagingDirPath());
     }
 
     /**
@@ -65,16 +62,16 @@ final class CleanerUnitTest extends TestCase
      */
     public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
-        $path = new TestPath($path);
+        $path = self::createPath($path);
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), $path, null, $timeout)
+            ->assertIsFulfilled(self::activeDirPath(), $path, null, $timeout)
             ->shouldBeCalledOnce();
         $this->filesystem
-            ->remove($path, $callback, $timeout)
+            ->rm($path, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->clean(PathHelper::activeDirPath(), $path, $callback, $timeout);
+        $sut->clean(self::activeDirPath(), $path, $callback, $timeout);
     }
 
     public function providerCleanWithOptionalParams(): array
@@ -99,27 +96,27 @@ final class CleanerUnitTest extends TestCase
         $message = __METHOD__;
         $previous = self::createTestPreconditionException($message);
         $this->preconditions
-            ->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath(), Argument::cetera())
+            ->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath(), Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+            $sut->clean(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
     /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
-        $message = new TestTranslatableExceptionMessage(__METHOD__);
+        $message = self::createTranslatableExceptionMessage(__METHOD__);
         $previous = new IOException($message);
         $this->filesystem
-            ->remove(Argument::cetera())
+            ->rm(Argument::cetera())
             ->willThrow($previous);
         $sut = $this->createSut();
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->clean(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
-        }, RuntimeException::class, $message, $previous::class);
+            $sut->clean(self::activeDirPath(), self::stagingDirPath());
+        }, RuntimeException::class, $message, null, $previous::class);
     }
 }

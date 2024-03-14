@@ -6,8 +6,6 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -19,8 +17,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::getStatusMessage
  * @covers ::isFulfilled
  */
-final class StagerPreconditionsUnitTest extends PreconditionTestCase
+final class StagerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Stager preconditions';
+    protected const DESCRIPTION = 'The preconditions for staging Composer commands.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for staging Composer commands are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;
 
@@ -43,15 +45,16 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
         $environment = $this->environment->reveal();
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new StagerPreconditions($environment, $translatableFactory, $commonPreconditions, $stagingDirIsReady);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->commonPreconditions
@@ -71,8 +74,8 @@ final class StagerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

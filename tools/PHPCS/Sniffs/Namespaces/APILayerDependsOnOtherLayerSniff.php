@@ -6,7 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use PhpTuf\ComposerStager\Helper\NamespaceHelper;
-use PhpTuf\ComposerStager\Helper\PHPHelper;
+use PhpTuf\ComposerStager\Helper\PhpHelper;
 
 /** Finds API code that depends on non-API layers, e.g., the internal layer or vendor code. */
 final class APILayerDependsOnOtherLayerSniff implements Sniff
@@ -26,7 +26,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
             return;
         }
 
-        $namespace = $this->getNamespace($phpcsFile, $stackPtr);
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr);
 
         // Not a scope-level namespace, e.g., a class or interface.
         // (It's probably an anonymous function declaration.)
@@ -67,16 +67,6 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
         return str_starts_with($phpcsFile->getFilename(), $srcDir);
     }
 
-    private function getNamespace(File $phpcsFile, int $scopePtr): string
-    {
-        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
-
-        return NamespaceHelper::getDeclarationNameWithNamespace(
-            $phpcsFile->getTokens(),
-            $endOfNamespaceDeclaration - 1,
-        );
-    }
-
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
     {
         $scopePtr = $phpcsFile->findNext(Tokens::$ooScopeTokens, $stackPtr);
@@ -91,7 +81,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
 
     private function isExcluded(string $namespace): bool
     {
-        return in_array($namespace, PHPHelper::UNAMBIGUOUS_BUILTIN_CLASSES, true);
+        return in_array($namespace, PhpHelper::UNAMBIGUOUS_BUILTIN_CLASSES, true);
     }
 
     private function namespaceIsInAPILayer(File $phpcsFile, int $stackPtr): bool
@@ -113,7 +103,7 @@ final class APILayerDependsOnOtherLayerSniff implements Sniff
         $namespaceTokenPtr = $phpcsFile->findNext(T_NAMESPACE, 0);
         $namespacePtr = $phpcsFile->findNext(T_STRING, $namespaceTokenPtr);
 
-        return $this->getNamespace($phpcsFile, $namespacePtr);
+        return NamespaceHelper::getNamespace($phpcsFile, $namespacePtr);
     }
 
     private function getClassName(File $phpcsFile): mixed

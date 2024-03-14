@@ -21,11 +21,11 @@ final class AliasEndsWithAliasSniff implements Sniff
     {
         // Not a project source file. (This apparently can't be controlled with
         // exclusions in phpcs.xml due to the way the custom sniffs are included.)
-        if (!$this->isSrcFile($phpcsFile)) {
+        if (!$this->isProjectFile($phpcsFile)) {
             return;
         }
 
-        $namespace = $this->getNamespace($phpcsFile, $stackPtr);
+        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr);
 
         if (!str_ends_with($namespace, 'Alias')) {
             return;
@@ -52,21 +52,14 @@ final class AliasEndsWithAliasSniff implements Sniff
         );
     }
 
-    private function isSrcFile(File $phpcsFile): bool
+    private function isProjectFile(File $phpcsFile): bool
     {
-        $srcDir = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'src';
+        $projectRoot = dirname(__DIR__, 4) . DIRECTORY_SEPARATOR;
+        $pattern = sprintf('#^%s#', preg_quote($projectRoot, DIRECTORY_SEPARATOR));
+        $phpcsFileRelative = preg_replace($pattern, '', $phpcsFile->getFilename());
+        $topLevelDir = strtok($phpcsFileRelative, DIRECTORY_SEPARATOR);
 
-        return str_starts_with($phpcsFile->getFilename(), $srcDir);
-    }
-
-    private function getNamespace(File $phpcsFile, int $scopePtr): string
-    {
-        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
-
-        return $this->getDeclarationNameWithNamespace(
-            $phpcsFile->getTokens(),
-            $endOfNamespaceDeclaration - 1,
-        );
+        return in_array($topLevelDir, ['src', 'tests', 'tools'], true);
     }
 
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
@@ -83,29 +76,5 @@ final class AliasEndsWithAliasSniff implements Sniff
         $asKeywordPtr = $phpcsFile->findPrevious(T_AS, $lastStringPtr, $stackPtr);
 
         return $asKeywordPtr !== false;
-    }
-
-    private function getDeclarationNameWithNamespace(array $tokens, $stackPtr): string
-    {
-        $nameParts = [];
-        $currentPointer = $stackPtr;
-
-        while ($tokens[$currentPointer]['code'] === T_NS_SEPARATOR
-            || $tokens[$currentPointer]['code'] === T_STRING
-            || isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])
-        ) {
-            if (isset(Tokens::$emptyTokens[$tokens[$currentPointer]['code']])) {
-                --$currentPointer;
-
-                continue;
-            }
-
-            $nameParts[] = $tokens[$currentPointer]['content'];
-            --$currentPointer;
-        }
-
-        $nameParts = array_reverse($nameParts);
-
-        return implode('', $nameParts);
     }
 }

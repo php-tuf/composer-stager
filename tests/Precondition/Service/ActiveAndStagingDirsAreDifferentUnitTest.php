@@ -3,16 +3,22 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent */
-final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCase
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent
+ *
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
+ */
+final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active and staging directories are different';
+    protected const DESCRIPTION = 'The active and staging directories cannot be the same.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active and staging directories are different.';
+
     protected function createSut(): ActiveAndStagingDirsAreDifferent
     {
         $environment = $this->environment->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ActiveAndStagingDirsAreDifferent($environment, $translatableFactory);
     }
@@ -25,8 +31,8 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
     {
         $this->doTestFulfilled(
             'The active and staging directories are different.',
-            PathHelper::activeDirPath(),
-            PathHelper::stagingDirPath(),
+            self::activeDirPath(),
+            self::stagingDirPath(),
         );
     }
 
@@ -34,7 +40,7 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionTestCas
     public function testUnfulfilled(): void
     {
         $message = 'The active and staging directories are the same.';
-        $samePath = PathHelper::activeDirPath();
+        $samePath = self::activeDirPath();
 
         $this->doTestUnfulfilled($message, null, $samePath, $samePath);
     }

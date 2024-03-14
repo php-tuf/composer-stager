@@ -8,11 +8,9 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
-use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointToADirectory;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\ContainerHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemHelper;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditionsTree;
+use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use Throwable;
 
 /**
@@ -27,12 +25,11 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         NoHardLinksExist::class,
         NoLinksExistOnWindows::class,
         NoSymlinksPointOutsideTheCodebase::class,
-        NoSymlinksPointToADirectory::class,
     ];
 
     private static function path(string $path): string
     {
-        return PathHelper::makeAbsolute($path, PathHelper::activeDirAbsolute());
+        return self::makeAbsolute($path, self::activeDirAbsolute());
     }
 
     protected function setUp(): void
@@ -40,10 +37,15 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         self::createTestEnvironment();
     }
 
+    protected function tearDown(): void
+    {
+        self::removeTestEnvironment();
+    }
+
     /** A NoUnsupportedLinksExist object can't be created directly because some preconditions need to be excluded. */
     private function createTestPreconditionsTree(array $excludePreconditions = []): TestPreconditionsTree
     {
-        $container = ContainerHelper::container();
+        $container = ContainerTestHelper::container();
         $container->compile();
 
         $allNoUnsupportedLinkPreconditions = [];
@@ -74,9 +76,10 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         }
 
         $uncoveredPreconditions = array_diff($allNoUnsupportedLinkPreconditions, self::COVERED_PRECONDITIONS);
+        $allPreconditionsAccountedFor = $uncoveredPreconditions === [];
         assert(
-            $uncoveredPreconditions === [],
-            reset($uncoveredPreconditions) . ' is not covered here. Add coverage and then add it to ::ALL_NO_UNSUPPORTED_LINKS_PRECONDITIONS',
+            $allPreconditionsAccountedFor,
+            sprintf('%s is missing coverage here. Add coverage and then add it to ::ALL_NO_UNSUPPORTED_LINKS_PRECONDITIONS', reset($uncoveredPreconditions)),
         );
 
         return new TestPreconditionsTree(...$includedPreconditions);
@@ -87,7 +90,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $sut = $this->createTestPreconditionsTree();
 
         self::assertTrue(
-            $sut->isFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath()),
+            $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath()),
             'All preconditions passed together without any links present.',
         );
     }
@@ -97,7 +100,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('source.txt');
         $target = self::path('target.txt');
-        FilesystemHelper::touch($target);
+        self::touch($target);
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoAbsoluteSymlinksExist::class);
@@ -108,16 +111,14 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $source = self::path('source.txt');
         $target = self::path('target.txt');
-        FilesystemHelper::touch($target);
+        self::touch($target);
         symlink($target, $source);
 
-        $container = ContainerHelper::container();
-        $container->compile();
-        /** @var \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows $sut */
-        $sut = $container->get(NoLinksExistOnWindows::class);
+        $sut = ContainerTestHelper::get(NoLinksExistOnWindows::class);
+        assert($sut instanceof NoLinksExistOnWindows);
 
         self::assertTranslatableException(static function () use ($sut): void {
-            $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+            $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class);
     }
 
@@ -130,17 +131,8 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         symlink($target, $source);
 
         $this->assertPreconditionIsIsolated(NoSymlinksPointOutsideTheCodebase::class);
-    }
 
-    /** @group no_windows */
-    public function testNoSymlinksPointToADirectory(): void
-    {
-        $source = self::path('link');
-        $target = 'directory';
-        FilesystemHelper::createDirectories($target);
-        symlink($target, $source);
-
-        $this->assertPreconditionIsIsolated(NoSymlinksPointToADirectory::class);
+        self::rm($target);
     }
 
     /** @group no_windows */
@@ -159,7 +151,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
     {
         $sut = $this->createTestPreconditionsTree([$sut]);
 
-        $sut->assertIsFulfilled(PathHelper::activeDirPath(), PathHelper::stagingDirPath());
+        $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
 
         $this->expectNotToPerformAssertions();
     }

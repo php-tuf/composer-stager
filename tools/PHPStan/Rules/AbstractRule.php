@@ -2,6 +2,7 @@
 
 namespace PhpTuf\ComposerStager\PHPStan\Rules;
 
+use Composer\Autoload\ClassLoader;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
@@ -66,5 +67,18 @@ abstract class AbstractRule implements Rule
         array_pop($nameParts);
 
         return implode('\\', $nameParts);
+    }
+
+    /**
+     * You would think get_declared_classes() and get_declared_interfaces() would provide
+     * the needed list of Composer Stager symbols, but for some reason they only include
+     * the PHPStan rules. This approach gets everything Composer knows about.
+     */
+    protected function getClassMap(): array
+    {
+        $autoloader = require dirname(__DIR__, 3) . '/vendor/autoload.php';
+        assert($autoloader instanceof ClassLoader);
+
+        return $autoloader->getClassMap();
     }
 }

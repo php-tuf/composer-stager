@@ -9,9 +9,7 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
-use PhpTuf\ComposerStager\Tests\Path\Value\TestPathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -33,7 +31,7 @@ abstract class PreconditionTestCase extends TestCase
         $this->environment
             ->setTimeLimit(Argument::any())
             ->willReturn(true);
-        $this->exclusions = new TestPathList();
+        $this->exclusions = self::createPathList();
     }
 
     abstract protected function createSut(): PreconditionInterface;
@@ -59,8 +57,8 @@ abstract class PreconditionTestCase extends TestCase
         ?PathInterface $stagingDirPath = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $activeDirPath ??= PathHelper::activeDirPath();
-        $stagingDirPath ??= PathHelper::stagingDirPath();
+        $activeDirPath ??= self::activeDirPath();
+        $stagingDirPath ??= self::stagingDirPath();
 
         $this->environment
             ->setTimeLimit($timeout)
@@ -82,12 +80,12 @@ abstract class PreconditionTestCase extends TestCase
         ?PathInterface $stagingDirPath = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
-        $activeDirPath ??= PathHelper::activeDirPath();
-        $stagingDirPath ??= PathHelper::stagingDirPath();
+        $activeDirPath ??= self::activeDirPath();
+        $stagingDirPath ??= self::stagingDirPath();
         $sut = $this->createSut();
 
         self::assertTranslatableException(function () use ($sut, $activeDirPath, $stagingDirPath, $timeout): void {
             $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout);
-        }, PreconditionException::class, $expectedStatusMessage, $previousException);
+        }, PreconditionException::class, $expectedStatusMessage, null, $previousException);
     }
 }

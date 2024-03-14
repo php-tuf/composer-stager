@@ -3,9 +3,9 @@
 /.idea/php-test-framework.xml
 /.idea/workspace.xml
 /grumphp.yml
+/infection.json5
 /phpcs.xml
 /phpunit.xml
-/psalm.xml
 /tests/Exploratory/*
 !/tests/Exploratory/ExploratoryTestTemplate.php
 /var/*/*

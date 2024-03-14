@@ -7,10 +7,7 @@ use PhpTuf\ComposerStager\API\Precondition\Service\NoAbsoluteSymlinksExistInterf
 use PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
-use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointToADirectoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -19,13 +16,16 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @covers ::__construct
  * @covers ::getFulfilledStatusMessage
  */
-final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
+final class NoUnsupportedLinksExistUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Unsupported links preconditions';
+    protected const DESCRIPTION = 'Preconditions concerning unsupported links.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no unsupported links in the codebase.';
+
     private NoAbsoluteSymlinksExistInterface|ObjectProphecy $noAbsoluteSymlinksExist;
     private NoHardLinksExistInterface|ObjectProphecy $noHardLinksExist;
     private NoLinksExistOnWindowsInterface|ObjectProphecy $noLinksExistOnWindows;
     private NoSymlinksPointOutsideTheCodebaseInterface|ObjectProphecy $noSymlinksPointOutsideTheCodebase;
-    private NoSymlinksPointToADirectoryInterface|ObjectProphecy $noSymlinksPointToADirectory;
 
     protected function setUp(): void
     {
@@ -33,7 +33,6 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $this->noHardLinksExist = $this->prophesize(NoHardLinksExistInterface::class);
         $this->noLinksExistOnWindows = $this->prophesize(NoLinksExistOnWindowsInterface::class);
         $this->noSymlinksPointOutsideTheCodebase = $this->prophesize(NoSymlinksPointOutsideTheCodebaseInterface::class);
-        $this->noSymlinksPointToADirectory = $this->prophesize(NoSymlinksPointToADirectoryInterface::class);
         $this->noAbsoluteSymlinksExist
             ->getLeaves()
             ->willReturn([$this->noAbsoluteSymlinksExist]);
@@ -46,9 +45,6 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $this->noSymlinksPointOutsideTheCodebase
             ->getLeaves()
             ->willReturn([$this->noSymlinksPointOutsideTheCodebase]);
-        $this->noSymlinksPointToADirectory
-            ->getLeaves()
-            ->willReturn([$this->noSymlinksPointToADirectory]);
 
         parent::setUp();
     }
@@ -60,8 +56,7 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $noHardLinksExist = $this->noHardLinksExist->reveal();
         $noLinksExistOnWindows = $this->noLinksExistOnWindows->reveal();
         $noSymlinksPointOutsideTheCodebase = $this->noSymlinksPointOutsideTheCodebase->reveal();
-        $noSymlinksPointToADirectory = $this->noSymlinksPointToADirectory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new NoUnsupportedLinksExist(
             $environment,
@@ -70,14 +65,14 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
             $noHardLinksExist,
             $noLinksExistOnWindows,
             $noSymlinksPointOutsideTheCodebase,
-            $noSymlinksPointToADirectory,
         );
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->noAbsoluteSymlinksExist
@@ -92,9 +87,6 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
         $this->noSymlinksPointOutsideTheCodebase
             ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
-        $this->noSymlinksPointToADirectory
-            ->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout)
-            ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled(
             'There are no unsupported links in the codebase.',
@@ -106,8 +98,8 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

@@ -6,17 +6,20 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class CommitterPreconditionsUnitTest extends PreconditionTestCase
+final class CommitterPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Committer preconditions';
+    protected const DESCRIPTION = 'The preconditions for making staged changes live.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for making staged changes live are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private NoUnsupportedLinksExistInterface|ObjectProphecy $noUnsupportedLinksExist;
     private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;
@@ -45,7 +48,7 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
         $commonPreconditions = $this->commonPreconditions->reveal();
         $noUnsupportedLinksExist = $this->noUnsupportedLinksExist->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new CommitterPreconditions($environment, $commonPreconditions, $noUnsupportedLinksExist, $stagingDirIsReady, $translatableFactory);
     }
@@ -53,8 +56,8 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->commonPreconditions
@@ -77,8 +80,8 @@ final class CommitterPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

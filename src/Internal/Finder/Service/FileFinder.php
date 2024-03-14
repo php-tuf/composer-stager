@@ -6,10 +6,11 @@ use FilesystemIterator;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Finder\Service\FileFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
+use PhpTuf\ComposerStager\API\Path\Factory\PathListFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
+use PhpTuf\ComposerStager\Internal\Path\Service\PathHelperInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -27,6 +28,8 @@ final class FileFinder implements FileFinderInterface
 
     public function __construct(
         private readonly PathFactoryInterface $pathFactory,
+        private readonly PathHelperInterface $pathHelper,
+        private readonly PathListFactoryInterface $pathListFactory,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         $this->setTranslatableFactory($translatableFactory);
@@ -34,7 +37,7 @@ final class FileFinder implements FileFinderInterface
 
     public function find(PathInterface $directory, ?PathListInterface $exclusions = null): array
     {
-        $exclusions ??= new PathList();
+        $exclusions ??= $this->pathListFactory->create();
 
         $directoryIterator = $this->getRecursiveDirectoryIterator($directory->absolute());
 
@@ -47,9 +50,9 @@ final class FileFinder implements FileFinderInterface
         // be excluded because they aren't individually in the array in order to be
         // matched. But because the directory iterator is recursive, their excluded
         // ancestor WILL BE found, and they will be excluded by extension.
-        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, static fn (
-            string $foundPathname,
-        ): bool => !in_array($foundPathname, $exclusions, true));
+        $filterIterator = new RecursiveCallbackFilterIterator($directoryIterator, fn (
+            string $foundPathAbsolute,
+        ): bool => !in_array($this->pathHelper->canonicalize($foundPathAbsolute), $exclusions, true));
 
         /** @var \Traversable<string> $iterator */
         $iterator = new RecursiveIteratorIterator($filterIterator);
@@ -61,6 +64,10 @@ final class FileFinder implements FileFinderInterface
         // to delete files after their ancestors had already been deleted.
         $files = iterator_to_array($iterator);
 
+        /** @infection-ignore-all This only makes any difference on Windows, whereas Infection is only run on Linux. */
+        $files = array_map(fn ($file): string => $this->pathHelper->canonicalize($file), $files);
+
+        // Sort the array to ensure idempotency.
         sort($files);
 
         return $files;
@@ -69,11 +76,6 @@ final class FileFinder implements FileFinderInterface
     /**
      * @throws \PhpTuf\ComposerStager\API\Exception\IOException
      *   If the directory cannot be found or is not actually a directory.
-     *
-     * @codeCoverageIgnore It's theoretically possible for RecursiveDirectoryIterator
-     *   to throw an exception here (because the given directory has disappeared)
-     *   but extremely unlikely, and it's infeasible to simulate in automated
-     *   tests--at least without way more trouble than it's worth.
      */
     private function getRecursiveDirectoryIterator(string $directory): RecursiveDirectoryIterator
     {
@@ -83,7 +85,6 @@ final class FileFinder implements FileFinderInterface
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS,
             );
         } catch (PhpUnexpectedValueException $e) {
-            // @todo Find a way to add test coverage for this.
             throw new IOException($this->t(
                 'The directory cannot be found or is not a directory at %path.',
                 $this->p(['%path' => $directory]),

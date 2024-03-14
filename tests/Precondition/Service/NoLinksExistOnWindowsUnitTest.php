@@ -3,8 +3,6 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 
 /**
@@ -13,10 +11,13 @@ use Prophecy\Argument;
  * @covers ::__construct
  * @covers ::assertIsSupportedFile
  * @covers ::exitEarly
- * @covers ::getFulfilledStatusMessage
  */
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {
+    protected const NAME = 'No links exist on Windows';
+    protected const DESCRIPTION = 'The codebase cannot contain links if on Windows.';
+    protected const FULFILLED_STATUS_MESSAGE = 'There are no links in the codebase if on Windows.';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -26,37 +27,34 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
             ->willReturn(true);
     }
 
-    protected function fulfilledStatusMessage(): string
-    {
-        return 'There are no links in the codebase if on Windows.';
-    }
-
     protected function createSut(): NoLinksExistOnWindows
     {
         $environment = $this->environment->reveal();
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $pathListFactory = self::createPathListFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
-        return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory);
+        return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 
+    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $this->doTestFulfilled('There are no links in the codebase if on Windows.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     public function testExitEarlyOnNonWindows(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->environment
             ->isWindows()
             ->willReturn(false);
         $this->filesystem
-            ->exists(Argument::cetera())
+            ->fileExists(Argument::cetera())
             ->shouldNotBeCalled();
         $this->fileFinder
             ->find(Argument::cetera())

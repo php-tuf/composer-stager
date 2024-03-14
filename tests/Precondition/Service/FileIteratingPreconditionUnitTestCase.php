@@ -14,17 +14,17 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableMessage;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
-abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCase
+abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTestCase
 {
-    abstract protected function fulfilledStatusMessage(): string;
+    // Override in subclasses.
+    protected const NAME = 'NAME';
+    protected const DESCRIPTION = 'DESCRIPTION';
+    protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
 
     protected EnvironmentInterface|ObjectProphecy $environment;
     protected FileFinderInterface|ObjectProphecy $fileFinder;
@@ -39,7 +39,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
             ->willReturn([]);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->filesystem
-            ->exists(Argument::type(PathInterface::class))
+            ->fileExists(Argument::type(PathInterface::class))
             ->willReturn(true);
         $this->pathFactory = $this->prophesize(PathFactoryInterface::class);
 
@@ -50,7 +50,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     public function testExitEarly(): void
     {
         $this->filesystem
-            ->exists(Argument::cetera())
+            ->fileExists(Argument::cetera())
             ->shouldNotBeCalled();
         $this->fileFinder
             ->find(Argument::cetera())
@@ -60,33 +60,23 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
         $fileFinder = $this->fileFinder->reveal();
         $filesystem = $this->filesystem->reveal();
         $pathFactory = $this->pathFactory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $pathListFactory = self::createPathListFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT in
         // this case, being abstract, can't be instantiated directly.
-        $sut = new class ($environment, $fileFinder, $filesystem, $pathFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
+        $sut = new class ($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory) extends AbstractFileIteratingPrecondition
         {
-            // @phpcs:ignore SlevomatCodingStandard.Functions.DisallowEmptyFunction.EmptyFunction
+            protected const NAME = 'NAME';
+            protected const DESCRIPTION = 'DESCRIPTION';
+            protected const FULFILLED_STATUS_MESSAGE = 'FULFILLED_STATUS_MESSAGE';
+
             protected function assertIsSupportedFile(
                 string $codebaseName,
                 PathInterface $codebaseRoot,
                 PathInterface $file,
             ): void {
-            }
-
-            protected function getFulfilledStatusMessage(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
-            public function getName(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
-            }
-
-            public function getDescription(): TranslatableInterface
-            {
-                return new TestTranslatableMessage();
+                // Always pass.
             }
 
             protected function exitEarly(
@@ -96,10 +86,25 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
             ): bool {
                 return true;
             }
+
+            public function getName(): TranslatableInterface
+            {
+                return $this->t(static::NAME);
+            }
+
+            public function getDescription(): TranslatableInterface
+            {
+                return $this->t(static::DESCRIPTION);
+            }
+
+            protected function getFulfilledStatusMessage(): TranslatableInterface
+            {
+                return $this->t(static::FULFILLED_STATUS_MESSAGE);
+            }
         };
 
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $isFulfilled = $sut->isFulfilled($activeDirPath, $stagingDirPath);
 
@@ -111,11 +116,11 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers ::doAssertIsFulfilled */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->filesystem
-            ->exists($activeDirPath)
+            ->fileExists($activeDirPath)
             ->willReturn(false);
         $sut = $this->createSut();
 
@@ -128,11 +133,11 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers ::doAssertIsFulfilled */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->filesystem
-            ->exists($stagingDirPath)
+            ->fileExists($stagingDirPath)
             ->willReturn(false);
         $sut = $this->createSut();
 
@@ -145,8 +150,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     /** @covers ::doAssertIsFulfilled */
     public function testNoFilesFound(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
@@ -166,8 +171,8 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
      */
     public function testFileFinderExceptions(ExceptionInterface $previous): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
 
         $this->fileFinder
             ->find(Argument::type(PathInterface::class), Argument::type(PathListInterface::class))
@@ -190,18 +195,18 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionTestCas
     public function providerFileFinderExceptions(): array
     {
         return [
-            'InvalidArgumentException' => [new InvalidArgumentException(new TestTranslatableMessage('Exclusions include invalid paths.'))],
-            'IOException' => [new IOException(new TestTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
+            'InvalidArgumentException' => [new InvalidArgumentException(self::createTranslatableMessage('Exclusions include invalid paths.'))],
+            'IOException' => [new IOException(self::createTranslatableMessage('The directory cannot be found or is not actually a directory.'))],
         ];
     }
 
-    /** @covers ::doAssertIsFulfilled */
+    /** @covers ::getFulfilledStatusMessage */
     public function assertFulfilled(
         bool $isFulfilled,
         TranslatableInterface $statusMessage,
         string $assertionMessage,
     ): void {
         self::assertTrue($isFulfilled, $assertionMessage);
-        self::assertEquals($this->fulfilledStatusMessage(), $statusMessage, 'Got correct status message');
+        self::assertEquals(static::FULFILLED_STATUS_MESSAGE, $statusMessage->trans(), 'Got correct status message');
     }
 }

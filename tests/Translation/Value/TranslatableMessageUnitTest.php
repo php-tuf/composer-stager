@@ -3,13 +3,8 @@
 namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
-use PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions;
-use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
-use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -51,11 +46,7 @@ final class TranslatableMessageUnitTest extends TestCase
         $sut->trans(null, ...$locale);
 
         /** Call again with a real translator to assert on actual results. */
-        $actualTranslation = $sut->trans(new Translator(
-            new DomainOptions(),
-            new LocaleOptions(),
-            new SymfonyTranslatorProxy(),
-        ));
+        $actualTranslation = $sut->trans(self::createTranslator());
 
         self::assertSame($expectedTranslation, $actualTranslation, 'Returned correct translation.');
         self::assertSame($expectedTranslation, (string) $sut, 'Returned correct typecast string value.');
@@ -96,12 +87,12 @@ final class TranslatableMessageUnitTest extends TestCase
             'Simple values' => [
                 'message' => 'Simple values',
                 'givenOptionalConstructorArguments' => [
-                    'parameters' => new TestTranslationParameters(),
+                    'parameters' => self::createTranslationParameters(),
                     'domain' => 'a_domain',
                 ],
                 'expectedTransArguments' => [
                     'message' => 'Simple values',
-                    'parameters' => new TestTranslationParameters(),
+                    'parameters' => self::createTranslationParameters(),
                     'domain' => 'a_domain',
                     'locale' => 'a_locale',
                 ],
@@ -111,11 +102,11 @@ final class TranslatableMessageUnitTest extends TestCase
             'Simple substitution' => [
                 'message' => 'A %mood string',
                 'givenOptionalConstructorArguments' => [
-                    'parameters' => new TestTranslationParameters(['%mood' => 'happy']),
+                    'parameters' => self::createTranslationParameters(['%mood' => 'happy']),
                 ],
                 'expectedTransArguments' => [
                     'message' => 'A %mood string',
-                    'parameters' => new TestTranslationParameters(['%mood' => 'happy']),
+                    'parameters' => self::createTranslationParameters(['%mood' => 'happy']),
                     'domain' => null,
                     'locale' => null,
                 ],
@@ -125,14 +116,14 @@ final class TranslatableMessageUnitTest extends TestCase
             'Multiple substitutions' => [
                 'message' => 'A %mood %size string',
                 'givenOptionalConstructorArguments' => [
-                    'parameters' => new TestTranslationParameters([
+                    'parameters' => self::createTranslationParameters([
                         '%mood' => 'happy',
                         '%size' => 'little',
                     ]),
                 ],
                 'expectedTransArguments' => [
                     'message' => 'A %mood %size string',
-                    'parameters' => new TestTranslationParameters([
+                    'parameters' => self::createTranslationParameters([
                         '%mood' => 'happy',
                         '%size' => 'little',
                     ]),

@@ -18,7 +18,7 @@ interface ExecutableFinderInterface
      *   The machine name of the executable, e.g., "composer" or "rsync".
      *
      * @return string
-     *   The path to the given executable.
+     *   The path to the executable.
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the executable cannot be found.

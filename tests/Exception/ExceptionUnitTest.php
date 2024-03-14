@@ -3,13 +3,13 @@
 namespace PhpTuf\ComposerStager\Tests\Exception;
 
 use Exception;
+use PhpTuf\ComposerStager\API\Exception\ExceptionInterface;
 use PhpTuf\ComposerStager\API\Exception\InvalidArgumentException;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Service\TestTranslator;
 use ReflectionClass;
 
 final class ExceptionUnitTest extends TestCase
@@ -25,12 +25,12 @@ final class ExceptionUnitTest extends TestCase
     public function testBasicFunctionality(string $exception): void
     {
         $message = $exception;
-        $translatableMessage = new TranslatableMessage($message, new TestTranslator());
+        $translatableMessage = new TranslatableMessage($message, self::createTranslator());
         $code = 42;
         $previous = new Exception('Message');
 
-        /** @var \PhpTuf\ComposerStager\API\Exception\ExceptionInterface $sut */
         $sut = new $exception($translatableMessage, $code, $previous);
+        assert($sut instanceof ExceptionInterface);
 
         self::assertSame($message, $sut->getMessage(), 'Got untranslated message.');
         self::assertSame($translatableMessage, $sut->getTranslatableMessage(), 'Got translatable message.');

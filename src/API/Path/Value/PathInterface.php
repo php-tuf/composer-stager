@@ -7,7 +7,11 @@ namespace PhpTuf\ComposerStager\API\Path\Value;
  *
  * The path string may be absolute or relative to the current working directory
  * as returned by `getcwd()` at runtime, e.g., "/var/www/example" or "example".
- * Nothing needs to actually exist at the path.
+ * Nothing needs to actually exist at the path. Paths beginning with a protocol,
+ * e.g., "ftp://" or "file:///", are unsupported, and their behavior is unspecified.
+ *
+ * To interact with the actual filesystem at this path, see
+ * {@see \PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface}
  *
  * @package Path
  *
@@ -26,6 +30,9 @@ interface PathInterface
 
     /** Determines whether the original path string as given is absolute, without resolving it. */
     public function isAbsolute(): bool;
+
+    /** Determines whether the original path string as given is relative, without resolving it. */
+    public function isRelative(): bool;
 
     /**
      * Gets the fully resolved, absolute path string without trailing slash, relative to another given path.

@@ -1,18 +1,23 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
+---
 version: 2
+
 updates:
 
-    - package-ecosystem: "composer"
-      directory: "/"
-      schedule:
-          interval: "weekly"
-      groups:
-          all:
-              patterns:
-                  - "*"
+    -   package-ecosystem: "composer"
+        directory: "/"
+        schedule:
+            interval: "weekly"
+        groups:
+            all:
+                patterns:
+                    - "*"
+        ignore:
+            # @see https://github.com/slevomat/coding-standard/issues/1632 Irresolvable conflict between DocCommentSpacing rules since 8.14.0
+            -   dependency-name: "slevomat/coding-standard"
+                versions: [ "8.14.0", "8.14.1" ]
 
-    - package-ecosystem: "github-actions"
-      directory: "/"
-      schedule:
-          interval: "weekly"
+    -   package-ecosystem: "github-actions"
+        directory: "/"
+        schedule:
+            interval: "weekly"

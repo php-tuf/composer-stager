@@ -14,12 +14,12 @@ parameters:
     paths:
         - .gitattributes
         - config/services.yml
+        - docs/services.yml
         - src
-        - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: false
-    preconditionSystemHash: 54a37bf8c9e9be8e703d4e2219df1d49
-    translationSystemHash: 0df1e2f49634b4bf0b655f2eada7f493
+    preconditionSystemHash: 282aea28dca092b4141a77e48da90a80
+    translationSystemHash: dec82389af17442fa61cc1fcc6f89c3e
     gitattributesExportInclude:
         - composer.json
         - docs
@@ -33,7 +33,6 @@ parameters:
         -
             message: '#Call to function assert\(\) with false and string will always evaluate to false.#'
             paths:
-                - src/Internal/Path/Value/Path.php
                 - src/Internal/Translation/Service/Translator.php
                 - src/Internal/Translation/Value/TranslationParameters.php
         -
@@ -42,7 +41,6 @@ parameters:
         -
             message: '#In method ".*", caught "Throwable" must be rethrown.*#'
             paths:
-                - src/Internal/Path/Value/Path.php
                 - src/Internal/Translation/Service/Translator.php
         -
             message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
@@ -56,67 +54,17 @@ parameters:
         -
             message: '#Method create\(\) should not be public because it doesn''t implement a method on an interface.#'
             path: src/Internal/Translation/Service/Translator.php
-        -
-            # @todo Ignore this error until the error can be resolved:
-            # @see https://github.com/php-tuf/composer-stager/issues/268
-            message: '#Service autoloading depends on the Internal layer.*#'
-            path: config/services.yml
-
-        # Test code.
-        -
-            message: '#.*::__construct\(\) does not call parent constructor from .*.#'
-            path: tests/Translation/Value/TestTranslatableExceptionMessage.php
-        -
-            message: '#Access to an undefined property.*#'
-            path: tests
-        -
-            message: '#Built-in or third party exception ".*" cannot be thrown from public methods.*#'
-            path: tests
-        -
-            message: '#Call to an undefined method .*Prophecy.*::.*\(\).#'
-            path: tests
-        -
-            message: '#Cannot call .*TranslatableFactory::create.*\(\) directly.*#'
-            path: tests
-        -
-            message: '#Cannot call method .*\(\) on .*MethodProphecy.#'
-            path: tests
-        -
-            message: '#Cannot instantiate .*\\.*tableMessage directly.*#'
-            path: tests
-        -
-            message: '#Concrete class must implement an interface#'
-            path: tests
-        -
-            message: '#.*caught .* must be rethrown.*#'
-            path: tests
-        -
-            message: '#Docblock must contain "@package.*#'
-            path: tests
-        -
-            message: '#Method .* no (value )?type specified.*#'
-            path: tests
-        -
-            message: '#Method .* should not be public because it doesn''t implement a method on an interface.#'
-            path: tests
-        -
-            message: '#Method .* throws checked exception .* but it''s missing from the PHPDoc @throws tag.#'
-            path: tests
-        -
-            message: '#Parameter .* of (static )?(class|method) .* expects .* given.#'
-            path: tests
-        -
-            message: '#Property .* does not accept .*.#'
-            path: tests
 
 # https://phpstan.org/developing-extensions/extension-types
 rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoCallingTranslatableFactoryDirectlyRule # Forbids calling TranslatableFactory::create() directly.
     - PhpTuf\ComposerStager\PHPStan\Rules\Calls\NoInstantiatingTranslatableDirectlyRule # Forbids instantiating translatables directly.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Calls\ValidTranslatableStringsRule # Ensures that TranslatableAwareTrait::t() is only called with literal string messages.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\FinalExceptionRule # Forbids exceptions from being final.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingExceptionInterfaceRule # Requires exceptions to implement ExceptionInterface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\MissingInterfaceRule # Requires concrete classes to implement an interface.
     - PhpTuf\ComposerStager\PHPStan\Rules\Classes\WrongExceptionNamespaceRule # Requires exceptions to be in the correct namespace.
+    - PhpTuf\ComposerStager\PHPStan\Rules\Files\ExampleServicesConfigIsCurrentRule # Ensures that the example docs/services.yml is current.
     - PhpTuf\ComposerStager\PHPStan\Rules\Files\InternalLayerExposureRule # Ensures that a client autoloaders don't depend on the Internal layer.
     - PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\UselessInterfaceRule # Forbids empty interfaces, i.e., without methods or constants.
     - PhpTuf\ComposerStager\PHPStan\Rules\Methods\ForbiddenConcreteTypeHintRule # Forbids using concrete classes in type hints when an interface is available.

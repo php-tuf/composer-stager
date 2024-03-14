@@ -1,4 +1,5 @@
 # https://github.com/phpro/grumphp#configuration
+---
 grumphp:
     ascii:
         failed: ~
@@ -16,28 +17,16 @@ grumphp:
             # this ever changes, that strategy will have to change accordingly.
             level: 100
         composer: ~
-        composer_normalize: ~
         phpcs:
             standard: []
             whitelist_patterns:
                 - src
                 - tests
-        phplint:
-            ignore_patterns:
-                - .idea
-                - var
-                - vendor
-        phpmd:
-            whitelist_patterns:
-                - src
-            ruleset:
-                - phpmd
         phpstan:
             use_grumphp_paths: false
         phpunit:
             exclude_group:
                 - windows_only
-        psalm: ~
         rector: ~
         shell:
             scripts:
@@ -63,11 +52,7 @@ grumphp:
         static:
             tasks:
                 - composer
-                - composer_normalize
                 - phpcs
-                - phplint
-                - phpmd
-                - psalm
                 - phpstan
                 - rector
                 - shell

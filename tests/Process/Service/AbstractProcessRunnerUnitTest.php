@@ -8,10 +8,10 @@ use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
+use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Value\TestTranslatableExceptionMessage;
+use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -37,6 +37,9 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
         $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
+            ->mustRun(Argument::any())
+            ->willReturn($this->process);
+        $this->process
             ->setTimeout(Argument::any())
             ->willReturn($this->process);
     }
@@ -50,7 +53,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->create(Argument::cetera())
             ->willReturn($process);
         $processFactory = $this->processFactory->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         // Create a concrete implementation for testing since the SUT, being
         // abstract, can't be instantiated directly.
@@ -63,6 +66,11 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                 TranslatableFactoryInterface $translatableFactory,
             ) {
                 parent::__construct($executableFinder, $processFactory, $translatableFactory);
+            }
+
+            public function getTranslatableMessage(string $message): TranslatableInterface
+            {
+                return $this->t($message);
             }
 
             protected function executableName(): string
@@ -81,8 +89,8 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testBasicFunctionality(
         string $executableName,
-        array $givenCommand,
-        array $expectedCommand,
+        array $givenRunArguments,
+        array $expectedFactoryArguments,
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
@@ -99,13 +107,12 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->process);
         $this->processFactory
-            ->create($expectedCommand)
-            ->shouldBeCalled()
+            ->create(...$expectedFactoryArguments)
+            ->shouldBeCalledOnce()
             ->willReturn($this->process);
-
         $sut = $this->createSut($executableName);
 
-        $sut->run($givenCommand, $callback, $timeout);
+        $sut->run(...$givenRunArguments);
     }
 
     public function providerBasicFunctionality(): array
@@ -113,15 +120,32 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         return [
             'Minimum values' => [
                 'executableName' => 'one',
-                'givenCommand' => [],
-                'expectedCommand' => ['one'],
+                'givenRunArguments' => [[]],
+                'expectedFactoryArguments' => [['one'], null, []],
                 'callback' => null,
-                'timeout' => 0,
+                'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
+            ],
+            'Default values' => [
+                'executableName' => 'one',
+                'givenRunArguments' => [['two'], null, []],
+                'expectedFactoryArguments' => [['one', 'two'], null, []],
+                'callback' => null,
+                'timeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Simple values' => [
-                'executableName' => 'two',
-                'givenCommand' => ['three', 'four'],
-                'expectedCommand' => ['two', 'three', 'four'],
+                'executableName' => 'one',
+                'givenRunArguments' => [
+                    ['two', 'three', 'four'],
+                    self::arbitraryDirPath(),
+                    ['ONE' => 'one', 'TWO' => 'two'],
+                    new TestOutputCallback(),
+                    100,
+                ],
+                'expectedFactoryArguments' => [
+                    ['one', 'two', 'three', 'four'],
+                    self::arbitraryDirPath(),
+                    ['ONE' => 'one', 'TWO' => 'two'],
+                ],
                 'callback' => new TestOutputCallback(),
                 'timeout' => 100,
             ],
@@ -134,7 +158,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
      */
     public function testRunCannotFindGivenExecutable(): void
     {
-        $previous = new IOException(new TestTranslatableExceptionMessage());
+        $previous = new IOException(self::createTranslatableExceptionMessage(__METHOD__));
         $this->executableFinder
             ->find(Argument::any())
             ->willThrow($previous);
@@ -143,5 +167,16 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->run([self::COMMAND_NAME]);
         }, $previous::class);
+    }
+
+    public function testIsTranslatable(): void
+    {
+        $message = 'test';
+        $sut = $this->createSut();
+
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        $translatable = $sut->getTranslatableMessage($message);
+
+        self::assertSame($message, $translatable->trans());
     }
 }

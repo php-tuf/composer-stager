@@ -4,8 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -13,10 +11,14 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers ::__construct
  * @covers ::doAssertIsFulfilled
- * @covers ::getFulfilledStatusMessage
+ * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
  */
-final class StagingDirIsWritableUnitTest extends PreconditionTestCase
+final class StagingDirIsWritableUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Staging directory is writable';
+    protected const DESCRIPTION = 'The staging directory must be writable before any operations can be performed.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The staging directory is writable.';
+
     private FilesystemInterface|ObjectProphecy $filesystem;
 
     protected function setUp(): void
@@ -31,19 +33,23 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
         assert($filesystem instanceof FilesystemInterface);
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new StagingDirIsWritable($environment, $filesystem, $translatableFactory);
     }
 
+    /**
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     */
     public function testFulfilled(): void
     {
         $this->filesystem
-            ->isWritable(PathHelper::stagingDirPath())
+            ->isWritable(self::stagingDirPath())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        $this->doTestFulfilled('The staging directory is writable.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */
@@ -51,7 +57,7 @@ final class StagingDirIsWritableUnitTest extends PreconditionTestCase
     {
         $message = 'The staging directory is not writable.';
         $this->filesystem
-            ->isWritable(PathHelper::stagingDirPath())
+            ->isWritable(self::stagingDirPath())
             ->willReturn(false);
 
         $this->doTestUnfulfilled($message);

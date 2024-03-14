@@ -5,17 +5,20 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions
  *
  * @covers ::__construct
+ * @covers ::getFulfilledStatusMessage
  */
-final class CleanerPreconditionsUnitTest extends PreconditionTestCase
+final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Cleaner preconditions';
+    protected const DESCRIPTION = 'The preconditions for removing the staging directory.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The preconditions for removing the staging directory are fulfilled.';
+
     private CommonPreconditionsInterface|ObjectProphecy $commonPreconditions;
     private StagingDirIsReadyInterface|ObjectProphecy $stagingDirIsReady;
 
@@ -38,7 +41,7 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
         $environment = $this->environment->reveal();
         $commonPreconditions = $this->commonPreconditions->reveal();
         $stagingDirIsReady = $this->stagingDirIsReady->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new CleanerPreconditions($environment, $commonPreconditions, $stagingDirIsReady, $translatableFactory);
     }
@@ -46,8 +49,8 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
     /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $this->commonPreconditions
@@ -67,8 +70,8 @@ final class CleanerPreconditionsUnitTest extends PreconditionTestCase
 
     public function testUnfulfilled(): void
     {
-        $activeDirPath = PathHelper::activeDirPath();
-        $stagingDirPath = PathHelper::stagingDirPath();
+        $activeDirPath = self::activeDirPath();
+        $stagingDirPath = self::stagingDirPath();
         $timeout = 42;
 
         $message = __METHOD__;

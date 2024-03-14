@@ -4,8 +4,6 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
-use PhpTuf\ComposerStager\Tests\TestUtils\PathHelper;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 
 /**
@@ -13,8 +11,12 @@ use Prophecy\Prophecy\ObjectProphecy;
  *
  * @covers ::__construct
  */
-final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
+final class ActiveDirIsWritableUnitTest extends PreconditionUnitTestCase
 {
+    protected const NAME = 'Active directory is writable';
+    protected const DESCRIPTION = 'The active directory must be writable before any operations can be performed.';
+    protected const FULFILLED_STATUS_MESSAGE = 'The active directory is writable.';
+
     private FilesystemInterface|ObjectProphecy $filesystem;
 
     protected function setUp(): void
@@ -28,7 +30,7 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
     {
         $environment = $this->environment->reveal();
         $filesystem = $this->filesystem->reveal();
-        $translatableFactory = new TestTranslatableFactory();
+        $translatableFactory = self::createTranslatableFactory();
 
         return new ActiveDirIsWritable($environment, $filesystem, $translatableFactory);
     }
@@ -40,11 +42,11 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
     public function testFulfilled(): void
     {
         $this->filesystem
-            ->isWritable(PathHelper::activeDirPath())
+            ->isWritable(self::activeDirPath())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE)
             ->willReturn(true);
 
-        $this->doTestFulfilled('The active directory is writable.');
+        $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
     /** @covers ::doAssertIsFulfilled */
@@ -52,7 +54,7 @@ final class ActiveDirIsWritableUnitTest extends PreconditionTestCase
     {
         $message = 'The active directory is not writable.';
         $this->filesystem
-            ->isWritable(PathHelper::activeDirPath())
+            ->isWritable(self::activeDirPath())
             ->willReturn(false);
 
         $this->doTestUnfulfilled($message);

@@ -6,7 +6,6 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
@@ -15,7 +14,6 @@ use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
  * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
  *
  * @covers ::__construct
- * @covers ::find
  */
 final class ExecutableFinderUnitTest extends TestCase
 {
@@ -32,11 +30,12 @@ final class ExecutableFinderUnitTest extends TestCase
     private function createSut(): ExecutableFinderInterface
     {
         $executableFinder = $this->symfonyExecutableFinder->reveal();
-        $translatorFactory = new TestTranslatableFactory();
+        $translatorFactory = self::createTranslatableFactory();
 
         return new ExecutableFinder($executableFinder, $translatorFactory);
     }
 
+    /** @covers ::find */
     public function testFind(): void
     {
         $command = 'command_name';
@@ -55,6 +54,7 @@ final class ExecutableFinderUnitTest extends TestCase
         self::assertSame($command, $actual, 'Returned correct path');
     }
 
+    /** @covers ::find */
     public function testFindNotFound(): void
     {
         $command = 'command_name';

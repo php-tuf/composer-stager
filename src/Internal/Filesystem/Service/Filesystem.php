@@ -13,8 +13,6 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Symfony\Component\Filesystem\Exception\ExceptionInterface as SymfonyExceptionInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
@@ -47,64 +45,14 @@ final class Filesystem implements FilesystemInterface
         $this->setTranslatableFactory($translatableFactory);
     }
 
-    public function copy(PathInterface $source, PathInterface $destination): void
+    public function fileExists(PathInterface $path): bool
     {
-        $sourceAbsolute = $source->absolute();
-        $destinationAbsolute = $destination->absolute();
-
-        if ($sourceAbsolute === $destinationAbsolute) {
-            throw new LogicException($this->t(
-                'The source and destination files cannot be the same at %path',
-                $this->p(['%path' => $sourceAbsolute]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        try {
-            $this->symfonyFilesystem->copy($sourceAbsolute, $destinationAbsolute, true);
-        } catch (SymfonyFileNotFoundException $e) {
-            throw new LogicException($this->t(
-                'The source file does not exist or is not a file at %path',
-                $this->p(['%path' => $sourceAbsolute]),
-                $this->d()->exceptions(),
-            ), 0, $e);
-        } catch (SymfonyIOException $e) {
-            throw new IOException($this->t(
-                'Failed to copy %source to %destination: %details',
-                $this->p([
-                    '%source' => $sourceAbsolute,
-                    '%destination' => $destinationAbsolute,
-                    '%details' => $e->getMessage(),
-                ]),
-                $this->d()->exceptions(),
-            ), 0, $e);
-        }
-    }
-
-    public function exists(PathInterface $path): bool
-    {
-        return $this->getFileType($path) !== self::PATH_DOES_NOT_EXIST;
+        return file_exists($path->absolute());
     }
 
     public function isDir(PathInterface $path): bool
     {
-        return $this->getFileType($path) === self::PATH_IS_DIRECTORY;
-    }
-
-    /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
-    public function isDirEmpty(PathInterface $path): bool
-    {
-        $scandir = @scandir($path->absolute());
-
-        if ($scandir === false) {
-            throw new IOException($this->t(
-                'The path does not exist or is not a directory at %path',
-                $this->p(['%path' => $path->absolute()]),
-                $this->d()->exceptions(),
-            ));
-        }
-
-        return $scandir === ['.', '..'];
+        return is_dir($path->absolute());
     }
 
     public function isFile(PathInterface $path): bool
@@ -132,22 +80,24 @@ final class Filesystem implements FilesystemInterface
 
     public function isWritable(PathInterface $path): bool
     {
-        return is_writable($path->absolute()); // @codeCoverageIgnore
+        return is_writable($path->absolute());
     }
 
     public function mkdir(PathInterface $path): void
     {
         $pathAbsolute = $path->absolute();
 
-        try {
-            $this->symfonyFilesystem->mkdir($pathAbsolute);
-        } catch (SymfonyIOException $e) {
-            throw new IOException($this->t(
-                'Failed to create directory at %path',
-                $this->p(['%path' => $pathAbsolute]),
-                $this->d()->exceptions(),
-            ), 0, $e);
+        @mkdir($pathAbsolute, 0777, true);
+
+        if (is_dir($pathAbsolute)) {
+            return;
         }
+
+        throw new IOException($this->t(
+            'Failed to create directory at %path',
+            $this->p(['%path' => $pathAbsolute]),
+            $this->d()->exceptions(),
+        ));
     }
 
     public function readLink(PathInterface $path): PathInterface
@@ -161,6 +111,7 @@ final class Filesystem implements FilesystemInterface
         }
 
         $target = readlink($path->absolute());
+
         assert(is_string($target));
 
         // Resolve the target relative to the link's parent directory, not the CWD of the PHP process at runtime.
@@ -169,7 +120,7 @@ final class Filesystem implements FilesystemInterface
         return $this->pathFactory->create($target, $basePath);
     }
 
-    public function remove(
+    public function rm(
         PathInterface $path,
         ?OutputCallbackInterface $callback = null,
         int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
@@ -187,10 +138,33 @@ final class Filesystem implements FilesystemInterface
         }
     }
 
-    /** @SuppressWarnings(PHPMD.ErrorControlOperator) */
+    public function touch(PathInterface $path, ?int $mtime = null, ?int $atime = null): void
+    {
+        $pathAbsolute = $path->absolute();
+
+        if ($this->isDir($path)) {
+            throw new LogicException($this->t(
+                'Cannot touch file--a directory already exists at %path',
+                $this->p(['%path' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+
+        /** @noinspection PotentialMalwareInspection */
+        $status = touch($pathAbsolute, $mtime, $atime);
+
+        if (!$status) {
+            throw new IOException($this->t(
+                'Failed to touch file at %path',
+                $this->p(['%path' => $pathAbsolute]),
+                $this->d()->exceptions(),
+            ));
+        }
+    }
+
     private function getFileType(PathInterface $path): string
     {
-        // A single call to `lstat()` should be cheaper than individual calls to `file_exists()`
+        // A single call to `lstat()` may be cheaper than individual calls to `file_exists()`
         // and `is_link()`, etc., not to mention being the only way to detect hard links at all.
         // Error reporting is suppressed because using `lstat()` on a non-link emits E_WARNING,
         // which may or may not throw an exception depending on error_reporting configuration.

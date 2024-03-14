@@ -9,14 +9,10 @@ use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\LocaleOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
-use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
-use PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions;
-use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslatableFactory;
-use PhpTuf\ComposerStager\Tests\Translation\Factory\TestTranslationParameters;
+use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
@@ -35,10 +31,10 @@ final class TranslatorUnitTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->domainOptions = new TestDomainOptions();
-        $this->localeOptions = new LocaleOptions();
-        $this->symfonyTranslatorProxy = new SymfonyTranslatorProxy();
-        $this->translatableFactory = new TestTranslatableFactory();
+        $this->domainOptions = self::createDomainOptions();
+        $this->localeOptions = self::createLocaleOptions();
+        $this->symfonyTranslatorProxy = self::createSymfonyTranslatorProxy();
+        $this->translatableFactory = self::createTranslatableFactory();
     }
 
     private function createSut(): Translator
@@ -76,28 +72,28 @@ final class TranslatorUnitTest extends TestCase
         return [
             'Empty values' => [
                 'message' => '',
-                'parameters' => new TestTranslationParameters(),
+                'parameters' => self::createTranslationParameters(),
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => '',
             ],
             'Simple values' => [
                 'message' => 'A string',
-                'parameters' => new TestTranslationParameters(),
+                'parameters' => self::createTranslationParameters(),
                 'domain' => 'a_domain',
                 'locale' => 'a_locale',
                 'expectedTranslation' => 'A string',
             ],
             'Simple substitution' => [
                 'message' => 'A %mood string',
-                'parameters' => new TestTranslationParameters(['%mood' => 'happy']),
+                'parameters' => self::createTranslationParameters(['%mood' => 'happy']),
                 'domain' => null,
                 'locale' => null,
                 'expectedTranslation' => 'A happy string',
             ],
             'Multiple substitutions' => [
                 'message' => 'A %mood %size string',
-                'parameters' => new TestTranslationParameters([
+                'parameters' => self::createTranslationParameters([
                     '%mood' => 'happy',
                     '%size' => 'little',
                 ]),
@@ -208,9 +204,10 @@ final class TranslatorUnitTest extends TestCase
     /** @covers ::create */
     public function testStaticFactory(): void
     {
-        assert($this->symfonyTranslatorProxy instanceof SymfonyTranslatorProxy);
-
-        $expected = new Translator(new DomainOptions(), new LocaleOptions(), $this->symfonyTranslatorProxy);
+        $domainOptions = self::createDomainOptions();
+        $localeOptions = self::createLocaleOptions();
+        $symfonyTranslatorProxy = self::createSymfonyTranslatorProxy();
+        $expected = new Translator($domainOptions, $localeOptions, $symfonyTranslatorProxy);
 
         $actual = Translator::create();
 
@@ -252,5 +249,38 @@ final class TranslatorUnitTest extends TestCase
             'Error' => [new Error('An Error')],
             'LogicException' => [new LogicException('A LogicException')],
         ];
+    }
+}
+
+final class TestDomainOptions implements DomainOptionsInterface
+{
+    public function __construct(
+        private readonly string $default = TranslationTestHelper::DOMAIN_DEFAULT,
+        private readonly string $exceptions = TranslationTestHelper::DOMAIN_EXCEPTIONS,
+    ) {
+    }
+
+    public function default(): string
+    {
+        return $this->default;
+    }
+
+    public function exceptions(): string
+    {
+        return $this->exceptions;
+    }
+}
+
+final class TestLocaleOptions implements LocaleOptionsInterface
+{
+    public const DEFAULT = 'en_US';
+
+    public function __construct(private readonly string $default = self::DEFAULT)
+    {
+    }
+
+    public function default(): string
+    {
+        return $this->default;
     }
 }
