@@ -8,6 +8,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\ActiveDirIsReadyInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\NoNestingOnWindowsInterface;
+use PhpTuf\ComposerStager\API\Precondition\Service\RsyncIsAvailableInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 
@@ -25,6 +27,8 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
         ActiveDirIsReadyInterface $activeDirIsReady,
         ComposerIsAvailableInterface $composerIsAvailable,
         HostSupportsRunningProcessesInterface $hostSupportsRunningProcesses,
+        NoNestingOnWindowsInterface $noNestingOnWindows,
+        RsyncIsAvailableInterface $rsyncIsAvailable,
     ) {
         parent::__construct(
             $environment,
@@ -33,6 +37,8 @@ final class CommonPreconditions extends AbstractPreconditionsTree implements Com
             $activeDirIsReady,
             $composerIsAvailable,
             $hostSupportsRunningProcesses,
+            $noNestingOnWindows,
+            $rsyncIsAvailable,
         );
     }
 
