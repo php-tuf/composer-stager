@@ -25,7 +25,7 @@ final class InternalLayerDependsOnNonProductionCodeSniff implements Sniff
             return;
         }
 
-        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr);
+        $namespace = $this->getNamespace($phpcsFile, $stackPtr);
 
         // Not a scope-level namespace, e.g., a class or interface.
         // (It's probably an anonymous function declaration.)
@@ -54,6 +54,16 @@ final class InternalLayerDependsOnNonProductionCodeSniff implements Sniff
         $srcDir = dirname(__DIR__, 4) . '/src/Internal';
 
         return str_starts_with($phpcsFile->getFilename(), $srcDir);
+    }
+
+    private function getNamespace(File $phpcsFile, int $scopePtr): string
+    {
+        $endOfNamespaceDeclaration = NamespaceHelper::getEndOfNamespaceDeclaration($phpcsFile, $scopePtr);
+
+        return NamespaceHelper::getDeclarationNameWithNamespace(
+            $phpcsFile->getTokens(),
+            $endOfNamespaceDeclaration - 1,
+        );
     }
 
     private function isScopeLevelNamespace(File $phpcsFile, int $stackPtr): bool
@@ -87,7 +97,7 @@ final class InternalLayerDependsOnNonProductionCodeSniff implements Sniff
         $namespaceTokenPtr = $phpcsFile->findNext(T_NAMESPACE, 0);
         $namespacePtr = $phpcsFile->findNext(T_STRING, $namespaceTokenPtr);
 
-        return NamespaceHelper::getNamespace($phpcsFile, $namespacePtr);
+        return $this->getNamespace($phpcsFile, $namespacePtr);
     }
 
     private function getClassName(File $phpcsFile): mixed
