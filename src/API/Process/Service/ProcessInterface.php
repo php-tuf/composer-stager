@@ -53,7 +53,7 @@ interface ProcessInterface
      *
      * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::run
      */
-    public function mustRun(?OutputCallbackInterface $callback = null): self;
+    public function mustRun(?OutputCallbackInterface $callback = null): void;
 
     /**
      * Runs the process.

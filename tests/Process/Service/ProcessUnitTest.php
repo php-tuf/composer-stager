@@ -128,14 +128,13 @@ final class ProcessUnitTest extends TestCase
         $actualEnv = $sut->getEnv();
         $actualOutput = $sut->getOutput();
         $actualErrorOutput = $sut->getErrorOutput();
-        $actualMustRunReturn = $sut->mustRun(...$givenRunArguments);
+        $sut->mustRun(...$givenRunArguments);
         $actualRunReturn = $sut->run(...$givenRunArguments);
         $sut->setTimeout(...$givenSetTimeoutArguments);
 
         self::assertSame($actualEnv, $envVars, 'Returned correct output.');
         self::assertSame($output, $actualOutput, 'Returned correct output.');
         self::assertSame($errorOutput, $actualErrorOutput, 'Returned correct error output.');
-        self::assertSame($sut, $actualMustRunReturn, 'Returned "self" from ::mustRun().');
         self::assertSame($expectedRunReturn, $actualRunReturn, 'Returned correct status code from ::run().');
     }
 

@@ -98,7 +98,7 @@ final class Process implements ProcessInterface
         }
     }
 
-    public function mustRun(?OutputCallbackInterface $callback = null): self
+    public function mustRun(?OutputCallbackInterface $callback = null): void
     {
         try {
             $callbackAdapter = new OutputCallbackAdapter($callback);
@@ -110,8 +110,6 @@ final class Process implements ProcessInterface
                 $this->d()->exceptions(),
             ), 0, $e);
         }
-
-        return $this;
     }
 
     public function run(?OutputCallbackInterface $callback = null): int
