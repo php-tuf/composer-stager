@@ -41,8 +41,7 @@ final class RsyncIsAvailableUnitTest extends PreconditionUnitTestCase
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
         $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
-            ->mustRun()
-            ->willReturn($this->process);
+            ->mustRun();
         $this->process
             ->getOutput()
             ->willReturn('');

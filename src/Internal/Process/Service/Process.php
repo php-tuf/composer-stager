@@ -98,7 +98,7 @@ final class Process implements ProcessInterface
         }
     }
 
-    public function mustRun(?OutputCallbackInterface $callback = null): self
+    public function mustRun(?OutputCallbackInterface $callback = null): void
     {
         try {
             $callbackAdapter = new OutputCallbackAdapter($callback);
@@ -110,8 +110,6 @@ final class Process implements ProcessInterface
                 $this->d()->exceptions(),
             ), 0, $e);
         }
-
-        return $this;
     }
 
     public function run(?OutputCallbackInterface $callback = null): int
@@ -129,15 +127,13 @@ final class Process implements ProcessInterface
         }
     }
 
-    public function setEnv(array $env): ProcessInterface
+    public function setEnv(array $env): void
     {
         $this->assertValidEnv($env);
         $this->symfonyProcess->setEnv($env);
-
-        return $this;
     }
 
-    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): self
+    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): void
     {
         try {
             $this->symfonyProcess->setTimeout($timeout);
@@ -148,8 +144,6 @@ final class Process implements ProcessInterface
                 $this->d()->exceptions(),
             ), 0, $e);
         }
-
-        return $this;
     }
 
     /**

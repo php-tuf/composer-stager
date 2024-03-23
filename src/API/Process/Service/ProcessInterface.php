@@ -53,7 +53,7 @@ interface ProcessInterface
      *
      * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::run
      */
-    public function mustRun(?OutputCallbackInterface $callback = null): self;
+    public function mustRun(?OutputCallbackInterface $callback = null): void;
 
     /**
      * Runs the process.
@@ -89,7 +89,7 @@ interface ProcessInterface
      *
      * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getEnv
      */
-    public function setEnv(array $env): self;
+    public function setEnv(array $env): void;
 
     /**
      * Sets the process timeout (max. runtime) in seconds.
@@ -101,5 +101,5 @@ interface ProcessInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
      *   If the given timeout is negative.
      */
-    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): self;
+    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): void;
 }
