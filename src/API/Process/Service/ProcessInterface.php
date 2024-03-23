@@ -101,5 +101,5 @@ interface ProcessInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
      *   If the given timeout is negative.
      */
-    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): self;
+    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): void;
 }

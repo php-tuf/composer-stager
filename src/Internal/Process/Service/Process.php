@@ -135,7 +135,7 @@ final class Process implements ProcessInterface
         $this->symfonyProcess->setEnv($env);
     }
 
-    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): self
+    public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): void
     {
         try {
             $this->symfonyProcess->setTimeout($timeout);
@@ -146,8 +146,6 @@ final class Process implements ProcessInterface
                 $this->d()->exceptions(),
             ), 0, $e);
         }
-
-        return $this;
     }
 
     /**

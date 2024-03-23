@@ -40,8 +40,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->mustRun(Argument::any())
             ->willReturn($this->process);
         $this->process
-            ->setTimeout(Argument::any())
-            ->willReturn($this->process);
+            ->setTimeout(Argument::any());
     }
 
     private function createSut($executableName = null): AbstractProcessRunner
@@ -100,8 +99,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $this->process
             ->setTimeout($timeout)
-            ->shouldBeCalledOnce()
-            ->willReturn($this->process);
+            ->shouldBeCalledOnce();
         $this->process
             ->mustRun($callback)
             ->shouldBeCalledOnce()
