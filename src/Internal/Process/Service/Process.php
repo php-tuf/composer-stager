@@ -129,12 +129,10 @@ final class Process implements ProcessInterface
         }
     }
 
-    public function setEnv(array $env): ProcessInterface
+    public function setEnv(array $env): void
     {
         $this->assertValidEnv($env);
         $this->symfonyProcess->setEnv($env);
-
-        return $this;
     }
 
     public function setTimeout(int $timeout = self::DEFAULT_TIMEOUT): self

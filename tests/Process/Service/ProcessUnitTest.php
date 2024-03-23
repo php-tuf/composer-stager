@@ -124,7 +124,7 @@ final class ProcessUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $sut = $this->createSut($givenConstructorArguments);
 
-        $actualSetEnvReturn = $sut->setEnv($envVars);
+        $sut->setEnv($envVars);
         $actualEnv = $sut->getEnv();
         $actualOutput = $sut->getOutput();
         $actualErrorOutput = $sut->getErrorOutput();
@@ -137,7 +137,6 @@ final class ProcessUnitTest extends TestCase
         self::assertSame($errorOutput, $actualErrorOutput, 'Returned correct error output.');
         self::assertSame($sut, $actualMustRunReturn, 'Returned "self" from ::mustRun().');
         self::assertSame($expectedRunReturn, $actualRunReturn, 'Returned correct status code from ::run().');
-        self::assertSame($sut, $actualSetEnvReturn, 'Returned "self" from ::setEnv().');
         self::assertSame($sut, $actualSetTimeoutReturn, 'Returned "self" from ::setTimeout().');
     }
 

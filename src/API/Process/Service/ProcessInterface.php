@@ -89,7 +89,7 @@ interface ProcessInterface
      *
      * @see \PhpTuf\ComposerStager\API\Process\Service\ProcessInterface::getEnv
      */
-    public function setEnv(array $env): self;
+    public function setEnv(array $env): void;
 
     /**
      * Sets the process timeout (max. runtime) in seconds.
