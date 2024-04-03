@@ -37,11 +37,9 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $this->processFactory = $this->prophesize(ProcessFactoryInterface::class);
         $this->process = $this->prophesize(ProcessInterface::class);
         $this->process
-            ->mustRun(Argument::any())
-            ->willReturn($this->process);
+            ->mustRun(Argument::any());
         $this->process
-            ->setTimeout(Argument::any())
-            ->willReturn($this->process);
+            ->setTimeout(Argument::any());
     }
 
     private function createSut($executableName = null): AbstractProcessRunner
@@ -100,12 +98,10 @@ final class AbstractProcessRunnerUnitTest extends TestCase
             ->shouldBeCalledOnce();
         $this->process
             ->setTimeout($timeout)
-            ->shouldBeCalledOnce()
-            ->willReturn($this->process);
+            ->shouldBeCalledOnce();
         $this->process
             ->mustRun($callback)
-            ->shouldBeCalledOnce()
-            ->willReturn($this->process);
+            ->shouldBeCalledOnce();
         $this->processFactory
             ->create(...$expectedFactoryArguments)
             ->shouldBeCalledOnce()

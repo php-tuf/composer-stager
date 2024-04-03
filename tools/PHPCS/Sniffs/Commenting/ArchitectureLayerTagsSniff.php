@@ -53,7 +53,7 @@ final class ArchitectureLayerTagsSniff implements Sniff
         $this->phpcsFile = $phpcsFile;
         $this->scopePtr = $stackPtr;
 
-        $rule = $this->getApplicableRule($phpcsFile, $stackPtr);
+        $rule = $this->getApplicableRule();
 
         // Return early if no rules apply.
         if ($rule === false) {
@@ -154,9 +154,9 @@ final class ArchitectureLayerTagsSniff implements Sniff
         return $docblockOpener['comment_closer'];
     }
 
-    private function getApplicableRule(File $phpcsFile, $stackPtr): array|false
+    private function getApplicableRule(): array|false
     {
-        $namespace = NamespaceHelper::getNamespace($phpcsFile, $stackPtr) . '\\';
+        $namespace = $this->getNamespace() . '\\';
 
         foreach (array_keys(self::RULES) as $rule) {
             if (str_starts_with($namespace, $rule)) {
@@ -165,6 +165,23 @@ final class ArchitectureLayerTagsSniff implements Sniff
         }
 
         return false;
+    }
+
+    /** @see \PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\SelfMemberReferenceSniff::getNamespaceOfScope() */
+    private function getNamespace(): string
+    {
+        $namespace = '\\';
+        $namespaceDeclaration = $this->phpcsFile->findPrevious(T_NAMESPACE, $this->scopePtr);
+
+        if ($namespaceDeclaration !== false) {
+            $endOfNamespaceDeclaration = $this->phpcsFile->findNext(
+                [T_SEMICOLON, T_OPEN_CURLY_BRACKET],
+                $namespaceDeclaration,
+            );
+            $namespace = NamespaceHelper::getNamespace($this->phpcsFile, $endOfNamespaceDeclaration - 1);
+        }
+
+        return $namespace;
     }
 
     // Gets an array of docblock tag data, keyed by tag pointers with values of their end pointers.
