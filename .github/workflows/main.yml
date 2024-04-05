@@ -41,20 +41,20 @@ jobs:
                 run: "composer static"
 
     tests:
-        name: "Test: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}"
+        name: "Tests: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && ' w/ coverage' || '' }}"
         runs-on: "${{ matrix.os }}-latest"
         strategy:
             fail-fast: false
             matrix:
                 os: [ ubuntu, macos, windows ]
-                php: [ "8.1", "8.2" ]
-                dependencies: [ lowest, highest ]
+                php: [ "8.1", "8.2", "8.3" ]
+                dependencies: [ low, high ]
         steps:
             -   name: "Install rsync"
                 uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
 
             -   name: "Set up PHP w/ Coverage"
-                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'highest' }}
+                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
@@ -62,7 +62,7 @@ jobs:
                     ini-values: zend.assertions=1
 
             -   name: "Set up PHP w/o Coverage"
-                if: ${{ !( matrix.os == 'ubuntu' && matrix.dependencies == 'highest' ) }}
+                if: ${{ !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
@@ -81,16 +81,16 @@ jobs:
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
                 with:
-                    dependency-versions: "${{ matrix.dependencies }}"
+                    dependency-versions: "${{ matrix.dependencies }}est"
 
             -   name: "Run core tests with coverage"
                 run: "composer test"
-                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'highest' }}
+                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
 
             # There's no reason to generate coverage data on multiple jobs--the result should be the same.
             -   name: "Run core tests without coverage"
                 run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only"
-                if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'highest' ) }}
+                if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
 
             -   name: "Run Windows tests"
                 run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
