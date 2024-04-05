@@ -41,34 +41,34 @@ jobs:
                 run: "composer static"
 
     tests:
-        name: "Test: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}"
+        name: "Tests: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && ' w/ coverage' || '' }}"
         runs-on: "${{ matrix.os }}-latest"
         strategy:
             fail-fast: false
             matrix:
                 os: [ ubuntu, macos, windows ]
-                php: [ "8.1", "8.2" ]
-                dependencies: [ lowest, highest ]
+                php: [ "8.1", "8.2", "8.3" ]
+                dependencies: [ low, high ]
         steps:
             -   name: "Install rsync"
                 uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
 
             -   name: "Set up PHP w/ Coverage"
-                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'highest' }}
+                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
                     extensions: gd
-                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+                    ini-values: zend.assertions=1
 
             -   name: "Set up PHP w/o Coverage"
-                if: ${{ !( matrix.os == 'ubuntu' && matrix.dependencies == 'highest' ) }}
+                if: ${{ !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
                     coverage: none
                     extensions: gd
-                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+                    ini-values: zend.assertions=1
 
             -   name: "Debugging info"
                 run: |
@@ -81,19 +81,19 @@ jobs:
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
                 with:
-                    dependency-versions: "${{ matrix.dependencies }}"
+                    dependency-versions: "${{ matrix.dependencies }}est"
 
             -   name: "Run core tests with coverage"
                 run: "composer test"
-                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'highest' }}
+                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
 
             # There's no reason to generate coverage data on multiple jobs--the result should be the same.
             -   name: "Run core tests without coverage"
-                run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only"
-                if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'highest' ) }}
+                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=windows_only"
+                if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
 
             -   name: "Run Windows tests"
-                run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
+                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=no_windows"
                 if: ${{ runner.os == 'Windows' }}
 
     performance:
@@ -122,6 +122,28 @@ jobs:
             -   name: "Run performance tests"
                 run: "composer phpbench -- --progress=plain --ansi"
 
+    compatability:
+        name: "Compatability"
+        runs-on: ubuntu-latest
+        steps:
+            -   name: "Install rsync"
+                uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
+
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "8.3"
+                    coverage: none
+
+            -   name: "Checkout code"
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
+
+            -   name: "Run compatability tests"
+                run: "composer compatability"
+
     mutation:
         name: "Mutation"
         runs-on: ubuntu-latest
@@ -131,7 +153,7 @@ jobs:
                 with:
                     php-version: "8.2"
                     extensions: gd
-                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+                    ini-values: zend.assertions=1
 
             -   name: "Checkout code"
                 uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout

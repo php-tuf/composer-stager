@@ -16,7 +16,8 @@
 >
     <testsuites>
         <testsuite name="all">
-            <directory>tests</directory>
+            <directory suffix="UnitTest.php">tests</directory>
+            <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
         <testsuite name="unit">
             <directory suffix="UnitTest.php">tests</directory>
@@ -45,8 +46,6 @@
     </logging>
 
     <php>
-        <ini name="assert.active" value="1"/>
-        <ini name="assert.exception" value="1"/>
         <ini name="zend.assertions" value="1"/>
     </php>
 </phpunit>
