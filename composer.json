@@ -91,7 +91,7 @@
             "rm -r var/*/* &> /dev/null || true",
             "git checkout -- var"
         ],
-        "compatability": "phpunit -- tests/Compatability",
+        "compatability": "phpunit --testsuite=compatability",
         "dox": "phpunit --testdox --color=always --exclude-group=windows_only",
         "fast": "phpunit --exclude-group=slow,windows_only",
         "functional": "phpunit --testsuite=functional --exclude-group=windows_only",

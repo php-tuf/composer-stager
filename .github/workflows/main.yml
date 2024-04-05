@@ -89,11 +89,11 @@ jobs:
 
             # There's no reason to generate coverage data on multiple jobs--the result should be the same.
             -   name: "Run core tests without coverage"
-                run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only"
+                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=windows_only"
                 if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
 
             -   name: "Run Windows tests"
-                run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows"
+                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=no_windows"
                 if: ${{ runner.os == 'Windows' }}
 
     performance:
@@ -121,6 +121,28 @@ jobs:
 
             -   name: "Run performance tests"
                 run: "composer phpbench -- --progress=plain --ansi"
+
+    compatability:
+        name: "Compatability"
+        runs-on: ubuntu-latest
+        steps:
+            -   name: "Install rsync"
+                uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
+
+            -   name: "Set up PHP"
+                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
+                with:
+                    php-version: "8.3"
+                    coverage: none
+
+            -   name: "Checkout code"
+                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Install dependencies"
+                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
+
+            -   name: "Run compatability tests"
+                run: "composer compatability"
 
     mutation:
         name: "Mutation"
