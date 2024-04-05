@@ -233,11 +233,11 @@ final class TranslatorUnitTest extends TestCase
         $expectedMessage = sprintf('Translation error: %s', $exception->getMessage());
 
         // Disable assertions so production error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 0);
+        ini_set('zend.assertions', 0);
         self::assertSame($expectedMessage, $sut->trans($message), 'Returned exception message on failure.');
 
         // Re-enable assertions so development error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 1);
+        ini_set('zend.assertions', 1);
         self::assertTranslatableException(static function () use ($sut, $message): void {
             $sut->trans($message);
         }, AssertionError::class, $expectedMessage);

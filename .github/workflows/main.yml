@@ -59,7 +59,7 @@ jobs:
                 with:
                     php-version: "${{ matrix.php }}"
                     extensions: gd
-                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+                    ini-values: zend.assertions=1
 
             -   name: "Set up PHP w/o Coverage"
                 if: ${{ !( matrix.os == 'ubuntu' && matrix.dependencies == 'highest' ) }}
@@ -68,7 +68,7 @@ jobs:
                     php-version: "${{ matrix.php }}"
                     coverage: none
                     extensions: gd
-                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+                    ini-values: zend.assertions=1
 
             -   name: "Debugging info"
                 run: |
@@ -131,7 +131,7 @@ jobs:
                 with:
                     php-version: "8.2"
                     extensions: gd
-                    ini-values: assert.active=1, assert.exception=1, zend.assertions=1
+                    ini-values: zend.assertions=1
 
             -   name: "Checkout code"
                 uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout

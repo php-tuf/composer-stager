@@ -45,8 +45,6 @@
     </logging>
 
     <php>
-        <ini name="assert.active" value="1"/>
-        <ini name="assert.exception" value="1"/>
         <ini name="zend.assertions" value="1"/>
     </php>
 </phpunit>

@@ -76,13 +76,13 @@ final class TranslationParametersUnitTest extends TestCase
     public function testInvalidPlaceholders(array $given, array $expected, mixed $invalidPlaceholder): void
     {
         // Disable assertions so production error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 0);
+        ini_set('zend.assertions', 0);
         $sut = new TranslationParameters($given);
 
         self::assertSame($expected, $sut->getAll(), 'Returned sanitized array on failure.');
 
         // Re-enable assertions so development error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 1);
+        ini_set('zend.assertions', 1);
 
         self::assertTranslatableException(static function () use ($given): void {
             new TranslationParameters($given);
@@ -167,13 +167,13 @@ final class TranslationParametersUnitTest extends TestCase
     public function testInvalidValues(array $given, array $expected, string $invalidType): void
     {
         // Disable assertions so production error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 0);
+        ini_set('zend.assertions', 0);
         $sut = new TranslationParameters($given);
 
         self::assertSame($expected, $sut->getAll(), 'Returned sanitized array on failure.');
 
         // Re-enable assertions so development error-handling can be tested.
-        assert_options(ASSERT_ACTIVE, 1);
+        ini_set('zend.assertions', 1);
 
         self::assertTranslatableException(static function () use ($given): void {
             new TranslationParameters($given);
