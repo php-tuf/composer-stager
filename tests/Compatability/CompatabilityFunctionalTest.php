@@ -22,8 +22,7 @@ final class CompatabilityFunctionalTest extends TestCase
         '10.1.0',
         '10.1.2',
         // Next minor dev.
-        // @todo Drupal 11.x now require PHP 8.3. Update the test setup for support.
-        //'11.x-dev',
+        '11.x-dev',
     ];
 
     public static function setUpBeforeClass(): void
