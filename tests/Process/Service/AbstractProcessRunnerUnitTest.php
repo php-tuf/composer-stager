@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -134,7 +134,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                     ['two', 'three', 'four'],
                     self::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
-                    new TestOutputCallback(),
+                    new OutputCallback(),
                     100,
                 ],
                 'expectedFactoryArguments' => [
@@ -142,7 +142,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
                     self::arbitraryDirPath(),
                     ['ONE' => 'one', 'TWO' => 'two'],
                 ],
-                'callback' => new TestOutputCallback(),
+                'callback' => new OutputCallback(),
                 'timeout' => 100,
             ],
         ];

@@ -4,8 +4,8 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 
 /** @coversNothing */
@@ -36,7 +36,7 @@ final class ProcessFunctionalTest extends TestCase
     {
         $buffer = __METHOD__;
         $sut = $this->createSut(['echo', $buffer]);
-        $outputCallback = new TestOutputCallback();
+        $outputCallback = new OutputCallback();
 
         $sut->run($outputCallback);
         $sut->mustRun($outputCallback);
@@ -50,7 +50,7 @@ final class ProcessFunctionalTest extends TestCase
     {
         $invalidCommand = 'invalid_command';
         $sut = $this->createSut([$invalidCommand]);
-        $outputCallback = new TestOutputCallback();
+        $outputCallback = new OutputCallback();
 
         $sut->run($outputCallback);
 

@@ -14,8 +14,8 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -123,7 +123,7 @@ final class FileSyncerUnitTest extends TestCase
             'Simple arguments' => [
                 'source' => '/var/www/source',
                 'destination' => '/var/www/destination',
-                'optionalArguments' => [self::createPathList('one.txt'), new TestOutputCallback(), 42],
+                'optionalArguments' => [self::createPathList('one.txt'), new OutputCallback(), 42],
                 'expectedCommand' => [
                     '--archive',
                     '--delete-after',
@@ -132,7 +132,7 @@ final class FileSyncerUnitTest extends TestCase
                     'var/www/source/',
                     'var/www/destination',
                 ],
-                'expectedCallback' => new TestOutputCallback(),
+                'expectedCallback' => new OutputCallback(),
                 'expectedTimeout' => 42,
             ],
             'Siblings: no exclusions given' => [
@@ -154,7 +154,7 @@ final class FileSyncerUnitTest extends TestCase
             'Siblings: simple exclusions given' => [
                 'source' => '/var/www/source/two',
                 'destination' => '/var/www/destination/two',
-                'optionalArguments' => [self::createPathList('three.txt', 'four.txt'), new TestOutputCallback()],
+                'optionalArguments' => [self::createPathList('three.txt', 'four.txt'), new OutputCallback()],
                 'expectedCommand' => [
                     '--archive',
                     '--delete-after',
@@ -164,7 +164,7 @@ final class FileSyncerUnitTest extends TestCase
                     'var/www/source/two/',
                     'var/www/destination/two',
                 ],
-                'expectedCallback' => new TestOutputCallback(),
+                'expectedCallback' => new OutputCallback(),
                 'expectedTimeout' => ProcessInterface::DEFAULT_TIMEOUT,
             ],
             'Siblings: duplicate exclusions given' => [
