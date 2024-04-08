@@ -12,6 +12,9 @@ updates:
             all:
                 patterns:
                     - "*"
+        ignore:
+            -   dependency-name: "phpunit/phpunit"
+                versions: [ "10.x", "11.x" ]
 
     -   package-ecosystem: "github-actions"
         directory: "/"
