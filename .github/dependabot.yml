@@ -15,6 +15,10 @@ updates:
         ignore:
             -   dependency-name: "phpunit/phpunit"
                 versions: [ "10.x", "11.x" ]
+            -   dependency-name: "symfony/filesystem"
+                versions: [ "6.x" ]
+            -   dependency-name: "symfony/process"
+                versions: [ "6.x" ]
 
     -   package-ecosystem: "github-actions"
         directory: "/"
