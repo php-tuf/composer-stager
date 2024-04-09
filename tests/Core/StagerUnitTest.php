@@ -13,8 +13,8 @@ use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -107,7 +107,7 @@ final class StagerUnitTest extends TestCase
                     self::INERT_COMMAND,
                     '--quiet',
                 ],
-                'callback' => new TestOutputCallback(),
+                'callback' => new OutputCallback(),
                 'timeout' => 10,
             ],
         ];

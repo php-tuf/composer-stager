@@ -8,8 +8,8 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 use Prophecy\Argument;
@@ -160,7 +160,7 @@ final class FilesystemUnitTest extends TestCase
             ],
             'Simple values' => [
                 'path' => 'three/four',
-                'callback' => new TestOutputCallback(),
+                'callback' => new OutputCallback(),
                 'timeout' => 10,
             ],
         ];
