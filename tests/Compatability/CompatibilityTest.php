@@ -7,7 +7,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /** @coversNothing */
-final class CompatabilityTest extends TestCase
+final class CompatibilityTest extends TestCase
 {
     // @see https://github.com/php-tuf/composer-stager/wiki/Library-compatibility-policy#drupal
     private const SUPPORTED_DRUPAL_VERSIONS = [
