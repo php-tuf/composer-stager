@@ -106,10 +106,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     /** @throws \PhpTuf\ComposerStager\API\Exception\ExceptionInterface */
     private function getComposerOutput(): string
     {
-        $this->composerProcessRunner->run([
-            'list',
-            '--format=json',
-        ], null, [], $this->outputCallback);
+        $this->composerProcessRunner->run(['--format=json'], null, [], $this->outputCallback);
 
         $output = $this->outputCallback->getOutput();
         $this->outputCallback->clearOutput();

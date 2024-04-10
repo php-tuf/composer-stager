@@ -80,10 +80,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
             ->find('composer')
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->composerProcessRunner
-            ->run([
-                'list',
-                '--format=json',
-            ], Argument::cetera())
+            ->run(['--format=json'], Argument::cetera())
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
 
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
