@@ -5,24 +5,26 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
-use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
+use ReflectionProperty;
 use Symfony\Component\DependencyInjection\Definition;
 
-/** @coversNothing */
+/**
+ * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable
+ *
+ * @covers ::__construct
+ */
 final class ComposerIsAvailableFunctionalTest extends TestCase
 {
-    private string $executableFinderClass;
-
     protected function setUp(): void
     {
         self::createTestEnvironment();
         self::mkdir(self::stagingDirRelative());
-
-        $this->executableFinderClass = ExecutableFinder::class;
     }
 
     protected function tearDown(): void
@@ -30,12 +32,16 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         self::removeTestEnvironment();
     }
 
-    private function createSut(): ComposerIsAvailable
+    private function createSut(?string $executableFinderClass = null): ComposerIsAvailable
     {
+        if ($executableFinderClass === null) {
+            return ContainerTestHelper::get(ComposerIsAvailable::class);
+        }
+
         $container = ContainerTestHelper::container();
 
         // Override the ExecutableFinder implementation.
-        $executableFinder = new Definition($this->executableFinderClass);
+        $executableFinder = new Definition($executableFinderClass);
         $container->setDefinition(ExecutableFinderInterface::class, $executableFinder);
 
         // Compile the container.
@@ -45,51 +51,101 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         return $container->get(ComposerIsAvailable::class);
     }
 
-    // The happy path, which would usually have a test method here, is implicitly tested in the end-to-end test.
-    // @see \PhpTuf\ComposerStager\Tests\EndToEnd\EndToEndFunctionalTestCase
-
-    public function testComposerNotFound(): void
+    /**
+     * @covers ::assertExecutableExists
+     * @covers ::assertIsActuallyComposer
+     * @covers ::doAssertIsFulfilled
+     * @covers ::getFulfilledStatusMessage
+     * @covers ::isValidExecutable
+     */
+    public function testFulfilled(): void
     {
-        $this->executableFinderClass = ComposerNotFoundExecutableFinder::class;
         $sut = $this->createSut();
 
-        $message = ComposerNotFoundExecutableFinder::EXCEPTION_MESSAGE;
+        $isFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
+        $isStillFulfilled = $sut->isFulfilled(self::activeDirPath(), self::stagingDirPath());
+
+        self::assertTrue($isFulfilled, 'Found Composer.');
+        self::assertTrue($isStillFulfilled, 'Achieved idempotency');
+    }
+
+    /** @covers ::assertExecutableExists */
+    public function testComposerNotFound(): void
+    {
+        $sut = $this->createSut(ComposerNotFoundExecutableFinder::class);
+
+        $message = 'Cannot find Composer.';
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $message, null, LogicException::class);
     }
 
-    public function testInvalidComposerFound(): void
+    /**
+     * @covers ::assertIsActuallyComposer
+     * @covers ::getComposerOutput
+     * @covers ::isValidExecutable
+     *
+     * @dataProvider providerInvalidComposerFound
+     */
+    public function testInvalidComposerFound(string $output): void
     {
-        $this->executableFinderClass = InvalidComposerFoundExecutableFinder::class;
-        $sut = $this->createSut();
+        $sut = $this->createSut(InvalidComposerFoundExecutableFinder::class);
+
+        // Dynamically set invalid executable output.
+        $reflection = new ReflectionProperty($sut, 'executableFinder');
+        /** @var \PhpTuf\ComposerStager\Tests\Precondition\Service\InvalidComposerFoundExecutableFinder $executableFinder */
+        $executableFinder = $reflection->getValue($sut);
+        $executableFinder->output = $output;
 
         $message = InvalidComposerFoundExecutableFinder::getExceptionMessage();
         self::assertTranslatableException(static function () use ($sut): void {
             $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
         }, PreconditionException::class, $message);
     }
+
+    public function providerInvalidComposerFound(): array
+    {
+        return [
+            'No output' => [''],
+            'Non-JSON' => ['invalid'],
+            'Empty JSON/missing application name' => ['{}'],
+            'Wrong application name' => ['{"application":{"name":"Invalid"}}'],
+        ];
+    }
 }
 
 final class ComposerNotFoundExecutableFinder implements ExecutableFinderInterface
 {
-    public const EXCEPTION_MESSAGE = 'Cannot find Composer.';
-
     public function find(string $name): string
     {
-        throw new LogicException(TranslationTestHelper::createTranslatableMessage(self::EXCEPTION_MESSAGE));
+        throw new LogicException(TranslationTestHelper::createTranslatableMessage(''));
     }
 }
 
 final class InvalidComposerFoundExecutableFinder implements ExecutableFinderInterface
 {
+    public string $output = '';
+
     public function find(string $name): string
     {
-        return __FILE__;
+        $executable = self::executablePath();
+
+        file_put_contents($executable, <<<END
+            #!/usr/bin/env bash
+            echo '{$this->output}'
+            END);
+        FilesystemTestHelper::chmod($executable, 0777);
+
+        return $executable;
     }
 
     public static function getExceptionMessage(): string
     {
-        return sprintf('The Composer executable at %s is invalid.', __FILE__);
+        return sprintf('The Composer executable at %s is invalid.', self::executablePath());
+    }
+
+    private static function executablePath(): string
+    {
+        return PathTestHelper::makeAbsolute('composer');
     }
 }

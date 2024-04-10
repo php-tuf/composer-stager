@@ -11,7 +11,8 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\ComposerIsAvailableInterface;
-use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
+use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
+use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
@@ -26,9 +27,10 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     private string $executablePath;
 
     public function __construct(
+        private readonly ComposerProcessRunnerInterface $composerProcessRunner,
         EnvironmentInterface $environment,
         private readonly ExecutableFinderInterface $executableFinder,
-        private readonly ProcessFactoryInterface $processFactory,
+        private readonly OutputCallbackInterface $outputCallback,
         TranslatableFactoryInterface $translatableFactory,
     ) {
         parent::__construct($environment, $translatableFactory);
@@ -76,9 +78,7 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
     /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
     private function assertIsActuallyComposer(): void
     {
-        $process = $this->getProcess();
-
-        if (!$this->isValidExecutable($process)) {
+        if (!$this->isValidExecutable()) {
             throw new PreconditionException($this, $this->t(
                 'The Composer executable at %name is invalid.',
                 $this->p(['%name' => $this->executablePath]),
@@ -87,36 +87,12 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\API\Exception\PreconditionException */
-    private function getProcess(): ProcessInterface
+    private function isValidExecutable(): bool
     {
         try {
-            return $this->processFactory->create([
-                $this->executablePath,
-                'list',
-                '--format=json',
-            ]);
-        } catch (LogicException $e) {
-            throw new PreconditionException($this, $this->t(
-                'Cannot check for Composer due to a host configuration problem: %details',
-                $this->p(['%details' => $e->getMessage()]),
-                $this->d()->exceptions(),
-            ), 0, $e);
-        }
-    }
-
-    private function isValidExecutable(ProcessInterface $process): bool
-    {
-        try {
-            $process->mustRun();
-            $output = $process->getOutput();
-        } catch (ExceptionInterface) {
-            return false;
-        }
-
-        try {
+            $output = $this->getComposerOutput();
             $data = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
+        } catch (ExceptionInterface|JsonException) {
             return false;
         }
 
@@ -125,5 +101,16 @@ final class ComposerIsAvailable extends AbstractPrecondition implements Composer
         }
 
         return $data['application']['name'] === 'Composer';
+    }
+
+    /** @throws \PhpTuf\ComposerStager\API\Exception\ExceptionInterface */
+    private function getComposerOutput(): string
+    {
+        $this->composerProcessRunner->run(['--format=json'], null, [], $this->outputCallback);
+
+        $output = $this->outputCallback->getOutput();
+        $this->outputCallback->clearOutput();
+
+        return implode('', $output);
     }
 }
