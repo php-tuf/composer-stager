@@ -4,7 +4,7 @@ name: Main
 on:
     push:
         branches: [ main, develop, wip ]
-        # As of September 19, 2023, these branches-ignore patterns don't work due to
+        # As of September 19, 2023, these paths-ignore patterns don't work due to
         # a bug in GitHub Actions See https://github.com/actions/runner/issues/2324
         # Ditto below.
         paths-ignore:
