@@ -368,6 +368,12 @@ final class ProcessUnitTest extends TestCase
                 ],
                 'invalidName' => '42',
             ],
+            // This error message probably isn't the most helpful. Let's
+            // at least document the behavior with this test case.
+            'Value with no name' => [
+                'values' => ['value'],
+                'invalidValue' => '0',
+            ],
         ];
     }
 
