@@ -7,7 +7,7 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy */
-final class SymfonyTranslatorProxyTest extends TestCase
+final class SymfonyTranslatorProxyUnitTest extends TestCase
 {
     /**
      * @covers ::getLocale

@@ -26,8 +26,12 @@ final class ExecutableFinder implements ExecutableFinderInterface
 
     public function find(string $name): string
     {
-        // Look for executable.
+        // Look for PHAR files--a common case with Composer, for example.
+        // Note: As of 04/09/2024, this doesn't actually work as documented.
+        // @see https://github.com/symfony/symfony/pull/52679
         $this->symfonyExecutableFinder->addSuffix('.phar');
+
+        // Look for executable.
         $path = $this->symfonyExecutableFinder->find($name);
 
         // Throw exception if not found.

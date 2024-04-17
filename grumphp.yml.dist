@@ -25,6 +25,7 @@ grumphp:
         phpstan:
             use_grumphp_paths: false
         phpunit:
+            testsuite: all
             exclude_group:
                 - windows_only
         rector: ~

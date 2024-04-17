@@ -10,8 +10,8 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CleanerPreconditionsInterface
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
+use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use PhpTuf\ComposerStager\Tests\TestDoubles\Process\Service\TestOutputCallback;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -84,7 +84,7 @@ final class CleanerUnitTest extends TestCase
             ],
             'Simple values' => [
                 'path' => 'three/four',
-                'callback' => new TestOutputCallback(),
+                'callback' => new OutputCallback(),
                 'timeout' => 10,
             ],
         ];

@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\API\Path\Value;
 
 /**
- * Handles a list of path strings.
+ * Defines a list of path strings.
  *
  * @package Path
  *

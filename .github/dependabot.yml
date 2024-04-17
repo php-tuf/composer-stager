@@ -13,9 +13,12 @@ updates:
                 patterns:
                     - "*"
         ignore:
-            # @see https://github.com/slevomat/coding-standard/issues/1632 Irresolvable conflict between DocCommentSpacing rules since 8.14.0
-            -   dependency-name: "slevomat/coding-standard"
-                versions: [ "8.14.0", "8.14.1" ]
+            -   dependency-name: "phpunit/phpunit"
+                versions: [ "10.x", "11.x" ]
+            -   dependency-name: "symfony/filesystem"
+                versions: [ "6.x" ]
+            -   dependency-name: "symfony/process"
+                versions: [ "6.x" ]
 
     -   package-ecosystem: "github-actions"
         directory: "/"
