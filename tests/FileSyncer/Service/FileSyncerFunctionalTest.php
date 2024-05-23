@@ -153,6 +153,32 @@ final class FileSyncerFunctionalTest extends TestCase
         ];
     }
 
+    /**
+     * @covers ::buildCommand
+     *
+     * @noinspection PotentialMalwareInspection
+     */
+    public function testChecksum(): void
+    {
+        $filename = 'file.txt';
+        $fileInSourceAbsolute = self::makeAbsolute($filename, self::sourceDirAbsolute());
+        $fileInDestinationAbsolute = self::makeAbsolute($filename, self::destinationDirAbsolute());
+        file_put_contents($fileInSourceAbsolute, 'test-1');
+        file_put_contents($fileInDestinationAbsolute, 'test-2');
+        $time = time();
+        touch($fileInSourceAbsolute, $time, $time);
+        touch($fileInDestinationAbsolute, $time, $time);
+        $sut = $this->createSut();
+
+        $sut->sync(self::sourceDirPath(), self::destinationDirPath());
+
+        self::assertFileEquals(
+            $fileInSourceAbsolute,
+            $fileInDestinationAbsolute,
+            'Rsync detected the file contents difference and overwrote the destination.',
+        );
+    }
+
     /** @covers ::buildCommand */
     public function testSyncPermissions(): void
     {
