@@ -112,6 +112,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     'var/www/source/',
@@ -126,6 +127,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [self::createPathList('one.txt'), new OutputCallback(), 42],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     '--exclude=/one.txt',
@@ -141,6 +143,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     'var/www/source/one/',
@@ -157,6 +160,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [self::createPathList('three.txt', 'four.txt'), new OutputCallback()],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     '--exclude=/three.txt',
@@ -175,6 +179,7 @@ final class FileSyncerUnitTest extends TestCase
                 ],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     '--exclude=/four/five',
@@ -199,6 +204,7 @@ final class FileSyncerUnitTest extends TestCase
                 ],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     '--exclude=/three/four',
@@ -215,6 +221,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     'var/www/source/',
@@ -229,6 +236,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.
@@ -245,6 +253,7 @@ final class FileSyncerUnitTest extends TestCase
                 'optionalArguments' => [],
                 'expectedCommand' => [
                     '--archive',
+                    '--checksum',
                     '--delete-after',
                     '--verbose',
                     // "Source inside destination" is the only case where the source directory needs to be excluded.

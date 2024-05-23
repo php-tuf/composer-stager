@@ -159,6 +159,8 @@ final class FileSyncer implements FileSyncerInterface
             // Archive mode--the same as -rlptgoD (no -H), or --recursive,
             // --links, --perms, --times, --group, --owner, --devices, --specials.
             '--archive',
+            // Skip files based on contents, not modification time and filesize.
+            '--checksum',
             // Delete extraneous files from destination directories. Note: Using
             // --delete-after rather than alternatives prevents "file has
             // vanished" errors when syncing a directory with its own ancestor.
