@@ -20,6 +20,8 @@ on:
         # @see https://crontab.cronhub.io/
         -   cron: "0 0 * * 1"
 
+    workflow_dispatch:
+
 jobs:
     static_analysis:
         name: "Static Analysis"

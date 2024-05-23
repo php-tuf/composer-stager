@@ -7,6 +7,8 @@ on:
         # @see https://crontab.cronhub.io/
         -   cron: "0 0 * * *"
 
+    workflow_dispatch:
+
 jobs:
     composer_audit:
         name: "Composer Audit"
