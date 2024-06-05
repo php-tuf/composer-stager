@@ -36,6 +36,9 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
+        // Exclude temporary Symfony Process fork.
+        __DIR__ . '/src/Internal/SymfonyProcess',
+
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
         EncapsedStringsToSprintfRector::class => [__DIR__],
         FinalizeClassesWithoutChildrenRector::class => [__DIR__], // This is duplicative of PHPCS sniff SlevomatCodingStandard.Classes.RequireAbstractOrFinal.
