@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use Symfony\Component\Process\Process as SymfonyProcess;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\FixedSymfonyProcess as SymfonyProcess;
 
 /**
  * Creates Symfony Process objects.
