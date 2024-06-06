@@ -13,6 +13,7 @@ use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapterInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\FixedSymfonyProcess as SymfonyProcess;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
@@ -22,7 +23,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Exception\RuntimeException as SymfonyRuntimeException;
-use Symfony\Component\Process\Process as SymfonyProcess;
 use Throwable;
 
 /**

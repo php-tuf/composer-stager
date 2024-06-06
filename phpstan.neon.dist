@@ -16,8 +16,10 @@ parameters:
         - config/services.yml
         - docs/services.yml
         - src
+    excludePaths:
+        # Exclude temporary Symfony Process fork.
+        - src/Internal/SymfonyProcess
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
     preconditionSystemHash: 8dfddc6171adcfe004a0bfaea2545f8e
     translationSystemHash: dec82389af17442fa61cc1fcc6f89c3e
     gitattributesExportInclude:
