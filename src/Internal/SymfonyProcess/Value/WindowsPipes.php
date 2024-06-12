@@ -24,6 +24,8 @@ use Symfony\Component\Process\Process;
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
+ *
+ * @infection-ignore-all
  */
 class WindowsPipes extends AbstractPipes
 {

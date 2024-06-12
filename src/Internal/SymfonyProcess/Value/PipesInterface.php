@@ -18,6 +18,8 @@ namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value;
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
+ *
+ * @infection-ignore-all
  */
 interface PipesInterface
 {

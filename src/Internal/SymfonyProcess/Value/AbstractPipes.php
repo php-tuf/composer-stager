@@ -18,6 +18,8 @@ use Symfony\Component\Process\Exception\InvalidArgumentException;
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
+ *
+ * @infection-ignore-all
  */
 abstract class AbstractPipes implements PipesInterface
 {

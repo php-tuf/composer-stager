@@ -32,6 +32,8 @@ use Symfony\Component\Process\ProcessUtils;
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @implements \IteratorAggregate<string, string>
+ *
+ * @infection-ignore-all
  */
 class FixedSymfonyProcess implements \IteratorAggregate
 {
