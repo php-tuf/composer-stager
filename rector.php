@@ -8,10 +8,8 @@ use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
-use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
-use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 
@@ -37,12 +35,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         // Exclude temporary Symfony Process fork.
-        __DIR__ . '/src/Internal/SymfonyProcess',
+        0 => __DIR__ . '/src/Internal/SymfonyProcess',
 
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
         EncapsedStringsToSprintfRector::class => [__DIR__],
-        FinalizeClassesWithoutChildrenRector::class => [__DIR__], // This is duplicative of PHPCS sniff SlevomatCodingStandard.Classes.RequireAbstractOrFinal.
-        FinalizePublicClassConstantRector::class => [__DIR__ . '/tests/TestDoubles/Precondition/Service/AbstractTestPrecondition.php'],
         LocallyCalledStaticMethodToNonStaticRector::class => [__DIR__],
         MixedTypeRector::class => [__DIR__],
         NewlineAfterStatementRector::class => [__DIR__],
