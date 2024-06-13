@@ -1,28 +1,24 @@
 <?php
 
 /*
- * This file is a temporary fork of part of the Symfony package to work around a regression.
- * @see https://github.com/symfony/symfony/pull/57317
- *
- * @todo Remove this fork as soon as soon as a fix to the above issue is released.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * For the full copyright and license information, see
- * https://github.com/symfony/symfony/blob/6.4/LICENSE
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value;
 
-use Symfony\Component\Process\Exception\InvalidArgumentException;
-use Symfony\Component\Process\Exception\LogicException;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Exception\ProcessSignaledException;
-use Symfony\Component\Process\Exception\ProcessTimedOutException;
-use Symfony\Component\Process\Exception\RuntimeException;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\UnixPipes;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\WindowsPipes;
-use Symfony\Component\Process\ProcessUtils;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\InvalidArgumentException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\LogicException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\ProcessFailedException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\ProcessSignaledException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\ProcessTimedOutException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Pipes\UnixPipes;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Pipes\WindowsPipes;
 
 /**
  * Process is a thin wrapper around proc_* functions to easily
@@ -32,10 +28,8 @@ use Symfony\Component\Process\ProcessUtils;
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @implements \IteratorAggregate<string, string>
- *
- * @infection-ignore-all
  */
-class FixedSymfonyProcess implements \IteratorAggregate
+class Process implements \IteratorAggregate
 {
     public const ERR = 'err';
     public const OUT = 'out';
@@ -95,7 +89,7 @@ class FixedSymfonyProcess implements \IteratorAggregate
      *
      * User-defined errors must use exit codes in the 64-113 range.
      */
-    public static array $exitCodes = [
+    public static $exitCodes = [
         0 => 'OK',
         1 => 'General error',
         2 => 'Misuse of shell builtins',
@@ -206,7 +200,10 @@ class FixedSymfonyProcess implements \IteratorAggregate
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
     }
 
-    public function __wakeup(): void
+    /**
+     * @return void
+     */
+    public function __wakeup()
     {
         throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }
@@ -291,11 +288,13 @@ class FixedSymfonyProcess implements \IteratorAggregate
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      *
+     * @return void
+     *
      * @throws RuntimeException When process can't be launched
      * @throws RuntimeException When process is already running
      * @throws LogicException   In case a callback is provided and output has been disabled
      */
-    public function start(?callable $callback = null, array $env = []): void
+    public function start(?callable $callback = null, array $env = [])
     {
         if ($this->isRunning()) {
             throw new RuntimeException('Process is already running.');
@@ -1142,9 +1141,11 @@ class FixedSymfonyProcess implements \IteratorAggregate
      * In case you run a background process (with the start method), you should
      * trigger this method regularly to ensure the process timeout
      *
+     * @return void
+     *
      * @throws ProcessTimedOutException In case the timeout was reached
      */
-    public function checkTimeout(): void
+    public function checkTimeout()
     {
         if (self::STATUS_STARTED !== $this->status) {
             return;
@@ -1182,8 +1183,10 @@ class FixedSymfonyProcess implements \IteratorAggregate
      *
      * Enabling the "create_new_console" option allows a subprocess to continue
      * to run after the main process exited, on both Windows and *nix
+     *
+     * @return void
      */
-    public function setOptions(array $options): void
+    public function setOptions(array $options)
     {
         if ($this->isRunning()) {
             throw new RuntimeException('Setting options while the process is running is not possible.');
@@ -1208,7 +1211,7 @@ class FixedSymfonyProcess implements \IteratorAggregate
     {
         static $isTtySupported;
 
-        return $isTtySupported ??= ('/' === \DIRECTORY_SEPARATOR && stream_isatty(\STDOUT));
+        return $isTtySupported ??= ('/' === \DIRECTORY_SEPARATOR && stream_isatty(\STDOUT) && @is_writable('/dev/tty'));
     }
 
     /**
@@ -1277,8 +1280,10 @@ class FixedSymfonyProcess implements \IteratorAggregate
      * Updates the status of the process, reads pipes.
      *
      * @param bool $blocking Whether to use a blocking read call
+     *
+     * @return void
      */
-    protected function updateStatus(bool $blocking): void
+    protected function updateStatus(bool $blocking)
     {
         if (self::STATUS_STARTED !== $this->status) {
             return;

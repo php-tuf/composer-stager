@@ -1,18 +1,17 @@
 <?php
 
 /*
- * This file is a temporary fork of part of the Symfony package to work around a regression.
- * @see https://github.com/symfony/symfony/pull/57317
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * For the full copyright and license information, see
- * https://github.com/symfony/symfony/blob/6.4/LICENSE
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
-namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value;
+namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Pipes;
 
-use Symfony\Component\Process\Process;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process;
 
 /**
  * UnixPipes implementation uses unix pipes as handles.
@@ -20,8 +19,6 @@ use Symfony\Component\Process\Process;
  * @author Romain Neutron <imprec@gmail.com>
  *
  * @internal
- *
- * @infection-ignore-all
  */
 class UnixPipes extends AbstractPipes
 {

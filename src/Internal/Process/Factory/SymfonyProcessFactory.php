@@ -5,9 +5,9 @@ namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\FixedSymfonyProcess as SymfonyProcess;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\ExceptionInterface as SymfonyExceptionInterface;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
-use Symfony\Component\Process\Exception\ExceptionInterface as SymfonyExceptionInterface;
 
 /**
  * @package Process
