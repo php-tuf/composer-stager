@@ -10,7 +10,7 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactoryInterface;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\FixedSymfonyProcess as SymfonyProcess;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use Throwable;
 

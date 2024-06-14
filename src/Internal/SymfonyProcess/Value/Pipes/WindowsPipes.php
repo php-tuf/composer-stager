@@ -1,19 +1,18 @@
 <?php
 
 /*
- * This file is a temporary fork of part of the Symfony package to work around a regression.
- * @see https://github.com/symfony/symfony/pull/57317
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * For the full copyright and license information, see
- * https://github.com/symfony/symfony/blob/6.4/LICENSE
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
-namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value;
+namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Pipes;
 
-use Symfony\Component\Process\Exception\RuntimeException;
-use Symfony\Component\Process\Process;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\RuntimeException;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process;
 
 /**
  * WindowsPipes implementation uses temporary files as handles.

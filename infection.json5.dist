@@ -3,6 +3,9 @@
     "source": {
         "directories": [
             "src"
+        ],
+        "excludes": [
+            "Internal/SymfonyProcess"
         ]
     },
     "timeout": 30,
