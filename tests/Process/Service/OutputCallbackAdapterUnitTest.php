@@ -5,8 +5,8 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Value\OutputTypeEnum;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
+use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
 use PhpTuf\ComposerStager\Tests\TestCase;
-use Symfony\Component\Process\Process as SymfonyProcess;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter */
 final class OutputCallbackAdapterUnitTest extends TestCase
