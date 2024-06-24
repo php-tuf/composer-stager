@@ -398,7 +398,7 @@ final class EndToEndFunctionalTest extends TestCase
         assert($result !== false, sprintf('Failed to change file: %s', $fileAbsolute));
     }
 
-    private static function putJson($filename, $json): void
+    private static function putJson(string $filename, array $json): void
     {
         file_put_contents($filename, json_encode($json, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
     }
