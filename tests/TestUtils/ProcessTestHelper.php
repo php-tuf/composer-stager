@@ -2,8 +2,8 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Exception\ProcessFailedException as SymfonyProcessFailedException;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
+use Symfony\Component\Process\Exception\ProcessFailedException as SymfonyProcessFailedException;
+use Symfony\Component\Process\Process as SymfonyProcess;
 use Throwable;
 
 final class ProcessTestHelper

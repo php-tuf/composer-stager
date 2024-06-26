@@ -4,7 +4,7 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
 
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Value\OutputTypeEnum;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * @package Process

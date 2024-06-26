@@ -13,6 +13,6 @@ namespace PhpTuf\ComposerStager\Internal\Process\Service;
  */
 interface OutputCallbackAdapterInterface
 {
-    /** @see \PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process::readPipes */
+    /** @see \Symfony\Component\Process\Process::readPipes */
     public function __invoke(string $type, string $buffer): void;
 }

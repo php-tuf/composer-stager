@@ -34,9 +34,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        // Exclude temporary Symfony Process fork.
-        0 => __DIR__ . '/src/Internal/SymfonyProcess',
-
         CatchExceptionNameMatchingTypeRector::class => [__DIR__],
         EncapsedStringsToSprintfRector::class => [__DIR__],
         LocallyCalledStaticMethodToNonStaticRector::class => [__DIR__],
