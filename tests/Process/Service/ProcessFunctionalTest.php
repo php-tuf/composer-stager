@@ -7,6 +7,7 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PhpTuf\ComposerStager\Tests\TestUtils\ProcessTestHelper;
 
 /** @coversNothing */
 final class ProcessFunctionalTest extends TestCase
@@ -48,15 +49,14 @@ final class ProcessFunctionalTest extends TestCase
 
     public function testOutputCallbackStderr(): void
     {
-        $invalidCommand = 'invalid_command';
-        $sut = $this->createSut([$invalidCommand]);
+        $errorMessage = 'some error output';
+        $command = ProcessTestHelper::createMockCommand('', $errorMessage);
         $outputCallback = new OutputCallback();
+        $sut = $this->createSut($command);
 
         $sut->run($outputCallback);
 
         self::assertSame([], $outputCallback->getOutput(), 'Streamed correct output to callback.');
-        // Asserting on error output is a little tricky across platforms. The safest meaningful
-        // test is probably to just search the error output for the invalid command name.
-        self::assertStringContainsString($invalidCommand, $outputCallback->getErrorOutput()[0], 'Streamed correct error output to callback.');
+        self::assertSame([$errorMessage], $outputCallback->getErrorOutput(), 'Streamed correct error output to callback.');
     }
 }
