@@ -5,9 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\FileSyncer\Service;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer */
 final class FileSyncerFunctionalTest extends TestCase

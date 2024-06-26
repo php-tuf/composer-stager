@@ -36,11 +36,6 @@
             <directory suffix=".php">src</directory>
         </include>
 
-        <!-- Exclude temporary Symfony Process fork. -->
-        <exclude>
-            <directory>src/Internal/SymfonyProcess</directory>
-        </exclude>
-
         <report>
             <clover outputFile="var/phpunit/clover.xml"/>
             <html outputDirectory="var/phpunit/html-coverage"/>

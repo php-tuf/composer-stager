@@ -2,9 +2,9 @@
 
 namespace PhpTuf\ComposerStager\Tests\Compatability;
 
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 /** @coversNothing */
 final class CompatibilityTest extends TestCase

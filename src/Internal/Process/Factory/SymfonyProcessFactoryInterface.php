@@ -3,7 +3,7 @@
 namespace PhpTuf\ComposerStager\Internal\Process\Factory;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 /**
  * Creates Symfony Process objects.
@@ -46,7 +46,7 @@ interface SymfonyProcessFactoryInterface
      * @throws \PhpTuf\ComposerStager\API\Exception\LogicException
      *   If the process cannot be created due to host configuration.
      *
-     * @see \PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process::__construct
+     * @see \Symfony\Component\Process\Process::__construct
      */
     public function create(array $command, ?PathInterface $cwd = null, array $env = []): SymfonyProcess;
 }
