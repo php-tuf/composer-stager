@@ -3,10 +3,10 @@
 namespace PhpTuf\ComposerStager\PHPBench\TestUtils;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use PhpTuf\ComposerStager\Internal\SymfonyProcess\Value\Process as SymfonyProcess;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelperTrait;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path as SymfonyPath;
+use Symfony\Component\Process\Process as SymfonyProcess;
 
 final class FixtureHelper
 {

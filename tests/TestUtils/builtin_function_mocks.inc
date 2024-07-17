@@ -107,7 +107,7 @@ namespace PhpTuf\ComposerStager\Internal\Path\Value {
     }
 }
 
-namespace PhpTuf\ComposerStager\Internal\SymfonyProcess\Value {
+namespace Symfony\Component\Process {
 
     use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
 
