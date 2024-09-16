@@ -92,17 +92,17 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
 
             public function getName(): TranslatableInterface
             {
-                return $this->t(static::NAME);
+                return $this->t(self::NAME);
             }
 
             public function getDescription(): TranslatableInterface
             {
-                return $this->t(static::DESCRIPTION);
+                return $this->t(self::DESCRIPTION);
             }
 
             protected function getFulfilledStatusMessage(): TranslatableInterface
             {
-                return $this->t(static::FULFILLED_STATUS_MESSAGE);
+                return $this->t(self::FULFILLED_STATUS_MESSAGE);
             }
         };
     }
