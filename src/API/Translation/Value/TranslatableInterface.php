@@ -3,7 +3,6 @@
 namespace PhpTuf\ComposerStager\API\Translation\Value;
 
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
-use Stringable;
 
 /**
  * Handles a translatable message.
@@ -22,7 +21,7 @@ use Stringable;
  *
  * @api This interface is subject to our backward compatibility promise and may be safely depended upon.
  */
-interface TranslatableInterface extends Stringable
+interface TranslatableInterface
 {
     /** Translates the message. */
     public function trans(?TranslatorInterface $translator = null, ?string $locale = null): string;
