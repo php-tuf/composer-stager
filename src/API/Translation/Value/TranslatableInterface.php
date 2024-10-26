@@ -23,6 +23,7 @@ use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
  */
 interface TranslatableInterface
 {
+    public function __toString();
     /** Translates the message. */
     public function trans(?TranslatorInterface $translator = null, ?string $locale = null): string;
 }
