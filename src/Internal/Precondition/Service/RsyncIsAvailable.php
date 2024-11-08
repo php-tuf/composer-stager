@@ -112,6 +112,7 @@ final class RsyncIsAvailable extends AbstractPrecondition implements RsyncIsAvai
             return false;
         }
 
-        return str_starts_with($output, 'rsync ');
+        // Look for "rsync version" at the beginning of any line of output (ignoring spacing).
+        return (bool) preg_match('/^ *rsync *version /m', $output);
     }
 }
