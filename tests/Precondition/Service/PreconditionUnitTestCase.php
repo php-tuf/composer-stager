@@ -76,8 +76,8 @@ abstract class PreconditionUnitTestCase extends TestCase
         $actualStatusMessage = $sut->getStatusMessage($activeDirPath, $stagingDirPath, $this->exclusions, $timeout);
         $sut->assertIsFulfilled($activeDirPath, $stagingDirPath, $this->exclusions, $timeout);
 
-        self::assertTrue($isFulfilled);
         self::assertTranslatableMessage(static::FULFILLED_STATUS_MESSAGE, $actualStatusMessage, 'Got correct fulfilled status message.');
+        self::assertTrue($isFulfilled);
     }
 
     protected function doTestUnfulfilled(

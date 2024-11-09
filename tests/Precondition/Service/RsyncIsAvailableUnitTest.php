@@ -70,8 +70,10 @@ final class RsyncIsAvailableUnitTest extends PreconditionUnitTestCase
      * @covers ::getFulfilledStatusMessage
      * @covers ::getProcess
      * @covers ::isValidExecutable
+     *
+     * @dataProvider providerFulfilled
      */
-    public function testFulfilled(): void
+    public function testFulfilled(string $output): void
     {
         $this->executableFinder
             ->find('rsync')
@@ -81,9 +83,7 @@ final class RsyncIsAvailableUnitTest extends PreconditionUnitTestCase
             ->shouldBeCalledTimes(self::EXPECTED_CALLS_MULTIPLE);
         $this->process
             ->getOutput()
-            ->willReturn("rsync  version 2..9  protocol version 29
-Copyright (C) 1996-2006.
-<http://rsync.samba.org/>");
+            ->willReturn($output);
         $this->processFactory
             ->create([
                 self::RSYNC_PATH,
@@ -93,6 +93,22 @@ Copyright (C) 1996-2006.
             ->willReturn($this->process->reveal());
 
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
+    }
+
+    public function providerFulfilled(): array
+    {
+        return [
+            'Command name on first line' => [
+                "rsync  version 2..9  protocol version 29
+Copyright (C) 1996-2006.
+<http://rsync.samba.org/>",
+            ],
+            'Command name on second line' => [
+                "openrsync: protocol version 29
+rsync version 2.6.9 compatible",
+            ],
+            'Funny spacing' => ['  rsync  version  42  '],
+        ];
     }
 
     /** @covers ::assertExecutableExists */
@@ -206,7 +222,9 @@ Copyright (C) 1996-2006.
         return [
             'No output' => [''],
             'Missing application name' => ['version 1.0.0'],
+            'Missing version' => ['rsync'],
             'Incorrect application name' => ['invalid_application version 1.0.0'],
+            'Extraneous characters' => ['x rsync version 1.0.0'],
         ];
     }
 

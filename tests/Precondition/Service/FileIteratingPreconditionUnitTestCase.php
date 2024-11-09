@@ -206,7 +206,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         TranslatableInterface $statusMessage,
         string $assertionMessage,
     ): void {
-        self::assertTrue($isFulfilled, $assertionMessage);
         self::assertEquals(static::FULFILLED_STATUS_MESSAGE, $statusMessage->trans(), 'Got correct status message');
+        self::assertTrue($isFulfilled, $assertionMessage);
     }
 }
