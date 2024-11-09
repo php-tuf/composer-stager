@@ -74,8 +74,20 @@ jobs:
 
             -   name: "Debugging info"
                 run: |
-                    rsync --version | head -1
+                    echo "::group::PHP"
+                    which php
                     php -i
+                    echo "::endgroup::"
+
+                    echo "::group::Composer"
+                    which composer
+                    composer --version
+                    echo "::endgroup::"
+
+                    echo "::group::rsync"
+                    which rsync
+                    rsync --version
+                    echo "::endgroup::"
 
             -   name: "Checkout code"
                 uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
@@ -84,6 +96,15 @@ jobs:
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
                 with:
                     dependency-versions: "${{ matrix.dependencies }}est"
+
+            -   name: "Show installed versions"
+                shell: bash
+                env:
+                    NO_COLOR: "1"
+                run: |
+                    output=$(composer show | awk '{print "- "$1" ("$2")"}')
+                    echo "$output"
+                    echo "Total packages: $(echo "$output" | wc -l | tr -d ' ')"
 
             -   name: "Run core tests with coverage"
                 run: "composer test"
