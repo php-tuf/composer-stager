@@ -80,8 +80,9 @@ jobs:
                     echo "::endgroup::"
 
                     echo "::group::Composer"
-                    which composer
                     composer --version
+                    composer --format=json | jq '.' -C > composer-output.log
+                    head -5 composer-output.log
                     echo "::endgroup::"
 
                     echo "::group::rsync"
