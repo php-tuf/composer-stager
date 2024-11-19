@@ -17,7 +17,7 @@ final class RsyncIsAvailableFunctionalTest extends TestCase
         $statusMessage = $sut->getStatusMessage(self::activeDirPath(), self::stagingDirPath());
 
         $message = 'Rsync is available.';
-        self::assertTrue($isFulfilled);
         self::assertSame($message, $statusMessage->trans());
+        self::assertTrue($isFulfilled);
     }
 }

@@ -150,7 +150,11 @@ final class EndToEndFunctionalTest extends TestCase
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
             $preconditionMet = false;
-            self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
+            self::assertEquals(
+                NoAbsoluteSymlinksExist::class,
+                $failedPrecondition::class,
+                sprintf('The beginner detects unmet "codebase contains symlinks" preconditions: %s', $e->getMessage()),
+            );
         } finally {
             self::assertTestSymlinkExists($activeDirAbsolute);
             self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
@@ -231,14 +235,18 @@ final class EndToEndFunctionalTest extends TestCase
         // Confirm that the committer fails with unsupported symlinks present in the codebase.
         try {
             // Invoke the committer without exclusions to cause it to find symlinks in the active directory.
-            $this->beginner->begin($activeDirPath, $stagingDirPath);
+            $this->committer->commit($activeDirPath, $stagingDirPath);
             $preconditionMet = true;
         } catch (PreconditionException $e) {
             $failedPrecondition = $e->getPrecondition();
-            self::assertEquals(NoAbsoluteSymlinksExist::class, $failedPrecondition::class, 'Correct "codebase contains symlinks" unmet.');
+            self::assertEquals(
+                NoAbsoluteSymlinksExist::class,
+                $failedPrecondition::class,
+                sprintf('The committer detects unmet "codebase contains symlinks" preconditions: %s', $e->getMessage()),
+            );
         } finally {
             self::assertTestSymlinkExists($activeDirAbsolute);
-            self::assertFalse($preconditionMet, 'Beginner fails with symlinks present in the codebase.');
+            self::assertFalse($preconditionMet, 'Committer fails with symlinks present in the codebase.');
         }
 
         // Commit: Sync files from the staging directory back to the directory.

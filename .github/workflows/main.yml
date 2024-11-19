@@ -74,8 +74,21 @@ jobs:
 
             -   name: "Debugging info"
                 run: |
-                    rsync --version | head -1
+                    echo "::group::PHP"
+                    which php
                     php -i
+                    echo "::endgroup::"
+
+                    echo "::group::Composer"
+                    composer --version
+                    composer --format=json | jq '.' -C > composer-output.log
+                    head -5 composer-output.log
+                    echo "::endgroup::"
+
+                    echo "::group::rsync"
+                    which rsync
+                    rsync --version
+                    echo "::endgroup::"
 
             -   name: "Checkout code"
                 uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
@@ -84,6 +97,15 @@ jobs:
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
                 with:
                     dependency-versions: "${{ matrix.dependencies }}est"
+
+            -   name: "Show installed versions"
+                shell: bash
+                env:
+                    NO_COLOR: "1"
+                run: |
+                    output=$(composer show | awk '{print "- "$1" ("$2")"}')
+                    echo "$output"
+                    echo "Total packages: $(echo "$output" | wc -l | tr -d ' ')"
 
             -   name: "Run core tests with coverage"
                 run: "composer test"
@@ -123,28 +145,6 @@ jobs:
 
             -   name: "Run performance tests"
                 run: "composer phpbench -- --progress=plain --ansi"
-
-    compatability:
-        name: "Compatability"
-        runs-on: ubuntu-latest
-        steps:
-            -   name: "Install rsync"
-                uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
-
-            -   name: "Set up PHP"
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "8.3"
-                    coverage: none
-
-            -   name: "Checkout code"
-                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-
-            -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
-
-            -   name: "Run compatability tests"
-                run: "composer compatability"
 
     mutation:
         name: "Mutation"

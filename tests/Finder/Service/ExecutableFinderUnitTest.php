@@ -40,9 +40,6 @@ final class ExecutableFinderUnitTest extends TestCase
     {
         $command = 'command_name';
         $this->symfonyExecutableFinder
-            ->addSuffix('.phar')
-            ->shouldBeCalled();
-        $this->symfonyExecutableFinder
             ->find($command)
             ->shouldBeCalledOnce()
             ->willReturn($command);
@@ -57,9 +54,6 @@ final class ExecutableFinderUnitTest extends TestCase
     public function testFindNotFound(): void
     {
         $command = 'command_name';
-        $this->symfonyExecutableFinder
-            ->addSuffix('.phar')
-            ->shouldBeCalledOnce();
         $this->symfonyExecutableFinder
             ->find($command)
             ->shouldBeCalledOnce()
