@@ -42,6 +42,10 @@
         "symfony/yaml": "^6.3",
         "thecodingmachine/phpstan-strict-rules": "^1.0"
     },
+    "conflict": {
+        "symfony/process": ">=6 <6.4.14 || >=7 <7.1.7",
+        "symfony/symfony": ">=6 <6.4.14 || >=7 <7.1.7"
+    },
     "suggest": {
         "symfony/dependency-injection": "For dependency injection",
         "symfony/translation": "For internationalization tools"
