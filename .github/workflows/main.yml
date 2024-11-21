@@ -108,14 +108,14 @@ jobs:
                     echo "Total packages: $(echo "$output" | wc -l | tr -d ' ')"
 
             -   name: "Run core tests with coverage"
-                run: "composer test"
+                run: "composer test -- --colors=always"
                 if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
 
             # There's no reason to generate coverage data on multiple jobs--the result should be the same.
             -   name: "Run core tests without coverage"
-                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=windows_only"
+                run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only --colors=always"
                 if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
 
             -   name: "Run Windows tests"
-                run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=no_windows"
+                run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows --colors=always"
                 if: ${{ runner.os == 'Windows' }}

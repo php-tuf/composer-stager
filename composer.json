@@ -24,6 +24,7 @@
         "symfony/translation-contracts": "^3.1"
     },
     "require-dev": {
+        "ext-simplexml": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpspec/prophecy": "^1.17",
         "phpspec/prophecy-phpunit": "^2.0",
@@ -82,7 +83,7 @@
         ],
         "compatibility": "phpunit --testsuite=compatibility",
         "dox": "phpunit --testdox --color=always --exclude-group=windows_only",
-        "fast": "phpunit --exclude-group=slow,windows_only",
+        "fast": "phpunit --testsuite=coverage --exclude-group=slow,windows_only",
         "functional": "phpunit --testsuite=functional --exclude-group=windows_only",
         "open-code-coverage": "open $(pwd)/var/phpunit/html-coverage/index.html || echo 'Run the \"test\" command to generate the coverage report.'",
         "phpcbf": "phpcbf",
@@ -96,8 +97,8 @@
             "@phpcs",
             "@phpstan"
         ],
-        "tests": "phpunit --testsuite=all --exclude-group=windows_only",
-        "unit": "phpunit --testsuite=unit --exclude-group=windows_only"
+        "tests": "phpunit --testsuite=coverage --exclude-group=windows_only",
+        "unit": "phpunit --no-coverage --testsuite=unit --exclude-group=windows_only"
     },
     "scripts-descriptions": {
         "all": "Runs all automated tests and static analysis tools",

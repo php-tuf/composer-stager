@@ -17,6 +17,10 @@
             <directory suffix="UnitTest.php">tests</directory>
             <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
+        <testsuite name="coverage">
+            <directory suffix="UnitTest.php">tests</directory>
+            <directory suffix="FunctionalTest.php">tests</directory>
+        </testsuite>
         <testsuite name="unit">
             <directory suffix="UnitTest.php">tests</directory>
         </testsuite>
@@ -44,6 +48,19 @@
     <logging>
         <junit outputFile="var/phpunit/junit.xml"/>
     </logging>
+
+    <extensions>
+        <bootstrap class="\PhpTuf\ComposerStager\Tests\Coverage\ClearCoverageExtension"/>
+        <bootstrap class="\PhpTuf\ComposerStager\Tests\Coverage\EnforceCoverageExtension">
+            <!--
+            Requiring 100% code coverage here makes it safe to just put a static badge in the README rather than
+            using some third-party service. If this ever changes, that strategy will have to change accordingly.
+            -->
+            <parameter name="required-coverage" value="100"/>
+            <!-- The testsuites that will enforce coverage requirements, separated by commas, e.g., "one,two". -->
+            <parameter name="required-testsuites" value="coverage"/>
+        </bootstrap>
+    </extensions>
 
     <php>
         <ini name="zend.assertions" value="1"/>
