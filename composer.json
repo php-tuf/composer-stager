@@ -25,7 +25,6 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-        "phpro/grumphp-shim": "^2.0",
         "phpspec/prophecy": "^1.17",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "^1.10",
@@ -60,8 +59,7 @@
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpro/grumphp-shim": false
+            "dealerdirect/phpcodesniffer-composer-installer": true
         },
         "optimize-autoloader": true,
         "sort-packages": true
@@ -69,15 +67,12 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "2.x-dev"
-        },
-        "grumphp": {
-            "disable-plugin": true
         }
     },
     "scripts": {
         "all": [
-            "phpstan clear-result-cache",
-            "grumphp run"
+            "@static",
+            "@tests"
         ],
         "clear-var-dir": [
             "@composer dump-autoload",
@@ -97,10 +92,11 @@
             "phpstan analyse"
         ],
         "static": [
-            "phpstan clear-result-cache",
-            "grumphp run --testsuite=static"
+            "composer dump-autoload --strict-psr --dry-run",
+            "@phpcs",
+            "@phpstan"
         ],
-        "tests": "grumphp run --testsuite=test",
+        "tests": "phpunit --testsuite=all --exclude-group=windows_only",
         "unit": "phpunit --testsuite=unit --exclude-group=windows_only"
     },
     "scripts-descriptions": {
