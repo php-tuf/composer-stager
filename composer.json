@@ -95,7 +95,7 @@
             "rm -r var/*/* &> /dev/null || true",
             "git checkout -- var"
         ],
-        "compatability": "phpunit --testsuite=compatability",
+        "compatibility": "phpunit --testsuite=compatibility",
         "dox": "phpunit --testdox --color=always --exclude-group=windows_only",
         "fast": "phpunit --exclude-group=slow,windows_only",
         "functional": "phpunit --testsuite=functional --exclude-group=windows_only",
@@ -119,7 +119,7 @@
     "scripts-descriptions": {
         "all": "Runs all automated tests and static analysis tools",
         "clear-var-dir": "Clears all script caches and test fixtures in the \"var\" directory",
-        "compatability": "Checks Composer version compatability with major client projects",
+        "compatibility": "Checks Composer version compatibility with major client projects",
         "dox": "Runs tests with TestDox output",
         "fast": "Runs only fast automated tests",
         "functional": "Runs functional tests",
@@ -139,7 +139,7 @@
             "cv",
             "var"
         ],
-        "compatability": [
+        "compatibility": [
             "compat"
         ],
         "infection": [

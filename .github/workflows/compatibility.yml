@@ -1,5 +1,5 @@
 ---
-name: Compatability
+name: Compatibility
 
 on:
     schedule:
@@ -10,8 +10,8 @@ on:
     workflow_dispatch:
 
 jobs:
-    compatability:
-        name: Compatability
+    compatibility:
+        name: Compatibility
         runs-on: ubuntu-latest
         steps:
             -   name: Install rsync
@@ -29,5 +29,5 @@ jobs:
             -   name: Install dependencies
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
 
-            -   name: Run compatability tests
-                run: composer compatability
+            -   name: Run compatibility tests
+                run: composer compatibility

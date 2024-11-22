@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpTuf\ComposerStager\Tests\Compatability;
+namespace PhpTuf\ComposerStager\Tests\Compatibility;
 
 use PhpTuf\ComposerStager\Tests\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,13 +27,13 @@ final class CompatibilityTest extends TestCase
     }
 
     /**
-     * Tests for Composer compatability with supported Drupal core versions.
+     * Tests for Composer compatibility with supported Drupal core versions.
      *
-     * @dataProvider providerDrupalVersionCompatability
+     * @dataProvider providerDrupalVersionCompatibility
      *
      * @see ../../composer.json
      */
-    public function testDrupalVersionCompatability(string $versionConstraint): void
+    public function testDrupalVersionCompatibility(string $versionConstraint): void
     {
         $fixtureDir = self::fixtureDir($versionConstraint);
 
@@ -54,7 +54,7 @@ final class CompatibilityTest extends TestCase
         ));
     }
 
-    public function providerDrupalVersionCompatability(): array
+    public function providerDrupalVersionCompatibility(): array
     {
         $data = [];
 
