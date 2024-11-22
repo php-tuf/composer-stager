@@ -28,7 +28,6 @@ grumphp:
             testsuite: all
             exclude_group:
                 - windows_only
-        rector: ~
         shell:
             scripts:
                 # Check for PSR-4 mapping errors.
@@ -55,7 +54,6 @@ grumphp:
                 - composer
                 - phpcs
                 - phpstan
-                - rector
                 - shell
                 - xmllint
                 - yamllint
