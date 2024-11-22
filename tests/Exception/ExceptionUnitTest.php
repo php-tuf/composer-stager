@@ -10,18 +10,17 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Exception\RuntimeException;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 
+#[CoversClass(InvalidArgumentException::class)]
+#[CoversClass(IOException::class)]
+#[CoversClass(LogicException::class)]
+#[CoversClass(RuntimeException::class)]
 final class ExceptionUnitTest extends TestCase
 {
-    /**
-     * @covers \PhpTuf\ComposerStager\API\Exception\InvalidArgumentException
-     * @covers \PhpTuf\ComposerStager\API\Exception\IOException
-     * @covers \PhpTuf\ComposerStager\API\Exception\LogicException
-     * @covers \PhpTuf\ComposerStager\API\Exception\RuntimeException
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(string $exception): void
     {
         $message = $exception;
@@ -39,7 +38,7 @@ final class ExceptionUnitTest extends TestCase
     }
 
     /** Provides a list of all exception classes except PreconditionException, which has a different signature. */
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         $exceptions = [
             InvalidArgumentException::class,

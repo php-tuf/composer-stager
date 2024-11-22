@@ -5,13 +5,11 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Filesystem\Path;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist
- *
- * @covers ::__construct
- */
+#[CoversClass(NoHardLinksExist::class)]
 final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
     protected function createSut(): NoHardLinksExist
@@ -19,7 +17,6 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         return ContainerTestHelper::get(NoHardLinksExist::class);
     }
 
-    /** @covers ::assertIsSupportedFile */
     public function testFulfilledWithSymlink(): void
     {
         $target = Path::makeAbsolute('target.txt', self::activeDirAbsolute());
@@ -33,11 +30,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         self::assertTrue($isFulfilled, 'Allowed symlink.');
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     *
-     * @dataProvider providerUnfulfilled
-     */
+    #[DataProvider('providerUnfulfilled')]
     public function testUnfulfilled(string $directory, string $dirName): void
     {
         $target = self::makeAbsolute('target.txt', $directory);
@@ -57,7 +50,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         }, PreconditionException::class, $message);
     }
 
-    public function providerUnfulfilled(): array
+    public static function providerUnfulfilled(): array
     {
         return [
             'In active directory' => [
@@ -71,11 +64,7 @@ final class NoHardLinksExistFunctionalTest extends LinkPreconditionsFunctionalTe
         ];
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     *
-     * @dataProvider providerExclusions
-     */
+    #[DataProvider('providerExclusions')]
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetFile = 'target.txt';

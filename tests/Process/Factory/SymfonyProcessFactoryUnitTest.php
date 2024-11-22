@@ -7,18 +7,16 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Symfony\Component\Process\Exception\LogicException as SymfonyLogicException;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory */
+#[CoversClass(SymfonyProcessFactory::class)]
 final class SymfonyProcessFactoryUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::create
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $given, array $expected): void
     {
         $translatableFactory = self::createTranslatableFactory();
@@ -31,7 +29,7 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
         self::assertTranslatableAware($sut);
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Minimum values' => [
@@ -57,11 +55,7 @@ final class SymfonyProcessFactoryUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::create
-     *
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testFailure(): void
     {
         $previousMessage = 'Something went wrong';

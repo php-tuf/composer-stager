@@ -5,8 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory;
 use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathFactory */
+#[CoversClass(PathFactory::class)]
 final class PathFactoryUnitTest extends TestCase
 {
     private function createSut(): PathFactory
@@ -16,10 +17,6 @@ final class PathFactoryUnitTest extends TestCase
         return new PathFactory($pathHelper);
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::create
-     */
     public function testBasicFunctionality(): void
     {
         $pathHelper = self::createPathHelper();

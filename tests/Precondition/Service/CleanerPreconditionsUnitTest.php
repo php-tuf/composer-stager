@@ -5,14 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CleanerPreconditions
- *
- * @covers ::__construct
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(CleanerPreconditions::class)]
 final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Cleaner preconditions';
@@ -46,7 +42,6 @@ final class CleanerPreconditionsUnitTest extends PreconditionUnitTestCase
         return new CleanerPreconditions($environment, $commonPreconditions, $stagingDirIsReady, $translatableFactory);
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();

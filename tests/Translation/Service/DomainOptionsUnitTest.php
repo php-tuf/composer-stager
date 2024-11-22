@@ -2,16 +2,14 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
+use PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\DomainOptions */
+#[CoversClass(DomainOptions::class)]
 final class DomainOptionsUnitTest extends TestCase
 {
-    /**
-     * @covers ::default
-     * @covers ::exceptions
-     */
     public function testBasicFunctionality(): void
     {
         $sut = self::createDomainOptions();

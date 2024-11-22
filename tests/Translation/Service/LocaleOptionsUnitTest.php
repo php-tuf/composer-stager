@@ -2,14 +2,15 @@
 
 namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 
+use PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\LocaleOptions */
+#[CoversClass(LocaleOptions::class)]
 final class LocaleOptionsUnitTest extends TestCase
 {
     private const DEFAULT = 'en_US';
 
-    /** @covers ::default */
     public function testBasicFunctionality(): void
     {
         $sut = self::createLocaleOptions();

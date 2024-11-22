@@ -11,14 +11,12 @@ use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\FilesystemTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 use Symfony\Component\DependencyInjection\Definition;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable
- *
- * @covers ::__construct
- */
+#[CoversClass(ComposerIsAvailable::class)]
 final class ComposerIsAvailableFunctionalTest extends TestCase
 {
     protected function setUp(): void
@@ -51,13 +49,6 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         return $container->get(ComposerIsAvailable::class);
     }
 
-    /**
-     * @covers ::assertExecutableExists
-     * @covers ::assertIsActuallyComposer
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     * @covers ::isValidExecutable
-     */
     public function testFulfilled(): void
     {
         $sut = $this->createSut();
@@ -69,7 +60,6 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         self::assertTrue($isStillFulfilled, 'Achieved idempotency');
     }
 
-    /** @covers ::assertExecutableExists */
     public function testComposerNotFound(): void
     {
         $sut = $this->createSut(ComposerNotFoundExecutableFinder::class);
@@ -80,13 +70,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         }, PreconditionException::class, $message, null, LogicException::class);
     }
 
-    /**
-     * @covers ::assertIsActuallyComposer
-     * @covers ::getComposerOutput
-     * @covers ::isValidExecutable
-     *
-     * @dataProvider providerInvalidComposerFound
-     */
+    #[DataProvider('providerInvalidComposerFound')]
     public function testInvalidComposerFound(string $output): void
     {
         $sut = $this->createSut(InvalidComposerFoundExecutableFinder::class);
@@ -103,7 +87,7 @@ final class ComposerIsAvailableFunctionalTest extends TestCase
         }, PreconditionException::class, $message);
     }
 
-    public function providerInvalidComposerFound(): array
+    public static function providerInvalidComposerFound(): array
     {
         return [
             'No output' => [''],

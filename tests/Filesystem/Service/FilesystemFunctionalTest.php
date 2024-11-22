@@ -7,8 +7,10 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem */
+#[CoversClass(Filesystem::class)]
 final class FilesystemFunctionalTest extends TestCase
 {
     protected function setUp(): void
@@ -29,17 +31,7 @@ final class FilesystemFunctionalTest extends TestCase
         return ContainerTestHelper::get(Filesystem::class);
     }
 
-    /**
-     * @covers ::fileExists
-     * @covers ::getFileType
-     * @covers ::isDir
-     * @covers ::isFile
-     * @covers ::isHardLink
-     * @covers ::isLink
-     * @covers ::isSymlink
-     *
-     * @dataProvider providerTypeCheckMethods
-     */
+    #[DataProvider('providerTypeCheckMethods')]
     public function testTypeCheckMethods(
         array $files,
         array $directories,
@@ -75,7 +67,7 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertSame($isSymlink, $actualIsSymlink, 'Correctly determined whether path is a symlink.');
     }
 
-    public function providerTypeCheckMethods(): array
+    public static function providerTypeCheckMethods(): array
     {
         return [
             'Path is a symlink to a file' => [
@@ -161,11 +153,7 @@ final class FilesystemFunctionalTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::readLink
-     *
-     * @dataProvider providerReadlink
-     */
+    #[DataProvider('providerReadlink')]
     public function testReadlink(string $given, string $expectedAbsolute): void
     {
         $basePath = self::sourceDirAbsolute();
@@ -191,7 +179,7 @@ final class FilesystemFunctionalTest extends TestCase
         }, IOException::class, $message);
     }
 
-    public function providerReadlink(): array
+    public static function providerReadlink(): array
     {
         $basePath = self::sourceDirAbsolute();
         $absolute = static fn ($path): string => self::makeAbsolute($path, $basePath);
@@ -208,7 +196,6 @@ final class FilesystemFunctionalTest extends TestCase
         ];
     }
 
-    /** @covers ::readLink */
     public function testReadlinkOnNonLink(): void
     {
         $file = self::createPath(__FILE__);
@@ -220,7 +207,6 @@ final class FilesystemFunctionalTest extends TestCase
         }, IOException::class, $message);
     }
 
-    /** @covers ::readLink */
     public function testReadlinkOnNonExistentFile(): void
     {
         $path = self::nonExistentFilePath();
@@ -232,7 +218,6 @@ final class FilesystemFunctionalTest extends TestCase
         }, IOException::class, $message);
     }
 
-    /** @covers ::touch */
     public function testTouch(): void
     {
         $path = self::arbitraryFilePath();
@@ -243,7 +228,6 @@ final class FilesystemFunctionalTest extends TestCase
         self::assertFileExists($path->absolute());
     }
 
-    /** @covers ::touch */
     public function testTouchAlreadyADirectory(): void
     {
         $directoryPath = self::arbitraryDirPath();

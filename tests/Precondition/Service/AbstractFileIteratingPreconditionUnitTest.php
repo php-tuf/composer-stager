@@ -10,14 +10,11 @@ use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
- *
- * @covers ::__construct
- */
+#[CoversClass(AbstractFileIteratingPrecondition::class)]
 final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected const NAME = 'NAME';
@@ -107,10 +104,6 @@ final class AbstractFileIteratingPreconditionUnitTest extends FileIteratingPreco
         };
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::exitEarly
-     */
     public function testExitEarly(): void
     {
         $activeDirPath = self::activeDirPath();

@@ -3,8 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist */
+#[CoversClass(NoHardLinksExist::class)]
 final class NoHardLinksExistUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected const NAME = 'No hard links exist';
@@ -23,16 +24,11 @@ final class NoHardLinksExistUnitTest extends FileIteratingPreconditionUnitTestCa
         return new NoHardLinksExist($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @covers ::assertIsSupportedFile */
     public function testUnfulfilled(): void
     {
         // @todo Implement once the corresponding functionality is added.

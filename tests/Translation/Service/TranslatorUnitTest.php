@@ -9,19 +9,19 @@ use PhpTuf\ComposerStager\API\Translation\Factory\TranslatableFactoryInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\DomainOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Service\LocaleOptionsInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslationParametersInterface;
+use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxyInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Service\Translator;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\Translator
- *
- * @covers \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy
- */
+#[CoversClass(SymfonyTranslatorProxy::class)]
+#[CoversClass(Translator::class)]
 final class TranslatorUnitTest extends TestCase
 {
     private DomainOptionsInterface $domainOptions;
@@ -45,13 +45,7 @@ final class TranslatorUnitTest extends TestCase
         return new Translator($this->domainOptions, $this->localeOptions, $this->symfonyTranslatorProxy);
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getLocale
-     * @covers ::trans
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
         string $message,
         ?TranslationParametersInterface $parameters,
@@ -67,7 +61,7 @@ final class TranslatorUnitTest extends TestCase
         self::assertEquals(TestLocaleOptions::DEFAULT, $sut->getLocale(), 'Returned correct default locale.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Empty values' => [
@@ -104,11 +98,7 @@ final class TranslatorUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::trans
-     *
-     * @dataProvider providerDomainHandling
-     */
+    #[DataProvider('providerDomainHandling')]
     public function testDomainHandling(string $defaultDomain, ?string $givenDomain, string $expectedDomain): void
     {
         $message = __METHOD__;
@@ -127,7 +117,7 @@ final class TranslatorUnitTest extends TestCase
         $sut->trans($message, null, $givenDomain);
     }
 
-    public function providerDomainHandling(): array
+    public static function providerDomainHandling(): array
     {
         return [
             'Default' => [
@@ -148,11 +138,7 @@ final class TranslatorUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::trans
-     *
-     * @dataProvider providerLocaleHandling
-     */
+    #[DataProvider('providerLocaleHandling')]
     public function testLocaleHandling(
         string $defaultLocale,
         ?string $givenLocale,
@@ -177,7 +163,7 @@ final class TranslatorUnitTest extends TestCase
         self::assertSame($expectedGetLocale, $sut->getLocale(), 'Returned correct locale.');
     }
 
-    public function providerLocaleHandling(): array
+    public static function providerLocaleHandling(): array
     {
         return [
             'Default' => [
@@ -201,7 +187,6 @@ final class TranslatorUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::create */
     public function testStaticFactory(): void
     {
         $domainOptions = self::createDomainOptions();
@@ -214,11 +199,7 @@ final class TranslatorUnitTest extends TestCase
         self::assertEquals($expected, $actual, 'Created new translator.');
     }
 
-    /**
-     * @covers ::trans
-     *
-     * @dataProvider providerTranslatorException
-     */
+    #[DataProvider('providerTranslatorException')]
     public function testTranslatorException(Throwable $exception): void
     {
         $message = __METHOD__;
@@ -243,7 +224,7 @@ final class TranslatorUnitTest extends TestCase
         }, AssertionError::class, $expectedMessage);
     }
 
-    public function providerTranslatorException(): array
+    public static function providerTranslatorException(): array
     {
         return [
             'Error' => [new Error('An Error')],

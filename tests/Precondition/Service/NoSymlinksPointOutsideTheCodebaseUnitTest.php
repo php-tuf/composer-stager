@@ -8,15 +8,10 @@ use PhpTuf\ComposerStager\API\Path\Factory\PathFactoryInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Argument;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase
- *
- * @covers ::__construct
- * @covers ::assertIsSupportedFile
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(NoSymlinksPointOutsideTheCodebase::class)]
 final class NoSymlinksPointOutsideTheCodebaseUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected const NAME = 'No symlinks point outside the codebase';

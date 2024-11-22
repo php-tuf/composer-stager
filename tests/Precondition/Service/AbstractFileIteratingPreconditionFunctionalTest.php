@@ -7,8 +7,10 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPre
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
+#[CoversClass(AbstractFileIteratingPrecondition::class)]
 final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
 {
     protected function setUp(): void
@@ -29,13 +31,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         return ContainerTestHelper::get(NoHardLinksExist::class);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::exitEarly
-     * @covers ::findFiles
-     *
-     * @dataProvider providerFulfilled
-     */
+    #[DataProvider('providerFulfilled')]
     public function testFulfilled(array $files): void
     {
         $activeDirPath = self::activeDirPath();
@@ -47,7 +43,7 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         self::assertTrue($sut->isFulfilled($activeDirPath, $stagingDirPath));
     }
 
-    public function providerFulfilled(): array
+    public static function providerFulfilled(): array
     {
         return [
             'Files' => [
@@ -63,7 +59,6 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         ];
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         // Use `NoHardLinksExist` to exercise `AbstractFileIteratingPrecondition` by extensions.
@@ -82,7 +77,6 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         self::assertFalse($isFulfilled, 'Found unsupported links.');
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testWithStagingDirNestedUnderActiveDir(): void
     {
         // Use `NoHardLinksExist` to exercise `AbstractFileIteratingPrecondition` by extensions.
@@ -101,20 +95,15 @@ final class AbstractFileIteratingPreconditionFunctionalTest extends TestCase
         self::assertTrue($isFulfilled, 'Excluded nested staging directory while scanning parent active directory.');
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::findFiles
-     *
-     * @dataProvider providerWithAbsentDirectory
-     */
-    public function testWithAbsentDirectory(PathInterface $activeDirPath, PathInterface $stagingDirPath): void
+    #[DataProvider('providerWithAbsentDirectory')]
+    public function testWithAbsentDirectory(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         $sut = $this->createSut();
 
-        self::assertTrue($sut->isFulfilled($activeDirPath, $stagingDirPath));
+        self::assertTrue($sut->isFulfilled($activeDir, $stagingDir));
     }
 
-    public function providerWithAbsentDirectory(): array
+    public static function providerWithAbsentDirectory(): array
     {
         return [
             'No active directory' => [

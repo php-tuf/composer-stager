@@ -4,15 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirDoesNotExist;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirDoesNotExist
- *
- * @covers ::__construct
- * @covers ::doAssertIsFulfilled
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
- */
+#[CoversClass(StagingDirDoesNotExist::class)]
 final class StagingDirDoesNotExistUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Staging directory does not exist';
@@ -37,10 +32,6 @@ final class StagingDirDoesNotExistUnitTest extends PreconditionUnitTestCase
         return new StagingDirDoesNotExist($environment, $filesystem, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -51,7 +42,6 @@ final class StagingDirDoesNotExistUnitTest extends PreconditionUnitTestCase
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The staging directory already exists.';

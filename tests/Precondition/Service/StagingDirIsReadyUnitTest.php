@@ -6,14 +6,10 @@ use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirExistsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsWritableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsReady
- *
- * @covers ::__construct
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(StagingDirIsReady::class)]
 final class StagingDirIsReadyUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Staging directory is ready';
@@ -47,7 +43,6 @@ final class StagingDirIsReadyUnitTest extends PreconditionUnitTestCase
         return new StagingDirIsReady($environment, $translatableFactory, $stagingDirExists, $stagingDirIsWritable);
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();

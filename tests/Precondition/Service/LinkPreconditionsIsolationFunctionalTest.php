@@ -11,13 +11,14 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTh
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Throwable;
 
 /**
  * Tests the interaction of unsupported links preconditions.
- *
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition
  */
+#[CoversClass(AbstractFileIteratingPrecondition::class)]
 final class LinkPreconditionsIsolationFunctionalTest extends TestCase
 {
     private const COVERED_PRECONDITIONS = [
@@ -95,7 +96,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         );
     }
 
-    /** @group no_windows */
+    #[Group('no_windows')]
     public function testNoAbsoluteSymlinksExist(): void
     {
         $source = self::path('source.txt');
@@ -106,7 +107,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $this->assertPreconditionIsIsolated(NoAbsoluteSymlinksExist::class);
     }
 
-    /** @group windows_only */
+    #[Group('windows_only')]
     public function testNoLinksExistOnWindows(): void
     {
         $source = self::path('source.txt');
@@ -122,7 +123,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         }, PreconditionException::class);
     }
 
-    /** @group no_windows */
+    #[Group('no_windows')]
     public function testNoSymlinksPointOutsideTheCodebase(): void
     {
         $source = self::path('source.txt');
@@ -135,7 +136,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         self::rm($target);
     }
 
-    /** @group no_windows */
+    #[Group('no_windows')]
     public function testNoHardLinksExistExist(): void
     {
         $source = self::path('source.txt');
@@ -146,7 +147,7 @@ final class LinkPreconditionsIsolationFunctionalTest extends TestCase
         $this->assertPreconditionIsIsolated(NoHardLinksExist::class);
     }
 
-    /** @group no_windows */
+    #[Group('no_windows')]
     private function assertPreconditionIsIsolated(string $sut): void
     {
         $sut = $this->createTestPreconditionsTree([$sut]);

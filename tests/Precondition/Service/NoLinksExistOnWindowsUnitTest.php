@@ -3,15 +3,10 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Argument;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
- *
- * @covers ::__construct
- * @covers ::assertIsSupportedFile
- * @covers ::exitEarly
- */
+#[CoversClass(NoLinksExistOnWindows::class)]
 final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected const NAME = 'No links exist on Windows';
@@ -39,7 +34,6 @@ final class NoLinksExistOnWindowsUnitTest extends FileIteratingPreconditionUnitT
         return new NoLinksExistOnWindows($environment, $fileFinder, $filesystem, $pathFactory, $pathListFactory, $translatableFactory);
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);

@@ -4,8 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\Path\Service;
 
 use PhpTuf\ComposerStager\Internal\Path\Service\PathHelper;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Service\PathHelper */
+#[CoversClass(PathHelper::class)]
 final class PathHelperUnitTest extends TestCase
 {
     public function createSut(): PathHelper
@@ -13,11 +15,7 @@ final class PathHelperUnitTest extends TestCase
         return new PathHelper();
     }
 
-    /**
-     * @covers ::canonicalize
-     *
-     * @dataProvider providerCanonicalize
-     */
+    #[DataProvider('providerCanonicalize')]
     public function testCanonicalize(string $unixLike, string $windows, string $expected): void
     {
         $sut = $this->createSut();
@@ -29,7 +27,7 @@ final class PathHelperUnitTest extends TestCase
         self::assertSame($expected, $actualWindows, 'Correctly canonicalized Windows path.');
     }
 
-    public function providerCanonicalize(): array
+    public static function providerCanonicalize(): array
     {
         return [
             'Empty paths' => [
@@ -90,12 +88,7 @@ final class PathHelperUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::isAbsolute
-     * @covers ::isRelative
-     *
-     * @dataProvider providerAbsoluteRelative
-     */
+    #[DataProvider('providerAbsoluteRelative')]
     public function testAbsoluteRelative(bool $isAbsolute, string $path): void
     {
         $sut = $this->createSut();
@@ -104,7 +97,7 @@ final class PathHelperUnitTest extends TestCase
         self::assertSame(!$isAbsolute, $sut->isRelative($path));
     }
 
-    public function providerAbsoluteRelative(): array
+    public static function providerAbsoluteRelative(): array
     {
         return [
             // Yes.
@@ -118,21 +111,17 @@ final class PathHelperUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::isDescendant
-     *
-     * @dataProvider providerIsRelative
-     */
-    public function testIsRelative(string $descendant, string $ancestor, bool $expectedIsDescendant): void
+    #[DataProvider('providerIsRelative')]
+    public function testIsRelative(string $descendant, string $ancestor, bool $isDescendant): void
     {
         $sut = $this->createSut();
 
         $actualIsDescendant = $sut->isDescendant($descendant, $ancestor);
 
-        self::assertSame($expectedIsDescendant, $actualIsDescendant);
+        self::assertSame($isDescendant, $actualIsDescendant);
     }
 
-    public function providerIsRelative(): array
+    public static function providerIsRelative(): array
     {
         return [
             'Simple descendant' => [

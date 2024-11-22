@@ -5,17 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\Path\Value;
 use PhpTuf\ComposerStager\Internal\Path\Value\PathList;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\PathList */
+#[CoversClass(PathList::class)]
 final class PathListUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::add
-     * @covers ::getAll
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $given, array $add, array $expected): void
     {
         $pathHelper = self::createPathHelper();
@@ -26,16 +22,16 @@ final class PathListUnitTest extends TestCase
         self::assertEquals($expected, $sut->getAll(), 'Correctly added paths and got them.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         $data = [
             'None given, none added' => [
-                'paths' => [],
+                'given' => [],
                 'add' => [],
                 'expected' => [],
             ],
             'Some given, none added' => [
-                'paths' => [
+                'given' => [
                     'one',
                     'two',
                 ],
@@ -46,7 +42,7 @@ final class PathListUnitTest extends TestCase
                 ],
             ],
             'None given, some added' => [
-                'paths' => [],
+                'given' => [],
                 'add' => [
                     'one',
                     'two',
@@ -57,7 +53,7 @@ final class PathListUnitTest extends TestCase
                 ],
             ],
             'Some given, some added' => [
-                'paths' => [
+                'given' => [
                     'one',
                     'two',
                 ],
@@ -75,15 +71,15 @@ final class PathListUnitTest extends TestCase
         ];
 
         return array_merge($data, EnvironmentTestHelper::isWindows()
-            ? $this->providerBasicFunctionalityWindows()
-            : $this->providerBasicFunctionalityUnixLike());
+            ? self::providerBasicFunctionalityWindows()
+            : self::providerBasicFunctionalityUnixLike());
     }
 
-    private function providerBasicFunctionalityWindows(): array
+    private static function providerBasicFunctionalityWindows(): array
     {
         return [
             'Different directory separators' => [
-                'paths' => [
+                'given' => [
                     'one',
                     'two\\two',
                     'three/three/three',
@@ -101,7 +97,7 @@ final class PathListUnitTest extends TestCase
                 ],
             ],
             'Complex paths' => [
-                'paths' => [
+                'given' => [
                     'one\\two',
                     'three/four/five',
                     'six\\seven/..\\eight/nine',
@@ -115,7 +111,7 @@ final class PathListUnitTest extends TestCase
                 ],
             ],
             'Duplicate paths' => [
-                'paths' => [
+                'given' => [
                     'one\\two',
                     'one\\two',
                     'three\\four\\five',
@@ -134,11 +130,11 @@ final class PathListUnitTest extends TestCase
         ];
     }
 
-    private function providerBasicFunctionalityUnixLike(): array
+    private static function providerBasicFunctionalityUnixLike(): array
     {
         return [
             'Different directory separators' => [
-                'paths' => [
+                'given' => [
                     'one',
                     'two/two',
                     'three\\three\\three',
@@ -156,7 +152,7 @@ final class PathListUnitTest extends TestCase
                 ],
             ],
             'Complex paths' => [
-                'paths' => [
+                'given' => [
                     'one/two',
                     'three\\four\\five',
                     'six/seven\\../eight\\nine',
@@ -170,7 +166,7 @@ final class PathListUnitTest extends TestCase
                 ],
             ],
             'Duplicate paths' => [
-                'paths' => [
+                'given' => [
                     'one/two',
                     'one/two',
                     'three/four/five',

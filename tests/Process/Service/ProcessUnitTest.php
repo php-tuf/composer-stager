@@ -17,6 +17,8 @@ use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestStringable;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
@@ -25,11 +27,7 @@ use Symfony\Component\Process\Exception\RuntimeException as SymfonyRuntimeExcept
 use Symfony\Component\Process\Process as SymfonyProcess;
 use Throwable;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\Process
- *
- * @covers ::__construct
- */
+#[CoversClass(Process::class)]
 final class ProcessUnitTest extends TestCase
 {
     private SymfonyProcessFactoryInterface|ObjectProphecy $symfonyProcessFactory;
@@ -66,20 +64,7 @@ final class ProcessUnitTest extends TestCase
         return new Process($symfonyProcessFactory, $translatableFactory, ...$givenConstructorArguments);
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertValidEnvName
-     * @covers ::assertValidEnvValue
-     * @covers ::getEnv
-     * @covers ::getErrorOutput
-     * @covers ::getOutput
-     * @covers ::mustRun
-     * @covers ::run
-     * @covers ::setEnv
-     * @covers ::setTimeout
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
         array $givenConstructorArguments,
         array $givenRunArguments,
@@ -138,7 +123,7 @@ final class ProcessUnitTest extends TestCase
         self::assertSame($expectedRunReturn, $actualRunReturn, 'Returned correct status code from ::run().');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Minimum arguments' => [
@@ -174,13 +159,7 @@ final class ProcessUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getEnv
-     * @covers ::setEnv
-     *
-     * @dataProvider providerEnv
-     */
+    #[DataProvider('providerEnv')]
     public function testEnv(array $optionalArguments, array $expectedInitialEnv, array $givenNewEnv): void
     {
         $symfonyProcessFactory = ContainerTestHelper::get(SymfonyProcessFactory::class);
@@ -195,7 +174,7 @@ final class ProcessUnitTest extends TestCase
         self::assertSame($givenNewEnv, $actualUpdatedEnv);
     }
 
-    public function providerEnv(): array
+    public static function providerEnv(): array
     {
         return [
             'No env argument' => [
@@ -228,11 +207,7 @@ final class ProcessUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::run
-     *
-     * @dataProvider providerRunStatusCode
-     */
+    #[DataProvider('providerRunStatusCode')]
     public function testRunStatusCode(int $expected): void
     {
         $this->symfonyProcess
@@ -246,7 +221,7 @@ final class ProcessUnitTest extends TestCase
         self::assertSame($expected, $actual, 'Returned correct status code.');
     }
 
-    public function providerRunStatusCode(): array
+    public static function providerRunStatusCode(): array
     {
         return [
             'success' => [0],
@@ -255,7 +230,6 @@ final class ProcessUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::getOutput */
     public function testGetOutputException(): void
     {
         $previous = ProcessTestHelper::createSymfonyProcessFailedException();
@@ -270,7 +244,6 @@ final class ProcessUnitTest extends TestCase
         }, LogicException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
-    /** @covers ::getErrorOutput */
     public function testGetErrorOutputException(): void
     {
         $previous = ProcessTestHelper::createSymfonyProcessFailedException();
@@ -285,7 +258,6 @@ final class ProcessUnitTest extends TestCase
         }, LogicException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
-    /** @covers ::mustRun */
     public function testMustRunException(): void
     {
         $previous = ProcessTestHelper::createSymfonyProcessFailedException();
@@ -300,11 +272,7 @@ final class ProcessUnitTest extends TestCase
         }, RuntimeException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
-    /**
-     * @covers ::run
-     *
-     * @dataProvider providerRunException
-     */
+    #[DataProvider('providerRunException')]
     public function testRunException(Throwable $previous): void
     {
         $this->symfonyProcess
@@ -319,7 +287,7 @@ final class ProcessUnitTest extends TestCase
         }, RuntimeException::class, $expectedExceptionMessage, null, $previous::class);
     }
 
-    public function providerRunException(): array
+    public static function providerRunException(): array
     {
         return [
             'SymfonyLogicException' => [new SymfonyLogicException('SymfonyLogicException')],
@@ -328,12 +296,7 @@ final class ProcessUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::assertValidEnv
-     * @covers ::assertValidEnvName
-     *
-     * @dataProvider providerSetEnvInvalidNames
-     */
+    #[DataProvider('providerSetEnvInvalidNames')]
     public function testSetEnvInvalidNames(array $values, string $invalidName): void
     {
         $this->symfonyProcess
@@ -349,7 +312,7 @@ final class ProcessUnitTest extends TestCase
         ));
     }
 
-    public function providerSetEnvInvalidNames(): array
+    public static function providerSetEnvInvalidNames(): array
     {
         return [
             'Empty string' => [
@@ -372,17 +335,12 @@ final class ProcessUnitTest extends TestCase
             // at least document the behavior with this test case.
             'Value with no name' => [
                 'values' => ['value'],
-                'invalidValue' => '0',
+                'invalidName' => '0',
             ],
         ];
     }
 
-    /**
-     * @covers ::assertValidEnv
-     * @covers ::assertValidEnvValue
-     *
-     * @dataProvider providerSetEnvInvalidValues
-     */
+    #[DataProvider('providerSetEnvInvalidValues')]
     public function testSetEnvInvalidValues(array $values, string $invalidValue): void
     {
         $this->symfonyProcess
@@ -398,7 +356,7 @@ final class ProcessUnitTest extends TestCase
         ));
     }
 
-    public function providerSetEnvInvalidValues(): array
+    public static function providerSetEnvInvalidValues(): array
     {
         return [
             'Array' => [
@@ -424,7 +382,6 @@ final class ProcessUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::setTimeout */
     public function testSetTimeoutException(): void
     {
         $previous = ProcessTestHelper::createSymfonyProcessFailedException();

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- https://docs.phpunit.de/en/9.6/configuration.html -->
+<!-- https://docs.phpunit.de/en/10.5/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         cacheResultFile="var/phpunit/test-results"
+         cacheDirectory="var/phpunit/cache"
          executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         failOnRisky="true"
+         requireCoverageMetadata="true"
          failOnWarning="true"
-         verbose="true"
+         failOnRisky="true"
+         defaultTestSuite="all"
 >
     <testsuites>
         <testsuite name="all">
@@ -30,12 +28,13 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="var/phpunit/coverage-cache"
-              processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
+    </source>
 
+    <coverage>
         <report>
             <clover outputFile="var/phpunit/clover.xml"/>
             <html outputDirectory="var/phpunit/html-coverage"/>

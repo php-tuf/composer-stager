@@ -5,12 +5,11 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows
- *
- * @covers ::__construct
- */
+#[CoversClass(NoLinksExistOnWindows::class)]
 final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
     protected function createSut(): NoLinksExistOnWindows
@@ -18,14 +17,8 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         return ContainerTestHelper::get(NoLinksExistOnWindows::class);
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::exitEarly
-     *
-     * @dataProvider providerUnfulfilled
-     *
-     * @group windows_only
-     */
+    #[DataProvider('providerUnfulfilled')]
+    #[Group('windows_only')]
     public function testUnfulfilled(array $symlinks, array $hardLinks): void
     {
         $activeDirPath = self::activeDirPath();
@@ -52,7 +45,7 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         }, PreconditionException::class, $message);
     }
 
-    public function providerUnfulfilled(): array
+    public static function providerUnfulfilled(): array
     {
         return [
             'Contains symlink' => [
@@ -66,14 +59,8 @@ final class NoLinksExistOnWindowsFunctionalTest extends LinkPreconditionsFunctio
         ];
     }
 
-    /**
-     * @covers ::exitEarly
-     * @covers ::isFulfilled
-     *
-     * @dataProvider providerExclusions
-     *
-     * @group windows_only
-     */
+    #[DataProvider('providerExclusions')]
+    #[Group('windows_only')]
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetFile = 'target.txt';

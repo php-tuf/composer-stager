@@ -11,11 +11,12 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait;
 use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableAwareTrait */
+#[CoversNothing]
 final class TranslatableAwareTraitUnitTest extends TestCase
 {
-    /** @covers ::d */
     public function testDMethod(): void
     {
         $domainOptions = self::createDomainOptions();
@@ -36,7 +37,6 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         self::assertSame($domainOptions, $actual);
     }
 
-    /** @covers ::d */
     public function testDMethodWithMissingTranslatableFactory(): void
     {
         $this->expectException(AssertionError::class);
@@ -50,12 +50,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         $sut->callD();
     }
 
-    /**
-     * @covers ::setTranslatableFactory
-     * @covers ::t
-     *
-     * @dataProvider providerTMethod
-     */
+    #[DataProvider('providerTMethod')]
     public function testTMethod(array $arguments): void
     {
         $arguments = array_values($arguments);
@@ -76,7 +71,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         self::assertEquals($expected, $actual, 'Returned correct translatable object.');
     }
 
-    public function providerTMethod(): array
+    public static function providerTMethod(): array
     {
         return [
             'Minimum values' => [
@@ -99,7 +94,6 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::t */
     public function testTMethodWithMissingTranslatableFactory(): void
     {
         $this->expectException(AssertionError::class);
@@ -113,11 +107,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         $sut->callT('Message');
     }
 
-    /**
-     * @covers ::p
-     *
-     * @dataProvider providerPMethod
-     */
+    #[DataProvider('providerPMethod')]
     public function testPMethod(array $parameters): void
     {
         $translatableFactory = self::createTranslatableFactory();
@@ -138,7 +128,7 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function providerPMethod(): array
+    public static function providerPMethod(): array
     {
         return [
             'Empty parameters' => [
@@ -153,7 +143,6 @@ final class TranslatableAwareTraitUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::p */
     public function testPMethodWithMissingTranslatableFactory(): void
     {
         $this->expectException(AssertionError::class);
