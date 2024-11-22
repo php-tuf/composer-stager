@@ -119,29 +119,3 @@ jobs:
             -   name: "Run Windows tests"
                 run: "./vendor/bin/phpunit --no-coverage --testsuite=all --exclude-group=no_windows"
                 if: ${{ runner.os == 'Windows' }}
-
-    performance:
-        name: "Performance: ${{ matrix.os }}"
-        runs-on: "${{ matrix.os }}-latest"
-        strategy:
-            fail-fast: false
-            matrix:
-                os: [ ubuntu, windows ]
-        steps:
-            -   name: "Install rsync"
-                uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
-
-            -   name: "Set up PHP"
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "8.2"
-                    coverage: none
-
-            -   name: "Checkout code"
-                uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-
-            -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
-
-            -   name: "Run performance tests"
-                run: "composer phpbench -- --progress=plain --ansi"
