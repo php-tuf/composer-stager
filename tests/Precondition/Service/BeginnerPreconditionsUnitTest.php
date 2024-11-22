@@ -6,14 +6,10 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirDoesNotExistInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\BeginnerPreconditions
- *
- * @covers ::__construct
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(BeginnerPreconditions::class)]
 final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Beginner preconditions';
@@ -59,7 +55,6 @@ final class BeginnerPreconditionsUnitTest extends PreconditionUnitTestCase
         );
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();

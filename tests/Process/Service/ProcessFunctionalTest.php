@@ -8,8 +8,9 @@ use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\ProcessTestHelper;
+use PHPUnit\Framework\Attributes\CoversNothing;
 
-/** @coversNothing */
+#[CoversNothing]
 final class ProcessFunctionalTest extends TestCase
 {
     private function createSut(array $command): ProcessInterface

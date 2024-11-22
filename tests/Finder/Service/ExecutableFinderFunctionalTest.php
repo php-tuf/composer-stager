@@ -6,12 +6,9 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
- *
- * @covers ::__construct
- */
+#[CoversClass(ExecutableFinder::class)]
 final class ExecutableFinderFunctionalTest extends TestCase
 {
     private function createSut(): ExecutableFinder
@@ -19,7 +16,6 @@ final class ExecutableFinderFunctionalTest extends TestCase
         return ContainerTestHelper::get(ExecutableFinder::class);
     }
 
-    /** @covers ::find */
     public function testFindFound(): void
     {
         $sut = $this->createSut();
@@ -29,7 +25,6 @@ final class ExecutableFinderFunctionalTest extends TestCase
         self::assertMatchesRegularExpression('/rsync(.exe)?$/i', $actual);
     }
 
-    /** @covers ::find */
     public function testFindNotFound(): void
     {
         $sut = $this->createSut();

@@ -5,8 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\RsyncIsAvailable;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversNothing;
 
-/** @coversNothing */
+#[CoversNothing]
 final class RsyncIsAvailableFunctionalTest extends TestCase
 {
     public function testFulfilled(): void

@@ -7,9 +7,11 @@ use PhpTuf\ComposerStager\API\FileSyncer\Service\FileSyncerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer */
+#[CoversClass(FileSyncer::class)]
 final class FileSyncerFunctionalTest extends TestCase
 {
     protected function setUp(): void
@@ -30,22 +32,15 @@ final class FileSyncerFunctionalTest extends TestCase
         return ContainerTestHelper::get(FileSyncer::class);
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::assertSourceAndDestinationAreDifferent
-     * @covers ::assertSourceIsValid
-     * @covers ::sync
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
-        string $sourceDirRelative,
-        string $destinationDirRelative,
+        string $sourceDir,
+        string $destinationDir,
         array $givenFiles,
         array $expectedFiles,
     ): void {
-        $sourceDirPath = self::createPath($sourceDirRelative);
-        $destinationDirPath = self::createPath($destinationDirRelative);
+        $sourceDirPath = self::createPath($sourceDir);
+        $destinationDirPath = self::createPath($destinationDir);
         self::touch($givenFiles, self::testFreshFixturesDirAbsolute());
         $sut = $this->createSut();
 
@@ -54,15 +49,14 @@ final class FileSyncerFunctionalTest extends TestCase
         self::assertDirectoryListing(self::testFreshFixturesDirAbsolute(), $expectedFiles);
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Source and destination both empty' => [
                 'sourceDir' => 'source-dir',
                 'destinationDir' => 'destination-dir',
-                'sourceFiles' => [],
-                'destinationFiles' => [],
-                'expected' => [],
+                'givenFiles' => [],
+                'expectedFiles' => [],
             ],
             'Files in source, destination empty' => [
                 'sourceDir' => 'source-dir',
@@ -100,7 +94,6 @@ final class FileSyncerFunctionalTest extends TestCase
                     'destination-dir/one.txt',
                     'destination-dir/two/three.txt',
                 ],
-                'expected' => ['one.txt', 'two/three.txt'],
             ],
             'Some overlap in files in source and destination' => [
                 'sourceDir' => 'source-dir',
@@ -153,11 +146,7 @@ final class FileSyncerFunctionalTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::buildCommand
-     *
-     * @noinspection PotentialMalwareInspection
-     */
+    /** @noinspection PotentialMalwareInspection */
     public function testChecksum(): void
     {
         $filename = 'file.txt';
@@ -179,7 +168,6 @@ final class FileSyncerFunctionalTest extends TestCase
         );
     }
 
-    /** @covers ::buildCommand */
     public function testSyncPermissions(): void
     {
         $filename = 'file.txt';
@@ -207,11 +195,7 @@ final class FileSyncerFunctionalTest extends TestCase
         self::assertFileMode($directoryInSourceAbsolute, 0744);
     }
 
-    /**
-     * @covers ::buildCommand
-     *
-     * @see https://github.com/php-tuf/composer-stager/issues/162
-     */
+    /** @see https://github.com/php-tuf/composer-stager/issues/162 */
     public function testSyncGitDirectory(): void
     {
         $git = static function (array $command): void {
@@ -233,7 +217,6 @@ final class FileSyncerFunctionalTest extends TestCase
         self::assertDirectoriesAreTheSame(self::sourceDirAbsolute(), self::destinationDirAbsolute());
     }
 
-    /** @covers ::buildCommand */
     public function testSyncPreservesEmptyDirectories(): void
     {
         $dirname = 'directory';
@@ -246,7 +229,6 @@ final class FileSyncerFunctionalTest extends TestCase
         self::assertDirectoryExists(self::makeAbsolute($dirname, self::destinationDirAbsolute()));
     }
 
-    /** @covers ::assertSourceAndDestinationAreDifferent */
     public function testSyncDirectoriesTheSame(): void
     {
         $samePath = self::arbitraryDirPath();
@@ -258,11 +240,7 @@ final class FileSyncerFunctionalTest extends TestCase
         }, LogicException::class, $message);
     }
 
-    /**
-     * @covers ::sync
-     *
-     * @dataProvider providerSyncTimeout
-     */
+    #[DataProvider('providerSyncTimeout')]
     public function testSyncTimeout(int $timeout): void
     {
         $sut = $this->createSut();
@@ -272,7 +250,7 @@ final class FileSyncerFunctionalTest extends TestCase
         self::assertSame((string) $timeout, ini_get('max_execution_time'), 'Correctly set process timeout.');
     }
 
-    public function providerSyncTimeout(): array
+    public static function providerSyncTimeout(): array
     {
         return [
             'Positive number' => [30],
@@ -281,7 +259,6 @@ final class FileSyncerFunctionalTest extends TestCase
         ];
     }
 
-    /** @covers ::sync */
     public function testSyncWithDirectorySymlinks(): void
     {
         $link = self::makeAbsolute('link', self::sourceDirAbsolute());
@@ -300,7 +277,6 @@ final class FileSyncerFunctionalTest extends TestCase
         ], '', 'Correctly synced files, including a symlink to a directory.');
     }
 
-    /** @covers ::assertSourceIsValid */
     public function testSourceDoesNotExist(): void
     {
         $sourcePath = self::nonExistentDirPath();
@@ -314,7 +290,6 @@ final class FileSyncerFunctionalTest extends TestCase
         }, LogicException::class, $message);
     }
 
-    /** @covers ::assertSourceIsValid */
     public function testSourceIsNotADirectory(): void
     {
         $sourcePath = self::arbitraryFilePath();

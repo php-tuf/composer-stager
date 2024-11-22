@@ -6,9 +6,12 @@ use PhpTuf\ComposerStager\Internal\Environment\Service\Environment;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Prophecy\Argument;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Environment\Service\Environment */
+#[CoversClass(Environment::class)]
 final class EnvironmentUnitTest extends TestCase
 {
     private function createSut(): Environment
@@ -16,7 +19,6 @@ final class EnvironmentUnitTest extends TestCase
         return new Environment();
     }
 
-    /** @covers ::isWindows */
     public function testIsWindows(): void
     {
         $isWindowsDirectorySeparator = DIRECTORY_SEPARATOR === '\\';
@@ -25,13 +27,8 @@ final class EnvironmentUnitTest extends TestCase
         self::assertEquals($isWindowsDirectorySeparator, $sut->isWindows());
     }
 
-    /**
-     * @covers ::setTimeLimit
-     *
-     * @dataProvider providerSetTimeLimitFunctionExists
-     *
-     * @runInSeparateProcess
-     */
+    #[DataProvider('providerSetTimeLimitFunctionExists')]
+    #[RunInSeparateProcess]
     public function testSetTimeLimitFunctionExists(int $seconds, bool $setTimeLimitReturn): void
     {
         BuiltinFunctionMocker::mock(['set_time_limit' => $this->prophesize(TestSpyInterface::class)]);
@@ -46,7 +43,7 @@ final class EnvironmentUnitTest extends TestCase
         self::assertSame($actualReturn, $setTimeLimitReturn, 'Passed through the return value from set_time_limit().');
     }
 
-    public function providerSetTimeLimitFunctionExists(): array
+    public static function providerSetTimeLimitFunctionExists(): array
     {
         return [
             [
@@ -60,11 +57,7 @@ final class EnvironmentUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::setTimeLimit
-     *
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testSetTimeLimitFunctionDoesNotExist(): void
     {
         BuiltinFunctionMocker::mock([

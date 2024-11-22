@@ -3,10 +3,12 @@
 namespace PhpTuf\ComposerStager\Tests\Compatibility;
 
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-/** @coversNothing */
+#[CoversNothing]
 final class CompatibilityTest extends TestCase
 {
     // @see https://github.com/php-tuf/composer-stager/wiki/Library-compatibility-policy#drupal
@@ -29,10 +31,9 @@ final class CompatibilityTest extends TestCase
     /**
      * Tests for Composer compatibility with supported Drupal core versions.
      *
-     * @dataProvider providerDrupalVersionCompatibility
-     *
      * @see ../../composer.json
      */
+    #[DataProvider('providerDrupalVersionCompatibility')]
     public function testDrupalVersionCompatibility(string $versionConstraint): void
     {
         $fixtureDir = self::fixtureDir($versionConstraint);
@@ -54,7 +55,7 @@ final class CompatibilityTest extends TestCase
         ));
     }
 
-    public function providerDrupalVersionCompatibility(): array
+    public static function providerDrupalVersionCompatibility(): array
     {
         $data = [];
 

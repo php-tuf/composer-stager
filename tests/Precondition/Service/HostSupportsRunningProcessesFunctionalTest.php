@@ -5,12 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses
- *
- * @covers ::__construct
- */
+#[CoversClass(HostSupportsRunningProcesses::class)]
 final class HostSupportsRunningProcessesFunctionalTest extends TestCase
 {
     private function createSut(): HostSupportsRunningProcesses
@@ -19,8 +16,6 @@ final class HostSupportsRunningProcessesFunctionalTest extends TestCase
     }
 
     /**
-     * @covers ::doAssertIsFulfilled
-     *
      * This test proves that the precondition correctly detects a failure from
      * the Symfony Process component when the the proc_open() function is
      * unavailable. Unfortunately, it is infeasible to simulate that condition

@@ -6,15 +6,12 @@ use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\ExecutableFinder as SymfonyExecutableFinder;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\ExecutableFinder
- *
- * @covers ::__construct
- */
+#[CoversClass(ExecutableFinder::class)]
 final class ExecutableFinderUnitTest extends TestCase
 {
     private SymfonyExecutableFinder|ObjectProphecy $symfonyExecutableFinder;
@@ -35,7 +32,6 @@ final class ExecutableFinderUnitTest extends TestCase
         return new ExecutableFinder($executableFinder, $translatorFactory);
     }
 
-    /** @covers ::find */
     public function testFind(): void
     {
         $command = 'command_name';
@@ -50,7 +46,6 @@ final class ExecutableFinderUnitTest extends TestCase
         self::assertSame($command, $actual, 'Returned correct path');
     }
 
-    /** @covers ::find */
     public function testFindNotFound(): void
     {
         $command = 'command_name';

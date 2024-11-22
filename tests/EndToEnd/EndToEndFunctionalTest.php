@@ -15,14 +15,15 @@ use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\EnvironmentTestHelper;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Provides end-to-end functional tests, including the API and internal layers.
- *
- * @coversNothing
- *
- * @group slow
  */
+#[CoversNothing]
+#[Group('slow')]
 final class EndToEndFunctionalTest extends TestCase
 {
     private const CHANGED_CONTENT = 'changed';
@@ -53,11 +54,8 @@ final class EndToEndFunctionalTest extends TestCase
         self::removeTestEnvironment();
     }
 
-    /**
-     * @dataProvider providerDirectories
-     *
-     * @group slow
-     */
+    #[DataProvider('providerDirectories')]
+    #[Group('slow')]
     public function testSync(string $activeDir, string $stagingDir): void
     {
         $activeDirPath = self::createPath($activeDir);
@@ -337,7 +335,7 @@ final class EndToEndFunctionalTest extends TestCase
         self::assertFileDoesNotExist($stagingDirPath->absolute(), 'Staging directory was completely removed.');
     }
 
-    public function providerDirectories(): array
+    public static function providerDirectories(): array
     {
         $data = [
             'Siblings' => [

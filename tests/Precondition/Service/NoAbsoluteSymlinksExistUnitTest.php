@@ -3,14 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
- *
- * @covers ::assertIsSupportedFile
- * @covers ::exitEarly
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(NoAbsoluteSymlinksExist::class)]
 final class NoAbsoluteSymlinksExistUnitTest extends FileIteratingPreconditionUnitTestCase
 {
     protected const NAME = 'No absolute links exist';

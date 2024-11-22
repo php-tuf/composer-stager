@@ -15,14 +15,12 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Committer;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Committer
- *
- * @covers \PhpTuf\ComposerStager\Internal\Core\Committer::__construct
- */
+#[CoversClass(Committer::class)]
 final class CommitterUnitTest extends TestCase
 {
     private CommitterPreconditionsInterface|ObjectProphecy $preconditions;
@@ -42,7 +40,6 @@ final class CommitterUnitTest extends TestCase
         return new Committer($fileSyncer, $preconditions);
     }
 
-    /** @covers ::commit */
     public function testCommitWithMinimumParams(): void
     {
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
@@ -58,11 +55,7 @@ final class CommitterUnitTest extends TestCase
         $sut->commit(self::stagingDirPath(), self::activeDirPath());
     }
 
-    /**
-     * @covers ::commit
-     *
-     * @dataProvider providerCommitWithOptionalParams
-     */
+    #[DataProvider('providerCommitWithOptionalParams')]
     public function testCommitWithOptionalParams(
         string $stagingDir,
         string $activeDir,
@@ -83,7 +76,7 @@ final class CommitterUnitTest extends TestCase
         $sut->commit($stagingDir, $activeDir, $exclusions, $callback, $timeout);
     }
 
-    public function providerCommitWithOptionalParams(): array
+    public static function providerCommitWithOptionalParams(): array
     {
         return [
             'Minimum values' => [
@@ -103,7 +96,6 @@ final class CommitterUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::commit */
     public function testCommitPreconditionsUnfulfilled(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -122,11 +114,7 @@ final class CommitterUnitTest extends TestCase
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
-    /**
-     * @covers ::commit
-     *
-     * @dataProvider providerExceptions
-     */
+    #[DataProvider('providerExceptions')]
     public function testExceptions(ExceptionInterface $caughtException): void
     {
         $stagingDirPath = self::stagingDirPath();
@@ -142,7 +130,7 @@ final class CommitterUnitTest extends TestCase
         }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
-    public function providerExceptions(): array
+    public static function providerExceptions(): array
     {
         return [
             'InvalidArgumentException' => [

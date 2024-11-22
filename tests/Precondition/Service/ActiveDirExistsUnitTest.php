@@ -4,14 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirExists
- *
- * @covers ::__construct
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
- */
+#[CoversClass(ActiveDirExists::class)]
 final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Active directory exists';
@@ -42,10 +38,6 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
         return new ActiveDirExists($environment, $filesystem, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -59,7 +51,6 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testDoesNotExist(): void
     {
         $message = 'The active directory does not exist.';
@@ -70,7 +61,6 @@ final class ActiveDirExistsUnitTest extends PreconditionUnitTestCase
         $this->doTestUnfulfilled($message);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testIsNotADirectory(): void
     {
         $message = 'The active directory is not actually a directory.';

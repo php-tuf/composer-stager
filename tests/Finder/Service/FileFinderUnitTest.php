@@ -5,12 +5,9 @@ namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 use PhpTuf\ComposerStager\API\Exception\IOException;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
- *
- * @covers ::__construct
- */
+#[CoversClass(FileFinder::class)]
 final class FileFinderUnitTest extends TestCase
 {
     private function createSut(): FileFinder
@@ -30,7 +27,6 @@ final class FileFinderUnitTest extends TestCase
         self::assertTranslatableAware($sut);
     }
 
-    /** @covers ::getRecursiveDirectoryIterator */
     public function testGetRecursiveDirectoryIteratorException(): void
     {
         $path = self::nonExistentFilePath();

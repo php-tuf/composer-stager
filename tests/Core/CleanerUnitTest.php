@@ -12,14 +12,12 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Cleaner;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Cleaner
- *
- * @covers \PhpTuf\ComposerStager\Internal\Core\Cleaner::__construct
- */
+#[CoversClass(Cleaner::class)]
 final class CleanerUnitTest extends TestCase
 {
     private CleanerPreconditionsInterface|ObjectProphecy $preconditions;
@@ -39,7 +37,6 @@ final class CleanerUnitTest extends TestCase
         return new Cleaner($filesystem, $preconditions);
     }
 
-    /** @covers ::clean */
     public function testCleanWithMinimumParams(): void
     {
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
@@ -55,11 +52,7 @@ final class CleanerUnitTest extends TestCase
         $sut->clean(self::activeDirPath(), self::stagingDirPath());
     }
 
-    /**
-     * @covers ::clean
-     *
-     * @dataProvider providerCleanWithOptionalParams
-     */
+    #[DataProvider('providerCleanWithOptionalParams')]
     public function testCleanWithOptionalParams(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
         $path = self::createPath($path);
@@ -74,7 +67,7 @@ final class CleanerUnitTest extends TestCase
         $sut->clean(self::activeDirPath(), $path, $callback, $timeout);
     }
 
-    public function providerCleanWithOptionalParams(): array
+    public static function providerCleanWithOptionalParams(): array
     {
         return [
             'Minimum values' => [
@@ -90,7 +83,6 @@ final class CleanerUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::clean */
     public function testCleanPreconditionsUnfulfilled(): void
     {
         $message = __METHOD__;
@@ -105,7 +97,6 @@ final class CleanerUnitTest extends TestCase
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
-    /** @covers ::clean */
     public function testCleanFailToRemove(): void
     {
         $message = self::createTranslatableExceptionMessage(__METHOD__);

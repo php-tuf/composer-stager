@@ -5,14 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
 use PhpTuf\ComposerStager\Tests\TestUtils\PathTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoAbsoluteSymlinksExist
- *
- * @covers ::__construct
- *
- * @group no_windows
- */
+#[CoversClass(NoAbsoluteSymlinksExist::class)]
+#[Group('no_windows')]
 final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
     protected function createSut(): NoAbsoluteSymlinksExist
@@ -20,11 +18,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         return ContainerTestHelper::get(NoAbsoluteSymlinksExist::class);
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     *
-     * @dataProvider providerDoesNotContainLinks
-     */
+    #[DataProvider('providerDoesNotContainLinks')]
     public function testDoesNotContainLinks(array $files): void
     {
         self::touch($files, self::activeDirAbsolute());
@@ -35,7 +29,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         self::assertTrue($isFulfilled, 'Found no links.');
     }
 
-    public function providerDoesNotContainLinks(): array
+    public static function providerDoesNotContainLinks(): array
     {
         return [
             'Empty directory' => ['files' => []],
@@ -57,11 +51,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         ];
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     *
-     * @dataProvider providerLinksExist
-     */
+    #[DataProvider('providerLinksExist')]
     public function testAbsoluteLinksExist(string $dirName, string $basePath, string $link): void
     {
         $linkAbsolute = self::makeAbsolute($link, $basePath);
@@ -87,11 +77,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         self::assertTranslatableMessage($pattern, $statusMessage, 'Returned correct status message.');
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     *
-     * @dataProvider providerLinksExist
-     */
+    #[DataProvider('providerLinksExist')]
     public function testOnlyRelativeLinksExist(string $dirName, string $basePath, string $link): void
     {
         $linkAbsolute = self::makeAbsolute($link, $basePath);
@@ -110,7 +96,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         self::assertTrue($isFulfilled, 'Ignored relative links.');
     }
 
-    public function providerLinksExist(): array
+    public static function providerLinksExist(): array
     {
         return [
             'Active directory: root' => [
@@ -146,7 +132,6 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         ];
     }
 
-    /** @covers ::assertIsSupportedFile */
     public function testWithHardLink(): void
     {
         $link = self::makeAbsolute('link.txt', self::activeDirAbsolute());
@@ -162,11 +147,7 @@ final class NoAbsoluteSymlinksExistFunctionalTest extends LinkPreconditionsFunct
         self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     *
-     * @dataProvider providerExclusions
-     */
+    #[DataProvider('providerExclusions')]
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetFile = PathTestHelper::makeAbsolute('target.txt', self::activeDirAbsolute());

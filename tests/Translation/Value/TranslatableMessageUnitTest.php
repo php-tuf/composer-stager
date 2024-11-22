@@ -5,10 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 use PhpTuf\ComposerStager\API\Translation\Service\TranslatorInterface;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage */
+#[CoversClass(TranslatableMessage::class)]
 final class TranslatableMessageUnitTest extends TestCase
 {
     private TranslatorInterface|ObjectProphecy $translator;
@@ -18,13 +20,7 @@ final class TranslatableMessageUnitTest extends TestCase
         $this->translator = $this->prophesize(TranslatorInterface::class);
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::__toString
-     * @covers ::trans
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
         string $message,
         array $givenOptionalConstructorArguments,
@@ -52,7 +48,7 @@ final class TranslatableMessageUnitTest extends TestCase
         self::assertSame($expectedTranslation, (string) $sut, 'Returned correct typecast string value.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Minimum values' => [
@@ -136,7 +132,6 @@ final class TranslatableMessageUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::trans */
     public function testTransWithOptionalTranslatorArgument(): void
     {
         $constructorTranslator = $this->prophesize(TranslatorInterface::class);

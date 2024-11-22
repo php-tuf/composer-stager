@@ -9,14 +9,10 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestFulfilledPrecondition;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestUnfulfilledPrecondition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPreconditionsTree
- *
- * @covers ::__construct
- * @covers ::assertIsFulfilled
- * @covers ::isFulfilled
- */
+#[CoversClass(AbstractPreconditionsTree::class)]
 final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
 {
     protected function createSut(...$children): AbstractPreconditionsTree
@@ -63,12 +59,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
         return new $class($environment, $translatableFactory);
     }
 
-    /**
-     * @covers ::getLeaves
-     * @covers ::getStatusMessage
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(string $class, ?PathListInterface $exclusions, int $timeout): void
     {
         $activeDirPath = self::activeDirPath();
@@ -100,7 +91,7 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
         self::assertSame([$child], $sut->getLeaves());
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Fulfilled, without exclusions' => [
@@ -116,7 +107,6 @@ final class AbstractPreconditionsTreeUnitTest extends PreconditionUnitTestCase
         ];
     }
 
-    /** @covers ::getLeaves */
     public function testIsFulfilledBubbling(): void
     {
         $leaves = [

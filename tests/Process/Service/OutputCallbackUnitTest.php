@@ -5,20 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\Process\Service;
 use PhpTuf\ComposerStager\API\Process\Value\OutputTypeEnum;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback */
+#[CoversClass(OutputCallback::class)]
 final class OutputCallbackUnitTest extends TestCase
 {
-    /**
-     * @covers ::__invoke
-     * @covers ::clearErrorOutput
-     * @covers ::clearOutput
-     * @covers ::getErrorOutput
-     * @covers ::getOutput
-     * @covers ::normalizeBuffer
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
         array $givenOutput,
         array $expectedOutput,
@@ -50,7 +43,7 @@ final class OutputCallbackUnitTest extends TestCase
         self::assertOutput($sut, [], [], 'Cleared output.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         // Space ( ).
         $s = "\040";

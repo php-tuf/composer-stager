@@ -15,14 +15,12 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Beginner;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Beginner
- *
- * @covers \PhpTuf\ComposerStager\Internal\Core\Beginner::__construct
- */
+#[CoversClass(Beginner::class)]
 final class BeginnerUnitTest extends TestCase
 {
     private BeginnerPreconditionsInterface|ObjectProphecy $preconditions;
@@ -42,7 +40,6 @@ final class BeginnerUnitTest extends TestCase
         return new Beginner($fileSyncer, $preconditions);
     }
 
-    /** @covers ::begin */
     public function testBeginWithMinimumParams(): void
     {
         $timeout = ProcessInterface::DEFAULT_TIMEOUT;
@@ -58,32 +55,28 @@ final class BeginnerUnitTest extends TestCase
         $sut->begin(self::activeDirPath(), self::stagingDirPath());
     }
 
-    /**
-     * @covers ::begin
-     *
-     * @dataProvider providerBeginWithOptionalParams
-     */
+    #[DataProvider('providerBeginWithOptionalParams')]
     public function testBeginWithOptionalParams(
         string $activeDir,
         string $stagingDir,
-        ?PathListInterface $exclusions,
+        ?PathListInterface $givenExclusions,
         ?OutputCallbackInterface $callback,
         int $timeout,
     ): void {
         $activeDir = self::createPath($activeDir);
         $stagingDir = self::createPath($stagingDir);
         $this->preconditions
-            ->assertIsFulfilled($activeDir, $stagingDir, $exclusions, $timeout)
+            ->assertIsFulfilled($activeDir, $stagingDir, $givenExclusions, $timeout)
             ->shouldBeCalledOnce();
         $this->fileSyncer
-            ->sync($activeDir, $stagingDir, $exclusions, $callback, $timeout)
+            ->sync($activeDir, $stagingDir, $givenExclusions, $callback, $timeout)
             ->shouldBeCalledOnce();
         $sut = $this->createSut();
 
-        $sut->begin($activeDir, $stagingDir, $exclusions, $callback, $timeout);
+        $sut->begin($activeDir, $stagingDir, $givenExclusions, $callback, $timeout);
     }
 
-    public function providerBeginWithOptionalParams(): array
+    public static function providerBeginWithOptionalParams(): array
     {
         return [
             'Minimum values' => [
@@ -103,7 +96,6 @@ final class BeginnerUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::begin */
     public function testBeginPreconditionsUnfulfilled(): void
     {
         $message = __METHOD__;
@@ -118,11 +110,7 @@ final class BeginnerUnitTest extends TestCase
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
-    /**
-     * @covers ::begin
-     *
-     * @dataProvider providerExceptions
-     */
+    #[DataProvider('providerExceptions')]
     public function testExceptions(ExceptionInterface $caughtException): void
     {
         $this->fileSyncer
@@ -135,7 +123,7 @@ final class BeginnerUnitTest extends TestCase
         }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
-    public function providerExceptions(): array
+    public static function providerExceptions(): array
     {
         return [
             'InvalidArgumentException' => [

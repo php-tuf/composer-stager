@@ -9,14 +9,10 @@ use PhpTuf\ComposerStager\API\Precondition\Service\HostSupportsRunningProcessesI
 use PhpTuf\ComposerStager\API\Precondition\Service\NoNestingOnWindowsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\RsyncIsAvailableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommonPreconditions
- *
- * @covers ::__construct
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(CommonPreconditions::class)]
 final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Common preconditions';
@@ -83,7 +79,6 @@ final class CommonPreconditionsUnitTest extends PreconditionUnitTestCase
         );
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();

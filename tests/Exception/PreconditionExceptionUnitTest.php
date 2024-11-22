@@ -6,15 +6,14 @@ use Exception;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\Precondition\Service\TestPrecondition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 
+#[CoversClass(PreconditionException::class)]
 final class PreconditionExceptionUnitTest extends TestCase
 {
-    /**
-     * @covers \PhpTuf\ComposerStager\API\Exception\PreconditionException
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $arguments, int $code, ?Throwable $previous): void
     {
         $sut = new PreconditionException(...array_values($arguments));
@@ -26,7 +25,7 @@ final class PreconditionExceptionUnitTest extends TestCase
         self::assertEquals($previous, $sut->getPrevious(), 'Got previous exception.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Minimum values' => [

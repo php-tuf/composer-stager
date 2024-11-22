@@ -5,12 +5,10 @@ namespace PhpTuf\ComposerStager\Tests\Finder\Service;
 use PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Finder\Service\FileFinder
- *
- * @covers ::__construct
- */
+#[CoversClass(FileFinder::class)]
 final class FileFinderFunctionalTest extends TestCase
 {
     protected function setUp(): void
@@ -28,12 +26,7 @@ final class FileFinderFunctionalTest extends TestCase
         return ContainerTestHelper::get(FileFinder::class);
     }
 
-    /**
-     * @covers ::find
-     * @covers ::getRecursiveDirectoryIterator
-     *
-     * @dataProvider providerFind
-     */
+    #[DataProvider('providerFind')]
     public function testFind(array $files, array $exclusions, array $expected): void
     {
         $expected = self::normalizePaths($expected);
@@ -45,7 +38,7 @@ final class FileFinderFunctionalTest extends TestCase
         self::assertArrayEquals($expected, $actual);
     }
 
-    public function providerFind(): array
+    public static function providerFind(): array
     {
         return [
             'No files, no exclusions' => [

@@ -5,16 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Service;
 use PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestUtils\TranslationTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Service\SymfonyTranslatorProxy */
+#[CoversClass(SymfonyTranslatorProxy::class)]
 final class SymfonyTranslatorProxyUnitTest extends TestCase
 {
-    /**
-     * @covers ::getLocale
-     * @covers ::trans
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $arguments, string $expectedTranslation): void
     {
         $arguments = array_values($arguments);
@@ -27,7 +24,7 @@ final class SymfonyTranslatorProxyUnitTest extends TestCase
         self::assertEquals(TranslationTestHelper::LOCALE_DEFAULT, $actualLocale, 'Got correct default locale.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Minimum values' => [
@@ -76,10 +73,6 @@ final class SymfonyTranslatorProxyUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::symfonyTranslator
-     * @covers ::trans
-     */
     public function testSerializable(): void
     {
         $id = 'Arbitrary string';

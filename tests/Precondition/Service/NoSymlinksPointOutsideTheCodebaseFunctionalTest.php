@@ -5,15 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\PreconditionException;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase;
 use PhpTuf\ComposerStager\Tests\TestUtils\ContainerTestHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoSymlinksPointOutsideTheCodebase
- *
- * @covers ::__construct
- * @covers ::exitEarly
- *
- * @group no_windows
- */
+#[CoversClass(NoSymlinksPointOutsideTheCodebase::class)]
+#[Group('no_windows')]
 final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPreconditionsFunctionalTestCase
 {
     protected function createSut(): NoSymlinksPointOutsideTheCodebase
@@ -21,13 +18,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         return ContainerTestHelper::get(NoSymlinksPointOutsideTheCodebase::class);
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
-     * @covers ::linkPointsOutsidePath
-     *
-     * @dataProvider providerFulfilledWithValidLink
-     */
+    #[DataProvider('providerFulfilledWithValidLink')]
     public function testFulfilledWithValidLink(string $link, string $target): void
     {
         $activeDirPath = self::activeDirPath();
@@ -46,7 +37,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         self::assertTrue($isFulfilled, 'Allowed link pointing within the codebase.');
     }
 
-    public function providerFulfilledWithValidLink(): array
+    public static function providerFulfilledWithValidLink(): array
     {
         return [
             'Not in any package' => [
@@ -76,13 +67,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         ];
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
-     * @covers ::linkPointsOutsidePath
-     *
-     * @dataProvider providerUnfulfilled
-     */
+    #[DataProvider('providerUnfulfilled')]
     public function testUnfulfilled(string $targetDir, string $linkDir, string $linkDirName): void
     {
         $activeDirPath = self::activeDirPath();
@@ -105,7 +90,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         }, PreconditionException::class, $message);
     }
 
-    public function providerUnfulfilled(): array
+    public static function providerUnfulfilled(): array
     {
         return [
             'In active directory' => [
@@ -121,10 +106,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         ];
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
-     */
     public function testWithHardLink(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -144,11 +125,6 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
-     * @covers ::linkPointsOutsidePath
-     */
     public function testWithAbsoluteLink(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -169,13 +145,7 @@ final class NoSymlinksPointOutsideTheCodebaseFunctionalTest extends LinkPrecondi
         self::assertTrue($isFulfilled, 'Ignored hard link.');
     }
 
-    /**
-     * @covers ::assertIsSupportedFile
-     * @covers ::isFulfilled
-     * @covers ::linkPointsOutsidePath
-     *
-     * @dataProvider providerExclusions
-     */
+    #[DataProvider('providerExclusions')]
     public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void
     {
         $targetFile = '../';

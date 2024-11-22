@@ -4,15 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\StagingDirIsWritable
- *
- * @covers ::__construct
- * @covers ::doAssertIsFulfilled
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
- */
+#[CoversClass(StagingDirIsWritable::class)]
 final class StagingDirIsWritableUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Staging directory is writable';
@@ -38,10 +33,6 @@ final class StagingDirIsWritableUnitTest extends PreconditionUnitTestCase
         return new StagingDirIsWritable($environment, $filesystem, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -52,7 +43,6 @@ final class StagingDirIsWritableUnitTest extends PreconditionUnitTestCase
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The staging directory is not writable.';

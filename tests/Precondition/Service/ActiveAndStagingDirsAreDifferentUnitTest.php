@@ -3,12 +3,9 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveAndStagingDirsAreDifferent
- *
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
- */
+#[CoversClass(ActiveAndStagingDirsAreDifferent::class)]
 final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Active and staging directories are different';
@@ -23,10 +20,6 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionUnitTes
         return new ActiveAndStagingDirsAreDifferent($environment, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->doTestFulfilled(
@@ -36,7 +29,6 @@ final class ActiveAndStagingDirsAreDifferentUnitTest extends PreconditionUnitTes
         );
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The active and staging directories are the same.';
