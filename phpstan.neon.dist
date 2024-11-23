@@ -38,15 +38,8 @@ parameters:
             message: '#Cannot access offset .(application|name). on mixed.#'
             path: src/Internal/Precondition/Service/ComposerIsAvailable.php
         -
-            message: '#In method ".*", caught "Throwable" must be rethrown.*#'
-            paths:
-                - src/Internal/Translation/Service/Translator.php
-        -
             message: '#Method .*SymfonyTranslatorProxy::trans\(\) has parameter \$parameters with no value type specified in iterable type array.*#'
             path: src/Internal/Translation/Service/SymfonyTranslatorProxy.php
-        -
-            message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
-            path: src/API/Exception/PreconditionException.php
         -
             message: '#Method run\(\) should not be public because it doesn''t implement a method on an interface.#'
             path: src/Internal/Process/Service/AbstractProcessRunner.php
