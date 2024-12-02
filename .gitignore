@@ -1,6 +1,7 @@
 /.idea/dictionaries/*
 !/.idea/dictionaries/project.xml
 /.idea/php-test-framework.xml
+/.idea/php.xml
 /.idea/workspace.xml
 /phpcs.xml
 /phpunit.xml
