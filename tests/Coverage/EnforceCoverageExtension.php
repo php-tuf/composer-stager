@@ -107,19 +107,19 @@ final class EnforceCoverageExtension implements Extension, FinishedSubscriber
 
     private function notice(string $message): void
     {
-        $this->print("[NOTICE] $message");
+        $this->print("[NOTICE] {$message}");
     }
 
     private function ok(string $message): void
     {
         $green = "\033[42;30m";
-        $this->print("[OK] $message", $green);
+        $this->print("[OK] {$message}", $green);
     }
 
     private function fail(string $message): never
     {
         $red = "\033[41;30m";
-        $this->print("[FAIL] $message", $red);
+        $this->print("[FAIL] {$message}", $red);
 
         exit(1);
     }
