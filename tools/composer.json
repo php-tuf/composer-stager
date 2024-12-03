@@ -24,9 +24,21 @@
         }
     },
     "scripts": {
+        "phpcbf": "phpcbf",
+        "phpcs": "phpcs -s",
         "rector": "rector"
     },
     "scripts-descriptions": {
+        "phpcbf": "Automatically fixes standards violations where possible",
+        "phpcs": "Checks code for standards compliance",
         "rector": "Instantly upgrades and automatically refactors PHP code"
+    },
+    "scripts-aliases": {
+        "phpcbf": [
+            "cbf"
+        ],
+        "phpcs": [
+            "cs"
+        ]
     }
 }
