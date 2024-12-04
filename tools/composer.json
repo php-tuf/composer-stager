@@ -4,6 +4,7 @@
     "license": "MIT",
     "type": "library",
     "require": {
+        "infection/infection": "^0.29.9",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan-strict-rules": "^1.5",
         "rector/rector": "^0.17.5 || ^0.18.0 || ^0.19.0 || ^1.0.0",
@@ -16,6 +17,7 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
+            "infection/extension-installer": true,
             "phpstan/extension-installer": true,
             "wikimedia/composer-merge-plugin": true
         },
@@ -29,6 +31,7 @@
         }
     },
     "scripts": {
+        "infection": "infection --ansi",
         "phpcbf": "phpcbf",
         "phpcs": "phpcs -s",
         "phpstan": [
@@ -38,12 +41,16 @@
         "rector": "rector"
     },
     "scripts-descriptions": {
+        "infection": "Performs mutation testing",
         "phpcbf": "Automatically fixes standards violations where possible",
         "phpcs": "Checks code for standards compliance",
         "phpstan": "Analyzes code to find bugs",
         "rector": "Instantly upgrades and automatically refactors PHP code"
     },
     "scripts-aliases": {
+        "infection": [
+            "mutation"
+        ],
         "phpcbf": [
             "cbf"
         ],
