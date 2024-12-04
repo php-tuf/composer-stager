@@ -1,0 +1,14 @@
+# https://phpstan.org/config-reference
+includes:
+    - ../phpstan.neon.dist
+
+parameters:
+    ignoreErrors:
+        # Production code.
+        -
+            message: '#In method ".*", caught "Throwable" must be rethrown.*#'
+            paths:
+                - ../src/Internal/Translation/Service/Translator.php
+        -
+            message: '#.*PreconditionException::__construct\(\) does not call parent constructor from Exception.#'
+            path: ../src/API/Exception/PreconditionException.php
