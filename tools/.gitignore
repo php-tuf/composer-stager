@@ -1,0 +1,4 @@
+# Ignore the Composer lock file to prevent Dependabot from scanning it for updates
+# since, as of December 9, 2024, there's no support for excluding directories.
+# @see https://github.com/dependabot/dependabot-core/issues/4364
+composer.lock
