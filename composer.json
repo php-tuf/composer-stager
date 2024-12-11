@@ -61,7 +61,10 @@
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "infection/extension-installer": true,
+            "phpstan/extension-installer": true,
+            "wikimedia/composer-merge-plugin": true
         },
         "optimize-autoloader": true,
         "sort-packages": true
