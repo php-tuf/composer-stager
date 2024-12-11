@@ -1,8 +1,6 @@
 # https://phpstan.org/config-reference
 parametersSchema:
     gitattributesExportInclude: listOf(string())
-    preconditionSystemHash: string()
-    translationSystemHash: string()
 
 parameters:
     exceptions:
@@ -17,8 +15,6 @@ parameters:
         - docs/services.yml
         - src
     treatPhpDocTypesAsCertain: false
-    preconditionSystemHash: 674c60ab5cf44e63da9c48fd60eadac7
-    translationSystemHash: dec82389af17442fa61cc1fcc6f89c3e
     gitattributesExportInclude:
         - composer.json
         - docs
@@ -69,20 +65,6 @@ rules:
     - PhpTuf\ComposerStager\PHPStan\Rules\PhpDoc\TranslationParametersPhpDocRule # Ensures that the docblockss for TranslationParameters creation methods stay in sync.
 
 services:
-    -
-        # Ensures that precondition system diagrams stay current.
-        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\PreconditionDiagramsInSyncRule
-        arguments:
-            preconditionSystemHash: %preconditionSystemHash%
-        tags:
-            - phpstan.rules.rule
-    -
-        # Ensures that translation system diagrams stay current.
-        class: PhpTuf\ComposerStager\PHPStan\Rules\Interfaces\TranslationDiagramsInSyncRule
-        arguments:
-            preconditionSystemHash: %translationSystemHash%
-        tags:
-            - phpstan.rules.rule
     -
         # Ensures that a conscious decision is made about whether to include new repository root paths in Git archive files.
         class: PhpTuf\ComposerStager\PHPStan\Rules\Files\GitattributesMissingExportIgnoreRule
