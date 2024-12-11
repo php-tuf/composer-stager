@@ -5,12 +5,12 @@
     "type": "library",
     "require": {
         "infection/infection": "^0.29.9",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan-deprecation-rules": "^1.2",
         "phpstan/phpstan-strict-rules": "^1.5",
         "rector/rector": "^0.17.5 || ^0.18.0 || ^0.19.0 || ^1.0.0",
-        "wikimedia/composer-merge-plugin": "dev-master",
-        "phpstan/phpstan-deprecation-rules": "^1.2",
-        "php-parallel-lint/php-parallel-lint": "^1.4"
+        "wikimedia/composer-merge-plugin": "dev-master"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
