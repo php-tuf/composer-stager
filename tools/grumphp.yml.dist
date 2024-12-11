@@ -1,0 +1,71 @@
+# https://github.com/phpro/grumphp#configuration
+---
+grumphp:
+    ascii:
+        failed: ~
+        succeeded: ~
+    fixer:
+        enabled: false
+    hide_circumvention_tip: true
+    process_timeout: 300
+
+    tasks:
+        clover_coverage:
+            clover_file: ../var/phpunit/clover.xml
+            # Requiring 100% code coverage here makes it safe to just put a static
+            # badge in the README rather than using some third-party service. If
+            # this ever changes, that strategy will have to change accordingly.
+            level: 100
+        composer: ~
+        # This task doesn't work in the current setup with "phpcs.xml.dist" in
+        # a different (parent) directory. It
+        # phpcs:
+        #     standard: []
+        #     whitelist_patterns:
+        #         - ../src
+        #         - ../tests
+        phpstan:
+            use_grumphp_paths: false
+        phpunit:
+            config_file: ../phpunit.xml.dist
+            testsuite: all
+            exclude_group:
+                - windows_only
+        rector: ~
+        shell:
+            scripts:
+                # Check for PSR-4 mapping errors.
+                - - '-c'
+                  - composer dump-autoload --optimize --strict-psr --dry-run
+                # Run PHPCS manually. See comment on "phpcs" task above.
+                - - '-c'
+                  - (cd ../ && ./vendor/bin/phpcs)
+        xmllint:
+            ignore_patterns:
+                - ../.idea
+                - ../var
+                - ../vendor
+            triggered_by:
+                - xml
+                - xml.dist
+        # Like the "phpcs"task, this doesn't work in the "tools" subdirectory.
+        # Unlike that task, it has no workaround yet.
+        # yamllint:
+        #     whitelist_patterns:
+        #         - ../.github
+        #         - /^.*.ya?ml(.dist)?$/
+        #         - ../config
+        #         - ../src
+
+    testsuites:
+        static:
+            tasks:
+                - composer
+                - phpstan
+                - rector
+                - shell
+                - xmllint
+        test:
+            tasks:
+                - clover_coverage
+                - phpunit
