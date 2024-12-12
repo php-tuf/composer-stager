@@ -40,7 +40,11 @@ jobs:
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
 
             -   name: "Run all static analysis tools"
-                run: "composer static"
+                run: |
+                    composer validate
+                    composer dump-autoload --strict-psr --dry-run
+                    ./vendor/bin/phpcs
+                    ./vendor/bin/phpstan
 
     tests:
         name: "Tests: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && ' w/ coverage' || '' }}"
@@ -108,7 +112,7 @@ jobs:
                     echo "Total packages: $(echo "$output" | wc -l | tr -d ' ')"
 
             -   name: "Run core tests with coverage"
-                run: "composer test -- --colors=always"
+                run: "./vendor/bin/phpunit --testsuite=coverage --exclude-group=windows_only --colors=always"
                 if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
 
             # There's no reason to generate coverage data on multiple jobs--the result should be the same.
