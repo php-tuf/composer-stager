@@ -14,11 +14,13 @@ use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Throwable;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition */
+#[CoversClass(AbstractFileIteratingPrecondition::class)]
 abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTestCase
 {
     // Override in subclasses.
@@ -46,7 +48,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         parent::setUp();
     }
 
-    /** @covers ::exitEarly */
     public function testExitEarly(): void
     {
         $this->filesystem
@@ -113,7 +114,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $sut->assertIsFulfilled($activeDirPath, $stagingDirPath);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testActiveDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -130,7 +130,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testStagingDirectoryDoesNotExistCountsAsFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -147,7 +146,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated non-existent directories as fulfilled.');
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testNoFilesFound(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -164,11 +162,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         $this->assertFulfilled($isFulfilled, $statusMessage, 'Treated empty codebase as fulfilled.');
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     *
-     * @dataProvider providerFileFinderExceptions
-     */
+    #[DataProvider('providerFileFinderExceptions')]
     public function testFileFinderExceptions(ExceptionInterface $previous): void
     {
         $activeDirPath = self::activeDirPath();
@@ -192,7 +186,7 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         }
     }
 
-    public function providerFileFinderExceptions(): array
+    public static function providerFileFinderExceptions(): array
     {
         return [
             'InvalidArgumentException' => [new InvalidArgumentException(self::createTranslatableMessage('Exclusions include invalid paths.'))],
@@ -200,7 +194,6 @@ abstract class FileIteratingPreconditionUnitTestCase extends PreconditionUnitTes
         ];
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function assertFulfilled(
         bool $isFulfilled,
         TranslatableInterface $statusMessage,

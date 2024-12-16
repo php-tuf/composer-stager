@@ -9,17 +9,12 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ComposerProcessRunnerInterface;
 use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ComposerIsAvailable
- *
- * @covers ::__construct
- * @covers ::assertExecutableExists
- * @covers ::assertIsActuallyComposer
- * @covers ::isValidExecutable
- */
+#[CoversClass(ComposerIsAvailable::class)]
 final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Composer';
@@ -67,13 +62,6 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
         );
     }
 
-    /**
-     * @covers ::assertExecutableExists
-     * @covers ::assertIsActuallyComposer
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     * @covers ::isValidExecutable
-     */
     public function testFulfilled(): void
     {
         $this->executableFinder
@@ -86,7 +74,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @dataProvider providerComposerProcessRunnerException */
+    #[DataProvider('providerComposerProcessRunnerException')]
     public function testComposerProcessRunnerException(string $exception): void
     {
         $this->expectException(PreconditionException::class);
@@ -98,7 +86,7 @@ final class ComposerIsAvailableUnitTest extends PreconditionUnitTestCase
         $sut->assertIsFulfilled(self::activeDirPath(), self::stagingDirPath());
     }
 
-    public function providerComposerProcessRunnerException(): array
+    public static function providerComposerProcessRunnerException(): array
     {
         return [
             [LogicException::class],

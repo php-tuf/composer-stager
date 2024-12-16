@@ -6,14 +6,10 @@ use PhpTuf\ComposerStager\API\Precondition\Service\CommonPreconditionsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoUnsupportedLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\StagingDirIsReadyInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\CommitterPreconditions
- *
- * @covers ::__construct
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(CommitterPreconditions::class)]
 final class CommitterPreconditionsUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Committer preconditions';
@@ -53,7 +49,6 @@ final class CommitterPreconditionsUnitTest extends PreconditionUnitTestCase
         return new CommitterPreconditions($environment, $commonPreconditions, $noUnsupportedLinksExist, $stagingDirIsReady, $translatableFactory);
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();

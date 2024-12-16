@@ -6,16 +6,13 @@ use PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Factory\SymfonyProcessFactory;
 use PhpTuf\ComposerStager\Internal\Process\Service\Process;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Factory\ProcessFactory */
+#[CoversClass(ProcessFactory::class)]
 final class ProcessFactoryUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::create
-     *
-     * @dataProvider providerFactory
-     */
+    #[DataProvider('providerFactory')]
     public function testFactory(array $command, array $optionalArguments): void
     {
         $translatableFactory = self::createTranslatableFactory();
@@ -29,7 +26,7 @@ final class ProcessFactoryUnitTest extends TestCase
         self::assertTranslatableAware($sut);
     }
 
-    public function providerFactory(): array
+    public static function providerFactory(): array
     {
         return [
             'Minimum values' => [

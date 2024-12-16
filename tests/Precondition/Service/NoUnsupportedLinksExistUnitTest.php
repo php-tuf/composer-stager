@@ -8,14 +8,10 @@ use PhpTuf\ComposerStager\API\Precondition\Service\NoHardLinksExistInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoLinksExistOnWindowsInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\NoSymlinksPointOutsideTheCodebaseInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoUnsupportedLinksExist
- *
- * @covers ::__construct
- * @covers ::getFulfilledStatusMessage
- */
+#[CoversClass(NoUnsupportedLinksExist::class)]
 final class NoUnsupportedLinksExistUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Unsupported links preconditions';
@@ -68,7 +64,6 @@ final class NoUnsupportedLinksExistUnitTest extends PreconditionUnitTestCase
         );
     }
 
-    /** @covers ::getFulfilledStatusMessage */
     public function testFulfilled(): void
     {
         $activeDirPath = self::activeDirPath();

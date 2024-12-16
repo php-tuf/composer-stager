@@ -15,14 +15,12 @@ use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Core\Stager;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Core\Stager
- *
- * @covers \PhpTuf\ComposerStager\Internal\Core\Stager
- */
+#[CoversClass(Stager::class)]
 final class StagerUnitTest extends TestCase
 {
     private const INERT_COMMAND = 'about';
@@ -45,7 +43,6 @@ final class StagerUnitTest extends TestCase
         return new Stager($composerRunner, $preconditions, $translatableFactory);
     }
 
-    /** @covers ::stage */
     public function testStageWithMinimumParams(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -67,7 +64,7 @@ final class StagerUnitTest extends TestCase
         $sut->stage([self::INERT_COMMAND], $activeDirPath, $stagingDirPath);
     }
 
-    /** @dataProvider providerStageWithOptionalParams */
+    #[DataProvider('providerStageWithOptionalParams')]
     public function testStageWithOptionalParams(
         array $givenCommand,
         array $expectedCommand,
@@ -88,7 +85,7 @@ final class StagerUnitTest extends TestCase
         $sut->stage($givenCommand, $activeDirPath, $stagingDirPath, $callback, $timeout);
     }
 
-    public function providerStageWithOptionalParams(): array
+    public static function providerStageWithOptionalParams(): array
     {
         return [
             'Minimum values ' => [
@@ -113,7 +110,6 @@ final class StagerUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::validateCommand */
     public function testCommandIsEmpty(): void
     {
         $message = 'The Composer command cannot be empty';
@@ -125,7 +121,6 @@ final class StagerUnitTest extends TestCase
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
-    /** @covers ::validateCommand */
     public function testCommandContainsComposer(): void
     {
         $sut = $this->createSut();
@@ -141,11 +136,7 @@ final class StagerUnitTest extends TestCase
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
-    /**
-     * @covers ::validateCommand
-     *
-     * @dataProvider providerCommandContainsWorkingDirOption
-     */
+    #[DataProvider('providerCommandContainsWorkingDirOption')]
     public function testCommandContainsWorkingDirOption(array $command): void
     {
         $sut = $this->createSut();
@@ -158,7 +149,7 @@ final class StagerUnitTest extends TestCase
         }, InvalidArgumentException::class, $expectedExceptionMessage);
     }
 
-    public function providerCommandContainsWorkingDirOption(): array
+    public static function providerCommandContainsWorkingDirOption(): array
     {
         return [
             'Full name' => [['--working-dir' => 'example/package']],
@@ -166,7 +157,6 @@ final class StagerUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::stage */
     public function testStagePreconditionsUnfulfilled(): void
     {
         $message = __METHOD__;
@@ -182,7 +172,7 @@ final class StagerUnitTest extends TestCase
         }, PreconditionException::class, $previous->getTranslatableMessage());
     }
 
-    /** @dataProvider providerExceptions */
+    #[DataProvider('providerExceptions')]
     public function testExceptions(ExceptionInterface $caughtException): void
     {
         $this->composerRunner
@@ -195,7 +185,7 @@ final class StagerUnitTest extends TestCase
         }, RuntimeException::class, $caughtException->getMessage(), null, $caughtException::class);
     }
 
-    public function providerExceptions(): array
+    public static function providerExceptions(): array
     {
         return [
             'IOException' => [

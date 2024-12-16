@@ -5,18 +5,14 @@ namespace PhpTuf\ComposerStager\Tests\Translation\Value;
 use AssertionError;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters */
+#[CoversClass(TranslationParameters::class)]
 final class TranslationParametersUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::getAll
-     * @covers ::setValidParameters
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $parameters): void
     {
         $sut = new TranslationParameters($parameters);
@@ -24,7 +20,7 @@ final class TranslationParametersUnitTest extends TestCase
         self::assertSame($parameters, $sut->getAll(), 'Returned correct parameters.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'No parameters' => [
@@ -54,11 +50,6 @@ final class TranslationParametersUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getAll
-     * @covers ::setValidParameters
-     */
     public function testDefaultParameters(): void
     {
         $sut = new TranslationParameters();
@@ -66,13 +57,7 @@ final class TranslationParametersUnitTest extends TestCase
         self::assertEquals([], $sut->getAll(), 'Got correct default parameters.');
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getAll
-     * @covers ::setValidParameters
-     *
-     * @dataProvider providerInvalidPlaceholders
-     */
+    #[DataProvider('providerInvalidPlaceholders')]
     public function testInvalidPlaceholders(array $given, array $expected, mixed $invalidPlaceholder): void
     {
         // Disable assertions so production error-handling can be tested.
@@ -93,7 +78,7 @@ final class TranslationParametersUnitTest extends TestCase
         ));
     }
 
-    public function providerInvalidPlaceholders(): array
+    public static function providerInvalidPlaceholders(): array
     {
         return [
             'Empty string' => [
@@ -157,13 +142,7 @@ final class TranslationParametersUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::getAll
-     * @covers ::setValidParameters
-     *
-     * @dataProvider providerInvalidValues
-     */
+    #[DataProvider('providerInvalidValues')]
     public function testInvalidValues(array $given, array $expected, string $invalidType): void
     {
         // Disable assertions so production error-handling can be tested.
@@ -183,7 +162,7 @@ final class TranslationParametersUnitTest extends TestCase
         ));
     }
 
-    public function providerInvalidValues(): array
+    public static function providerInvalidValues(): array
     {
         return [
             'Null' => [

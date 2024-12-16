@@ -7,14 +7,12 @@ use PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslatableMessage;
 use PhpTuf\ComposerStager\Internal\Translation\Value\TranslationParameters;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Translation\Factory\TranslatableFactory */
+#[CoversClass(TranslatableFactory::class)]
 final class TranslatableFactoryUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::createDomainOptions
-     */
     public function testCreateDomainOptions(): void
     {
         $expected = self::createDomainOptions();
@@ -25,11 +23,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         self::assertSame($expected, $actual, 'Returned correct domain options object.');
     }
 
-    /**
-     * @covers ::createTranslatableMessage
-     *
-     * @dataProvider providerCreateTranslatableMessage
-     */
+    #[DataProvider('providerCreateTranslatableMessage')]
     public function testCreateTranslatableMessage(
         array $givenCreateMessageArguments,
         TranslatableInterface $expectedMessage,
@@ -42,7 +36,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         self::assertEquals($expectedMessage, $actual, 'Returned correct translatable object.');
     }
 
-    public function providerCreateTranslatableMessage(): array
+    public static function providerCreateTranslatableMessage(): array
     {
         return [
             'Minimum values' => [
@@ -77,11 +71,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::createTranslationParameters
-     *
-     * @dataProvider providerCreateTranslationParameters
-     */
+    #[DataProvider('providerCreateTranslationParameters')]
     public function testCreateTranslationParameters(array $parameters): void
     {
         $sut = new TranslatableFactory(self::createDomainOptions(), self::createTranslator());
@@ -92,7 +82,7 @@ final class TranslatableFactoryUnitTest extends TestCase
         self::assertEquals($expected, $actual, 'Returned correct translation parameters object.');
     }
 
-    public function providerCreateTranslationParameters(): array
+    public static function providerCreateTranslationParameters(): array
     {
         return [
             'Empty array' => [[]],

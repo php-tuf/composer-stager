@@ -5,18 +5,12 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 use PhpTuf\ComposerStager\API\Exception\LogicException;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Process;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\HostSupportsRunningProcesses
- *
- * @covers ::__construct
- * @covers ::doAssertIsFulfilled
- * @covers ::isFulfilled
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
- */
+#[CoversClass(HostSupportsRunningProcesses::class)]
 final class HostSupportsRunningProcessesUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Host supports running processes';
@@ -44,10 +38,6 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionUnitTestCas
         return new HostSupportsRunningProcesses($environment, $processFactory, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->processFactory
@@ -57,7 +47,6 @@ final class HostSupportsRunningProcessesUnitTest extends PreconditionUnitTestCas
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = __METHOD__;

@@ -4,13 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Filesystem\Service\FilesystemInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\ActiveDirIsWritable
- *
- * @covers ::__construct
- */
+#[CoversClass(ActiveDirIsWritable::class)]
 final class ActiveDirIsWritableUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Active directory is writable';
@@ -35,10 +32,6 @@ final class ActiveDirIsWritableUnitTest extends PreconditionUnitTestCase
         return new ActiveDirIsWritable($environment, $filesystem, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->filesystem
@@ -49,7 +42,6 @@ final class ActiveDirIsWritableUnitTest extends PreconditionUnitTestCase
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /** @covers ::doAssertIsFulfilled */
     public function testUnfulfilled(): void
     {
         $message = 'The active directory is not writable.';

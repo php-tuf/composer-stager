@@ -15,6 +15,7 @@
       <w>carden</w>
       <w>cleancode</w>
       <w>codesize</w>
+      <w>coveredelements</w>
       <w>dealerdirect</w>
       <w>depfile</w>
       <w>deptrac</w>
@@ -26,6 +27,7 @@
       <w>finfo</w>
       <w>getcwd</w>
       <w>gitattributes</w>
+      <w>gitkeep</w>
       <w>grum</w>
       <w>grumphp</w>
       <w>jangregor</w>

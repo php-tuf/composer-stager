@@ -12,14 +12,12 @@ use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\AbstractProcessRunner
- *
- * @covers ::__construct
- */
+#[CoversClass(AbstractProcessRunner::class)]
 final class AbstractProcessRunnerUnitTest extends TestCase
 {
     private const COMMAND_NAME = 'test';
@@ -78,13 +76,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         };
     }
 
-    /**
-     * @covers ::executableName
-     * @covers ::findExecutable
-     * @covers ::run
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
         string $executableName,
         array $givenRunArguments,
@@ -111,7 +103,7 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         $sut->run(...$givenRunArguments);
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'Minimum values' => [
@@ -148,10 +140,6 @@ final class AbstractProcessRunnerUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::findExecutable
-     * @covers ::run
-     */
     public function testRunCannotFindGivenExecutable(): void
     {
         $previous = new IOException(self::createTranslatableExceptionMessage(__METHOD__));

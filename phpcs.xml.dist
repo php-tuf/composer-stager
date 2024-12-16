@@ -14,7 +14,6 @@
     <file>src</file>
     <file>tests</file>
     <file>tools</file>
-    <file>rector.php</file>
 
     <!-- Custom sniffs -->
     <rule ref="tools/PHPCS/phpcs.xml"/>
@@ -255,12 +254,11 @@
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 
     <!-- Exclusions for test and tool classes. -->
-    <rule ref="Generic.Files.LineLength"><exclude-pattern>tests</exclude-pattern><exclude-pattern>tools</exclude-pattern><exclude-pattern>rector.php</exclude-pattern></rule>
+    <rule ref="Generic.Files.LineLength"><exclude-pattern>tests</exclude-pattern><exclude-pattern>tools</exclude-pattern></rule>
     <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure.IncorrectGroupOrder"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty.ForbiddenPublicProperty"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength"><exclude-pattern>tests</exclude-pattern><exclude-pattern>tools/PHPCS</exclude-pattern></rule>
-    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>rector.php</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall.RequiredMultiLineCall"><exclude-pattern>tests</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration.DisallowedBracketedSyntax"><exclude-pattern>tests/TestUtils/builtin_function_mocks.inc</exclude-pattern><exclude-pattern>tools/PHPCS</exclude-pattern></rule>
     <rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile.MoreNamespacesInFile"><exclude-pattern>tests/TestUtils/builtin_function_mocks.inc</exclude-pattern><exclude-pattern>tools/PHPCS</exclude-pattern></rule>

@@ -5,16 +5,13 @@ namespace PhpTuf\ComposerStager\Tests\Path\Factory;
 use PhpTuf\ComposerStager\API\Path\Value\PathListInterface;
 use PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Factory\PathListFactory */
+#[CoversClass(PathListFactory::class)]
 final class PathListFactoryUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::create
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $paths, PathListInterface $expected): void
     {
         $pathHelper = self::createPathHelper();
@@ -25,7 +22,7 @@ final class PathListFactoryUnitTest extends TestCase
         self::assertEquals($expected, $actual, 'Returned correct path list object.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'No paths' => [

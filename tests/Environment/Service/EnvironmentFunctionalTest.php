@@ -4,8 +4,10 @@ namespace PhpTuf\ComposerStager\Tests\Environment\Service;
 
 use PhpTuf\ComposerStager\Internal\Environment\Service\Environment;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Environment\Service\Environment */
+#[CoversClass(Environment::class)]
 final class EnvironmentFunctionalTest extends TestCase
 {
     private function createSut(): Environment
@@ -13,11 +15,7 @@ final class EnvironmentFunctionalTest extends TestCase
         return new Environment();
     }
 
-    /**
-     * @covers ::setTimeLimit
-     *
-     * @dataProvider providerSetTimeLimit
-     */
+    #[DataProvider('providerSetTimeLimit')]
     public function testSetTimeLimit(int $timeout): void
     {
         $sut = $this->createSut();
@@ -30,7 +28,7 @@ final class EnvironmentFunctionalTest extends TestCase
         self::assertSame($result, set_time_limit($timeout), 'Returned same result as set_time_limit() called directly.');
     }
 
-    public function providerSetTimeLimit(): array
+    public static function providerSetTimeLimit(): array
     {
         return [
             'Positive number' => [30],

@@ -11,20 +11,23 @@ grumphp:
 
     tasks:
         clover_coverage:
-            clover_file: var/phpunit/clover.xml
+            clover_file: ../var/phpunit/clover.xml
             # Requiring 100% code coverage here makes it safe to just put a static
             # badge in the README rather than using some third-party service. If
             # this ever changes, that strategy will have to change accordingly.
             level: 100
         composer: ~
-        phpcs:
-            standard: []
-            whitelist_patterns:
-                - src
-                - tests
+        # This task doesn't work in the current setup with "phpcs.xml.dist" in
+        # a different (parent) directory. It
+        # phpcs:
+        #     standard: []
+        #     whitelist_patterns:
+        #         - ../src
+        #         - ../tests
         phpstan:
             use_grumphp_paths: false
         phpunit:
+            config_file: ../phpunit.xml.dist
             testsuite: all
             exclude_group:
                 - windows_only
@@ -33,32 +36,35 @@ grumphp:
             scripts:
                 # Check for PSR-4 mapping errors.
                 - - '-c'
-                  - composer dump-autoload --strict-psr
+                  - composer dump-autoload --optimize --strict-psr --dry-run
+                # Run PHPCS manually. See comment on "phpcs" task above.
+                - - '-c'
+                  - (cd ../ && ./vendor/bin/phpcs)
         xmllint:
             ignore_patterns:
-                - .idea
-                - var
-                - vendor
+                - ../.idea
+                - ../var
+                - ../vendor
             triggered_by:
                 - xml
                 - xml.dist
-        yamllint:
-            whitelist_patterns:
-                - .github
-                - /^.*.ya?ml(.dist)?$/
-                - config
-                - src
+        # Like the "phpcs"task, this doesn't work in the "tools" subdirectory.
+        # Unlike that task, it has no workaround yet.
+        # yamllint:
+        #     whitelist_patterns:
+        #         - ../.github
+        #         - /^.*.ya?ml(.dist)?$/
+        #         - ../config
+        #         - ../src
 
     testsuites:
         static:
             tasks:
                 - composer
-                - phpcs
                 - phpstan
                 - rector
                 - shell
                 - xmllint
-                - yamllint
         test:
             tasks:
                 - clover_coverage

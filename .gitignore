@@ -1,9 +1,8 @@
 /.idea/dictionaries/*
 !/.idea/dictionaries/project.xml
 /.idea/php-test-framework.xml
+/.idea/php.xml
 /.idea/workspace.xml
-/grumphp.yml
-/infection.json5
 /phpcs.xml
 /phpunit.xml
 /tests/Exploratory/*

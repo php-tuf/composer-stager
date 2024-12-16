@@ -3,12 +3,12 @@
 namespace PhpTuf\ComposerStager\Tests\Misc;
 
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
 
 /**
  * Tests assumptions about PHP built-in behavior.
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class PhpAssumptionsFunctionalTest extends TestCase
 {
     protected function setUp(): void

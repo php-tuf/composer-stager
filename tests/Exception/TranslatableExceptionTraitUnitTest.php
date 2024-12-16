@@ -6,16 +6,13 @@ use Exception;
 use PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait;
 use PhpTuf\ComposerStager\API\Translation\Value\TranslatableInterface;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\API\Exception\TranslatableExceptionTrait */
+#[CoversNothing]
 final class TranslatableExceptionTraitUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::getTranslatableMessage
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(array $arguments, TranslatableInterface $message, int $code): void
     {
         $sut = new class(...$arguments) extends Exception {
@@ -27,7 +24,7 @@ final class TranslatableExceptionTraitUnitTest extends TestCase
         self::assertSame($code, $sut->getCode(), 'Returned correct code.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             [

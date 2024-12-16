@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All Tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-    <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" options="--testsuite=all --exclude-group=windows_only" />
+    <TestRunner configuration_file="$PROJECT_DIR$/phpunit.xml.dist" scope="XML" options="--testsuite=coverage --exclude-group=windows_only" />
     <method v="2" />
   </configuration>
 </component>

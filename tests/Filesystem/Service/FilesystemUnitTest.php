@@ -12,16 +12,15 @@ use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem
- *
- * @covers \PhpTuf\ComposerStager\Internal\Filesystem\Service\Filesystem::__construct
- */
+#[CoversClass(Filesystem::class)]
 final class FilesystemUnitTest extends TestCase
 {
     private EnvironmentInterface|ObjectProphecy $environment;
@@ -52,13 +51,8 @@ final class FilesystemUnitTest extends TestCase
         return new Filesystem($environment, $pathFactory, $symfonyFilesystem, $translatableFactory);
     }
 
-    /**
-     * @covers ::isWritable
-     *
-     * @dataProvider providerIsWritable
-     *
-     * @runInSeparateProcess
-     */
+    #[DataProvider('providerIsWritable')]
+    #[RunInSeparateProcess]
     public function testIsWritable(bool $expected): void
     {
         BuiltinFunctionMocker::mock(['is_writable' => $this->prophesize(TestSpyInterface::class)]);
@@ -73,7 +67,7 @@ final class FilesystemUnitTest extends TestCase
         self::assertSame($expected, $actual, 'Got correct writable status.');
     }
 
-    public function providerIsWritable(): array
+    public static function providerIsWritable(): array
     {
         return [
             [true],
@@ -81,11 +75,7 @@ final class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::mkdir
-     *
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testMkdir(): void
     {
         BuiltinFunctionMocker::mock([
@@ -105,11 +95,7 @@ final class FilesystemUnitTest extends TestCase
         $sut->mkdir(self::arbitraryDirPath());
     }
 
-    /**
-     * @covers ::mkdir
-     *
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testMkdirFailure(): void
     {
         $dirAbsolute = self::arbitraryDirAbsolute();
@@ -132,11 +118,7 @@ final class FilesystemUnitTest extends TestCase
         }, IOException::class, $message);
     }
 
-    /**
-     * @covers ::rm
-     *
-     * @dataProvider providerRm
-     */
+    #[DataProvider('providerRm')]
     public function testRm(string $path, ?OutputCallbackInterface $callback, int $timeout): void
     {
         $this->environment->setTimeLimit($timeout)
@@ -150,7 +132,7 @@ final class FilesystemUnitTest extends TestCase
         $sut->rm($stagingDir, $callback, $timeout);
     }
 
-    public function providerRm(): array
+    public static function providerRm(): array
     {
         return [
             'Default values' => [
@@ -166,7 +148,6 @@ final class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::rm */
     public function testRmException(): void
     {
         $message = 'Failed to remove directory.';
@@ -181,13 +162,8 @@ final class FilesystemUnitTest extends TestCase
         }, IOException::class, $message, null, $previous::class);
     }
 
-    /**
-     * @covers ::touch
-     *
-     * @dataProvider providerTouch
-     *
-     * @runInSeparateProcess
-     */
+    #[DataProvider('providerTouch')]
+    #[RunInSeparateProcess]
     public function testTouch(string $filename, array $givenArguments, array $expectedArguments): void
     {
         $path = self::createPath($filename);
@@ -201,7 +177,7 @@ final class FilesystemUnitTest extends TestCase
         $sut->touch($path, ...$givenArguments);
     }
 
-    public function providerTouch(): array
+    public static function providerTouch(): array
     {
         return [
             [
@@ -237,11 +213,7 @@ final class FilesystemUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::touch
-     *
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testTouchFailure(): void
     {
         $path = self::arbitraryFilePath();

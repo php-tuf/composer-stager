@@ -7,22 +7,12 @@ use PhpTuf\ComposerStager\Internal\Path\Value\Path;
 use PhpTuf\ComposerStager\Tests\TestCase;
 use PhpTuf\ComposerStager\Tests\TestDoubles\TestSpyInterface;
 use PhpTuf\ComposerStager\Tests\TestUtils\BuiltinFunctionMocker;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use ReflectionClass;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Path\Value\Path
- *
- * @covers ::__construct
- * @covers ::absolute
- * @covers ::doAbsolute
- * @covers ::getcwd
- * @covers ::getProtocol
- * @covers ::hasProtocol
- * @covers ::isAbsolute
- * @covers ::isRelative
- * @covers ::relative
- * @covers ::stripProtocol
- */
+#[CoversClass(Path::class)]
 final class PathUnitTest extends TestCase
 {
     private function createSut(mixed ...$arguments): Path
@@ -32,11 +22,8 @@ final class PathUnitTest extends TestCase
         return new Path($pathHelper, ...func_get_args());
     }
 
-    /**
-     * @dataProvider providerBasicFunctionality
-     *
-     * @noinspection PhpConditionAlreadyCheckedInspection
-     */
+    /** @noinspection PhpConditionAlreadyCheckedInspection */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(
         string $given,
         string $basePath,
@@ -74,21 +61,21 @@ final class PathUnitTest extends TestCase
         self::assertNotEquals($sut, $unequalInstance, 'Path value considered unequal to another instance with different input.');
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return array_merge(
-            $this->providerBasicFunctionalityUnixLike(),
-            $this->providerBasicFunctionalityWindows(),
+            self::providerBasicFunctionalityUnixLike(),
+            self::providerBasicFunctionalityWindows(),
         );
     }
 
-    public function providerBasicFunctionalityUnixLike(): array
+    public static function providerBasicFunctionalityUnixLike(): array
     {
         $data = [
             // Special base paths.
             'Unix-like: Path as empty string ()' => [
                 'given' => '',
-                'baseDir' => '/var/one',
+                'basePath' => '/var/one',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/one',
                 'relativeBase' => '/tmp/two',
@@ -96,7 +83,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Path as dot (.)' => [
                 'given' => '.',
-                'baseDir' => '/var/three',
+                'basePath' => '/var/three',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/three',
                 'relativeBase' => '/tmp/four',
@@ -104,7 +91,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Path as dot-slash (./)' => [
                 'given' => './',
-                'baseDir' => '/var/five',
+                'basePath' => '/var/five',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/five',
                 'relativeBase' => '/tmp/six',
@@ -113,7 +100,7 @@ final class PathUnitTest extends TestCase
             // Relative paths.
             'Unix-like: Relative path as simple string' => [
                 'given' => 'one',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/one',
                 'relativeBase' => '/tmp',
@@ -121,7 +108,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Relative path as space ( )' => [
                 'given' => ' ',
-                'baseDir' => '/var/two',
+                'basePath' => '/var/two',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/two/ ',
                 'relativeBase' => '/tmp/three',
@@ -129,7 +116,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Relative path with depth' => [
                 'given' => 'one/two/three/four/five',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/one/two/three/four/five',
                 'relativeBase' => '/tmp',
@@ -137,7 +124,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Relative path with trailing slash' => [
                 'given' => 'one/two/',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/one/two',
                 'relativeBase' => '/tmp',
@@ -145,7 +132,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Relative path with repeating directory separators' => [
                 'given' => 'one//two////three',
-                'baseDir' => '/var/four',
+                'basePath' => '/var/four',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/four/one/two/three',
                 'relativeBase' => '/tmp/five',
@@ -153,7 +140,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Relative path with double dots (..)' => [
                 'given' => '../one/../two/three/four/../../five/six/..',
-                'baseDir' => '/var/seven/eight',
+                'basePath' => '/var/seven/eight',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/seven/two/five',
                 'relativeBase' => '/tmp/nine/ten',
@@ -161,7 +148,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Relative path with leading double dots (..) and root base path' => [
                 'given' => '../one/two',
-                'baseDir' => '/',
+                'basePath' => '/',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/one/two',
                 'relativeBase' => '/three/..',
@@ -169,7 +156,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Silly combination of relative path as double dots (..) with root base path' => [
                 'given' => '..',
-                'baseDir' => '/',
+                'basePath' => '/',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/',
                 'relativeBase' => '/',
@@ -177,7 +164,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Crazy relative path' => [
                 'given' => 'one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
-                'baseDir' => '/seven/eight/nine/ten',
+                'basePath' => '/seven/eight/nine/ten',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/seven/eight/nine/ten/one/six',
                 'relativeBase' => '/eleven/twelve/thirteen/fourteen',
@@ -186,7 +173,7 @@ final class PathUnitTest extends TestCase
             // Absolute paths.
             'Unix-like: Absolute path to the root' => [
                 'given' => '/',
-                'baseDir' => '/',
+                'basePath' => '/',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => '/',
                 'relativeBase' => '/',
@@ -194,7 +181,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Absolute path as simple string' => [
                 'given' => '/one',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => '/one',
                 'relativeBase' => '/tmp',
@@ -202,7 +189,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Absolute path with depth' => [
                 'given' => '/one/two/three/four/five',
-                'baseDir' => '/var/six/seven/eight/nine',
+                'basePath' => '/var/six/seven/eight/nine',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => '/one/two/three/four/five',
                 'relativeBase' => '/tmp/ten/eleven/twelve/thirteen',
@@ -210,7 +197,7 @@ final class PathUnitTest extends TestCase
             ],
             'Unix-like: Crazy absolute path' => [
                 'given' => '/one/.////./two/three/four/five/./././..//.//../////../././.././six/////',
-                'baseDir' => '/var/seven/eight/nine',
+                'basePath' => '/var/seven/eight/nine',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => '/one/six',
                 'relativeBase' => '/tmp/ten/eleven/twelve',
@@ -219,7 +206,7 @@ final class PathUnitTest extends TestCase
             // Protocols.
             'Path with protocol: ftp://' => [
                 'given' => 'ftp://example.com/one/two/three.txt',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'ftp://example.com/one/two/three.txt',
                 'relativeBase' => '/tmp',
@@ -227,7 +214,7 @@ final class PathUnitTest extends TestCase
             ],
             'Path with protocol: file:///' => [
                 'given' => 'file:///one/two/three.txt',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'file:///one/two/three.txt',
                 'relativeBase' => '/tmp',
@@ -235,7 +222,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative with base path with protocol' => [
                 'given' => 'one/two/three.txt',
-                'baseDir' => 'ftp://example.com',
+                'basePath' => 'ftp://example.com',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'ftp://example.com/one/two/three.txt',
                 'relativeBase' => '/tmp',
@@ -243,7 +230,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative with base path with protocol with trailing slash' => [
                 'given' => 'one/two/three.txt',
-                'baseDir' => 'ftp://example.com/',
+                'basePath' => 'ftp://example.com/',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'ftp://example.com/one/two/three.txt',
                 'relativeBase' => '/tmp',
@@ -251,7 +238,7 @@ final class PathUnitTest extends TestCase
             ],
             'Absolute with base path with protocol' => [
                 'given' => '/one/two/three.txt',
-                'baseDir' => 'ftp://example.com',
+                'basePath' => 'ftp://example.com',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => '/one/two/three.txt',
                 'relativeBase' => 'ftp://example.com/one/two/three.txt',
@@ -259,7 +246,7 @@ final class PathUnitTest extends TestCase
             ],
             'Absolute with base path with protocol with trailing slash' => [
                 'given' => '/one/two/three.txt',
-                'baseDir' => 'ftp://example.com/',
+                'basePath' => 'ftp://example.com/',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => '/one/two/three.txt',
                 'relativeBase' => 'ftp://example.com/one/two/three.txt',
@@ -267,7 +254,7 @@ final class PathUnitTest extends TestCase
             ],
             'Non-canonicalized path with protocol' => [
                 'given' => 'vfs://example.com/one/../two/three.txt',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'vfs://example.com/two/three.txt',
                 'relativeBase' => '/tmp',
@@ -279,7 +266,7 @@ final class PathUnitTest extends TestCase
             // just to document that this is the current behavior.
             'Invalid protocol' => [
                 'given' => '1ftp://example.com/one/../two/three.txt',
-                'baseDir' => '/var',
+                'basePath' => '/var',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => '/var/1ftp:/example.com/two/three.txt',
                 'relativeBase' => '/tmp',
@@ -295,13 +282,13 @@ final class PathUnitTest extends TestCase
         return $data;
     }
 
-    public function providerBasicFunctionalityWindows(): array
+    public static function providerBasicFunctionalityWindows(): array
     {
         $data = [
             // Relative paths.
             'Relative path as simple string' => [
                 'given' => 'One',
-                'baseDir' => 'C:\\Windows',
+                'basePath' => 'C:\\Windows',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Windows/One',
                 'relativeBase' => 'D:\\Users',
@@ -309,7 +296,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative path as space ( )' => [
                 'given' => ' ',
-                'baseDir' => 'C:\\Windows\\Two',
+                'basePath' => 'C:\\Windows\\Two',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Windows/Two/ ',
                 'relativeBase' => 'D:\\Users\\Three',
@@ -317,7 +304,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative path with nesting' => [
                 'given' => 'One\\Two\\Three\\Four\\Five',
-                'baseDir' => 'C:\\Windows',
+                'basePath' => 'C:\\Windows',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Windows/One/Two/Three/Four/Five',
                 'relativeBase' => 'D:\\Users',
@@ -325,7 +312,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative path with trailing slash' => [
                 'given' => 'One\\Two\\',
-                'baseDir' => 'C:\\Windows',
+                'basePath' => 'C:\\Windows',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Windows/One/Two',
                 'relativeBase' => 'D:\\Users',
@@ -333,7 +320,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative path with repeating directory separators' => [
                 'given' => 'One\\\\Two\\\\\\\\Three',
-                'baseDir' => 'C:\\Windows\\Four',
+                'basePath' => 'C:\\Windows\\Four',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Windows/Four/One/Two/Three',
                 'relativeBase' => 'D:\\Users\\Five',
@@ -341,7 +328,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative path with double dots (..)' => [
                 'given' => '..\\One\\..\\Two\\Three\\Four\\..\\..\\Five\\Six\\..',
-                'baseDir' => 'C:\\Windows\\Seven\\Eight',
+                'basePath' => 'C:\\Windows\\Seven\\Eight',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Windows/Seven/Two/Five',
                 'relativeBase' => 'D:\\Users\\Nine\\Ten',
@@ -349,7 +336,7 @@ final class PathUnitTest extends TestCase
             ],
             'Relative path with leading double dots (..) and root path base path' => [
                 'given' => '..\\One\\Two',
-                'baseDir' => 'C:\\',
+                'basePath' => 'C:\\',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/One/Two',
                 'relativeBase' => 'D:\\',
@@ -357,7 +344,7 @@ final class PathUnitTest extends TestCase
             ],
             'Silly combination of relative path as double dots (..) with root path base path' => [
                 'given' => '..',
-                'baseDir' => 'C:\\',
+                'basePath' => 'C:\\',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/',
                 'relativeBase' => 'D:\\',
@@ -365,7 +352,7 @@ final class PathUnitTest extends TestCase
             ],
             'Crazy relative path' => [
                 'given' => 'One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'basePath' => 'C:\\Seven\\Eight\\Nine\\Ten',
                 'expectedIsAbsolute' => false,
                 'expectedAbsolute' => 'C:/Seven/Eight/Nine/Ten/One/Six',
                 'relativeBase' => 'D:\\Eleven\\Twelve\\Thirteen\\Fourteen',
@@ -374,7 +361,7 @@ final class PathUnitTest extends TestCase
             // Absolute paths from the root of a specific drive.
             'Absolute path to the root of a specific drive' => [
                 'given' => 'D:\\',
-                'baseDir' => 'C:\\',
+                'basePath' => 'C:\\',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'D:/',
                 'relativeBase' => 'D:\\',
@@ -382,7 +369,7 @@ final class PathUnitTest extends TestCase
             ],
             'Absolute path from the root of a specific drive as simple string' => [
                 'given' => 'D:\\One',
-                'baseDir' => 'C:\\Windows',
+                'basePath' => 'C:\\Windows',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'D:/One',
                 'relativeBase' => 'D:\\Users',
@@ -390,7 +377,7 @@ final class PathUnitTest extends TestCase
             ],
             'Absolute path from the root of a specific drive with nesting' => [
                 'given' => 'D:\\One\\Two\\Three\\Four\\Five',
-                'baseDir' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
+                'basePath' => 'C:\\Windows\\Six\\Seven\\Eight\\Nine',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'D:/One/Two/Three/Four/Five',
                 'relativeBase' => 'D:\\Users',
@@ -398,7 +385,7 @@ final class PathUnitTest extends TestCase
             ],
             'Crazy absolute path from the root of a specific drive' => [
                 'given' => 'D:\\One\\.\\\\\\\\.\\Two\\Three\\Four\\Five\\.\\.\\.\\..\\\\.\\\\..\\\\\\\\\\..\\.\\.\\..\\.\\Six\\\\\\\\\\',
-                'baseDir' => 'C:\\Seven\\Eight\\Nine\\Ten',
+                'basePath' => 'C:\\Seven\\Eight\\Nine\\Ten',
                 'expectedIsAbsolute' => true,
                 'expectedAbsolute' => 'D:/One/Six',
                 'relativeBase' => 'D:\\Eleven\\Twelve\\Fourteen',
@@ -414,47 +401,44 @@ final class PathUnitTest extends TestCase
         return $data;
     }
 
-    /** @dataProvider providerBaseDirArgument */
-    public function testOptionalBaseDirArgument(string $path, ?PathInterface $baseDir, string $expectedAbsolute): void
+    #[DataProvider('providerBaseDirArgument')]
+    public function testOptionalBaseDirArgument(string $path, ?PathInterface $basePath, string $expectedAbsolute): void
     {
-        $sut = $this->createSut($path, $baseDir);
+        $sut = $this->createSut($path, $basePath);
 
         self::assertEquals($expectedAbsolute, $sut->absolute(), 'Got absolute path.');
     }
 
-    public function providerBaseDirArgument(): array
+    public static function providerBaseDirArgument(): array
     {
         $cwd = str_replace('\\', '/', getcwd());
 
         return [
             'Unix-like: with $basePath argument.' => [
                 'path' => 'one',
-                'baseDir' => self::createPath('/arg'),
+                'basePath' => self::createPath('/arg'),
                 'expectedAbsolute' => '/arg/one',
             ],
             'Unix-like: with null $basePath argument' => [
                 'path' => 'one',
-                'baseDir' => null,
+                'basePath' => null,
                 'expectedAbsolute' => sprintf('%s/one', $cwd),
             ],
             'Windows: with $basePath argument.' => [
                 'path' => 'One',
-                'baseDir' => self::createPath('C:\\Arg'),
+                'basePath' => self::createPath('C:\\Arg'),
                 'expectedAbsolute' => 'C:/Arg/One',
             ],
             'Windows: With null $basePath argument' => [
                 'path' => 'One',
-                'baseDir' => null,
+                'basePath' => null,
                 'expectedAbsolute' => sprintf('%s/One', $cwd),
             ],
         ];
     }
 
-    /**
-     * @dataProvider providerGetCwd
-     *
-     * @runInSeparateProcess
-     */
+    #[DataProvider('providerGetCwd')]
+    #[RunInSeparateProcess]
     public function testGetCwd(
         string|false $builtInReturn,
         string $md5,
@@ -485,19 +469,19 @@ final class PathUnitTest extends TestCase
         self::assertSame($expectedSutReturn, $actualSutReturn);
     }
 
-    public function providerGetCwd(): array
+    public static function providerGetCwd(): array
     {
         return [
             'Normal return' => [
                 'builtInReturn' => __DIR__,
                 'md5' => '',
-                'sys_get_temp_dir' => '',
+                'sysGetTempDir' => '',
                 'expectedSutReturn' => __DIR__,
             ],
             'Failure' => [
                 'builtInReturn' => false,
                 'md5' => '1234',
-                'sys_get_temp_dir' => '/temp',
+                'sysGetTempDir' => '/temp',
                 'expectedSutReturn' => '/temp/composer-stager/error-1234',
             ],
         ];

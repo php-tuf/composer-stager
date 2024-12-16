@@ -2,7 +2,7 @@
 
 [![Latest stable version](https://poser.pugx.org/php-tuf/composer-stager/v/stable)](https://packagist.org/packages/php-tuf/composer-stager)
 [![Tests status](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml)
-[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml) <!-- A static "100%" value can be used safely here because grumphp will fail builds if coverage falls below that. See grumphp.yml.dist. -->
+[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg?style=flat)](https://github.com/php-tuf/composer-stager/actions/workflows/main.yml) <!-- A static "100%" value can be used safely here because PHPUnit will fail builds if coverage falls below that. See the extensions in phpunit.xml.dist. -->
 [![PHPStan](https://img.shields.io/badge/PHPStan-max-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 
 Composer Stager makes long-running Composer commands safe to run on a codebase in production by "staging" them--performing them on a non-live copy of the codebase and syncing back the result for the least possible downtime.
@@ -104,7 +104,7 @@ A complete, functioning example implementation of Composer Stager can be found i
 
 ## Contributing
 
-[Pull requests](https://github.com/php-tuf/composer-stager/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) are welcome. For major changes, please [open an issue](https://github.com/php-tuf/composer-stager/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) first to discuss what you would like to change. Observe [the coding standards](https://github.com/php-tuf/composer-stager/wiki/Coding-standards-&-style-guide), and if you're able, add and update [the tests](https://github.com/php-tuf/composer-stager/wiki/Automated-testing) as appropriate.
+[Pull requests](https://github.com/php-tuf/composer-stager/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) are welcome. For major changes, please [open an issue](https://github.com/php-tuf/composer-stager/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) first to discuss what you would like to change. Observe [the coding standards](https://github.com/php-tuf/composer-stager/wiki/Coding-standards-&-style-guide), and if you're able, add and update [the tests](https://github.com/php-tuf/composer-stager/wiki/Automated-testing-&-analysis) as appropriate.
 
 ---
 

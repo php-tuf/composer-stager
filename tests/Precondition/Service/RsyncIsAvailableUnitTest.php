@@ -8,18 +8,12 @@ use PhpTuf\ComposerStager\API\Finder\Service\ExecutableFinderInterface;
 use PhpTuf\ComposerStager\API\Process\Factory\ProcessFactoryInterface;
 use PhpTuf\ComposerStager\API\Process\Service\ProcessInterface;
 use PhpTuf\ComposerStager\Internal\Precondition\Service\RsyncIsAvailable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\RsyncIsAvailable
- *
- * @covers ::__construct
- * @covers ::assertExecutableExists
- * @covers ::assertIsActuallyRsync
- * @covers ::getProcess
- * @covers ::isValidExecutable
- */
+#[CoversClass(RsyncIsAvailable::class)]
 final class RsyncIsAvailableUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Rsync';
@@ -63,16 +57,7 @@ final class RsyncIsAvailableUnitTest extends PreconditionUnitTestCase
         return new RsyncIsAvailable($environment, $executableFinder, $processFactory, $translatableFactory);
     }
 
-    /**
-     * @covers ::assertExecutableExists
-     * @covers ::assertIsActuallyRsync
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     * @covers ::getProcess
-     * @covers ::isValidExecutable
-     *
-     * @dataProvider providerFulfilled
-     */
+    #[DataProvider('providerFulfilled')]
     public function testFulfilled(string $output): void
     {
         $this->executableFinder
@@ -95,7 +80,7 @@ final class RsyncIsAvailableUnitTest extends PreconditionUnitTestCase
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    public function providerFulfilled(): array
+    public static function providerFulfilled(): array
     {
         return [
             'Command name on first line' => [
@@ -111,7 +96,6 @@ rsync version 2.6.9 compatible",
         ];
     }
 
-    /** @covers ::assertExecutableExists */
     public function testExecutableNotFound(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -133,12 +117,6 @@ rsync version 2.6.9 compatible",
         }, PreconditionException::class, $message);
     }
 
-    /**
-     * @covers ::assertExecutableExists
-     * @covers ::assertIsActuallyRsync
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getProcess
-     */
     public function testFailedToCreateProcess(): void
     {
         $message = __METHOD__;
@@ -153,7 +131,6 @@ rsync version 2.6.9 compatible",
         ), $previous::class);
     }
 
-    /** @covers ::getProcess */
     public function testFailedToRunProcess(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -174,7 +151,6 @@ rsync version 2.6.9 compatible",
         }, PreconditionException::class, $message);
     }
 
-    /** @covers ::isValidExecutable */
     public function testFailedToGetOutput(): void
     {
         $activeDirPath = self::activeDirPath();
@@ -196,7 +172,7 @@ rsync version 2.6.9 compatible",
         }, PreconditionException::class, $message);
     }
 
-    /** @dataProvider providerInvalidOutput */
+    #[DataProvider('providerInvalidOutput')]
     public function testInvalidOutput(string $output): void
     {
         $activeDirPath = self::activeDirPath();
@@ -217,7 +193,7 @@ rsync version 2.6.9 compatible",
         }, PreconditionException::class, $message);
     }
 
-    public function providerInvalidOutput(): array
+    public static function providerInvalidOutput(): array
     {
         return [
             'No output' => [''],

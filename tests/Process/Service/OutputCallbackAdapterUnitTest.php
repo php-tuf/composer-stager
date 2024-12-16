@@ -6,17 +6,14 @@ use PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface;
 use PhpTuf\ComposerStager\API\Process\Value\OutputTypeEnum;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Process\Process as SymfonyProcess;
 
-/** @coversDefaultClass \PhpTuf\ComposerStager\Internal\Process\Service\OutputCallbackAdapter */
+#[CoversClass(OutputCallbackAdapter::class)]
 final class OutputCallbackAdapterUnitTest extends TestCase
 {
-    /**
-     * @covers ::__construct
-     * @covers ::__invoke
-     *
-     * @dataProvider providerBasicFunctionality
-     */
+    #[DataProvider('providerBasicFunctionality')]
     public function testBasicFunctionality(string $givenType, OutputTypeEnum $expectedType, string $buffer): void
     {
         $callback = $this->prophesize(OutputCallbackInterface::class);
@@ -28,7 +25,7 @@ final class OutputCallbackAdapterUnitTest extends TestCase
         $sut($givenType, $buffer);
     }
 
-    public function providerBasicFunctionality(): array
+    public static function providerBasicFunctionality(): array
     {
         return [
             'stdout' => [
@@ -44,12 +41,7 @@ final class OutputCallbackAdapterUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::__construct
-     * @covers ::__invoke
-     *
-     * @dataProvider providerNoCallback
-     */
+    #[DataProvider('providerNoCallback')]
     public function testNoCallback(array $constructorArguments): void
     {
         // No explicit assertion is necessary for this test. The SUT will
@@ -61,7 +53,7 @@ final class OutputCallbackAdapterUnitTest extends TestCase
         $sut(SymfonyProcess::OUT, __METHOD__);
     }
 
-    public function providerNoCallback(): array
+    public static function providerNoCallback(): array
     {
         return [
             'Implicit null' => [

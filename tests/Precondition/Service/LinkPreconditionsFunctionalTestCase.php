@@ -4,8 +4,18 @@ namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
 use PhpTuf\ComposerStager\API\Precondition\Service\PreconditionInterface;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist;
+use PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+#[CoversClass(AbstractFileIteratingPrecondition::class)]
+#[CoversClass(AbstractPrecondition::class)]
+#[CoversClass(NoLinksExistOnWindows::class)]
+#[CoversClass(NoHardLinksExist::class)]
 abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 {
     protected function setUp(): void
@@ -21,16 +31,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     abstract protected function createSut(): PreconditionInterface;
 
-    /**
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::doAssertIsFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::findFiles
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::assertIsFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::doAssertIsFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::isFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows::exitEarly
-     *
-     * @dataProvider providerFulfilledDirectoryDoesNotExist
-     */
+    #[DataProvider('providerFulfilledDirectoryDoesNotExist')]
     public function testFulfilledDirectoryDoesNotExist(PathInterface $activeDir, PathInterface $stagingDir): void
     {
         $this->doTestFulfilledDirectoryDoesNotExist($activeDir, $stagingDir);
@@ -45,7 +46,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
         self::assertTrue($isFulfilled, 'Silently ignored non-existent directory');
     }
 
-    final public function providerFulfilledDirectoryDoesNotExist(): array
+    final public static function providerFulfilledDirectoryDoesNotExist(): array
     {
         $nonexistentDir = self::nonExistentDirPath();
 
@@ -61,13 +62,6 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
         ];
     }
 
-    /**
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::doAssertIsFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractFileIteratingPrecondition::findFiles
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::isFulfilled
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\NoHardLinksExist::assertIsSupportedFile
-     * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\NoLinksExistOnWindows::exitEarly
-     */
     public function testFulfilledWithNoLinks(): void
     {
         $sut = $this->createSut();
@@ -79,7 +73,7 @@ abstract class LinkPreconditionsFunctionalTestCase extends TestCase
 
     abstract public function testFulfilledExclusions(array $links, array $exclusions, bool $shouldBeFulfilled): void;
 
-    final public function providerExclusions(): array
+    final public static function providerExclusions(): array
     {
         return [
             'No links or exclusions' => [

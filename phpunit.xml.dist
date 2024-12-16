@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- https://docs.phpunit.de/en/9.6/configuration.html -->
+<!-- https://docs.phpunit.de/en/10.5/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         cacheResultFile="var/phpunit/test-results"
+         cacheDirectory="var/phpunit/cache"
          executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         failOnRisky="true"
+         requireCoverageMetadata="true"
          failOnWarning="true"
-         verbose="true"
+         failOnRisky="true"
+         defaultTestSuite="all"
 >
     <testsuites>
         <testsuite name="all">
+            <directory suffix="UnitTest.php">tests</directory>
+            <directory suffix="FunctionalTest.php">tests</directory>
+        </testsuite>
+        <testsuite name="coverage">
             <directory suffix="UnitTest.php">tests</directory>
             <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
@@ -25,17 +27,18 @@
         <testsuite name="functional">
             <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
-        <testsuite name="compatability">
-            <directory>tests/Compatability</directory>
+        <testsuite name="compatibility">
+            <directory>tests/Compatibility</directory>
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="var/phpunit/coverage-cache"
-              processUncoveredFiles="true">
+    <source>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory>src</directory>
         </include>
+    </source>
 
+    <coverage>
         <report>
             <clover outputFile="var/phpunit/clover.xml"/>
             <html outputDirectory="var/phpunit/html-coverage"/>
@@ -45,6 +48,19 @@
     <logging>
         <junit outputFile="var/phpunit/junit.xml"/>
     </logging>
+
+    <extensions>
+        <bootstrap class="\PhpTuf\ComposerStager\Tests\Coverage\ClearCoverageExtension"/>
+        <bootstrap class="\PhpTuf\ComposerStager\Tests\Coverage\EnforceCoverageExtension">
+            <!--
+            Requiring 100% code coverage here makes it safe to just put a static badge in the README rather than
+            using some third-party service. If this ever changes, that strategy will have to change accordingly.
+            -->
+            <parameter name="required-coverage" value="100"/>
+            <!-- The testsuites that will enforce coverage requirements, separated by commas, e.g., "one,two". -->
+            <parameter name="required-testsuites" value="coverage"/>
+        </bootstrap>
+    </extensions>
 
     <php>
         <ini name="zend.assertions" value="1"/>

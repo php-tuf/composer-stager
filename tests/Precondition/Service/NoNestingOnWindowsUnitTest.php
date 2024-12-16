@@ -3,13 +3,10 @@
 namespace PhpTuf\ComposerStager\Tests\Precondition\Service;
 
 use PhpTuf\ComposerStager\Internal\Precondition\Service\NoNestingOnWindows;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\Precondition\Service\NoNestingOnWindows
- *
- * @covers ::__construct
- * @covers \PhpTuf\ComposerStager\Internal\Precondition\Service\AbstractPrecondition::getStatusMessage
- */
+#[CoversClass(NoNestingOnWindows::class)]
 final class NoNestingOnWindowsUnitTest extends PreconditionUnitTestCase
 {
     protected const NAME = 'Active and staging directories not nested on Windows.';
@@ -34,19 +31,11 @@ final class NoNestingOnWindowsUnitTest extends PreconditionUnitTestCase
         return new NoNestingOnWindows($environment, $pathHelper, $translatableFactory);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testFulfilled(): void
     {
         $this->doTestFulfilled(self::FULFILLED_STATUS_MESSAGE);
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     */
     public function testExitEarlyOnNonWindows(): void
     {
         $activeDirPath = self::createPath('/active-dir');
@@ -63,12 +52,7 @@ final class NoNestingOnWindowsUnitTest extends PreconditionUnitTestCase
         self::assertTrue($isFulfilled, 'Exited early on non-Windows');
     }
 
-    /**
-     * @covers ::doAssertIsFulfilled
-     * @covers ::getFulfilledStatusMessage
-     *
-     * @dataProvider providerUnfulfilled
-     */
+    #[DataProvider('providerUnfulfilled')]
     public function testUnfulfilled(string $activeDir, string $stagingDir): void
     {
         $activeDirPath = self::createPath($activeDir);
@@ -83,7 +67,7 @@ final class NoNestingOnWindowsUnitTest extends PreconditionUnitTestCase
         $this->doTestUnfulfilled($expectedStatusMessage, null, $activeDirPath, $stagingDirPath);
     }
 
-    public function providerUnfulfilled(): array
+    public static function providerUnfulfilled(): array
     {
         return [
             [

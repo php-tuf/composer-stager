@@ -16,20 +16,13 @@ use PhpTuf\ComposerStager\API\Process\Service\RsyncProcessRunnerInterface;
 use PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer;
 use PhpTuf\ComposerStager\Internal\Process\Service\OutputCallback;
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 
-/**
- * @coversDefaultClass \PhpTuf\ComposerStager\Internal\FileSyncer\Service\FileSyncer
- *
- * @covers ::__construct
- * @covers ::buildCommand
- * @covers ::ensureDestinationDirectoryExists
- * @covers ::getRelativePath
- * @covers ::makeRelativeToSource
- * @covers ::runCommand
- * @covers ::sync
- */
+#[CoversClass(FileSyncer::class)]
 final class FileSyncerUnitTest extends TestCase
 {
     private EnvironmentInterface|ObjectProphecy $environment;
@@ -73,11 +66,7 @@ final class FileSyncerUnitTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::sync
-     *
-     * @dataProvider providerSync
-     */
+    #[DataProvider('providerSync')]
     public function testSync(
         string $source,
         string $destination,
@@ -103,7 +92,7 @@ final class FileSyncerUnitTest extends TestCase
         $sut->sync($sourcePath, $destinationPath, ...$optionalArguments);
     }
 
-    public function providerSync(): array
+    public static function providerSync(): array
     {
         return [
             'Minimum arguments' => [
@@ -267,7 +256,6 @@ final class FileSyncerUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::assertRsyncIsAvailable */
     public function testNoRsyncError(): void
     {
         $message = 'Something went wrong.';
@@ -282,11 +270,7 @@ final class FileSyncerUnitTest extends TestCase
         }, LogicException::class, $message);
     }
 
-    /**
-     * @covers ::runCommand
-     *
-     * @dataProvider providerSyncFailure
-     */
+    #[DataProvider('providerSyncFailure')]
     public function testSyncFailure(ExceptionInterface $caughtException, string $thrownException): void
     {
         $this->rsync
@@ -299,7 +283,7 @@ final class FileSyncerUnitTest extends TestCase
         }, $thrownException, $caughtException->getMessage(), null, $caughtException::class);
     }
 
-    public function providerSyncFailure(): array
+    public static function providerSyncFailure(): array
     {
         $message = self::createTranslatableExceptionMessage(__METHOD__);
 
@@ -315,11 +299,7 @@ final class FileSyncerUnitTest extends TestCase
         ];
     }
 
-    /**
-     * @covers ::getRelativePath
-     *
-     * @dataProvider providerGetRelativePath
-     */
+    #[DataProvider('providerGetRelativePath')]
     public function testGetRelativePath(string $ancestor, string $path, string $expected): void
     {
         // Expose private method for testing.
@@ -334,11 +314,9 @@ final class FileSyncerUnitTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @group no_windows
-     * @phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces
-     */
-    public function providerGetRelativePath(): array
+    /** @phpcs:disable SlevomatCodingStandard.Whitespaces.DuplicateSpaces.DuplicateSpaces */
+    #[Group('no_windows')]
+    public static function providerGetRelativePath(): array
     {
         return [
             'Match: single directory depth' => [
@@ -384,7 +362,6 @@ final class FileSyncerUnitTest extends TestCase
         ];
     }
 
-    /** @covers ::ensureDestinationDirectoryExists */
     public function testSyncCreateDestinationDirectoryFailed(): void
     {
         $message = self::createTranslatableExceptionMessage(__METHOD__);

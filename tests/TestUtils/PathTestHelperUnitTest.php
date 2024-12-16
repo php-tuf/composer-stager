@@ -3,11 +3,13 @@
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
 use PhpTuf\ComposerStager\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/** @coversNothing */
+#[CoversNothing]
 final class PathTestHelperUnitTest extends TestCase
 {
-    /** @dataProvider providerFixSeparatorsMultiple */
+    #[DataProvider('providerFixSeparatorsMultiple')]
     public function testFixSeparatorsMultiple(array $paths, array $expected): void
     {
         PathTestHelper::fixSeparatorsMultiple(...$paths);
@@ -15,7 +17,7 @@ final class PathTestHelperUnitTest extends TestCase
         self::assertSame($expected, $paths);
     }
 
-    public function providerFixSeparatorsMultiple(): array
+    public static function providerFixSeparatorsMultiple(): array
     {
         return [
             'Empty arrays' => [
