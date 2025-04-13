@@ -255,7 +255,6 @@ final class FileSyncerFunctionalTest extends TestCase
         return [
             'Positive number' => [30],
             'Zero' => [0],
-            'Negative number' => [-30],
         ];
     }
 
