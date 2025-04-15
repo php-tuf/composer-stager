@@ -107,7 +107,11 @@ final class FileSyncer implements FileSyncerInterface
         }
     }
 
-    /** @throws \PhpTuf\ComposerStager\API\Exception\IOException */
+    /**
+     * @param int<0, max> $timeout
+     *
+     * @throws \PhpTuf\ComposerStager\API\Exception\IOException
+     */
     private function runCommand(
         ?PathListInterface $exclusions,
         PathInterface $source,

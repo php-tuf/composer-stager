@@ -35,7 +35,7 @@ interface FileSyncerInterface
      *   "underneath" or "inside" it.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
-     * @param non-negative-int $timeout
+     * @param int<0, max> $timeout
      *   An optional process timeout (maximum runtime) in seconds. If set to
      *   zero (0), no time limit is imposed.
      *
