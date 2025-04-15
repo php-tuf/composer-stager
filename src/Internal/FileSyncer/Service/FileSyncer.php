@@ -117,7 +117,7 @@ final class FileSyncer implements FileSyncerInterface
         PathInterface $source,
         PathInterface $destination,
         ?OutputCallbackInterface $callback,
-        int $timeout,
+        int $timeout = ProcessInterface::DEFAULT_TIMEOUT,
     ): void {
         $this->ensureDestinationDirectoryExists($destination);
         $command = $this->buildCommand($source, $destination, $exclusions);
