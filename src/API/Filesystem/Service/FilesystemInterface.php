@@ -167,7 +167,7 @@ interface FilesystemInterface
      *   A path to delete.
      * @param \PhpTuf\ComposerStager\API\Process\Service\OutputCallbackInterface|null $callback
      *   An optional PHP callback to run whenever there is process output.
-     * @param int $timeout
+     * @param int<0, max> $timeout
      *   An optional process timeout (maximum runtime) in seconds. If set to
      *   zero (0), no time limit is imposed.
      *

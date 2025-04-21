@@ -40,7 +40,7 @@ interface PreconditionInterface
      * cannot be found. Make sure it's installed." If the precondition has
      * unfulfilled leaves, the status message from the first one will be returned.
      *
-     * @param int $timeout
+     * @param int<0, max> $timeout
      *   An optional process timeout (maximum runtime) in seconds. If set to
      *   zero (0), no time limit is imposed.
      */
@@ -54,7 +54,7 @@ interface PreconditionInterface
     /**
      * Determines whether the precondition is fulfilled.
      *
-     * @param int $timeout
+     * @param int<0, max> $timeout
      *   An optional process timeout (maximum runtime) in seconds. If set to
      *   zero (0), no time limit is imposed.
      */
@@ -68,7 +68,7 @@ interface PreconditionInterface
     /**
      * Asserts that the precondition is fulfilled.
      *
-     * @param int $timeout
+     * @param int<0, max> $timeout
      *   An optional process timeout (maximum runtime) in seconds. If set to
      *   zero (0), no time limit is imposed.
      *

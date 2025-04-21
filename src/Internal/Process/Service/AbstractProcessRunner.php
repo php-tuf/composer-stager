@@ -55,7 +55,7 @@ abstract class AbstractProcessRunner
      *       'REMOVE_ME' => false,
      *   );
      *   ```
-     * @param int $timeout
+     * @param int<0, max> $timeout
      *    An optional process timeout (maximum runtime) in seconds. If set to
      *    zero (0), no time limit is imposed.
      *

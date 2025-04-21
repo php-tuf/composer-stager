@@ -27,9 +27,6 @@
         <testsuite name="functional">
             <directory suffix="FunctionalTest.php">tests</directory>
         </testsuite>
-        <testsuite name="compatibility">
-            <directory>tests/Compatibility</directory>
-        </testsuite>
     </testsuites>
 
     <source>

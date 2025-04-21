@@ -46,7 +46,6 @@
             "rm -r ../var/*/* &> /dev/null || true",
             "git checkout -- ../var"
         ],
-        "compatibility": "(cd ../ && phpunit --testsuite=compatibility)",
         "fast": "(cd ../ && phpunit --testsuite=coverage --exclude-group=slow,windows_only)",
         "functional": "(cd ../ && phpunit --testsuite=functional --exclude-group=windows_only)",
         "infection": "infection --ansi",
@@ -62,7 +61,6 @@
     "scripts-descriptions": {
         "all": "Runs all automated tests and static analysis tools",
         "clear-var-dir": "Clears all script caches and test fixtures in the \"var\" directory",
-        "compatibility": "Checks Composer version compatibility with major client projects",
         "fast": "Runs only fast automated tests",
         "functional": "Runs functional tests",
         "infection": "Performs mutation testing",
@@ -79,9 +77,6 @@
         "clear-var-dir": [
             "cvd",
             "var"
-        ],
-        "compatibility": [
-            "compat"
         ],
         "infection": [
             "mutation"

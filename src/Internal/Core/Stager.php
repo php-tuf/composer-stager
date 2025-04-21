@@ -79,6 +79,7 @@ final class Stager implements StagerInterface
 
     /**
      * @param array<string> $composerCommand
+     * @param int<0, max> $timeout
      *
      * @throws \PhpTuf\ComposerStager\API\Exception\RuntimeException
      */
