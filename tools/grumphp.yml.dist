@@ -18,7 +18,8 @@ grumphp:
             level: 100
         composer: ~
         # This task doesn't work in the current setup with "phpcs.xml.dist" in
-        # a different (parent) directory. It
+        # a different (parent) directory. The workaround is to run PHPCS via
+        # the "shell" task below.
         # phpcs:
         #     standard: []
         #     whitelist_patterns:
@@ -48,7 +49,7 @@ grumphp:
             triggered_by:
                 - xml
                 - xml.dist
-        # Like the "phpcs"task, this doesn't work in the "tools" subdirectory.
+        # Like the "phpcs" task, this doesn't work in the "tools" subdirectory.
         # Unlike that task, it has no workaround yet.
         # yamllint:
         #     whitelist_patterns:
