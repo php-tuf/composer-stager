@@ -17,6 +17,7 @@ grumphp:
             # this ever changes, that strategy will have to change accordingly.
             level: 100
         composer: ~
+        composer_validate_autoload: ~
         # This task doesn't work in the current setup with "phpcs.xml.dist" in
         # a different (parent) directory. The workaround is to run PHPCS via
         # the "shell" task below.
@@ -35,9 +36,6 @@ grumphp:
         rector: ~
         shell:
             scripts:
-                # Check for PSR-4 mapping errors.
-                - - '-c'
-                  - composer dump-autoload --optimize --strict-psr --dry-run
                 # Run PHPCS manually. See comment on "phpcs" task above.
                 - - '-c'
                   - (cd ../ && ./vendor/bin/phpcs)
@@ -62,6 +60,7 @@ grumphp:
         static:
             tasks:
                 - composer
+                - composer_validate_autoload
                 - phpstan
                 - rector
                 - shell
