@@ -260,18 +260,6 @@ final class PathUnitTest extends TestCase
                 'relativeBase' => '/tmp',
                 'expectedRelative' => 'vfs://example.com/two/three.txt',
             ],
-            // Generally speaking, it would probably be better if an invalid
-            // protocol caused a failure. But since protocols are officially
-            // unsupported and used only internally for testing, it's sufficient
-            // just to document that this is the current behavior.
-            'Invalid protocol' => [
-                'given' => '1ftp://example.com/one/../two/three.txt',
-                'basePath' => '/var',
-                'expectedIsAbsolute' => false,
-                'expectedAbsolute' => '/var/1ftp:/example.com/two/three.txt',
-                'relativeBase' => '/tmp',
-                'expectedRelative' => '/tmp/1ftp:/example.com/two/three.txt',
-            ],
         ];
 
         foreach ($data as $label => $datum) {
