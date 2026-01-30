@@ -38,8 +38,8 @@
         "thecodingmachine/phpstan-strict-rules": "^1.0"
     },
     "conflict": {
-        "symfony/process": ">=6.4 <6.4.33 || >=7.3 <7.3.11 || >=7.4 <7.4.5",
-        "symfony/symfony": ">=6.4 <6.4.33 || >=7.3 <7.3.11 || >=7.4 <7.4.5"
+        "symfony/process": ">=6.4 <6.4.33 || >=7.3 <7.3.11 || >=7.4 <7.4.5 || >=8.0 <8.0.5",
+        "symfony/symfony": ">=6.4 <6.4.33 || >=7.3 <7.3.11 || >=7.4 <7.4.5 || >=8.0 <8.0.5"
     },
     "suggest": {
         "symfony/dependency-injection": "For dependency injection",
