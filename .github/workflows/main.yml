@@ -34,7 +34,11 @@ jobs:
                     coverage: none
 
             -   name: "Checkout code"
-                uses: actions/checkout@v5 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+
+            -   name: "Remove composer.lock to test latest dependencies"
+                run: if [ -f composer.lock ]; then rm composer.lock; fi
+                shell: bash
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
@@ -47,58 +51,69 @@ jobs:
                     ./vendor/bin/phpstan
 
     tests:
-        name: "Tests: ${{ matrix.os }} / ${{ matrix.php }} / ${{ matrix.dependencies }}${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && ' w/ coverage' || '' }}"
+        name: "Tests: ${{ matrix.os }} / PHP ${{ matrix.php }} / Symfony ^${{ matrix.symfony_major }} / deps ${{ matrix.dependencies }}${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && matrix.symfony_major == '7' && ' w/ coverage' || '' }}"
         runs-on: "${{ matrix.os }}-latest"
+        env:
+            # Only collect coverage for ubuntu/8.3/high/Symfony 7.x
+            COVERAGE: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' && matrix.symfony_major == '7' }}
         strategy:
             fail-fast: false
             matrix:
-                os: [ ubuntu, macos, windows ]
-                php: [ "8.1", "8.2", "8.3" ]
-                dependencies: [ low, high ]
+                include:
+                    # Ubuntu: Only PHP/Symfony combos supported by Drupal core, plus forward-compat jobs for Symfony 8.x and PHP 8.4/8.5.
+                    # 8.1: Symfony 6.4 (low/high)
+                    - { os: ubuntu, php: '8.1', dependencies: low, symfony_major: '6' }
+                    - { os: ubuntu, php: '8.1', dependencies: high, symfony_major: '6' }
+                    # 8.2: Symfony 6.4 (high), Symfony 7.4 (low/high)
+                    - { os: ubuntu, php: '8.2', dependencies: high, symfony_major: '6' }
+                    - { os: ubuntu, php: '8.2', dependencies: low, symfony_major: '7' }
+                    - { os: ubuntu, php: '8.2', dependencies: high, symfony_major: '7' }
+                    # 8.3: Symfony 6.4 (high), Symfony 7.4 (high)
+                    - { os: ubuntu, php: '8.3', dependencies: high, symfony_major: '6' }
+                    - { os: ubuntu, php: '8.3', dependencies: high, symfony_major: '7' }
+                    # 8.4: Symfony 6.4 (high), Symfony 7.4 (high), Symfony 8.x (forward-compat, high)
+                    - { os: ubuntu, php: '8.4', dependencies: high, symfony_major: '6' }
+                    - { os: ubuntu, php: '8.4', dependencies: high, symfony_major: '7' }
+                    - { os: ubuntu, php: '8.4', dependencies: high, symfony_major: '8' }
+                    # 8.5: Symfony 8.x (forward-compat, high)
+                    - { os: ubuntu, php: '8.5', dependencies: high, symfony_major: '8' }
+                    # macOS/Windows: smoke test, forward-compat only
+                    - { os: macos, php: '8.5', dependencies: high, symfony_major: '8' }
+                    - { os: windows, php: '8.5', dependencies: high, symfony_major: '8' }
         steps:
             -   name: "Install rsync"
                 uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
 
-            -   name: "Set up PHP w/ Coverage"
-                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
+            -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
                 with:
                     php-version: "${{ matrix.php }}"
+                    coverage: ${{ env.COVERAGE == 'true' && 'xdebug' || 'none' }}
                     extensions: gd
                     ini-values: zend.assertions=1
-
-            -   name: "Set up PHP w/o Coverage"
-                if: ${{ !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
-                uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
-                with:
-                    php-version: "${{ matrix.php }}"
-                    coverage: none
-                    extensions: gd
-                    ini-values: zend.assertions=1
-
-            -   name: "Debugging info"
-                run: |
-                    echo "::group::PHP"
-                    which php
-                    php -i
-                    echo "::endgroup::"
-
-                    echo "::group::Composer"
-                    composer --version
-                    composer --format=json | jq '.' -C > composer-output.log
-                    head -5 composer-output.log
-                    echo "::endgroup::"
-
-                    echo "::group::rsync"
-                    which rsync
-                    rsync --version
-                    echo "::endgroup::"
 
             -   name: "Checkout code"
-                uses: actions/checkout@v5 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+
+            # For all jobs except the main supported combo (Ubuntu, PHP 8.2, Symfony 7, highest),
+            # remove composer.lock so Composer resolves the latest allowed and secure dependencies.
+            # This ensures forward-compatibility, lowest-dependencies, and other matrix jobs test
+            # real-world installability, while the main job remains reproducible.
+            -   name: "Remove composer.lock for non-main jobs"
+                if: ${{ !(matrix.os == 'ubuntu' && matrix.php == '8.2' && matrix.symfony_major == '7' && matrix.dependencies == 'high') }}
+                run: if [ -f composer.lock ]; then rm composer.lock; fi
+                shell: bash
+
+            # For Symfony 6 and 7, explicitly require the specific major version to override the
+            # version ranges in composer.json. For Symfony 8, skip this step and use the existing
+            # "^8.0" constraint from composer.json, which combined with conflict rules, ensures
+            # only secure versions are installed.
+            -   name: "Require specific Symfony major version"
+                if: matrix.symfony_major != '8'
+                run: composer require --no-update "symfony/filesystem:^${{ matrix.symfony_major }}" "symfony/process:^${{ matrix.symfony_major }}"
 
             -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-composer-dependencies
+                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
                 with:
                     dependency-versions: "${{ matrix.dependencies }}est"
 
@@ -111,15 +126,16 @@ jobs:
                     echo "$output"
                     echo "Total packages: $(echo "$output" | wc -l | tr -d ' ')"
 
-            -   name: "Run core tests with coverage"
-                run: "./vendor/bin/phpunit --testsuite=coverage --exclude-group=windows_only --colors=always"
-                if: ${{ matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' }}
-
-            # There's no reason to generate coverage data on multiple jobs--the result should be the same.
-            -   name: "Run core tests without coverage"
-                run: "./vendor/bin/phpunit --no-coverage --exclude-group=windows_only --colors=always"
-                if: ${{ runner.os != 'Windows' && !( matrix.os == 'ubuntu' && matrix.dependencies == 'high' && matrix.php == '8.3' ) }}
-
-            -   name: "Run Windows tests"
-                run: "./vendor/bin/phpunit --no-coverage --exclude-group=no_windows --colors=always"
-                if: ${{ runner.os == 'Windows' }}
+            -   name: "Run tests"
+                shell: bash
+                run: |
+                    if [[ "${{ runner.os }}" == "Windows" ]]; then
+                        # Windows-specific test suite
+                        ./vendor/bin/phpunit --no-coverage --exclude-group=no_windows --colors=always
+                    elif [[ "${{ env.COVERAGE }}" == "true" ]]; then
+                        # Run with coverage collection (only ubuntu/8.3/high)
+                        ./vendor/bin/phpunit --testsuite=coverage --exclude-group=windows_only --colors=always
+                    else
+                        # Standard test run without coverage
+                        ./vendor/bin/phpunit --no-coverage --exclude-group=windows_only --colors=always
+                    fi
