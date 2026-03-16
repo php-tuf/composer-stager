@@ -41,7 +41,7 @@ jobs:
                 shell: bash
 
             -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
+                uses: ramsey/composer-install@v4 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
 
             -   name: "Run all static analysis tools"
                 run: |
@@ -113,7 +113,7 @@ jobs:
                 run: composer require --no-update "symfony/filesystem:^${{ matrix.symfony_major }}" "symfony/process:^${{ matrix.symfony_major }}"
 
             -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
+                uses: ramsey/composer-install@v4 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
                 with:
                     dependency-versions: "${{ matrix.dependencies }}est"
 
