@@ -1,16 +1,21 @@
 services:
-    php83:
+    # --- Quick group (representative matrix, one per PHP version) ---
+
+    php83-sf7-high:
         build:
             context: .
             dockerfile: docker/Dockerfile
             args:
                 PHP_VERSION: "8.3"
+        environment:
+            SYMFONY_MAJOR: "7"
+            DEPENDENCIES: high
         volumes:
             - .:/app
-            - vendor-php83:/app/vendor
-            - var-php83:/app/var
+            - vendor-php83-sf7-high:/app/vendor
+            - var-php83-sf7-high:/app/var
 
-    php84:
+    php84-sf7-high:
         build:
             context: .
             dockerfile: docker/Dockerfile
@@ -18,27 +23,82 @@ services:
                 PHP_VERSION: "8.4"
                 INSTALL_XDEBUG: "true"
         environment:
+            SYMFONY_MAJOR: "7"
+            DEPENDENCIES: high
             XDEBUG_MODE: coverage
         volumes:
             - .:/app
-            - vendor-php84:/app/vendor
-            - var-php84:/app/var
+            - vendor-php84-sf7-high:/app/vendor
+            - var-php84-sf7-high:/app/var
 
-    php85:
+    php85-sf8-high:
         build:
             context: .
             dockerfile: docker/Dockerfile
             args:
                 PHP_VERSION: "8.5"
+        environment:
+            SYMFONY_MAJOR: "8"
+            DEPENDENCIES: high
         volumes:
             - .:/app
-            - vendor-php85:/app/vendor
-            - var-php85:/app/var
+            - vendor-php85-sf8-high:/app/vendor
+            - var-php85-sf8-high:/app/var
+
+    # --- Full group (additional Symfony version combinations matching CI) ---
+
+    php83-sf6-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.3"
+        environment:
+            SYMFONY_MAJOR: "6"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - vendor-php83-sf6-high:/app/vendor
+            - var-php83-sf6-high:/app/var
+
+    php84-sf6-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.4"
+        environment:
+            SYMFONY_MAJOR: "6"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - vendor-php84-sf6-high:/app/vendor
+            - var-php84-sf6-high:/app/var
+
+    php84-sf8-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.4"
+        environment:
+            SYMFONY_MAJOR: "8"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - vendor-php84-sf8-high:/app/vendor
+            - var-php84-sf8-high:/app/var
 
 volumes:
-    vendor-php83:
-    vendor-php84:
-    vendor-php85:
-    var-php83:
-    var-php84:
-    var-php85:
+    vendor-php83-sf7-high:
+    vendor-php84-sf7-high:
+    vendor-php85-sf8-high:
+    vendor-php83-sf6-high:
+    vendor-php84-sf6-high:
+    vendor-php84-sf8-high:
+    var-php83-sf7-high:
+    var-php84-sf7-high:
+    var-php85-sf8-high:
+    var-php83-sf6-high:
+    var-php84-sf6-high:
+    var-php84-sf8-high:
