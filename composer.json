@@ -74,5 +74,31 @@
         "branch-alias": {
             "dev-develop": "2.x-dev"
         }
+    },
+    "scripts": {
+        "check:phpunit": [
+            "docker compose run --rm php83 php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php84 php ./vendor/bin/phpunit --exclude-group=windows_only --testsuite=coverage",
+            "docker compose run --rm php85 php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage"
+        ],
+        "docker:build": "docker compose build",
+        "docker:down": "docker compose down"
+    },
+    "scripts-descriptions": {
+        "check:phpunit": "Runs automated tests",
+        "docker:build": "Builds the Docker images for all supported PHP versions",
+        "docker:down": "Stops and removes Docker containers and networks (images and volumes are preserved; no rebuild needed to resume)"
+    },
+    "scripts-aliases": {
+        "check:phpunit": [
+            "phpunit",
+            "test"
+        ],
+        "docker:build": [
+            "build"
+        ],
+        "docker:down": [
+            "down"
+        ]
     }
 }
