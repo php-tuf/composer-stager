@@ -1,0 +1,44 @@
+services:
+    php83:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.3"
+        volumes:
+            - .:/app
+            - vendor-php83:/app/vendor
+            - var-php83:/app/var
+
+    php84:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.4"
+                INSTALL_XDEBUG: "true"
+        environment:
+            XDEBUG_MODE: coverage
+        volumes:
+            - .:/app
+            - vendor-php84:/app/vendor
+            - var-php84:/app/var
+
+    php85:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.5"
+        volumes:
+            - .:/app
+            - vendor-php85:/app/vendor
+            - var-php85:/app/var
+
+volumes:
+    vendor-php83:
+    vendor-php84:
+    vendor-php85:
+    var-php83:
+    var-php84:
+    var-php85:
