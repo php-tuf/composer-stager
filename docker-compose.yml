@@ -12,6 +12,7 @@ services:
             DEPENDENCIES: low
         volumes:
             - .:/app
+            - ./docker/composer-locks/php83-sf6-low.lock:/app/composer.lock
             - vendor-php83-sf6-low:/app/vendor
             - var-php83-sf6-low:/app/var
 
@@ -26,6 +27,7 @@ services:
             DEPENDENCIES: high
         volumes:
             - .:/app
+            - ./docker/composer-locks/php83-sf7-high.lock:/app/composer.lock
             - vendor-php83-sf7-high:/app/vendor
             - var-php83-sf7-high:/app/var
 
@@ -42,6 +44,7 @@ services:
             XDEBUG_MODE: coverage
         volumes:
             - .:/app
+            - ./docker/composer-locks/php84-sf7-high.lock:/app/composer.lock
             - vendor-php84-sf7-high:/app/vendor
             - var-php84-sf7-high:/app/var
 
@@ -56,6 +59,7 @@ services:
             DEPENDENCIES: high
         volumes:
             - .:/app
+            - ./docker/composer-locks/php85-sf8-high.lock:/app/composer.lock
             - vendor-php85-sf8-high:/app/vendor
             - var-php85-sf8-high:/app/var
 
@@ -72,6 +76,7 @@ services:
             DEPENDENCIES: high
         volumes:
             - .:/app
+            - ./docker/composer-locks/php83-sf6-high.lock:/app/composer.lock
             - vendor-php83-sf6-high:/app/vendor
             - var-php83-sf6-high:/app/var
 
@@ -86,6 +91,7 @@ services:
             DEPENDENCIES: low
         volumes:
             - .:/app
+            - ./docker/composer-locks/php83-sf7-low.lock:/app/composer.lock
             - vendor-php83-sf7-low:/app/vendor
             - var-php83-sf7-low:/app/var
 
@@ -100,6 +106,7 @@ services:
             DEPENDENCIES: high
         volumes:
             - .:/app
+            - ./docker/composer-locks/php84-sf6-high.lock:/app/composer.lock
             - vendor-php84-sf6-high:/app/vendor
             - var-php84-sf6-high:/app/var
 
@@ -114,6 +121,7 @@ services:
             DEPENDENCIES: high
         volumes:
             - .:/app
+            - ./docker/composer-locks/php84-sf8-high.lock:/app/composer.lock
             - vendor-php84-sf8-high:/app/vendor
             - var-php84-sf8-high:/app/var
 
