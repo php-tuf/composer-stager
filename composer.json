@@ -90,7 +90,10 @@
             "docker compose run --rm php84-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
             "docker compose run --rm php85-sf8-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage"
         ],
-        "docker:build": "docker compose build",
+        "docker:build": [
+            "./docker/init-locks.sh",
+            "docker compose build"
+        ],
         "docker:down": "docker compose down"
     },
     "scripts-descriptions": {
