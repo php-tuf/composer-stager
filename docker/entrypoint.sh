@@ -23,10 +23,10 @@ else
     composer install --no-interaction --no-progress --quiet
 fi
 
-# Print PHP version header
+# Print test environment header
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-php --version | head -1
+echo "PHP $(php -r 'echo phpversion();') | Symfony ${SYMFONY_MAJOR} | Dependencies: ${DEPENDENCIES}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
