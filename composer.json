@@ -74,5 +74,48 @@
         "branch-alias": {
             "dev-develop": "2.x-dev"
         }
+    },
+    "scripts": {
+        "check:phpunit:full": [
+            "docker compose run --rm php83-sf6-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php83-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php84-sf6-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php84-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --testsuite=coverage",
+            "docker compose run --rm php84-sf8-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php85-sf8-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage"
+        ],
+        "check:phpunit:quick": [
+            "docker compose run --rm php83-sf6-low php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php83-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --testsuite=coverage",
+            "docker compose run --rm php84-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
+            "docker compose run --rm php85-sf8-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage"
+        ],
+        "docker:build": [
+            "./docker/init-locks.sh",
+            "docker compose build"
+        ],
+        "docker:down": "docker compose down"
+    },
+    "scripts-descriptions": {
+        "check:phpunit:full": "Runs automated tests across major supported PHP/Symfony/dependency combinations",
+        "check:phpunit:quick": "Runs automated tests on a representative subset: sf6/low and sf7/high on PHP 8.3, sf7/high w/ coverage on PHP 8.4, sf8/high on PHP 8.5",
+        "docker:build": "Builds the Docker images for all supported PHP versions",
+        "docker:down": "Stops and removes Docker containers and networks (images and volumes are preserved; no rebuild needed to resume)"
+    },
+    "scripts-aliases": {
+        "check:phpunit:full": [
+            "full"
+        ],
+        "check:phpunit:quick": [
+            "phpunit",
+            "quick",
+            "test"
+        ],
+        "docker:build": [
+            "build"
+        ],
+        "docker:down": [
+            "down"
+        ]
     }
 }

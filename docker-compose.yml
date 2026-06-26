@@ -1,0 +1,144 @@
+services:
+    # --- Quick group (representative matrix, one per PHP version) ---
+
+    php83-sf6-low:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.3"
+        environment:
+            SYMFONY_MAJOR: "6"
+            DEPENDENCIES: low
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php83-sf6-low.lock:/app/composer.lock
+            - vendor-php83-sf6-low:/app/vendor
+            - var-php83-sf6-low:/app/var
+
+    php83-sf7-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.3"
+        environment:
+            SYMFONY_MAJOR: "7"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php83-sf7-high.lock:/app/composer.lock
+            - vendor-php83-sf7-high:/app/vendor
+            - var-php83-sf7-high:/app/var
+
+    php84-sf7-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.4"
+                INSTALL_XDEBUG: "true"
+        environment:
+            SYMFONY_MAJOR: "7"
+            DEPENDENCIES: high
+            XDEBUG_MODE: coverage
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php84-sf7-high.lock:/app/composer.lock
+            - vendor-php84-sf7-high:/app/vendor
+            - var-php84-sf7-high:/app/var
+
+    php85-sf8-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.5"
+        environment:
+            SYMFONY_MAJOR: "8"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php85-sf8-high.lock:/app/composer.lock
+            - vendor-php85-sf8-high:/app/vendor
+            - var-php85-sf8-high:/app/var
+
+    # --- Full group (additional Symfony version combinations matching CI) ---
+
+    php83-sf6-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.3"
+        environment:
+            SYMFONY_MAJOR: "6"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php83-sf6-high.lock:/app/composer.lock
+            - vendor-php83-sf6-high:/app/vendor
+            - var-php83-sf6-high:/app/var
+
+    php83-sf7-low:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.3"
+        environment:
+            SYMFONY_MAJOR: "7"
+            DEPENDENCIES: low
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php83-sf7-low.lock:/app/composer.lock
+            - vendor-php83-sf7-low:/app/vendor
+            - var-php83-sf7-low:/app/var
+
+    php84-sf6-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.4"
+        environment:
+            SYMFONY_MAJOR: "6"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php84-sf6-high.lock:/app/composer.lock
+            - vendor-php84-sf6-high:/app/vendor
+            - var-php84-sf6-high:/app/var
+
+    php84-sf8-high:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+            args:
+                PHP_VERSION: "8.4"
+        environment:
+            SYMFONY_MAJOR: "8"
+            DEPENDENCIES: high
+        volumes:
+            - .:/app
+            - ./docker/composer-locks/php84-sf8-high.lock:/app/composer.lock
+            - vendor-php84-sf8-high:/app/vendor
+            - var-php84-sf8-high:/app/var
+
+volumes:
+    vendor-php83-sf6-low:
+    vendor-php83-sf7-high:
+    vendor-php83-sf7-low:
+    vendor-php84-sf7-high:
+    vendor-php85-sf8-high:
+    vendor-php83-sf6-high:
+    vendor-php84-sf6-high:
+    vendor-php84-sf8-high:
+    var-php83-sf6-low:
+    var-php83-sf7-high:
+    var-php83-sf7-low:
+    var-php84-sf7-high:
+    var-php85-sf8-high:
+    var-php83-sf6-high:
+    var-php84-sf6-high:
+    var-php84-sf8-high:

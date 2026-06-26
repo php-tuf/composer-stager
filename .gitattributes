@@ -4,6 +4,8 @@
 /.idea                export-ignore
 /composer.lock        export-ignore
 /config               export-ignore
+/docker               export-ignore
+/docker-compose.yml   export-ignore
 /phpcs.xml.dist       export-ignore
 /phpstan.neon.dist    export-ignore
 /phpunit.xml.dist     export-ignore

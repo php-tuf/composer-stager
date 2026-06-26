@@ -10,3 +10,5 @@
 /var/*/*
 /vendor/
 !/**/.gitkeep
+/docker/composer-locks/*
+!/docker/composer-locks/.gitkeep
