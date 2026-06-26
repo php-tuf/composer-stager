@@ -8,6 +8,7 @@ services:
             args:
                 PHP_VERSION: "8.3"
         environment:
+            SERVICE_NAME: php83-sf6-low
             SYMFONY_MAJOR: "6"
             DEPENDENCIES: low
         volumes:
@@ -23,6 +24,7 @@ services:
             args:
                 PHP_VERSION: "8.3"
         environment:
+            SERVICE_NAME: php83-sf7-high
             SYMFONY_MAJOR: "7"
             DEPENDENCIES: high
         volumes:
@@ -39,6 +41,7 @@ services:
                 PHP_VERSION: "8.4"
                 INSTALL_XDEBUG: "true"
         environment:
+            SERVICE_NAME: php84-sf7-high
             SYMFONY_MAJOR: "7"
             DEPENDENCIES: high
             XDEBUG_MODE: coverage
@@ -55,6 +58,7 @@ services:
             args:
                 PHP_VERSION: "8.5"
         environment:
+            SERVICE_NAME: php85-sf8-high
             SYMFONY_MAJOR: "8"
             DEPENDENCIES: high
         volumes:
@@ -72,6 +76,7 @@ services:
             args:
                 PHP_VERSION: "8.3"
         environment:
+            SERVICE_NAME: php83-sf6-high
             SYMFONY_MAJOR: "6"
             DEPENDENCIES: high
         volumes:
@@ -87,6 +92,7 @@ services:
             args:
                 PHP_VERSION: "8.3"
         environment:
+            SERVICE_NAME: php83-sf7-low
             SYMFONY_MAJOR: "7"
             DEPENDENCIES: low
         volumes:
@@ -102,6 +108,7 @@ services:
             args:
                 PHP_VERSION: "8.4"
         environment:
+            SERVICE_NAME: php84-sf6-high
             SYMFONY_MAJOR: "6"
             DEPENDENCIES: high
         volumes:
@@ -117,6 +124,7 @@ services:
             args:
                 PHP_VERSION: "8.4"
         environment:
+            SERVICE_NAME: php84-sf8-high
             SYMFONY_MAJOR: "8"
             DEPENDENCIES: high
         volumes:

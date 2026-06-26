@@ -26,7 +26,7 @@ fi
 # Print test environment header
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "PHP $(php -r 'echo phpversion();') | Symfony ${SYMFONY_MAJOR} | Dependencies: ${DEPENDENCIES}"
+echo "PHP $(php -r 'echo phpversion();') | Symfony ${SYMFONY_MAJOR} | Dependencies: ${DEPENDENCIES} | ${SERVICE_NAME}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
