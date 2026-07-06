@@ -77,6 +77,9 @@
         }
     },
     "scripts": {
+        "check:phpunit:coverage": [
+            "docker compose run --rm php84-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --testsuite=coverage"
+        ],
         "check:phpunit:full": [
             "docker compose run --rm php83-sf6-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
             "docker compose run --rm php83-sf7-high php ./vendor/bin/phpunit --exclude-group=windows_only --no-coverage",
@@ -97,12 +100,17 @@
         "docker:down": "docker compose down"
     },
     "scripts-descriptions": {
+        "check:phpunit:coverage": "Runs PHPUnit tests with code coverage",
         "check:phpunit:full": "Runs automated tests across major supported PHP/Symfony/dependency combinations",
         "check:phpunit:quick": "Runs automated tests on a representative subset: sf6/low and sf7/high on PHP 8.3, sf7/high w/ coverage on PHP 8.4, sf8/high on PHP 8.5",
         "docker:build": "Builds the Docker images for all supported PHP versions",
         "docker:down": "Stops and removes Docker containers and networks (images and volumes are preserved; no rebuild needed to resume)"
     },
     "scripts-aliases": {
+        "check:phpunit:coverage": [
+            "coverage",
+            "cov"
+        ],
         "check:phpunit:full": [
             "full"
         ],
