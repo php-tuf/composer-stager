@@ -34,14 +34,14 @@ jobs:
                     coverage: none
 
             -   name: "Checkout code"
-                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v7 # https://github.com/marketplace/actions/checkout
 
             -   name: "Remove composer.lock to test latest dependencies"
                 run: if [ -f composer.lock ]; then rm composer.lock; fi
                 shell: bash
 
             -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
+                uses: ramsey/composer-install@v4 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
 
             -   name: "Run all static analysis tools"
                 run: |
@@ -82,7 +82,12 @@ jobs:
                     - { os: windows, php: '8.5', dependencies: high, symfony_major: '8' }
         steps:
             -   name: "Install rsync"
+                if: runner.os != 'Windows'
                 uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
+
+            -   name: "Install rsync (Windows)"
+                if: runner.os == 'Windows'
+                run: choco install rsync --no-progress -y
 
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
@@ -93,7 +98,7 @@ jobs:
                     ini-values: zend.assertions=1
 
             -   name: "Checkout code"
-                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v7 # https://github.com/marketplace/actions/checkout
 
             # For all jobs except the main supported combo (Ubuntu, PHP 8.2, Symfony 7, highest),
             # remove composer.lock so Composer resolves the latest allowed and secure dependencies.
@@ -113,7 +118,7 @@ jobs:
                 run: composer require --no-update "symfony/filesystem:^${{ matrix.symfony_major }}" "symfony/process:^${{ matrix.symfony_major }}"
 
             -   name: "Install dependencies"
-                uses: ramsey/composer-install@v3 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
+                uses: ramsey/composer-install@v4 # https://github.com/marketplace/actions/install-php-dependencies-with-composer
                 with:
                     dependency-versions: "${{ matrix.dependencies }}est"
 
