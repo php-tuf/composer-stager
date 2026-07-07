@@ -20,7 +20,7 @@ jobs:
                     php-version: "8.2"
 
             -   name: "Checkout code"
-                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v7 # https://github.com/marketplace/actions/checkout
 
             -   name: "Install dependencies"
                 uses: ramsey/composer-install@v4 # https://github.com/marketplace/actions/install-composer-dependencies
