@@ -34,7 +34,7 @@ jobs:
                     coverage: none
 
             -   name: "Checkout code"
-                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v7 # https://github.com/marketplace/actions/checkout
 
             -   name: "Remove composer.lock to test latest dependencies"
                 run: if [ -f composer.lock ]; then rm composer.lock; fi
@@ -98,7 +98,7 @@ jobs:
                     ini-values: zend.assertions=1
 
             -   name: "Checkout code"
-                uses: actions/checkout@v6 # https://github.com/marketplace/actions/checkout
+                uses: actions/checkout@v7 # https://github.com/marketplace/actions/checkout
 
             # For all jobs except the main supported combo (Ubuntu, PHP 8.2, Symfony 7, highest),
             # remove composer.lock so Composer resolves the latest allowed and secure dependencies.
