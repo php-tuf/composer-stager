@@ -21,7 +21,7 @@ final class PathHelper implements PathHelperInterface
         // symfony/filesystem ≥v6.4.40/v7.4.11 no longer recognizes Windows drive
         // roots (e.g., "C:/") on non-Windows systems. Use a Unix sentinel root so
         // ".." segments resolve correctly, then restore the drive prefix.
-        if (preg_match('#^([A-Za-z]:)(/?+)(.*)$#s', $path, $matches)) {
+        if (preg_match('#^([A-Za-z]:)(/?+)(.*)$#s', $path, $matches) === 1) {
             // Use a Unix sentinel root ('/') so '..' segments resolve correctly,
             // then restore the drive prefix. Path::canonicalize('/') always returns
             // '/' (never ''), so the result is always at least "$drive/".
