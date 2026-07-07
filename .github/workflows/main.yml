@@ -82,7 +82,12 @@ jobs:
                     - { os: windows, php: '8.5', dependencies: high, symfony_major: '8' }
         steps:
             -   name: "Install rsync"
+                if: runner.os != 'Windows'
                 uses: GuillaumeFalourd/setup-rsync@v1.2 # https://github.com/marketplace/actions/setup-rsync
+
+            -   name: "Install rsync (Windows)"
+                if: runner.os == 'Windows'
+                run: choco install rsync --no-progress -y
 
             -   name: "Set up PHP"
                 uses: shivammathur/setup-php@v2 # https://github.com/marketplace/actions/setup-php-action
