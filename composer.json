@@ -97,14 +97,16 @@
             "./docker/init-locks.sh",
             "docker compose build"
         ],
-        "docker:down": "docker compose down"
+        "docker:down": "docker compose down",
+        "docker:shell": "docker compose run --rm php84-sf7-high bash"
     },
     "scripts-descriptions": {
         "check:phpunit:coverage": "Runs PHPUnit tests with code coverage",
         "check:phpunit:full": "Runs automated tests across major supported PHP/Symfony/dependency combinations",
         "check:phpunit:quick": "Runs automated tests on a representative subset: sf6/low and sf7/high on PHP 8.3, sf7/high w/ coverage on PHP 8.4, sf8/high on PHP 8.5",
         "docker:build": "Builds the Docker images for all supported PHP versions",
-        "docker:down": "Stops and removes Docker containers and networks (images and volumes are preserved; no rebuild needed to resume)"
+        "docker:down": "Stops and removes Docker containers and networks (images and volumes are preserved; no rebuild needed to resume)",
+        "docker:shell": "Opens an interactive shell in the php84-sf7-high container for running composer/phpunit commands directly"
     },
     "scripts-aliases": {
         "check:phpunit:coverage": [
@@ -124,6 +126,9 @@
         ],
         "docker:down": [
             "down"
+        ],
+        "docker:shell": [
+            "shell"
         ]
     }
 }
