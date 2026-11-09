@@ -2,8 +2,10 @@
 
 namespace PhpTuf\ComposerStager\Tests\TestUtils;
 
+use FilesystemIterator;
 use PhpTuf\ComposerStager\API\Path\Value\PathInterface;
-use Symfony\Component\Filesystem\Exception\IOException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\Filesystem\Filesystem;
 
 final class FixtureTestHelper
@@ -182,17 +184,33 @@ final class FixtureTestHelper
             return;
         }
 
-        try {
-            $filesystem->remove(self::testFreshFixturesDirAbsolute());
-        } catch (IOException) {
-            // @todo Windows chokes on this every time, e.g.,
-            //    | Failed to remove directory
-            //    | "D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container":
-            //    | rmdir(D:\a\composer-stager\composer-stager\tests\Functional/../../var/phpunit/test-env-container):
-            //    | Resource temporarily unavailable.
-            //   Obviously, this error suppression is likely to bite us in the future
-            //   even though it doesn't seem to cause any problems now. Fix it.
-            // @ignoreException
+        // Windows can't remove a directory that is the current working directory
+        // (and createTestEnvironment() makes it so), so step out of it first.
+        chdir(self::testEnvAbsolute());
+
+        // Windows refuses to unlink read-only files, e.g., Git's pack files
+        // created by "git gc", so clear the attribute first.
+        if (PHP_OS_FAMILY === 'Windows') {
+            self::makeWritable(self::testFreshFixturesDirAbsolute());
+        }
+
+        $filesystem->remove(self::testFreshFixturesDirAbsolute());
+    }
+
+    private static function makeWritable(string $directory): void
+    {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        /** @var \SplFileInfo $item */
+        foreach ($iterator as $item) {
+            if ($item->isLink()) {
+                continue;
+            }
+
+            @chmod($item->getPathname(), 0777);
         }
     }
 }
